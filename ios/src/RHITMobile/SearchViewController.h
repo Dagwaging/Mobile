@@ -21,6 +21,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface SearchViewController : UIViewController
+@interface SearchViewController : UIViewController <UISearchBarDelegate>
+
+@property (nonatomic, retain) IBOutlet UISearchBar *searchBar;
 
 @end
