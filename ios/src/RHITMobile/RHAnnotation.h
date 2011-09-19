@@ -17,6 +17,8 @@
 //  limitations under the License.
 //
 
+/// Representation of an annotatable map object. For use by RHAnnotationView.
+
 #import <Foundation/Foundation.h>
 #import <MapKit/MapKit.h>
 

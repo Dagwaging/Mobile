@@ -44,10 +44,10 @@
             [self addSubview:textView];
             break;
         case RHAnnotationTypePolygon:
-            // TODO: Add polygon rendering
+            /// \todo Add polygon rendering
             break;
         case RHAnnotationTypeTextAndPolygon:
-            // TODO: Add polygon rendering
+            /// \todo Add polygon rendering
             self.frame = CGRectMake(0, 0, 100, 50);
             self.backgroundColor = [UIColor clearColor];
             

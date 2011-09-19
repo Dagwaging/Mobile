@@ -67,9 +67,9 @@
 }
 
 - (void) renderAdditionalLocations {
-    // FIXME: This is just proof-of-concept code to render a single location.
-    //        A true implementation should obviously retrieve the location
-    //        data from somewhere dynamic.
+    /// \todo This is just proof-of-concept code to render a single location.
+    ///       A true implementation should obviously retrieve the location
+    ///       data from somewhere dynamic.
     RHLocation *hatfield = [[RHLocation alloc] initWithName:@"Hatfield Hall"
                                             navigationNodes:nil
                                               boundaryNodes:nil

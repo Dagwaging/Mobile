@@ -6,6 +6,8 @@
 //  Copyright 2011 Rose-Hulman Institute of Technology. All rights reserved.
 //
 
+/// Node representing a boundary point of a location.
+
 #import "RHNode.h"
 
 @interface RHBoundaryNode : RHNode
