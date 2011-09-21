@@ -1,9 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="562" systemVersion="11B26" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
-    <entity name="Location">
+    <entity name="BoundaryNode" parentEntity="Node"/>
+    <entity name="Location" representedClassName="RHLocation">
         <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="boundaryNodes" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="BoundaryNode"/>
+        <relationship name="labelLocation" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Node"/>
+        <relationship name="navigationNodes" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="NavigationNode"/>
+    </entity>
+    <entity name="NavigationNode" parentEntity="Node"/>
+    <entity name="Node" representedClassName="RHNode">
+        <attribute name="latitude" optional="YES" attributeType="Double" defaultValueString="0.0"/>
+        <attribute name="longitude" optional="YES" attributeType="Double" defaultValueString="0.0"/>
     </entity>
     <elements>
-        <element name="Location" positionX="-2133" positionY="-1557" width="128" height="60"/>
+        <element name="Location" positionX="-2556" positionY="-1302" width="128" height="105"/>
+        <element name="Node" positionX="-2333" positionY="-1620" width="128" height="75"/>
+        <element name="BoundaryNode" positionX="-2450" positionY="-1440" width="128" height="45"/>
+        <element name="NavigationNode" positionX="-2250" positionY="-1449" width="128" height="45"/>
     </elements>
 </model>

@@ -17,7 +17,7 @@
 //  limitations under the License.
 //
 
-#import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
 
 #import "RHEnums.h"
 
@@ -25,7 +25,7 @@
 /// to be used directly, but rather to be subclassed, specifically into
 /// RHNavigationNode and RHBoundaryNode.
 
-@interface RHNode : NSObject
+@interface RHNode : NSManagedObject
 
 /// Latitude coordinate for this node.
 @property (nonatomic, assign) double latitude;

@@ -17,7 +17,7 @@
 //  limitations under the License.
 //
 
-#import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
 
 #import "RHNavigationNode.h"
 #import "RHBoundaryNode.h"
@@ -25,7 +25,7 @@
 /// Representation of a canonical location, which may be more than a specific
 /// point in space.
 
-@interface RHLocation : NSObject
+@interface RHLocation : NSManagedObject
 
 /// Human-readable name of this location
 @property (nonatomic, retain) NSString *name;
