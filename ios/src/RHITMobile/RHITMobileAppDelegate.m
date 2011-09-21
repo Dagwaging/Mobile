@@ -23,6 +23,8 @@
 
 @synthesize window = _window;
 @synthesize tabBarController = _tabBarController;
+@synthesize mapViewController;
+@synthesize searchViewController;
 @synthesize managedObjectModel;
 @synthesize managedObjectContext;
 @synthesize persistentStoreCoordinator;
@@ -33,6 +35,7 @@
     // Add the tab bar controller's current view as a subview of the window
     self.window.rootViewController = self.tabBarController;
     [self.window makeKeyAndVisible];
+    self.mapViewController.managedObjectContext = self.managedObjectContext;
     return YES;
 }
 
@@ -137,7 +140,7 @@
                                   initWithManagedObjectModel:[self managedObjectModel]];
     if(![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType
                                                  configuration:nil URL:storeUrl options:nil error:&error]) {
-        /*Error for store creation should be handled in here*/
+        /* Error for store creation should be handled in here */
     }
     
     return persistentStoreCoordinator;

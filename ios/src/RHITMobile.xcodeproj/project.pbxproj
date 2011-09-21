@@ -181,6 +181,7 @@
 		9226030C1409AE640065F705 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				923C841A14298DD500DFE415 /* Model.xcdatamodeld */,
 				9226032B1409B3890065F705 /* RHNode.h */,
 				9226032C1409B3890065F705 /* RHNode.m */,
 				922603301409B3A20065F705 /* RHPath.h */,
@@ -196,7 +197,6 @@
 				924E7552140ADCA0001DFC4C /* RHNavigationNode.m */,
 				924E7555140ADCD7001DFC4C /* RHBoundaryNode.h */,
 				924E7556140ADCD7001DFC4C /* RHBoundaryNode.m */,
-				923C841A14298DD500DFE415 /* Model.xcdatamodeld */,
 			);
 			name = Model;
 			sourceTree = "<group>";

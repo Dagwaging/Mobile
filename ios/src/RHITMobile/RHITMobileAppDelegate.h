@@ -23,18 +23,32 @@
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
 
-@interface RHITMobileAppDelegate : NSObject
+#import "MapViewController.h"
+#import "SearchViewController.h"
+
+@interface RHITMobileAppDelegate : NSObject 
 <UIApplicationDelegate, UITabBarControllerDelegate>
 
 /// Current window.
 @property (nonatomic, retain) IBOutlet UIWindow *window;
 
-@property (nonatomic, retain, readonly) NSManagedObjectModel *managedObjectModel;
-@property (nonatomic, retain, readonly) NSManagedObjectContext *managedObjectContext;
-@property (nonatomic, retain, readonly) NSPersistentStoreCoordinator *persistentStoreCoordinator;
-
 /// Main tab bar.
 @property (nonatomic, retain) IBOutlet UITabBarController *tabBarController;
+
+/// Map view controller
+@property (nonatomic, retain) IBOutlet MapViewController *mapViewController;
+
+/// Search view controller
+@property (nonatomic, retain) IBOutlet SearchViewController *searchViewController;
+
+/// Object model for the application
+@property (nonatomic, retain, readonly) NSManagedObjectModel *managedObjectModel;
+
+/// Context to execute data interactions against
+@property (nonatomic, retain, readonly) NSManagedObjectContext *managedObjectContext;
+
+/// Persistant store coordinator
+@property (nonatomic, retain, readonly) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
 - (NSString *)applicationDocumentsDirectory;
 
