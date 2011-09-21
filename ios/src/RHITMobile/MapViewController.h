@@ -20,10 +20,13 @@
 /// View controller for the map portion of the application.
 
 #import <UIKit/UIKit.h>
+#import <CoreData/CoreData.h>
 #import "MKMapView+ZoomLevel.h"
 
 @interface MapViewController : UIViewController <MKMapViewDelegate>
 
 @property (nonatomic, retain) IBOutlet MKMapView *mapView;
+@property (nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
+@property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;
 
 @end

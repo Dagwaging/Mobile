@@ -23,6 +23,9 @@
 		9226035A1409C9680065F705 /* launch-icon-small.png in Resources */ = {isa = PBXBuildFile; fileRef = 922603591409C9680065F705 /* launch-icon-small.png */; };
 		9233DD0F141BAA3500B9A549 /* RHAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9233DD0E141BAA3500B9A549 /* RHAnnotation.m */; };
 		9233DD10141BAA3500B9A549 /* RHAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9233DD0E141BAA3500B9A549 /* RHAnnotation.m */; };
+		923C841414298C5800DFE415 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 923C841314298C5800DFE415 /* CoreData.framework */; };
+		923C841C14298DD500DFE415 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 923C841A14298DD500DFE415 /* Model.xcdatamodeld */; };
+		923C841D14298DD500DFE415 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 923C841A14298DD500DFE415 /* Model.xcdatamodeld */; };
 		924E754D140ACC9A001DFC4C /* tab-bar-map-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 924E754C140ACC9A001DFC4C /* tab-bar-map-icon.png */; };
 		924E7550140ADA56001DFC4C /* RHPathTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 924E754F140ADA56001DFC4C /* RHPathTests.m */; };
 		924E7553140ADCA0001DFC4C /* RHNavigationNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 924E7552140ADCA0001DFC4C /* RHNavigationNode.m */; };
@@ -89,6 +92,8 @@
 		922603591409C9680065F705 /* launch-icon-small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "launch-icon-small.png"; sourceTree = "<group>"; };
 		9233DD0D141BAA3500B9A549 /* RHAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHAnnotation.h; sourceTree = "<group>"; };
 		9233DD0E141BAA3500B9A549 /* RHAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHAnnotation.m; sourceTree = "<group>"; };
+		923C841314298C5800DFE415 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		923C841B14298DD500DFE415 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		924E754C140ACC9A001DFC4C /* tab-bar-map-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab-bar-map-icon.png"; sourceTree = "<group>"; };
 		924E754E140ADA56001DFC4C /* RHPathTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHPathTests.h; sourceTree = "<group>"; };
 		924E754F140ADA56001DFC4C /* RHPathTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHPathTests.m; sourceTree = "<group>"; };
@@ -142,6 +147,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				923C841414298C5800DFE415 /* CoreData.framework in Frameworks */,
 				9265FEA91409AB5D00AE406E /* UIKit.framework in Frameworks */,
 				9265FEAB1409AB5D00AE406E /* Foundation.framework in Frameworks */,
 				9265FEAD1409AB5D00AE406E /* CoreGraphics.framework in Frameworks */,
@@ -190,6 +196,7 @@
 				924E7552140ADCA0001DFC4C /* RHNavigationNode.m */,
 				924E7555140ADCD7001DFC4C /* RHBoundaryNode.h */,
 				924E7556140ADCD7001DFC4C /* RHBoundaryNode.m */,
+				923C841A14298DD500DFE415 /* Model.xcdatamodeld */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -244,6 +251,7 @@
 		9265FEA71409AB5D00AE406E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				923C841314298C5800DFE415 /* CoreData.framework */,
 				92DFEACC141FEF9100889314 /* MapKit.framework */,
 				9226030D1409AEF00065F705 /* MapKit.framework */,
 				9265FEA81409AB5D00AE406E /* UIKit.framework */,
@@ -449,6 +457,7 @@
 				92DFEACA141FD4E500889314 /* MKMapView+ZoomLevel.m in Sources */,
 				92DFEAD01420245F00889314 /* RHAnnotationView.m in Sources */,
 				92DFEAD414203C6400889314 /* RHMapLabel.m in Sources */,
+				923C841C14298DD500DFE415 /* Model.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -474,6 +483,7 @@
 				92DFEACB141FD4E500889314 /* MKMapView+ZoomLevel.m in Sources */,
 				92DFEAD11420245F00889314 /* RHAnnotationView.m in Sources */,
 				92DFEAD514203C6400889314 /* RHMapLabel.m in Sources */,
+				923C841D14298DD500DFE415 /* Model.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -661,6 +671,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		923C841A14298DD500DFE415 /* Model.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				923C841B14298DD500DFE415 /* Model.xcdatamodel */,
+			);
+			currentVersion = 923C841B14298DD500DFE415 /* Model.xcdatamodel */;
+			path = Model.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 9265FE9B1409AB5C00AE406E /* Project object */;
 }

@@ -33,6 +33,8 @@
 @implementation MapViewController
 
 @synthesize mapView;
+@synthesize fetchedResultsController;
+@synthesize managedObjectContext;
 
 - (void)viewDidLoad {
     [super viewDidLoad];

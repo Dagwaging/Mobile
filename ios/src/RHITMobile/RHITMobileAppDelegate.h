@@ -21,6 +21,7 @@
 /// functionality.
 
 #import <UIKit/UIKit.h>
+#import <CoreData/CoreData.h>
 
 @interface RHITMobileAppDelegate : NSObject
 <UIApplicationDelegate, UITabBarControllerDelegate>
@@ -28,7 +29,13 @@
 /// Current window.
 @property (nonatomic, retain) IBOutlet UIWindow *window;
 
+@property (nonatomic, retain, readonly) NSManagedObjectModel *managedObjectModel;
+@property (nonatomic, retain, readonly) NSManagedObjectContext *managedObjectContext;
+@property (nonatomic, retain, readonly) NSPersistentStoreCoordinator *persistentStoreCoordinator;
+
 /// Main tab bar.
 @property (nonatomic, retain) IBOutlet UITabBarController *tabBarController;
+
+- (NSString *)applicationDocumentsDirectory;
 
 @end
