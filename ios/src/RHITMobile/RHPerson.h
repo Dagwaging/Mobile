@@ -17,13 +17,13 @@
 //  limitations under the License.
 //
 
-#import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
 
 #import "RHLocation.h"
 
 /// Representation of a generic person.
 
-@interface RHPerson : NSObject
+@interface RHPerson : NSManagedObject
 
 /// RHLocation associated with this person.
 @property (nonatomic, retain) RHLocation *location;
