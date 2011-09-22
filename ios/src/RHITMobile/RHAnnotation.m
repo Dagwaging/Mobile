@@ -18,6 +18,7 @@
 //
 
 #import "RHAnnotation.h"
+#import "RHNode.h"
 
 @implementation RHAnnotation
 
@@ -32,8 +33,8 @@
     int count = 0;
     
     for (RHNode *node in newLocation.boundaryNodes) {
-        totalLatitude += node.latitude;
-        totalLongitude += node.longitude;
+        //totalLatitude += node.latitude;
+        //totalLongitude += node.longitude;
         count ++;
     }
     

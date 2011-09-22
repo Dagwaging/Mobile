@@ -72,17 +72,17 @@
     /// \todo This is just proof-of-concept code to render a single location.
     ///       A true implementation should obviously retrieve the location
     ///       data from somewhere dynamic.
-    RHLocation *hatfield = [[RHLocation alloc] initWithName:@"Hatfield Hall"
-                                            navigationNodes:nil
-                                              boundaryNodes:nil
-                                          enclosedLocations:nil];
-    CLLocationCoordinate2D hatfieldCenter;
-    hatfieldCenter.latitude = 39.481968;
-    hatfieldCenter.longitude = -87.322276;
-    RHAnnotation *annotation = [[RHAnnotation alloc] initWithLocation:hatfield
-                                                           coordinate:hatfieldCenter
-                                                       annotationType:RHAnnotationTypeText];
-    [self.mapView addAnnotation:annotation];
+//    RHLocation *hatfield = [[RHLocation alloc] initWithName:@"Hatfield Hall"
+//                                            navigationNodes:nil
+//                                              boundaryNodes:nil
+//                                          enclosedLocations:nil];
+//    CLLocationCoordinate2D hatfieldCenter;
+//    hatfieldCenter.latitude = 39.481968;
+//    hatfieldCenter.longitude = -87.322276;
+//    RHAnnotation *annotation = [[RHAnnotation alloc] initWithLocation:hatfield
+//                                                           coordinate:hatfieldCenter
+//                                                       annotationType:RHAnnotationTypeText];
+//    [self.mapView addAnnotation:annotation];
 }
 
 # pragma mark -
