@@ -1,21 +1,29 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="562" systemVersion="11B26" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
-    <entity name="BoundaryNode" parentEntity="Node"/>
+    <entity name="BoundaryNode" parentEntity="Node">
+        <relationship name="boundedLocation" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Location" inverseName="boundaryNodes" inverseEntity="Location"/>
+    </entity>
+    <entity name="LabelNode" parentEntity="Node">
+        <relationship name="labeledLocation" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Location" inverseName="labelLocation" inverseEntity="Location"/>
+    </entity>
     <entity name="Location" representedClassName="RHLocation">
         <attribute name="name" optional="YES" attributeType="String"/>
-        <relationship name="boundaryNodes" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="BoundaryNode"/>
-        <relationship name="labelLocation" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Node"/>
-        <relationship name="navigationNodes" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="NavigationNode"/>
+        <relationship name="boundaryNodes" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="BoundaryNode" inverseName="boundedLocation" inverseEntity="BoundaryNode"/>
+        <relationship name="labelLocation" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="LabelNode" inverseName="labeledLocation" inverseEntity="LabelNode"/>
+        <relationship name="navigationNodes" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="NavigationNode" inverseName="enclosingLocation" inverseEntity="NavigationNode"/>
     </entity>
-    <entity name="NavigationNode" parentEntity="Node"/>
-    <entity name="Node" representedClassName="RHNode">
+    <entity name="NavigationNode" parentEntity="Node">
+        <relationship name="enclosingLocation" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Location" inverseName="navigationNodes" inverseEntity="Location"/>
+    </entity>
+    <entity name="Node" representedClassName="RHNode" isAbstract="YES">
         <attribute name="latitude" optional="YES" attributeType="Double" defaultValueString="0.0"/>
         <attribute name="longitude" optional="YES" attributeType="Double" defaultValueString="0.0"/>
     </entity>
     <elements>
+        <element name="BoundaryNode" positionX="-2450" positionY="-1440" width="128" height="60"/>
         <element name="Location" positionX="-2556" positionY="-1302" width="128" height="105"/>
-        <element name="Node" positionX="-2333" positionY="-1620" width="128" height="75"/>
-        <element name="BoundaryNode" positionX="-2450" positionY="-1440" width="128" height="45"/>
-        <element name="NavigationNode" positionX="-2250" positionY="-1449" width="128" height="45"/>
+        <element name="NavigationNode" positionX="-2250" positionY="-1440" width="128" height="60"/>
+        <element name="Node" positionX="-2450" positionY="-1593" width="128" height="75"/>
+        <element name="LabelNode" positionX="-2664" positionY="-1440" width="128" height="60"/>
     </elements>
 </model>
