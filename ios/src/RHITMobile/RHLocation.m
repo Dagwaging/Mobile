@@ -18,35 +18,15 @@
 //
 
 #import "RHLocation.h"
+#import "RHBoundaryNode.h"
+#import "RHLabelNode.h"
+
 
 @implementation RHLocation
-
-@synthesize name;
-@synthesize navigationNodes;
-@synthesize boundaryNodes;
-@synthesize enclosedLocations;
-
-- (RHLocation *) initWithName:(NSString *)newName
-              navigationNodes:(NSArray *)newNavigationNodes
-                boundaryNodes:(NSArray *)newBoundaryNodes
-            enclosedLocations:(NSArray *)newEnclosedLocations {
-    self = (RHLocation *)[super init];
-    
-    if (self) {
-        self.name = newName;
-        self.navigationNodes = newNavigationNodes;
-        self.boundaryNodes = newBoundaryNodes;
-        self.enclosedLocations = newEnclosedLocations;
-    }
-    
-    return self;
-}
-
-- (void) dealloc {
-    [self.navigationNodes release];
-    [self.boundaryNodes release];
-    [self.enclosedLocations release];
-    [super dealloc];
-}
+@dynamic name;
+@dynamic visibleZoomLevel;
+@dynamic boundaryNodes;
+@dynamic labelLocation;
+@dynamic navigationNodes;
 
 @end

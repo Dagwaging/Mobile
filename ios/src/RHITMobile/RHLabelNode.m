@@ -1,5 +1,5 @@
 //
-//  RHMKPolygonFactory.m
+//  RHLabelNode.m
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -17,8 +17,11 @@
 //  limitations under the License.
 //
 
-#import "RHMKPolygonFactory.h"
+#import "RHLabelNode.h"
+#import "RHLocation.h"
 
-@implementation RHMKPolygonFactory
+
+@implementation RHLabelNode
+@dynamic labeledLocation;
 
 @end

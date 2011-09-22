@@ -19,21 +19,9 @@
 
 #import "RHNode.h"
 
+
 @implementation RHNode
-
-@synthesize latitude;
-@synthesize longitude;
-
-- (RHNode *) initWithLatitude:(double)newLatitude 
-                    longitude:(double)newLongitude {
-    self = (RHNode *)[super init];
-    
-    if (self) {
-        self.latitude = newLatitude;
-        self.longitude = newLongitude;
-    }
-    
-    return self;
-}
+@dynamic latitude;
+@dynamic longitude;
 
 @end

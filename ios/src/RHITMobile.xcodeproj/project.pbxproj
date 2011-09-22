@@ -7,18 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9208547F142BA28100BE55B8 /* RHNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 9208547E142BA28100BE55B8 /* RHNode.m */; };
+		92085480142BA28100BE55B8 /* RHNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 9208547E142BA28100BE55B8 /* RHNode.m */; };
+		92085493142BA3C300BE55B8 /* RHLabelNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 92085492142BA3C300BE55B8 /* RHLabelNode.m */; };
+		92085494142BA3C300BE55B8 /* RHLabelNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 92085492142BA3C300BE55B8 /* RHLabelNode.m */; };
 		9226030E1409AEF00065F705 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9226030D1409AEF00065F705 /* MapKit.framework */; };
-		9226032D1409B3890065F705 /* RHNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 9226032C1409B3890065F705 /* RHNode.m */; };
-		9226032E1409B3890065F705 /* RHNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 9226032C1409B3890065F705 /* RHNode.m */; };
-		922603321409B3A20065F705 /* RHPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 922603311409B3A20065F705 /* RHPath.m */; };
-		922603331409B3A20065F705 /* RHPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 922603311409B3A20065F705 /* RHPath.m */; };
-		922603371409B3B00065F705 /* RHEnclosure.m in Sources */ = {isa = PBXBuildFile; fileRef = 922603361409B3B00065F705 /* RHEnclosure.m */; };
-		922603381409B3B00065F705 /* RHEnclosure.m in Sources */ = {isa = PBXBuildFile; fileRef = 922603361409B3B00065F705 /* RHEnclosure.m */; };
-		9226033C1409B3BE0065F705 /* RHLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9226033B1409B3BE0065F705 /* RHLocation.m */; };
-		9226033D1409B3BE0065F705 /* RHLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9226033B1409B3BE0065F705 /* RHLocation.m */; };
-		922603411409B3D30065F705 /* RHPerson.m in Sources */ = {isa = PBXBuildFile; fileRef = 922603401409B3D30065F705 /* RHPerson.m */; };
-		922603421409B3D30065F705 /* RHPerson.m in Sources */ = {isa = PBXBuildFile; fileRef = 922603401409B3D30065F705 /* RHPerson.m */; };
-		9226034E1409BD910065F705 /* RHNodeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9226034D1409BD910065F705 /* RHNodeTests.m */; };
 		922603581409C9480065F705 /* launch-icon-large.png in Resources */ = {isa = PBXBuildFile; fileRef = 922603571409C9480065F705 /* launch-icon-large.png */; };
 		9226035A1409C9680065F705 /* launch-icon-small.png in Resources */ = {isa = PBXBuildFile; fileRef = 922603591409C9680065F705 /* launch-icon-small.png */; };
 		9233DD0F141BAA3500B9A549 /* RHAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9233DD0E141BAA3500B9A549 /* RHAnnotation.m */; };
@@ -26,16 +19,13 @@
 		923C841414298C5800DFE415 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 923C841314298C5800DFE415 /* CoreData.framework */; };
 		923C841C14298DD500DFE415 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 923C841A14298DD500DFE415 /* Model.xcdatamodeld */; };
 		923C841D14298DD500DFE415 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 923C841A14298DD500DFE415 /* Model.xcdatamodeld */; };
+		9246368C142BAAC700A5E399 /* RHLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9246368B142BAAC700A5E399 /* RHLocation.m */; };
+		9246368D142BAAC700A5E399 /* RHLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9246368B142BAAC700A5E399 /* RHLocation.m */; };
+		92463690142BAB5300A5E399 /* RHBoundaryNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 9246368F142BAB5300A5E399 /* RHBoundaryNode.m */; };
+		92463691142BAB5300A5E399 /* RHBoundaryNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 9246368F142BAB5300A5E399 /* RHBoundaryNode.m */; };
+		92463698142BAE0A00A5E399 /* RHNavigationNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 92463697142BAE0A00A5E399 /* RHNavigationNode.m */; };
+		92463699142BAE0A00A5E399 /* RHNavigationNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 92463697142BAE0A00A5E399 /* RHNavigationNode.m */; };
 		924E754D140ACC9A001DFC4C /* tab-bar-map-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 924E754C140ACC9A001DFC4C /* tab-bar-map-icon.png */; };
-		924E7550140ADA56001DFC4C /* RHPathTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 924E754F140ADA56001DFC4C /* RHPathTests.m */; };
-		924E7553140ADCA0001DFC4C /* RHNavigationNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 924E7552140ADCA0001DFC4C /* RHNavigationNode.m */; };
-		924E7554140ADCA0001DFC4C /* RHNavigationNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 924E7552140ADCA0001DFC4C /* RHNavigationNode.m */; };
-		924E7557140ADCD7001DFC4C /* RHBoundaryNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 924E7556140ADCD7001DFC4C /* RHBoundaryNode.m */; };
-		924E7558140ADCD7001DFC4C /* RHBoundaryNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 924E7556140ADCD7001DFC4C /* RHBoundaryNode.m */; };
-		924E755B140B1C36001DFC4C /* RHNavigationNodeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 924E755A140B1C36001DFC4C /* RHNavigationNodeTests.m */; };
-		924E755E140B2DFE001DFC4C /* RHEnclosureTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 924E755D140B2DFD001DFC4C /* RHEnclosureTests.m */; };
-		924E7561140B347A001DFC4C /* RHLocationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 924E7560140B347A001DFC4C /* RHLocationTests.m */; };
-		924E7567140B3979001DFC4C /* RHPersonTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 924E7566140B3978001DFC4C /* RHPersonTests.m */; };
 		9265FEA91409AB5D00AE406E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9265FEA81409AB5D00AE406E /* UIKit.framework */; };
 		9265FEAB1409AB5D00AE406E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9265FEAA1409AB5D00AE406E /* Foundation.framework */; };
 		9265FEAD1409AB5D00AE406E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9265FEAC1409AB5D00AE406E /* CoreGraphics.framework */; };
@@ -52,8 +42,6 @@
 		9265FED21409AB5D00AE406E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9265FEAA1409AB5D00AE406E /* Foundation.framework */; };
 		9265FED31409AB5D00AE406E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9265FEAC1409AB5D00AE406E /* CoreGraphics.framework */; };
 		9265FEDB1409AB5D00AE406E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9265FED91409AB5D00AE406E /* InfoPlist.strings */; };
-		92C930F5141114170003CE8D /* RHMKPolygonFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C930F4141114170003CE8D /* RHMKPolygonFactory.m */; };
-		92C930F6141114170003CE8D /* RHMKPolygonFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C930F4141114170003CE8D /* RHMKPolygonFactory.m */; };
 		92DFEACA141FD4E500889314 /* MKMapView+ZoomLevel.m in Sources */ = {isa = PBXBuildFile; fileRef = 92DFEAC9141FD4E500889314 /* MKMapView+ZoomLevel.m */; };
 		92DFEACB141FD4E500889314 /* MKMapView+ZoomLevel.m in Sources */ = {isa = PBXBuildFile; fileRef = 92DFEAC9141FD4E500889314 /* MKMapView+ZoomLevel.m */; };
 		92DFEACD141FEF9100889314 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92DFEACC141FEF9100889314 /* MapKit.framework */; };
@@ -74,41 +62,24 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		9208547D142BA28100BE55B8 /* RHNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHNode.h; sourceTree = "<group>"; };
+		9208547E142BA28100BE55B8 /* RHNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHNode.m; sourceTree = "<group>"; };
+		92085491142BA3C300BE55B8 /* RHLabelNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHLabelNode.h; sourceTree = "<group>"; };
+		92085492142BA3C300BE55B8 /* RHLabelNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHLabelNode.m; sourceTree = "<group>"; };
 		9226030D1409AEF00065F705 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
-		9226032B1409B3890065F705 /* RHNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHNode.h; sourceTree = "<group>"; };
-		9226032C1409B3890065F705 /* RHNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHNode.m; sourceTree = "<group>"; };
-		922603301409B3A20065F705 /* RHPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHPath.h; sourceTree = "<group>"; };
-		922603311409B3A20065F705 /* RHPath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHPath.m; sourceTree = "<group>"; };
-		922603351409B3B00065F705 /* RHEnclosure.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHEnclosure.h; sourceTree = "<group>"; };
-		922603361409B3B00065F705 /* RHEnclosure.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHEnclosure.m; sourceTree = "<group>"; };
-		9226033A1409B3BE0065F705 /* RHLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHLocation.h; sourceTree = "<group>"; };
-		9226033B1409B3BE0065F705 /* RHLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHLocation.m; sourceTree = "<group>"; };
-		9226033F1409B3D30065F705 /* RHPerson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHPerson.h; sourceTree = "<group>"; };
-		922603401409B3D30065F705 /* RHPerson.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHPerson.m; sourceTree = "<group>"; };
-		922603441409B4890065F705 /* RHEnums.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHEnums.h; sourceTree = "<group>"; };
-		9226034C1409BD910065F705 /* RHNodeTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHNodeTests.h; sourceTree = "<group>"; };
-		9226034D1409BD910065F705 /* RHNodeTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHNodeTests.m; sourceTree = "<group>"; };
 		922603571409C9480065F705 /* launch-icon-large.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "launch-icon-large.png"; sourceTree = "<group>"; };
 		922603591409C9680065F705 /* launch-icon-small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "launch-icon-small.png"; sourceTree = "<group>"; };
 		9233DD0D141BAA3500B9A549 /* RHAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHAnnotation.h; sourceTree = "<group>"; };
 		9233DD0E141BAA3500B9A549 /* RHAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHAnnotation.m; sourceTree = "<group>"; };
 		923C841314298C5800DFE415 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		923C841B14298DD500DFE415 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		9246368A142BAAC700A5E399 /* RHLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHLocation.h; sourceTree = "<group>"; };
+		9246368B142BAAC700A5E399 /* RHLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHLocation.m; sourceTree = "<group>"; };
+		9246368E142BAB5300A5E399 /* RHBoundaryNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHBoundaryNode.h; sourceTree = "<group>"; };
+		9246368F142BAB5300A5E399 /* RHBoundaryNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHBoundaryNode.m; sourceTree = "<group>"; };
+		92463696142BAE0900A5E399 /* RHNavigationNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHNavigationNode.h; sourceTree = "<group>"; };
+		92463697142BAE0A00A5E399 /* RHNavigationNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHNavigationNode.m; sourceTree = "<group>"; };
 		924E754C140ACC9A001DFC4C /* tab-bar-map-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab-bar-map-icon.png"; sourceTree = "<group>"; };
-		924E754E140ADA56001DFC4C /* RHPathTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHPathTests.h; sourceTree = "<group>"; };
-		924E754F140ADA56001DFC4C /* RHPathTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHPathTests.m; sourceTree = "<group>"; };
-		924E7551140ADCA0001DFC4C /* RHNavigationNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHNavigationNode.h; sourceTree = "<group>"; };
-		924E7552140ADCA0001DFC4C /* RHNavigationNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHNavigationNode.m; sourceTree = "<group>"; };
-		924E7555140ADCD7001DFC4C /* RHBoundaryNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHBoundaryNode.h; sourceTree = "<group>"; };
-		924E7556140ADCD7001DFC4C /* RHBoundaryNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHBoundaryNode.m; sourceTree = "<group>"; };
-		924E7559140B1C36001DFC4C /* RHNavigationNodeTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHNavigationNodeTests.h; sourceTree = "<group>"; };
-		924E755A140B1C36001DFC4C /* RHNavigationNodeTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHNavigationNodeTests.m; sourceTree = "<group>"; };
-		924E755C140B2DFD001DFC4C /* RHEnclosureTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHEnclosureTests.h; sourceTree = "<group>"; };
-		924E755D140B2DFD001DFC4C /* RHEnclosureTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHEnclosureTests.m; sourceTree = "<group>"; };
-		924E755F140B347A001DFC4C /* RHLocationTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHLocationTests.h; sourceTree = "<group>"; };
-		924E7560140B347A001DFC4C /* RHLocationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHLocationTests.m; sourceTree = "<group>"; };
-		924E7565140B3978001DFC4C /* RHPersonTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHPersonTests.h; sourceTree = "<group>"; };
-		924E7566140B3978001DFC4C /* RHPersonTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHPersonTests.m; sourceTree = "<group>"; };
 		9265FEA41409AB5D00AE406E /* RHITMobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RHITMobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9265FEA81409AB5D00AE406E /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		9265FEAA1409AB5D00AE406E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -130,8 +101,6 @@
 		9265FECF1409AB5D00AE406E /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		9265FED81409AB5D00AE406E /* RHITMobileTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "RHITMobileTests-Info.plist"; sourceTree = "<group>"; };
 		9265FEDA1409AB5D00AE406E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		92C930F3141114170003CE8D /* RHMKPolygonFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHMKPolygonFactory.h; sourceTree = "<group>"; };
-		92C930F4141114170003CE8D /* RHMKPolygonFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHMKPolygonFactory.m; sourceTree = "<group>"; };
 		92DFEAC8141FD4E500889314 /* MKMapView+ZoomLevel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MKMapView+ZoomLevel.h"; sourceTree = "<group>"; };
 		92DFEAC9141FD4E500889314 /* MKMapView+ZoomLevel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MKMapView+ZoomLevel.m"; sourceTree = "<group>"; };
 		92DFEACC141FEF9100889314 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
@@ -182,21 +151,16 @@
 			isa = PBXGroup;
 			children = (
 				923C841A14298DD500DFE415 /* Model.xcdatamodeld */,
-				9226032B1409B3890065F705 /* RHNode.h */,
-				9226032C1409B3890065F705 /* RHNode.m */,
-				922603301409B3A20065F705 /* RHPath.h */,
-				922603311409B3A20065F705 /* RHPath.m */,
-				922603351409B3B00065F705 /* RHEnclosure.h */,
-				922603361409B3B00065F705 /* RHEnclosure.m */,
-				9226033A1409B3BE0065F705 /* RHLocation.h */,
-				9226033B1409B3BE0065F705 /* RHLocation.m */,
-				9226033F1409B3D30065F705 /* RHPerson.h */,
-				922603401409B3D30065F705 /* RHPerson.m */,
-				922603441409B4890065F705 /* RHEnums.h */,
-				924E7551140ADCA0001DFC4C /* RHNavigationNode.h */,
-				924E7552140ADCA0001DFC4C /* RHNavigationNode.m */,
-				924E7555140ADCD7001DFC4C /* RHBoundaryNode.h */,
-				924E7556140ADCD7001DFC4C /* RHBoundaryNode.m */,
+				9208547D142BA28100BE55B8 /* RHNode.h */,
+				9208547E142BA28100BE55B8 /* RHNode.m */,
+				9246368E142BAB5300A5E399 /* RHBoundaryNode.h */,
+				9246368F142BAB5300A5E399 /* RHBoundaryNode.m */,
+				92085491142BA3C300BE55B8 /* RHLabelNode.h */,
+				92085492142BA3C300BE55B8 /* RHLabelNode.m */,
+				92463696142BAE0900A5E399 /* RHNavigationNode.h */,
+				92463697142BAE0A00A5E399 /* RHNavigationNode.m */,
+				9246368A142BAAC700A5E399 /* RHLocation.h */,
+				9246368B142BAAC700A5E399 /* RHLocation.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -204,18 +168,6 @@
 		9226034F1409C32A0065F705 /* LogicTests */ = {
 			isa = PBXGroup;
 			children = (
-				9226034C1409BD910065F705 /* RHNodeTests.h */,
-				9226034D1409BD910065F705 /* RHNodeTests.m */,
-				924E754E140ADA56001DFC4C /* RHPathTests.h */,
-				924E754F140ADA56001DFC4C /* RHPathTests.m */,
-				924E7559140B1C36001DFC4C /* RHNavigationNodeTests.h */,
-				924E755A140B1C36001DFC4C /* RHNavigationNodeTests.m */,
-				924E755C140B2DFD001DFC4C /* RHEnclosureTests.h */,
-				924E755D140B2DFD001DFC4C /* RHEnclosureTests.m */,
-				924E755F140B347A001DFC4C /* RHLocationTests.h */,
-				924E7560140B347A001DFC4C /* RHLocationTests.m */,
-				924E7565140B3978001DFC4C /* RHPersonTests.h */,
-				924E7566140B3978001DFC4C /* RHPersonTests.m */,
 			);
 			name = LogicTests;
 			sourceTree = "<group>";
@@ -268,8 +220,6 @@
 				92ECC4C4141434D30073C4C3 /* RHConstants.h */,
 				92ECC4C3141430510073C4C3 /* Views */,
 				9226030C1409AE640065F705 /* Model */,
-				92C930F3141114170003CE8D /* RHMKPolygonFactory.h */,
-				92C930F4141114170003CE8D /* RHMKPolygonFactory.m */,
 				9265FEAF1409AB5D00AE406E /* Supporting Files */,
 			);
 			path = RHITMobile;
@@ -445,19 +395,16 @@
 				9265FEB91409AB5D00AE406E /* RHITMobileAppDelegate.m in Sources */,
 				9265FEBF1409AB5D00AE406E /* MapViewController.m in Sources */,
 				9265FEC21409AB5D00AE406E /* SearchViewController.m in Sources */,
-				9226032D1409B3890065F705 /* RHNode.m in Sources */,
-				922603321409B3A20065F705 /* RHPath.m in Sources */,
-				922603371409B3B00065F705 /* RHEnclosure.m in Sources */,
-				9226033C1409B3BE0065F705 /* RHLocation.m in Sources */,
-				922603411409B3D30065F705 /* RHPerson.m in Sources */,
-				924E7553140ADCA0001DFC4C /* RHNavigationNode.m in Sources */,
-				924E7557140ADCD7001DFC4C /* RHBoundaryNode.m in Sources */,
-				92C930F5141114170003CE8D /* RHMKPolygonFactory.m in Sources */,
 				9233DD0F141BAA3500B9A549 /* RHAnnotation.m in Sources */,
 				92DFEACA141FD4E500889314 /* MKMapView+ZoomLevel.m in Sources */,
 				92DFEAD01420245F00889314 /* RHAnnotationView.m in Sources */,
 				92DFEAD414203C6400889314 /* RHMapLabel.m in Sources */,
 				923C841C14298DD500DFE415 /* Model.xcdatamodeld in Sources */,
+				9208547F142BA28100BE55B8 /* RHNode.m in Sources */,
+				92085493142BA3C300BE55B8 /* RHLabelNode.m in Sources */,
+				9246368C142BAAC700A5E399 /* RHLocation.m in Sources */,
+				92463690142BAB5300A5E399 /* RHBoundaryNode.m in Sources */,
+				92463698142BAE0A00A5E399 /* RHNavigationNode.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -465,25 +412,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9226032E1409B3890065F705 /* RHNode.m in Sources */,
-				922603331409B3A20065F705 /* RHPath.m in Sources */,
-				922603381409B3B00065F705 /* RHEnclosure.m in Sources */,
-				9226033D1409B3BE0065F705 /* RHLocation.m in Sources */,
-				922603421409B3D30065F705 /* RHPerson.m in Sources */,
-				9226034E1409BD910065F705 /* RHNodeTests.m in Sources */,
-				924E7550140ADA56001DFC4C /* RHPathTests.m in Sources */,
-				924E7554140ADCA0001DFC4C /* RHNavigationNode.m in Sources */,
-				924E7558140ADCD7001DFC4C /* RHBoundaryNode.m in Sources */,
-				924E755B140B1C36001DFC4C /* RHNavigationNodeTests.m in Sources */,
-				924E755E140B2DFE001DFC4C /* RHEnclosureTests.m in Sources */,
-				924E7561140B347A001DFC4C /* RHLocationTests.m in Sources */,
-				924E7567140B3979001DFC4C /* RHPersonTests.m in Sources */,
-				92C930F6141114170003CE8D /* RHMKPolygonFactory.m in Sources */,
 				9233DD10141BAA3500B9A549 /* RHAnnotation.m in Sources */,
 				92DFEACB141FD4E500889314 /* MKMapView+ZoomLevel.m in Sources */,
 				92DFEAD11420245F00889314 /* RHAnnotationView.m in Sources */,
 				92DFEAD514203C6400889314 /* RHMapLabel.m in Sources */,
 				923C841D14298DD500DFE415 /* Model.xcdatamodeld in Sources */,
+				92085480142BA28100BE55B8 /* RHNode.m in Sources */,
+				92085494142BA3C300BE55B8 /* RHLabelNode.m in Sources */,
+				9246368D142BAAC700A5E399 /* RHLocation.m in Sources */,
+				92463691142BAB5300A5E399 /* RHBoundaryNode.m in Sources */,
+				92463699142BAE0A00A5E399 /* RHNavigationNode.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -17,24 +17,18 @@
 //  limitations under the License.
 //
 
+#import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-#import "RHEnums.h"
 
-/// Representation of a node, or single point in space. RHNode is not meant
-/// to be used directly, but rather to be subclassed, specifically into
-/// RHNavigationNode and RHBoundaryNode.
+/// Abstract implementation of a single point in space. RHNode should be
+/// subclassed into more specific objects.
+@interface RHNode : NSManagedObject 
 
-@interface RHNode : NSManagedObject
+/// Latitude of this point in space.
+@property (nonatomic, retain) NSNumber *latitude;
 
-/// Latitude coordinate for this node.
-@property (nonatomic, assign) double latitude;
-
-/// Longitude coordinate for this node.
-@property (nonatomic, assign) double longitude;
-
-/// Initialize with all properties.
-- (RHNode *) initWithLatitude:(double)latitude 
-                    longitude:(double)longitude;
+/// Longitude of this point in space.
+@property (nonatomic, retain) NSNumber *longitude;
 
 @end

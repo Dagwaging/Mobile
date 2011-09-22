@@ -1,5 +1,5 @@
 //
-//  RHPerson.h
+//  RHLabelNode.h
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -17,26 +17,19 @@
 //  limitations under the License.
 //
 
+#import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-#import "RHLocation.h"
+#import "RHNode.h"
 
-/// Representation of a generic person.
 
-@interface RHPerson : NSManagedObject
+@class RHLocation;
 
-/// RHLocation associated with this person.
-@property (nonatomic, retain) RHLocation *location;
+/// An RHNode subclass that is specifically used to position a label on an
+/// RHLocation.
+@interface RHLabelNode : RHNode
 
-/// First name of this person.
-@property (nonatomic, retain) NSString *firstName;
-
-/// Last name of this person.
-@property (nonatomic, retain) NSString *lastName;
-
-/// Initialize with all properties
-- (RHPerson *)initWithLocation:(RHLocation *)location
-                     firstName:(NSString *)firstName
-                      lastName:(NSString *)lastName;
+/// The RHLocation being labeled by this RHLabelNode.
+@property (nonatomic, retain) RHLocation *labeledLocation;
 
 @end

@@ -17,23 +17,25 @@
 //  limitations under the License.
 //
 
-/// Specialized RHNode that contains navigation-specific information, such
-/// as floor level and whether or not a point is indoors.
+#import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
 
 #import "RHNode.h"
 
+
+@class RHLocation;
+
+/// An RHNode subclass that is able to be navigated to. These are used as
+/// points for users to travel to.
 @interface RHNavigationNode : RHNode
 
-/// Whether or not this node is indoors.
-@property (nonatomic, assign) BOOL indoors;
+/// Integer representing which floor this node is on.
+@property (nonatomic, retain) NSNumber *floor;
 
-/// Which floor this node is on, if applicable.
-@property (nonatomic, assign) RHFloor floor;
+/// Integer representing whether or not this floor is indoors.
+@property (nonatomic, retain) NSNumber *indoors;
 
-/// Initialize with all properties.
-- (RHNavigationNode *) initWithLatitude:(double)latitude 
-                              longitude:(double)longitude 
-                                indoors:(BOOL)indoors 
-                                  floor:(RHFloor)floor;
+/// RHLocation that contains this RHNavigationNode.
+@property (nonatomic, retain) RHLocation *enclosingLocation;
 
 @end

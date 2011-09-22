@@ -17,32 +17,60 @@
 //  limitations under the License.
 //
 
+#import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-#import "RHNavigationNode.h"
-#import "RHBoundaryNode.h"
 
-/// Representation of a canonical location, which may be more than a specific
-/// point in space.
+@class RHBoundaryNode, RHLabelNode;
 
-@interface RHLocation : NSManagedObject
+/// Representation of a canonical location. An RHLocation has areas that can
+/// be travelled to, borders defining where it physically is, labelling
+/// properties, and a human-readable name.
+@interface RHLocation : NSManagedObject 
 
-/// Human-readable name of this location
+/// Human-readable name for this RHLocation.
 @property (nonatomic, retain) NSString *name;
 
-/// RHNavigationNode objects that make up this location.
-@property (nonatomic, retain) NSArray *navigationNodes;
+/// The minimum canonical map zoom level this RHLocation shouldbe visible at.
+@property (nonatomic, retain) NSNumber *visibleZoomLevel;
 
-/// RHBoundaryNode objects that define the border of this location.
-@property (nonatomic, retain) NSArray *boundaryNodes;
+/// The list of RHBoundaryNode objects that define the boundary of this
+/// RHLocation. The RHBoundaryNode objects contain ordering information.
+@property (nonatomic, retain) NSSet *boundaryNodes;
 
-/// RHLocation objects that are part of or enclosed by this location.
-@property (nonatomic, retain) NSArray *enclosedLocations;
+/// The location at which the label for this RHLocation should appear.
+@property (nonatomic, retain) RHLabelNode *labelLocation;
 
-/// Initialize with all properties.
-- (RHLocation *) initWithName:(NSString *)name
-              navigationNodes:(NSArray *)navigationNodes
-                boundaryNodes:(NSArray *)boundaryNodes
-            enclosedLocations:(NSArray *)enclosedLocations;
+/// The navigable RHNavigationNode objects that are enclosed by this RHLocation.
+@property (nonatomic, retain) NSSet *navigationNodes;
+
+@end
+
+@interface RHLocation (CoreDataGeneratedAccessors)
+
+/// Add an RHBoundaryNode to the current boundary.
+- (void)addBoundaryNodesObject:(RHBoundaryNode *)boundaryNode;
+
+/// Remove an RHBoundaryNode from the current boundary.
+- (void)removeBoundaryNodesObject:(RHBoundaryNode *)boundaryNode;
+
+/// Add an NSSet of RHBoundaryNode objects to the current boundary.
+- (void)addBoundaryNodes:(NSSet *)boundaryNodes;
+
+/// Remove an NSSet of RHBoundaryNode objects from the current boundary.
+- (void)removeBoundaryNodes:(NSSet *)boundaryNodes;
+
+
+/// Add an RHNavigationNode to this RHLocation.
+- (void)addNavigationNodesObject:(NSManagedObject *)navigationNode;
+
+/// Remove an RHNavigationNode from this location.
+- (void)removeNavigationNodesObject:(NSManagedObject *)navigationNode;
+
+/// Add an NSSet of RHNavigationNode objects to this location.
+- (void)addNavigationNodes:(NSSet *)navigationNodes;
+
+/// Remove an NSSet of RHNavigationNode objects from this location.
+- (void)removeNavigationNodes:(NSSet *)navigationNodes;
 
 @end
