@@ -35,7 +35,7 @@
 /// CLLocationCoordinate2D assembled from latitude and longitude values.
 @property (nonatomic, readonly) CLLocationCoordinate2D coordinate;
 
-/// Init (in place) with all properties.
+/// Init from Core Data managed object context.
 - (RHNode *)initWithContext:(NSManagedObjectContext *)context;
 
 @end

@@ -25,4 +25,10 @@
 
 @dynamic labeledLocation;
 
+- (RHNode *)initWithContext:(NSManagedObjectContext *)context {
+    self = [NSEntityDescription insertNewObjectForEntityForName:@"LabelNode"
+                                         inManagedObjectContext:context];
+    return self;
+}
+
 @end
