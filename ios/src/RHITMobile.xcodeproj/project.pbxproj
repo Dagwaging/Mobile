@@ -47,6 +47,7 @@
 		92948900142D380400820A9C /* RHBoundaryNodeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 929488FF142D380400820A9C /* RHBoundaryNodeTests.m */; };
 		92948903142D3C4200820A9C /* RHLabelNodeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 92948902142D3C4200820A9C /* RHLabelNodeTests.m */; };
 		92948906142D3D5B00820A9C /* RHNavigationNodeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 92948905142D3D5B00820A9C /* RHNavigationNodeTests.m */; };
+		9294890A142D3FE400820A9C /* RHLocationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 92948909142D3FE400820A9C /* RHLocationTests.m */; };
 		92DFEACA141FD4E500889314 /* MKMapView+ZoomLevel.m in Sources */ = {isa = PBXBuildFile; fileRef = 92DFEAC9141FD4E500889314 /* MKMapView+ZoomLevel.m */; };
 		92DFEACB141FD4E500889314 /* MKMapView+ZoomLevel.m in Sources */ = {isa = PBXBuildFile; fileRef = 92DFEAC9141FD4E500889314 /* MKMapView+ZoomLevel.m */; };
 		92DFEACD141FEF9100889314 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92DFEACC141FEF9100889314 /* MapKit.framework */; };
@@ -115,6 +116,8 @@
 		92948902142D3C4200820A9C /* RHLabelNodeTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHLabelNodeTests.m; sourceTree = "<group>"; };
 		92948904142D3D5B00820A9C /* RHNavigationNodeTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHNavigationNodeTests.h; sourceTree = "<group>"; };
 		92948905142D3D5B00820A9C /* RHNavigationNodeTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHNavigationNodeTests.m; sourceTree = "<group>"; };
+		92948908142D3FE400820A9C /* RHLocationTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHLocationTests.h; sourceTree = "<group>"; };
+		92948909142D3FE400820A9C /* RHLocationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHLocationTests.m; sourceTree = "<group>"; };
 		92DFEAC8141FD4E500889314 /* MKMapView+ZoomLevel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MKMapView+ZoomLevel.h"; sourceTree = "<group>"; };
 		92DFEAC9141FD4E500889314 /* MKMapView+ZoomLevel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MKMapView+ZoomLevel.m"; sourceTree = "<group>"; };
 		92DFEACC141FEF9100889314 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
@@ -191,6 +194,8 @@
 				92948902142D3C4200820A9C /* RHLabelNodeTests.m */,
 				92948904142D3D5B00820A9C /* RHNavigationNodeTests.h */,
 				92948905142D3D5B00820A9C /* RHNavigationNodeTests.m */,
+				92948908142D3FE400820A9C /* RHLocationTests.h */,
+				92948909142D3FE400820A9C /* RHLocationTests.m */,
 			);
 			name = ModelTests;
 			sourceTree = "<group>";
@@ -458,6 +463,7 @@
 				92948900142D380400820A9C /* RHBoundaryNodeTests.m in Sources */,
 				92948903142D3C4200820A9C /* RHLabelNodeTests.m in Sources */,
 				92948906142D3D5B00820A9C /* RHNavigationNodeTests.m in Sources */,
+				9294890A142D3FE400820A9C /* RHLocationTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
