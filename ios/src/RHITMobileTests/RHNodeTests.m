@@ -75,14 +75,16 @@
     NSArray *results = [context executeFetchRequest:request error:&error];
     
     STAssertNotNil(results, @"Results array is nil");
-    STAssertEquals(results.count, (NSUInteger) 1, @"Results array has wrong number length");
+    STAssertEquals(results.count, (NSUInteger) 1,
+                   @"Results array has wrong number length");
     
     if (results.count > 0) {
         RHNode *storedNode = (RHNode *) [results objectAtIndex:0];
         
         // Verify the properties set on our retrieved object
         STAssertEquals(storedNode.latitude, latitude, @"Latitude is incorrect");
-        STAssertEquals(storedNode.longitude.doubleValue, 0.0, @"Longitude is incorrect");
+        STAssertEquals(storedNode.longitude.doubleValue, 0.0,
+                       @"Longitude is incorrect");
     }
 }
 
