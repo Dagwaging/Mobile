@@ -1,5 +1,5 @@
 //
-//  RHNodeTests.h
+//  RHBoundaryNodeTests.h
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -20,16 +20,13 @@
 #import <SenTestingKit/SenTestingKit.h>
 #import <UIKit/UIKit.h>
 
-/// Tests targetting the abstract RHNode model object.
-@interface RHNodeTests : SenTestCase
+/// Tests targetting the RHBoundaryNode model object.
+@interface RHBoundaryNodeTests : SenTestCase
 
 /// Verify that basic creation still works.
 - (void)testInitSmokeTest;
 
 /// Verify that storage and retrieval still works.
 - (void)testStorageAndRetrieval;
-
-/// Test the accuracy of the generated CLLocationCoordinate2D in RHNode objects.
-- (void)testComputedCoordinate;
 
 @end
