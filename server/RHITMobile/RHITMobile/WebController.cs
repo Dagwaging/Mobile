@@ -4,104 +4,121 @@ using System.Linq;
 using System.Text;
 using System.Net.Sockets;
 using System.Net;
+using System.ServiceModel;
+using System.ServiceModel.Channels;
 
 namespace RHITMobile
 {
+    [ServiceContract]
+    public interface IService
+    {
+        [OperationContract]
+        string Ping(string name);
+    }
+
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall)]
+    public class ServiceImplementation : IService
+    {
+        public string Ping(string name)
+        {
+            return "Hello, " + name;
+        }
+    }
+
     public static class WebController
     {
         public static IEnumerable<ulong> HandleClients(ThreadManager TM)
         {
             var currentThread = TM.CurrentThread;
-            var listener = new TcpListener(IPAddress.Parse("127.0.0.1"), 4000);
+
+            var listener = new HttpListener();
+            listener.Prefixes.Add("http://localhost:5600/");
             listener.Start();
             while (true)
             {
-                yield return TM.WaitForTcpClient(currentThread, listener);
-                var client = TM.GetResult<TcpClient>();
-                TM.Enqueue(HandleRequests(TM, client));
+                yield return TM.WaitForClient(currentThread, listener);
+                var context = TM.GetResult<HttpListenerContext>();
+                TM.Enqueue(HandleRequests(TM, context));
             }
         }
 
-        private static IEnumerable<ulong> HandleRequests(ThreadManager TM, TcpClient client)
+        public static Dictionary<string, Func<ThreadManager, IEnumerable<string>, Dictionary<string, string>, IEnumerable<ulong>>> RequestHandlers =
+            new Dictionary<string, Func<ThreadManager, IEnumerable<string>, Dictionary<string, string>, IEnumerable<ulong>>>()
+        {
+            { "mapareas", MapAreas.HandleMapAreasRequest },
+        };
+
+        private static IEnumerable<ulong> HandleRequests(ThreadManager TM, HttpListenerContext context)
         {
             var currentThread = TM.CurrentThread;
-            using (var stream = client.GetStream())
+            // http://localhost:5600/favicon.ico
+            var path = context.Request.Url.LocalPath.ToLower().Split('/').Skip(1);
+            Dictionary<string, string> query = new Dictionary<string, string>();
+            if (!String.IsNullOrEmpty(context.Request.Url.Query))
             {
-                var bytes = new byte[256];
-                var builder = new StringBuilder();
-                int bytesRead;
-                var encoder = new ASCIIEncoding();
-                while (true)
+                var querySplit = context.Request.Url.Query.Split('?', '&', ';').Skip(1);
+                foreach (string field in querySplit)
                 {
-                    yield return TM.WaitForStream(currentThread, stream, bytes, 256);
-                    try
-                    {
-                        bytesRead = TM.GetResult<int>();
-                    }
-                    catch
-                    {
-                        break;
-                    }
-                    if (bytesRead == 0)
-                        break;
-
-                    string requestStr = encoder.GetString(bytes, 0, bytesRead);
-                    ClientRequest request = null;
-                    bool deserializeException = false;
-                    try
-                    {
-                        request = requestStr.Deserialize<ClientRequest>();
-                    }
-                    catch (Exception ex)
-                    {
-                        var a = ex;
-                        deserializeException = true;
-                    }
-                    JsonObject response;
-                    if (!deserializeException)
-                    {
-                        if (requestMethods.ContainsKey(request.Request))
-                        {
-                            yield return TM.Await(currentThread, requestMethods[request.Request](TM, request));
-                            try
-                            {
-                                response = TM.GetResult<JsonObject>();
-                            }
-                            catch (Exception ex)
-                            {
-                                response = new ErrorResponse("An exception occurred: {0}, Stack: {1}", ex.Message, ex.StackTrace);
-                            }
-                        }
-                        else
-                        {
-                            response = new ErrorResponse("Unknown request type: \"{0}\"", request.Request);
-                        }
-                    }
-                    else
-                    {
-                        response = new ErrorResponse("Could not parse JSON object");
-                    }
-                    byte[] responseBytes = encoder.GetBytes(response.Serialize());
-                    stream.Write(responseBytes, 0, responseBytes.Length);
+                    int equalsPos = field.IndexOf('=');
+                    query.Add(field.Substring(0, equalsPos), field.Substring(equalsPos + 1, field.Length - equalsPos - 1));
+                }
+            }
+            JsonResponse result = null;
+            if (!path.Any())
+            {
+                result = new JsonResponse(new MessageResponse("Server is active."));
+            }
+            else
+            {
+                if (RequestHandlers.ContainsKey(path.First()))
+                {
+                    yield return TM.Await(currentThread, RequestHandlers[path.First()](TM, path.Skip(1), query));
+                    result = TM.GetResult<JsonResponse>();
+                }
+                else
+                {
+                    result = new JsonResponse(HttpStatusCode.BadRequest);
                 }
             }
 
-            client.Close();
+            if (result.Json != null)
+            {
+                var encoding = new ASCIIEncoding();
+                byte[] b = encoding.GetBytes(result.Json.Serialize());
+                context.Response.OutputStream.Write(b, 0, b.Length);
+            }
+            context.Response.StatusCode = (int)result.StatusCode;
+            context.Response.Close();
+            yield return TM.Return(currentThread);
         }
 
-        private static Dictionary<int, Func<ThreadManager, ClientRequest, IEnumerable<ulong>>> requestMethods = new Dictionary<int, Func<ThreadManager, ClientRequest, IEnumerable<ulong>>>
+        public static string MakePath(this IEnumerable<string> paths)
         {
-            { 1000, HandleLocation },
-        };
-
-        private static IEnumerable<ulong> HandleLocation(ThreadManager TM, ClientRequest request)
-        {
-            var currentThread = TM.CurrentThread;
-            yield return TM.Return(currentThread,
-                new PointsOfInterestResponse(
-                    new PointOfInterest(1, 2.3, "Java City", "Coffee"),
-                    new PointOfInterest(4.5, 6, "Logan's", "More Coffee"),
-                    new PointOfInterest(7.8, 9, "Noble Roman's", "Pizza")));
+            var builder = new StringBuilder();
+            foreach (var path in paths)
+            {
+                builder.Append('/');
+                builder.Append(path);
+            }
+            return builder.ToString();
         }
+    }
+
+    public class JsonResponse
+    {
+        public JsonResponse(JsonObject obj)
+        {
+            Json = obj;
+            StatusCode = HttpStatusCode.OK;
+        }
+
+        public JsonResponse(HttpStatusCode code)
+        {
+            Json = null;
+            StatusCode = code;
+        }
+
+        public JsonObject Json { get; set; }
+        public HttpStatusCode StatusCode { get; set; }
     }
 }

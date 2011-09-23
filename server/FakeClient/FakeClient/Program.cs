@@ -7,6 +7,7 @@ using System.Net;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.IO;
+using System.Threading;
 
 namespace FakeClient
 {
@@ -19,14 +20,19 @@ namespace FakeClient
 
             var stream = client.GetStream();
             var encoding = new ASCIIEncoding();
-            var message = new ClientRequest() { Request = 1000 };
-
+            var message = new ClientRequest() { Request = 400, MyVersion = 0.0 };
             byte[] request = encoding.GetBytes(message.Serialize());
             stream.Write(request, 0, request.Length);
+            stream.WriteByte(0);
 
             byte[] response = new byte[1000];
-            int bytesRead = stream.Read(response, 0, 1000);
-            Console.WriteLine(encoding.GetString(response, 0, bytesRead));
+            while (true)
+            {
+                int bytesRead = stream.Read(response, 0, 1000);
+                if (bytesRead == 0)
+                    break;
+                Console.WriteLine(encoding.GetString(response, 0, bytesRead));
+            }
 
             client.Close();
         }
@@ -37,6 +43,8 @@ namespace FakeClient
     {
         [DataMember(IsRequired = true)]
         public int Request { get; set; }
+        [DataMember(IsRequired = false)]
+        public double MyVersion { get; set; }
     }
 
     public static class JsonUtility

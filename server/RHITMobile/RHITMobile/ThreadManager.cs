@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Data;
 using System.Data.SqlClient;
 using System.Net.Sockets;
+using System.Net;
 
 namespace RHITMobile
 {
@@ -25,6 +26,26 @@ namespace RHITMobile
                 throw _result as Exception;
             }
             return (T)_result;
+        }
+
+        public bool GetResult<T1, T2>(out T1 a1, out T2 a2)
+        {
+            if (_result is Exception)
+            {
+                throw _result as Exception;
+            }
+            else if (_result is T1)
+            {
+                a1 = (T1)_result;
+                a2 = default(T2);
+                return true;
+            }
+            else
+            {
+                a1 = default(T1);
+                a2 = (T2)_result;
+                return false;
+            }
         }
 
         public ulong CurrentThread { get; set; }
@@ -56,10 +77,15 @@ namespace RHITMobile
 
         public ulong Return(ulong currentThread, object result)
         {
+            _result = result;
+
+            return Return(currentThread);
+        }
+
+        public ulong Return(ulong currentThread)
+        {
             ulong caller = _threads[currentThread].Caller;
             _threads.Remove(currentThread);
-
-            _result = result;
 
             return caller;
         }
@@ -176,14 +202,14 @@ namespace RHITMobile
             return 0;
         }
 
-        public ulong WaitForTcpClient(ulong currentThread, TcpListener listener)
+        public ulong WaitForClient(ulong currentThread, HttpListener listener)
         {
             IncreaseExecutions();
             Task.Factory.StartNew<object>(() =>
                 {
                     try
                     {
-                        return listener.AcceptTcpClient();
+                        return listener.GetContext();
                     }
                     catch (Exception ex)
                     {
@@ -195,26 +221,7 @@ namespace RHITMobile
             return 0;
         }
 
-        public ulong WaitForStream(ulong currentThread, NetworkStream stream, byte[] message, int size)
-        {
-            IncreaseExecutions();
-            Task.Factory.StartNew<object>(() =>
-            {
-                try
-                {
-                    return stream.Read(message, 0, size);
-                }
-                catch (Exception ex)
-                {
-                    return ex;
-                }
-            }).ContinueWith((task) =>
-                Enqueue(currentThread, task.Result));
-
-            return 0;
-        }
-
-        public ulong MakeDbCall(ulong currentThread, string connectionString, string requestUri)
+        public ulong MakeDbCall(ulong currentThread, string connectionString, string procedure, params SqlParameter[] parameters)
         {
             IncreaseExecutions();
             Task.Factory.StartNew<object>(() =>
@@ -225,12 +232,17 @@ namespace RHITMobile
                     {
                         connection.Open();
                         var table = new DataTable();
-                        using (var command = new SqlCommand(requestUri, connection))
-                        using (var reader = command.ExecuteReader())
+                        using (var command = connection.CreateCommand())
                         {
-                            table.Load(reader);
+                            command.CommandType = CommandType.StoredProcedure;
+                            command.CommandText = procedure;
+                            command.Parameters.AddRange(parameters);
+                            using (var reader = command.ExecuteReader())
+                            {
+                                table.Load(reader);
+                            }
+                            return table;
                         }
-                        return table;
                     }
                 }
                 catch (Exception ex)
