@@ -25,10 +25,10 @@
 @dynamic latitude;
 @dynamic longitude;
 
-- (RHNode *)initWithContext:(NSManagedObjectContext *)context {
-    self = [NSEntityDescription insertNewObjectForEntityForName:@"Node"
-                                         inManagedObjectContext:context];
-    return self;
++ (RHNode *)fromContext:(NSManagedObjectContext *)context {
+    RHNode *node = [NSEntityDescription insertNewObjectForEntityForName:@"Node"
+                                                 inManagedObjectContext:context];
+    return node;
 }
 
 - (CLLocationCoordinate2D)coordinate {

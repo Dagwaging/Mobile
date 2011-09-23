@@ -26,10 +26,11 @@
 @dynamic position;
 @dynamic boundedLocation;
 
-- (RHNode *)initWithContext:(NSManagedObjectContext *)context {
-    self = [NSEntityDescription insertNewObjectForEntityForName:@"BoundaryNode"
-                                         inManagedObjectContext:context];
-    return self;
++ (RHNode *)fromContext:(NSManagedObjectContext *)context {
+    RHBoundaryNode *node = [NSEntityDescription
+                            insertNewObjectForEntityForName:@"BoundaryNode"
+                            inManagedObjectContext:context];
+    return node;
 }
 
 @end

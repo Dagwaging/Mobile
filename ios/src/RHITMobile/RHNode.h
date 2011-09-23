@@ -36,6 +36,6 @@
 @property (nonatomic, readonly) CLLocationCoordinate2D coordinate;
 
 /// Init from Core Data managed object context.
-- (RHNode *)initWithContext:(NSManagedObjectContext *)context;
++ (RHNode *)fromContext:(NSManagedObjectContext *)context;
 
 @end

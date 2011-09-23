@@ -27,11 +27,11 @@
 @dynamic indoors;
 @dynamic enclosingLocation;
 
-- (RHNode *)initWithContext:(NSManagedObjectContext *)context {
-    self = [NSEntityDescription
-            insertNewObjectForEntityForName:@"NavigationNode"
-            inManagedObjectContext:context];
-    return self;
++ (RHNode *)fromContext:(NSManagedObjectContext *)context {
+    RHNavigationNode *node = [NSEntityDescription
+                              insertNewObjectForEntityForName:@"NavigationNode"
+                              inManagedObjectContext:context];
+    return node;
 }
 
 @end

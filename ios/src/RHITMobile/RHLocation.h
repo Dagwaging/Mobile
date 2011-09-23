@@ -45,7 +45,7 @@
 @property (nonatomic, retain) NSSet *navigationNodes;
 
 /// Init from Core Data managed object context.
-- (RHLocation *)initWithContext:(NSManagedObjectContext *)context;
++ (RHLocation *)fromContext:(NSManagedObjectContext *)context;
 
 @end
 

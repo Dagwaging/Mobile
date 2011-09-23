@@ -30,10 +30,11 @@
 @dynamic labelLocation;
 @dynamic navigationNodes;
 
-- (RHLocation *)initWithContext:(NSManagedObjectContext *)context {
-    self = [NSEntityDescription insertNewObjectForEntityForName:@"Location"
-                                         inManagedObjectContext:context];
-    return self;
++ (RHLocation *)fromContext:(NSManagedObjectContext *)context {
+    RHLocation *location = [NSEntityDescription
+                            insertNewObjectForEntityForName:@"Location"
+                            inManagedObjectContext:context];
+    return location;
 }
 
 @end
