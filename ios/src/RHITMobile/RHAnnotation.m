@@ -28,8 +28,8 @@
 @synthesize annotationType;
 @synthesize location;
 
-- (RHAnnotation *) initWithLocation:(RHLocation *)newLocation
-                     annotationType:(RHAnnotationType)newAnnotationType {
+- (RHAnnotation *)initWithLocation:(RHLocation *)newLocation
+                    annotationType:(RHAnnotationType)newAnnotationType {
     double totalLatitude = 0;
     double totalLongitude = 0;
     int count = 0;
@@ -50,9 +50,9 @@
     
 }
 
-- (RHAnnotation *) initWithLocation:(RHLocation *)newLocation
-                         coordinate:(CLLocationCoordinate2D)newCoordinate
-                       annotationType:(RHAnnotationType)newAnnotationType {
+- (RHAnnotation *)initWithLocation:(RHLocation *)newLocation
+                        coordinate:(CLLocationCoordinate2D)newCoordinate
+                    annotationType:(RHAnnotationType)newAnnotationType {
     self = [super init];
     
     if (self) {

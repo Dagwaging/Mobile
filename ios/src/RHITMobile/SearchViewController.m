@@ -19,6 +19,7 @@
 
 #import "SearchViewController.h"
 
+
 @implementation SearchViewController
 
 @synthesize searchBar;
@@ -28,17 +29,17 @@
 }
 
 
-- (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
-- (void) didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     
     // Release any cached data, images, etc. that aren't in use.
 }
 
-- (void) viewDidUnload {
+- (void)viewDidUnload {
     [super viewDidUnload];
     self.searchBar = nil;
 }
