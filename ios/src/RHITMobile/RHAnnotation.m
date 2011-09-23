@@ -19,6 +19,8 @@
 
 #import "RHAnnotation.h"
 #import "RHNode.h"
+#import "RHLocation.h"
+
 
 @implementation RHAnnotation
 

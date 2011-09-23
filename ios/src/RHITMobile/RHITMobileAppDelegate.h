@@ -17,15 +17,15 @@
 //  limitations under the License.
 //
 
-/// AppDelgate for the RHITMobile app. Handles application-level delegate
-/// functionality.
-
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
 
-#import "MapViewController.h"
-#import "SearchViewController.h"
 
+@class MapViewController;
+@class SearchViewController;
+
+/// AppDelgate for the RHITMobile app. Handles application-level delegate
+/// functionality.
 @interface RHITMobileAppDelegate : NSObject 
 <UIApplicationDelegate, UITabBarControllerDelegate>
 

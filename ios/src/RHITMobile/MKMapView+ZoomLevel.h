@@ -20,10 +20,10 @@
 //  limitations under the License.
 //
 
-/// MapKit MKMapView category that includes setting a canonical zoom level.
-
 #import <MapKit/MapKit.h>
 
+
+/// MapKit MKMapView category that includes setting a canonical zoom level.
 @interface MKMapView(ZoomLevel)
 
 - (void)setCenterCoordinate:(CLLocationCoordinate2D)centerCoordinate

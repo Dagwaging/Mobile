@@ -17,12 +17,12 @@
 //  limitations under the License.
 //
 
-/// The actual view to be rendered when an RHAnnotation appears on the map.
-
 #import <MapKit/MapKit.h>
 
-#import "RHMapLabel.h"
 
+@class RHMapLabel;
+
+/// The actual view to be rendered when an RHAnnotation appears on the map.
 @interface RHAnnotationView : MKAnnotationView
 
 /// Special textview that emulates the MapKit look and feel.

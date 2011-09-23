@@ -17,12 +17,11 @@
 //  limitations under the License.
 //
 
-/// Representation of an annotatable map object. For use by RHAnnotationView.
-
 #import <Foundation/Foundation.h>
 #import <MapKit/MapKit.h>
 
-#import "RHLocation.h"
+
+@class RHLocation;
 
 typedef enum {
     RHAnnotationTypeText,
@@ -30,6 +29,7 @@ typedef enum {
     RHAnnotationTypeTextAndPolygon
 } RHAnnotationType;
 
+/// Representation of an annotatable map object. For use by RHAnnotationView.
 @interface RHAnnotation : NSObject <MKAnnotation>
 
 /// The "center point" of sorts for this location

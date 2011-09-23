@@ -19,6 +19,8 @@
 
 #import "RHAnnotationView.h"
 #import "RHAnnotation.h"
+#import "RHMapLabel.h"
+#import "RHLocation.h"
 
 @implementation RHAnnotationView
 

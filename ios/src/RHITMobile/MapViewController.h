@@ -17,16 +17,22 @@
 //  limitations under the License.
 //
 
-/// View controller for the map portion of the application.
-
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
-#import "MKMapView+ZoomLevel.h"
 
+
+@class MKMapView;
+
+/// View controller for the map portion of the application.
 @interface MapViewController : UIViewController <MKMapViewDelegate>
 
+/// Map view that is visible to the user.
 @property (nonatomic, retain) IBOutlet MKMapView *mapView;
+
+/// Core Data fetched results controller.
 @property (nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
+
+/// Core Data managed object context. 
 @property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;
 
 @end

@@ -18,6 +18,8 @@
 //
 
 #import "RHITMobileAppDelegate.h"
+#import "MapViewController.h"
+#import "SearchViewController.h"
 
 @implementation RHITMobileAppDelegate
 
