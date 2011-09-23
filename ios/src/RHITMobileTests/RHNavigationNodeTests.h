@@ -1,5 +1,5 @@
 //
-//  RHLabelNodeTests.h
+//  RHNavigationNodeTests.h
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -20,8 +20,8 @@
 #import <SenTestingKit/SenTestingKit.h>
 #import <UIKit/UIKit.h>
 
-/// Tests targetting the RHLabelNode model object.
-@interface RHLabelNodeTests : SenTestCase
+/// Tests targetting the RHNavigationNode model object.
+@interface RHNavigationNodeTests : SenTestCase
 
 /// Verify that basic creation still works.
 - (void)testInitSmokeTest;
