@@ -17,7 +17,7 @@
 //  limitations under the License.
 //
 
-/// Global constants for the application
+/// Global constants for the application.
 
 #ifndef RHITMobile_RHConstants_h
 #define RHITMobile_RHConstants_h
