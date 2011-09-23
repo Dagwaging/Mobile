@@ -22,6 +22,7 @@
 
 
 @implementation RHBoundaryNode
+
 @dynamic position;
 @dynamic boundedLocation;
 

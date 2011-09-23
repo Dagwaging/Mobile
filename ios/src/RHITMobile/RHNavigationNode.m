@@ -22,6 +22,7 @@
 
 
 @implementation RHNavigationNode
+
 @dynamic floor;
 @dynamic indoors;
 @dynamic enclosingLocation;

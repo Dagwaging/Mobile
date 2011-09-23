@@ -23,6 +23,7 @@
 
 
 @implementation RHLocation
+
 @dynamic name;
 @dynamic visibleZoomLevel;
 @dynamic boundaryNodes;

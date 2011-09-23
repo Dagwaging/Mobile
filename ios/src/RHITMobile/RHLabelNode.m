@@ -22,6 +22,7 @@
 
 
 @implementation RHLabelNode
+
 @dynamic labeledLocation;
 
 @end
