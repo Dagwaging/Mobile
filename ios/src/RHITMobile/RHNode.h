@@ -19,16 +19,23 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
+#import <CoreLocation/CoreLocation.h>
 
 
 /// Abstract implementation of a single point in space. RHNode should be
 /// subclassed into more specific objects.
-@interface RHNode : NSManagedObject 
+@interface RHNode : NSManagedObject
 
 /// Latitude of this point in space.
 @property (nonatomic, retain) NSNumber *latitude;
 
 /// Longitude of this point in space.
 @property (nonatomic, retain) NSNumber *longitude;
+
+/// CLLocationCoordinate2D assembled from latitude and longitude values.
+@property (nonatomic, readonly) CLLocationCoordinate2D coordinate;
+
+/// Init (in place) with all properties.
+- (RHNode *)initWithContext:(NSManagedObjectContext *)context;
 
 @end

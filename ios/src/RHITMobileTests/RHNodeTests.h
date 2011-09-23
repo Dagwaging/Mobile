@@ -1,5 +1,5 @@
 //
-//  RHNode.m
+//  RHNodeTests.h
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -17,25 +17,19 @@
 //  limitations under the License.
 //
 
-#import "RHNode.h"
+#import <SenTestingKit/SenTestingKit.h>
+#import <UIKit/UIKit.h>
 
 
-@implementation RHNode
+@interface RHNodeTests : SenTestCase
 
-@dynamic latitude;
-@dynamic longitude;
+/// Verify that basic creation still works.
+- (void)testInitSmokeTest;
 
-- (RHNode *)initWithContext:(NSManagedObjectContext *)context {
-    self = [NSEntityDescription insertNewObjectForEntityForName:@"Node"
-                                         inManagedObjectContext:context];
-    return self;
-}
+/// Verify that storage and retrieval still works.
+- (void)testStorageAndRetrieval;
 
-- (CLLocationCoordinate2D)coordinate {
-    CLLocationCoordinate2D coordinate;
-    coordinate.latitude = self.latitude.doubleValue;
-    coordinate.longitude = self.longitude.doubleValue;
-    return coordinate;
-}
+/// Test the accuracy of the generated CLLocationCoordinate2D in RHNode objects.
+- (void)testComputedCoordinate;
 
 @end

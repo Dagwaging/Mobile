@@ -42,6 +42,8 @@
 		9265FED21409AB5D00AE406E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9265FEAA1409AB5D00AE406E /* Foundation.framework */; };
 		9265FED31409AB5D00AE406E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9265FEAC1409AB5D00AE406E /* CoreGraphics.framework */; };
 		9265FEDB1409AB5D00AE406E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9265FED91409AB5D00AE406E /* InfoPlist.strings */; };
+		929488F7142CD4E700820A9C /* RHNodeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 929488F6142CD4E700820A9C /* RHNodeTests.m */; };
+		929488FA142CD65500820A9C /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 929488F9142CD65500820A9C /* CoreData.framework */; };
 		92DFEACA141FD4E500889314 /* MKMapView+ZoomLevel.m in Sources */ = {isa = PBXBuildFile; fileRef = 92DFEAC9141FD4E500889314 /* MKMapView+ZoomLevel.m */; };
 		92DFEACB141FD4E500889314 /* MKMapView+ZoomLevel.m in Sources */ = {isa = PBXBuildFile; fileRef = 92DFEAC9141FD4E500889314 /* MKMapView+ZoomLevel.m */; };
 		92DFEACD141FEF9100889314 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92DFEACC141FEF9100889314 /* MapKit.framework */; };
@@ -101,6 +103,9 @@
 		9265FECF1409AB5D00AE406E /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		9265FED81409AB5D00AE406E /* RHITMobileTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "RHITMobileTests-Info.plist"; sourceTree = "<group>"; };
 		9265FEDA1409AB5D00AE406E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		929488F5142CD4E700820A9C /* RHNodeTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHNodeTests.h; sourceTree = "<group>"; };
+		929488F6142CD4E700820A9C /* RHNodeTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHNodeTests.m; sourceTree = "<group>"; };
+		929488F9142CD65500820A9C /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		92DFEAC8141FD4E500889314 /* MKMapView+ZoomLevel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MKMapView+ZoomLevel.h"; sourceTree = "<group>"; };
 		92DFEAC9141FD4E500889314 /* MKMapView+ZoomLevel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MKMapView+ZoomLevel.m"; sourceTree = "<group>"; };
 		92DFEACC141FEF9100889314 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
@@ -128,6 +133,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				929488FA142CD65500820A9C /* CoreData.framework in Frameworks */,
 				92DFEACD141FEF9100889314 /* MapKit.framework in Frameworks */,
 				9265FED01409AB5D00AE406E /* SenTestingKit.framework in Frameworks */,
 				9265FED11409AB5D00AE406E /* UIKit.framework in Frameworks */,
@@ -165,11 +171,13 @@
 			name = Model;
 			sourceTree = "<group>";
 		};
-		9226034F1409C32A0065F705 /* LogicTests */ = {
+		9226034F1409C32A0065F705 /* ModelTests */ = {
 			isa = PBXGroup;
 			children = (
+				929488F5142CD4E700820A9C /* RHNodeTests.h */,
+				929488F6142CD4E700820A9C /* RHNodeTests.m */,
 			);
-			name = LogicTests;
+			name = ModelTests;
 			sourceTree = "<group>";
 		};
 		922603501409C3330065F705 /* ApplicationTests */ = {
@@ -203,6 +211,7 @@
 		9265FEA71409AB5D00AE406E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				929488F9142CD65500820A9C /* CoreData.framework */,
 				923C841314298C5800DFE415 /* CoreData.framework */,
 				92DFEACC141FEF9100889314 /* MapKit.framework */,
 				9226030D1409AEF00065F705 /* MapKit.framework */,
@@ -241,7 +250,7 @@
 			isa = PBXGroup;
 			children = (
 				922603501409C3330065F705 /* ApplicationTests */,
-				9226034F1409C32A0065F705 /* LogicTests */,
+				9226034F1409C32A0065F705 /* ModelTests */,
 				9265FED71409AB5D00AE406E /* Supporting Files */,
 			);
 			path = RHITMobileTests;
@@ -422,6 +431,7 @@
 				9246368D142BAAC700A5E399 /* RHLocation.m in Sources */,
 				92463691142BAB5300A5E399 /* RHBoundaryNode.m in Sources */,
 				92463699142BAE0A00A5E399 /* RHNavigationNode.m in Sources */,
+				929488F7142CD4E700820A9C /* RHNodeTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
