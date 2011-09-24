@@ -36,8 +36,8 @@
     NSManagedObjectContext *context = appDelegate.managedObjectContext;
     
     // Create a new node
-    RHBoundaryNode *node = (RHBoundaryNode *) [[RHBoundaryNode alloc] 
-                                               initWithContext:context];
+    RHBoundaryNode *node = (RHBoundaryNode *) [RHBoundaryNode
+                                               fromContext:context];
     
     // Just make sure it exists
     STAssertNotNil(node, @"New RHBoundaryNode is nil");
@@ -55,8 +55,8 @@
     NSManagedObjectContext *context = appDelegate.managedObjectContext;
     
     // Create and "store" a new node with our random latitude
-    RHBoundaryNode *node = (RHBoundaryNode *) [[RHBoundaryNode alloc]
-                                               initWithContext:context];
+    RHBoundaryNode *node = (RHBoundaryNode *) [RHBoundaryNode
+                                               fromContext:context];
     node.latitude = latitude;
     node.longitude = [NSNumber numberWithDouble:0.0];
     node.position = [NSNumber numberWithInteger:4];

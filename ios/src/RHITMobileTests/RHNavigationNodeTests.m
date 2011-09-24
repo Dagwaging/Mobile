@@ -36,8 +36,7 @@
     NSManagedObjectContext *context = appDelegate.managedObjectContext;
     
     // Create a new node
-    RHNavigationNode *node = (RHNavigationNode *) [[RHNavigationNode alloc]
-                                                   initWithContext:context];
+    RHNavigationNode *node = (RHNavigationNode *) [RHNavigationNode fromContext:context];
     
     // Just make sure it exists
     STAssertNotNil(node, @"New RHNavigationNode is nil");
@@ -55,8 +54,8 @@
     NSManagedObjectContext *context = appDelegate.managedObjectContext;
     
     // Create and "store" a new node with our random latitude
-    RHNavigationNode *node = (RHNavigationNode *) [[RHNavigationNode alloc]
-                                                   initWithContext:context];
+    RHNavigationNode *node = (RHNavigationNode *) [RHNavigationNode
+                                                   fromContext:context];
     node.latitude = latitude;
     node.longitude = [NSNumber numberWithDouble:0.0];
     

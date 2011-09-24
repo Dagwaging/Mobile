@@ -36,8 +36,7 @@
     NSManagedObjectContext *context = appDelegate.managedObjectContext;
     
     // Create a new node
-    RHLabelNode *node = (RHLabelNode *) [[RHLabelNode alloc]
-                                         initWithContext:context];
+    RHLabelNode *node = (RHLabelNode *) [RHLabelNode fromContext:context];
     
     // Just make sure it exists
     STAssertNotNil(node, @"New RHLabelNode is nil");
@@ -55,8 +54,7 @@
     NSManagedObjectContext *context = appDelegate.managedObjectContext;
     
     // Create and "store" a new node with our random latitude
-    RHLabelNode *node = (RHLabelNode *) [[RHLabelNode alloc]
-                                         initWithContext:context];
+    RHLabelNode *node = (RHLabelNode *) [RHLabelNode fromContext:context];
     node.latitude = latitude;
     node.longitude = [NSNumber numberWithDouble:0.0];
     

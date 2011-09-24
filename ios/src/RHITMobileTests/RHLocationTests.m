@@ -34,7 +34,7 @@
     NSManagedObjectContext *context = appDelegate.managedObjectContext;
     
     // Create a new location
-    RHLocation *node = [[RHLocation alloc] initWithContext:context];
+    RHLocation *node = [RHLocation fromContext:context];
     
     // Just make sure it exists
     STAssertNotNil(node, @"New RHLocation is nil");
@@ -56,7 +56,7 @@
     NSManagedObjectContext *context = appDelegate.managedObjectContext;
     
     // Create and "store" a new loaction with our specific name
-    RHLocation *location = [[RHLocation alloc] initWithContext:context];
+    RHLocation *location = [RHLocation fromContext:context];
     location.name = name;
     
     // Describe the type of entity we'd like to retrieve
