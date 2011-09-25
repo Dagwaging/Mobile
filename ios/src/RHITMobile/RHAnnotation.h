@@ -46,10 +46,4 @@ typedef enum {
 - (RHAnnotation *) initWithLocation:(RHLocation *)location
                      annotationType:(RHAnnotationType)annotationType;
 
-/// Initialize with an RHLocation, CLLocationCoordinate2D, and RHAnnotationType.
-/// This allows you to set the "center point" manually.
-- (RHAnnotation *) initWithLocation:(RHLocation *)location
-                         coordinate:(CLLocationCoordinate2D)coordinate
-                     annotationType:(RHAnnotationType)annotationType;
-
 @end
