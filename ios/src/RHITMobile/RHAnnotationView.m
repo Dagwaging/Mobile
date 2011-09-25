@@ -67,7 +67,7 @@
     textView = [[RHMapLabel alloc] initWithFrame:CGRectMake(2, 2, 96, 46)];
     textView.backgroundColor = [UIColor clearColor];
     textView.text = storedAnnotation.location.name;
-    textView.font = [UIFont fontWithName:@"Arial" size:10];
+    textView.font = [UIFont fontWithName:@"Arial-BoldMT" size:10];
     textView.textColor = [UIColor whiteColor];
     textView.textAlignment = UITextAlignmentCenter;
     [self addSubview:textView];
