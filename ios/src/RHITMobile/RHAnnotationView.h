@@ -21,9 +21,13 @@
 
 
 @class RHMapLabel;
+@class RHAnnotation;
 
 /// The actual view to be rendered when an RHAnnotation appears on the map.
 @interface RHAnnotationView : MKAnnotationView
+
+/// Annotation storing the data we're looking for.
+@property (nonatomic, retain) RHAnnotation *storedAnnotation;
 
 /// Special textview that emulates the MapKit look and feel.
 @property (nonatomic, retain) RHMapLabel *textView;

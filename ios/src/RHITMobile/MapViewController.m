@@ -23,6 +23,7 @@
 #import "RHAnnotation.h"
 #import "RHAnnotationView.h"
 #import "RHLocation.h"
+#import "RHLabelNode.h"
 
 
 @interface MapViewController ()
@@ -73,17 +74,16 @@
     /// \todo This is just proof-of-concept code to render a single location.
     ///       A true implementation should obviously retrieve the location
     ///       data from somewhere dynamic.
-//    RHLocation *hatfield = [[RHLocation alloc] initWithName:@"Hatfield Hall"
-//                                            navigationNodes:nil
-//                                              boundaryNodes:nil
-//                                          enclosedLocations:nil];
-//    CLLocationCoordinate2D hatfieldCenter;
-//    hatfieldCenter.latitude = 39.481968;
-//    hatfieldCenter.longitude = -87.322276;
-//    RHAnnotation *annotation = [[RHAnnotation alloc] initWithLocation:hatfield
-//                                                           coordinate:hatfieldCenter
-//                                                       annotationType:RHAnnotationTypeText];
-//    [self.mapView addAnnotation:annotation];
+    RHLabelNode *hatfieldCenter = (RHLabelNode *)[RHLabelNode 
+                                                  fromContext:self.managedObjectContext];
+    hatfieldCenter.latitude = [NSNumber numberWithDouble:39.481968];
+    hatfieldCenter.longitude = [NSNumber numberWithDouble:-87.322276];
+    RHLocation *hatfield = [RHLocation fromContext:self.managedObjectContext];
+    hatfield.name = @"Hatfield Hall";
+    hatfield.labelLocation = hatfieldCenter;
+    RHAnnotation *annotation = [[[RHAnnotation alloc] initWithLocation:hatfield
+                                                       annotationType:RHAnnotationTypeText] autorelease];
+    [self.mapView addAnnotation:annotation];
 }
 
 # pragma mark -
