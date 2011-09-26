@@ -71,6 +71,8 @@
 /* Begin PBXFileReference section */
 		920656EF142FE83200D50293 /* PhysicalStorageTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhysicalStorageTests.h; sourceTree = "<group>"; };
 		920656F0142FE83200D50293 /* PhysicalStorageTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhysicalStorageTests.m; sourceTree = "<group>"; };
+		920656F414303D1400D50293 /* RHRemoteHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHRemoteHandler.h; sourceTree = "<group>"; };
+		920656F514303D4F00D50293 /* RHRemoteHandlerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHRemoteHandlerDelegate.h; sourceTree = "<group>"; };
 		9208547D142BA28100BE55B8 /* RHNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHNode.h; sourceTree = "<group>"; };
 		9208547E142BA28100BE55B8 /* RHNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHNode.m; sourceTree = "<group>"; };
 		92085491142BA3C300BE55B8 /* RHLabelNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHLabelNode.h; sourceTree = "<group>"; };
@@ -160,6 +162,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		920656F314303CB200D50293 /* Web */ = {
+			isa = PBXGroup;
+			children = (
+				920656F414303D1400D50293 /* RHRemoteHandler.h */,
+				920656F514303D4F00D50293 /* RHRemoteHandlerDelegate.h */,
+			);
+			name = Web;
+			sourceTree = "<group>";
+		};
 		9226030B1409AC820065F705 /* Images */ = {
 			isa = PBXGroup;
 			children = (
@@ -255,6 +266,7 @@
 				9265FEB71409AB5D00AE406E /* RHITMobileAppDelegate.h */,
 				9265FEB81409AB5D00AE406E /* RHITMobileAppDelegate.m */,
 				92948907142D3ED400820A9C /* Map */,
+				920656F314303CB200D50293 /* Web */,
 				92ECC4C3141430510073C4C3 /* Views */,
 				9226030C1409AE640065F705 /* Model */,
 				9265FEAF1409AB5D00AE406E /* Supporting Files */,
