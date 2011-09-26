@@ -24,6 +24,6 @@
 @protocol RHRemoteHandlerDelegate <NSObject>
 
 /// Callback from fetching all RHLocation objects;
-- (void)didReceiveAllLocations:(NSArray *)locations;
+- (void)didFetchAllLocations:(NSArray *)locations;
 
 @end

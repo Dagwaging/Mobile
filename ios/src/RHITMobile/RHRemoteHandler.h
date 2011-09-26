@@ -18,6 +18,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
 
 
 /// Wrapper for remote data fetching and posting.
@@ -28,7 +29,11 @@
 /// RHRemoteHandlerDelgate to interact with.
 @property (nonatomic, retain) RHRemoteHandlerDelegate *delegate;
 
+/// Init with a managed object context for object creation;
+- (id)initWithContext:(NSManagedObjectContext *)context
+             delegate:(RHRemoteHandlerDelegate *)delegate;
+
 /// Begin an asynchronous fetch of all available RHLocation objects.
-- (void)fetchAllLocation;
+- (void)fetchAllLocations;
 
 @end

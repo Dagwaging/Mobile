@@ -24,19 +24,15 @@
 #import "RHAnnotationView.h"
 #import "RHLocation.h"
 #import "RHLabelNode.h"
+#import "RHDummyHandler.h"
 
-
-@interface MapViewController ()
-
-- (void) renderAdditionalLocations;
-    
-@end
 
 @implementation MapViewController
 
 @synthesize mapView;
 @synthesize fetchedResultsController;
 @synthesize managedObjectContext;
+@synthesize remoteHandler = remoteHandler_;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -49,7 +45,7 @@
                             zoomLevel:RH_INITIAL_ZOOM_LEVEL
                              animated:NO];
     
-    [self renderAdditionalLocations];
+    [self.remoteHandler fetchAllLocations];
 }
 
 
@@ -70,22 +66,6 @@
     self.mapView = nil;
 }
 
-- (void) renderAdditionalLocations {
-    /// \todo This is just proof-of-concept code to render a single location.
-    ///       A true implementation should obviously retrieve the location
-    ///       data from somewhere dynamic.
-    RHLabelNode *hatfieldCenter = (RHLabelNode *)[RHLabelNode 
-                                                  fromContext:self.managedObjectContext];
-    hatfieldCenter.latitude = [NSNumber numberWithDouble:39.481968];
-    hatfieldCenter.longitude = [NSNumber numberWithDouble:-87.322276];
-    RHLocation *hatfield = [RHLocation fromContext:self.managedObjectContext];
-    hatfield.name = @"Hatfield Hall";
-    hatfield.labelLocation = hatfieldCenter;
-    RHAnnotation *annotation = [[[RHAnnotation alloc] initWithLocation:hatfield
-                                                       annotationType:RHAnnotationTypeText] autorelease];
-    [self.mapView addAnnotation:annotation];
-}
-
 # pragma mark -
 # pragma mark MKMapViewDelegate Methods
 
@@ -104,6 +84,30 @@
     annotationView.enabled = YES;
     
     return annotationView;
+}
+
+#pragma mark -
+#pragma mark RHRemoteHandlerDelegate Methods
+
+- (RHRemoteHandler *)remoteHandler {
+    if (remoteHandler_ == nil) {
+        // Use the dummy handler for now
+        remoteHandler_ = [[RHDummyHandler alloc]
+                          initWithContext:self.managedObjectContext
+                          delegate:(RHRemoteHandlerDelegate *)self];
+    }
+    
+    return remoteHandler_;
+}
+
+- (void)didFetchAllLocations:(NSArray *)locations {
+    for (RHLocation *location in locations) {
+        RHAnnotation *annotation = [RHAnnotation alloc];
+        annotation = [[annotation initWithLocation:location
+                                    annotationType:RHAnnotationTypeText]
+                      autorelease];
+        [self.mapView addAnnotation:annotation];
+    }
 }
 
 @end

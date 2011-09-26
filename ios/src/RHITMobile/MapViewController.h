@@ -21,10 +21,13 @@
 #import <CoreData/CoreData.h>
 
 #import "MKMapView+ZoomLevel.h"
+#import "RHRemoteHandlerDelegate.h"
 
+
+@class RHRemoteHandler;
 
 /// View controller for the map portion of the application.
-@interface MapViewController : UIViewController <MKMapViewDelegate>
+@interface MapViewController : UIViewController <MKMapViewDelegate, RHRemoteHandlerDelegate>
 
 /// Map view that is visible to the user.
 @property (nonatomic, retain) IBOutlet MKMapView *mapView;
@@ -34,5 +37,8 @@
 
 /// Core Data managed object context. 
 @property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;
+
+/// Remote data handler.
+@property (nonatomic, retain) RHRemoteHandler *remoteHandler;
 
 @end
