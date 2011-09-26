@@ -252,6 +252,8 @@
 			isa = PBXGroup;
 			children = (
 				92ECC4C4141434D30073C4C3 /* RHConstants.h */,
+				9265FEB71409AB5D00AE406E /* RHITMobileAppDelegate.h */,
+				9265FEB81409AB5D00AE406E /* RHITMobileAppDelegate.m */,
 				92948907142D3ED400820A9C /* Map */,
 				92ECC4C3141430510073C4C3 /* Views */,
 				9226030C1409AE640065F705 /* Model */,
@@ -309,8 +311,6 @@
 		92ECC4C3141430510073C4C3 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				9265FEB71409AB5D00AE406E /* RHITMobileAppDelegate.h */,
-				9265FEB81409AB5D00AE406E /* RHITMobileAppDelegate.m */,
 				9265FEBD1409AB5D00AE406E /* MapViewController.h */,
 				9265FEBE1409AB5D00AE406E /* MapViewController.m */,
 				9265FEC01409AB5D00AE406E /* SearchViewController.h */,
