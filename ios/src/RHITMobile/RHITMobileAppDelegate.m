@@ -169,4 +169,31 @@
                                                 YES) lastObject];
 }
 
+- (void)clearDatabase {
+    NSArray *stores = [persistentStoreCoordinator persistentStores];
+    NSPersistentStore *store = [stores objectAtIndex:0];
+    
+    // Delete existing database
+    NSError *error = nil;
+    NSURL *storeURL = store.URL;
+    [persistentStoreCoordinator removePersistentStore:store
+                                                error:&error];
+    [[NSFileManager defaultManager] removeItemAtPath:storeURL.path
+                                               error:&error];
+    
+    // Create new database
+    NSString *path = [self.applicationDocumentsDirectory
+                      stringByAppendingPathComponent:@"RHITMobile.sqlite"];
+    NSURL *storeUrl = [NSURL fileURLWithPath:path];
+    error = nil;
+    
+    if(![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType
+                                                 configuration:nil
+                                                           URL:storeUrl
+                                                       options:nil
+                                                         error:&error]) {
+        /* Error for store creation should be handled in here */
+    }
+}
+
 @end

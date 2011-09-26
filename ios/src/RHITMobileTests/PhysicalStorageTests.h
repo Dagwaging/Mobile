@@ -24,6 +24,9 @@
 @interface PhysicalStorageTests : SenTestCase
 
 /// Test simply storing and retrieving an object.
-- (void) testSimpleStorageAndRetrieval;
+- (void)testSimpleStorageAndRetrieval;
+
+/// Test clearing the database.
+- (void)testClearDatabase;
 
 @end

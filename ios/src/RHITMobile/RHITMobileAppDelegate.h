@@ -52,4 +52,7 @@
 
 - (NSString *)applicationDocumentsDirectory;
 
+/// Clears all data from this application's storage.
+- (void)clearDatabase;
+
 @end

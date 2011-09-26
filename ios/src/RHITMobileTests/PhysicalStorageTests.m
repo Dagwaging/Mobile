@@ -83,4 +83,47 @@
     }
 }
 
+- (void)testClearDatabase {
+    double latValue = ((double)arc4random() / ARC4RANDOM_MAX) * 100.0;
+    NSNumber *latitude = [NSNumber numberWithDouble:latValue];
+    
+    // Retrieve the App Delegate and Managed Object Context
+    RHITMobileAppDelegate *appDelegate;
+    appDelegate = (RHITMobileAppDelegate *)[[UIApplication
+                                             sharedApplication] delegate];
+    NSManagedObjectContext *context = appDelegate.managedObjectContext;
+    
+    RHNode *node = [RHNode fromContext:context];
+    node.latitude = latitude;
+    node.longitude = [NSNumber numberWithDouble:6.0];
+    
+    NSError *error = nil;
+    
+    // Actually save the object to disk, making sure it doesn't break
+    STAssertTrue([context save:&error], @"Save operation failed");
+    
+    // Clear all database data
+    [appDelegate clearDatabase];
+    
+    // Describe the type of entity we'd like to retrieve
+    NSEntityDescription *entityDescription = [NSEntityDescription
+                                              entityForName:@"Node"
+                                              inManagedObjectContext:context];
+    NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
+    [request setEntity:entityDescription];
+    
+    // Put conditions on our fetch request
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:
+                              @"latitude == %@", latitude];
+    [request setPredicate:predicate];
+    
+    // Retrieve what we hope is our created object
+    error = nil;
+    NSArray *results = [context executeFetchRequest:request error:&error];
+    
+    STAssertNotNil(results, @"Results array is nil");
+    STAssertEquals(results.count, (NSUInteger) 0,
+                   @"Results array has incorrect length");
+}
+
 @end
