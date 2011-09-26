@@ -88,4 +88,15 @@
     }
 }
 
+- (void)tearDown {
+    // Retrieve the App Delegate and Managed Object Context
+    RHITMobileAppDelegate *appDelegate;
+    appDelegate = (RHITMobileAppDelegate *)[[UIApplication
+                                             sharedApplication] delegate];
+    NSManagedObjectContext *context = appDelegate.managedObjectContext;
+    
+    // Forget about all those changes
+    [context rollback];
+}
+
 @end

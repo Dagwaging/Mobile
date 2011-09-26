@@ -113,7 +113,10 @@
     if (managedObjectContext != nil) {
         return managedObjectContext;
     }
-    NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
+    
+    NSPersistentStoreCoordinator *coordinator;
+    coordinator = [self persistentStoreCoordinator];
+    
     if (coordinator != nil) {
         managedObjectContext = [[NSManagedObjectContext alloc] init];
         [managedObjectContext setPersistentStoreCoordinator: coordinator];
@@ -126,22 +129,34 @@
     if (managedObjectModel != nil) {
         return managedObjectModel;
     }
-    managedObjectModel = [[NSManagedObjectModel mergedModelFromBundles:nil] retain];
+    
+    managedObjectModel = [[NSManagedObjectModel mergedModelFromBundles:nil]
+                          retain];
     
     return managedObjectModel;
 }
 
 - (NSPersistentStoreCoordinator *)persistentStoreCoordinator {
+    
     if (persistentStoreCoordinator != nil) {
         return persistentStoreCoordinator;
     }
-    NSURL *storeUrl = [NSURL fileURLWithPath: [[self applicationDocumentsDirectory]
-                                               stringByAppendingPathComponent: @"RHITMobile.sqlite"]];
+    
+    NSString *path = [self.applicationDocumentsDirectory
+                      stringByAppendingPathComponent:@"RHITMobile.sqlite"];
+    NSURL *storeUrl = [NSURL fileURLWithPath:path];
     NSError *error = nil;
+    
+    NSManagedObjectModel *model = [self managedObjectModel];
+    
     persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc]
-                                  initWithManagedObjectModel:[self managedObjectModel]];
+                                  initWithManagedObjectModel:model];
+    
     if(![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType
-                                                 configuration:nil URL:storeUrl options:nil error:&error]) {
+                                                 configuration:nil
+                                                           URL:storeUrl
+                                                       options:nil
+                                                         error:&error]) {
         /* Error for store creation should be handled in here */
     }
     
@@ -149,7 +164,9 @@
 }
 
 - (NSString *)applicationDocumentsDirectory {
-    return [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
+    return [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+                                                NSUserDomainMask,
+                                                YES) lastObject];
 }
 
 @end

@@ -1,5 +1,5 @@
 //
-//  RHBoundaryNodeTests.m
+//  PhysicalStorageTests.m
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -19,32 +19,16 @@
 
 #import <CoreLocation/CoreLocation.h>
 
-#import "RHBoundaryNodeTests.h"
-#import "RHBoundaryNode.h"
+#import "PhysicalStorageTests.h"
 #import "RHITMobileAppDelegate.h"
+#import "RHNode.h"
 
 
 #define ARC4RANDOM_MAX 0x100000000
 
-@implementation RHBoundaryNodeTests
+@implementation PhysicalStorageTests
 
-- (void)testInitSmokeTest {
-    // Retrieve the App Delegate and Managed Object Context
-    RHITMobileAppDelegate *appDelegate;
-    appDelegate = (RHITMobileAppDelegate *)[[UIApplication
-                                             sharedApplication] delegate];
-    NSManagedObjectContext *context = appDelegate.managedObjectContext;
-    
-    // Create a new node
-    RHBoundaryNode *node = (RHBoundaryNode *) [RHBoundaryNode
-                                               fromContext:context];
-    
-    // Just make sure it exists
-    STAssertNotNil(node, @"New RHBoundaryNode is nil");
-}
-
-- (void)testStorageAndRetrieval {
-    // Decide on a random latitude
+- (void)testSimpleStorageAndRetrieval {
     double latValue = ((double)arc4random() / ARC4RANDOM_MAX) * 100.0;
     NSNumber *latitude = [NSNumber numberWithDouble:latValue];
     
@@ -54,16 +38,18 @@
                                              sharedApplication] delegate];
     NSManagedObjectContext *context = appDelegate.managedObjectContext;
     
-    // Create and "store" a new node with our random latitude
-    RHBoundaryNode *node = (RHBoundaryNode *) [RHBoundaryNode
-                                               fromContext:context];
+    RHNode *node = [RHNode fromContext:context];
     node.latitude = latitude;
-    node.longitude = [NSNumber numberWithDouble:0.0];
-    node.position = [NSNumber numberWithInteger:4];
+    node.longitude = [NSNumber numberWithDouble:6.0];
+    
+    NSError *error = nil;
+    
+    // Actually save the object to disk, making sure it doesn't break
+    STAssertTrue([context save:&error], @"Save operation failed");
     
     // Describe the type of entity we'd like to retrieve
     NSEntityDescription *entityDescription = [NSEntityDescription
-                                              entityForName:@"BoundaryNode"
+                                              entityForName:@"Node"
                                               inManagedObjectContext:context];
     NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
     [request setEntity:entityDescription];
@@ -74,35 +60,27 @@
     [request setPredicate:predicate];
     
     // Retrieve what we hope is our created object
-    NSError *error = nil;
+    error = nil;
     NSArray *results = [context executeFetchRequest:request error:&error];
     
     STAssertNotNil(results, @"Results array is nil");
     STAssertEquals(results.count, (NSUInteger) 1,
-                   @"Results array has wrong number length");
+                   @"Results array has incorrect length");
     
     if (results.count > 0) {
-        RHBoundaryNode *storedNode;
-        storedNode = (RHBoundaryNode *) [results objectAtIndex:0];
+        RHNode *storedNode = (RHNode *) [results objectAtIndex:0];
         
         // Verify the properties set on our retrieved object
-        STAssertEquals(storedNode.latitude, latitude, @"Latitude is incorrect");
-        STAssertEquals(storedNode.longitude.doubleValue, 0.0,
+        STAssertEquals(storedNode.latitude.doubleValue, latValue,
+                       @"Latitude is incorrect");
+        STAssertEquals(storedNode.longitude.doubleValue, 6.0,
                        @"Longitude is incorrect");
-        STAssertEquals(storedNode.position.doubleValue, 4.0,
-                       @"Position is incorrect");
+        
+        // Clean up
+        error = nil;
+        [context deleteObject:storedNode];
+        STAssertTrue([context save:&error], @"Cleanup failed");
     }
-}
-
-- (void)tearDown {
-    // Retrieve the App Delegate and Managed Object Context
-    RHITMobileAppDelegate *appDelegate;
-    appDelegate = (RHITMobileAppDelegate *)[[UIApplication
-                                             sharedApplication] delegate];
-    NSManagedObjectContext *context = appDelegate.managedObjectContext;
-    
-    // Forget about all those changes
-    [context rollback];
 }
 
 @end
