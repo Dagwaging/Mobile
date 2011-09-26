@@ -21,9 +21,9 @@
 #import <CoreData/CoreData.h>
 
 
-/// Wrapper for remote data fetching and posting.
 @class RHRemoteHandlerDelegate;
 
+/// Wrapper for remote data fetching and posting.
 @protocol RHRemoteHandler <NSObject>
 
 /// RHRemoteHandlerDelgate to interact with.
