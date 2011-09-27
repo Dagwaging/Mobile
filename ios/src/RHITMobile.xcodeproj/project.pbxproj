@@ -29,6 +29,8 @@
 		92463698142BAE0A00A5E399 /* RHNavigationNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 92463697142BAE0A00A5E399 /* RHNavigationNode.m */; };
 		92463699142BAE0A00A5E399 /* RHNavigationNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 92463697142BAE0A00A5E399 /* RHNavigationNode.m */; };
 		924E754D140ACC9A001DFC4C /* tab-bar-map-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 924E754C140ACC9A001DFC4C /* tab-bar-map-icon.png */; };
+		9250133C1431A7C700CEBB35 /* RHRestHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 9250133B1431A7C700CEBB35 /* RHRestHandler.m */; };
+		9250133D1431A7C700CEBB35 /* RHRestHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 9250133B1431A7C700CEBB35 /* RHRestHandler.m */; };
 		9265FEA91409AB5D00AE406E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9265FEA81409AB5D00AE406E /* UIKit.framework */; };
 		9265FEAB1409AB5D00AE406E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9265FEAA1409AB5D00AE406E /* Foundation.framework */; };
 		9265FEAD1409AB5D00AE406E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9265FEAC1409AB5D00AE406E /* CoreGraphics.framework */; };
@@ -95,6 +97,8 @@
 		92463696142BAE0900A5E399 /* RHNavigationNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHNavigationNode.h; sourceTree = "<group>"; };
 		92463697142BAE0A00A5E399 /* RHNavigationNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHNavigationNode.m; sourceTree = "<group>"; };
 		924E754C140ACC9A001DFC4C /* tab-bar-map-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab-bar-map-icon.png"; sourceTree = "<group>"; };
+		9250133A1431A7C700CEBB35 /* RHRestHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHRestHandler.h; sourceTree = "<group>"; };
+		9250133B1431A7C700CEBB35 /* RHRestHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHRestHandler.m; sourceTree = "<group>"; };
 		9265FEA41409AB5D00AE406E /* RHITMobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RHITMobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9265FEA81409AB5D00AE406E /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		9265FEAA1409AB5D00AE406E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -173,6 +177,8 @@
 				920656F514303D4F00D50293 /* RHRemoteHandlerDelegate.h */,
 				920656F61430402E00D50293 /* RHDummyHandler.h */,
 				920656F71430402E00D50293 /* RHDummyHandler.m */,
+				9250133A1431A7C700CEBB35 /* RHRestHandler.h */,
+				9250133B1431A7C700CEBB35 /* RHRestHandler.m */,
 			);
 			name = Web;
 			sourceTree = "<group>";
@@ -466,6 +472,7 @@
 				92463690142BAB5300A5E399 /* RHBoundaryNode.m in Sources */,
 				92463698142BAE0A00A5E399 /* RHNavigationNode.m in Sources */,
 				920656F81430402E00D50293 /* RHDummyHandler.m in Sources */,
+				9250133C1431A7C700CEBB35 /* RHRestHandler.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -490,6 +497,7 @@
 				9294890A142D3FE400820A9C /* RHLocationTests.m in Sources */,
 				920656F1142FE83200D50293 /* PhysicalStorageTests.m in Sources */,
 				920656F91430402E00D50293 /* RHDummyHandler.m in Sources */,
+				9250133D1431A7C700CEBB35 /* RHRestHandler.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
