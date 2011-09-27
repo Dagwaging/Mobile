@@ -146,6 +146,10 @@ namespace RHITMobile
                 }
                 continueThread = thread.Iterator.Current;
             }
+            if (_result is Exception)
+            {
+                // Log exception
+            }
             DecreaseExecutions();
         }
 

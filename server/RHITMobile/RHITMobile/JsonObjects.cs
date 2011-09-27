@@ -70,6 +70,7 @@ namespace RHITMobile
             Id = (int)row["id"];
             Name = (string)row["name"];
             Description = (string)row["description"];
+            Center = new LatLong(row);
             Corners = new List<LatLong>();
         }
 
@@ -79,6 +80,8 @@ namespace RHITMobile
         public string Name { get; set; }
         [DataMember(IsRequired = true)]
         public string Description { get; set; }
+        [DataMember(IsRequired = true)]
+        public LatLong Center { get; set; }
         [DataMember(IsRequired = true)]
         public List<LatLong> Corners { get; set; }
     }
