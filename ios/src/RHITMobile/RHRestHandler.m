@@ -33,6 +33,12 @@
 
 - (void)performFetchAllLocations;
 
+- (void)notifyDelegateViaSelector:(SEL)selector
+               ofFailureWithError:(NSError *)error;
+
+- (void)notifyDelegateViaSelector:(SEL)selector
+             ofFailureWithMessage:(NSString *)message;
+
 @end
 
 
@@ -71,6 +77,7 @@
 #pragma mark Private Methods
 
 - (void)performFetchAllLocations {
+    SEL failureSelector = @selector(didFailFetchingAllLocationsWithError:);
     NSURL *url = [NSURL URLWithString:@"http://mobilewin.csse.rose-hulman.edu:5600/mapareas"];
     
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
@@ -83,7 +90,9 @@
                                          returningResponse:&response
                                                      error:&error];
     if (data == nil) {
-        [delegate didFailFetchingAllLocationsWithError:error];
+        [self notifyDelegateViaSelector:failureSelector
+                     ofFailureWithError:error];
+        return;
     }
     
     error = nil;
@@ -91,13 +100,17 @@
                                                               error:&error];
     
     if (parsedData == nil) {
-        [delegate didFailFetchingAllLocationsWithError:error];
+        [self notifyDelegateViaSelector:failureSelector
+                     ofFailureWithError:error];
+        return;
     }
     
     NSArray *areas = [parsedData valueForKey:@"Areas"];
     
     if (areas == nil) {
-        // TODO: Handle errors here
+        NSString *message = @"Problem with server response:\nList of locations missing or named incorrectly";
+        [self notifyDelegateViaSelector:failureSelector
+                   ofFailureWithMessage:message];
         return;
     }
     
@@ -107,7 +120,9 @@
         NSDictionary *center = [area valueForKey:@"Center"];
         
         if (center == nil) {
-            // TODO: Handle errors here
+            NSString *message = @"Problem with server response:\nAt least one location is missing the location of its label";
+            [self notifyDelegateViaSelector:failureSelector
+                       ofFailureWithMessage:message];
             return;
         }
         
@@ -125,7 +140,29 @@
         [locations addObject:location];
     }
     
-    [delegate didFetchAllLocations:locations];
+    [delegate performSelectorOnMainThread:@selector(didFetchAllLocations:)
+                               withObject:locations
+                            waitUntilDone:NO];
+}
+
+- (void)notifyDelegateViaSelector:(SEL)selector
+               ofFailureWithError:(NSError *)error {
+    [delegate performSelectorOnMainThread:selector
+                               withObject:error
+                            waitUntilDone:NO];
+}
+
+- (void)notifyDelegateViaSelector:(SEL)selector
+             ofFailureWithMessage:(NSString *)message {
+    NSDictionary *userInfo = [NSDictionary
+                              dictionaryWithObject:message
+                              forKey:NSLocalizedDescriptionKey];
+    NSError *error = [NSError errorWithDomain:@"edu.rosehulman.ios.mobile"
+                                         code:0
+                                     userInfo:userInfo];
+    [delegate performSelectorOnMainThread:selector
+                               withObject:error
+                            waitUntilDone:NO];
 }
 
 @end
