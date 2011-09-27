@@ -100,7 +100,7 @@
     return remoteHandler_;
 }
 
-- (void)didFetchAllLocations:(NSArray *)locations {
+- (void)didFetchAllLocations:(NSSet *)locations {
     for (RHLocation *location in locations) {
         RHAnnotation *annotation = [RHAnnotation alloc];
         annotation = [[annotation initWithLocation:location

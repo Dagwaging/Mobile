@@ -17,6 +17,9 @@
 //  limitations under the License.
 //
 
+#import "CJSONDeserializer.h"
+#import "NSDictionary_JSONExtensions.h"
+
 #import "RHRestHandler.h"
 #import "RHRemoteHandlerDelegate.h"
 #import "RHLabelNode.h"
@@ -68,8 +71,63 @@
 #pragma mark Private Methods
 
 - (void)performFetchAllLocations {
+    NSURL *url = [NSURL URLWithString:@"http://mobilewin.csse.rose-hulman.edu:5600/mapareas"];
     
-    // Aggregate and pass on locations
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    NSURLResponse *response = nil;
+    NSError *error = nil;
+    
+    // Because this will be done on a background thread, we can use a
+    // synchronous request for our data retrieval step.
+    NSData *data = [NSURLConnection sendSynchronousRequest:request
+                                         returningResponse:&response
+                                                     error:&error];
+    if (data == nil) {
+        // TODO: Handle errors here
+        return;
+    }
+    
+    error = nil;
+    NSDictionary *parsedData = [NSDictionary dictionaryWithJSONData:data
+                                                              error:&error];
+    
+    if (parsedData == nil) {
+        // TODO: Handle errors here
+        return;
+    }
+    
+    NSArray *areas = [parsedData valueForKey:@"Areas"];
+    
+    if (areas == nil) {
+        // TODO: Handle errors here
+        return;
+    }
+    
+    NSMutableSet *locations = [NSMutableSet setWithCapacity:[areas count]];
+    
+    for (NSDictionary *area in areas) {
+        NSDictionary *center = [area valueForKey:@"Center"];
+        
+        if (center == nil) {
+            // TODO: Handle errors here
+            return;
+        }
+        
+        RHLabelNode *centerNode = (RHLabelNode *) [RHLabelNode
+                                                   fromContext:context];
+        
+        centerNode.latitude = [center valueForKey:@"Lat"];
+        centerNode.longitude = [center valueForKey:@"Long"];
+        
+        RHLocation *location = (RHLocation *) [RHLocation fromContext:context];
+        
+        location.labelLocation = centerNode;
+        location.name = [area valueForKey:@"Name"];
+        
+        [locations addObject:location];
+    }
+    
+    [delegate didFetchAllLocations:locations];
 }
 
 @end

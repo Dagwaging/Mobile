@@ -109,7 +109,7 @@
     olin.labelLocation = olinLabel;
     
     // Aggregate and pass on locations
-    NSArray *locations = [[NSArray alloc] initWithObjects:hatfield, moench, crapo, olin, nil];
+    NSSet *locations = [[NSArray alloc] initWithObjects:hatfield, moench, crapo, olin, nil];
     [delegate didFetchAllLocations:locations];
     [locations release];
 }
