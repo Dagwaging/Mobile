@@ -23,7 +23,10 @@
 /// Delegate for RHRemoteHandler asynchronous calls.
 @protocol RHRemoteHandlerDelegate <NSObject>
 
-/// Callback from fetching all RHLocation objects;
+/// Callback from fetching all RHLocation objects.
 - (void)didFetchAllLocations:(NSSet *)locations;
+
+/// Callback when something goes wrong fetching all locations.
+- (void)didFailFetchingAllLocationsWithError:(NSError *)error;
 
 @end

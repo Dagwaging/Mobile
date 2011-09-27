@@ -109,4 +109,14 @@
     }
 }
 
+- (void)didFailFetchingAllLocationsWithError:(NSError *)error {
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error Updating Map"
+                                                    message:error.localizedDescription
+                                                   delegate:self
+                                          cancelButtonTitle:@"OK"
+                                          otherButtonTitles:nil, nil];
+    [alert show];
+    [alert release];
+}
+
 @end

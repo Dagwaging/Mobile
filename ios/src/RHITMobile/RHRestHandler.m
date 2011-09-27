@@ -83,8 +83,7 @@
                                          returningResponse:&response
                                                      error:&error];
     if (data == nil) {
-        // TODO: Handle errors here
-        return;
+        [delegate didFailFetchingAllLocationsWithError:error];
     }
     
     error = nil;
@@ -92,8 +91,7 @@
                                                               error:&error];
     
     if (parsedData == nil) {
-        // TODO: Handle errors here
-        return;
+        [delegate didFailFetchingAllLocationsWithError:error];
     }
     
     NSArray *areas = [parsedData valueForKey:@"Areas"];
