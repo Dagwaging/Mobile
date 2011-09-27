@@ -110,8 +110,11 @@
 }
 
 - (void)didFailFetchingAllLocationsWithError:(NSError *)error {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error Updating Map"
-                                                    message:error.localizedDescription
+    NSString *title = @"Error Updating Map";
+    NSString *message = error.localizedDescription;
+    
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
+                                                    message:message
                                                    delegate:self
                                           cancelButtonTitle:@"OK"
                                           otherButtonTitles:nil, nil];
