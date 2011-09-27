@@ -108,7 +108,8 @@
     NSArray *areas = [parsedData valueForKey:@"Areas"];
     
     if (areas == nil) {
-        NSString *message = @"Problem with server response:\nList of locations missing or named incorrectly";
+        NSString *message = @"Problem with server response:\nList of locations "
+            "missing or named incorrectly";
         [self notifyDelegateViaSelector:failureSelector
                    ofFailureWithMessage:message];
         return;
@@ -117,10 +118,22 @@
     NSMutableSet *locations = [NSMutableSet setWithCapacity:[areas count]];
     
     for (NSDictionary *area in areas) {
+        NSString *name = [area valueForKey:@"Name"];
+        if (name == nil) {
+            NSString *message = @"Problem with server response:\nAt least one "
+                                 "location is missing the location of its name";
+            [self notifyDelegateViaSelector:failureSelector
+                       ofFailureWithMessage:message];
+            return;
+        }
+        
         NSDictionary *center = [area valueForKey:@"Center"];
         
         if (center == nil) {
-            NSString *message = @"Problem with server response:\nAt least one location is missing the location of its label";
+            NSString *message = [NSString
+                                 stringWithFormat:@"Problem with server "
+                                 "response:\nLocation \"%@\" is missing the "
+                                 "coordinates of its label.", name];
             [self notifyDelegateViaSelector:failureSelector
                        ofFailureWithMessage:message];
             return;
@@ -130,12 +143,35 @@
                                                    fromContext:context];
         
         centerNode.latitude = [center valueForKey:@"Lat"];
+        
+        if (centerNode.latitude == nil) {
+            NSString *message = [NSString
+                                 stringWithFormat:@"Problem with server "
+                                 "response:\nLocation \"%@\" is missing the "
+                                 "latitude component of its label coordinate.",
+                                 name];
+            [self notifyDelegateViaSelector:failureSelector
+                       ofFailureWithMessage:message];
+            return;
+        }
+        
         centerNode.longitude = [center valueForKey:@"Long"];
+        
+        if (centerNode.longitude == nil) {
+            NSString *message = [NSString
+                                 stringWithFormat:@"Problem with server "
+                                 "response:\nLocation \"%@\" is missing the "
+                                 "longitude component of its label coordinate.",
+                                 name];
+            [self notifyDelegateViaSelector:failureSelector
+                       ofFailureWithMessage:message];
+            return;
+        }
         
         RHLocation *location = (RHLocation *) [RHLocation fromContext:context];
         
         location.labelLocation = centerNode;
-        location.name = [area valueForKey:@"Name"];
+        location.name = name;
         
         [locations addObject:location];
     }
