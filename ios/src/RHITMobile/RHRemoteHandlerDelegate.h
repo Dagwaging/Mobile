@@ -20,6 +20,7 @@
 #import <Foundation/Foundation.h>
 
 
+/// \ingroup web
 /// Delegate for RHRemoteHandler asynchronous calls.
 @protocol RHRemoteHandlerDelegate <NSObject>
 

@@ -20,6 +20,7 @@
 #import <SenTestingKit/SenTestingKit.h>
 #import <UIKit/UIKit.h>
 
+/// \test
 /// Tests targetting the RHLabelNode model object.
 @interface RHLabelNodeTests : SenTestCase
 

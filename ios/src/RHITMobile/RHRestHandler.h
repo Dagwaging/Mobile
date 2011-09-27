@@ -22,6 +22,7 @@
 #import "RHRemoteHandler.h"
 
 
+/// \ingroup web
 /// RHRemoteHandler that completely synthesizes its output.
 @interface RHRestHandler : NSObject <RHRemoteHandler>
 

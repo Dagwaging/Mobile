@@ -23,6 +23,7 @@
 
 @class RHBoundaryNode, RHLabelNode;
 
+/// \ingroup model
 /// Representation of a canonical location. An RHLocation has areas that can
 /// be travelled to, borders defining where it physically is, labelling
 /// properties, and a human-readable name.

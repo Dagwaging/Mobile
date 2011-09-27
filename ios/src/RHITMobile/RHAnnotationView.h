@@ -23,6 +23,7 @@
 @class RHMapLabel;
 @class RHAnnotation;
 
+/// \ingroup map
 /// The actual view to be rendered when an RHAnnotation appears on the map.
 @interface RHAnnotationView : MKAnnotationView
 

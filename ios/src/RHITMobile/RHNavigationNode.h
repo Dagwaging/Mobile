@@ -25,6 +25,7 @@
 
 @class RHLocation;
 
+/// \ingroup model
 /// An RHNode subclass that is able to be navigated to. These are used as
 /// points for users to travel to.
 @interface RHNavigationNode : RHNode

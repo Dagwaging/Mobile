@@ -23,6 +23,7 @@
 #import <MapKit/MapKit.h>
 
 
+/// \ingroup map
 /// MapKit MKMapView category that includes setting a canonical zoom level.
 @interface MKMapView(ZoomLevel)
 

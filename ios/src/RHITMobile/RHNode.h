@@ -22,6 +22,7 @@
 #import <CoreLocation/CoreLocation.h>
 
 
+/// \ingroup model
 /// Abstract implementation of a single point in space. RHNode should be
 /// subclassed into more specific objects.
 @interface RHNode : NSManagedObject

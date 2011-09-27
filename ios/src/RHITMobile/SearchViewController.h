@@ -20,6 +20,7 @@
 #import <UIKit/UIKit.h>
 
 
+/// \ingroup views
 /// View controller for the search portion of the application.
 @interface SearchViewController : UIViewController <UISearchBarDelegate>
 

@@ -25,6 +25,7 @@
 
 @class RHLocation;
 
+/// \ingroup model
 /// An RHNode subclass that is specifically used to position a label on an
 /// RHLocation.
 @interface RHLabelNode : RHNode

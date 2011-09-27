@@ -26,6 +26,7 @@
 
 @class RHRemoteHandler;
 
+/// \ingroup views
 /// View controller for the map portion of the application.
 @interface MapViewController : UIViewController <MKMapViewDelegate, RHRemoteHandlerDelegate>
 

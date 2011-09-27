@@ -20,6 +20,7 @@
 #import <SenTestingKit/SenTestingKit.h>
 #import <UIKit/UIKit.h>
 
+/// \test
 /// Tests targetting actually storing data on the device and retrieving it.
 @interface PhysicalStorageTests : SenTestCase
 

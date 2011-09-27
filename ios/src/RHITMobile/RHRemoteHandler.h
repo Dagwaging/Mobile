@@ -23,6 +23,7 @@
 
 @class RHRemoteHandlerDelegate;
 
+/// \ingroup web
 /// Wrapper for remote data fetching and posting.
 @protocol RHRemoteHandler <NSObject>
 

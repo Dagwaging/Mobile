@@ -29,6 +29,7 @@ typedef enum {
     RHAnnotationTypeTextAndPolygon
 } RHAnnotationType;
 
+/// \ingroup map
 /// Representation of an annotatable map object. For use by RHAnnotationView.
 @interface RHAnnotation : NSObject <MKAnnotation>
 

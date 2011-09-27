@@ -25,6 +25,7 @@
 
 @class RHLocation;
 
+/// \ingroup model
 /// RHNode specifically used for defining the boundary of a location.
 /// RHBoundaryNodes will be represented in an ordered manner, and thus contain
 /// order information.
