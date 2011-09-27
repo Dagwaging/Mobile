@@ -24,6 +24,7 @@
 
 @implementation RHLocation
 
+@dynamic serverIdentifer;
 @dynamic name;
 @dynamic visibleZoomLevel;
 @dynamic boundaryNodes;

@@ -27,7 +27,10 @@
 /// Representation of a canonical location. An RHLocation has areas that can
 /// be travelled to, borders defining where it physically is, labelling
 /// properties, and a human-readable name.
-@interface RHLocation : NSManagedObject 
+@interface RHLocation : NSManagedObject
+
+/// Server-generated integer ID for this RHLocation
+@property (nonatomic, retain) NSNumber *serverIdentifer;
 
 /// Human-readable name for this RHLocation.
 @property (nonatomic, retain) NSString *name;
