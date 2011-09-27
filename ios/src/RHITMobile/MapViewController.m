@@ -24,7 +24,7 @@
 #import "RHAnnotationView.h"
 #import "RHLocation.h"
 #import "RHLabelNode.h"
-#import "RHDummyHandler.h"
+#import "RHRestHandler.h"
 
 
 @implementation MapViewController
@@ -91,8 +91,7 @@
 
 - (RHRemoteHandler *)remoteHandler {
     if (remoteHandler_ == nil) {
-        // Use the dummy handler for now
-        remoteHandler_ = [[RHDummyHandler alloc]
+        remoteHandler_ = [[RHRestHandler alloc]
                           initWithContext:self.managedObjectContext
                           delegate:(RHRemoteHandlerDelegate *)self];
     }
