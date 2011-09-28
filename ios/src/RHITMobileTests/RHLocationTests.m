@@ -41,7 +41,7 @@
 }
 
 - (void)testStorageAndRetrieval {
-    // User the current time as a name
+    // Use the current time as a name
     NSDate *now = [NSDate date];
 	NSDateFormatter *formatter = nil;
 	formatter = [[NSDateFormatter alloc] init];
@@ -58,6 +58,8 @@
     // Create and "store" a new loaction with our specific name
     RHLocation *location = [RHLocation fromContext:context];
     location.name = name;
+    location.serverIdentifier = [NSNumber numberWithInt:2];
+    location.visibleZoomLevel = [NSNumber numberWithInt:15];
     
     // Describe the type of entity we'd like to retrieve
     NSEntityDescription *entityDescription = [NSEntityDescription
@@ -84,7 +86,11 @@
         storedLocation = (RHLocation *) [results objectAtIndex:0];
         
         // Verify the properties set on our retrieved object
-        STAssertEquals(location.name, name, @"Name is incorrect.");
+        STAssertEquals([location name], name, @"Name is incorrect.");
+        STAssertEquals([[location serverIdentifier] intValue], 2,
+                       @"Server ID is incorrect.");
+        STAssertEquals([[location visibleZoomLevel] intValue], 15,
+                       @"Visible zoom level is incorrect.");
     }
 }
 

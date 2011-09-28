@@ -8,7 +8,7 @@
         <relationship name="labeledLocation" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Location" inverseName="labelLocation" inverseEntity="Location"/>
     </entity>
     <entity name="Location" representedClassName="RHLocation">
-        <attribute name="name" optional="YES" attributeType="Integer 16" defaultValueString="0"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="serverIdentifier" optional="YES" attributeType="Integer 16" defaultValueString="0"/>
         <attribute name="visibleZoomLevel" optional="YES" attributeType="Integer 16" defaultValueString="0"/>
         <relationship name="boundaryNodes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="BoundaryNode" inverseName="boundedLocation" inverseEntity="BoundaryNode"/>

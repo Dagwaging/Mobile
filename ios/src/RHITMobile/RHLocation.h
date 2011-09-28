@@ -30,7 +30,7 @@
 @interface RHLocation : NSManagedObject
 
 /// Server-generated integer ID for this RHLocation
-@property (nonatomic, retain) NSNumber *serverIdentifer;
+@property (nonatomic, retain) NSNumber *serverIdentifier;
 
 /// Human-readable name for this RHLocation.
 @property (nonatomic, retain) NSString *name;
