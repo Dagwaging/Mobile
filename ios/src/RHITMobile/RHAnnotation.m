@@ -34,12 +34,19 @@
     
     if (self) {
         self.location = inLocation;
-        self.coordinate = inLocation.labelLocation.coordinate;
         self.annotationType = inAnnotationType;
     }
     
     return self;
     
+}
+
+- (CLLocationCoordinate2D)coordinate {
+    return [[[self location] labelLocation] coordinate];
+}
+
+- (NSString *)title {
+    return [[self location] name];
 }
 
 @end

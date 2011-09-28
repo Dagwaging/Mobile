@@ -56,7 +56,7 @@
             
         case RHAnnotationTypeTextAndPolygon:
             /// \todo Add polygon rendering
-            self.frame = CGRectMake(0, 0, 100, 50);
+            self.frame = CGRectMake(0, 0, 100, 30);
             [self createText];
             break;
     }
@@ -65,7 +65,9 @@
 }
 
 - (void) createText {
-    textView = [[RHMapLabel alloc] initWithFrame:CGRectMake(2, 2, 96, 46)];
+    textView = [[RHMapLabel alloc] initWithFrame:CGRectMake(2, 2, 96, 26)];
+    [textView setNumberOfLines:2];
+    [textView setLineBreakMode:UILineBreakModeWordWrap];
     textView.backgroundColor = [UIColor clearColor];
     textView.text = storedAnnotation.location.name;
     textView.font = [UIFont fontWithName:@"Arial-BoldMT" size:10];

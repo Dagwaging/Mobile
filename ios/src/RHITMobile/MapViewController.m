@@ -81,7 +81,9 @@
                                                        reuseIdentifier:identifier] autorelease];
     }
     
-    annotationView.enabled = YES;
+    [annotationView setEnabled:YES];
+    [annotationView setCanShowCallout:YES];
+    [annotationView setDraggable:NO];
     
     return annotationView;
 }
