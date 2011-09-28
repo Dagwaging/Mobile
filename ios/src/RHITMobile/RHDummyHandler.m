@@ -87,6 +87,7 @@
                                         fromContext:self.context];
     moench.name = @"Moench Hall";
     moench.labelLocation = moenchLabel;
+    moench.quickDescription = @"Ahhh  super long description. Ahhhh!!!!!!!";
     
     // Crapo
     RHLabelNode *crapoLabel = (RHLabelNode *)[RHLabelNode
@@ -97,6 +98,7 @@
                                        fromContext:self.context];
     crapo.name = @"Crapo Hall";
     crapo.labelLocation = crapoLabel;
+    crapo.quickDescription = @"This is a hall. For school.";
     
     // Olin
     RHLabelNode *olinLabel = (RHLabelNode *)[RHLabelNode
@@ -107,6 +109,7 @@
                                       fromContext:self.context];
     olin.name = @"Olin Hall";
     olin.labelLocation = olinLabel;
+    olin.quickDescription = @"This is a hall. For school.";
     
     // Aggregate and pass on locations
     NSSet *locations = [[NSArray alloc] initWithObjects:hatfield, moench, crapo, olin, nil];
