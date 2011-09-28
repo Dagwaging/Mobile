@@ -140,6 +140,18 @@
             return;
         }
         
+        NSString *description = [area valueForKey:@"Description"];
+        
+        if (description == nil) {
+            NSString *message = [NSString
+                                 stringWithFormat:@"Problem with server "
+                                 "response:\nLocation \"%@\" is missing its "
+                                 "description", name];
+            [self notifyDelegateViaSelector:failureSelector
+                       ofFailureWithMessage:message];
+            return;
+        }
+        
         NSNumber *minZoomLevel = [area valueForKey:@"MinZoomLevel"];
         
         if (minZoomLevel == nil) {
@@ -252,6 +264,7 @@
         location.labelLocation = centerNode;
         location.serverIdentifier = serverId;
         location.name = name;
+        location.quickDescription = description;
         location.visibleZoomLevel = minZoomLevel;
         location.orderedBoundaryNodes = workingBoundary;
         

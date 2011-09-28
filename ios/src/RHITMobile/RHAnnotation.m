@@ -49,4 +49,8 @@
     return [[self location] name];
 }
 
+- (NSString *)subtitle {
+    return self.location.quickDescription;
+}
+
 @end
