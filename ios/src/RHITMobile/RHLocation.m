@@ -38,4 +38,17 @@
     return location;
 }
 
+- (void)setOrderedBoundaryNodes:(NSArray *)inBoundaryNodes {
+    for (RHBoundaryNode *node in inBoundaryNodes) {
+        node.position = [NSNumber numberWithInt:[inBoundaryNodes
+                                                 indexOfObject:node]];
+        [self addBoundaryNodesObject:node];
+    }
+}
+
+- (NSArray *)orderedBoundaryNodes {
+    return [[self.boundaryNodes allObjects]
+            sortedArrayUsingSelector:@selector(position)];
+}
+
 @end

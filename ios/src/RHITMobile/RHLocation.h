@@ -48,6 +48,10 @@
 /// The navigable RHNavigationNode objects that are enclosed by this RHLocation.
 @property (nonatomic, retain) NSSet *navigationNodes;
 
+/// The ordered set of RHBoundaryNode objects that Core Data can't provide as of
+/// iOS 4.
+@property (nonatomic, copy) NSArray *orderedBoundaryNodes;
+
 /// Init from Core Data managed object context.
 + (RHLocation *)fromContext:(NSManagedObjectContext *)context;
 
