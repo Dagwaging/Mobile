@@ -90,6 +90,10 @@
     return span;
 }
 
+- (NSUInteger)zoomLevelForSpan:(MKCoordinateSpan)span {
+    return (NSUInteger) 0;
+}
+
 #pragma mark -
 #pragma mark Public methods
 
@@ -107,6 +111,10 @@
     
     // set the region like normal
     [self setRegion:region animated:animated];
+}
+
+- (NSUInteger)zoomLevel {
+    return [self zoomLevelForSpan:self.region.span];
 }
 
 @end
