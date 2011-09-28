@@ -1,5 +1,5 @@
 //
-//  RHAnnotationView.h
+//  RHAnnotationViewDelegate.h
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -17,23 +17,13 @@
 //  limitations under the License.
 //
 
-#import <MapKit/MapKit.h>
+#import <Foundation/Foundation.h>
 
 
-@class RHMapLabel;
-@class RHAnnotation;
-@class RHAnnotationViewDelegate;
+@class RHLocation;
 
-/// \ingroup map
-/// The actual view to be rendered when an RHAnnotation appears on the map.
-@interface RHAnnotationView : MKAnnotationView
+@protocol RHAnnotationViewDelegate <NSObject>
 
-@property (nonatomic, retain) RHAnnotationViewDelegate *delegate;
-
-/// Annotation storing the data we're looking for.
-@property (nonatomic, retain) RHAnnotation *storedAnnotation;
-
-/// Special textview that emulates the MapKit look and feel.
-@property (nonatomic, retain) RHMapLabel *textView;
+-(void)focusMapViewToLocation:(RHLocation *)location;
 
 @end

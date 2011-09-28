@@ -93,6 +93,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		9201A4611432CA2600069863 /* RHAnnotationViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHAnnotationViewDelegate.h; sourceTree = "<group>"; };
 		920656EF142FE83200D50293 /* PhysicalStorageTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhysicalStorageTests.h; sourceTree = "<group>"; };
 		920656F0142FE83200D50293 /* PhysicalStorageTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhysicalStorageTests.m; sourceTree = "<group>"; };
 		920656F414303D1400D50293 /* RHRemoteHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHRemoteHandler.h; sourceTree = "<group>"; };
@@ -419,6 +420,7 @@
 				92DFEAC9141FD4E500889314 /* MKMapView+ZoomLevel.m */,
 				9233DD0D141BAA3500B9A549 /* RHAnnotation.h */,
 				9233DD0E141BAA3500B9A549 /* RHAnnotation.m */,
+				9201A4611432CA2600069863 /* RHAnnotationViewDelegate.h */,
 				92DFEACE1420245F00889314 /* RHAnnotationView.h */,
 				92DFEACF1420245F00889314 /* RHAnnotationView.m */,
 				92DFEAD214203C6400889314 /* RHMapLabel.h */,

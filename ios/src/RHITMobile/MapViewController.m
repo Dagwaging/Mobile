@@ -84,6 +84,7 @@
     [annotationView setEnabled:YES];
     [annotationView setCanShowCallout:YES];
     [annotationView setDraggable:NO];
+    [annotationView setDelegate:(RHAnnotationViewDelegate *)self];
     
     UIButton *newButton = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
     [annotationView setRightCalloutAccessoryView:newButton];
@@ -125,6 +126,14 @@
                                           otherButtonTitles:nil, nil];
     [alert show];
     [alert release];
+}
+
+#pragma mark -
+#pragma mark RHAnnotationView Delegate Methods
+
+-(void)focusMapViewToLocation:(RHLocation *)location {
+    CLLocationCoordinate2D center = [[location labelLocation] coordinate];
+    [[self mapView] setCenterCoordinate:center zoomLevel:16 animated:YES];
 }
 
 @end

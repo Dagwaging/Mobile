@@ -18,6 +18,7 @@
 //
 
 #import "RHAnnotationView.h"
+#import "RHAnnotationViewDelegate.h"
 #import "RHAnnotation.h"
 #import "RHMapLabel.h"
 #import "RHLocation.h"
@@ -31,6 +32,7 @@
 
 @implementation RHAnnotationView
 
+@synthesize delegate;
 @synthesize textView;
 @synthesize storedAnnotation;
 
@@ -74,6 +76,13 @@
     textView.textColor = [UIColor whiteColor];
     textView.textAlignment = UITextAlignmentCenter;
     [self addSubview:textView];
+}
+
+- (void)setSelected:(BOOL)inSelected {
+    if (inSelected) {
+        [delegate focusMapViewToLocation:[[self storedAnnotation] location]];
+    }
+    [super setSelected:inSelected];
 }
 
 - (void) dealloc {

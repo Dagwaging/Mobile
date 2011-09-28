@@ -22,13 +22,15 @@
 
 #import "MKMapView+ZoomLevel.h"
 #import "RHRemoteHandlerDelegate.h"
+#import "RHAnnotationViewDelegate.h"
 
 
 @class RHRemoteHandler;
 
 /// \ingroup views
 /// View controller for the map portion of the application.
-@interface MapViewController : UIViewController <MKMapViewDelegate, RHRemoteHandlerDelegate>
+@interface MapViewController : UIViewController
+<MKMapViewDelegate, RHRemoteHandlerDelegate, RHAnnotationViewDelegate>
 
 /// Map view that is visible to the user.
 @property (nonatomic, retain) IBOutlet MKMapView *mapView;
