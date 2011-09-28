@@ -21,6 +21,7 @@
 
 #import "RHLocationTests.h"
 #import "RHLocation.h"
+#import "RHBoundaryNode.h"
 #import "RHITMobileAppDelegate.h"
 
 
@@ -34,10 +35,51 @@
     NSManagedObjectContext *context = appDelegate.managedObjectContext;
     
     // Create a new location
-    RHLocation *node = [RHLocation fromContext:context];
+    RHLocation *location = [RHLocation fromContext:context];
     
     // Just make sure it exists
-    STAssertNotNil(node, @"New RHLocation is nil");
+    STAssertNotNil(location, @"New RHLocation is nil");
+}
+
+- (void)testBoundaryNodeOrdering {
+    // Retrieve the App Delegate and Managed Object Context
+    RHITMobileAppDelegate *appDelegate;
+    appDelegate = (RHITMobileAppDelegate *)[[UIApplication
+                                             sharedApplication] delegate];
+    NSManagedObjectContext *context = appDelegate.managedObjectContext;
+    
+    // Create our candidate boundary nodes
+    RHBoundaryNode *node1 = (RHBoundaryNode *) [RHBoundaryNode
+                                                fromContext:context];
+    node1.latitude = [NSNumber numberWithInt:1];
+    
+    RHBoundaryNode *node2 = (RHBoundaryNode *) [RHBoundaryNode
+                                                fromContext:context];
+    node2.latitude = [NSNumber numberWithInt:2];
+    
+    RHBoundaryNode *node3 = (RHBoundaryNode *) [RHBoundaryNode
+                                                fromContext:context];
+    node3.latitude = [NSNumber numberWithInt:3];
+    
+    // Aggregate them into an array
+    NSArray *nodes = [[[NSArray alloc] initWithObjects:node2, node1, node3, nil]
+                      autorelease];
+    
+    RHLocation *location = [RHLocation fromContext:context];
+    location.orderedBoundaryNodes = nodes;
+    
+    NSArray *retrievedNodes = location.orderedBoundaryNodes;
+    
+    RHBoundaryNode *retrievedNode1 = [retrievedNodes objectAtIndex:1];
+    RHBoundaryNode *retrievedNode2 = [retrievedNodes objectAtIndex:0];
+    RHBoundaryNode *retrievedNode3 = [retrievedNodes objectAtIndex:2];
+    
+    STAssertEquals(retrievedNode1.latitude.intValue, 1, 
+                   @"Incorrect first node.");
+    STAssertEquals(retrievedNode2.latitude.intValue, 2, 
+                   @"Incorrect second node.");
+    STAssertEquals(retrievedNode3.latitude.intValue, 3,
+                   @"Incorrect third node.");
 }
 
 - (void)testStorageAndRetrieval {

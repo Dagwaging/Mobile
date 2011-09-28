@@ -27,6 +27,9 @@
 /// Verify that basic creation still works.
 - (void)testInitSmokeTest;
 
+/// Test synthetic ordering of boundary nodes.
+- (void)testBoundaryNodeOrdering;
+
 /// Verify that storage and retrieval still works.
 - (void)testStorageAndRetrieval;
 

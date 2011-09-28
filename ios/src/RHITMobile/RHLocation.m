@@ -39,6 +39,10 @@
 }
 
 - (void)setOrderedBoundaryNodes:(NSArray *)inBoundaryNodes {
+    for (RHBoundaryNode *node in self.boundaryNodes) {
+        [self removeBoundaryNodesObject:node];
+    }
+    
     for (RHBoundaryNode *node in inBoundaryNodes) {
         node.position = [NSNumber numberWithInt:[inBoundaryNodes
                                                  indexOfObject:node]];
@@ -48,7 +52,22 @@
 
 - (NSArray *)orderedBoundaryNodes {
     return [[self.boundaryNodes allObjects]
-            sortedArrayUsingSelector:@selector(position)];
+            sortedArrayUsingComparator: ^(id n1, id n2) {
+                
+                RHBoundaryNode *node1 = (RHBoundaryNode *) n1;
+                RHBoundaryNode *node2 = (RHBoundaryNode *) n2;
+                
+                
+                if (node1.position.integerValue > node2.position.integerValue) {
+                    return (NSComparisonResult)NSOrderedDescending;
+                }
+                
+                if (node1.position.integerValue < node2.position.integerValue) {
+                    return (NSComparisonResult)NSOrderedAscending;
+                }
+                
+                return (NSComparisonResult)NSOrderedSame;
+            }];
 }
 
 @end
