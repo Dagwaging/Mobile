@@ -33,8 +33,8 @@
     self = [super init];
     
     if (self) {
-        self.location = inLocation;
-        self.annotationType = inAnnotationType;
+        [self setLocation:inLocation];
+        [self setAnnotationType:inAnnotationType];
     }
     
     return self;
