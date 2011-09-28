@@ -9,6 +9,7 @@
     </entity>
     <entity name="Location" representedClassName="RHLocation">
         <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="quickDescription" optional="YES" attributeType="String"/>
         <attribute name="serverIdentifier" optional="YES" attributeType="Integer 16" defaultValueString="0"/>
         <attribute name="visibleZoomLevel" optional="YES" attributeType="Integer 16" defaultValueString="0"/>
         <relationship name="boundaryNodes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="BoundaryNode" inverseName="boundedLocation" inverseEntity="BoundaryNode"/>
@@ -27,7 +28,7 @@
     <elements>
         <element name="BoundaryNode" positionX="-2450" positionY="-1440" width="128" height="45"/>
         <element name="LabelNode" positionX="-2657" positionY="-1455" width="128" height="60"/>
-        <element name="Location" positionX="-2556" positionY="-1302" width="128" height="135"/>
+        <element name="Location" positionX="-2556" positionY="-1302" width="128" height="150"/>
         <element name="NavigationNode" positionX="-2250" positionY="-1449" width="128" height="90"/>
         <element name="Node" positionX="-2333" positionY="-1620" width="128" height="75"/>
     </elements>

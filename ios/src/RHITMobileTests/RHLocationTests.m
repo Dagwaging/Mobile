@@ -102,6 +102,7 @@
     location.name = name;
     location.serverIdentifier = [NSNumber numberWithInt:2];
     location.visibleZoomLevel = [NSNumber numberWithInt:15];
+    location.quickDescription = @"Quick Description";
     
     // Describe the type of entity we'd like to retrieve
     NSEntityDescription *entityDescription = [NSEntityDescription
@@ -133,6 +134,8 @@
                        @"Server ID is incorrect.");
         STAssertEquals([[location visibleZoomLevel] intValue], 15,
                        @"Visible zoom level is incorrect.");
+        STAssertEquals(location.quickDescription, @"Quick Description", 
+                    @"Description is incorrect.");
     }
 }
 

@@ -26,6 +26,7 @@
 
 @dynamic serverIdentifier;
 @dynamic name;
+@dynamic quickDescription;
 @dynamic visibleZoomLevel;
 @dynamic boundaryNodes;
 @dynamic labelLocation;

@@ -35,6 +35,9 @@
 /// Human-readable name for this RHLocation.
 @property (nonatomic, retain) NSString *name;
 
+/// Short description. Used as a subtitle for map callouts.
+@property (nonatomic, retain) NSString *quickDescription;
+
 /// The minimum canonical map zoom level this RHLocation shouldbe visible at.
 @property (nonatomic, retain) NSNumber *visibleZoomLevel;
 
