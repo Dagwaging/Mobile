@@ -85,6 +85,9 @@
     [annotationView setCanShowCallout:YES];
     [annotationView setDraggable:NO];
     
+    UIButton *newButton = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
+    [annotationView setRightCalloutAccessoryView:newButton];
+    
     return annotationView;
 }
 
