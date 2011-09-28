@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9201A4651432E96000069863 /* RHLocationOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 9201A4641432E96000069863 /* RHLocationOverlay.m */; };
+		9201A4661432E96000069863 /* RHLocationOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 9201A4641432E96000069863 /* RHLocationOverlay.m */; };
 		920656F1142FE83200D50293 /* PhysicalStorageTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 920656F0142FE83200D50293 /* PhysicalStorageTests.m */; };
 		920656F81430402E00D50293 /* RHDummyHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 920656F71430402E00D50293 /* RHDummyHandler.m */; };
 		920656F91430402E00D50293 /* RHDummyHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 920656F71430402E00D50293 /* RHDummyHandler.m */; };
@@ -67,6 +69,8 @@
 		9265FED21409AB5D00AE406E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9265FEAA1409AB5D00AE406E /* Foundation.framework */; };
 		9265FED31409AB5D00AE406E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9265FEAC1409AB5D00AE406E /* CoreGraphics.framework */; };
 		9265FEDB1409AB5D00AE406E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9265FED91409AB5D00AE406E /* InfoPlist.strings */; };
+		927866FF1432F35C00749C2E /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 927866FE1432F35C00749C2E /* CoreLocation.framework */; };
+		927867021432F36500749C2E /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 927867011432F36500749C2E /* CoreLocation.framework */; };
 		929488F7142CD4E700820A9C /* RHNodeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 929488F6142CD4E700820A9C /* RHNodeTests.m */; };
 		929488FA142CD65500820A9C /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 929488F9142CD65500820A9C /* CoreData.framework */; };
 		92948900142D380400820A9C /* RHBoundaryNodeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 929488FF142D380400820A9C /* RHBoundaryNodeTests.m */; };
@@ -94,6 +98,8 @@
 
 /* Begin PBXFileReference section */
 		9201A4611432CA2600069863 /* RHAnnotationViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHAnnotationViewDelegate.h; sourceTree = "<group>"; };
+		9201A4631432E96000069863 /* RHLocationOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHLocationOverlay.h; sourceTree = "<group>"; };
+		9201A4641432E96000069863 /* RHLocationOverlay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHLocationOverlay.m; sourceTree = "<group>"; };
 		920656EF142FE83200D50293 /* PhysicalStorageTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhysicalStorageTests.h; sourceTree = "<group>"; };
 		920656F0142FE83200D50293 /* PhysicalStorageTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhysicalStorageTests.m; sourceTree = "<group>"; };
 		920656F414303D1400D50293 /* RHRemoteHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHRemoteHandler.h; sourceTree = "<group>"; };
@@ -162,6 +168,8 @@
 		9265FECF1409AB5D00AE406E /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		9265FED81409AB5D00AE406E /* RHITMobileTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "RHITMobileTests-Info.plist"; sourceTree = "<group>"; };
 		9265FEDA1409AB5D00AE406E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		927866FE1432F35C00749C2E /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		927867011432F36500749C2E /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		929488F5142CD4E700820A9C /* RHNodeTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHNodeTests.h; sourceTree = "<group>"; };
 		929488F6142CD4E700820A9C /* RHNodeTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHNodeTests.m; sourceTree = "<group>"; };
 		929488F9142CD65500820A9C /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
@@ -188,6 +196,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				927866FF1432F35C00749C2E /* CoreLocation.framework in Frameworks */,
 				923C841414298C5800DFE415 /* CoreData.framework in Frameworks */,
 				9265FEA91409AB5D00AE406E /* UIKit.framework in Frameworks */,
 				9265FEAB1409AB5D00AE406E /* Foundation.framework in Frameworks */,
@@ -200,6 +209,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				927867021432F36500749C2E /* CoreLocation.framework in Frameworks */,
 				929488FA142CD65500820A9C /* CoreData.framework in Frameworks */,
 				92DFEACD141FEF9100889314 /* MapKit.framework in Frameworks */,
 				9265FED01409AB5D00AE406E /* SenTestingKit.framework in Frameworks */,
@@ -355,6 +365,8 @@
 		9265FEA71409AB5D00AE406E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				927866FE1432F35C00749C2E /* CoreLocation.framework */,
+				927867011432F36500749C2E /* CoreLocation.framework */,
 				929488F9142CD65500820A9C /* CoreData.framework */,
 				923C841314298C5800DFE415 /* CoreData.framework */,
 				92DFEACC141FEF9100889314 /* MapKit.framework */,
@@ -425,6 +437,8 @@
 				92DFEACF1420245F00889314 /* RHAnnotationView.m */,
 				92DFEAD214203C6400889314 /* RHMapLabel.h */,
 				92DFEAD314203C6400889314 /* RHMapLabel.m */,
+				9201A4631432E96000069863 /* RHLocationOverlay.h */,
+				9201A4641432E96000069863 /* RHLocationOverlay.m */,
 			);
 			name = Map;
 			sourceTree = "<group>";
@@ -580,6 +594,7 @@
 				925013661431AB6F00CEBB35 /* CJSONDeserializer.m in Sources */,
 				925013681431AB6F00CEBB35 /* CJSONScanner.m in Sources */,
 				9250136A1431AB6F00CEBB35 /* CJSONSerializer.m in Sources */,
+				9201A4651432E96000069863 /* RHLocationOverlay.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -615,6 +630,7 @@
 				925013671431AB6F00CEBB35 /* CJSONDeserializer.m in Sources */,
 				925013691431AB6F00CEBB35 /* CJSONScanner.m in Sources */,
 				9250136B1431AB6F00CEBB35 /* CJSONSerializer.m in Sources */,
+				9201A4661432E96000069863 /* RHLocationOverlay.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

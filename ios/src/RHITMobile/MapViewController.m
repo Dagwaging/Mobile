@@ -25,6 +25,14 @@
 #import "RHLocation.h"
 #import "RHLabelNode.h"
 #import "RHRestHandler.h"
+#import "RHLocationOverlay.h"
+
+
+@interface MapViewController()
+
+@property (nonatomic, retain) RHLocationOverlay *currentOverlay;
+
+@end
 
 
 @implementation MapViewController
@@ -33,6 +41,7 @@
 @synthesize fetchedResultsController;
 @synthesize managedObjectContext;
 @synthesize remoteHandler = remoteHandler_;
+@synthesize currentOverlay;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -92,6 +101,23 @@
     return annotationView;
 }
 
+- (MKOverlayView *)mapView:(MKMapView *)mapView
+            viewForOverlay:(id<MKOverlay>)overlay {
+    if ([overlay isKindOfClass:[RHLocationOverlay class]]) {
+        MKPolygon *polygon = ((RHLocationOverlay *) overlay).polygon;
+        MKPolygonView *view = [[[MKPolygonView alloc] initWithPolygon:polygon]
+                               autorelease];
+        
+        view.fillColor = [[UIColor cyanColor] colorWithAlphaComponent:0.2];
+        view.strokeColor = [[UIColor blueColor] colorWithAlphaComponent:0.7];
+        view.lineWidth = 3;
+        
+        return view;
+    }
+    
+    return nil;
+}
+
 #pragma mark -
 #pragma mark RHRemoteHandlerDelegate Methods
 
@@ -132,8 +158,14 @@
 #pragma mark RHAnnotationView Delegate Methods
 
 -(void)focusMapViewToLocation:(RHLocation *)location {
+    [self.mapView removeOverlay:self.currentOverlay];
+    RHLocationOverlay *overlay = [[RHLocationOverlay alloc]
+                                  initWithLocation:location];
     CLLocationCoordinate2D center = [[location labelLocation] coordinate];
-    [[self mapView] setCenterCoordinate:center zoomLevel:16 animated:YES];
+    [self.mapView setCenterCoordinate:center zoomLevel:16 animated:YES];
+    [self.mapView addOverlay:overlay];
+    self.currentOverlay = overlay;
+    [overlay release];
 }
 
 @end
