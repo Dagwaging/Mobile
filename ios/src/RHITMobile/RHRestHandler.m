@@ -22,6 +22,7 @@
 
 #import "RHRestHandler.h"
 #import "RHRemoteHandlerDelegate.h"
+#import "RHBoundaryNode.h"
 #import "RHLabelNode.h"
 #import "RHLocation.h"
 
@@ -127,6 +128,30 @@
             return;
         }
         
+        NSNumber *serverId = [area valueForKey:@"Id"];
+        
+        if (serverId == nil) {
+            NSString *message = [NSString
+                                 stringWithFormat:@"Problem with server "
+                                 "response:\nLocation \"%@\" is missing its "
+                                 "server ID", name];
+            [self notifyDelegateViaSelector:failureSelector
+                       ofFailureWithMessage:message];
+            return;
+        }
+        
+        NSNumber *minZoomLevel = [area valueForKey:@"MinZoomLevel"];
+        
+        if (minZoomLevel == nil) {
+            NSString *message = [NSString
+                                 stringWithFormat:@"Problem with server "
+                                 "response:\nLocation \"%@\" is missing its "
+                                 "minimum zoom level", name];
+            [self notifyDelegateViaSelector:failureSelector
+                       ofFailureWithMessage:message];
+            return;
+        }
+        
         NSDictionary *center = [area valueForKey:@"Center"];
         
         if (center == nil) {
@@ -168,10 +193,67 @@
             return;
         }
         
+        NSArray *retrievedBoundary = [area valueForKey:@"Corners"];
+        
+        if (retrievedBoundary == nil) {
+            NSString *message = [NSString
+                                 stringWithFormat:@"Problem with server "
+                                 "response:\nLocation \"%@\" is missing its "
+                                 "boundary coordinates",
+                                 name];
+            [self notifyDelegateViaSelector:failureSelector
+                       ofFailureWithMessage:message];
+            return;
+        }
+        
+        NSMutableArray *workingBoundary = [[[NSMutableArray alloc]
+                                           initWithCapacity:[retrievedBoundary
+                                                             count]]
+                                           autorelease];
+        
+        for (NSDictionary *nodeDict in retrievedBoundary) {
+            RHBoundaryNode *node = (RHBoundaryNode *) [RHBoundaryNode
+                                                       fromContext:context];
+            
+            NSNumber *nodeLat = [nodeDict valueForKey:@"Lat"];
+            
+            if (nodeLat == nil) {
+                NSString *message = [NSString
+                                     stringWithFormat:@"Problem with server "
+                                     "response:\nLocation \"%@\" is missing "
+                                     "the latitude component of one of its "
+                                     "boundary coordinates", name];
+                [self notifyDelegateViaSelector:failureSelector
+                           ofFailureWithMessage:message];
+                return;
+            }
+            
+            NSNumber *nodeLong = [nodeDict valueForKey:@"Long"];
+            
+            if (nodeLong == nil) {
+                NSString *message = [NSString
+                                     stringWithFormat:@"Problem with server "
+                                     "response:\nLocation \"%@\" is missing "
+                                     "the longitude component of one of its "
+                                     "boundary coordinates", name];
+                [self notifyDelegateViaSelector:failureSelector
+                           ofFailureWithMessage:message];
+                return;
+            }
+            
+            node.latitude = nodeLat;
+            node.longitude = nodeLong;
+            
+            [workingBoundary addObject:node];
+        }
+        
         RHLocation *location = (RHLocation *) [RHLocation fromContext:context];
         
         location.labelLocation = centerNode;
+        location.serverIdentifier = serverId;
         location.name = name;
+        location.visibleZoomLevel = minZoomLevel;
+        location.orderedBoundaryNodes = workingBoundary;
         
         [locations addObject:location];
     }
