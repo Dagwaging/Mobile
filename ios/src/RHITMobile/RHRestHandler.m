@@ -32,6 +32,26 @@
 @property (nonatomic, retain) NSManagedObjectContext *context;
 @property (nonatomic, retain) NSOperationQueue *operations;
 
+- (NSString *)stringFromDictionary:(NSDictionary *)dictionary
+                            forKey:(NSString *)key
+                 withErrorSelector:(SEL)selector
+                   withErrorString:(NSString *)errorString;
+
+- (NSNumber *)numberFromDictionary:(NSDictionary *)dictionary
+                            forKey:(NSString *)key
+                 withErrorSelector:(SEL)selector
+                   withErrorString:(NSString *)erorString;
+
+- (NSArray *)arrayFromDictionary:(NSDictionary *)dictionary
+                          forKey:(NSString *)key
+               withErrorSelector:(SEL)selector
+                 withErrorString:(NSString *)errorString;
+
+- (NSDictionary *)dictionaryFromDictionary:(NSDictionary *)dictionary
+                                    forKey:(NSString *)key
+                         withErrorSelector:(SEL)selector
+                           withErrorString:(NSString *)errorString;
+
 - (void)performFetchAllLocations;
 
 - (void)performCheckForNewLocations;
@@ -120,15 +140,11 @@
         return;
     }
     
-    NSArray *areas = [parsedData valueForKey:@"Areas"];
-    
-    if (areas == nil) {
-        NSString *message = @"Problem with server response:\nList of locations "
-            "missing or named incorrectly";
-        [self notifyDelegateViaSelector:failureSelector
-                   ofFailureWithMessage:message];
-        return;
-    }
+    NSArray *areas = [self arrayFromDictionary:parsedData
+                                        forKey:@"Areas"
+                             withErrorSelector:failureSelector
+                               withErrorString:@"Problem with server response:"
+                                                "\nList of locations missing"];
     
     NSMutableSet *locations = [NSMutableSet setWithCapacity:[areas count]];
     
@@ -136,7 +152,7 @@
         NSString *name = [area valueForKey:@"Name"];
         if (name == nil) {
             NSString *message = @"Problem with server response:\nAt least one "
-                                 "location is missing the location of its name";
+            "location is missing the location of its name";
             [self notifyDelegateViaSelector:failureSelector
                        ofFailureWithMessage:message];
             return;
@@ -233,8 +249,8 @@
         }
         
         NSMutableArray *workingBoundary = [[[NSMutableArray alloc]
-                                           initWithCapacity:[retrievedBoundary
-                                                             count]]
+                                            initWithCapacity:[retrievedBoundary
+                                                              count]]
                                            autorelease];
         
         for (NSDictionary *nodeDict in retrievedBoundary) {
@@ -292,6 +308,62 @@
 
 - (void)performCheckForNewLocations {
     // TODO
+}
+
+- (NSString *)stringFromDictionary:(NSDictionary *)dictionary
+                            forKey:(NSString *)key
+                 withErrorSelector:(SEL)selector
+                   withErrorString:(NSString *)errorString {
+    NSString *result = [dictionary valueForKey:key];
+    
+    if (result == nil) {
+        [self notifyDelegateViaSelector:selector
+                   ofFailureWithMessage:errorString];
+    }
+    
+    return result;
+}
+
+- (NSNumber *)numberFromDictionary:(NSDictionary *)dictionary
+                            forKey:(NSString *)key
+                 withErrorSelector:(SEL)selector
+                   withErrorString:(NSString *)erorString {
+    NSNumber *result = [dictionary valueForKey:key];
+    
+    if (result == nil) {
+        [self notifyDelegateViaSelector:selector
+                   ofFailureWithMessage:erorString];
+    }
+    
+    return result;
+}
+
+- (NSArray *)arrayFromDictionary:(NSDictionary *)dictionary
+                          forKey:(NSString *)key
+               withErrorSelector:(SEL)selector
+                 withErrorString:(NSString *)errorString {
+    NSArray *result = [dictionary valueForKey:key];
+    
+    if (result ==  nil) {
+        [self notifyDelegateViaSelector:selector
+                   ofFailureWithMessage:errorString];
+    }
+    
+    return result;
+}
+
+- (NSDictionary *)dictionaryFromDictionary:(NSDictionary *)dictionary
+                                    forKey:(NSString *)key
+                         withErrorSelector:(SEL)selector
+                           withErrorString:(NSString *)errorString {
+    NSDictionary *result = [dictionary valueForKey:key];
+    
+    if (result == nil) {
+        [self notifyDelegateViaSelector:selector
+                   ofFailureWithMessage:errorString];
+    }
+    
+    return result;
 }
 
 - (void)notifyDelegateViaSelector:(SEL)selector
