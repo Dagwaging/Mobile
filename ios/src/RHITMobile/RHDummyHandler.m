@@ -30,6 +30,8 @@
 
 - (void)performFetchAllLocations;
 
+- (void)performCheckForNewLocations;
+
 @end
 
 
@@ -61,6 +63,14 @@
     operation = [[operation initWithTarget:self
                                  selector:@selector(performFetchAllLocations)
                                    object:nil] autorelease];
+    [operations addOperation:operation];
+}
+
+- (void)checkForNewLocations {
+    NSInvocationOperation* operation = [NSInvocationOperation alloc];
+    operation = [[operation initWithTarget:self
+                                  selector:@selector(performCheckForNewLocations)
+                                    object:nil] autorelease];
     [operations addOperation:operation];
 }
 
@@ -115,6 +125,10 @@
     NSSet *locations = [[NSArray alloc] initWithObjects:hatfield, moench, crapo, olin, nil];
     [delegate didFetchAllLocations:locations];
     [locations release];
+}
+
+-(void)performCheckForNewLocations {
+    // TODO
 }
 
 @end

@@ -141,6 +141,10 @@
     }
 }
 
+- (void)didFindNewerLocations:(NSSet *)locations {
+    // TODO
+}
+
 - (void)didFailFetchingAllLocationsWithError:(NSError *)error {
     NSString *title = @"Error Updating Map";
     NSString *message = error.localizedDescription;

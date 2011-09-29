@@ -34,6 +34,8 @@
 
 - (void)performFetchAllLocations;
 
+- (void)performCheckForNewLocations;
+
 - (void)notifyDelegateViaSelector:(SEL)selector
                ofFailureWithError:(NSError *)error;
 
@@ -70,6 +72,18 @@
     NSInvocationOperation* operation = [NSInvocationOperation alloc];
     operation = [[operation initWithTarget:self
                                   selector:@selector(performFetchAllLocations)
+                                    object:nil] autorelease];
+    [operations addOperation:operation];
+}
+
+- (void)checkForNewLocations {
+    if (self.delegate == nil) {
+        return;
+    }
+    
+    NSInvocationOperation* operation = [NSInvocationOperation alloc];
+    operation = [[operation initWithTarget:self
+                                  selector:@selector(performCheckForNewLocations)
                                     object:nil] autorelease];
     [operations addOperation:operation];
 }
@@ -274,6 +288,10 @@
     [delegate performSelectorOnMainThread:@selector(didFetchAllLocations:)
                                withObject:locations
                             waitUntilDone:NO];
+}
+
+- (void)performCheckForNewLocations {
+    // TODO
 }
 
 - (void)notifyDelegateViaSelector:(SEL)selector

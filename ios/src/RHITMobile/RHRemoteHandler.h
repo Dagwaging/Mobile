@@ -37,4 +37,7 @@
 /// Begin an asynchronous fetch of all available RHLocation objects.
 - (void)fetchAllLocations;
 
+/// Asynchronously check for new location data from the server.
+- (void)checkForNewLocations;
+
 @end

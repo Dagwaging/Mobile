@@ -27,6 +27,9 @@
 /// Callback from fetching all RHLocation objects.
 - (void)didFetchAllLocations:(NSSet *)locations;
 
+/// Callback after fetching, replacing, and saving all RHLocation objects.
+- (void)didFindNewerLocations:(NSSet *)locations;
+
 /// Callback when something goes wrong fetching all locations.
 - (void)didFailFetchingAllLocationsWithError:(NSError *)error;
 
