@@ -3,6 +3,7 @@
     <AssemblyPart x:Name="RhitMobile" Source="RhitMobile.dll" />
     <AssemblyPart x:Name="GalaSoft.MvvmLight.Extras.WP7" Source="GalaSoft.MvvmLight.Extras.WP7.dll" />
     <AssemblyPart x:Name="GalaSoft.MvvmLight.WP7" Source="GalaSoft.MvvmLight.WP7.dll" />
+    <AssemblyPart x:Name="Microsoft.Phone.Controls" Source="Microsoft.Phone.Controls.dll" />
     <AssemblyPart x:Name="Microsoft.Phone.Controls.Maps" Source="Microsoft.Phone.Controls.Maps.dll" />
     <AssemblyPart x:Name="Microsoft.Phone.Controls.Toolkit" Source="Microsoft.Phone.Controls.Toolkit.dll" />
     <AssemblyPart x:Name="System.Windows.Interactivity" Source="System.Windows.Interactivity.dll" />
