@@ -25,7 +25,8 @@
         </StackPanel>
 
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
-            <Button Content="Map" Height="72" HorizontalAlignment="Left" Margin="137,236,0,0" Name="map_button" VerticalAlignment="Top" Width="160" Click="mapButton_Click" />
+            <Button Content="Map" Height="72" HorizontalAlignment="Left" Margin="137,236,0,0" 
+                    Name="map_button" VerticalAlignment="Top" Width="160" Click="mapButton_Click" />
         </Grid>
     </Grid>
     
