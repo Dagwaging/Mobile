@@ -1,5 +1,5 @@
 //
-//  RHPathTests.h
+//  RHDummyHandler.h
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -17,24 +17,13 @@
 //  limitations under the License.
 //
 
-#import <SenTestingKit/SenTestingKit.h>
+#import <Foundation/Foundation.h>
 
-#import "RHPath.h"
+#import "RHRemoteHandler.h"
 
-/// Unit tests (logic) for RHPath.
 
-@interface RHPathTests : SenTestCase
-
-/// Test basic initialization.
-- (void) testInitWithAllProperties;
-
-/// Test basic initialization in place.
-- (void) testInitWithAllPropertiesInPlace;
-
-/// Verify that the generated NSArray of nodes is initially populated correctly.
-- (void) testNodesArrayIsPopulatedCorrectly;
-
-/// Verify thta the generated NSArray of nodes is updated correctly.
-- (void) testNodesArrayIsUpdatedCorrectly;
+/// \ingroup web
+/// RHRemoteHandler that completely synthesizes its output.
+@interface RHDummyHandler : NSObject <RHRemoteHandler>
 
 @end

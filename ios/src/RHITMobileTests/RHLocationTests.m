@@ -17,95 +17,137 @@
 //  limitations under the License.
 //
 
+#import <CoreLocation/CoreLocation.h>
+
 #import "RHLocationTests.h"
+#import "RHLocation.h"
+#import "RHBoundaryNode.h"
+#import "RHITMobileAppDelegate.h"
+
 
 @implementation RHLocationTests
 
-- (void) testInitWithAllProperties {
-    RHNavigationNode *node1 = [RHNavigationNode alloc];
-    RHNavigationNode *node2 = [RHNavigationNode alloc];
+- (void)testInitSmokeTest {
+    // Retrieve the App Delegate and Managed Object Context
+    RHITMobileAppDelegate *appDelegate;
+    appDelegate = (RHITMobileAppDelegate *)[[UIApplication
+                                             sharedApplication] delegate];
+    NSManagedObjectContext *context = appDelegate.managedObjectContext;
     
-    NSArray *navigationNodes = [NSArray alloc];
-    navigationNodes = [navigationNodes initWithObjects:node1, node2, nil];
+    // Create a new location
+    RHLocation *location = [RHLocation fromContext:context];
     
-    RHBoundaryNode *node3 = [RHBoundaryNode alloc];
-    RHBoundaryNode *node4 = [RHBoundaryNode alloc];
-    
-    NSArray *boundaryNodes = [NSArray alloc];
-    boundaryNodes = [boundaryNodes initWithObjects:node3, node4, nil];
-    
-    RHLocation *location1 = [RHLocation alloc];
-    RHLocation *location2 = [RHLocation alloc];
-    
-    NSArray *enclosed = [NSArray alloc];
-    enclosed = [enclosed initWithObjects:location1, location2, nil];
-    
-    [enclosed containsObject:location1];
-    
-    RHLocation *location = [RHLocation alloc];
-    location = [location initWithName:@"Test Location"
-                      navigationNodes:navigationNodes
-                        boundaryNodes:boundaryNodes
-                    enclosedLocations:enclosed];
-    
-    STAssertTrue([location.navigationNodes containsObject: node1],
-                 @"Navigation node missing");
-    STAssertTrue([location.navigationNodes containsObject: node2],
-                 @"Navigation node missing");
-    
-    STAssertTrue([location.boundaryNodes containsObject: node3],
-                 @"Boundary node missing");
-    STAssertTrue([location.boundaryNodes containsObject: node4],
-                 @"Boundary node missing");
-    
-    STAssertTrue([location.enclosedLocations containsObject: location1],
-                 @"Enclosed location missing");
-    STAssertTrue([location.enclosedLocations containsObject: location2],
-                 @"Enclosed location missing");
-    
+    // Just make sure it exists
+    STAssertNotNil(location, @"New RHLocation is nil");
 }
 
-- (void) testInitWithAllPropertiesInPlace {
-    RHNavigationNode *node1 = [RHNavigationNode alloc];
-    RHNavigationNode *node2 = [RHNavigationNode alloc];
+- (void)testBoundaryNodeOrdering {
+    // Retrieve the App Delegate and Managed Object Context
+    RHITMobileAppDelegate *appDelegate;
+    appDelegate = (RHITMobileAppDelegate *)[[UIApplication
+                                             sharedApplication] delegate];
+    NSManagedObjectContext *context = appDelegate.managedObjectContext;
     
-    NSArray *navigationNodes = [NSArray alloc];
-    navigationNodes = [navigationNodes initWithObjects:node1, node2, nil];
+    // Create our candidate boundary nodes
+    RHBoundaryNode *node1 = (RHBoundaryNode *) [RHBoundaryNode
+                                                fromContext:context];
+    node1.latitude = [NSNumber numberWithInt:1];
     
-    RHBoundaryNode *node3 = [RHBoundaryNode alloc];
-    RHBoundaryNode *node4 = [RHBoundaryNode alloc];
+    RHBoundaryNode *node2 = (RHBoundaryNode *) [RHBoundaryNode
+                                                fromContext:context];
+    node2.latitude = [NSNumber numberWithInt:2];
     
-    NSArray *boundaryNodes = [NSArray alloc];
-    boundaryNodes = [boundaryNodes initWithObjects:node3, node4, nil];
+    RHBoundaryNode *node3 = (RHBoundaryNode *) [RHBoundaryNode
+                                                fromContext:context];
+    node3.latitude = [NSNumber numberWithInt:3];
     
-    RHLocation *location1 = [RHLocation alloc];
-    RHLocation *location2 = [RHLocation alloc];
+    // Aggregate them into an array
+    NSArray *nodes = [[[NSArray alloc] initWithObjects:node2, node1, node3, nil]
+                      autorelease];
     
-    NSArray *enclosed = [NSArray alloc];
-    enclosed = [enclosed initWithObjects:location1, location2, nil];
+    RHLocation *location = [RHLocation fromContext:context];
+    location.orderedBoundaryNodes = nodes;
     
-    [enclosed containsObject:location1];
+    NSArray *retrievedNodes = location.orderedBoundaryNodes;
     
-    RHLocation *location = [RHLocation alloc];
-    [location initWithName:@"Test Location"
-           navigationNodes:navigationNodes
-             boundaryNodes:boundaryNodes
-         enclosedLocations:enclosed];
+    RHBoundaryNode *retrievedNode1 = [retrievedNodes objectAtIndex:1];
+    RHBoundaryNode *retrievedNode2 = [retrievedNodes objectAtIndex:0];
+    RHBoundaryNode *retrievedNode3 = [retrievedNodes objectAtIndex:2];
     
-    STAssertTrue([location.navigationNodes containsObject: node1],
-                 @"Navigation node missing");
-    STAssertTrue([location.navigationNodes containsObject: node2],
-                 @"Navigation node missing");
+    STAssertEquals(retrievedNode1.latitude.intValue, 1, 
+                   @"Incorrect first node.");
+    STAssertEquals(retrievedNode2.latitude.intValue, 2, 
+                   @"Incorrect second node.");
+    STAssertEquals(retrievedNode3.latitude.intValue, 3,
+                   @"Incorrect third node.");
+}
+
+- (void)testStorageAndRetrieval {
+    // Use the current time as a name
+    NSDate *now = [NSDate date];
+	NSDateFormatter *formatter = nil;
+	formatter = [[NSDateFormatter alloc] init];
+	[formatter setTimeStyle:NSDateFormatterShortStyle];
+    NSString *name = [formatter stringFromDate:now];
+	[formatter release];
     
-    STAssertTrue([location.boundaryNodes containsObject: node3],
-                 @"Boundary node missing");
-    STAssertTrue([location.boundaryNodes containsObject: node4],
-                 @"Boundary node missing");
+    // Retrieve the App Delegate and Managed Object Context
+    RHITMobileAppDelegate *appDelegate;
+    appDelegate = (RHITMobileAppDelegate *)[[UIApplication
+                                             sharedApplication] delegate];
+    NSManagedObjectContext *context = appDelegate.managedObjectContext;
     
-    STAssertTrue([location.enclosedLocations containsObject: location1],
-                 @"Enclosed location missing");
-    STAssertTrue([location.enclosedLocations containsObject: location2],
-                 @"Enclosed location missing");
+    // Create and "store" a new loaction with our specific name
+    RHLocation *location = [RHLocation fromContext:context];
+    location.name = name;
+    location.serverIdentifier = [NSNumber numberWithInt:2];
+    location.visibleZoomLevel = [NSNumber numberWithInt:15];
+    location.quickDescription = @"Quick Description";
+    
+    // Describe the type of entity we'd like to retrieve
+    NSEntityDescription *entityDescription = [NSEntityDescription
+                                              entityForName:@"Location"
+                                              inManagedObjectContext:context];
+    NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
+    [request setEntity:entityDescription];
+    
+    // Put conditions on our fetch request
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:
+                              @"name == %@", name];
+    [request setPredicate:predicate];
+    
+    // Retrieve what we hope is our created object
+    NSError *error = nil;
+    NSArray *results = [context executeFetchRequest:request error:&error];
+    
+    STAssertNotNil(results, @"Results array is nil");
+    STAssertEquals(results.count, (NSUInteger) 1,
+                   @"Results array has wrong number length");
+    
+    if (results.count > 0) {
+        RHLocation *storedLocation;
+        storedLocation = (RHLocation *) [results objectAtIndex:0];
+        
+        // Verify the properties set on our retrieved object
+        STAssertEquals([location name], name, @"Name is incorrect.");
+        STAssertEquals([[location serverIdentifier] intValue], 2,
+                       @"Server ID is incorrect.");
+        STAssertEquals([[location visibleZoomLevel] intValue], 15,
+                       @"Visible zoom level is incorrect.");
+        STAssertEquals(location.quickDescription, @"Quick Description", 
+                    @"Description is incorrect.");
+    }
+}
+
+- (void)tearDown {
+    // Retrieve the App Delegate and Managed Object Context
+    RHITMobileAppDelegate *appDelegate;
+    appDelegate = (RHITMobileAppDelegate *)[[UIApplication
+                                             sharedApplication] delegate];
+    NSManagedObjectContext *context = appDelegate.managedObjectContext;
+    
+    // Forget about all those changes
+    [context rollback];
 }
 
 @end

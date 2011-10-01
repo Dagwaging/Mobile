@@ -22,7 +22,12 @@
 
 #import <MapKit/MapKit.h>
 
+
+/// \ingroup map
+/// MapKit MKMapView category that includes setting a canonical zoom level.
 @interface MKMapView(ZoomLevel)
+
+@property (nonatomic, readonly) NSUInteger zoomLevel;
 
 - (void)setCenterCoordinate:(CLLocationCoordinate2D)centerCoordinate
                   zoomLevel:(NSUInteger)zoomLevel

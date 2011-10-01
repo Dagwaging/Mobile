@@ -18,35 +18,57 @@
 //
 
 #import "RHLocation.h"
+#import "RHBoundaryNode.h"
+#import "RHLabelNode.h"
+
 
 @implementation RHLocation
 
-@synthesize name;
-@synthesize navigationNodes;
-@synthesize boundaryNodes;
-@synthesize enclosedLocations;
+@dynamic serverIdentifier;
+@dynamic name;
+@dynamic quickDescription;
+@dynamic visibleZoomLevel;
+@dynamic boundaryNodes;
+@dynamic labelLocation;
+@dynamic navigationNodes;
 
-- (RHLocation *) initWithName:(NSString *)newName
-              navigationNodes:(NSArray *)newNavigationNodes
-                boundaryNodes:(NSArray *)newBoundaryNodes
-            enclosedLocations:(NSArray *)newEnclosedLocations {
-    self = (RHLocation *)[super init];
-    
-    if (self) {
-        self.name = newName;
-        self.navigationNodes = newNavigationNodes;
-        self.boundaryNodes = newBoundaryNodes;
-        self.enclosedLocations = newEnclosedLocations;
-    }
-    
-    return self;
++ (RHLocation *)fromContext:(NSManagedObjectContext *)context {
+    RHLocation *location = [NSEntityDescription
+                            insertNewObjectForEntityForName:@"Location"
+                            inManagedObjectContext:context];
+    return location;
 }
 
-- (void) dealloc {
-    [self.navigationNodes release];
-    [self.boundaryNodes release];
-    [self.enclosedLocations release];
-    [super dealloc];
+- (void)setOrderedBoundaryNodes:(NSArray *)inBoundaryNodes {
+    for (RHBoundaryNode *node in self.boundaryNodes) {
+        [self removeBoundaryNodesObject:node];
+    }
+    
+    for (RHBoundaryNode *node in inBoundaryNodes) {
+        node.position = [NSNumber numberWithInt:[inBoundaryNodes
+                                                 indexOfObject:node]];
+        [self addBoundaryNodesObject:node];
+    }
+}
+
+- (NSArray *)orderedBoundaryNodes {
+    return [[self.boundaryNodes allObjects]
+            sortedArrayUsingComparator: ^(id n1, id n2) {
+                
+                RHBoundaryNode *node1 = (RHBoundaryNode *) n1;
+                RHBoundaryNode *node2 = (RHBoundaryNode *) n2;
+                
+                
+                if (node1.position.integerValue > node2.position.integerValue) {
+                    return (NSComparisonResult)NSOrderedDescending;
+                }
+                
+                if (node1.position.integerValue < node2.position.integerValue) {
+                    return (NSComparisonResult)NSOrderedAscending;
+                }
+                
+                return (NSComparisonResult)NSOrderedSame;
+            }];
 }
 
 @end

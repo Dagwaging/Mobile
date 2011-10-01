@@ -1,5 +1,5 @@
 //
-//  RHEnclosure.h
+//  RHRemoteHandler.h
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -18,21 +18,26 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
 
-#import "RHNavigationNode.h"
 
-/// Representation of a geographic partition of all RHNode objects.
+@class RHRemoteHandlerDelegate;
 
-@interface RHEnclosure : NSObject
+/// \ingroup web
+/// Wrapper for remote data fetching and posting.
+@protocol RHRemoteHandler <NSObject>
 
-/// RHNode objects internal to the enclosure that do not contribute to its edge.
-@property (nonatomic, retain) NSArray *internalNodes;
+/// RHRemoteHandlerDelgate to interact with.
+@property (nonatomic, retain) RHRemoteHandlerDelegate *delegate;
 
-/// RHNode objects that are part of the edge of the enclosure.
-@property (nonatomic, retain) NSArray *edgeNodes;
+/// Init with a managed object context for object creation;
+- (id)initWithContext:(NSManagedObjectContext *)context
+             delegate:(RHRemoteHandlerDelegate *)delegate;
 
-/// Initialize with all properties.
-- (RHEnclosure *) initWithInternalNodes:(NSArray *)internalNodes
-                              edgeNodes:(NSArray *)edgeNodes;
+/// Begin an asynchronous fetch of all available RHLocation objects.
+- (void)fetchAllLocations;
+
+/// Asynchronously check for new location data from the server.
+- (void)checkForNewLocations;
 
 @end

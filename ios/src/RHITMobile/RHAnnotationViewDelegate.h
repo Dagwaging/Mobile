@@ -1,5 +1,5 @@
 //
-//  RHMKPolygonFactory.m
+//  RHAnnotationViewDelegate.h
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -17,8 +17,13 @@
 //  limitations under the License.
 //
 
-#import "RHMKPolygonFactory.h"
+#import <Foundation/Foundation.h>
 
-@implementation RHMKPolygonFactory
+
+@class RHLocation;
+
+@protocol RHAnnotationViewDelegate <NSObject>
+
+-(void)focusMapViewToLocation:(RHLocation *)location;
 
 @end

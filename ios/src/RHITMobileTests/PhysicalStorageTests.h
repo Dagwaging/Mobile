@@ -1,5 +1,5 @@
 //
-//  RHPerson.m
+//  PhysicalStorageTests.h
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -17,34 +17,17 @@
 //  limitations under the License.
 //
 
-#import "RHPerson.h"
+#import <SenTestingKit/SenTestingKit.h>
+#import <UIKit/UIKit.h>
 
-@implementation RHPerson
+/// \test
+/// Tests targetting actually storing data on the device and retrieving it.
+@interface PhysicalStorageTests : SenTestCase
 
-@synthesize location;
-@synthesize firstName;
-@synthesize lastName;
+/// Test simply storing and retrieving an object.
+- (void)testSimpleStorageAndRetrieval;
 
-/// Initialize with all properties
-- (RHPerson *)initWithLocation:(RHLocation *)newLocation
-                     firstName:(NSString *)newFirstName
-                      lastName:(NSString *)newLastName {
-    self = (RHPerson *)[super init];
-    
-    if (self) {
-        self.location = newLocation;
-        self.firstName = newFirstName;
-        self.lastName = newLastName;
-    }
-    
-    return self;
-}
-
-- (void) dealloc {
-    [location release];
-    [firstName release];
-    [lastName release];
-    [super dealloc];
-}
+/// Test clearing the database.
+- (void)testClearDatabase;
 
 @end

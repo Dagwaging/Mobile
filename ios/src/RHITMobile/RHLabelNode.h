@@ -1,5 +1,5 @@
 //
-//  RHEnclosureTests.h
+//  RHLabelNode.h
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -17,18 +17,20 @@
 //  limitations under the License.
 //
 
-#import <SenTestingKit/SenTestingKit.h>
+#import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
 
-#import "RHEnclosure.h"
+#import "RHNode.h"
 
-/// Unit tests (logic) for RHEnclosure.
 
-@interface RHEnclosureTests : SenTestCase
+@class RHLocation;
 
-/// Test basic initialization.
-- (void) testInitWithAllProperties;
+/// \ingroup model
+/// An RHNode subclass that is specifically used to position a label on an
+/// RHLocation.
+@interface RHLabelNode : RHNode
 
-/// Test basic initialization in place.
-- (void) testInitWithAllPropertiesInPlace;
+/// The RHLocation being labeled by this RHLabelNode.
+@property (nonatomic, retain) RHLocation *labeledLocation;
 
 @end

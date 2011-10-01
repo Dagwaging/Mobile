@@ -1,5 +1,5 @@
 //
-//  RHEnums.h
+//  RHRemoteHandlerDelegate.h
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -17,28 +17,20 @@
 //  limitations under the License.
 //
 
-/// Various enumerations pertaining to the model layer.
+#import <Foundation/Foundation.h>
 
-#ifndef RHITMobile_Header_h
-#define RHITMobile_Header_h
 
-/// Represents the notion of floors in a building.
-typedef enum _RHFloor {
-    RHFLOOR_NONE,
-    RHFLOOR_SUBBASEMENT,
-    RHFLOOR_BASEMENT,
-    RHFLOOR_FIRST,
-    RHFLOOR_SECOND,
-    RHFLOOR_THIRD,
-    RHFLOOR_FOURTH,
-    RHFLOOR_FIFTH
-} RHFloor;
+/// \ingroup web
+/// Delegate for RHRemoteHandler asynchronous calls.
+@protocol RHRemoteHandlerDelegate <NSObject>
 
-/// Represents the notion of how traversable a path is
-typedef enum _RHPathType {
-    RHPATHTYPE_STANDARD,
-    RHPATHTYPE_STAIRS,
-    RHPATHTYPE_ELEVATOR
-} RHPathType;
+/// Callback from fetching all RHLocation objects.
+- (void)didFetchAllLocations:(NSSet *)locations;
 
-#endif
+/// Callback after fetching, replacing, and saving all RHLocation objects.
+- (void)didFindNewerLocations:(NSSet *)locations;
+
+/// Callback when something goes wrong fetching all locations.
+- (void)didFailFetchingAllLocationsWithError:(NSError *)error;
+
+@end

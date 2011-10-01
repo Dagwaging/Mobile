@@ -18,6 +18,9 @@
 //
 
 #import "RHAnnotation.h"
+#import "RHLabelNode.h"
+#import "RHLocation.h"
+
 
 @implementation RHAnnotation
 
@@ -25,40 +28,29 @@
 @synthesize annotationType;
 @synthesize location;
 
-- (RHAnnotation *) initWithLocation:(RHLocation *)newLocation
-                     annotationType:(RHAnnotationType)newAnnotationType {
-    double totalLatitude = 0;
-    double totalLongitude = 0;
-    int count = 0;
-    
-    for (RHNode *node in newLocation.boundaryNodes) {
-        totalLatitude += node.latitude;
-        totalLongitude += node.longitude;
-        count ++;
-    }
-    
-    CLLocationCoordinate2D center;
-    center.latitude = totalLatitude / count;
-    center.longitude = totalLongitude / count;
-    
-    return [self initWithLocation:newLocation
-                       coordinate:center
-                   annotationType:newAnnotationType];
-    
-}
-
-- (RHAnnotation *) initWithLocation:(RHLocation *)newLocation
-                         coordinate:(CLLocationCoordinate2D)newCoordinate
-                       annotationType:(RHAnnotationType)newAnnotationType {
+- (RHAnnotation *)initWithLocation:(RHLocation *)inLocation
+                    annotationType:(RHAnnotationType)inAnnotationType {
     self = [super init];
     
     if (self) {
-        self.coordinate = newCoordinate;
-        self.annotationType = newAnnotationType;
-        self.location = newLocation;
+        [self setLocation:inLocation];
+        [self setAnnotationType:inAnnotationType];
     }
     
     return self;
+    
+}
+
+- (CLLocationCoordinate2D)coordinate {
+    return [[[self location] labelLocation] coordinate];
+}
+
+- (NSString *)title {
+    return [[self location] name];
+}
+
+- (NSString *)subtitle {
+    return self.location.quickDescription;
 }
 
 @end

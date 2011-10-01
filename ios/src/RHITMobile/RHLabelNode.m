@@ -1,5 +1,5 @@
 //
-//  RHITMobile-Prefix.pch
+//  RHLabelNode.m
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -17,16 +17,19 @@
 //  limitations under the License.
 //
 
-/// Prefix header for all source files of the 'RHITMobile' target in the
-/// 'RHITMobile' project.
+#import "RHLabelNode.h"
+#import "RHLocation.h"
 
-#import <Availability.h>
 
-#ifndef __IPHONE_3_0
-#warning "This project uses features only available in iPhone SDK 3.0 and later"
-#endif
+@implementation RHLabelNode
 
-#ifdef __OBJC__
-    #import <UIKit/UIKit.h>
-    #import <Foundation/Foundation.h>
-#endif
+@dynamic labeledLocation;
+
++ (RHNode *)fromContext:(NSManagedObjectContext *)context {
+    RHLabelNode *node = [NSEntityDescription
+                         insertNewObjectForEntityForName:@"LabelNode"
+                         inManagedObjectContext:context];
+    return node;
+}
+
+@end

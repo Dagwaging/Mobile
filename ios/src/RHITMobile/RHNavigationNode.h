@@ -1,25 +1,42 @@
 //
 //  RHNavigationNode.h
-//  RHITMobile
+//  RHIT Mobile Campus Directory
 //
-//  Created by Jimmy Theis on 8/28/11.
-//  Copyright 2011 Rose-Hulman Institute of Technology. All rights reserved.
+//  Copyright 2011 Rose-Hulman Institute of Technology
+// 
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
 //
+//  http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
+//
+
+#import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
 
 #import "RHNode.h"
 
+
+@class RHLocation;
+
+/// \ingroup model
+/// An RHNode subclass that is able to be navigated to. These are used as
+/// points for users to travel to.
 @interface RHNavigationNode : RHNode
 
-/// Whether or not this node is indoors.
-@property (nonatomic, assign) BOOL indoors;
+/// Integer representing which floor this node is on.
+@property (nonatomic, retain) NSNumber *floor;
 
-/// Which floor this node is on, if applicable.
-@property (nonatomic, assign) RHFloor floor;
+/// Integer representing whether or not this floor is indoors.
+@property (nonatomic, retain) NSNumber *indoors;
 
-/// Initialize with all properties.
-- (RHNavigationNode *) initWithLatitude:(double)latitude 
-                              longitude:(double)longitude 
-                                indoors:(BOOL)indoors 
-                                  floor:(RHFloor)floor;
+/// RHLocation that contains this RHNavigationNode.
+@property (nonatomic, retain) RHLocation *enclosingLocation;
 
 @end

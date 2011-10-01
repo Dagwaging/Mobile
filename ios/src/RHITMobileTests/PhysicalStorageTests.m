@@ -1,5 +1,5 @@
 //
-//  RHNodeTests.m
+//  PhysicalStorageTests.m
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -19,31 +19,16 @@
 
 #import <CoreLocation/CoreLocation.h>
 
-#import "RHNodeTests.h"
-#import "RHNode.h"
+#import "PhysicalStorageTests.h"
 #import "RHITMobileAppDelegate.h"
+#import "RHNode.h"
 
 
 #define ARC4RANDOM_MAX 0x100000000
 
-@implementation RHNodeTests
+@implementation PhysicalStorageTests
 
-- (void)testInitSmokeTest {
-    // Retrieve the App Delegate and Managed Object Context
-    RHITMobileAppDelegate *appDelegate;
-    appDelegate = (RHITMobileAppDelegate *)[[UIApplication
-                                             sharedApplication] delegate];
-    NSManagedObjectContext *context = appDelegate.managedObjectContext;
-    
-    // Create a new node
-    RHNode *node = [RHNode fromContext:context];
-    
-    // Just make sure it exists
-    STAssertNotNil(node, @"New RHNode is nil");
-}
-
-- (void)testStorageAndRetrieval {
-    // Decide on a random latitude
+- (void)testSimpleStorageAndRetrieval {
     double latValue = ((double)arc4random() / ARC4RANDOM_MAX) * 100.0;
     NSNumber *latitude = [NSNumber numberWithDouble:latValue];
     
@@ -53,10 +38,14 @@
                                              sharedApplication] delegate];
     NSManagedObjectContext *context = appDelegate.managedObjectContext;
     
-    // Create and "store" a new node with our random latitude
     RHNode *node = [RHNode fromContext:context];
     node.latitude = latitude;
-    node.longitude = [NSNumber numberWithDouble:0.0];
+    node.longitude = [NSNumber numberWithDouble:6.0];
+    
+    NSError *error = nil;
+    
+    // Actually save the object to disk, making sure it doesn't break
+    STAssertTrue([context save:&error], @"Save operation failed");
     
     // Describe the type of entity we'd like to retrieve
     NSEntityDescription *entityDescription = [NSEntityDescription
@@ -71,51 +60,70 @@
     [request setPredicate:predicate];
     
     // Retrieve what we hope is our created object
-    NSError *error = nil;
+    error = nil;
     NSArray *results = [context executeFetchRequest:request error:&error];
     
     STAssertNotNil(results, @"Results array is nil");
     STAssertEquals(results.count, (NSUInteger) 1,
-                   @"Results array has wrong number length");
+                   @"Results array has incorrect length");
     
     if (results.count > 0) {
         RHNode *storedNode = (RHNode *) [results objectAtIndex:0];
         
         // Verify the properties set on our retrieved object
-        STAssertEquals(storedNode.latitude, latitude, @"Latitude is incorrect");
-        STAssertEquals(storedNode.longitude.doubleValue, 0.0,
+        STAssertEquals(storedNode.latitude.doubleValue, latValue,
+                       @"Latitude is incorrect");
+        STAssertEquals(storedNode.longitude.doubleValue, 6.0,
                        @"Longitude is incorrect");
+        
+        // Clean up
+        error = nil;
+        [context deleteObject:storedNode];
+        STAssertTrue([context save:&error], @"Cleanup failed");
     }
 }
 
-- (void)testComputedCoordinate {
+- (void)testClearDatabase {
+    double latValue = ((double)arc4random() / ARC4RANDOM_MAX) * 100.0;
+    NSNumber *latitude = [NSNumber numberWithDouble:latValue];
+    
     // Retrieve the App Delegate and Managed Object Context
     RHITMobileAppDelegate *appDelegate;
     appDelegate = (RHITMobileAppDelegate *)[[UIApplication
                                              sharedApplication] delegate];
     NSManagedObjectContext *context = appDelegate.managedObjectContext;
     
-    // Create and populate a new node
     RHNode *node = [RHNode fromContext:context];
-    node.latitude = [NSNumber numberWithDouble:5.0];
+    node.latitude = latitude;
     node.longitude = [NSNumber numberWithDouble:6.0];
     
-    CLLocationCoordinate2D coord = node.coordinate;
+    NSError *error = nil;
     
-    // Verify the generated coordinate's components
-    STAssertEquals(coord.latitude, 5.0, @"Generated latitude is incorrect");
-    STAssertEquals(coord.longitude, 6.0, @"Generated longitude is incorrect");
-}
-
-- (void)tearDown {
-    // Retrieve the App Delegate and Managed Object Context
-    RHITMobileAppDelegate *appDelegate;
-    appDelegate = (RHITMobileAppDelegate *)[[UIApplication
-                                             sharedApplication] delegate];
-    NSManagedObjectContext *context = appDelegate.managedObjectContext;
+    // Actually save the object to disk, making sure it doesn't break
+    STAssertTrue([context save:&error], @"Save operation failed");
     
-    // Forget about all those changes
-    [context rollback];
+    // Clear all database data
+    [appDelegate clearDatabase];
+    
+    // Describe the type of entity we'd like to retrieve
+    NSEntityDescription *entityDescription = [NSEntityDescription
+                                              entityForName:@"Node"
+                                              inManagedObjectContext:context];
+    NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
+    [request setEntity:entityDescription];
+    
+    // Put conditions on our fetch request
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:
+                              @"latitude == %@", latitude];
+    [request setPredicate:predicate];
+    
+    // Retrieve what we hope is our created object
+    error = nil;
+    NSArray *results = [context executeFetchRequest:request error:&error];
+    
+    STAssertNotNil(results, @"Results array is nil");
+    STAssertEquals(results.count, (NSUInteger) 0,
+                   @"Results array has incorrect length");
 }
 
 @end

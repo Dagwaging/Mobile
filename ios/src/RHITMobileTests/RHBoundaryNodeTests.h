@@ -1,5 +1,5 @@
 //
-//  RHPersonTests.h
+//  RHBoundaryNodeTests.h
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -18,17 +18,16 @@
 //
 
 #import <SenTestingKit/SenTestingKit.h>
+#import <UIKit/UIKit.h>
 
-#import "RHPerson.h"
+/// \test
+/// Tests targetting the RHBoundaryNode model object.
+@interface RHBoundaryNodeTests : SenTestCase
 
-/// Unit tests (logic) for RHPerson.
+/// Verify that basic creation still works.
+- (void)testInitSmokeTest;
 
-@interface RHPersonTests : SenTestCase
-
-/// Test basic initialization.
-- (void) testInitWithAllProperties;
-
-/// Test basic initialization in place.
-- (void) testInitWithAllPropertiesInPlace;
+/// Verify that storage and retrieval still works.
+- (void)testStorageAndRetrieval;
 
 @end

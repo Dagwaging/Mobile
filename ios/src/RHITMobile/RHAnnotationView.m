@@ -18,56 +18,77 @@
 //
 
 #import "RHAnnotationView.h"
+#import "RHAnnotationViewDelegate.h"
 #import "RHAnnotation.h"
+#import "RHMapLabel.h"
+#import "RHLocation.h"
+
+
+@interface RHAnnotationView () 
+
+- (void) createText;
+
+@end
 
 @implementation RHAnnotationView
 
+@synthesize delegate;
 @synthesize textView;
+@synthesize storedAnnotation;
 
 - (id)initWithAnnotation:(id<MKAnnotation>)inAnnotation
          reuseIdentifier:(NSString *)reuseIdentifier {
     self = [super initWithAnnotation:inAnnotation
                      reuseIdentifier:reuseIdentifier];
-    RHAnnotation *annotation = (RHAnnotation *)inAnnotation;
     
-    switch (annotation.annotationType) {
+    self.storedAnnotation = (RHAnnotation *)inAnnotation;
+    self.backgroundColor = [UIColor clearColor];
+    
+    switch (storedAnnotation.annotationType) {
+            
         case RHAnnotationTypeText:
             self.frame = CGRectMake(0, 0, 100, 50);
-            self.backgroundColor = [UIColor clearColor];
-            
-            textView = [[RHMapLabel alloc] initWithFrame:CGRectMake(2, 2, 96, 46)];
-            textView.backgroundColor = [UIColor clearColor];
-            textView.text = annotation.location.name;
-            textView.font = [UIFont fontWithName:@"Arial" size:10];
-            textView.textColor = [UIColor colorWithRed:101.0/255.0
-                                                 green:89.0/255.0
-                                                  blue:73.0/255.0
-                                                 alpha:1];
-            textView.textAlignment = UITextAlignmentCenter;
-            [self addSubview:textView];
+
+            [self createText];
             break;
+            
         case RHAnnotationTypePolygon:
-            // TODO: Add polygon rendering
+            /// \todo Add polygon rendering
             break;
-        case RHAnnotationTypeTextAndPolygon:
-            // TODO: Add polygon rendering
-            self.frame = CGRectMake(0, 0, 100, 50);
-            self.backgroundColor = [UIColor clearColor];
             
-            textView = [[RHMapLabel alloc] initWithFrame:CGRectMake(2, 2, 96, 46)];
-            textView.backgroundColor = [UIColor clearColor];
-            textView.text = annotation.location.name;
-            textView.font = [UIFont fontWithName:@"Arial" size:10];
-            textView.textColor = [UIColor colorWithRed:101.0/255.0
-                                                 green:89.0/255.0
-                                                  blue:73.0/255.0
-                                                 alpha:1];
-            textView.textAlignment = UITextAlignmentCenter;
-            [self addSubview:textView];
+        case RHAnnotationTypeTextAndPolygon:
+            /// \todo Add polygon rendering
+            self.frame = CGRectMake(0, 0, 100, 30);
+            [self createText];
             break;
     }
     
     return self;
+}
+
+- (void) createText {
+    textView = [[RHMapLabel alloc] initWithFrame:CGRectMake(2, 2, 96, 26)];
+    [textView setNumberOfLines:2];
+    [textView setLineBreakMode:UILineBreakModeWordWrap];
+    textView.backgroundColor = [UIColor clearColor];
+    textView.text = storedAnnotation.location.name;
+    textView.font = [UIFont fontWithName:@"Arial-BoldMT" size:10];
+    textView.textColor = [UIColor whiteColor];
+    textView.textAlignment = UITextAlignmentCenter;
+    [self addSubview:textView];
+}
+
+- (void)setSelected:(BOOL)inSelected {
+    if (inSelected) {
+        [delegate focusMapViewToLocation:[[self storedAnnotation] location]];
+    }
+    [super setSelected:inSelected];
+}
+
+- (void) dealloc {
+    [textView release];
+    [storedAnnotation release];
+    [super dealloc];
 }
 
 @end

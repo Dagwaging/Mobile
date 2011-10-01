@@ -1,5 +1,5 @@
 //
-//  RHMKPolygonFactory.h
+//  RHLocationOverlay.h
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -20,6 +20,14 @@
 #import <Foundation/Foundation.h>
 #import <MapKit/MapKit.h>
 
-@interface RHMKPolygonFactory : NSObject
+@class RHLocation;
+
+@interface RHLocationOverlay : NSObject <MKOverlay>
+
+@property (nonatomic, retain) RHLocation *location;
+
+@property (nonatomic, retain) MKPolygon *polygon;
+
+- (RHLocationOverlay *)initWithLocation:(RHLocation *)location;
 
 @end

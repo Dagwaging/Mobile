@@ -1,5 +1,5 @@
 //
-//  RHEnclosure.m
+//  RHLabelNodeTests.h
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -17,28 +17,17 @@
 //  limitations under the License.
 //
 
-#import "RHEnclosure.h"
+#import <SenTestingKit/SenTestingKit.h>
+#import <UIKit/UIKit.h>
 
-@implementation RHEnclosure
+/// \test
+/// Tests targetting the RHLabelNode model object.
+@interface RHLabelNodeTests : SenTestCase
 
-@synthesize internalNodes;
-@synthesize edgeNodes;
+/// Verify that basic creation still works.
+- (void)testInitSmokeTest;
 
-- (RHEnclosure *) initWithInternalNodes:(NSArray *)newInternalNodes
-                              edgeNodes:(NSArray *)newEdgeNodes {
-    self = (RHEnclosure *)[super init];
-    if (self) {
-        self.internalNodes = newInternalNodes;
-        self.edgeNodes = newEdgeNodes;
-    }
-    
-    return self;
-}
-
-- (void) dealloc {
-    [internalNodes release];
-    [edgeNodes release];
-    [super dealloc];
-}
+/// Verify that storage and retrieval still works.
+- (void)testStorageAndRetrieval;
 
 @end

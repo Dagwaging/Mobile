@@ -18,17 +18,19 @@
 //
 
 #import <SenTestingKit/SenTestingKit.h>
+#import <UIKit/UIKit.h>
 
-#import "RHNode.h"
-
-/// Unit tests (logic) for RHNode.
-
+/// \test
+/// Tests targetting the abstract RHNode model object.
 @interface RHNodeTests : SenTestCase
 
-/// Test basic initialization.
-- (void) testInitWithAllProperties;
+/// Verify that basic creation still works.
+- (void)testInitSmokeTest;
 
-/// Test basic initialization in place.
-- (void) testInitWithAllPropertiesInPlace;
+/// Verify that storage and retrieval still works.
+- (void)testStorageAndRetrieval;
+
+/// Test the accuracy of the generated CLLocationCoordinate2D in RHNode objects.
+- (void)testComputedCoordinate;
 
 @end

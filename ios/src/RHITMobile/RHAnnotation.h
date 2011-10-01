@@ -20,7 +20,8 @@
 #import <Foundation/Foundation.h>
 #import <MapKit/MapKit.h>
 
-#import "RHLocation.h"
+
+@class RHLocation;
 
 typedef enum {
     RHAnnotationTypeText,
@@ -28,6 +29,8 @@ typedef enum {
     RHAnnotationTypeTextAndPolygon
 } RHAnnotationType;
 
+/// \ingroup map
+/// Representation of an annotatable map object. For use by RHAnnotationView.
 @interface RHAnnotation : NSObject <MKAnnotation>
 
 /// The "center point" of sorts for this location
@@ -42,12 +45,6 @@ typedef enum {
 /// Initialize with only an RHLocation and RHAnnotationType. This automatically
 /// tries to guess the center point of the RHLocation.
 - (RHAnnotation *) initWithLocation:(RHLocation *)location
-                     annotationType:(RHAnnotationType)annotationType;
-
-/// Initialize with an RHLocation, CLLocationCoordinate2D, and RHAnnotationType.
-/// This allows you to set the "center point" manually.
-- (RHAnnotation *) initWithLocation:(RHLocation *)location
-                         coordinate:(CLLocationCoordinate2D)coordinate
                      annotationType:(RHAnnotationType)annotationType;
 
 @end

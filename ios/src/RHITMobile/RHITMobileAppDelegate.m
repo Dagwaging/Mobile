@@ -18,22 +18,30 @@
 //
 
 #import "RHITMobileAppDelegate.h"
+#import "MapViewController.h"
+#import "SearchViewController.h"
 
 @implementation RHITMobileAppDelegate
 
 @synthesize window = _window;
 @synthesize tabBarController = _tabBarController;
+@synthesize mapViewController;
+@synthesize searchViewController;
+@synthesize managedObjectModel;
+@synthesize managedObjectContext;
+@synthesize persistentStoreCoordinator;
 
-- (BOOL) application:(UIApplication *)application 
+- (BOOL)application:(UIApplication *)application 
     didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     // Add the tab bar controller's current view as a subview of the window
     self.window.rootViewController = self.tabBarController;
     [self.window makeKeyAndVisible];
+    self.mapViewController.managedObjectContext = self.managedObjectContext;
     return YES;
 }
 
-- (void) applicationWillResignActive:(UIApplication *)application {
+- (void)applicationWillResignActive:(UIApplication *)application {
     /*
      Sent when the application is about to move from active to inactive state. 
      This can occur for certain types of temporary interruptions (such as an 
@@ -44,7 +52,7 @@
      */
 }
 
-- (void) applicationDidEnterBackground:(UIApplication *)application {
+- (void)applicationDidEnterBackground:(UIApplication *)application {
     /*
      Use this method to release shared resources, save user data, invalidate 
      timers, and store enough application state information to restore your 
@@ -54,7 +62,7 @@
      */
 }
 
-- (void) applicationWillEnterForeground:(UIApplication *)application {
+- (void)applicationWillEnterForeground:(UIApplication *)application {
     /*
      Called as part of the transition from the background to the inactive 
      state; here you can undo many of the changes made on entering the 
@@ -62,7 +70,7 @@
      */
 }
 
-- (void) applicationDidBecomeActive:(UIApplication *)application {
+- (void)applicationDidBecomeActive:(UIApplication *)application {
     /*
      Restart any tasks that were paused (or not yet started) while the 
      application was inactive. If the application was previously in the 
@@ -81,6 +89,9 @@
 - (void)dealloc {
     [_window release];
     [_tabBarController release];
+    [managedObjectContext release];
+    [managedObjectModel release];
+    [persistentStoreCoordinator release];
     [super dealloc];
 }
 
@@ -97,5 +108,92 @@
 {
 }
 */
+
+- (NSManagedObjectContext *)managedObjectContext {
+    if (managedObjectContext != nil) {
+        return managedObjectContext;
+    }
+    
+    NSPersistentStoreCoordinator *coordinator;
+    coordinator = [self persistentStoreCoordinator];
+    
+    if (coordinator != nil) {
+        managedObjectContext = [[NSManagedObjectContext alloc] init];
+        [managedObjectContext setPersistentStoreCoordinator: coordinator];
+    }
+    
+    return managedObjectContext;
+}
+
+- (NSManagedObjectModel *)managedObjectModel {
+    if (managedObjectModel != nil) {
+        return managedObjectModel;
+    }
+    
+    managedObjectModel = [[NSManagedObjectModel mergedModelFromBundles:nil]
+                          retain];
+    
+    return managedObjectModel;
+}
+
+- (NSPersistentStoreCoordinator *)persistentStoreCoordinator {
+    
+    if (persistentStoreCoordinator != nil) {
+        return persistentStoreCoordinator;
+    }
+    
+    NSString *path = [self.applicationDocumentsDirectory
+                      stringByAppendingPathComponent:@"RHITMobile.sqlite"];
+    NSURL *storeUrl = [NSURL fileURLWithPath:path];
+    NSError *error = nil;
+    
+    NSManagedObjectModel *model = [self managedObjectModel];
+    
+    persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc]
+                                  initWithManagedObjectModel:model];
+    
+    if(![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType
+                                                 configuration:nil
+                                                           URL:storeUrl
+                                                       options:nil
+                                                         error:&error]) {
+        /* Error for store creation should be handled in here */
+    }
+    
+    return persistentStoreCoordinator;
+}
+
+- (NSString *)applicationDocumentsDirectory {
+    return [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+                                                NSUserDomainMask,
+                                                YES) lastObject];
+}
+
+- (void)clearDatabase {
+    NSArray *stores = [persistentStoreCoordinator persistentStores];
+    NSPersistentStore *store = [stores objectAtIndex:0];
+    
+    // Delete existing database
+    NSError *error = nil;
+    NSURL *storeURL = store.URL;
+    [persistentStoreCoordinator removePersistentStore:store
+                                                error:&error];
+    [[NSFileManager defaultManager] removeItemAtPath:storeURL.path
+                                               error:&error];
+    
+    // Create new database
+    NSString *path = [self.applicationDocumentsDirectory
+                      stringByAppendingPathComponent:@"RHITMobile.sqlite"];
+    NSURL *storeUrl = [NSURL fileURLWithPath:path];
+    error = nil;
+    
+    if(![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType
+                                                 configuration:nil
+                                                           URL:storeUrl
+                                                       options:nil
+                                                         error:&error]) {
+        /* Error for store creation should be handled in here */
+    }
+}
 
 @end

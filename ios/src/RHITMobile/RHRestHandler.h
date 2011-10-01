@@ -1,5 +1,5 @@
 //
-//  RHPerson.h
+//  RHRestHandler.h
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -19,24 +19,11 @@
 
 #import <Foundation/Foundation.h>
 
-#import "RHLocation.h"
+#import "RHRemoteHandler.h"
 
-/// Representation of a generic person.
 
-@interface RHPerson : NSObject
-
-/// RHLocation associated with this person.
-@property (nonatomic, retain) RHLocation *location;
-
-/// First name of this person.
-@property (nonatomic, retain) NSString *firstName;
-
-/// Last name of this person.
-@property (nonatomic, retain) NSString *lastName;
-
-/// Initialize with all properties
-- (RHPerson *)initWithLocation:(RHLocation *)location
-                     firstName:(NSString *)firstName
-                      lastName:(NSString *)lastName;
+/// \ingroup web
+/// RHRemoteHandler that completely synthesizes its output.
+@interface RHRestHandler : NSObject <RHRemoteHandler>
 
 @end

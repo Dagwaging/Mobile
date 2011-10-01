@@ -18,23 +18,25 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
+#import <CoreLocation/CoreLocation.h>
 
-#import "RHEnums.h"
 
-/// Representation of a node, or single point in space. RHNode is not meant
-/// to be used directly, but rather to be subclassed, specifically into
-/// RHNavigationNode and RHBoundaryNode.
+/// \ingroup model
+/// Abstract implementation of a single point in space. RHNode should be
+/// subclassed into more specific objects.
+@interface RHNode : NSManagedObject
 
-@interface RHNode : NSObject
+/// Latitude of this point in space.
+@property (nonatomic, retain) NSNumber *latitude;
 
-/// Latitude coordinate for this node.
-@property (nonatomic, assign) double latitude;
+/// Longitude of this point in space.
+@property (nonatomic, retain) NSNumber *longitude;
 
-/// Longitude coordinate for this node.
-@property (nonatomic, assign) double longitude;
+/// CLLocationCoordinate2D assembled from latitude and longitude values.
+@property (nonatomic, readonly) CLLocationCoordinate2D coordinate;
 
-/// Initialize with all properties.
-- (RHNode *) initWithLatitude:(double)latitude 
-                    longitude:(double)longitude;
+/// Init from Core Data managed object context.
++ (RHNode *)fromContext:(NSManagedObjectContext *)context;
 
 @end

@@ -18,21 +18,30 @@
 //
 
 #import "MapViewController.h"
+#import "MKMapView+ZoomLevel.h"
 #import "RHConstants.h"
 #import "RHAnnotation.h"
 #import "RHAnnotationView.h"
-
 #import "RHLocation.h"
+#import "RHLabelNode.h"
+#import "RHRestHandler.h"
+#import "RHLocationOverlay.h"
 
-@interface MapViewController ()
 
-- (void) renderAdditionalLocations;
-    
+@interface MapViewController()
+
+@property (nonatomic, retain) RHLocationOverlay *currentOverlay;
+
 @end
+
 
 @implementation MapViewController
 
 @synthesize mapView;
+@synthesize fetchedResultsController;
+@synthesize managedObjectContext;
+@synthesize remoteHandler = remoteHandler_;
+@synthesize currentOverlay;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -40,11 +49,12 @@
     // Initialize what's visible on the map
     CLLocationCoordinate2D center = {RH_CAMPUS_CENTER_LATITUDE,
         RH_CAMPUS_CENTER_LONGITUDE};
+    self.mapView.mapType = MKMapTypeSatellite;
     [self.mapView setCenterCoordinate:center
                             zoomLevel:RH_INITIAL_ZOOM_LEVEL
                              animated:NO];
     
-    [self renderAdditionalLocations];
+    [self.remoteHandler fetchAllLocations];
 }
 
 
@@ -65,23 +75,6 @@
     self.mapView = nil;
 }
 
-- (void) renderAdditionalLocations {
-    // FIXME: This is just proof-of-concept code to render a single location.
-    //        A true implementation should obviously retrieve the location
-    //        data from somewhere dynamic.
-    RHLocation *hatfield = [[RHLocation alloc] initWithName:@"Hatfield Hall"
-                                            navigationNodes:nil
-                                              boundaryNodes:nil
-                                          enclosedLocations:nil];
-    CLLocationCoordinate2D hatfieldCenter;
-    hatfieldCenter.latitude = 39.481968;
-    hatfieldCenter.longitude = -87.322276;
-    RHAnnotation *annotation = [[RHAnnotation alloc] initWithLocation:hatfield
-                                                           coordinate:hatfieldCenter
-                                                       annotationType:RHAnnotationTypeText];
-    [self.mapView addAnnotation:annotation];
-}
-
 # pragma mark -
 # pragma mark MKMapViewDelegate Methods
 
@@ -97,9 +90,86 @@
                                                        reuseIdentifier:identifier] autorelease];
     }
     
-    annotationView.enabled = YES;
+    [annotationView setEnabled:YES];
+    [annotationView setCanShowCallout:YES];
+    [annotationView setDraggable:NO];
+    [annotationView setDelegate:(RHAnnotationViewDelegate *)self];
+    
+    UIButton *newButton = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
+    [annotationView setRightCalloutAccessoryView:newButton];
     
     return annotationView;
+}
+
+- (MKOverlayView *)mapView:(MKMapView *)mapView
+            viewForOverlay:(id<MKOverlay>)overlay {
+    if ([overlay isKindOfClass:[RHLocationOverlay class]]) {
+        MKPolygon *polygon = ((RHLocationOverlay *) overlay).polygon;
+        MKPolygonView *view = [[[MKPolygonView alloc] initWithPolygon:polygon]
+                               autorelease];
+        
+        view.fillColor = [[UIColor cyanColor] colorWithAlphaComponent:0.2];
+        view.strokeColor = [[UIColor blueColor] colorWithAlphaComponent:0.7];
+        view.lineWidth = 3;
+        
+        return view;
+    }
+    
+    return nil;
+}
+
+#pragma mark -
+#pragma mark RHRemoteHandlerDelegate Methods
+
+- (RHRemoteHandler *)remoteHandler {
+    if (remoteHandler_ == nil) {
+        remoteHandler_ = [[RHRestHandler alloc]
+                          initWithContext:self.managedObjectContext
+                          delegate:(RHRemoteHandlerDelegate *)self];
+    }
+    
+    return remoteHandler_;
+}
+
+- (void)didFetchAllLocations:(NSSet *)locations {
+    for (RHLocation *location in locations) {
+        RHAnnotation *annotation = [RHAnnotation alloc];
+        annotation = [[annotation initWithLocation:location
+                                    annotationType:RHAnnotationTypeText]
+                      autorelease];
+        [self.mapView addAnnotation:annotation];
+    }
+}
+
+- (void)didFindNewerLocations:(NSSet *)locations {
+    // TODO
+}
+
+- (void)didFailFetchingAllLocationsWithError:(NSError *)error {
+    NSString *title = @"Error Updating Map";
+    NSString *message = error.localizedDescription;
+    
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
+                                                    message:message
+                                                   delegate:self
+                                          cancelButtonTitle:@"OK"
+                                          otherButtonTitles:nil, nil];
+    [alert show];
+    [alert release];
+}
+
+#pragma mark -
+#pragma mark RHAnnotationView Delegate Methods
+
+-(void)focusMapViewToLocation:(RHLocation *)location {
+    [self.mapView removeOverlay:self.currentOverlay];
+    RHLocationOverlay *overlay = [[RHLocationOverlay alloc]
+                                  initWithLocation:location];
+    CLLocationCoordinate2D center = [[location labelLocation] coordinate];
+    [self.mapView setCenterCoordinate:center zoomLevel:16 animated:YES];
+    [self.mapView addOverlay:overlay];
+    self.currentOverlay = overlay;
+    [overlay release];
 }
 
 @end

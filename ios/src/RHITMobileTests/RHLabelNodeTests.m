@@ -1,5 +1,5 @@
 //
-//  RHNodeTests.m
+//  RHLabelNodeTests.m
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -19,14 +19,14 @@
 
 #import <CoreLocation/CoreLocation.h>
 
-#import "RHNodeTests.h"
-#import "RHNode.h"
+#import "RHLabelNodeTests.h"
+#import "RHLabelNode.h"
 #import "RHITMobileAppDelegate.h"
 
 
 #define ARC4RANDOM_MAX 0x100000000
 
-@implementation RHNodeTests
+@implementation RHLabelNodeTests
 
 - (void)testInitSmokeTest {
     // Retrieve the App Delegate and Managed Object Context
@@ -36,10 +36,10 @@
     NSManagedObjectContext *context = appDelegate.managedObjectContext;
     
     // Create a new node
-    RHNode *node = [RHNode fromContext:context];
+    RHLabelNode *node = (RHLabelNode *) [RHLabelNode fromContext:context];
     
     // Just make sure it exists
-    STAssertNotNil(node, @"New RHNode is nil");
+    STAssertNotNil(node, @"New RHLabelNode is nil");
 }
 
 - (void)testStorageAndRetrieval {
@@ -54,13 +54,13 @@
     NSManagedObjectContext *context = appDelegate.managedObjectContext;
     
     // Create and "store" a new node with our random latitude
-    RHNode *node = [RHNode fromContext:context];
+    RHLabelNode *node = (RHLabelNode *) [RHLabelNode fromContext:context];
     node.latitude = latitude;
     node.longitude = [NSNumber numberWithDouble:0.0];
     
     // Describe the type of entity we'd like to retrieve
     NSEntityDescription *entityDescription = [NSEntityDescription
-                                              entityForName:@"Node"
+                                              entityForName:@"LabelNode"
                                               inManagedObjectContext:context];
     NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
     [request setEntity:entityDescription];
@@ -79,32 +79,14 @@
                    @"Results array has wrong number length");
     
     if (results.count > 0) {
-        RHNode *storedNode = (RHNode *) [results objectAtIndex:0];
+        RHLabelNode *storedNode;
+        storedNode = (RHLabelNode *) [results objectAtIndex:0];
         
         // Verify the properties set on our retrieved object
         STAssertEquals(storedNode.latitude, latitude, @"Latitude is incorrect");
         STAssertEquals(storedNode.longitude.doubleValue, 0.0,
                        @"Longitude is incorrect");
     }
-}
-
-- (void)testComputedCoordinate {
-    // Retrieve the App Delegate and Managed Object Context
-    RHITMobileAppDelegate *appDelegate;
-    appDelegate = (RHITMobileAppDelegate *)[[UIApplication
-                                             sharedApplication] delegate];
-    NSManagedObjectContext *context = appDelegate.managedObjectContext;
-    
-    // Create and populate a new node
-    RHNode *node = [RHNode fromContext:context];
-    node.latitude = [NSNumber numberWithDouble:5.0];
-    node.longitude = [NSNumber numberWithDouble:6.0];
-    
-    CLLocationCoordinate2D coord = node.coordinate;
-    
-    // Verify the generated coordinate's components
-    STAssertEquals(coord.latitude, 5.0, @"Generated latitude is incorrect");
-    STAssertEquals(coord.longitude, 6.0, @"Generated longitude is incorrect");
 }
 
 - (void)tearDown {
