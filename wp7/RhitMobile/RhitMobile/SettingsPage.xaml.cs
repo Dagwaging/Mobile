@@ -1,10 +1,20 @@
-﻿using System.Collections.Generic;
-using System.Windows.Navigation;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Animation;
+using System.Windows.Shapes;
 using Microsoft.Phone.Controls;
+using System.Windows.Navigation;
 
 namespace RhitMobile {
     public partial class SettingsPage : PhoneApplicationPage {
-        /// <summary> Constructor for the application's settings page. </summary>
+
         public SettingsPage() {
             InitializeComponent();
             List<MapTileSource> source = new List<MapTileSource>();
@@ -20,16 +30,14 @@ namespace RhitMobile {
         protected override void OnNavigatedFrom(NavigationEventArgs e) {
             string source = ((MapTileSource) mapSourcePicker.SelectedItem).Name;
             this.SaveState("MapSource", source);
-            this.SaveState("TileOverlay", tileToggle.IsChecked);
-            this.SaveState("AreOutlinesVisible", polygonToggle.IsChecked);
-            this.SaveState("AreLabelsVisible", textToggle.IsChecked);
+            this.SaveState("TileOverlay", toggleSwitch1.IsChecked);
+            this.SaveState("PolygonOverlay", toggleSwitch2.IsChecked);
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e) {
             string ms_name = this.LoadState<string>("MapSource");
-            tileToggle.IsChecked = (bool) this.LoadState<object>("TileOverlay", false);
-            polygonToggle.IsChecked = (bool) this.LoadState<object>("AreOutlinesVisible", false);
-            textToggle.IsChecked = (bool) this.LoadState<object>("AreLabelsVisible", false);
+            toggleSwitch1.IsChecked = (bool) this.LoadState<object>("TileOverlay", true);
+            toggleSwitch2.IsChecked = (bool) this.LoadState<object>("PolygonOverlay", false);
             if(ms_name != null) {
                 foreach(MapTileSource source in mapSourcePicker.Items) {
                     if(source.Name == ms_name)
@@ -38,7 +46,7 @@ namespace RhitMobile {
             }
         }
 
-        private class MapTileSource {
+        public class MapTileSource {
             public string Name {
                 get;
                 set;

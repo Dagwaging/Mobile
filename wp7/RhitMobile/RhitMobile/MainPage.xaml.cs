@@ -4,6 +4,7 @@ using Microsoft.Phone.Controls;
 
 namespace RhitMobile {
     public partial class MainPage : PhoneApplicationPage {
+
         public MainPage() {
             InitializeComponent();
         }

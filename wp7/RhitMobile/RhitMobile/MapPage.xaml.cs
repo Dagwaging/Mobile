@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Device.Location;
 using System.Threading;
 using System.Windows.Controls;
@@ -7,193 +6,194 @@ using System.Windows.Media;
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Controls.Maps;
-using Microsoft.Phone.Controls.Maps.Core;
 using Microsoft.Phone.Shell;
-using RhitMobile.Events;
-using RhitMobile.ObjectModel;
-using RhitMobile.Services;
+using RhitMobile.Maps;
+using RhitMobile.ViewModel;
 
 namespace RhitMobile {
+
     public partial class MapPage : PhoneApplicationPage {
-        #region Private Fields
-        private GeoCoordinateWatcher _userLocationWatcher;
-        private ApplicationBar _appBar;
-        #endregion
+        GeoCoordinateWatcher watcher;
+        Pushpin user_loc = new Pushpin();
+        ApplicationBar appbar;
+
+        GeoCoordinate LOCATION_ROSE = new GeoCoordinate(39.4820263, -87.3248677);
+        GeoCoordinate LOCATION_HATFIELD = new GeoCoordinate(39.481968, -87.322276);
+
+        MapTileLayer cutomTilesLayer = new MapTileLayer();
+        MapLayer polygonLayer = new MapLayer();
+        MapLayer textLayer = new MapLayer();
 
         public MapPage() {
             InitializeComponent();
 
-            LoadMap();
+            Map.CredentialsProvider = new ApplicationIdCredentialsProvider(App.Id);
+            Map.MapZoom += new EventHandler<MapZoomEventArgs>(Map_MapZoom);
 
-            RhitMapView.Instance.OutlineTapped += new Events.OutlineEventHandler(Outline_Tapped);
-            RhitMapView.Instance.PushpinTapped += new PushpinEventHandler(SelectedPushpin_MouseLeftButtonUp);
+            cutomTilesLayer.TileSources.Add(new RoseTileOverlay());
 
-            InitApplicationBar();
-            InitGeoCordinateWatcher();
+            initApplicationBar();
+            initGeoCordinateWatcher();
         }
 
-        #region Initializers
-        private void LoadMap() {
-            Map map = RhitMapView.Instance.Map;
-            map.Margin = new System.Windows.Thickness(0, 0, 0, 36);
-            map.Mode = new MercatorMode();
-            map.CacheMode = new BitmapCache();
-            map.LogoVisibility = System.Windows.Visibility.Collapsed;
-            map.VerticalAlignment = System.Windows.VerticalAlignment.Stretch;
-            map.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
-            LayoutRoot.Children.Add(map);
-            Grid.SetRow(map, 0);
-            map.MapZoom += new EventHandler<MapZoomEventArgs>(Map_MapZoom);
-        }
+        void initGeoCordinateWatcher() {
+            watcher = new GeoCoordinateWatcher(GeoPositionAccuracy.High);
+            watcher.MovementThreshold = 10.0f;
 
-        void InitGeoCordinateWatcher() {
-            _userLocationWatcher = new GeoCoordinateWatcher(GeoPositionAccuracy.High);
-
-            _userLocationWatcher.MovementThreshold = 10.0f;
-
-            _userLocationWatcher.StatusChanged += new EventHandler<GeoPositionStatusChangedEventArgs>(Watcher_StatusChanged);
-            _userLocationWatcher.PositionChanged += new EventHandler<GeoPositionChangedEventArgs<GeoCoordinate>>(Watcher_PositionChanged);
+            watcher.StatusChanged += new EventHandler<GeoPositionStatusChangedEventArgs>(watcher_StatusChanged);
+            watcher.PositionChanged += new EventHandler<GeoPositionChangedEventArgs<GeoCoordinate>>(watcher_PositionChanged);
 
             new Thread(bgWatcherUpdate).Start();
         }
 
-        void InitApplicationBar() {
-            _appBar = new ApplicationBar() {
+        void initApplicationBar() {
+            appbar = new ApplicationBar() {
                 Opacity = 0.5,
                 IsVisible = true,
                 IsMenuEnabled = true
             };
-            ApplicationBarIconButton button1 = new ApplicationBarIconButton(new Uri("/Images/position.png", UriKind.Relative)) {
+            ApplicationBarIconButton button1 = new ApplicationBarIconButton(new Uri("/pin.png", UriKind.Relative)) {
                 Text = "Me",
             };
-            ApplicationBarIconButton button2 = new ApplicationBarIconButton(new Uri("/Images/rose-hulman.png", UriKind.Relative)) {
-                Text = "RHIT",
+            ApplicationBarIconButton button2 = new ApplicationBarIconButton(new Uri("/pin.png", UriKind.Relative)) {
+                Text = "Rose",
             };
-            ApplicationBarIconButton button3 = new ApplicationBarIconButton(new Uri("/Images/directions.png", UriKind.Relative)) {
+            ApplicationBarIconButton button3 = new ApplicationBarIconButton(new Uri("/pin.png", UriKind.Relative)) {
                 Text = "Directions",
             };
-            button1.Click += new EventHandler(MeButton_Click);
-            button2.Click += new EventHandler(RhitButton_Click);
-            button3.Click += new EventHandler(DirectionsButton_Click);
+            button1.Click += new EventHandler(button1_Click);
+            button2.Click += new EventHandler(button2_Click);
+            button3.Click += new EventHandler(button3_Click);
 
-            _appBar.Buttons.Add(button1);
-            _appBar.Buttons.Add(button2);
-            _appBar.Buttons.Add(button3);
+            appbar.Buttons.Add(button1);
+            appbar.Buttons.Add(button2);
+            appbar.Buttons.Add(button3);
 
-            ApplicationBarMenuItem pointsOfInterestMenuItem = new ApplicationBarMenuItem("Points of Interest");
-            pointsOfInterestMenuItem.Click += new EventHandler(POI_Click);
-            _appBar.MenuItems.Add(pointsOfInterestMenuItem);
-
-            ApplicationBarMenuItem settingsMenuItem = new ApplicationBarMenuItem("Settings");
-            settingsMenuItem.Click += new EventHandler(Settings_Click);
-            _appBar.MenuItems.Add(settingsMenuItem);
-
-            this.ApplicationBar = _appBar;
+            ApplicationBarMenuItem menuItem1 = new ApplicationBarMenuItem("Settings");
+            menuItem1.Click += new EventHandler(Settings_Click);
+            appbar.MenuItems.Add(menuItem1);
+            this.ApplicationBar = appbar;
         }
-        #endregion
 
-        #region Map/Service Event Handlers
         void Map_MapZoom(object sender, MapZoomEventArgs e) {
-            //TODO: Remove for release
-            this.statusTextBlock.Text = "Zoom: " + RhitMapView.Instance.Map.ZoomLevel.ToString();
+            this.textBlock1.Text = "Zoom: " + Map.ZoomLevel.ToString();
         }
 
-        private void Outline_Tapped(object sender, Events.OutlineEventArgs e) {
-            if(e.Outline == null) return;
-            StateManagment.SaveState(null, "SelectedOutline", RhitMapView.Instance.Select(e.Outline));
-        }
-
-        private void SelectedPushpin_MouseLeftButtonUp(object sender, PushpinEventArgs e) {
-            NavigationService.Navigate(new Uri("/DescriptionPage.xaml", UriKind.Relative));
-        }
-
-        private void OnUpdateAvailable(object sender, ServerEventArgs e) {
-            RhitMapView.Instance.Outlines = e.ResponseObject.GetLocations();
-        }
-        #endregion
-
-        #region AppBar Button Event Handlers
-        void MeButton_Click(object sender, EventArgs e) {
-            RhitMapView.Instance.GoToUserLocation();
-        }
-
-        void RhitButton_Click(object sender, EventArgs e) {
-            RhitMapView.Instance.GoToRhit();
-        }
-
-        void DirectionsButton_Click(object sender, EventArgs e) {
-            //TODO: Implement directions
-        }
-        #endregion
-
-        #region AppBar MenuItem Event Handlers
         void Settings_Click(object sender, EventArgs e) {
             NavigationService.Navigate(new Uri("/SettingsPage.xaml", UriKind.Relative));
         }
-
-        void POI_Click(object sender, EventArgs e) {
-            NavigationService.Navigate(new Uri("/POIPage.xaml", UriKind.Relative));
+        void button1_Click(object sender, EventArgs e) {
+            new Thread(bgWatcherUpdate).Start();
         }
-        #endregion
-
-        #region GeoCoordinateWatcher Event Handlers
-        void Watcher_StatusChanged(object sender, GeoPositionStatusChangedEventArgs e) {
-            //switch(e.Status) {
-            //    case GeoPositionStatus.Disabled:
-            //        if(watcher.Permission == GeoPositionPermission.Denied)
-            //            statusTextBlock.Text = "You have disabled Location Service.";
-            //        else
-            //            statusTextBlock.Text = "Location Service is not functioning on this device.";
-            //        break;
-            //    case GeoPositionStatus.Initializing:
-            //        statusTextBlock.Text = "Location Service is retrieving data...";
-            //        break;
-            //    case GeoPositionStatus.NoData:
-            //        statusTextBlock.Text = "Location data is not available.";
-            //        break;
-            //    case GeoPositionStatus.Ready:
-            //        statusTextBlock.Text = "Location data is available.";
-            //        break;
-            //}
+        void button2_Click(object sender, EventArgs e) {
+            watcher.Stop();
+            Map.Center = LOCATION_ROSE;
+            Map.ZoomLevel = 16;
+        }
+        void button3_Click(object sender, EventArgs e) {
+            //TODO: Remove this
+            addTextLayer();
         }
 
-        void Watcher_PositionChanged(object sender, GeoPositionChangedEventArgs<GeoCoordinate> e) {
-            GeoCoordinate coordinate = e.Position.Location;
-            string accuracy = "0.0000000000000";
-            //statusTextBlock.Text = "Updated: " + coordinate.Latitude.ToString(accuracy) + ", " + coordinate.Longitude.ToString(accuracy);
-            RhitMapView.Instance.User.Location = e.Position.Location;
+        private void addTextLayer() {
+            watcher.Stop();
+            Map.Center = LOCATION_HATFIELD;
+            if(Map.ZoomLevel < 16)
+                Map.ZoomLevel = 16;
+
+            textLayer.Children.Clear();
+            Pushpin hatfield = new Pushpin() {
+                Location = LOCATION_HATFIELD,
+                Template = (ControlTemplate) Resources["myct"],
+                Content = "Hatfield Hall",
+                Background = new SolidColorBrush(Colors.Gray) { Opacity = 0.3 },
+                PositionOrigin = PositionOrigin.Center,
+
+            };
+
+            textLayer.Children.Add(hatfield);
+            Map.Children.Add(textLayer);
         }
 
         void bgWatcherUpdate() {
-            _userLocationWatcher.TryStart(true, TimeSpan.FromMilliseconds(60000));
+            watcher.TryStart(true, TimeSpan.FromMilliseconds(60000));
         }
-        #endregion
+
+        void watcher_StatusChanged(object sender, GeoPositionStatusChangedEventArgs e) {
+            switch(e.Status) {
+                case GeoPositionStatus.Disabled:
+                    // The Location Service is disabled or unsupported.
+                    // Check to see if the user has disabled the Location Service.
+                    if(watcher.Permission == GeoPositionPermission.Denied) {
+                        // The user has disabled the Location Service on their device.
+                        //statusTextBlock.Text = "You have disabled Location Service.";
+                    } else {
+                        //statusTextBlock.Text = "Location Service is not functioning on this device.";
+                    }
+                    break;
+                case GeoPositionStatus.Initializing:
+                    //statusTextBlock.Text = "Location Service is retrieving data...";
+                    // The Location Service is initializing.
+                    break;
+                case GeoPositionStatus.NoData:
+                    // The Location Service is working, but it cannot get location data.
+                    //statusTextBlock.Text = "Location data is not available.";
+                    break;
+                case GeoPositionStatus.Ready:
+                    // The Location Service is working and is receiving location data.
+                    //statusTextBlock.Text = "Location data is available.";
+                    break;
+            }
+        }
+        void watcher_PositionChanged(object sender, GeoPositionChangedEventArgs<GeoCoordinate> e) {
+            //update the TextBlock readouts
+            //latitudeTextBlock.Text = e.Position.Location.Latitude.ToString("0.0000000000000");
+            //longitudeTextBlock.Text = e.Position.Location.Longitude.ToString("0.0000000000000");
+            //speedreadout.Text = e.Position.Location.Speed.ToString("0.0") + " meters per second";
+            //coursereadout.Text = e.Position.Location.Course.ToString("0.0");
+            //altitudereadout.Text = e.Position.Location.Altitude.ToString("0.0");
+            // update the Map if the user has asked to be tracked.
+
+            user_loc.Location = e.Position.Location;
+            Map.Center = e.Position.Location;
+            if(Map.Children.Contains(user_loc) == false)
+                Map.Children.Add(user_loc);
+        }
 
         protected override void OnNavigatedTo(NavigationEventArgs e) {
-            if(!LayoutRoot.Children.Contains(RhitMapView.Instance.Map)) LoadMap();
-            RhitMapView.Instance.LoadData();
+            if(MvvmMap.Instance == null)
+                MvvmMap.CreateNew();
+            MvvmMap.Instance.setTileSource(this.LoadState<string>("MapSource", ""));
 
-            RhitMapView.Instance.GoToRhit();//TODO: Center to full map view instead
+            if(!Map.Children.Contains(cutomTilesLayer)) {
+                    Map.Children.Add(cutomTilesLayer);
+            }
+            //if(!Map.Children.Contains(textLayer)) {
+            //    Map.Children.Add(textLayer);
+            //}
 
-            List<RhitLocation> locations = DataCollector.Instance.GetLocations(Dispatcher);
-            DataCollector.Instance.UpdateAvailable += new ServerEventHandler(OnUpdateAvailable);
-            if(locations != null) RhitMapView.Instance.Outlines = locations;
-            //TODO: Display message if locations == null; "Map Data is Empty. Trying to download..."
-
-            RhitLocation outline = this.LoadState<RhitLocation>("SelectedOutline", null);
-            if(outline != null) this.SaveState("SelectedOutline", RhitMapView.Instance.Select(outline));
-
-            string mapSourceName = this.LoadState<string>("MapSource");
-            RhitMapView.Instance.ChangeTileSource(mapSourceName);
-
-            bool floorPlans = (bool) this.LoadState<object>("TileOverlay", false);
-            if(floorPlans) RhitMapView.Instance.AddOverlay("RHIT Floor Plans");
-            else RhitMapView.Instance.RemoveOverlay("RHIT Floor Plans");
+            if(polygonLayer.Children.Count == 0) {
+                if((bool) this.LoadState<object>("PolygonOverlay", false)) {
+                    polygonLayer.Children.Add(getPolygon());
+                    Map.Children.Add(polygonLayer);
+                    
+                }
+            }
         }
 
-        protected override void OnNavigatedFrom(NavigationEventArgs e) {
-            RhitMapView.Instance.StoreData();
-            LayoutRoot.Children.Remove(RhitMapView.Instance.Map);
+        private MapPolygon getPolygon() {
+            MapPolygon polygon = new MapPolygon();
+            polygon.Fill = new SolidColorBrush(Colors.Gray) { Opacity = 0.3 };
+            polygon.Stroke = new SolidColorBrush(Colors.White) { Opacity = 0.7 };
+            polygon.StrokeThickness = 5;
+            polygon.Locations = new LocationCollection() { 
+                new GeoCoordinate(39.48222435102057, -87.3227208852768), 
+                new GeoCoordinate(39.481996630009654, -87.32262969017029), 
+                new GeoCoordinate(39.48186413744205, -87.3222005367279), 
+                new GeoCoordinate(39.48224919326755, -87.32184112071991),
+                new GeoCoordinate(39.48252245739884, -87.3222005367279),
+            };
+            return polygon;
         }
     }
 }

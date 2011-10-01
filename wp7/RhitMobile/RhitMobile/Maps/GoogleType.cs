@@ -1,8 +1,5 @@
 ﻿
-namespace RhitMobile.MapSource {
-    /// <summary>
-    /// The various available Google map tile source types
-    /// </summary>
+namespace RhitMobile.Maps {
     public enum GoogleType {
         Street = 'm',
         Hybrid = 'y',

@@ -48,9 +48,8 @@
             <toolkit:ListPicker x:Name="mapSourcePicker" ItemCountThreshold="3" Header="Map Source" 
                                 ItemTemplate="{StaticResource PickerItemTemplate}"
                                 FullModeItemTemplate="{StaticResource PickerFullModeItemTemplate}" FullModeHeader="Map Source"/>
-            <toolkit:ToggleSwitch Header="Tile Overlays" Name="tileToggle" Margin="6,0,-6,338" Grid.Row="2" IsChecked="False" />
-            <toolkit:ToggleSwitch Header="Polygon Overlays" Name="polygonToggle" Margin="6,83,-6,264" Grid.Row="3" IsChecked="False" />
-            <toolkit:ToggleSwitch Header="Text Overlays" Name="textToggle" Margin="6,166,-6,187" Grid.Row="4" IsChecked="False" />
+            <toolkit:ToggleSwitch Header="Floor Plan Tile Overlays" Name="toggleSwitch1" Margin="6,0,-6,338" Grid.Row="1" IsChecked="True" />
+            <toolkit:ToggleSwitch Header="Floor Plan Polygon Overlays" Name="toggleSwitch2" Margin="6,83,-6,264" Grid.Row="1" IsChecked="False" />
         </Grid>
     </Grid>
 
