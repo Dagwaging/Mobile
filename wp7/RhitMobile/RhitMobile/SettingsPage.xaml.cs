@@ -38,7 +38,7 @@ namespace RhitMobile {
             }
         }
 
-        private class MapTileSource {
+        public class MapTileSource {
             public string Name {
                 get;
                 set;

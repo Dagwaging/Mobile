@@ -1,21 +1,21 @@
-﻿<xapCache source="C:\Users\Mr. Power\Desktop\RhitMobile\RhitMobile\Bin\Debug\RhitMobile.xap" wasSigned="False" certificateThumbprint="" TimeStampUrl="" lastWriteTime="10/1/2011 1:06:27 PM">
-  <file source="C:\Users\Mr. Power\Desktop\RhitMobile\RhitMobile\Properties\WMAppManifest.xml" archivePath="WMAppManifest.xml" lastWriteTime="9/14/2011 4:10:46 PM" />
-  <file source="C:\Users\Mr. Power\Desktop\RhitMobile\RhitMobile\Background.png" archivePath="Background.png" lastWriteTime="9/14/2011 4:10:46 PM" />
-  <file source="C:\Users\Mr. Power\Desktop\RhitMobile\RhitMobile\ApplicationIcon.png" archivePath="ApplicationIcon.png" lastWriteTime="9/14/2011 4:10:46 PM" />
-  <file source="C:\Users\Mr. Power\Desktop\RhitMobile\RhitMobile\obj\Debug\RhitMobile.dll" archivePath="RhitMobile.dll" lastWriteTime="10/1/2011 1:06:26 PM" />
-  <file source="C:\Users\Mr. Power\Desktop\RhitMobile\RhitMobile\Binaries\GalaSoft.MvvmLight.Extras.WP7.dll" archivePath="GalaSoft.MvvmLight.Extras.WP7.dll" lastWriteTime="9/14/2011 11:18:43 AM" />
-  <file source="C:\Users\Mr. Power\Desktop\RhitMobile\RhitMobile\Binaries\GalaSoft.MvvmLight.WP7.dll" archivePath="GalaSoft.MvvmLight.WP7.dll" lastWriteTime="9/14/2011 11:18:43 AM" />
+﻿<xapCache source="E:\Senior Project\Mobile\wp7\RhitMobile\RhitMobile\Bin\Debug\RhitMobile.xap" wasSigned="False" certificateThumbprint="" TimeStampUrl="" lastWriteTime="10/1/2011 7:14:01 PM">
+  <file source="E:\Senior Project\Mobile\wp7\RhitMobile\RhitMobile\Properties\WMAppManifest.xml" archivePath="WMAppManifest.xml" lastWriteTime="10/1/2011 7:05:58 PM" />
+  <file source="E:\Senior Project\Mobile\wp7\RhitMobile\RhitMobile\Background.png" archivePath="Background.png" lastWriteTime="10/1/2011 7:05:58 PM" />
+  <file source="E:\Senior Project\Mobile\wp7\RhitMobile\RhitMobile\ApplicationIcon.png" archivePath="ApplicationIcon.png" lastWriteTime="10/1/2011 7:05:58 PM" />
+  <file source="E:\Senior Project\Mobile\wp7\RhitMobile\RhitMobile\obj\Debug\RhitMobile.dll" archivePath="RhitMobile.dll" lastWriteTime="10/1/2011 7:14:00 PM" />
+  <file source="E:\Senior Project\Mobile\wp7\RhitMobile\RhitMobile\Binaries\GalaSoft.MvvmLight.Extras.WP7.dll" archivePath="GalaSoft.MvvmLight.Extras.WP7.dll" lastWriteTime="10/1/2011 7:05:58 PM" />
+  <file source="E:\Senior Project\Mobile\wp7\RhitMobile\RhitMobile\Binaries\GalaSoft.MvvmLight.WP7.dll" archivePath="GalaSoft.MvvmLight.WP7.dll" lastWriteTime="10/1/2011 7:05:58 PM" />
   <file source="C:\Program Files (x86)\Microsoft SDKs\Windows Phone\v7.0\Libraries\Silverlight\Microsoft.Phone.Controls.dll" archivePath="Microsoft.Phone.Controls.dll" lastWriteTime="7/20/2011 12:31:06 AM" />
   <file source="C:\Program Files (x86)\Microsoft SDKs\Windows Phone\v7.0\Libraries\Silverlight\Microsoft.Phone.Controls.Maps.dll" archivePath="Microsoft.Phone.Controls.Maps.dll" lastWriteTime="7/20/2011 12:31:06 AM" />
   <file source="C:\Program Files (x86)\Microsoft SDKs\Windows Phone\v7.0\Toolkit\Feb11\Bin\Microsoft.Phone.Controls.Toolkit.dll" archivePath="Microsoft.Phone.Controls.Toolkit.dll" lastWriteTime="2/17/2011 3:27:04 PM" />
-  <file source="C:\Users\Mr. Power\Desktop\RhitMobile\RhitMobile\Binaries\System.Windows.Interactivity.dll" archivePath="System.Windows.Interactivity.dll" lastWriteTime="9/14/2011 11:18:43 AM" />
-  <file source="C:\Users\Mr. Power\Desktop\RhitMobile\RhitMobile\Binaries\GalaSoft.MvvmLight.Extras.WP7.dll" archivePath="Binaries\GalaSoft.MvvmLight.Extras.WP7.dll" lastWriteTime="9/14/2011 11:18:43 AM" />
-  <file source="C:\Users\Mr. Power\Desktop\RhitMobile\RhitMobile\Binaries\GalaSoft.MvvmLight.WP7.dll" archivePath="Binaries\GalaSoft.MvvmLight.WP7.dll" lastWriteTime="9/14/2011 11:18:43 AM" />
-  <file source="C:\Users\Mr. Power\Desktop\RhitMobile\RhitMobile\Binaries\System.Windows.Interactivity.dll" archivePath="Binaries\System.Windows.Interactivity.dll" lastWriteTime="9/14/2011 11:18:43 AM" />
-  <file source="C:\Users\Mr. Power\Desktop\RhitMobile\RhitMobile\Images\rose-hulman.png" archivePath="Images\rose-hulman.png" lastWriteTime="9/27/2011 11:27:06 PM" />
-  <file source="C:\Users\Mr. Power\Desktop\RhitMobile\RhitMobile\Images\search.png" archivePath="Images\search.png" lastWriteTime="9/25/2011 3:58:45 PM" />
-  <file source="C:\Users\Mr. Power\Desktop\RhitMobile\RhitMobile\Images\directions.png" archivePath="Images\directions.png" lastWriteTime="9/25/2011 3:58:45 PM" />
-  <file source="C:\Users\Mr. Power\Desktop\RhitMobile\RhitMobile\Images\position.png" archivePath="Images\position.png" lastWriteTime="9/25/2011 3:58:45 PM" />
-  <file source="C:\Users\Mr. Power\Desktop\RhitMobile\RhitMobile\SplashScreenImage.jpg" archivePath="SplashScreenImage.jpg" lastWriteTime="9/14/2011 4:10:46 PM" />
-  <file source="C:\Users\Mr. Power\Desktop\RhitMobile\RhitMobile\Bin\Debug\AppManifest.xaml" archivePath="AppManifest.xaml" lastWriteTime="9/29/2011 1:17:10 AM" />
+  <file source="E:\Senior Project\Mobile\wp7\RhitMobile\RhitMobile\Binaries\System.Windows.Interactivity.dll" archivePath="System.Windows.Interactivity.dll" lastWriteTime="10/1/2011 7:05:58 PM" />
+  <file source="E:\Senior Project\Mobile\wp7\RhitMobile\RhitMobile\Binaries\GalaSoft.MvvmLight.Extras.WP7.dll" archivePath="Binaries\GalaSoft.MvvmLight.Extras.WP7.dll" lastWriteTime="10/1/2011 7:05:58 PM" />
+  <file source="E:\Senior Project\Mobile\wp7\RhitMobile\RhitMobile\Binaries\GalaSoft.MvvmLight.WP7.dll" archivePath="Binaries\GalaSoft.MvvmLight.WP7.dll" lastWriteTime="10/1/2011 7:05:58 PM" />
+  <file source="E:\Senior Project\Mobile\wp7\RhitMobile\RhitMobile\Binaries\System.Windows.Interactivity.dll" archivePath="Binaries\System.Windows.Interactivity.dll" lastWriteTime="10/1/2011 7:05:58 PM" />
+  <file source="E:\Senior Project\Mobile\wp7\RhitMobile\RhitMobile\Images\rose-hulman.png" archivePath="Images\rose-hulman.png" lastWriteTime="10/1/2011 7:06:46 PM" />
+  <file source="E:\Senior Project\Mobile\wp7\RhitMobile\RhitMobile\Images\search.png" archivePath="Images\search.png" lastWriteTime="10/1/2011 7:06:46 PM" />
+  <file source="E:\Senior Project\Mobile\wp7\RhitMobile\RhitMobile\Images\directions.png" archivePath="Images\directions.png" lastWriteTime="10/1/2011 7:06:46 PM" />
+  <file source="E:\Senior Project\Mobile\wp7\RhitMobile\RhitMobile\Images\position.png" archivePath="Images\position.png" lastWriteTime="10/1/2011 7:06:46 PM" />
+  <file source="E:\Senior Project\Mobile\wp7\RhitMobile\RhitMobile\SplashScreenImage.jpg" archivePath="SplashScreenImage.jpg" lastWriteTime="10/1/2011 7:05:58 PM" />
+  <file source="E:\Senior Project\Mobile\wp7\RhitMobile\RhitMobile\Bin\Debug\AppManifest.xaml" archivePath="AppManifest.xaml" lastWriteTime="10/1/2011 7:14:01 PM" />
 </xapCache>
