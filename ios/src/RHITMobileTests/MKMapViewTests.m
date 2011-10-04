@@ -1,32 +1,49 @@
 //
 //  MKMapViewTests.m
-//  RHITMobile
+//  RHIT Mobile Campus Directory
 //
-//  Created by Jimmy Theis on 10/4/11.
-//  Copyright 2011 Rose-Hulman Institute of Technology. All rights reserved.
+//  Copyright 2011 Rose-Hulman Institute of Technology
+// 
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//
+//  http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
 //
 
+#import <CoreLocation/CoreLocation.h>
+
 #import "MKMapViewTests.h"
+#import "MKMapView+ZoomLevel.h"
+#import "RHConstants.h"
+#import "RHITMobileAppDelegate.h"
+#import "MapViewController.h"
 
 @implementation MKMapViewTests
 
-#if USE_APPLICATION_UNIT_TEST     // all code under test is in the iPhone Application
-
-- (void)testAppDelegate {
+- (void)testZoomLevelSetAndGetIntegrity {
+    // Retrieve app delegate, view controller, and actual map view
+    RHITMobileAppDelegate *appDelegate = (RHITMobileAppDelegate *)
+        UIApplication.sharedApplication.delegate;
     
-    id yourApplicationDelegate = [[UIApplication sharedApplication] delegate];
-    STAssertNotNil(yourApplicationDelegate, @"UIApplication failed to find the AppDelegate");
+    MapViewController *mapViewController = appDelegate.mapViewController;
     
+    MKMapView *mapView = mapViewController.mapView;
+    
+    CLLocationCoordinate2D center = CLLocationCoordinate2DMake(RH_CAMPUS_CENTER_LATITUDE, RH_CAMPUS_CENTER_LONGITUDE);
+    
+    // Set the zoom level
+    [mapView setCenterCoordinate:center zoomLevel:12 animated:NO];
+    
+    // Check the resulting zoom level
+    STAssertEquals(mapView.zoomLevel, (NSUInteger) 12,
+                   @"Zoom level is incorrect");
 }
-
-#else                           // all code under test must be linked into the Unit Test bundle
-
-- (void)testMath {
-    
-    STAssertTrue((1+1)==2, @"Compiler isn't feeling well today :-(" );
-    
-}
-
-#endif
 
 @end
