@@ -1,4 +1,4 @@
-## OSX Stuff
+#OSX Stuff
 .DS_Store
 ._*
 .Spotlight-V100
@@ -8,7 +8,7 @@
 doc/*
 
 ## Xcode Stuff
-build/*
+build/
 *.pbxuser
 !default.pbxuser
 *.mode1v3
