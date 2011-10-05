@@ -44,6 +44,27 @@
     // Check the resulting zoom level
     STAssertEquals(mapView.zoomLevel, (NSUInteger) 12,
                    @"Zoom level is incorrect");
+    
+    // Set the zoom level again
+    [mapView setCenterCoordinate:center zoomLevel:1 animated:NO];
+    
+    // Check the resulting zoom level
+    STAssertEquals(mapView.zoomLevel, (NSUInteger) 1,
+                   @"Zoom level is incorrect");
+    
+    // Set the zoom level again
+    [mapView setCenterCoordinate:center zoomLevel:19 animated:NO];
+    
+    // Check the resulting zoom level
+    STAssertEquals(mapView.zoomLevel, (NSUInteger) 19,
+                   @"Zoom level is incorrect");
+    
+    // Set the zoom level again
+    [mapView setCenterCoordinate:center zoomLevel:2 animated:NO];
+    
+    // Check the resulting zoom level
+    STAssertEquals(mapView.zoomLevel, (NSUInteger) 2,
+                   @"Zoom level is incorrect");
 }
 
 @end

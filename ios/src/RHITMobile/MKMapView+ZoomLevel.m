@@ -4,7 +4,7 @@
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
 //
-//  This code provided publicly by Troy Brant without licensing terms:
+//  Based on code provided publicly by Troy Brant without licensing terms:
 //  http://troybrant.net/blog/2010/01/set-the-zoom-level-of-an-mkmapview/
 // 
 //  Licensed under the Apache License, Version 2.0 (the "License");
@@ -90,9 +90,23 @@
     return span;
 }
 
-- (NSUInteger)zoomLevelForSpan:(MKCoordinateSpan)span {
+- (NSUInteger)zoomLevelWithMapView:(MKMapView *)mapView
+                              span:(MKCoordinateSpan)span {
     // A reverse-engineering of the existing zoom level calculation
-    return (NSUInteger) 0;
+    
+    CLLocationDegrees longitudeDelta = span.longitudeDelta;
+    
+    CLLocationDegrees maxLng = mapView.centerCoordinate.longitude + longitudeDelta / 2;
+    CLLocationDegrees minLng = mapView.centerCoordinate.longitude - longitudeDelta / 2;
+    
+    double scaledMapWidth = [self longitudeToPixelSpaceX:maxLng] -
+        [self longitudeToPixelSpaceX:minLng];
+    
+    CGSize mapSizeInPixels = mapView.bounds.size;
+    
+    double zoomScale = scaledMapWidth / mapSizeInPixels.width;
+    
+    return (NSUInteger) 20 - log2(zoomScale);
 }
 
 #pragma mark -
@@ -115,7 +129,7 @@
 }
 
 - (NSUInteger)zoomLevel {
-    return [self zoomLevelForSpan:self.region.span];
+    return [self zoomLevelWithMapView:self span:self.region.span];
 }
 
 @end
