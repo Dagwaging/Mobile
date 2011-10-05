@@ -76,8 +76,6 @@
 /// page, make changes to RHConstants.h (this documentation won't be visible
 /// in the file if you view it with the built-in Doxygen source viewer).
 
-/// Global constants for the application.
-
 #ifndef RHITMobile_RHConstants_h
 #define RHITMobile_RHConstants_h
 
