@@ -24,11 +24,6 @@ public class MainActivityTest extends
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
-		
-		//disable looping back into the beta system
-		Intent intent = new Intent();
-		intent.putExtra("DisableBeta", true);
-		setActivityIntent(intent); 
 
 		mActivity = getActivity();
 
@@ -43,6 +38,7 @@ public class MainActivityTest extends
 	@UiThreadTest
 	public void testMapViewState() {
 		assertTrue(m_mapView.isSatellite());
+		assertFalse(m_mapView.isStreetView());
 		assertTrue(m_mapView.getOverlays().size() > 0);
 	}
 
