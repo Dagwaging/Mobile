@@ -33,4 +33,8 @@
 /// this method.
 -(void)focusMapViewToLocation:(RHLocation *)location;
 
+/// Clear any existing overlays on the map. This method is used to properly
+/// facilitate fully deselecting a location.
+-(void)clearOverlays;
+
 @end

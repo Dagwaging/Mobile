@@ -79,6 +79,13 @@
     [super setSelected:inSelected];
 }
 
+- (void)setHighlighted:(BOOL)inHighlighted {
+    if (!inHighlighted) {
+        [delegate clearOverlays];
+    }
+    [super setHighlighted:inHighlighted];
+}
+
 - (void)updateAnnotationVisibility {
     if (!self.storedAnnotation.visible) {
         self.textView.hidden = YES;
