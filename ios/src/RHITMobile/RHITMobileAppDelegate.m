@@ -38,6 +38,7 @@
     self.window.rootViewController = self.tabBarController;
     [self.window makeKeyAndVisible];
     self.mapViewController.managedObjectContext = self.managedObjectContext;
+    [self.mapViewController refreshPreferences];
     return YES;
 }
 
@@ -68,6 +69,7 @@
      state; here you can undo many of the changes made on entering the 
      background.
      */
+    [self.mapViewController refreshPreferences];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
@@ -76,6 +78,7 @@
      application was inactive. If the application was previously in the 
      background, optionally refresh the user interface.
      */
+    [self.mapViewController refreshPreferences];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {

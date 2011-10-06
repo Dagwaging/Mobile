@@ -22,8 +22,15 @@
 
 @class RHLocation;
 
+/// Delegate responsible for repsonding to events generated from an
+/// RHAnnotationView, or for performing actions requested by the annotation
+/// view. An RHAnnotationViewDelegate should have access to the MKMapView
+/// responsible for the RHAnnotationView in question.
 @protocol RHAnnotationViewDelegate <NSObject>
 
+/// Focus the MKMapView containing this RHAnnotationView to a specific location.
+/// The final zoom level of the map is a decision left to the implemntation of
+/// this method.
 -(void)focusMapViewToLocation:(RHLocation *)location;
 
 @end

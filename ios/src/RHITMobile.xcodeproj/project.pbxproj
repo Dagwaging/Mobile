@@ -69,6 +69,8 @@
 		9265FED21409AB5D00AE406E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9265FEAA1409AB5D00AE406E /* Foundation.framework */; };
 		9265FED31409AB5D00AE406E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9265FEAC1409AB5D00AE406E /* CoreGraphics.framework */; };
 		9265FEDB1409AB5D00AE406E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9265FED91409AB5D00AE406E /* InfoPlist.strings */; };
+		926D397F143D2CE400223121 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 926D397E143D2CE400223121 /* Settings.bundle */; };
+		926D3980143D2CE400223121 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 926D397E143D2CE400223121 /* Settings.bundle */; };
 		92747161143B6F99005B6D43 /* MKMapViewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 92747160143B6F99005B6D43 /* MKMapViewTests.m */; };
 		927866FF1432F35C00749C2E /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 927866FE1432F35C00749C2E /* CoreLocation.framework */; };
 		927867021432F36500749C2E /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 927867011432F36500749C2E /* CoreLocation.framework */; };
@@ -169,6 +171,7 @@
 		9265FECF1409AB5D00AE406E /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		9265FED81409AB5D00AE406E /* RHITMobileTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "RHITMobileTests-Info.plist"; sourceTree = "<group>"; };
 		9265FEDA1409AB5D00AE406E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		926D397E143D2CE400223121 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		9274715F143B6F99005B6D43 /* MKMapViewTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MKMapViewTests.h; sourceTree = "<group>"; };
 		92747160143B6F99005B6D43 /* MKMapViewTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MKMapViewTests.m; sourceTree = "<group>"; };
 		927866FE1432F35C00749C2E /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
@@ -407,6 +410,7 @@
 				9265FEB11409AB5D00AE406E /* InfoPlist.strings */,
 				9265FEB41409AB5D00AE406E /* main.m */,
 				9265FEB61409AB5D00AE406E /* RHITMobile-Prefix.pch */,
+				926D397E143D2CE400223121 /* Settings.bundle */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -539,6 +543,7 @@
 				922603581409C9480065F705 /* launch-icon-large.png in Resources */,
 				9226035A1409C9680065F705 /* launch-icon-small.png in Resources */,
 				924E754D140ACC9A001DFC4C /* tab-bar-map-icon.png in Resources */,
+				926D397F143D2CE400223121 /* Settings.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -547,6 +552,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9265FEDB1409AB5D00AE406E /* InfoPlist.strings in Resources */,
+				926D3980143D2CE400223121 /* Settings.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

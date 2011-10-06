@@ -18,39 +18,79 @@
 //
 
 #import "RHAnnotation.h"
+#import "RHAnnotationView.h"
 #import "RHLabelNode.h"
 #import "RHLocation.h"
 
 
+#pragma mark Private Method Declarations
+
+@interface RHAnnotation ()
+
+@property (nonatomic, readonly) NSInteger visibleZoomLevel;
+
+@end
+
+
+#pragma mark -
+#pragma mark Implementation
+
 @implementation RHAnnotation
 
+#pragma mark -
+#pragma mark Generic Properties
+
 @synthesize coordinate;
-@synthesize annotationType;
+@synthesize visible;
 @synthesize location;
+@synthesize annotationView;
+
+#pragma mark -
+#pragma mark General Methods
 
 - (RHAnnotation *)initWithLocation:(RHLocation *)inLocation
-                    annotationType:(RHAnnotationType)inAnnotationType {
+                    currentZoomLevel:(NSUInteger)zoomLevel {
     self = [super init];
     
     if (self) {
-        [self setLocation:inLocation];
-        [self setAnnotationType:inAnnotationType];
+        self.location = inLocation;
+        self.visible = zoomLevel >= self.visibleZoomLevel;
     }
     
     return self;
-    
 }
 
+- (void)mapView:(MKMapView *)mapView didChangeZoomLevel:(NSUInteger)zoomLevel {
+    if (self.visible && zoomLevel < self.visibleZoomLevel) {
+        self.visible = NO;
+        [self.annotationView updateAnnotationVisibility];
+    } else if (!self.visible && zoomLevel >= self.visibleZoomLevel) {
+        self.visible = YES;
+        [self.annotationView updateAnnotationVisibility];
+    }
+}
+
+#pragma mark -
+#pragma mark Property Methods
+
 - (CLLocationCoordinate2D)coordinate {
-    return [[[self location] labelLocation] coordinate];
+    return self.location.labelLocation.coordinate;
 }
 
 - (NSString *)title {
-    return [[self location] name];
+    return self.location.name;
 }
 
 - (NSString *)subtitle {
     return self.location.quickDescription;
+}
+
+
+#pragma mark -
+#pragma mark Private Methods
+
+- (NSInteger)visibleZoomLevel {
+    return self.location.visibleZoomLevel.integerValue;
 }
 
 @end

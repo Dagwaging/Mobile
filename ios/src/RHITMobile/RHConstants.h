@@ -79,9 +79,14 @@
 #ifndef RHITMobile_RHConstants_h
 #define RHITMobile_RHConstants_h
 
-#define RH_CAMPUS_CENTER_LATITUDE 39.483011
-#define RH_CAMPUS_CENTER_LONGITUDE -87.325623
+#define kRHCampusCenterLatitude 39.483011
+#define kRHCampusCenterLongitude -87.325623
 
-#define RH_INITIAL_ZOOM_LEVEL 15
+#define kRHInitialZoomLevel 15
+
+#define kRHLocationFocusZoomLevel 16
+
+#define kRHPreferenceDebugMapInfo @"map_info_debug_preference"
+#define kRHPreferenceDebugMapZoomControls @"map_zoom_debug_preference"
 
 #endif

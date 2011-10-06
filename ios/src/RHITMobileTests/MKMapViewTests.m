@@ -36,7 +36,7 @@
     
     MKMapView *mapView = mapViewController.mapView;
     
-    CLLocationCoordinate2D center = CLLocationCoordinate2DMake(RH_CAMPUS_CENTER_LATITUDE, RH_CAMPUS_CENTER_LONGITUDE);
+    CLLocationCoordinate2D center = CLLocationCoordinate2DMake(kRHCampusCenterLatitude, kRHCampusCenterLongitude);
     
     // Set the zoom level
     [mapView setCenterCoordinate:center zoomLevel:12 animated:NO];
