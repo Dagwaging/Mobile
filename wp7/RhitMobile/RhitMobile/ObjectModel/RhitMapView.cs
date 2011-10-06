@@ -1,0 +1,385 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Windows;
+using System.Windows.Input;
+using Microsoft.Phone.Controls.Maps;
+using RhitMobile.Events;
+using RhitMobile.MapSource;
+
+namespace RhitMobile.ObjectModel {
+    /// <summary>
+    /// Singleton class to handle the map object.
+    /// </summary>
+    public class RhitMapView {
+        #region Private Variables
+        private static RhitMapView _instance;
+        private Map _map;
+        private BaseTileSource _tileSource;
+        private List<BaseTileSource> _overlaySources;
+        private List<RhitLocation> _locations;
+        private MapTileLayer _mapTileLayer;
+        private MapTileLayer _mapOverlayLayer;
+        private MapLayer _polygonLayer;
+        private MapLayer _textLayer;
+        private MapPolygon _lastSelected;
+        private double _zoomLevel;
+        private bool _areOutlinesVisible;
+        private bool _areLabelsVisible;
+        #endregion
+
+        #region Events
+        public event OutlineEventHandler OutlineTapped;
+
+        public event PushpinEventHandler PushpinTapped;
+        #endregion
+
+        private RhitMapView() {
+            CreateAvailableSources();
+            Map = new Map();
+            Initialize();
+            Map.MapZoom += new EventHandler<MapZoomEventArgs>(Map_MapZoom);
+        }
+
+        #region Public Properties
+        /// <summary> Should the labels be visible? </summary>
+        public bool AreLabelsVisible {
+            get { return _areLabelsVisible; }
+            set {
+                if(value == _areLabelsVisible) return;
+                _areLabelsVisible = value;
+                _textLayer.Children.Clear();
+                if(value) foreach(RhitLocation location in _locations)
+                        if(ZoomLevel > location.MinZoomLevel)
+                            _textLayer.Children.Add(location.GetLabel());
+            }
+        }
+
+        /// <summary> Should the polygons be visible? </summary>
+        public bool AreOutlinesVisible {
+            get { return _areOutlinesVisible; }
+            set {
+                if(value == _areOutlinesVisible) return;
+                _areOutlinesVisible = value;
+                foreach(UIElement element in _polygonLayer.Children) {
+                    if(!value) RhitLocation.HideOutline((MapPolygon) element);
+                    else RhitLocation.ShowOutline((MapPolygon) element);
+                }
+            }
+        }
+
+        /// <summary> Current tile source for the map. </summary>
+        public BaseTileSource CurrentTileSource {
+            get { return _tileSource; }
+            set {
+                if(value.Equals(CurrentTileSource)) return;
+                if(!TileSources.Contains(value)) return;
+                _tileSource = value;
+                Map.Mode = _tileSource.Mode;
+                _mapTileLayer.TileSources.Clear();
+                _mapTileLayer.TileSources.Add(_tileSource);
+                //TODO: Raise source change event?
+            }
+        }
+
+        /// <summary> The overlays currently applied to the map. </summary>
+        public List<BaseTileSource> CurrentOverlaySources {
+            get { return _overlaySources; }
+            set {
+                if(value.Equals(CurrentOverlaySources)) return;
+                _overlaySources.Clear();
+                _mapOverlayLayer.TileSources.Clear();
+                foreach(BaseTileSource source in value) {
+                    if(!OverlaySources.Contains(source)) continue;
+                    _overlaySources.Add(source);
+                    _mapOverlayLayer.TileSources.Add(source);
+                }
+                //TODO: Raise source change event?
+            }
+        }
+
+        /// <summary> The single instance of this class. </summary>
+        public static RhitMapView Instance {
+            get {
+                if(_instance == null) _instance = new RhitMapView();
+                return _instance;
+            }
+        }
+
+        /// <summary> The map object to add to the GUI. </summary>
+        public Map Map {
+            get { return _map; }
+            private set {
+                _map = value;
+                _map.CredentialsProvider = new ApplicationIdCredentialsProvider(App.Id);
+                _map.MouseLeftButtonUp += new System.Windows.Input.MouseButtonEventHandler(Map_MouseLeftButtonUp);
+                ZoomLevel = _map.ZoomLevel;
+            }
+        }
+
+        /// <summary>
+        /// All of the available location received from the service.
+        /// </summary>
+        public List<RhitLocation> Outlines {
+            get { return _locations; }
+            set {
+                _locations = value;
+                _polygonLayer.Children.Clear();
+                _textLayer.Children.Clear();
+                foreach(RhitLocation location in _locations) {
+                    if(!AreOutlinesVisible) RhitLocation.HideOutline(location.OutLine);
+                    else RhitLocation.ShowOutline(location.OutLine);
+                    location.OutLine.MouseLeftButtonUp += new System.Windows.Input.MouseButtonEventHandler(Polgon_MouseLeftButtonUp);
+                    _polygonLayer.Children.Add(location.OutLine);
+                    if(AreLabelsVisible && ZoomLevel > location.MinZoomLevel) _textLayer.Children.Add(location.GetLabel());
+                }
+            }
+        }
+
+        /// <summary> The available overlays to add to the map. </summary>
+        public List<BaseTileSource> OverlaySources { get; private set; }
+
+        /// <summary> Pushpin to show when a location is selected. </summary>
+        public Pushpin SelectedPushpin { get; private set; }
+
+        /// <summary>
+        /// The available tile sources to be applied to the map.
+        /// </summary>
+        public List<BaseTileSource> TileSources { get; private set; }
+
+        /// <summary>
+        /// Data container for information specific to the user.
+        /// </summary>
+        public User User { get; private set; }
+
+        /// <summary> Current zoom level of the map. </summary>
+        public double ZoomLevel {
+            get { return _zoomLevel; }
+            set {
+                if(_zoomLevel > 1) return;
+                if(_zoomLevel == value) return;
+                _zoomLevel = value;
+                Map.ZoomLevel = _zoomLevel;
+                if(_textLayer == null) return;
+                _textLayer.Children.Clear();
+                foreach(RhitLocation location in Outlines)
+                    if(AreLabelsVisible && value > location.MinZoomLevel) _textLayer.Children.Add(location.GetLabel());
+            }
+        }
+        #endregion
+
+        #region Event Handler Callabacks
+        private void Map_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            //TODO: If there is a selected polygon, then unselect it
+        }
+
+        private void UserPushpin_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            //TODO: Do something here
+        }
+
+        private void SelectedPushpin_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            if(Map.Children.Contains(SelectedPushpin)) Map.Children.Remove(SelectedPushpin);
+            if(_lastSelected != null && !AreOutlinesVisible)
+                RhitLocation.HideOutline(_lastSelected);
+            _lastSelected = null;
+
+            OnSelectedTap(new PushpinEventArgs() { SelectedPushpin = SelectedPushpin });
+        }
+
+        private void Polgon_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            RhitLocation location = Select((MapPolygon) sender);
+            RhitLocation.ShowOutline(location.OutLine);
+            if(_lastSelected != null && !AreOutlinesVisible)
+                RhitLocation.HideOutline(_lastSelected);
+            _lastSelected = location.OutLine;
+
+            OnTap(new OutlineEventArgs() { Outline = location.OutLine });
+        }
+
+        private void Map_MapZoom(object sender, MapZoomEventArgs e) {
+            _zoomLevel = Map.ZoomLevel;
+            _textLayer.Children.Clear();
+            if(!AreLabelsVisible) return;
+            foreach(RhitLocation location in Outlines) //TODO: Make more efficient
+                if(_zoomLevel > location.MinZoomLevel) _textLayer.Children.Add(location.GetLabel());
+        }
+        #endregion
+
+        #region private/Protected Methods
+        private void CreateAvailableSources() {
+            TileSources = new List<BaseTileSource>() {
+                new BaseBingSource() { Name = "Aerial", MapType = BingType.Aerial},
+                new BaseBingSource() { Name = "Road", MapType = BingType.Road},
+                new BaseBingSource() { Name = "Core Aerial", MapType = BingType.CoreAerial},
+                new BaseBingSource() { Name = "Core Road", MapType = BingType.CoreRoad},
+                new BaseGoogleSource() {Name = "Google Hybrid", MapType = GoogleType.Hybrid},
+                new BaseGoogleSource() {Name = "Google Physical", MapType = GoogleType.Physical},
+                new BaseGoogleSource() {Name = "Google Physical Hybrid", MapType = GoogleType.PhysicalHybrid},
+                new BaseGoogleSource() {Name = "Google Satellite", MapType = GoogleType.Satellite},
+                new BaseGoogleSource() {Name = "Google Street", MapType = GoogleType.Street},
+                new Mapnik() {Name = "OSM Mapnik"},
+                new OsmaRender() {Name = "Osma Render"},
+            };
+            OverlaySources = new List<BaseTileSource>() {
+                new BaseGoogleSource() {Name = "Google Street", MapType = GoogleType.StreetOverlay},
+                new BaseGoogleSource() {Name = "Google Street", MapType = GoogleType.WaterOverlay},
+                new RoseTileOverlay() { Name = "RHIT Floor Plans"},
+            };
+        }
+
+        private void Initialize() {
+            _mapTileLayer = new MapTileLayer();
+            _mapOverlayLayer = new MapTileLayer();
+            _overlaySources = new List<BaseTileSource>();
+            _locations = new List<RhitLocation>();
+            CurrentTileSource = TileSources[0];
+            CurrentOverlaySources = new List<BaseTileSource>();
+            User = new User();
+            _polygonLayer = new MapLayer();
+            _textLayer = new MapLayer();
+            AreLabelsVisible = false;
+            AreOutlinesVisible = false;
+            User.Pin.MouseLeftButtonUp += new MouseButtonEventHandler(UserPushpin_MouseLeftButtonUp);
+            Map.Children.Add(User.Pin);
+            SelectedPushpin = new Pushpin();
+            SelectedPushpin.MouseLeftButtonUp += new MouseButtonEventHandler(SelectedPushpin_MouseLeftButtonUp);
+            Map.Children.Add(_mapTileLayer);
+            Map.Children.Add(_mapOverlayLayer);
+            Map.Children.Add(_polygonLayer);
+            Map.Children.Add(_textLayer);
+        }
+
+        protected virtual void OnTap(OutlineEventArgs e) {
+            if(OutlineTapped != null) OutlineTapped(this, e);
+        }
+
+        protected virtual void OnSelectedTap(PushpinEventArgs e) {
+            if(PushpinTapped != null) PushpinTapped(this, e);
+        }
+        #endregion
+
+        #region Public Methods
+        /// <summary>
+        /// Add an overlay to the map.
+        /// </summary>
+        /// <param name="sourceName">Name of one of the available sources</param>
+        public void AddOverlay(string sourceName) {
+            foreach(BaseTileSource source in OverlaySources)
+                if(source.Name == sourceName) {
+                    if(CurrentOverlaySources.Contains(source)) return;
+                    CurrentOverlaySources.Add(source);
+                    _mapOverlayLayer.TileSources.Add(source);
+                    return;
+                }
+        }
+
+        /// <summary>
+        /// Switch which tile source the map is using.
+        /// </summary>
+        /// <param name="sourceName">Name of one of the available sources</param>
+        public void ChangeTileSource(string sourceName) {
+            if(CurrentTileSource.Name == sourceName) return;
+            foreach(BaseTileSource source in TileSources)
+                if(source.Name == sourceName) {
+                    CurrentTileSource = source;
+                    return;
+                }
+        }
+
+        /// <summary>
+        /// Makes Rose-Hulman is visible on the map.
+        /// </summary>
+        public void GoToRhit() {
+            Map.Center = Locations.LOCATION_RHIT.Center;
+            ZoomLevel = 16; //TODO: Don't hard code numbers
+        }
+        
+        /// <summary>
+        /// Makes the user's current location visible on the map.
+        /// </summary>
+        public void GoToUserLocation() {
+            if(User.Location == null) //TODO: Show Error Message
+                return;
+            Map.Center = User.Location;
+            ZoomLevel = 18; //TODO: Don't hard code numbers
+        }
+
+        /// <summary>
+        /// Loads data for the map from isolated storage.
+        /// </summary>
+        public void LoadData() {
+            ZoomLevel = (double) StateManagment.LoadState<object>(null, "ZoomLevel", ZoomLevel);
+            ChangeTileSource(StateManagment.LoadState<string>(null, "CurrentTileSource", CurrentTileSource.Name));
+            List<string> sourceNames = StateManagment.LoadState<List<string>>(null, "CurrentOverlaySources", new List<string>());
+            foreach(string sourceName in sourceNames) AddOverlay(sourceName);
+            AreOutlinesVisible = (bool) StateManagment.LoadState<object>(null, "AreOutlinesVisible", AreOutlinesVisible);
+            AreLabelsVisible = (bool) StateManagment.LoadState<object>(null, "AreLabelsVisible", AreLabelsVisible);
+            User = StateManagment.LoadState<User>(null, "User", User);
+            User.Pin.MouseLeftButtonUp += new MouseButtonEventHandler(UserPushpin_MouseLeftButtonUp);
+        }
+
+        /// <summary>
+        /// Removes an overlay from the map.
+        /// </summary>
+        /// <param name="sourceName">Name of one of the available source</param>
+        public void RemoveOverlay(string sourceName) {
+            foreach(BaseTileSource source in CurrentOverlaySources)
+                if(source.Name == sourceName) {
+                    CurrentOverlaySources.Remove(source);
+                    _mapOverlayLayer.TileSources.Remove(source);
+                    return;
+                }
+        }
+
+        /// <summary>
+        /// Makes a location visible on the map.
+        /// </summary>
+        /// <param name="polygon">Polygon to make visible</param>
+        /// <returns>The location that was made visible</returns>
+        public RhitLocation Select(MapPolygon polygon) {
+            foreach(RhitLocation location in Outlines)
+                if(location.IsPolygonEqual(polygon)) {
+                    return Select(location);
+                }
+            return null;
+        }
+
+        /// <summary>
+        /// Makes a location visible on the map.
+        /// </summary>
+        /// <param name="location">Location to make visible</param>
+        /// <returns>The location that was made visible</returns>
+        public RhitLocation Select(RhitLocation location) {
+            foreach(RhitLocation _location in Outlines)
+                if(_location.Label == location.Label) {
+                    if(_lastSelected != null && !AreOutlinesVisible)
+                        RhitLocation.HideOutline(_lastSelected);
+                    _lastSelected = _location.OutLine;
+                    SelectedPushpin.Content = _location.Label + "\n(click for more)";
+                    SelectedPushpin.Location = _location.Center;
+                    if(!Map.Children.Contains(SelectedPushpin)) Map.Children.Add(SelectedPushpin);
+                    RhitLocation.ShowOutline(_location.OutLine);
+                    Map.Center = _location.Center;
+                    if(ZoomLevel < 18) ZoomLevel = 18;
+                    return _location;
+                }
+            return null;
+        }
+
+        /// <summary>
+        /// Stores map data to isolated storage.
+        /// </summary>
+        public void StoreData() {
+            StateManagment.SaveState(null, "ZoomLevel", ZoomLevel);
+            StateManagment.SaveState(null, "CurrentTileSource", CurrentTileSource.Name);
+            List<string> sourceNames = new List<string>();
+            foreach(BaseTileSource source in CurrentOverlaySources)
+                sourceNames.Add(source.Name);
+            StateManagment.SaveState(null, "CurrentOverlaySources", sourceNames);
+            StateManagment.SaveState(null, "AreOutlinesVisible", AreOutlinesVisible);
+            StateManagment.SaveState(null, "AreLabelsVisible", AreLabelsVisible);
+            StateManagment.SaveState(null, "User", User);
+            //TODO: Cache Map Tiles
+        }
+        #endregion
+    }
+}

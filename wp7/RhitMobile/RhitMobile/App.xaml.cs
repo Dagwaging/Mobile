@@ -2,131 +2,109 @@
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
-using RhitMobile.Serialization;
-using RhitMobile.ViewModel;
+using RhitMobile.Services;
 
 namespace RhitMobile {
     public partial class App : Application {
+        #region Fields
+        private bool phoneApplicationInitialized = false;
 
         internal const string Id = "AthZ1tu5ROM0PUWcIYFSxC1oQALFR-g0aoFIuL9tlbeGJ9Z6qKIRYoB_jGpct8Yu";
-
-        /// <summary>
-        /// Provides easy access to the root frame of the Phone Application.
-        /// </summary>
-        /// <returns>The root frame of the Phone Application.</returns>
-        public PhoneApplicationFrame RootFrame { get; private set; }
+        #endregion
 
         /// <summary>
         /// Constructor for the Application object.
         /// </summary>
         public App() {
+            //Set the base address of the service
+            GeoService.Instance.BaseAddress = "http://mobilewin.csse.rose-hulman.edu:5600";
+
             // Global handler for uncaught exceptions. 
             UnhandledException += Application_UnhandledException;
 
-            // Standard Silverlight initialization
             InitializeComponent();
-
-            // Phone-specific initialization
             InitializePhoneApplication();
-
-            // Show graphics profiling information while debugging.
-            if(System.Diagnostics.Debugger.IsAttached) {
-                // Display the current frame rate counters.
-                Application.Current.Host.Settings.EnableFrameRateCounter = true;
-
-                // Show the areas of the app that are being redrawn in each frame.
-                //Application.Current.Host.Settings.EnableRedrawRegions = true;
-
-                // Enable non-production analysis visualization mode, 
-                // which shows areas of a page that are handed off to GPU with a colored overlay.
-                //Application.Current.Host.Settings.EnableCacheVisualization = true;
-
-                // Disable the application idle detection by setting the UserIdleDetectionMode property of the
-                // application's PhoneApplicationService object to Disabled.
-                // Caution:- Use this under debug mode only. Application that disables user idle detection will continue to run
-                // and consume battery power when the user is not using the phone.
-                PhoneApplicationService.Current.UserIdleDetectionMode = IdleDetectionMode.Disabled;
-            }
-
         }
 
-        // Code to execute when the application is launching (eg, from Start)
-        // This code will not execute when the application is reactivated
-        private void Application_Launching(object sender, LaunchingEventArgs e) {
-            LoadModelFromIsolatedStorage();
-        }
+        #region Properties
+        /// <summary>
+        /// Provides easy access to the root frame of the Phone Application.
+        /// </summary>
+        /// <returns>The root frame of the Phone Application.</returns>
+        public PhoneApplicationFrame RootFrame { get; private set; }
+        #endregion
 
-        // Code to execute when the application is activated (brought to foreground)
-        // This code will not execute when the application is first launched
-        private void Application_Activated(object sender, ActivatedEventArgs e) {
-            LoadModelFromIsolatedStorage();
-        }
-
-        private void LoadModelFromIsolatedStorage() {
-            MvvmMap.Instance = this.RetrieveFromIsolatedStorage<MvvmMap>();
-            if(MvvmMap.Instance == null) MvvmMap.CreateNew();
-        }
-
-        // Code to execute when the application is deactivated (sent to background)
-        // This code will not execute when the application is closing
-        private void Application_Deactivated(object sender, DeactivatedEventArgs e) {
-            this.SaveToIsolatedStorage(MvvmMap.Instance);
-        }
-
-        // Code to execute when the application is closing (eg, user hit Back)
-        // This code will not execute when the application is deactivated
-        private void Application_Closing(object sender, ClosingEventArgs e) {
-            this.SaveToIsolatedStorage(MvvmMap.Instance);
-        }
-
-        // Code to execute if a navigation fails
-        private void RootFrame_NavigationFailed(object sender, NavigationFailedEventArgs e) {
-            if(System.Diagnostics.Debugger.IsAttached) {
-                // A navigation has failed; break into the debugger
-                System.Diagnostics.Debugger.Break();
-            }
-        }
-
-        // Code to execute on Unhandled Exceptions
-        private void Application_UnhandledException(object sender, ApplicationUnhandledExceptionEventArgs e) {
-            if(System.Diagnostics.Debugger.IsAttached) {
-                // An unhandled exception has occurred; break into the debugger
-                System.Diagnostics.Debugger.Break();
-            }
-        }
-
-        #region Phone application initialization
-
-        // Avoid double-initialization
-        private bool phoneApplicationInitialized = false;
-
-        // Do not add any additional code to this method
+        #region Initialization Methods
+        /// <summary> Initialize Application. </summary>
         private void InitializePhoneApplication() {
-            if(phoneApplicationInitialized)
-                return;
-
-            // Create the frame but don't set it as RootVisual yet; this allows the splash
-            // screen to remain active until the application is ready to render.
+            if(phoneApplicationInitialized) return;
+            // Create the frame but don't set it as RootVisual yet.
+            // This allows the splash screen to remain active until the application is ready to render.
             RootFrame = new PhoneApplicationFrame();
             RootFrame.Navigated += CompleteInitializePhoneApplication;
-
             // Handle navigation failures
             RootFrame.NavigationFailed += RootFrame_NavigationFailed;
-
             // Ensure we don't initialize again
             phoneApplicationInitialized = true;
         }
 
-        // Do not add any additional code to this method
+        /// <summary> Finialize initialization. </summary>
         private void CompleteInitializePhoneApplication(object sender, NavigationEventArgs e) {
             // Set the root visual to allow the application to render
-            if(RootVisual != RootFrame)
-                RootVisual = RootFrame;
-
+            if(RootVisual != RootFrame) RootVisual = RootFrame;
             // Remove this handler since it is no longer needed
             RootFrame.Navigated -= CompleteInitializePhoneApplication;
         }
+        #endregion
 
+        #region Application Level Exception Handlers
+        /// <summary> Execute if a navigation fails. </summary>
+        private void RootFrame_NavigationFailed(object sender, NavigationFailedEventArgs e) {
+            if(System.Diagnostics.Debugger.IsAttached)
+                System.Diagnostics.Debugger.Break();
+        }
+
+        /// <summary> Execute on Unhandled Exceptions. </summary>
+        private void Application_UnhandledException(object sender, ApplicationUnhandledExceptionEventArgs e) {
+            if(System.Diagnostics.Debugger.IsAttached)
+                System.Diagnostics.Debugger.Break();
+        }
+        #endregion
+
+        #region Application Level OnStart and OnStop Event Handlers
+        /// <summary>
+        /// Code to be executed when the application is launching.
+        /// This will not execute when the application is reactivated.
+        /// </summary>
+        private void Application_Launching(object sender, LaunchingEventArgs e) {
+            //TODO: Load data from isolated storage?
+            //TODO: Make the one call to the service to update the data?
+        }
+
+        /// <summary>
+        /// Code to execute when the application is activated.
+        /// This code will not execute when the application is first launched.
+        /// </summary>
+        private void Application_Activated(object sender, ActivatedEventArgs e) {
+            //TODO: Load data from isolated storage?
+            //TODO: Make the one call to the service to update the data?
+        }
+
+        /// <summary>
+        /// Code to execute when the application is deactivated (sent to background).
+        /// This code will not execute when the application is closing.
+        /// </summary>
+        private void Application_Deactivated(object sender, DeactivatedEventArgs e) {
+            //TODO: Save data to isolated storage?
+        }
+
+        /// <summary>
+        /// Code to execute when the application is closing (eg, user hit Back).
+        /// This code will not execute when the application is deactivated.
+        /// </summary>
+        private void Application_Closing(object sender, ClosingEventArgs e) {
+            //TODO: Save data to isolated storage?
+        }
         #endregion
     }
 }
