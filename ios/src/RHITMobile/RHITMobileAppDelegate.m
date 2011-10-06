@@ -69,7 +69,6 @@
      state; here you can undo many of the changes made on entering the 
      background.
      */
-    [self.mapViewController refreshPreferences];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {

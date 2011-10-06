@@ -81,6 +81,7 @@
                              animated:NO];
     
     [self.remoteHandler fetchAllLocations];
+    [self refreshPreferences];
 }
 
 - (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)io {
@@ -110,6 +111,7 @@
 }
 
 - (void)refreshPreferences {
+    [NSUserDefaults resetStandardUserDefaults];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     self.debugMapInfo = [defaults boolForKey:kRHPreferenceDebugMapInfo];
     self.debugMapZoomControls = [defaults
