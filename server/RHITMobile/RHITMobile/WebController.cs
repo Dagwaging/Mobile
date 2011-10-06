@@ -9,50 +9,73 @@ using System.ServiceModel.Channels;
 
 namespace RHITMobile
 {
-    [ServiceContract]
-    public interface IService
-    {
-        [OperationContract]
-        string Ping(string name);
-    }
-
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall)]
-    public class ServiceImplementation : IService
-    {
-        public string Ping(string name)
-        {
-            return "Hello, " + name;
-        }
-    }
-
     public static class WebController
     {
-        public static IEnumerable<ulong> HandleClients(ThreadManager TM)
+        public static IEnumerable<ThreadInfo> HandleClients(ThreadManager TM)
         {
             var currentThread = TM.CurrentThread;
 
-            var listener = new HttpListener();
-            listener.Prefixes.Add("http://localhost:5600/");
-            listener.Start();
             while (true)
             {
-                yield return TM.WaitForClient(currentThread, listener);
-                var context = TM.GetResult<HttpListenerContext>();
-                TM.Enqueue(HandleRequests(TM, context));
+                int tries = 1;
+                HttpListener listener = null;
+                while (true)
+                {
+                    try
+                    {
+                        listener = new HttpListener();
+                        listener.Prefixes.Add("http://+:5600/");
+                        Console.WriteLine("[{0}]\nAttempt #{1} to start HttpListener...", DateTime.Now, tries);
+                        listener.Start();
+                        Console.WriteLine("HttpListener successfully started.\n");
+                        break;
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("HttpListener failed to start with exception:\nMessage: {0}\nStack trace:\n{1}\n", ex.Message, ex.StackTrace);
+                        tries++;
+                    }
+                    if (tries > 5)
+                    {
+                        Console.WriteLine("[{0}]\nMaximum number of attempts reached.  Try again later.\n", DateTime.Now);
+                        yield return TM.Return(currentThread);
+                    }
+                    else
+                    {
+                        Console.WriteLine("[{0}]\nWaiting 5 seconds before attemping again...", DateTime.Now);
+                        yield return TM.Sleep(currentThread, 5000);
+                    }
+                }
+                Console.WriteLine("[{0}]\nWaiting for requests...\n", DateTime.Now);
+                while (true)
+                {
+                    yield return TM.WaitForClient(currentThread, listener);
+                    HttpListenerContext context = null;
+                    try
+                    {
+                        context = TM.GetResult<HttpListenerContext>(currentThread);
+                        Console.WriteLine("[{0}]\nHandling request: {1}\n", DateTime.Now, context.Request.RawUrl);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("HttpListener threw an exception while waiting for a client:\nMessage: {0}\nStack trace:\n{1}\n\nGoing to restart the HttpListener...", ex.Message, ex.StackTrace);
+                        break;
+                    }
+                    TM.Enqueue(HandleRequest(TM, context));
+                }
+                listener.Close();
             }
         }
 
-        public static Dictionary<string, Func<ThreadManager, IEnumerable<string>, Dictionary<string, string>, IEnumerable<ulong>>> RequestHandlers =
-            new Dictionary<string, Func<ThreadManager, IEnumerable<string>, Dictionary<string, string>, IEnumerable<ulong>>>()
-        {
-            { "mapareas", MapAreas.HandleMapAreasRequest },
-        };
+        private static PathHandler _handler = new InitialPathHandler();
 
-        private static IEnumerable<ulong> HandleRequests(ThreadManager TM, HttpListenerContext context)
+        private static IEnumerable<ThreadInfo> HandleRequest(ThreadManager TM, HttpListenerContext context)
         {
             var currentThread = TM.CurrentThread;
-            // http://localhost:5600/favicon.ico
-            var path = context.Request.Url.LocalPath.ToLower().Split('/').Skip(1);
+
+            JsonResponse result = null;
+
+            var path = context.Request.Url.LocalPath.ToLower().Split('/').SkipWhile(String.IsNullOrEmpty);
             Dictionary<string, string> query = new Dictionary<string, string>();
             if (!String.IsNullOrEmpty(context.Request.Url.Query))
             {
@@ -60,24 +83,25 @@ namespace RHITMobile
                 foreach (string field in querySplit)
                 {
                     int equalsPos = field.IndexOf('=');
+                    if (equalsPos == -1 || equalsPos == 0 || equalsPos == field.Length - 1)
+                    {
+                        result = new JsonResponse(HttpStatusCode.BadRequest);
+                        break;
+                    }
                     query.Add(field.Substring(0, equalsPos), field.Substring(equalsPos + 1, field.Length - equalsPos - 1));
                 }
             }
-            JsonResponse result = null;
-            if (!path.Any())
+
+            if (result == null)
             {
-                result = new JsonResponse(new MessageResponse("Server is active."));
-            }
-            else
-            {
-                if (RequestHandlers.ContainsKey(path.First()))
+                yield return TM.Await(currentThread, _handler.HandlePath(TM, path, query));
+                try
                 {
-                    yield return TM.Await(currentThread, RequestHandlers[path.First()](TM, path.Skip(1), query));
-                    result = TM.GetResult<JsonResponse>();
+                    result = TM.GetResult<JsonResponse>(currentThread);
                 }
-                else
+                catch (Exception)
                 {
-                    result = new JsonResponse(HttpStatusCode.BadRequest);
+                    result = new JsonResponse(HttpStatusCode.InternalServerError);
                 }
             }
 
@@ -89,7 +113,7 @@ namespace RHITMobile
             }
             context.Response.StatusCode = (int)result.StatusCode;
             context.Response.Close();
-            yield return TM.Return(currentThread);
+            yield return TM.Return(currentThread, null);
         }
 
         public static string MakePath(this IEnumerable<string> paths)
@@ -101,6 +125,21 @@ namespace RHITMobile
                 builder.Append(path);
             }
             return builder.ToString();
+        }
+    }
+
+    public class InitialPathHandler : PathHandler
+    {
+        public InitialPathHandler()
+        {
+            Redirects.Add("mapareas", new MapAreasHandler());
+            Redirects.Add("locations", new LocationsHandler());
+        }
+
+        protected override IEnumerable<ThreadInfo> HandleNoPath(ThreadManager TM, Dictionary<string, string> query)
+        {
+            var currentThread = TM.CurrentThread;
+            yield return TM.Return(currentThread, new JsonResponse(new MessageResponse("Server is active.")));
         }
     }
 

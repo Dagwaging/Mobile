@@ -12,29 +12,7 @@ namespace RHITMobile
     [DataContract]
     public abstract class JsonObject { }
 
-    [DataContract]
-    public class ClientRequest : JsonObject
-    {
-        [DataMember(IsRequired = true)]
-        public int Request { get; set; }
-        [DataMember(IsRequired = false)]
-        public double MyVersion { get; set; }
-        [DataMember(IsRequired = false)]
-        public double Latitude { get; set; }
-        [DataMember(IsRequired = false)]
-        public double Longitude { get; set; }
-        [DataMember(IsRequired = false)]
-        public int NearbyLocation { get; set; }
-        [DataMember(IsRequired = false)]
-        public int Destination { get; set; }
-        [DataMember(IsRequired = false)]
-        public double StairsMultiplier { get; set; }
-        [DataMember(IsRequired = false)]
-        public double OutdoorsMultiplier { get; set; }
-        [DataMember(IsRequired = false)]
-        public bool CanUseElevator { get; set; }
-    }
-
+    #region MessageResponse
     [DataContract]
     public class MessageResponse : JsonObject
     {
@@ -43,10 +21,12 @@ namespace RHITMobile
             Message = String.Format(message, objects);
         }
 
-        [DataMember(IsRequired = true)]
+        [DataMember]
         public string Message { get; set; }
     }
+    #endregion
 
+    #region MapAreasResponse
     [DataContract]
     public class MapAreasResponse : JsonObject
     {
@@ -56,9 +36,9 @@ namespace RHITMobile
             Areas = new List<MapArea>();
         }
 
-        [DataMember(IsRequired = true)]
+        [DataMember]
         public List<MapArea> Areas { get; set; }
-        [DataMember(IsRequired = true)]
+        [DataMember]
         public double Version { get; set; }
     }
 
@@ -70,22 +50,169 @@ namespace RHITMobile
             Id = (int)row["id"];
             Name = (string)row["name"];
             Description = (string)row["description"];
+            LabelOnHybrid = (bool)row["labelonhybrid"];
+            MinZoomLevel = (int)row["minzoomlevel"];
             Center = new LatLong(row);
             Corners = new List<LatLong>();
         }
 
-        [DataMember(IsRequired = true)]
+        [DataMember]
         public int Id { get; set; }
-        [DataMember(IsRequired = true)]
+        [DataMember]
         public string Name { get; set; }
-        [DataMember(IsRequired = true)]
+        [DataMember]
         public string Description { get; set; }
-        [DataMember(IsRequired = true)]
+        [DataMember]
         public LatLong Center { get; set; }
-        [DataMember(IsRequired = true)]
+        [DataMember]
         public List<LatLong> Corners { get; set; }
+        [DataMember]
+        public bool LabelOnHybrid { get; set; }
+        [DataMember]
+        public int MinZoomLevel { get; set; }
+    }
+    #endregion
+
+    #region LocationsResponse
+    [DataContract]
+    public class LocationsResponse : JsonObject
+    {
+        public LocationsResponse(double version)
+        {
+            Version = version;
+            Locations = new List<Location>();
+        }
+
+        [DataMember]
+        public List<Location> Locations { get; set; }
+        [DataMember]
+        public double Version { get; set; }
     }
 
+    [DataContract]
+    public class Location : JsonObject
+    {
+        public Location(DataRow row, bool hideDescs)
+        {
+            Center = new LatLong(row);
+            Description = hideDescs ? null : (string)row["description"];
+            Id = (int)row["id"];
+            IsPOI = (bool)row["ispoi"];
+            MapArea = row.IsNull("labelonhybrid") ? null : new MapAreaData(row);
+            Name = (string)row["name"];
+            OnQuickList = (bool)row["onquicklist"];
+            Parent = row.IsNull("parent") ? null : (int?)row["parent"];
+        }
+
+        [DataMember]
+        public LatLong Center { get; set; }
+        [DataMember]
+        public string Description { get; set; }
+        [DataMember]
+        public int Id { get; set; }
+        [DataMember]
+        public bool IsPOI { get; set; }
+        [DataMember]
+        public MapAreaData MapArea { get; set; }
+        [DataMember]
+        public string Name { get; set; }
+        [DataMember]
+        public bool OnQuickList { get; set; }
+        [DataMember]
+        public int? Parent { get; set; }
+
+        public bool IsMapArea()
+        {
+            return MapArea != null;
+        }
+    }
+
+    [DataContract]
+    public class MapAreaData : JsonObject
+    {
+        public MapAreaData(DataRow row)
+        {
+            Corners = new List<LatLong>();
+            LabelOnHybrid = (bool)row["labelonhybrid"];
+            MinZoomLevel = (int)row["minzoomlevel"];
+        }
+
+        [DataMember]
+        public List<LatLong> Corners { get; set; }
+        [DataMember]
+        public bool LabelOnHybrid { get; set; }
+        [DataMember]
+        public int MinZoomLevel { get; set; }
+    }
+    #endregion
+
+    #region LocationNamesResponse
+    [DataContract]
+    public class LocationNamesResponse : JsonObject
+    {
+        public LocationNamesResponse(double version)
+        {
+            Names = new List<LocationName>();
+            Version = version;
+        }
+
+        [DataMember]
+        public List<LocationName> Names { get; set; }
+        [DataMember]
+        public double Version { get; set; }
+    }
+
+    [DataContract]
+    public class LocationName : JsonObject
+    {
+        public LocationName(DataRow row)
+        {
+            Id = (int)row["id"];
+            Name = (string)row["name"];
+        }
+
+        [DataMember]
+        public int Id { get; set; }
+        [DataMember]
+        public string Name { get; set; }
+    }
+    #endregion
+
+    #region LocationDescResponse
+    [DataContract]
+    public class LocationDescResponse : JsonObject
+    {
+        public LocationDescResponse(DataRow row)
+        {
+            Description = (string)row["description"];
+        }
+
+        [DataMember]
+        public string Description { get; set; }
+    }
+    #endregion
+
+    #region DirectionsResponse
+    [DataContract]
+    public class DirectionsResponse : JsonObject
+    {
+        [DataMember]
+        public int Done { get; set; }
+        [DataMember]
+        public int RequestId { get; set; }
+        [DataMember]
+        public string Message { get; set; }
+
+        public DirectionsResponse(int done, int requestId, string message)
+        {
+            Done = done;
+            RequestId = requestId;
+            Message = message;
+        }
+    }
+    #endregion
+
+    #region Miscellaneous
     [DataContract]
     public class LatLong : JsonObject
     {
@@ -95,11 +222,12 @@ namespace RHITMobile
             Long = (double)row["lon"];
         }
 
-        [DataMember(IsRequired = true)]
+        [DataMember]
         public double Lat { get; set; }
-        [DataMember(IsRequired = true)]
+        [DataMember]
         public double Long { get; set; }
     }
+    #endregion
 
     public static class JsonUtility
     {

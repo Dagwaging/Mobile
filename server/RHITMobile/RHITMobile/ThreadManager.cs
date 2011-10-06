@@ -13,202 +13,262 @@ namespace RHITMobile
 {
     public class ThreadManager
     {
-        public uint NumExecutions { get; set; }
-
-        private ulong _lastThread = 0;
-        private Dictionary<ulong, ThreadInfo> _threads = new Dictionary<ulong, ThreadInfo>();
-
-        private object _result;
-        public T GetResult<T>()
+        #region Constructor
+        public ThreadManager()
         {
-            if (_result is Exception)
-            {
-                throw _result as Exception;
-            }
-            return (T)_result;
+            Enqueue(_threads.LookForNewIndex(this), ThreadPriority.Low);
+            Enqueue(_threads.CheckForIncreaseSize(this), ThreadPriority.Low);
+        }
+        #endregion
+
+        #region Status requests
+        public void WriteExecutionStatus()
+        {
+            Console.WriteLine("Low priority executions: " + _numExecutions[ThreadPriority.Low]);
+            Console.WriteLine("Normal priority executions: " + _numExecutions[ThreadPriority.Normal]);
         }
 
-        public bool GetResult<T1, T2>(out T1 a1, out T2 a2)
+        public void WriteQueueStatus()
         {
-            if (_result is Exception)
+            Console.WriteLine("Low priority queue items: " + _queues[ThreadPriority.Low].Count());
+            Console.WriteLine("Normal priority queue items: " + _queues[ThreadPriority.Normal].Count());
+        }
+
+        public void WriteThreadStatus()
+        {
+            Console.Write("Threads in progress: ");
+            _threads.WriteStatus();
+        }
+        #endregion
+
+        #region Fields and Properties
+        private Dictionary<ThreadPriority, int> _numExecutions = new Dictionary<ThreadPriority, int>()
+        {
+            { ThreadPriority.Low, 0 },
+            { ThreadPriority.Normal, 0 },
+        };
+
+        private void IncreaseExecutions(ThreadPriority priority)
+        {
+            lock (_numExecutions)
             {
-                throw _result as Exception;
-            }
-            else if (_result is T1)
-            {
-                a1 = (T1)_result;
-                a2 = default(T2);
-                return true;
-            }
-            else
-            {
-                a1 = default(T1);
-                a2 = (T2)_result;
-                return false;
+                _numExecutions[priority]++;
             }
         }
 
-        public ulong CurrentThread { get; set; }
-
-        public void Enqueue(IEnumerable<ulong> method)
+        private void DecreaseExecutions(ThreadPriority priority)
         {
-            IncreaseExecutions();
-            var continueThread = Await(0, method);
-            ContinueThread(continueThread);
+            lock (_numExecutions)
+            {
+                _numExecutions[priority]--;
+            }
         }
 
-        public ulong Await(ulong currentThread, IEnumerable<ulong> method)
+        private Dictionary<ThreadPriority, Queue<ThreadInfo>> _queues = new Dictionary<ThreadPriority, Queue<ThreadInfo>>()
         {
-            CurrentThread = GetNextThreadId();
+            { ThreadPriority.Low, new Queue<ThreadInfo>() },
+            { ThreadPriority.Normal, new Queue<ThreadInfo>() },
+        };
 
+        private Hash<IteratorInfo> _threads = new Hash<IteratorInfo>(64);
+
+        public ThreadInfo CurrentThread { get; set; }
+
+        private ThreadInfo[] _results;
+        public object GetResult(ThreadInfo currentThread)
+        {
+            foreach (var continuation in _results)
+            {
+                if (continuation.Thread == currentThread.Thread)
+                {
+                    if (continuation.Result is Exception)
+                    {
+                        throw continuation.Result as Exception;
+                    }
+                    return continuation.Result;
+                }
+            }
+            return null;
+        }
+
+        public T GetResult<T>(ThreadInfo currentThread)
+        {
+            return (T)GetResult(currentThread);
+        }
+
+        public bool GetResult<T1, T2>(ThreadInfo currentThread, out T1 a1, out T2 a2)
+        {
+            foreach (var continuation in _results)
+            {
+                if (continuation.Thread == currentThread.Thread)
+                {
+                    if (continuation.Result is Exception)
+                    {
+                        throw continuation.Result as Exception;
+                    }
+                    else if (continuation.Result is T1)
+                    {
+                        a1 = (T1)continuation.Result;
+                        a2 = default(T2);
+                        return true;
+                    }
+                    else
+                    {
+                        a1 = default(T1);
+                        a2 = (T2)continuation.Result;
+                        return false;
+                    }
+                }
+            }
+            throw new ArgumentException("Thread does not have a result.");
+        }
+        #endregion
+
+        #region Enqueue, Await, and Return
+        public void Enqueue(IEnumerable<ThreadInfo> method)
+        {
+            Enqueue(method, ThreadPriority.Normal);
+        }
+
+        public void Enqueue(IEnumerable<ThreadInfo> method, ThreadPriority priority)
+        {
+            IncreaseExecutions(priority);
+            var continueThread = Await(new ThreadInfo(priority), method);
+            Enqueue(continueThread);
+        }
+
+        public ThreadInfo Await(ThreadInfo currentThread, IEnumerable<ThreadInfo> method)
+        {
             var thread = method.GetEnumerator();
-            _threads[CurrentThread] = new ThreadInfo(currentThread, thread);
+            var threadId = _threads.Insert(new IteratorInfo(currentThread.Thread, thread));
+            CurrentThread = new ThreadInfo(threadId, currentThread.Priority);
             try
             {
                 thread.MoveNext();
             }
             catch (Exception ex)
             {
-                _result = ex;
-                return currentThread;
+                return currentThread.WithResult(ex);
             }
             return thread.Current;
         }
 
-        public ulong Return(ulong currentThread, object result)
+        public ThreadInfo Return(ThreadInfo currentThread, object result)
         {
-            _result = result;
-
-            return Return(currentThread);
+            return Return(currentThread).WithResult(result);
         }
 
-        public ulong Return(ulong currentThread)
+        public ThreadInfo Return(ThreadInfo currentThread)
         {
-            ulong caller = _threads[currentThread].Caller;
-            _threads.Remove(currentThread);
+            var thread = _threads[currentThread.Thread];
+            _threads.Remove(currentThread.Thread);
 
-            return caller;
+            return new ThreadInfo(thread.Caller, currentThread.Priority, GetResult(currentThread));
         }
+        #endregion
 
-        private ulong GetNextThreadId()
+        #region Control
+        public void Start(int processes)
         {
-            do
+            _results = new ThreadInfo[processes];
+            Task[] tasks = new Task[processes];
+            for (int i = 0; i < processes; i++)
             {
-                if (_lastThread == ulong.MaxValue)
-                    _lastThread = 1;
-                else
-                    _lastThread++;
-            } while (_threads.ContainsKey(_lastThread) || _lastThread == 0);
-            return _lastThread;
+                tasks[i] = Task.Factory.StartNew(Run, i);
+            }
+            Task.WaitAll(tasks);
+            Console.WriteLine("ThreadManager ran out of items to process.  Please restart the service.");
+            Console.ReadLine();
         }
 
-        private Queue<Continuation> _queue = new Queue<Continuation>();
-
-        private void Enqueue(ulong thread, object result)
+        private void Run(object processObj)
         {
-            lock (_queue)
+            int processor = (int)processObj;
+            while (_numExecutions[ThreadPriority.Normal] > -100)
             {
-                _queue.Enqueue(new Continuation(thread, result));
+                ThreadInfo continuation = null;
+                while (true)
+                {
+                    lock (_queues[ThreadPriority.Normal])
+                        if (_queues[ThreadPriority.Normal].Any())
+                        {
+                            continuation = _queues[ThreadPriority.Normal].Dequeue();
+                            break;
+                        }
+                    lock (_queues[ThreadPriority.Low])
+                        if (_queues[ThreadPriority.Low].Any())
+                        {
+                            continuation = _queues[ThreadPriority.Low].Dequeue();
+                            break;
+                        }
+                    Thread.Sleep(1);
+                }
+
+                _results[processor] = continuation;
+                ContinueThread(processor, continuation);
             }
         }
 
-        private object _numExecutionsLock = new object();
-        private void IncreaseExecutions()
+        private void Enqueue(ThreadInfo thread)
         {
-            lock (_numExecutionsLock)
+            lock (_queues[thread.Priority])
             {
-                NumExecutions++;
+                _queues[thread.Priority].Enqueue(thread);
             }
         }
 
-        private void DecreaseExecutions()
+        private void ContinueThread(int processor, ThreadInfo continueThread)
         {
-            lock (_numExecutionsLock)
+            int threadId = continueThread.Thread;
+            while (threadId >= 0)
             {
-                NumExecutions--;
-            }
-        }
-
-        private void ContinueThread(ulong continueThread)
-        {
-            while (continueThread != 0)
-            {
-                var thread = _threads[continueThread];
+                var thread = _threads[threadId];
                 try
                 {
                     thread.Iterator.MoveNext();
                 }
                 catch (Exception ex)
                 {
-                    _result = ex;
-                    continueThread = thread.Caller;
+                    _results[processor] = new ThreadInfo(thread.Caller, continueThread.Priority, ex);
+                    threadId = thread.Caller;
                     continue;
                 }
-                continueThread = thread.Iterator.Current;
+                var threadResult = thread.Iterator.Current;
+                _results[processor] = threadResult;
+                threadId = threadResult.Thread;
             }
-            if (_result is Exception)
+            if (_results[processor].Result is Exception)
             {
                 // Log exception
             }
-            DecreaseExecutions();
+            DecreaseExecutions(continueThread.Priority);
+        }
+        #endregion
+
+        #region Waiting operations
+        public ThreadInfo Requeue(ThreadInfo currentThread)
+        {
+            IncreaseExecutions(currentThread.Priority);
+            Enqueue(currentThread.WithResult("Requeued."));
+            return new ThreadInfo(currentThread.Priority);
         }
 
-        public void Start(int processes)
+        public ThreadInfo Sleep(ThreadInfo currentThread, int milliseconds)
         {
-            Task[] tasks = new Task[processes];
-            for (int i = 0; i < processes; i++)
-            {
-                tasks[i] = Task.Factory.StartNew(Run);
-            }
-            Task.WaitAll(tasks);
-            Console.WriteLine("COMPLETED");
-            Console.ReadLine();
-        }
-
-        private void Run()
-        {
-            while (NumExecutions > 0)
-            {
-                Monitor.Enter(_queue);
-                while (!_queue.Any())
-                {
-                    Monitor.Exit(_queue);
-                    Thread.Sleep(1);
-                    if (NumExecutions == 0)
-                        return;
-                    Monitor.Enter(_queue);
-                }
-                var continuation = _queue.Dequeue();
-                Monitor.Exit(_queue);
-
-                _result = continuation.Result;
-                ContinueThread(continuation.Thread);
-            }
-        }
-
-        public ulong Requeue(ulong currentThread)
-        {
-            IncreaseExecutions();
-            Enqueue(currentThread, "Requeued.");
-            return 0;
-        }
-
-        public ulong Sleep(ulong currentThread, int milliseconds)
-        {
-            IncreaseExecutions();
+            IncreaseExecutions(currentThread.Priority);
             Task.Factory.StartNew(() =>
-            {
-                Thread.Sleep(milliseconds);
-                return "Slept for " + milliseconds + " milliseconds.";
-            }).ContinueWith((task) =>
-                    Enqueue(currentThread, task.Result));
+                {
+                    Thread.Sleep(milliseconds);
+                    return "Slept for " + milliseconds + " milliseconds.";
+                }).ContinueWith((task) =>
+                    Enqueue(currentThread.WithResult(task.Result)));
 
-            return 0;
+            return new ThreadInfo(currentThread.Priority);
         }
 
-        public ulong WaitForClient(ulong currentThread, HttpListener listener)
+        public ThreadInfo WaitForClient(ThreadInfo currentThread, HttpListener listener)
         {
-            IncreaseExecutions();
+            IncreaseExecutions(currentThread.Priority);
             Task.Factory.StartNew<object>(() =>
                 {
                     try
@@ -220,67 +280,116 @@ namespace RHITMobile
                         return ex;
                     }
                 }).ContinueWith((task) =>
-                Enqueue(currentThread, task.Result));
+                    Enqueue(currentThread.WithResult(task.Result)));
 
-            return 0;
+            return new ThreadInfo(currentThread.Priority);
         }
 
-        public ulong MakeDbCall(ulong currentThread, string connectionString, string procedure, params SqlParameter[] parameters)
+        public ThreadInfo WaitForConsole(ThreadInfo currentThread)
         {
-            IncreaseExecutions();
+            IncreaseExecutions(currentThread.Priority);
             Task.Factory.StartNew<object>(() =>
-            {
-                try
                 {
-                    using (var connection = new SqlConnection(connectionString))
+                    return Console.ReadLine();
+                }).ContinueWith((task) =>
+                    Enqueue(currentThread.WithResult(task.Result)));
+
+            return new ThreadInfo(currentThread.Priority);
+        }
+
+        public ThreadInfo MakeDbCall(ThreadInfo currentThread, string connectionString, string procedure, params SqlParameter[] parameters)
+        {
+            IncreaseExecutions(currentThread.Priority);
+            Task.Factory.StartNew<object>(() =>
+                {
+                    try
                     {
-                        connection.Open();
-                        var table = new DataTable();
-                        using (var command = connection.CreateCommand())
+                        using (var connection = new SqlConnection(connectionString))
                         {
-                            command.CommandType = CommandType.StoredProcedure;
-                            command.CommandText = procedure;
-                            command.Parameters.AddRange(parameters);
-                            using (var reader = command.ExecuteReader())
+                            connection.Open();
+                            var table = new DataTable();
+                            using (var command = connection.CreateCommand())
                             {
-                                table.Load(reader);
+                                command.CommandType = CommandType.StoredProcedure;
+                                command.CommandText = procedure;
+                                command.Parameters.AddRange(parameters);
+                                using (var reader = command.ExecuteReader())
+                                {
+                                    table.Load(reader);
+                                }
+                                return table;
                             }
-                            return table;
                         }
                     }
-                }
-                catch (Exception ex)
-                {
-                    return ex;
-                }
-            }).ContinueWith((task) =>
-                    Enqueue(currentThread, task.Result));
+                    catch (Exception ex)
+                    {
+                        return ex;
+                    }
+                }).ContinueWith((task) =>
+                    Enqueue(currentThread.WithResult(task.Result)));
 
-            return 0;
+            return new ThreadInfo(currentThread.Priority);
         }
+        #endregion
     }
 
-    public struct ThreadInfo
+    public class IteratorInfo
     {
-        public ulong Caller;
-        public IEnumerator<ulong> Iterator;
+        public int Caller { get; private set; }
+        public IEnumerator<ThreadInfo> Iterator { get; private set; }
 
-        public ThreadInfo(ulong caller, IEnumerator<ulong> iterator)
+        public IteratorInfo(int caller, IEnumerator<ThreadInfo> iterator)
         {
             Caller = caller;
             Iterator = iterator;
         }
     }
 
-    public struct Continuation
+    public class ThreadInfo
     {
-        public ulong Thread;
-        public object Result;
+        public int Thread { get; private set; }
+        public ThreadPriority Priority { get; private set; }
+        public object Result { get; private set; }
 
-        public Continuation(ulong thread, object result)
+        public ThreadInfo(int thread, ThreadPriority priority, object result)
+        {
+            Thread = thread;
+            Priority = priority;
+            Result = result;
+        }
+
+        public ThreadInfo(int thread, ThreadPriority priority) : this(thread, priority, null) { }
+
+        public ThreadInfo(ThreadPriority priority) : this(-1, priority) { }
+
+        public ThreadInfo WithThread(int thread)
+        {
+            Thread = thread;
+            return this;
+        }
+
+        public ThreadInfo WithResult(object result)
+        {
+            Result = result;
+            return this;
+        }
+    }
+
+    /*public class Continuation
+    {
+        public int Thread { get; private set; }
+        public object Result { get; private set; }
+
+        public Continuation(int thread, object result)
         {
             Thread = thread;
             Result = result;
         }
+    }*/
+
+    public enum ThreadPriority
+    {
+        Low,
+        Normal
     }
 }
