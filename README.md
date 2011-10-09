@@ -26,4 +26,5 @@ This work is licensed under a
 [Creative Commons Attribution 3.0 Unported License](http://creativecommons.org/licenses/by/3.0/).
 You are free to use, modify, and distribute these images, as long as you attribute
 the images to [Rose-Hulman Institute of Technology](http://www.rose-hulman.edu)
-(with link) in your work.
+(with link) in your work. If you are a current or past Rose-Hulman student, staff, or
+faculty member, you may use these images with or without attribution.
