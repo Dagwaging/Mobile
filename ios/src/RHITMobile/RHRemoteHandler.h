@@ -31,13 +31,11 @@
 @property (nonatomic, retain) RHRemoteHandlerDelegate *delegate;
 
 /// Init with a managed object context for object creation;
-- (id)initWithContext:(NSManagedObjectContext *)context
-             delegate:(RHRemoteHandlerDelegate *)delegate;
+- (RHRemoteHandler *)initWithContext:(NSManagedObjectContext *)context
+                            delegate:(RHRemoteHandlerDelegate *)delegate;
 
-/// Begin an asynchronous fetch of all available RHLocation objects.
-- (void)fetchAllLocations;
-
-/// Asynchronously check for new location data from the server.
-- (void)checkForNewLocations;
+/// Asynchronously check for new data from the server. If there is new data,
+/// appropriate callbacks will be called on the RHRemoteHandlerDelegate.
+- (void)checkForLocationUpdates;
 
 @end

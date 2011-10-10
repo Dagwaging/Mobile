@@ -24,13 +24,11 @@
 /// Delegate for RHRemoteHandler asynchronous calls.
 @protocol RHRemoteHandlerDelegate <NSObject>
 
-/// Callback from fetching all RHLocation objects.
-- (void)didFetchAllLocations:(NSSet *)locations;
+/// Callback if new locations that should be displayed on the map are provided
+/// by the server.
+- (void)didFindMapLevelLocationUpdates:(NSSet *)locations;
 
-/// Callback after fetching, replacing, and saving all RHLocation objects.
-- (void)didFindNewerLocations:(NSSet *)locations;
-
-/// Callback when something goes wrong fetching all locations.
-- (void)didFailFetchingAllLocationsWithError:(NSError *)error;
+/// Callback when something goes wrong checking for new location data.
+- (void)didFailCheckingForLocationUpdates:(NSError *)error;
 
 @end
