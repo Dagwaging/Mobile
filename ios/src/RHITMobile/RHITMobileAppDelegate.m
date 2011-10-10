@@ -38,6 +38,7 @@
     self.window.rootViewController = self.tabBarController;
     [self.window makeKeyAndVisible];
     self.mapViewController.managedObjectContext = self.managedObjectContext;
+    [self.mapViewController refreshPreferences];
     return YES;
 }
 
@@ -76,6 +77,7 @@
      application was inactive. If the application was previously in the 
      background, optionally refresh the user interface.
      */
+    [self.mapViewController refreshPreferences];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {

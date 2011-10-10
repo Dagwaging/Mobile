@@ -35,6 +35,16 @@
 /// Map view that is visible to the user.
 @property (nonatomic, retain) IBOutlet MKMapView *mapView;
 
+@property (nonatomic, retain) IBOutlet UIToolbar *toolbar;
+
+@property (nonatomic, retain) IBOutlet UIBarButtonItem *zoomInButton;
+
+@property (nonatomic, retain) IBOutlet UIBarButtonItem *zoomOutButton;
+
+@property (nonatomic, retain) IBOutlet UIBarButtonItem *placesButton;
+
+@property (nonatomic, retain) IBOutlet UILabel *zoomLevelLabel;
+
 /// Core Data fetched results controller.
 @property (nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
 
@@ -43,5 +53,7 @@
 
 /// Remote data handler.
 @property (nonatomic, retain) RHRemoteHandler *remoteHandler;
+
+- (void)refreshPreferences;
 
 @end

@@ -28,39 +28,65 @@
 #import "RHLocationOverlay.h"
 
 
+#pragma mark Private Method Declarations
+
 @interface MapViewController()
 
 @property (nonatomic, retain) RHLocationOverlay *currentOverlay;
 
+@property (nonatomic, assign) BOOL debugMapInfo;
+
+@property (nonatomic, assign) BOOL debugMapZoomControls;
+
 @end
 
 
+#pragma mark -
+#pragma mark Implementation
+
 @implementation MapViewController
 
+#pragma mark -
+#pragma mark Generic Properties
+
 @synthesize mapView;
+@synthesize toolbar;
+@synthesize zoomInButton;
+@synthesize zoomOutButton;
+@synthesize placesButton;
+@synthesize zoomLevelLabel;
 @synthesize fetchedResultsController;
 @synthesize managedObjectContext;
 @synthesize remoteHandler = remoteHandler_;
+
+// Private properties
 @synthesize currentOverlay;
+@synthesize debugMapInfo;
+@synthesize debugMapZoomControls;
+
+
+#pragma mark -
+#pragma mark General Methods
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     // Initialize what's visible on the map
-    CLLocationCoordinate2D center = {RH_CAMPUS_CENTER_LATITUDE,
-        RH_CAMPUS_CENTER_LONGITUDE};
+    CLLocationCoordinate2D center = {kRHCampusCenterLatitude,
+        kRHCampusCenterLongitude};
+    
     self.mapView.mapType = MKMapTypeSatellite;
     [self.mapView setCenterCoordinate:center
-                            zoomLevel:RH_INITIAL_ZOOM_LEVEL
+                            zoomLevel:kRHInitialZoomLevel
                              animated:NO];
     
     [self.remoteHandler fetchAllLocations];
+    [self refreshPreferences];
 }
 
-
-- (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+- (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)io {
     // Return YES for supported orientations
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+    return (io == UIInterfaceOrientationPortrait);
 }
 
 - (void) didReceiveMemoryWarning {
@@ -75,6 +101,53 @@
     self.mapView = nil;
 }
 
+- (void)dealloc {
+    [mapView release];
+    [fetchedResultsController release];
+    [managedObjectContext release];
+    [remoteHandler_ release];
+    [currentOverlay release];
+    [super dealloc];
+}
+
+- (void)refreshPreferences {
+    [NSUserDefaults resetStandardUserDefaults];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    self.debugMapInfo = [defaults boolForKey:kRHPreferenceDebugMapInfo];
+    self.debugMapZoomControls = [defaults
+                                 boolForKey:kRHPreferenceDebugMapZoomControls];
+    
+    self.zoomLevelLabel.hidden = !self.debugMapInfo;
+    
+    NSArray *items = [NSArray alloc];
+    
+    if (self.debugMapZoomControls) {
+        items = [items initWithObjects:self.placesButton, self.zoomInButton,
+                 self.zoomOutButton, nil];
+        self.toolbar.items = items;
+    } else {
+        items = [items initWithObjects:self.placesButton, nil];
+        self.toolbar.items = items;
+    }
+    
+    [items release];
+}
+
+#pragma mark -
+#pragma mark IBActions
+
+- (IBAction)debugZoomIn:(id)sender {
+    [self.mapView setCenterCoordinate:self.mapView.region.center
+                            zoomLevel:self.mapView.zoomLevel + 1
+                             animated:YES];
+}
+
+- (IBAction)debugZoomOut:(id)sender {
+    [self.mapView setCenterCoordinate:self.mapView.region.center
+                            zoomLevel:self.mapView.zoomLevel - 1
+                             animated:YES];
+}
+
 # pragma mark -
 # pragma mark MKMapViewDelegate Methods
 
@@ -86,8 +159,9 @@
     RHAnnotationView *annotationView = (RHAnnotationView *)[self.mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
     
     if (annotationView == nil) {
-        annotationView = [[[RHAnnotationView alloc] initWithAnnotation:annotation
-                                                       reuseIdentifier:identifier] autorelease];
+        annotationView = [[[RHAnnotationView alloc]
+                           initWithAnnotation:annotation
+                           reuseIdentifier:identifier] autorelease];
     }
     
     [annotationView setEnabled:YES];
@@ -97,6 +171,8 @@
     
     UIButton *newButton = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
     [annotationView setRightCalloutAccessoryView:newButton];
+    
+    annotation.annotationView = annotationView;
     
     return annotationView;
 }
@@ -118,6 +194,19 @@
     return nil;
 }
 
+- (void)mapView:(MKMapView *)map regionDidChangeAnimated:(BOOL)animated {
+    NSInteger newZoomLevel = map.zoomLevel;
+    
+    for (RHAnnotation *annotation in self.mapView.annotations) {
+        [annotation mapView:self.mapView didChangeZoomLevel:newZoomLevel];
+    }
+    
+    NSString *zoomLevelText = [[NSString alloc]
+                               initWithFormat:@"Zoom Level: %d", newZoomLevel];
+    self.zoomLevelLabel.text = zoomLevelText;
+    [zoomLevelText release];
+}
+
 #pragma mark -
 #pragma mark RHRemoteHandlerDelegate Methods
 
@@ -132,11 +221,14 @@
 }
 
 - (void)didFetchAllLocations:(NSSet *)locations {
+    NSInteger currentZoomLevel = self.mapView.zoomLevel;
+    
     for (RHLocation *location in locations) {
         RHAnnotation *annotation = [RHAnnotation alloc];
         annotation = [[annotation initWithLocation:location
-                                    annotationType:RHAnnotationTypeText]
+                                    currentZoomLevel:currentZoomLevel]
                       autorelease];
+        
         [self.mapView addAnnotation:annotation];
     }
 }
@@ -166,10 +258,18 @@
     RHLocationOverlay *overlay = [[RHLocationOverlay alloc]
                                   initWithLocation:location];
     CLLocationCoordinate2D center = [[location labelLocation] coordinate];
-    [self.mapView setCenterCoordinate:center zoomLevel:16 animated:YES];
+    [self.mapView setCenterCoordinate:center
+                            zoomLevel:kRHLocationFocusZoomLevel
+                             animated:YES];
     [self.mapView addOverlay:overlay];
     self.currentOverlay = overlay;
     [overlay release];
+}
+
+-(void)clearOverlays {
+    [mapView removeOverlay:self.currentOverlay];
+    [currentOverlay release];
+    self.currentOverlay = nil;
 }
 
 @end

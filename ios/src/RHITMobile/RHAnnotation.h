@@ -18,16 +18,11 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <MapKit/MapKit.h>
+#import "MKMapView+ZoomLevel.h"
 
 
 @class RHLocation;
-
-typedef enum {
-    RHAnnotationTypeText,
-    RHAnnotationTypePolygon,
-    RHAnnotationTypeTextAndPolygon
-} RHAnnotationType;
+@class RHAnnotationView;
 
 /// \ingroup map
 /// Representation of an annotatable map object. For use by RHAnnotationView.
@@ -36,15 +31,25 @@ typedef enum {
 /// The "center point" of sorts for this location
 @property (nonatomic, assign) CLLocationCoordinate2D coordinate;
 
-/// Determines whether or not text or polygons will be rendered
-@property (nonatomic, assign) RHAnnotationType annotationType;
+/// Determines whether or not text or polygons will be rendered.
+@property (nonatomic, assign) BOOL visible;
 
-/// Location model to pull data from
+/// Location model to pull data from.
 @property (nonatomic, retain) RHLocation *location;
+
+/// The RHAnnotationView tied to this RHAnnotation once it is rendered to the
+/// map. This reference is used to tell the view when it needs to hide or show
+/// the annotation's text.
+@property (nonatomic, retain) RHAnnotationView *annotationView;
 
 /// Initialize with only an RHLocation and RHAnnotationType. This automatically
 /// tries to guess the center point of the RHLocation.
-- (RHAnnotation *) initWithLocation:(RHLocation *)location
-                     annotationType:(RHAnnotationType)annotationType;
+- (RHAnnotation *)initWithLocation:(RHLocation *)location
+                  currentZoomLevel:(NSUInteger)zoomLevel;
+
+/// Nofify this RHAnnotation that the map view containing it has changed its
+/// zoom level. This allows us to determine when to show and hide the
+/// annotation's text.
+- (void)mapView:(MKMapView *)mapView didChangeZoomLevel:(NSUInteger)zoomLevel;
 
 @end

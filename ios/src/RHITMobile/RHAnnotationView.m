@@ -24,59 +24,53 @@
 #import "RHLocation.h"
 
 
+#pragma mark Private Method Declarations
+
 @interface RHAnnotationView () 
 
 - (void) createText;
 
 @end
 
+
+#pragma mark -
+#pragma mark Implementation
+
 @implementation RHAnnotationView
+
+#pragma mark -
+#pragma mark Generic Properties
 
 @synthesize delegate;
 @synthesize textView;
-@synthesize storedAnnotation;
+
+#pragma mark -
+#pragma mark General Methods
 
 - (id)initWithAnnotation:(id<MKAnnotation>)inAnnotation
          reuseIdentifier:(NSString *)reuseIdentifier {
     self = [super initWithAnnotation:inAnnotation
                      reuseIdentifier:reuseIdentifier];
     
-    self.storedAnnotation = (RHAnnotation *)inAnnotation;
     self.backgroundColor = [UIColor clearColor];
+    self.frame = CGRectMake(0, 0, 100, 50);
     
-    switch (storedAnnotation.annotationType) {
-            
-        case RHAnnotationTypeText:
-            self.frame = CGRectMake(0, 0, 100, 50);
-
-            [self createText];
-            break;
-            
-        case RHAnnotationTypePolygon:
-            /// \todo Add polygon rendering
-            break;
-            
-        case RHAnnotationTypeTextAndPolygon:
-            /// \todo Add polygon rendering
-            self.frame = CGRectMake(0, 0, 100, 30);
-            [self createText];
-            break;
+    [self createText];
+    
+    if (!self.storedAnnotation.visible) {
+        self.textView.hidden = YES;
     }
     
     return self;
 }
 
-- (void) createText {
-    textView = [[RHMapLabel alloc] initWithFrame:CGRectMake(2, 2, 96, 26)];
-    [textView setNumberOfLines:2];
-    [textView setLineBreakMode:UILineBreakModeWordWrap];
-    textView.backgroundColor = [UIColor clearColor];
-    textView.text = storedAnnotation.location.name;
-    textView.font = [UIFont fontWithName:@"Arial-BoldMT" size:10];
-    textView.textColor = [UIColor whiteColor];
-    textView.textAlignment = UITextAlignmentCenter;
-    [self addSubview:textView];
+- (void) dealloc {
+    [textView release];
+    [super dealloc];
 }
+
+#pragma mark -
+#pragma mark Property Methods
 
 - (void)setSelected:(BOOL)inSelected {
     if (inSelected) {
@@ -85,10 +79,38 @@
     [super setSelected:inSelected];
 }
 
-- (void) dealloc {
-    [textView release];
-    [storedAnnotation release];
-    [super dealloc];
+- (void)setHighlighted:(BOOL)inHighlighted {
+    if (!inHighlighted) {
+        [delegate clearOverlays];
+    }
+    [super setHighlighted:inHighlighted];
+}
+
+- (void)updateAnnotationVisibility {
+    if (!self.storedAnnotation.visible) {
+        self.textView.hidden = YES;
+    } else {
+        self.textView.hidden = NO;
+    }
+}
+
+- (RHAnnotation *)storedAnnotation {
+    return (RHAnnotation *) self.annotation;
+}
+
+#pragma mark -
+#pragma mark Private Methods
+
+- (void) createText {
+    textView = [[RHMapLabel alloc] initWithFrame:CGRectMake(2, 2, 96, 26)];
+    [textView setNumberOfLines:2];
+    [textView setLineBreakMode:UILineBreakModeWordWrap];
+    textView.backgroundColor = [UIColor clearColor];
+    textView.text = self.storedAnnotation.location.name;
+    textView.font = [UIFont fontWithName:@"Arial-BoldMT" size:10];
+    textView.textColor = [UIColor whiteColor];
+    textView.textAlignment = UITextAlignmentCenter;
+    [self addSubview:textView];
 }
 
 @end
