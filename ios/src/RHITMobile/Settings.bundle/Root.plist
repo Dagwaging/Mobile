@@ -30,6 +30,44 @@
 			<key>Type</key>
 			<string>PSToggleSwitchSpecifier</string>
 		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
+			<string>Server Debugging Tools</string>
+		</dict>
+		<dict>
+			<key>DefaultValue</key>
+			<false/>
+			<key>Key</key>
+			<string>server_protocol_debug_preference</string>
+			<key>Title</key>
+			<string>SSL Encryption</string>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+		</dict>
+		<dict>
+			<key>DefaultValue</key>
+			<string>mobile.csse.rose-hulman.edu</string>
+			<key>Type</key>
+			<string>PSTextFieldSpecifier</string>
+			<key>Title</key>
+			<string>Hostname</string>
+			<key>Key</key>
+			<string>server_hostname_debug_preference</string>
+		</dict>
+		<dict>
+			<key>KeyboardType</key>
+			<string>NumberPad</string>
+			<key>DefaultValue</key>
+			<string>5600</string>
+			<key>Type</key>
+			<string>PSTextFieldSpecifier</string>
+			<key>Title</key>
+			<string>Port Number</string>
+			<key>Key</key>
+			<string>server_port_number_debug_preference</string>
+		</dict>
 	</array>
 	<key>StringsTable</key>
 	<string>Root</string>
