@@ -31,8 +31,8 @@
 @property (nonatomic, retain) RHRemoteHandlerDelegate *delegate;
 
 /// Init with a managed object context for object creation;
-- (RHRemoteHandler *)initWithContext:(NSManagedObjectContext *)context
-                            delegate:(RHRemoteHandlerDelegate *)delegate;
+- (id)initWithContext:(NSManagedObjectContext *)context
+             delegate:(RHRemoteHandlerDelegate *)delegate;
 
 /// Asynchronously check for new data from the server. If there is new data,
 /// appropriate callbacks will be called on the RHRemoteHandlerDelegate.

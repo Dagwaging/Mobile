@@ -88,5 +88,9 @@
 
 #define kRHPreferenceDebugMapInfo @"map_info_debug_preference"
 #define kRHPreferenceDebugMapZoomControls @"map_zoom_debug_preference"
+#define kRHPreferenceDebugMockData @"use_mock_data_debug_preference"
+#define kRHPreferenceDebugServerProtocol @"server_protocol_debug_preference"
+#define kRHPreferenceDebugServerHostname @"server_hostname_debug_preference"
+#define kRHPreferenceDebugServerPort @"server_port_number_debug_preference"
 
 #endif

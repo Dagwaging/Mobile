@@ -54,6 +54,8 @@
 /// Remote data handler.
 @property (nonatomic, retain) RHRemoteHandler *remoteHandler;
 
+/// Reload preference data, in case something has changed while the application
+/// was running.
 - (void)refreshPreferences;
 
 @end

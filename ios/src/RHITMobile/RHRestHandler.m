@@ -25,12 +25,20 @@
 #import "RHBoundaryNode.h"
 #import "RHLabelNode.h"
 #import "RHLocation.h"
+#import "RHConstants.h"
 
+
+#define kRHTopLevelServerPath @"/locations/data/top"
+
+#pragma mark Private Method Declarations
 
 @interface RHRestHandler ()
 
 @property (nonatomic, retain) NSManagedObjectContext *context;
 @property (nonatomic, retain) NSOperationQueue *operations;
+@property (nonatomic, retain) NSString *scheme;
+@property (nonatomic, retain) NSString *host;
+@property (nonatomic, retain) NSString *port;
 
 - (NSString *)stringFromDictionary:(NSDictionary *)dictionary
                             forKey:(NSString *)key
@@ -52,9 +60,7 @@
                          withErrorSelector:(SEL)selector
                            withErrorString:(NSString *)errorString;
 
-- (void)performFetchAllLocations;
-
-- (void)performCheckForNewLocations;
+- (void)performCheckForLocationUpdates;
 
 - (void)notifyDelegateViaSelector:(SEL)selector
                ofFailureWithError:(NSError *)error;
@@ -65,57 +71,92 @@
 @end
 
 
+#pragma mark -
+#pragma mark Implementation
+
 @implementation RHRestHandler
+
+#pragma mark -
+#pragma mark Generic Properties
 
 @synthesize delegate;
 @synthesize context;
 @synthesize operations;
+@synthesize scheme;
+@synthesize host;
+@synthesize port;
 
-- (id)initWithContext:(NSManagedObjectContext *)inContext
-             delegate:(RHRemoteHandlerDelegate *)inDelegate {
+#pragma mark -
+#pragma mark General Methods
+
+- (RHRestHandler *)initWithContext:(NSManagedObjectContext *)inContext
+                          delegate:(RHRemoteHandlerDelegate *)inDelegate {
     self = [super init];
     
     if (self) {
         self.delegate = inDelegate;
         self.context = inContext;
         self.operations = [[NSOperationQueue new] autorelease];
+        
+        
+        [NSUserDefaults resetStandardUserDefaults];
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        
+        BOOL ssl = [defaults boolForKey:kRHPreferenceDebugServerProtocol];
+        
+        if (ssl) {
+            self.scheme = @"https";
+        } else {
+            self.scheme = @"http";
+        }
+        
+        self.host = [defaults objectForKey:kRHPreferenceDebugServerHostname];
+        self.port = [defaults objectForKey:kRHPreferenceDebugServerPort];
     }
     
     return self;
 }
 
-- (void)fetchAllLocations {
+- (void)checkForLocationUpdates {
     if (self.delegate == nil) {
         return;
     }
     
     NSInvocationOperation* operation = [NSInvocationOperation alloc];
     operation = [[operation initWithTarget:self
-                                  selector:@selector(performFetchAllLocations)
+                                  selector:@selector(performCheckForLocationUpdates)
                                     object:nil] autorelease];
     [operations addOperation:operation];
 }
 
-- (void)checkForNewLocations {
-    if (self.delegate == nil) {
-        return;
-    }
-    
-    NSInvocationOperation* operation = [NSInvocationOperation alloc];
-    operation = [[operation initWithTarget:self
-                                  selector:@selector(performCheckForNewLocations)
-                                    object:nil] autorelease];
-    [operations addOperation:operation];
+- (void)dealloc {
+    [delegate release];
+    [context release];
+    [operations release];
+    [scheme release];
+    [host release];
+    [port release];
+    [super dealloc];
 }
 
 #pragma mark -
 #pragma mark Private Methods
 
-- (void)performFetchAllLocations {
-    SEL failureSelector = @selector(didFailFetchingAllLocationsWithError:);
-    NSURL *url = [NSURL URLWithString:@"http://mobilewin.csse.rose-hulman.edu:5600/mapareas"];
+- (void)performCheckForLocationUpdates {
+    SEL failureSelector = @selector(didFailCheckingForLocationUpdatesWithError:);
+    NSString *fullHost = [[NSString alloc] initWithFormat:@"%@:%@",
+                          self.host,
+                          self.port];
+    NSURL *url = [[NSURL alloc] initWithScheme:self.scheme
+                                          host:fullHost
+                                          path:kRHTopLevelServerPath];
+    
+    [fullHost release];
     
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    NSLog(@"REQUEST: %@", url.absoluteString);
+    [url release];
+    
     NSURLResponse *response = nil;
     NSError *error = nil;
     
@@ -127,6 +168,21 @@
     if (data == nil) {
         [self notifyDelegateViaSelector:failureSelector
                      ofFailureWithError:error];
+        return;
+    }
+
+    
+    NSInteger statusCode = ((NSHTTPURLResponse *) response).statusCode;
+    
+    if (statusCode == 204) {
+        return;
+    } else if (statusCode != 200) {
+        NSString *errorString = [[NSString alloc] initWithFormat:@"Problem "
+                                 "with server response:\nServer gave response "
+                                 "code %d", statusCode];
+        [self notifyDelegateViaSelector:failureSelector
+                   ofFailureWithMessage:errorString];
+        [errorString release];
         return;
     }
     
@@ -148,105 +204,73 @@
     
     NSMutableSet *locations = [NSMutableSet setWithCapacity:[areas count]];
     
+    // Populate new location objects for each retrieved dictionary
     for (NSDictionary *area in areas) {
-        NSString *name = [area valueForKey:@"Name"];
-        if (name == nil) {
-            NSString *message = @"Problem with server response:\nAt least one "
-            "location is missing the location of its name";
-            [self notifyDelegateViaSelector:failureSelector
-                       ofFailureWithMessage:message];
-            return;
-        }
+        RHLocation *location = (RHLocation *) [RHLocation fromContext:context];
         
-        NSNumber *serverId = [area valueForKey:@"Id"];
+        // Name
+        location.name = [self stringFromDictionary:area forKey:@"Name"
+                                 withErrorSelector:failureSelector
+                                   withErrorString:@"Problem with server "
+                         "response:\nAt least one location is missings its "
+                         "name"];
         
-        if (serverId == nil) {
-            NSString *message = [NSString
-                                 stringWithFormat:@"Problem with server "
-                                 "response:\nLocation \"%@\" is missing its "
-                                 "server ID", name];
-            [self notifyDelegateViaSelector:failureSelector
-                       ofFailureWithMessage:message];
-            return;
-        }
+        // Server identifier
+        location.serverIdentifier = [self numberFromDictionary:area forKey:@"Id"
+                                             withErrorSelector:failureSelector
+                                               withErrorString:@"Problem with "
+                                     "server response:\nAt least one location "
+                                     "is missing its server identifier"];
         
-        NSString *description = [area valueForKey:@"Description"];
+        // Description
+        location.quickDescription = [self stringFromDictionary:area
+                                                        forKey:@"Description"
+                                             withErrorSelector:failureSelector
+                                               withErrorString:@"Problem with "
+                                     "server response:\nAt least one location "
+                                     "is missing its description"];
         
-        if (description == nil) {
-            NSString *message = [NSString
-                                 stringWithFormat:@"Problem with server "
-                                 "response:\nLocation \"%@\" is missing its "
-                                 "description", name];
-            [self notifyDelegateViaSelector:failureSelector
-                       ofFailureWithMessage:message];
-            return;
-        }
+        // Minimum zoom level
+        location.visibleZoomLevel = [self numberFromDictionary:area
+                                                        forKey:@"MinZoomLevel"
+                                             withErrorSelector:failureSelector
+                                               withErrorString:@"Problem with "
+                                     "server response:\nAt least one location "
+                                     "is missing its minimum zoom level"];
         
-        NSNumber *minZoomLevel = [area valueForKey:@"MinZoomLevel"];
-        
-        if (minZoomLevel == nil) {
-            NSString *message = [NSString
-                                 stringWithFormat:@"Problem with server "
-                                 "response:\nLocation \"%@\" is missing its "
-                                 "minimum zoom level", name];
-            [self notifyDelegateViaSelector:failureSelector
-                       ofFailureWithMessage:message];
-            return;
-        }
-        
-        NSDictionary *center = [area valueForKey:@"Center"];
-        
-        if (center == nil) {
-            NSString *message = [NSString
-                                 stringWithFormat:@"Problem with server "
-                                 "response:\nLocation \"%@\" is missing the "
-                                 "coordinates of its label.", name];
-            [self notifyDelegateViaSelector:failureSelector
-                       ofFailureWithMessage:message];
-            return;
-        }
+        // Use center data to populate a center node
+        NSDictionary *center = [self dictionaryFromDictionary:area
+                                                       forKey:@"Center"
+                                            withErrorSelector:failureSelector
+                                              withErrorString:@"Problem with "
+                                "server response:\nAt least one location is "
+                                "missing its center point"];
         
         RHLabelNode *centerNode = (RHLabelNode *) [RHLabelNode
                                                    fromContext:context];
         
-        centerNode.latitude = [center valueForKey:@"Lat"];
+        centerNode.latitude = [self numberFromDictionary:center
+                                                  forKey:@"Lat"
+                                       withErrorSelector:failureSelector
+                                         withErrorString:@"Problem with server "
+                               "response:\nAt least one location is missing "
+                               "the latitude component of its center point"];
         
-        if (centerNode.latitude == nil) {
-            NSString *message = [NSString
-                                 stringWithFormat:@"Problem with server "
-                                 "response:\nLocation \"%@\" is missing the "
-                                 "latitude component of its label coordinate.",
-                                 name];
-            [self notifyDelegateViaSelector:failureSelector
-                       ofFailureWithMessage:message];
-            return;
-        }
+        centerNode.longitude = [self numberFromDictionary:center
+                                                   forKey:@"Long"
+                                        withErrorSelector:failureSelector
+                                          withErrorString:@"Problem with "
+                                "server response:\nAt least one location is "
+                                "missing the longitude component of its center "
+                                "point"];
         
-        centerNode.longitude = [center valueForKey:@"Long"];
-        
-        if (centerNode.longitude == nil) {
-            NSString *message = [NSString
-                                 stringWithFormat:@"Problem with server "
-                                 "response:\nLocation \"%@\" is missing the "
-                                 "longitude component of its label coordinate.",
-                                 name];
-            [self notifyDelegateViaSelector:failureSelector
-                       ofFailureWithMessage:message];
-            return;
-        }
-        
-        NSArray *retrievedBoundary = [area valueForKey:@"Corners"];
-        
-        if (retrievedBoundary == nil) {
-            NSString *message = [NSString
-                                 stringWithFormat:@"Problem with server "
-                                 "response:\nLocation \"%@\" is missing its "
-                                 "boundary coordinates",
-                                 name];
-            [self notifyDelegateViaSelector:failureSelector
-                       ofFailureWithMessage:message];
-            return;
-        }
+        // Use boundary data to create boundary nodes
+        NSArray *retrievedBoundary = [self arrayFromDictionary:area
+                                                        forKey:@"Corners"
+                                             withErrorSelector:failureSelector
+                                               withErrorString:@"Problem with "
+                                      "server response:\nAt least one location "
+                                      "is missings its boundary coordinates"];
         
         NSMutableArray *workingBoundary = [[[NSMutableArray alloc]
                                             initWithCapacity:[retrievedBoundary
@@ -257,58 +281,40 @@
             RHBoundaryNode *node = (RHBoundaryNode *) [RHBoundaryNode
                                                        fromContext:context];
             
-            NSNumber *nodeLat = [nodeDict valueForKey:@"Lat"];
+            node.latitude = [self numberFromDictionary:nodeDict
+                                                forKey:@"Lat"
+                                     withErrorSelector:failureSelector
+                                       withErrorString:@"Problem with server "
+                             "response:\nAt least one location is missing a "
+                             "latitude component for one of its boundary "
+                             "coordinates"];
             
-            if (nodeLat == nil) {
-                NSString *message = [NSString
-                                     stringWithFormat:@"Problem with server "
-                                     "response:\nLocation \"%@\" is missing "
-                                     "the latitude component of one of its "
-                                     "boundary coordinates", name];
-                [self notifyDelegateViaSelector:failureSelector
-                           ofFailureWithMessage:message];
-                return;
-            }
-            
-            NSNumber *nodeLong = [nodeDict valueForKey:@"Long"];
-            
-            if (nodeLong == nil) {
-                NSString *message = [NSString
-                                     stringWithFormat:@"Problem with server "
-                                     "response:\nLocation \"%@\" is missing "
-                                     "the longitude component of one of its "
-                                     "boundary coordinates", name];
-                [self notifyDelegateViaSelector:failureSelector
-                           ofFailureWithMessage:message];
-                return;
-            }
-            
-            node.latitude = nodeLat;
-            node.longitude = nodeLong;
+            node.longitude  = [self numberFromDictionary:nodeDict 
+                                                  forKey:@"Long"
+                                       withErrorSelector:failureSelector
+                                         withErrorString:@"Problem with server "
+                               "response:\nAt least one location is missing a "
+                               "longitude component for one of its boundary "
+                               "coordinates"];
             
             [workingBoundary addObject:node];
         }
         
-        RHLocation *location = (RHLocation *) [RHLocation fromContext:context];
-        
-        location.labelLocation = centerNode;
-        location.serverIdentifier = serverId;
-        location.name = name;
-        location.quickDescription = description;
-        location.visibleZoomLevel = minZoomLevel;
         location.orderedBoundaryNodes = workingBoundary;
         
         [locations addObject:location];
     }
+    
+    NSError *saveError = nil;
+    [self.context save:&saveError];
     
     [delegate performSelectorOnMainThread:@selector(didFetchAllLocations:)
                                withObject:locations
                             waitUntilDone:NO];
 }
 
-- (void)performCheckForNewLocations {
-    // TODO
-}
+#pragma mark-
+#pragma mark Private Data Retrieval Methods
 
 - (NSString *)stringFromDictionary:(NSDictionary *)dictionary
                             forKey:(NSString *)key

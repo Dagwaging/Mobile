@@ -41,20 +41,21 @@
 @synthesize context;
 @synthesize operations;
 
-- (id)initWithContext:(NSManagedObjectContext *)inContext
-             delegate:(RHRemoteHandlerDelegate *)inDelegate {
+- (RHDummyHandler *)initWithContext:(NSManagedObjectContext *)inContext
+                           delegate:(RHRemoteHandlerDelegate *)inDelegate {
     self = [super init];
     
     if (self) {
         self.delegate = inDelegate;
         self.context = inContext;
         self.operations = [[NSOperationQueue new] autorelease];
+        
     }
     
     return self;
 }
 
-- (void)fetchAllLocations {
+- (void)checkForLocationUpdates {
     if (self.delegate == nil) {
         return;
     }
@@ -123,7 +124,7 @@
     
     // Aggregate and pass on locations
     NSSet *locations = [[NSArray alloc] initWithObjects:hatfield, moench, crapo, olin, nil];
-    [delegate didFetchAllLocations:locations];
+    //[delegate didFetchAllLocations:locations];
     [locations release];
 }
 

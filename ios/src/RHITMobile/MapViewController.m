@@ -33,9 +33,7 @@
 @interface MapViewController()
 
 @property (nonatomic, retain) RHLocationOverlay *currentOverlay;
-
 @property (nonatomic, assign) BOOL debugMapInfo;
-
 @property (nonatomic, assign) BOOL debugMapZoomControls;
 
 @end
@@ -80,7 +78,7 @@
                             zoomLevel:kRHInitialZoomLevel
                              animated:NO];
     
-    [self.remoteHandler fetchAllLocations];
+    [self.remoteHandler checkForLocationUpdates];
     [self refreshPreferences];
 }
 
@@ -111,7 +109,6 @@
 }
 
 - (void)refreshPreferences {
-    [NSUserDefaults resetStandardUserDefaults];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     self.debugMapInfo = [defaults boolForKey:kRHPreferenceDebugMapInfo];
     self.debugMapZoomControls = [defaults
@@ -131,6 +128,19 @@
     }
     
     [items release];
+}
+
+#pragma mark -
+#pragma mark Property Methods
+
+- (RHRemoteHandler *)remoteHandler {
+    if (remoteHandler_ == nil) {
+        remoteHandler_ = [[RHRestHandler alloc]
+                          initWithContext:self.managedObjectContext
+                          delegate:(RHRemoteHandlerDelegate *)self];
+    }
+    
+    return remoteHandler_;
 }
 
 #pragma mark -
@@ -210,15 +220,6 @@
 #pragma mark -
 #pragma mark RHRemoteHandlerDelegate Methods
 
-- (RHRemoteHandler *)remoteHandler {
-    if (remoteHandler_ == nil) {
-        remoteHandler_ = [[RHRestHandler alloc]
-                          initWithContext:self.managedObjectContext
-                          delegate:(RHRemoteHandlerDelegate *)self];
-    }
-    
-    return remoteHandler_;
-}
 
 - (void)didFetchAllLocations:(NSSet *)locations {
     NSInteger currentZoomLevel = self.mapView.zoomLevel;
@@ -233,11 +234,11 @@
     }
 }
 
-- (void)didFindNewerLocations:(NSSet *)locations {
-    // TODO
+- (void)didFindMapLevelLocationUpdates:(NSSet *)locations {
+    
 }
 
-- (void)didFailFetchingAllLocationsWithError:(NSError *)error {
+- (void)didFailCheckingForLocationUpdatesWithError:(NSError *)error {
     NSString *title = @"Error Updating Map";
     NSString *message = error.localizedDescription;
     

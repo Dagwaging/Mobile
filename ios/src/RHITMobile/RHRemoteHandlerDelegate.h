@@ -29,6 +29,6 @@
 - (void)didFindMapLevelLocationUpdates:(NSSet *)locations;
 
 /// Callback when something goes wrong checking for new location data.
-- (void)didFailCheckingForLocationUpdates:(NSError *)error;
+- (void)didFailCheckingForLocationUpdatesWithError:(NSError *)error;
 
 @end
