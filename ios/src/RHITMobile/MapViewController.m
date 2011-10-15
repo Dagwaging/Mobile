@@ -135,7 +135,7 @@
 
 - (RHRemoteHandler *)remoteHandler {
     if (remoteHandler_ == nil) {
-        remoteHandler_ = [[RHRestHandler alloc]
+        remoteHandler_ = (RHRemoteHandler *) [[RHRestHandler alloc]
                           initWithContext:self.managedObjectContext
                           delegate:(RHRemoteHandlerDelegate *)self];
     }
@@ -220,22 +220,18 @@
 #pragma mark -
 #pragma mark RHRemoteHandlerDelegate Methods
 
-
-- (void)didFetchAllLocations:(NSSet *)locations {
+- (void)didFindMapLevelLocationUpdates:(NSSet *)locations {
     NSInteger currentZoomLevel = self.mapView.zoomLevel;
     
     for (RHLocation *location in locations) {
         RHAnnotation *annotation = [RHAnnotation alloc];
+        NSLog(@"Lat: %f Long: %f", location.labelLocation.latitude.doubleValue, location.labelLocation.longitude.doubleValue);
         annotation = [[annotation initWithLocation:location
-                                    currentZoomLevel:currentZoomLevel]
+                                  currentZoomLevel:currentZoomLevel]
                       autorelease];
         
         [self.mapView addAnnotation:annotation];
     }
-}
-
-- (void)didFindMapLevelLocationUpdates:(NSSet *)locations {
-    
 }
 
 - (void)didFailCheckingForLocationUpdatesWithError:(NSError *)error {

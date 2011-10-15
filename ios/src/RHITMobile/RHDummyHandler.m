@@ -123,7 +123,7 @@
     olin.quickDescription = @"This is a hall. For school.";
     
     // Aggregate and pass on locations
-    NSSet *locations = [[NSArray alloc] initWithObjects:hatfield, moench, crapo, olin, nil];
+    NSSet *locations = (NSSet *) [[NSArray alloc] initWithObjects:hatfield, moench, crapo, olin, nil];
     //[delegate didFetchAllLocations:locations];
     [locations release];
 }
