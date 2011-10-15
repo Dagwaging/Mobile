@@ -295,7 +295,6 @@
     
     for (RHLocation *location in locations) {
         RHAnnotation *annotation = [RHAnnotation alloc];
-        NSLog(@"Lat: %f Long: %f", location.labelLocation.latitude.doubleValue, location.labelLocation.longitude.doubleValue);
         annotation = [[annotation initWithLocation:location
                                   currentZoomLevel:currentZoomLevel]
                       autorelease];
