@@ -297,6 +297,8 @@
             }
             
             location.orderedBoundaryNodes = workingBoundary;
+        } else {
+            location.visibleZoomLevel = [NSNumber numberWithInt:-1];
         }
 
         
