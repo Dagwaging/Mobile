@@ -36,6 +36,10 @@
 @property (nonatomic, assign) BOOL debugMapInfo;
 @property (nonatomic, assign) BOOL debugMapZoomControls;
 
+- (void)loadStoredLocations;
+
+- (void)populateMapWithLocations:(NSSet *)locations;
+
 @end
 
 
@@ -78,6 +82,7 @@
                             zoomLevel:kRHInitialZoomLevel
                              animated:NO];
     
+    [self loadStoredLocations];
     [self.remoteHandler checkForLocationUpdates];
     [self refreshPreferences];
 }
@@ -221,17 +226,7 @@
 #pragma mark RHRemoteHandlerDelegate Methods
 
 - (void)didFindMapLevelLocationUpdates:(NSSet *)locations {
-    NSInteger currentZoomLevel = self.mapView.zoomLevel;
-    
-    for (RHLocation *location in locations) {
-        RHAnnotation *annotation = [RHAnnotation alloc];
-        NSLog(@"Lat: %f Long: %f", location.labelLocation.latitude.doubleValue, location.labelLocation.longitude.doubleValue);
-        annotation = [[annotation initWithLocation:location
-                                  currentZoomLevel:currentZoomLevel]
-                      autorelease];
-        
-        [self.mapView addAnnotation:annotation];
-    }
+    [self populateMapWithLocations:locations];
 }
 
 - (void)didFailCheckingForLocationUpdatesWithError:(NSError *)error {
@@ -250,7 +245,7 @@
 #pragma mark -
 #pragma mark RHAnnotationView Delegate Methods
 
--(void)focusMapViewToLocation:(RHLocation *)location {
+- (void)focusMapViewToLocation:(RHLocation *)location {
     [self.mapView removeOverlay:self.currentOverlay];
     RHLocationOverlay *overlay = [[RHLocationOverlay alloc]
                                   initWithLocation:location];
@@ -263,10 +258,50 @@
     [overlay release];
 }
 
--(void)clearOverlays {
+- (void)clearOverlays {
     [mapView removeOverlay:self.currentOverlay];
     [currentOverlay release];
     self.currentOverlay = nil;
+}
+
+#pragma mark -
+#pragma mark Private Methods
+
+- (void)loadStoredLocations {
+    // Describe the type of entity we'd like to retrieve
+    NSEntityDescription *entityDescription = [NSEntityDescription
+                                              entityForName:@"Location"
+                                              inManagedObjectContext:managedObjectContext];
+    NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
+    [request setEntity:entityDescription];
+    
+    // Put conditions on our fetch request
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:
+                              @"visibleZoomLevel > 0"];
+    [request setPredicate:predicate];
+    
+    // Retrieve what we hope is our created object
+    NSError *error = nil;
+    NSArray *results = [managedObjectContext executeFetchRequest:request error:&error];
+    
+    [self populateMapWithLocations:(NSSet *)results];
+}
+
+- (void)populateMapWithLocations:(NSSet *)locations {
+    // Clear existing annotations first
+    [self.mapView removeAnnotations:self.mapView.annotations];
+    
+    NSInteger currentZoomLevel = self.mapView.zoomLevel;
+    
+    for (RHLocation *location in locations) {
+        RHAnnotation *annotation = [RHAnnotation alloc];
+        NSLog(@"Lat: %f Long: %f", location.labelLocation.latitude.doubleValue, location.labelLocation.longitude.doubleValue);
+        annotation = [[annotation initWithLocation:location
+                                  currentZoomLevel:currentZoomLevel]
+                      autorelease];
+        
+        [self.mapView addAnnotation:annotation];
+    }
 }
 
 @end
