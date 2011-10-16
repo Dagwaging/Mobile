@@ -40,18 +40,29 @@
             <TextBlock x:Name="PageTitle" Text="Settings" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
         </StackPanel>
 
-        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="129"/>
-                <RowDefinition Height="478*"/>
-            </Grid.RowDefinitions>
-            <toolkit:ListPicker x:Name="mapSourcePicker" ItemCountThreshold="3" Header="Map Source" 
-                                ItemTemplate="{StaticResource PickerItemTemplate}"
-                                FullModeItemTemplate="{StaticResource PickerFullModeItemTemplate}" FullModeHeader="Map Source"/>
-            <toolkit:ToggleSwitch Header="Tile Overlays" Name="tileToggle" Margin="6,0,-6,338" Grid.Row="2" IsChecked="False" />
-            <toolkit:ToggleSwitch Header="Polygon Overlays" Name="polygonToggle" Margin="6,83,-6,264" Grid.Row="3" IsChecked="False" />
-            <toolkit:ToggleSwitch Header="Text Overlays" Name="textToggle" Margin="6,166,-6,187" Grid.Row="4" IsChecked="False" />
-        </Grid>
-    </Grid>
+        <ScrollViewer Grid.Row="1" Margin="12,0,12,0">
 
+            <Grid x:Name="ContentPanel">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <toolkit:ListPicker x:Name="mapSourcePicker" ItemCountThreshold="3" Header="Map Source" Grid.Row="0"
+                                    ItemTemplate="{StaticResource PickerItemTemplate}"
+                                    FullModeItemTemplate="{StaticResource PickerFullModeItemTemplate}" FullModeHeader="Map Source"/>
+                <toolkit:ListPicker x:Name="mapTypePicker" ItemCountThreshold="3" Header="Map Type" Grid.Row="1"
+                                    ItemTemplate="{StaticResource PickerItemTemplate}"
+                                    FullModeItemTemplate="{StaticResource PickerFullModeItemTemplate}" FullModeHeader="Map Type"/>
+                <toolkit:ToggleSwitch Header="Tile Overlays" Name="tileToggle" Grid.Row="2" IsChecked="False" />
+                <toolkit:ToggleSwitch Header="Polygon Overlays" Name="polygonToggle" Grid.Row="3" IsChecked="False" />
+                <toolkit:ToggleSwitch Header="Text Overlays" Name="textToggle" Grid.Row="4" IsChecked="False" />
+                <toolkit:ToggleSwitch Header="Debug Mode" Name="debugToggle" Grid.Row="5" IsChecked="False" />
+            </Grid>
+            
+        </ScrollViewer>
+    </Grid>
 </phone:PhoneApplicationPage>

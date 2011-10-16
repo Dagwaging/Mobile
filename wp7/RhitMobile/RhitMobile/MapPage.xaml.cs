@@ -12,12 +12,14 @@ using Microsoft.Phone.Shell;
 using RhitMobile.Events;
 using RhitMobile.ObjectModel;
 using RhitMobile.Services;
+using System.Windows;
 
 namespace RhitMobile {
     public partial class MapPage : PhoneApplicationPage {
         #region Private Fields
         private GeoCoordinateWatcher _userLocationWatcher;
         private ApplicationBar _appBar;
+        private TextBlock _debugText;
         #endregion
 
         public MapPage() {
@@ -27,6 +29,8 @@ namespace RhitMobile {
 
             RhitMapView.Instance.OutlineTapped += new Events.OutlineEventHandler(Outline_Tapped);
             RhitMapView.Instance.PushpinTapped += new PushpinEventHandler(SelectedPushpin_MouseLeftButtonUp);
+            RhitMapView.Instance.DebugTextChanged += new DebugEventHandler(DebugText_Changed);
+            RhitMapView.Instance.DebugModeChanged += new DebugEventHandler(DebugMode_Changed);
 
             InitApplicationBar();
             InitGeoCordinateWatcher();
@@ -35,14 +39,12 @@ namespace RhitMobile {
         #region Initializers
         private void LoadMap() {
             Map map = RhitMapView.Instance.Map;
-            map.Margin = new System.Windows.Thickness(0, 0, 0, 36);
+            map.Margin = new System.Windows.Thickness(0, 0, 0, 0);
             map.Mode = new MercatorMode();
             map.CacheMode = new BitmapCache();
             map.LogoVisibility = System.Windows.Visibility.Collapsed;
             map.VerticalAlignment = System.Windows.VerticalAlignment.Stretch;
             map.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
-            LayoutRoot.Children.Add(map);
-            Grid.SetRow(map, 0);
             map.MapZoom += new EventHandler<MapZoomEventArgs>(Map_MapZoom);
         }
 
@@ -93,9 +95,17 @@ namespace RhitMobile {
         #endregion
 
         #region Map/Service Event Handlers
+        void DebugMode_Changed(object sender, DebugEventArgs e) {
+            fillGrid();
+        }
+
+        void DebugText_Changed(object sender, DebugEventArgs e) {
+            if (RhitMapView.Instance.InDebugMode)
+                _debugText.Text = RhitMapView.Instance.DebugText;
+        }
+
         void Map_MapZoom(object sender, MapZoomEventArgs e) {
-            //TODO: Remove for release
-            this.statusTextBlock.Text = "Zoom: " + RhitMapView.Instance.Map.ZoomLevel.ToString();
+            RhitMapView.Instance.DebugText = "Zoom: " + RhitMapView.Instance.Map.ZoomLevel.ToString();
         }
 
         private void Outline_Tapped(object sender, Events.OutlineEventArgs e) {
@@ -168,32 +178,36 @@ namespace RhitMobile {
             _userLocationWatcher.TryStart(true, TimeSpan.FromMilliseconds(60000));
         }
         #endregion
+        
+        private void fillGrid() {
+            ContentPanel.Children.Clear();
+            ContentPanel.RowDefinitions.Clear();
+            ContentPanel.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) });
+            if (RhitMapView.Instance.InDebugMode)
+                ContentPanel.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Auto) });
+            ContentPanel.Children.Add(RhitMapView.Instance.Map);
+            Grid.SetRow(RhitMapView.Instance.Map, 0);
+            if(RhitMapView.Instance.InDebugMode) {
+                _debugText = new TextBlock() { Text = RhitMapView.Instance.DebugText };
+                ContentPanel.Children.Add(_debugText);
+                Grid.SetRow(_debugText, 1);
+            }
+        }
 
         protected override void OnNavigatedTo(NavigationEventArgs e) {
-            if(!LayoutRoot.Children.Contains(RhitMapView.Instance.Map)) LoadMap();
-            RhitMapView.Instance.LoadData();
-
-            RhitMapView.Instance.GoToRhit();//TODO: Center to full map view instead
-
+            if(!ContentPanel.Children.Contains(RhitMapView.Instance.Map)) LoadMap();
+            
             List<RhitLocation> locations = DataCollector.Instance.GetLocations(Dispatcher);
             DataCollector.Instance.UpdateAvailable += new ServerEventHandler(OnUpdateAvailable);
             if(locations != null) RhitMapView.Instance.Outlines = locations;
             //TODO: Display message if locations == null; "Map Data is Empty. Trying to download..."
 
-            RhitLocation outline = this.LoadState<RhitLocation>("SelectedOutline", null);
-            if(outline != null) this.SaveState("SelectedOutline", RhitMapView.Instance.Select(outline));
-
-            string mapSourceName = this.LoadState<string>("MapSource");
-            RhitMapView.Instance.ChangeTileSource(mapSourceName);
-
-            bool floorPlans = (bool) this.LoadState<object>("TileOverlay", false);
-            if(floorPlans) RhitMapView.Instance.AddOverlay("RHIT Floor Plans");
-            else RhitMapView.Instance.RemoveOverlay("RHIT Floor Plans");
+            fillGrid();
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e) {
             RhitMapView.Instance.StoreData();
-            LayoutRoot.Children.Remove(RhitMapView.Instance.Map);
+            ContentPanel.Children.Remove(RhitMapView.Instance.Map);
         }
     }
 }

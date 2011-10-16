@@ -26,8 +26,9 @@
     <phone:PhoneApplicationPage.FontSize> <StaticResource ResourceKey="PhoneFontSizeNormal"/> </phone:PhoneApplicationPage.FontSize>
     <phone:PhoneApplicationPage.Foreground> <StaticResource ResourceKey="PhoneForegroundBrush"/> </phone:PhoneApplicationPage.Foreground>
     
-    <Grid x:Name="LayoutRoot" Background="Transparent">
-        <TextBlock HorizontalAlignment="Left" Grid.Row="1" Name="statusTextBlock" Width="480"
-                   Text=" For Testing Purposes: Will be removed for Release." VerticalAlignment="Bottom" Height="30" />
+    <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
     </Grid>
 </phone:PhoneApplicationPage>

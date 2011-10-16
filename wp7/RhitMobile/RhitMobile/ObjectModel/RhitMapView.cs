@@ -25,9 +25,15 @@ namespace RhitMobile.ObjectModel {
         private double _zoomLevel;
         private bool _areOutlinesVisible;
         private bool _areLabelsVisible;
+        private string _debugText;
+        private bool _inDebugMode;
         #endregion
 
         #region Events
+        public event DebugEventHandler DebugTextChanged;
+
+        public event DebugEventHandler DebugModeChanged;
+
         public event OutlineEventHandler OutlineTapped;
 
         public event PushpinEventHandler PushpinTapped;
@@ -38,6 +44,9 @@ namespace RhitMobile.ObjectModel {
             Map = new Map();
             Initialize();
             Map.MapZoom += new EventHandler<MapZoomEventArgs>(Map_MapZoom);
+
+            InDebugMode = false;
+            DebugText = " For Testing Purposes: Will be removed for Release.";
         }
 
         #region Public Properties
@@ -94,6 +103,29 @@ namespace RhitMobile.ObjectModel {
                     _mapOverlayLayer.TileSources.Add(source);
                 }
                 //TODO: Raise source change event?
+            }
+        }
+
+        /// <summary>
+        /// The text to be displayed if in debug mode.
+        /// </summary>
+        public string DebugText {
+            get { return _debugText; }
+            set {
+                _debugText = value;
+                OnDebugTextChanged(new DebugEventArgs());
+            }
+        }
+
+        /// <summary>
+        /// True if in debug mode.
+        /// </summary>
+        public bool InDebugMode {
+            get { return _inDebugMode; }
+            set {
+                if(_inDebugMode == value) return;
+                _inDebugMode = value;
+                OnDebugModeChanged(new DebugEventArgs());
             }
         }
 
@@ -204,18 +236,18 @@ namespace RhitMobile.ObjectModel {
         }
         #endregion
 
-        #region private/Protected Methods
+        #region Private/Protected Methods
         private void CreateAvailableSources() {
             TileSources = new List<BaseTileSource>() {
                 new BaseBingSource() { Name = "Aerial", MapType = BingType.Aerial},
                 new BaseBingSource() { Name = "Road", MapType = BingType.Road},
                 new BaseBingSource() { Name = "Core Aerial", MapType = BingType.CoreAerial},
                 new BaseBingSource() { Name = "Core Road", MapType = BingType.CoreRoad},
-                new BaseGoogleSource() {Name = "Google Hybrid", MapType = GoogleType.Hybrid},
-                new BaseGoogleSource() {Name = "Google Physical", MapType = GoogleType.Physical},
-                new BaseGoogleSource() {Name = "Google Physical Hybrid", MapType = GoogleType.PhysicalHybrid},
-                new BaseGoogleSource() {Name = "Google Satellite", MapType = GoogleType.Satellite},
-                new BaseGoogleSource() {Name = "Google Street", MapType = GoogleType.Street},
+                new BaseGoogleSource() {Name = "Hybrid", MapType = GoogleType.Hybrid},
+                new BaseGoogleSource() {Name = "Physical", MapType = GoogleType.Physical},
+                new BaseGoogleSource() {Name = "Physical Hybrid", MapType = GoogleType.PhysicalHybrid},
+                new BaseGoogleSource() {Name = "Satellite", MapType = GoogleType.Satellite},
+                new BaseGoogleSource() {Name = "Street", MapType = GoogleType.Street},
                 new Mapnik() {Name = "OSM Mapnik"},
                 new OsmaRender() {Name = "Osma Render"},
             };
@@ -231,7 +263,7 @@ namespace RhitMobile.ObjectModel {
             _mapOverlayLayer = new MapTileLayer();
             _overlaySources = new List<BaseTileSource>();
             _locations = new List<RhitLocation>();
-            CurrentTileSource = TileSources[0];
+            CurrentTileSource = TileSources[7];
             CurrentOverlaySources = new List<BaseTileSource>();
             User = new User();
             _polygonLayer = new MapLayer();
@@ -246,14 +278,24 @@ namespace RhitMobile.ObjectModel {
             Map.Children.Add(_mapOverlayLayer);
             Map.Children.Add(_polygonLayer);
             Map.Children.Add(_textLayer);
+            LoadData();
+            GoToRhit(); //TODO: Load position from last time (Default here though)
+        }
+
+        protected virtual void OnSelectedTap(PushpinEventArgs e) {
+            if(PushpinTapped != null) PushpinTapped(this, e);
         }
 
         protected virtual void OnTap(OutlineEventArgs e) {
             if(OutlineTapped != null) OutlineTapped(this, e);
         }
 
-        protected virtual void OnSelectedTap(PushpinEventArgs e) {
-            if(PushpinTapped != null) PushpinTapped(this, e);
+        protected virtual void OnDebugModeChanged(DebugEventArgs e) {
+            if(DebugModeChanged != null) DebugModeChanged(this, e);
+        }
+
+        protected virtual void OnDebugTextChanged(DebugEventArgs e) {
+            if(DebugTextChanged != null) DebugTextChanged(this, e);
         }
         #endregion
 
@@ -275,14 +317,45 @@ namespace RhitMobile.ObjectModel {
         /// <summary>
         /// Switch which tile source the map is using.
         /// </summary>
+        /// <param name="sourceType">Name of the base source type.</param>
+        /// <param name="sourceName">Name of one of the available sources</param>
+        public void ChangeTileSource(string sourceType, string sourceName) {
+            if(sourceType == null && sourceName == null) return;
+            if(sourceName == null) ChangeTileSource(sourceType);
+            if(sourceType == null) ChangeTileSource(sourceName);
+            if(sourceType == "Bing") {
+                if(CurrentTileSource is BaseBingSource && CurrentTileSource.Name == sourceName) return;
+                foreach(BaseTileSource source in TileSources)
+                    if(source is BaseBingSource && source.Name == sourceName) {
+                        CurrentTileSource = source;
+                        DebugText = "Tile Source: Bing " + source.Name;
+                        return;
+                    }
+            } else if(sourceType == "Google") {
+                if(CurrentTileSource is BaseGoogleSource && CurrentTileSource.Name == sourceType) return;
+                foreach(BaseTileSource source in TileSources)
+                    if(source is BaseGoogleSource && source.Name == sourceName) {
+                        CurrentTileSource = source;
+                        DebugText = "Tile Source: Google " + source.Name;
+                        return;
+                    }
+            } else
+                ChangeTileSource(sourceType);
+        }
+
+        /// <summary>
+        /// Switch which tile source the map is using.
+        /// </summary>
         /// <param name="sourceName">Name of one of the available sources</param>
         public void ChangeTileSource(string sourceName) {
             if(CurrentTileSource.Name == sourceName) return;
             foreach(BaseTileSource source in TileSources)
                 if(source.Name == sourceName) {
                     CurrentTileSource = source;
+                    DebugText = "Tile Source: " + source.Name;
                     return;
                 }
+            DebugText = "Tile Source Failed: " + sourceName;
         }
 
         /// <summary>
