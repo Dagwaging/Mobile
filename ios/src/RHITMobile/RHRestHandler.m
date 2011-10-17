@@ -26,6 +26,7 @@
 #import "RHLabelNode.h"
 #import "RHLocation.h"
 #import "RHConstants.h"
+#import "RHPListStore.h"
 
 
 #define kTopLevelServerPath @"/locations/data/top"
@@ -50,6 +51,7 @@
 @property (nonatomic, retain) NSString *scheme;
 @property (nonatomic, retain) NSString *host;
 @property (nonatomic, retain) NSString *port;
+@property (nonatomic, retain) RHPListStore *valueStore;
 
 - (NSString *)stringFromDictionary:(NSDictionary *)dictionary
                             forKey:(NSString *)key
@@ -96,6 +98,7 @@
 @synthesize scheme;
 @synthesize host;
 @synthesize port;
+@synthesize valueStore;
 
 #pragma mark -
 #pragma mark General Methods
@@ -123,6 +126,8 @@
         
         self.host = [defaults objectForKey:kRHPreferenceDebugServerHostname];
         self.port = [defaults objectForKey:kRHPreferenceDebugServerPort];
+        
+        self.valueStore = [[[RHPListStore alloc] init] autorelease];
     }
     
     return self;
@@ -160,9 +165,24 @@
     NSString *fullHost = [[NSString alloc] initWithFormat:@"%@:%@",
                           self.host,
                           self.port];
+    
+    NSString *currentVersion = self.valueStore.currentDataVersion;
+    NSString *serverPath = nil;
+    
+    if (currentVersion == nil) {
+        serverPath = kTopLevelServerPath;
+    } else {
+        NSString *escaped = [currentVersion
+                             stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        serverPath = [[[NSString alloc] initWithFormat:@"%@?version=%@",
+                      kTopLevelServerPath, escaped] autorelease];
+    }
+    
     NSURL *url = [[NSURL alloc] initWithScheme:self.scheme
                                           host:fullHost
-                                          path:kTopLevelServerPath];
+                                          path:serverPath];
+    
+    NSLog(@"Full URL: %@", url.absoluteString);
     
     [fullHost release];
     
@@ -207,6 +227,10 @@
                      ofFailureWithError:error];
         return;
     }
+    
+    NSString *newVersion = [self stringFromDictionary:parsedData forKey:@"Version" withErrorSelector:failureSelector withErrorString:@"Couldn't find the thing"];
+    
+    self.valueStore.currentDataVersion = newVersion;
     
     NSArray *areas = [self arrayFromDictionary:parsedData
                                         forKey:kLocationListKey

@@ -26,6 +26,7 @@
 #import "RHLabelNode.h"
 #import "RHRestHandler.h"
 #import "RHLocationOverlay.h"
+#import "RHITMobileAppDelegate.h"
 
 
 #pragma mark Private Method Declarations
@@ -72,6 +73,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.managedObjectContext = [(RHITMobileAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext]; 
+    NSLog(@"After managedObjectContext: %@",  managedObjectContext);
     
     // Initialize what's visible on the map
     CLLocationCoordinate2D center = {kRHCampusCenterLatitude,
@@ -260,7 +264,7 @@
 
 - (void)clearOverlays {
     [mapView removeOverlay:self.currentOverlay];
-    [currentOverlay release];
+    //[currentOverlay release];
     self.currentOverlay = nil;
 }
 

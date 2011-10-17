@@ -76,6 +76,8 @@
 		92747161143B6F99005B6D43 /* MKMapViewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 92747160143B6F99005B6D43 /* MKMapViewTests.m */; };
 		927866FF1432F35C00749C2E /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 927866FE1432F35C00749C2E /* CoreLocation.framework */; };
 		927867021432F36500749C2E /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 927867011432F36500749C2E /* CoreLocation.framework */; };
+		928A6440144955EB00521EB1 /* RHPListStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 928A643F144955EB00521EB1 /* RHPListStore.m */; };
+		928A6441144955EB00521EB1 /* RHPListStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 928A643F144955EB00521EB1 /* RHPListStore.m */; };
 		929488F7142CD4E700820A9C /* RHNodeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 929488F6142CD4E700820A9C /* RHNodeTests.m */; };
 		929488FA142CD65500820A9C /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 929488F9142CD65500820A9C /* CoreData.framework */; };
 		92948900142D380400820A9C /* RHBoundaryNodeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 929488FF142D380400820A9C /* RHBoundaryNodeTests.m */; };
@@ -180,6 +182,9 @@
 		92747160143B6F99005B6D43 /* MKMapViewTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MKMapViewTests.m; sourceTree = "<group>"; };
 		927866FE1432F35C00749C2E /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		927867011432F36500749C2E /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		928A643D144954EC00521EB1 /* RHValueStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHValueStore.h; sourceTree = "<group>"; };
+		928A643E144955EB00521EB1 /* RHPListStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHPListStore.h; sourceTree = "<group>"; };
+		928A643F144955EB00521EB1 /* RHPListStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHPListStore.m; sourceTree = "<group>"; };
 		929488F5142CD4E700820A9C /* RHNodeTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHNodeTests.h; sourceTree = "<group>"; };
 		929488F6142CD4E700820A9C /* RHNodeTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHNodeTests.m; sourceTree = "<group>"; };
 		929488F9142CD65500820A9C /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
@@ -401,6 +406,7 @@
 				9265FEB81409AB5D00AE406E /* RHITMobileAppDelegate.m */,
 				92948907142D3ED400820A9C /* Map */,
 				920656F314303CB200D50293 /* Web */,
+				928A643C144954A900521EB1 /* Storage */,
 				92ECC4C3141430510073C4C3 /* Views */,
 				9226030C1409AE640065F705 /* Model */,
 				9265FEAF1409AB5D00AE406E /* Supporting Files */,
@@ -438,6 +444,16 @@
 				9265FED91409AB5D00AE406E /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		928A643C144954A900521EB1 /* Storage */ = {
+			isa = PBXGroup;
+			children = (
+				928A643D144954EC00521EB1 /* RHValueStore.h */,
+				928A643E144955EB00521EB1 /* RHPListStore.h */,
+				928A643F144955EB00521EB1 /* RHPListStore.m */,
+			);
+			name = Storage;
 			sourceTree = "<group>";
 		};
 		92948907142D3ED400820A9C /* Map */ = {
@@ -615,6 +631,7 @@
 				925013681431AB6F00CEBB35 /* CJSONScanner.m in Sources */,
 				9250136A1431AB6F00CEBB35 /* CJSONSerializer.m in Sources */,
 				9201A4651432E96000069863 /* RHLocationOverlay.m in Sources */,
+				928A6440144955EB00521EB1 /* RHPListStore.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -652,6 +669,7 @@
 				9250136B1431AB6F00CEBB35 /* CJSONSerializer.m in Sources */,
 				9201A4661432E96000069863 /* RHLocationOverlay.m in Sources */,
 				92747161143B6F99005B6D43 /* MKMapViewTests.m in Sources */,
+				928A6441144955EB00521EB1 /* RHPListStore.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -714,7 +732,8 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Erik Hayes (UBJCB4G878)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Erik Hayes (UBJCB4G878)";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -729,6 +748,8 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				PROVISIONING_PROFILE = "90C413ED-335C-45AB-8B1A-FC86F36AEF55";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "1680D2BA-748D-451C-9E9A-0808AEB832D6";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -738,7 +759,8 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Erik Hayes (UBJCB4G878)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Erik Hayes (UBJCB4G878)";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
@@ -747,6 +769,8 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				PROVISIONING_PROFILE = "90C413ED-335C-45AB-8B1A-FC86F36AEF55";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "1680D2BA-748D-451C-9E9A-0808AEB832D6";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -755,6 +779,7 @@
 		9265FEE31409AB5D00AE406E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				"CODE_SIGN_ENTITLEMENTS[sdk=*]" = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "RHITMobile/RHITMobile-Prefix.pch";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
