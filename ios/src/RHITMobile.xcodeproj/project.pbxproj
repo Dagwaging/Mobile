@@ -78,6 +78,7 @@
 		927867021432F36500749C2E /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 927867011432F36500749C2E /* CoreLocation.framework */; };
 		928A6440144955EB00521EB1 /* RHPListStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 928A643F144955EB00521EB1 /* RHPListStore.m */; };
 		928A6441144955EB00521EB1 /* RHPListStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 928A643F144955EB00521EB1 /* RHPListStore.m */; };
+		928B76E8144CBADA00D2F98D /* tab-bar-map-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 928B76E7144CBADA00D2F98D /* tab-bar-map-icon@2x.png */; };
 		929488F7142CD4E700820A9C /* RHNodeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 929488F6142CD4E700820A9C /* RHNodeTests.m */; };
 		929488FA142CD65500820A9C /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 929488F9142CD65500820A9C /* CoreData.framework */; };
 		92948900142D380400820A9C /* RHBoundaryNodeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 929488FF142D380400820A9C /* RHBoundaryNodeTests.m */; };
@@ -185,6 +186,7 @@
 		928A643D144954EC00521EB1 /* RHValueStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHValueStore.h; sourceTree = "<group>"; };
 		928A643E144955EB00521EB1 /* RHPListStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHPListStore.h; sourceTree = "<group>"; };
 		928A643F144955EB00521EB1 /* RHPListStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHPListStore.m; sourceTree = "<group>"; };
+		928B76E7144CBADA00D2F98D /* tab-bar-map-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab-bar-map-icon@2x.png"; sourceTree = "<group>"; };
 		929488F5142CD4E700820A9C /* RHNodeTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHNodeTests.h; sourceTree = "<group>"; };
 		929488F6142CD4E700820A9C /* RHNodeTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHNodeTests.m; sourceTree = "<group>"; };
 		929488F9142CD65500820A9C /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
@@ -253,6 +255,7 @@
 		9226030B1409AC820065F705 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				928B76E7144CBADA00D2F98D /* tab-bar-map-icon@2x.png */,
 				924E754C140ACC9A001DFC4C /* tab-bar-map-icon.png */,
 			);
 			name = Images;
@@ -569,6 +572,7 @@
 				926D397F143D2CE400223121 /* Settings.bundle in Resources */,
 				9218208D144113A800A66923 /* Default@2x.png in Resources */,
 				9218208F144113B900A66923 /* Default.png in Resources */,
+				928B76E8144CBADA00D2F98D /* tab-bar-map-icon@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
