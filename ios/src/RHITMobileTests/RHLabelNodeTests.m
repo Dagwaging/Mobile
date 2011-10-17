@@ -83,7 +83,7 @@
         storedNode = (RHLabelNode *) [results objectAtIndex:0];
         
         // Verify the properties set on our retrieved object
-        STAssertEquals(storedNode.latitude, latitude, @"Latitude is incorrect");
+        STAssertEquals(storedNode.latitude.doubleValue, latitude.doubleValue, @"Latitude is incorrect");
         STAssertEquals(storedNode.longitude.doubleValue, 0.0,
                        @"Longitude is incorrect");
     }
