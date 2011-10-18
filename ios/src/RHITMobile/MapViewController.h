@@ -45,6 +45,8 @@
 
 @property (nonatomic, retain) IBOutlet UILabel *zoomLevelLabel;
 
+@property (nonatomic, retain) IBOutlet UILabel *overlaysLabel;
+
 /// Core Data fetched results controller.
 @property (nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
 

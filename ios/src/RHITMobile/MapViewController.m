@@ -58,6 +58,7 @@
 @synthesize zoomOutButton;
 @synthesize placesButton;
 @synthesize zoomLevelLabel;
+@synthesize overlaysLabel;
 @synthesize fetchedResultsController;
 @synthesize managedObjectContext;
 @synthesize remoteHandler = remoteHandler_;
@@ -123,6 +124,7 @@
                                  boolForKey:kRHPreferenceDebugMapZoomControls];
     
     self.zoomLevelLabel.hidden = !self.debugMapInfo;
+    self.overlaysLabel.hidden = !self.debugMapInfo;
     
     NSArray *items = [NSArray alloc];
     
@@ -223,6 +225,12 @@
                                initWithFormat:@"Zoom Level: %d", newZoomLevel];
     self.zoomLevelLabel.text = zoomLevelText;
     [zoomLevelText release];
+    
+    NSString *overlayText = [[NSString alloc] initWithFormat:@"Current Overlays: %@", self.mapView.overlays];
+    
+    self.overlaysLabel.text = overlayText;
+    
+    [overlayText release];
 }
 
 #pragma mark -
