@@ -61,7 +61,7 @@
 }
 
 - (NSString *)currentDataVersion {
-    return [self.data valueForKey:kRHCurrentDataVersionKey];
+    return [[self.data valueForKey:kRHCurrentDataVersionKey] description];
 }
 
 - (void)setCurrentDataVersion:(NSString *)inCurrentDataVersion {

@@ -182,6 +182,8 @@
                                           host:fullHost
                                           path:serverPath];
     
+    NSLog(@"URL: %@", url.absoluteString);
+    
     [fullHost release];
     
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
@@ -205,6 +207,7 @@
     NSInteger statusCode = ((NSHTTPURLResponse *) response).statusCode;
     
     if (statusCode == 204) {
+        NSLog(@"NO DATA");
         return;
     } else if (statusCode != 200) {
         NSString *errorString = [[NSString alloc] initWithFormat:@"Problem "
