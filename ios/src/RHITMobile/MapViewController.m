@@ -82,6 +82,7 @@
         kRHCampusCenterLongitude};
     
     self.mapView.mapType = MKMapTypeSatellite;
+    self.mapView.showsUserLocation = YES;
     [self.mapView setCenterCoordinate:center
                             zoomLevel:kRHInitialZoomLevel
                              animated:NO];
@@ -171,28 +172,32 @@
 
 - (MKAnnotationView *)mapView:(MKMapView *)mapView
             viewForAnnotation:(id <MKAnnotation>)inAnnotation {
-    RHAnnotation *annotation = (RHAnnotation *)inAnnotation;
-    NSString *identifier = annotation.location.name;
-    
-    RHAnnotationView *annotationView = (RHAnnotationView *)[self.mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
-    
-    if (annotationView == nil) {
-        annotationView = [[[RHAnnotationView alloc]
-                           initWithAnnotation:annotation
-                           reuseIdentifier:identifier] autorelease];
+    if ([inAnnotation isKindOfClass:[RHAnnotation class]]) {
+        RHAnnotation *annotation = (RHAnnotation *)inAnnotation;
+        NSString *identifier = annotation.location.name;
+        
+        RHAnnotationView *annotationView = (RHAnnotationView *)[self.mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
+        
+        if (annotationView == nil) {
+            annotationView = [[[RHAnnotationView alloc]
+                               initWithAnnotation:annotation
+                               reuseIdentifier:identifier] autorelease];
+        }
+        
+        [annotationView setEnabled:YES];
+        [annotationView setCanShowCallout:YES];
+        [annotationView setDraggable:NO];
+        [annotationView setDelegate:(RHAnnotationViewDelegate *)self];
+        
+        UIButton *newButton = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
+        [annotationView setRightCalloutAccessoryView:newButton];
+        
+        annotation.annotationView = annotationView;
+        
+        return annotationView;
     }
     
-    [annotationView setEnabled:YES];
-    [annotationView setCanShowCallout:YES];
-    [annotationView setDraggable:NO];
-    [annotationView setDelegate:(RHAnnotationViewDelegate *)self];
-    
-    UIButton *newButton = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
-    [annotationView setRightCalloutAccessoryView:newButton];
-    
-    annotation.annotationView = annotationView;
-    
-    return annotationView;
+    return nil;
 }
 
 - (MKOverlayView *)mapView:(MKMapView *)mapView
@@ -215,8 +220,10 @@
 - (void)mapView:(MKMapView *)map regionDidChangeAnimated:(BOOL)animated {
     NSInteger newZoomLevel = map.zoomLevel;
     
-    for (RHAnnotation *annotation in self.mapView.annotations) {
-        [annotation mapView:self.mapView didChangeZoomLevel:newZoomLevel];
+    for (id annotation in self.mapView.annotations) {
+        if ([annotation isKindOfClass:[RHAnnotation class]]) {
+            [annotation mapView:self.mapView didChangeZoomLevel:newZoomLevel];
+        }
     }
     
     NSString *zoomLevelText = [[NSString alloc]
