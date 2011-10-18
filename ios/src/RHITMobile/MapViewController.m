@@ -263,7 +263,6 @@
 
 - (void)clearOverlays {
     [mapView removeOverlay:self.currentOverlay];
-    //[currentOverlay release];
     self.currentOverlay = nil;
 }
 
