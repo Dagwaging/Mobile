@@ -20,6 +20,7 @@
 #import "RHITMobileAppDelegate.h"
 #import "MapViewController.h"
 #import "SearchViewController.h"
+#import "RHRestHandler.h"
 
 @interface RHITMobileAppDelegate ()
 
@@ -43,7 +44,6 @@
     // Add the tab bar controller's current view as a subview of the window
     self.window.rootViewController = self.tabBarController;
     [self.window makeKeyAndVisible];
-    //self.mapViewController.managedObjectContext = self.managedObjectContext;
     [self setupDefaults];
     return YES;
 }
@@ -242,6 +242,9 @@
     
     //write the changes to disk
     [defaults synchronize];
+    
+    // Kick off a network update
+    [self.mapViewController.remoteHandler checkForLocationUpdates];
 }
 
 @end

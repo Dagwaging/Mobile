@@ -86,7 +86,7 @@
                              animated:NO];
     
     [self loadStoredLocations];
-    [self.remoteHandler checkForLocationUpdates];
+    //[self.remoteHandler checkForLocationUpdates];
     [self refreshPreferences];
 }
 
