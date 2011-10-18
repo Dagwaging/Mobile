@@ -182,8 +182,6 @@
                                           host:fullHost
                                           path:serverPath];
     
-    NSLog(@"Full URL: %@", url.absoluteString);
-    
     [fullHost release];
     
     NSURLRequest *request = [NSURLRequest requestWithURL:url];

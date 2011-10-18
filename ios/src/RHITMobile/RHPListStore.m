@@ -26,63 +26,59 @@
 
 @interface RHPListStore ()
 
-@property (nonatomic, readonly) NSDictionary *data;
-
-- (void)saveData;
+@property (nonatomic, retain) NSString *path;
+@property (nonatomic, retain) NSDictionary *data;
 
 @end
 
 
 @implementation RHPListStore
 
+@synthesize path;
+
+- (id)init {
+    self = [super init];
+    
+    NSError *error;
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+                                                         NSUserDomainMask,
+                                                         YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    self.path = [documentsDirectory
+                 stringByAppendingPathComponent:@"RHITMobileValues.plist"];
+        
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+        
+    if (![fileManager fileExistsAtPath:self.path]) {
+        NSString *bundle = [[NSBundle mainBundle]
+                            pathForResource:kRHPListStoreFile
+                            ofType:@"plist"];
+            
+        [fileManager copyItemAtPath:bundle toPath:self.path error:&error];
+    }
+
+    return self;
+}
+
 - (NSString *)currentDataVersion {
     return [self.data valueForKey:kRHCurrentDataVersionKey];
 }
 
 - (void)setCurrentDataVersion:(NSString *)inCurrentDataVersion {
-    [self.data setValue:inCurrentDataVersion forKey:kRHCurrentDataVersionKey];
-    [self saveData];
+    NSDictionary *newDict = [NSMutableDictionary dictionaryWithDictionary:self.data];
+    [newDict setValue:inCurrentDataVersion forKey:kRHCurrentDataVersionKey];
+    self.data = newDict;
 }
 
 #pragma mark -
 #pragma mark Private Methods
 
 - (NSDictionary *)data {
-    NSData *plistData;  
-    NSString *error;  
-    NSPropertyListFormat format;  
-    id plist;  
-    
-    NSString *localizedPath = [[NSBundle mainBundle]
-                               pathForResource:kRHPListStoreFile
-                               ofType:@"plist"];  
-    plistData = [NSData dataWithContentsOfFile:localizedPath];   
-    
-    plist = [NSPropertyListSerialization
-             propertyListFromData:plistData
-             mutabilityOption:NSPropertyListImmutable
-             format:&format
-             errorDescription:&error]; 
-    
-    return (NSDictionary *)plist;  
+    return [NSDictionary dictionaryWithContentsOfFile:self.path];
 }
 
-- (void)saveData {
-    NSData *xmlData;  
-    NSString *error;   
-    
-    NSString *localizedPath = [[NSBundle mainBundle]
-                               pathForResource:kRHPListStoreFile
-                               ofType:@"plist"];  
-    
-    xmlData = [NSPropertyListSerialization
-               dataFromPropertyList:self.data
-               format:NSPropertyListXMLFormat_v1_0
-               errorDescription:&error];
-    
-    if (xmlData) {  
-        [xmlData writeToFile:localizedPath atomically:YES];  
-    }
+- (void)setData:(NSDictionary *)inData {
+    [inData writeToFile:path atomically:YES];
 }
 
 @end

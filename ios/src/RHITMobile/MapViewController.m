@@ -74,8 +74,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.managedObjectContext = [(RHITMobileAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext]; 
-    NSLog(@"After managedObjectContext: %@",  managedObjectContext);
+    self.managedObjectContext = [(RHITMobileAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
     
     // Initialize what's visible on the map
     CLLocationCoordinate2D center = {kRHCampusCenterLatitude,
