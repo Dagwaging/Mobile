@@ -26,7 +26,7 @@
 
 /// Callback if new locations that should be displayed on the map are provided
 /// by the server.
-- (void)didFindMapLevelLocationUpdates:(NSSet *)locations;
+- (void)didFindMapLevelLocationUpdates;
 
 /// Callback when something goes wrong checking for new location data.
 - (void)didFailCheckingForLocationUpdatesWithError:(NSError *)error;

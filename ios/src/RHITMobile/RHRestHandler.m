@@ -359,8 +359,8 @@
     NSError *saveError = nil;
     [self.context save:&saveError];
     
-    [delegate performSelectorOnMainThread:@selector(didFindMapLevelLocationUpdates:)
-                               withObject:locations
+    [delegate performSelectorOnMainThread:@selector(didFindMapLevelLocationUpdates)
+                               withObject:nil
                             waitUntilDone:NO];
 }
 

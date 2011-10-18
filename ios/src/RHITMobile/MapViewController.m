@@ -228,8 +228,8 @@
 #pragma mark -
 #pragma mark RHRemoteHandlerDelegate Methods
 
-- (void)didFindMapLevelLocationUpdates:(NSSet *)locations {
-    [self populateMapWithLocations:locations];
+- (void)didFindMapLevelLocationUpdates {
+    [self loadStoredLocations];
 }
 
 - (void)didFailCheckingForLocationUpdatesWithError:(NSError *)error {
