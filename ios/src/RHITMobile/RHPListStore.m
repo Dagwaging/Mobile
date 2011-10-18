@@ -65,7 +65,8 @@
 }
 
 - (void)setCurrentDataVersion:(NSString *)inCurrentDataVersion {
-    NSDictionary *newDict = [NSMutableDictionary dictionaryWithDictionary:self.data];
+    NSDictionary *newDict = [NSMutableDictionary
+                             dictionaryWithDictionary:self.data];
     [newDict setValue:inCurrentDataVersion forKey:kRHCurrentDataVersionKey];
     self.data = newDict;
 }
