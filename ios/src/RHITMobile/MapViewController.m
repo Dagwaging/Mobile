@@ -87,8 +87,6 @@
                              animated:NO];
     
     [self loadStoredLocations];
-    //[self.remoteHandler checkForLocationUpdates];
-    [self refreshPreferences];
 }
 
 - (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)io {

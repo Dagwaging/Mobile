@@ -83,7 +83,7 @@
      application was inactive. If the application was previously in the 
      background, optionally refresh the user interface.
      */
-    [self.mapViewController refreshPreferences];
+    [self setupDefaults];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
@@ -245,6 +245,8 @@
     
     // Kick off a network update
     [self.mapViewController.remoteHandler checkForLocationUpdates];
+    
+    [self.mapViewController refreshPreferences];
 }
 
 @end
