@@ -205,7 +205,6 @@
     NSInteger statusCode = ((NSHTTPURLResponse *) response).statusCode;
     
     if (statusCode == 204) {
-        NSLog(@"NO DATA");
         return;
     } else if (statusCode != 200) {
         NSString *errorString = [[NSString alloc] initWithFormat:@"Problem "

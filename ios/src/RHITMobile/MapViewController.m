@@ -59,6 +59,7 @@
 @synthesize placesButton;
 @synthesize zoomLevelLabel;
 @synthesize overlaysLabel;
+@synthesize annotationsLabel;
 @synthesize fetchedResultsController;
 @synthesize managedObjectContext;
 @synthesize remoteHandler = remoteHandler_;
@@ -124,6 +125,7 @@
     
     self.zoomLevelLabel.hidden = !self.debugMapInfo;
     self.overlaysLabel.hidden = !self.debugMapInfo;
+    self.annotationsLabel.hidden = !self.debugMapInfo;
     
     NSArray *items = [NSArray alloc];
     
@@ -236,6 +238,12 @@
     self.overlaysLabel.text = overlayText;
     
     [overlayText release];
+    
+    NSString *annotationsText = [[NSString alloc] initWithFormat:@"Selected Annotations: %@", self.mapView.selectedAnnotations];
+    
+    self.annotationsLabel.text = annotationsText;
+    
+    [annotationsText release];
 }
 
 #pragma mark -
@@ -275,8 +283,10 @@
 }
 
 - (void)clearOverlays {
-    [mapView removeOverlay:self.currentOverlay];
-    self.currentOverlay = nil;
+    if (self.mapView.annotations == nil || self.mapView.annotations.count == 0) {
+        [mapView removeOverlay:self.currentOverlay];
+        self.currentOverlay = nil;
+    }
 }
 
 #pragma mark -

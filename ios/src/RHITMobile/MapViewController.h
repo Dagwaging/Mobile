@@ -47,6 +47,8 @@
 
 @property (nonatomic, retain) IBOutlet UILabel *overlaysLabel;
 
+@property (nonatomic, retain) IBOutlet UILabel *annotationsLabel;
+
 /// Core Data fetched results controller.
 @property (nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
 

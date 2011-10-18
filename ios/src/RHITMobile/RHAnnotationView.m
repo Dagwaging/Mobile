@@ -75,15 +75,10 @@
 - (void)setSelected:(BOOL)inSelected {
     if (inSelected) {
         [delegate focusMapViewToLocation:[[self storedAnnotation] location]];
-    }
-    [super setSelected:inSelected];
-}
-
-- (void)setHighlighted:(BOOL)inHighlighted {
-    if (!inHighlighted) {
+    } else {
         [delegate clearOverlays];
     }
-    [super setHighlighted:inHighlighted];
+    [super setSelected:inSelected];
 }
 
 - (void)updateAnnotationVisibility {

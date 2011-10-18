@@ -48,7 +48,7 @@
 						<string key="NSFrameSize">{320, 367}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView" ref="342570234"/>
+						<reference key="NSNextKeyView" ref="301335116"/>
 						<string key="NSReuseIdentifierKey">_NS:774</string>
 						<bool key="IBUIClipsSubviews">YES</bool>
 						<bool key="IBUIMultipleTouchEnabled">YES</bool>
@@ -106,7 +106,7 @@
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						<string key="IBUIText">Zoom Level</string>
-						<object class="NSColor" key="IBUITextColor" id="611551922">
+						<object class="NSColor" key="IBUITextColor" id="747427234">
 							<int key="NSColorSpace">1</int>
 							<bytes key="NSRGB">MCAwIDAAA</bytes>
 						</object>
@@ -120,13 +120,13 @@
 							<int key="traits">0</int>
 							<double key="pointSize">17</double>
 						</object>
-						<object class="NSFont" key="IBUIFont" id="4580467">
+						<object class="NSFont" key="IBUIFont" id="419316503">
 							<string key="NSName">Helvetica</string>
 							<double key="NSSize">17</double>
 							<int key="NSfFlags">16</int>
 						</object>
 					</object>
-					<object class="IBUILabel" id="342570234">
+					<object class="IBUILabel" id="301335116">
 						<reference key="NSNextResponder" ref="191373211"/>
 						<int key="NSvFlags">288</int>
 						<string key="NSFrameSize">{320, 21}</string>
@@ -140,16 +140,37 @@
 						<int key="IBUIContentMode">7</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-						<string key="IBUIText">Current Overlay(s)</string>
-						<reference key="IBUITextColor" ref="611551922"/>
+						<string key="IBUIText">Current Overlays:</string>
+						<reference key="IBUITextColor" ref="747427234"/>
 						<nil key="IBUIHighlightedColor"/>
 						<int key="IBUIBaselineAdjustment">1</int>
 						<float key="IBUIMinimumFontSize">10</float>
-						<object class="IBUIFontDescription" key="IBUIFontDescription">
+						<object class="IBUIFontDescription" key="IBUIFontDescription" id="656726746">
 							<int key="type">1</int>
 							<double key="pointSize">17</double>
 						</object>
-						<reference key="IBUIFont" ref="4580467"/>
+						<reference key="IBUIFont" ref="419316503"/>
+					</object>
+					<object class="IBUILabel" id="194596551">
+						<reference key="NSNextResponder" ref="191373211"/>
+						<int key="NSvFlags">288</int>
+						<string key="NSFrame">{{0, 20}, {320, 21}}</string>
+						<reference key="NSSuperview" ref="191373211"/>
+						<reference key="NSWindow"/>
+						<string key="NSReuseIdentifierKey">_NS:328</string>
+						<reference key="IBUIBackgroundColor" ref="951135286"/>
+						<bool key="IBUIOpaque">NO</bool>
+						<bool key="IBUIClipsSubviews">YES</bool>
+						<int key="IBUIContentMode">7</int>
+						<bool key="IBUIUserInteractionEnabled">NO</bool>
+						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
+						<string key="IBUIText">Selected Annotations:</string>
+						<reference key="IBUITextColor" ref="747427234"/>
+						<nil key="IBUIHighlightedColor"/>
+						<int key="IBUIBaselineAdjustment">1</int>
+						<float key="IBUIMinimumFontSize">10</float>
+						<reference key="IBUIFontDescription" ref="656726746"/>
+						<reference key="IBUIFont" ref="419316503"/>
 					</object>
 				</object>
 				<string key="NSFrame">{{0, 20}, {320, 411}}</string>
@@ -225,9 +246,17 @@
 					<object class="IBCocoaTouchOutletConnection" key="connection">
 						<string key="label">overlaysLabel</string>
 						<reference key="source" ref="372490531"/>
-						<reference key="destination" ref="342570234"/>
+						<reference key="destination" ref="301335116"/>
 					</object>
 					<int key="connectionID">27</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">annotationsLabel</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="194596551"/>
+					</object>
+					<int key="connectionID">29</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchOutletConnection" key="connection">
@@ -273,7 +302,8 @@
 							<reference ref="147431762"/>
 							<reference ref="918389356"/>
 							<reference ref="472646777"/>
-							<reference ref="342570234"/>
+							<reference ref="301335116"/>
+							<reference ref="194596551"/>
 						</object>
 						<reference key="parent" ref="0"/>
 					</object>
@@ -326,7 +356,12 @@
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">26</int>
-						<reference key="object" ref="342570234"/>
+						<reference key="object" ref="301335116"/>
+						<reference key="parent" ref="191373211"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">28</int>
+						<reference key="object" ref="194596551"/>
 						<reference key="parent" ref="191373211"/>
 					</object>
 				</object>
@@ -346,6 +381,7 @@
 					<string>17.IBPluginDependency</string>
 					<string>22.IBPluginDependency</string>
 					<string>26.IBPluginDependency</string>
+					<string>28.IBPluginDependency</string>
 					<string>8.IBPluginDependency</string>
 				</object>
 				<object class="NSMutableArray" key="dict.values">
@@ -353,6 +389,7 @@
 					<string>MapViewController</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>UIResponder</string>
+					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -376,7 +413,7 @@
 				<reference key="dict.values" ref="0"/>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">27</int>
+			<int key="maxID">29</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -388,6 +425,7 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>annotationsLabel</string>
 							<string>mapView</string>
 							<string>overlaysLabel</string>
 							<string>placesButton</string>
@@ -398,6 +436,7 @@
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>UILabel</string>
 							<string>MKMapView</string>
 							<string>UILabel</string>
 							<string>UIBarButtonItem</string>
@@ -411,6 +450,7 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>annotationsLabel</string>
 							<string>mapView</string>
 							<string>overlaysLabel</string>
 							<string>placesButton</string>
@@ -421,6 +461,10 @@
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<object class="IBToOneOutletInfo">
+								<string key="name">annotationsLabel</string>
+								<string key="candidateClassName">UILabel</string>
+							</object>
 							<object class="IBToOneOutletInfo">
 								<string key="name">mapView</string>
 								<string key="candidateClassName">MKMapView</string>
