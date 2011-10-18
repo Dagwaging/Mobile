@@ -1,0 +1,3 @@
+[submodule "android/src/android-mapviewballoons"]
+	path = android/src/android-mapviewballoons
+	url = git@github.com:RHIT/android-mapviewballoons.git
