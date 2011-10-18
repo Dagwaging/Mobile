@@ -76,7 +76,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.managedObjectContext = [(RHITMobileAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+    self.managedObjectContext = [(RHITMobileAppDelegate *)
+                                 [[UIApplication sharedApplication]
+                                  delegate] managedObjectContext];
     
     // Initialize what's visible on the map
     CLLocationCoordinate2D center = {kRHCampusCenterLatitude,
@@ -146,7 +148,8 @@
 
 - (RHRemoteHandler *)remoteHandler {
     if (remoteHandler_ == nil) {
-        remoteHandler_ = (RHRemoteHandler *) [[RHRestHandler alloc]
+        remoteHandler_ = (RHRemoteHandler *) [RHRestHandler alloc];
+        remoteHandler_ = [remoteHandler_
                           initWithContext:self.managedObjectContext
                           delegate:(RHRemoteHandlerDelegate *)self];
     }
@@ -191,7 +194,8 @@
         [annotationView setDraggable:NO];
         [annotationView setDelegate:(RHAnnotationViewDelegate *)self];
         
-        UIButton *newButton = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
+        UIButton *newButton = [UIButton
+                               buttonWithType:UIButtonTypeDetailDisclosure];
         [annotationView setRightCalloutAccessoryView:newButton];
         
         annotation.annotationView = annotationView;
@@ -233,13 +237,17 @@
     self.zoomLevelLabel.text = zoomLevelText;
     [zoomLevelText release];
     
-    NSString *overlayText = [[NSString alloc] initWithFormat:@"Current Overlays: %@", self.mapView.overlays];
+    NSString *overlayText = [[NSString alloc]
+                             initWithFormat:@"Current Overlays: %@",
+                             self.mapView.overlays];
     
     self.overlaysLabel.text = overlayText;
     
     [overlayText release];
     
-    NSString *annotationsText = [[NSString alloc] initWithFormat:@"Selected Annotations: %@", self.mapView.selectedAnnotations];
+    NSString *annotationsText = [[NSString alloc]
+                                 initWithFormat:@"Selected Annotations: %@",
+                                 self.mapView.selectedAnnotations];
     
     self.annotationsLabel.text = annotationsText;
     
@@ -283,7 +291,8 @@
 }
 
 - (void)clearOverlays {
-    if (self.mapView.annotations == nil || self.mapView.annotations.count == 0) {
+    if (self.mapView.annotations == nil ||
+        self.mapView.annotations.count == 0) {
         [mapView removeOverlay:self.currentOverlay];
         self.currentOverlay = nil;
     }
@@ -294,9 +303,11 @@
 
 - (void)loadStoredLocations {
     // Describe the type of entity we'd like to retrieve
-    NSEntityDescription *entityDescription = [NSEntityDescription
-                                              entityForName:@"Location"
-                                              inManagedObjectContext:managedObjectContext];
+    NSEntityDescription *entityDescription;
+    entityDescription = [NSEntityDescription
+                         entityForName:@"Location"
+                         inManagedObjectContext:managedObjectContext];
+    
     NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
     [request setEntity:entityDescription];
     
@@ -307,7 +318,8 @@
     
     // Retrieve what we hope is our created object
     NSError *error = nil;
-    NSArray *results = [managedObjectContext executeFetchRequest:request error:&error];
+    NSArray *results = [managedObjectContext executeFetchRequest:request
+                                                           error:&error];
     
     [self populateMapWithLocations:(NSSet *)results];
 }
