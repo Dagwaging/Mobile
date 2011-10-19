@@ -300,8 +300,8 @@
 }
 
 - (void)clearOverlays {
-    if (self.mapView.annotations == nil ||
-        self.mapView.annotations.count == 0) {
+    if (self.mapView.selectedAnnotations == nil ||
+        self.mapView.selectedAnnotations.count == 0) {
         [mapView removeOverlay:self.currentOverlay];
         self.currentOverlay = nil;
     }
