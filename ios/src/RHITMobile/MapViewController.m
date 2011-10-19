@@ -424,9 +424,6 @@
 }
 
 - (void)clearAllAnnotations {
-//    if (self.temporaryAnnotations != nil && self.temporaryAnnotations.count > 0) {
-//        [self.mapView deselectAnnotation:[self.temporaryAnnotations objectAtIndex:0] animated:NO];
-//    }
     [self.mapView removeAnnotations:self.temporaryAnnotations];
     self.temporaryAnnotations = nil;
 }
