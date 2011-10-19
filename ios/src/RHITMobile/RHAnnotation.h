@@ -34,6 +34,8 @@
 /// Determines whether or not text or polygons will be rendered.
 @property (nonatomic, assign) BOOL visible;
 
+@property (nonatomic, readonly) BOOL area;
+
 /// Location model to pull data from.
 @property (nonatomic, retain) RHLocation *location;
 

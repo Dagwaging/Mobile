@@ -73,16 +73,11 @@
 }
 
 - (IBAction)goToLocation:(id)sender {
-    RHAnnotation *annotation = (RHAnnotation *)[self.mapViewController.quickListAnnotations objectAtIndex:currentSelection_];
-    if (annotation.location.visibleZoomLevel.intValue > 0) {
-        [self.mapViewController.mapView
-         selectAnnotation:annotation animated:YES];
-        [self dismissModalViewControllerAnimated:YES];
-    } else {
-        [self dismissModalViewControllerAnimated:YES];
-        [self.mapViewController focusMapViewToTemporaryAnnotation:annotation];
-    }
-
+    RHAnnotation *annotation = (RHAnnotation *)
+        [self.mapViewController.quickListAnnotations
+         objectAtIndex:currentSelection_];
+    [self.mapViewController focusMapViewToAnnotation:annotation];
+    [self dismissModalViewControllerAnimated:YES];
 }
 
 - (IBAction)cancel:(id)sender {

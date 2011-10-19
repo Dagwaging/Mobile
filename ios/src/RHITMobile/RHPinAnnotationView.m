@@ -26,9 +26,14 @@
 
 - (void)setSelected:(BOOL)selected {
     if (!selected) {
-        [self.mapViewController performSelector:@selector(clearOverlays) withObject:nil afterDelay:0.01];
-        [self.mapViewController performSelector:@selector(clearOverlays) withObject:nil afterDelay:0.3];
-
+        [self.mapViewController
+         performSelector:@selector(clearUnusedAnnotations)
+         withObject:nil
+         afterDelay:0.01];
+        [self.mapViewController
+         performSelector:@selector(clearUnusedAnnotations)
+         withObject:nil
+         afterDelay:0.3];
     }
     
     [super setSelected:selected];

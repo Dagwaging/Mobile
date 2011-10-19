@@ -328,35 +328,107 @@
 #pragma mark -
 #pragma mark RHAnnotationView Delegate Methods
 
-- (void)focusMapViewToLocation:(RHAnnotation *)annotation {
-    RHLocation *location = annotation.location;
-    
-    [self.mapView removeOverlay:self.currentOverlay];
-    RHLocationOverlay *overlay = [[RHLocationOverlay alloc]
-                                  initWithLocation:location];
-    
-    [self.mapView removeAnnotations:self.temporaryAnnotations];
-    self.temporaryAnnotations = nil;
-    
-    NSLog(@"COORDINATE: %f, %f", location.labelLocation.coordinate.latitude, location.labelLocation.coordinate.longitude);
-    
-    [self.mapView setCenterCoordinate:location.labelLocation.coordinate
-                            zoomLevel:kRHLocationFocusZoomLevel
-                             animated:YES];
-    
-    [self.mapView addOverlay:overlay];
-    self.currentOverlay = overlay;
-    [overlay release];
+- (void)focusMapViewToAnnotation:(RHAnnotation *)annotation {
+    if (annotation.area) {
+        [self focusMapViewToAreaAnnotation:annotation selected:NO];
+    } else {
+        [self focusMapViewToPointAnnotation:annotation];
+    }
 }
 
-- (void)clearOverlays {
+- (void)focusMapViewToAreaAnnotation:(RHAnnotation *)annotation
+                            selected:(BOOL)selected {
+
+    if (!selected) {
+        [self clearAllDynamicMapArtifacts];
+        [self.mapView selectAnnotation:annotation animated:YES];
+        return;
+    }
+    
+    [self clearAllOverlays];
+    [self clearUnusedAnnotations];
+    
+    self.currentOverlay = [[[RHLocationOverlay alloc]
+                            initWithLocation:annotation.location]
+                           autorelease];
+    [self.mapView addOverlay:self.currentOverlay];
+    [self.mapView
+     setCenterCoordinate:annotation.location.labelLocation.coordinate
+     zoomLevel:kRHLocationFocusZoomLevel
+     animated:YES];
+}
+
+- (void)focusMapViewToPointAnnotation:(RHAnnotation *)annotation {
+    [self clearAllDynamicMapArtifacts];
+    self.temporaryAnnotations = [NSArray arrayWithObject:annotation];
+    [self.mapView addAnnotation:annotation];
+    [self.mapView selectAnnotation:annotation animated:NO];
+    [self.mapView
+     setCenterCoordinate:annotation.location.labelLocation.coordinate
+     zoomLevel:kRHLocationFocusZoomLevel
+     animated:YES];
+}
+
+- (void)clearUnusedDynamicMapArtifacts {
+    [self clearUnusedAnnotations];
+    [self clearUnusedOverlays];
+}
+
+- (void)clearUnusedAnnotations {
     if (self.mapView.selectedAnnotations == nil ||
         self.mapView.selectedAnnotations.count == 0) {
-        [self.mapView removeOverlay:self.currentOverlay];
-        [self.mapView removeAnnotations:self.temporaryAnnotations];
-        self.temporaryAnnotations = nil;
-        self.currentOverlay = nil;
+        [self clearAllAnnotations];
+        return;
     }
+    
+    for (id annotationId in self.mapView.selectedAnnotations) {
+        if ([annotationId isKindOfClass:[RHAnnotation class]]) {
+            RHAnnotation *annotation = (RHAnnotation *)annotationId;
+            if (!annotation.area) {
+                return;
+            }
+        }
+    }
+    
+
+    [self clearAllAnnotations];
+}
+
+- (void)clearUnusedOverlays {
+    if (self.mapView.selectedAnnotations == nil ||
+        self.mapView.selectedAnnotations.count == 0) {
+        [self clearAllOverlays];
+        return;
+    }
+    
+    for (id annotationId in self.mapView.selectedAnnotations) {
+        if ([annotationId isKindOfClass:[RHAnnotation class]]) {
+            RHAnnotation *annotation = (RHAnnotation *)annotationId;
+            if (annotation.area) {
+                return;
+            }
+        }
+    }
+    
+    [self clearAllOverlays];
+}
+
+- (void)clearAllDynamicMapArtifacts {
+    [self clearAllAnnotations];
+    [self clearAllOverlays];
+}
+
+- (void)clearAllOverlays {
+    [self.mapView removeOverlay:self.currentOverlay];
+    self.currentOverlay = nil;
+}
+
+- (void)clearAllAnnotations {
+//    if (self.temporaryAnnotations != nil && self.temporaryAnnotations.count > 0) {
+//        [self.mapView deselectAnnotation:[self.temporaryAnnotations objectAtIndex:0] animated:NO];
+//    }
+    [self.mapView removeAnnotations:self.temporaryAnnotations];
+    self.temporaryAnnotations = nil;
 }
 
 #pragma mark -
