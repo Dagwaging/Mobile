@@ -6,5 +6,9 @@ namespace RhitMobile.MapSource {
     /// CoreRoad: Built-in Bing road tile source
     /// Road: Custom Bing road tile source
     /// </summary>
-    public enum BingType { Aerial, CoreAerial, CoreRoad, Road }
+    public enum BingType {
+        Aerial = 'a',
+        Hybrid = 'h',
+        Road = 'r',
+    }
 }

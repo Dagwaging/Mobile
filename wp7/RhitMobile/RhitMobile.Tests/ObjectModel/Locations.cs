@@ -1,20 +1,10 @@
-﻿using System;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Ink;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
+﻿using System.Collections.Generic;
 using System.Device.Location;
-using RhitMobile.ObjectModel;
 using Microsoft.Phone.Controls.Maps;
+using RhitMobile.ObjectModel;
 
-namespace RhitMobile {
+namespace RhitMobile.Tests {
 	public class Locations {
-
         public static RhitLocation LOCATION_RHIT = new RhitLocation(39.4820263, -87.3248677) {
             Label = ""
         };
@@ -223,6 +213,27 @@ namespace RhitMobile {
                 new GeoCoordinate(39.482327633399755,-87.32594587668228),
 			}
 		};
+
+        public static List<RhitLocation> ALL = new List<RhitLocation>() {
+            LOCATION_ATO,
+            LOCATION_BSB,
+            LOCATION_CIRLCE_K,
+            LOCATION_CRAPO,
+            LOCATION_FACILITIES,
+            LOCATION_HADLEY,
+            LOCATION_HATFIELD,
+            LOCATION_LAMBDA_CHI,
+            LOCATION_LOGAN,
+            LOCATION_MOENCH,
+            LOCATION_MYERS,
+            LOCATION_OLIN,
+            LOCATION_PUBLIC_SAFETY,
+            LOCATION_RECYCLING_CENTER,
+            LOCATION_RHIT,
+            LOCATION_ROTZ_LAB,
+            LOCATION_SKINNER,
+            LOCATION_TRIANGLE,
+        };
 
 	}
 }

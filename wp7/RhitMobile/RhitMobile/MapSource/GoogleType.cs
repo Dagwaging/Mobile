@@ -10,6 +10,6 @@ namespace RhitMobile.MapSource {
         Physical = 't',
         PhysicalHybrid = 'p',
         StreetOverlay = 'h',
-        WaterOverlay = 'r'
+        WaterOverlay = 'r',
     }
 }

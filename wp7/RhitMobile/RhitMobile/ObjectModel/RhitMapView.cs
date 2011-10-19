@@ -142,7 +142,7 @@ namespace RhitMobile.ObjectModel {
             get { return _map; }
             private set {
                 _map = value;
-                _map.CredentialsProvider = new ApplicationIdCredentialsProvider(App.Id);
+                _map.CredentialsProvider = new ApplicationIdCredentialsProvider(App.MapId);
                 _map.MouseLeftButtonUp += new System.Windows.Input.MouseButtonEventHandler(Map_MouseLeftButtonUp);
                 ZoomLevel = _map.ZoomLevel;
             }
@@ -240,9 +240,8 @@ namespace RhitMobile.ObjectModel {
         private void CreateAvailableSources() {
             TileSources = new List<BaseTileSource>() {
                 new BaseBingSource() { Name = "Aerial", MapType = BingType.Aerial},
+                new BaseBingSource() { Name = "Hybrid", MapType = BingType.Hybrid},
                 new BaseBingSource() { Name = "Road", MapType = BingType.Road},
-                new BaseBingSource() { Name = "Core Aerial", MapType = BingType.CoreAerial},
-                new BaseBingSource() { Name = "Core Road", MapType = BingType.CoreRoad},
                 new BaseGoogleSource() {Name = "Hybrid", MapType = GoogleType.Hybrid},
                 new BaseGoogleSource() {Name = "Physical", MapType = GoogleType.Physical},
                 new BaseGoogleSource() {Name = "Physical Hybrid", MapType = GoogleType.PhysicalHybrid},
@@ -252,8 +251,8 @@ namespace RhitMobile.ObjectModel {
                 new OsmaRender() {Name = "Osma Render"},
             };
             OverlaySources = new List<BaseTileSource>() {
-                new BaseGoogleSource() {Name = "Google Street", MapType = GoogleType.StreetOverlay},
-                new BaseGoogleSource() {Name = "Google Street", MapType = GoogleType.WaterOverlay},
+                new BaseGoogleSource() {Name = "Google Street Overlays", MapType = GoogleType.StreetOverlay},
+                new BaseGoogleSource() {Name = "Google Water Overlays", MapType = GoogleType.WaterOverlay},
                 new RoseTileOverlay() { Name = "RHIT Floor Plans"},
             };
         }
@@ -362,7 +361,7 @@ namespace RhitMobile.ObjectModel {
         /// Makes Rose-Hulman is visible on the map.
         /// </summary>
         public void GoToRhit() {
-            Map.Center = Locations.LOCATION_RHIT.Center;
+            Map.Center = App.LOCATION_RHIT.Center;
             ZoomLevel = 16; //TODO: Don't hard code numbers
         }
         

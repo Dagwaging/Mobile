@@ -103,8 +103,14 @@ namespace RhitMobile.Services {
             string requestString;
             if(version > 0) requestString = BaseAddress + "/mapareas?version=" + version.ToString();
             else requestString = BaseAddress + "/mapareas";
-
-            HttpWebRequest request = (HttpWebRequest) WebRequest.Create(requestString);
+            HttpWebRequest request;
+            try {
+                request = (HttpWebRequest) WebRequest.Create(requestString);
+            } catch {
+                //TODO: Actually do something here
+                //Raise error or notify what happened
+                return;
+            }
             request.Method = "POST";
             request.ContentType = "application/json; charset=utf-8";
             request.AllowAutoRedirect = true;

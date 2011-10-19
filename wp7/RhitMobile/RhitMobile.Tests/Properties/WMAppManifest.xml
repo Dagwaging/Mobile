@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 
 <Deployment xmlns="http://schemas.microsoft.com/windowsphone/2009/deployment" AppPlatformVersion="7.0">
-  <App xmlns="" ProductID="{269f763e-c995-4fbc-b556-55ccb53cea99}" Title="RhitMobile" RuntimeType="Silverlight" Version="1.0.0.0" Genre="apps.normal"  Author="RhitMobile author" Description="Sample description" Publisher="RhitMobile">
+  <App xmlns="" ProductID="{d14d988a-c228-4f7b-8670-e6219546f23d}" Title="RhitMobile.Tests" RuntimeType="Silverlight" Version="1.0.0.0" Genre="apps.normal"  Author="RhitMobile.Tests author" Description="Sample description" Publisher="RhitMobile.Tests">
     <IconPath IsRelative="true" IsResource="false">ApplicationIcon.png</IconPath>
     <Capabilities>
       <Capability Name="ID_CAP_GAMERSERVICES"/>
@@ -17,14 +17,14 @@
       <Capability Name="ID_CAP_WEBBROWSERCOMPONENT"/>
     </Capabilities>
     <Tasks>
-      <DefaultTask  Name ="_default" NavigationPage="MapPage.xaml"/>
+      <DefaultTask  Name ="_default" NavigationPage="MainPage.xaml"/>
     </Tasks>
     <Tokens>
-      <PrimaryToken TokenID="RhitMobileToken" TaskName="_default">
+      <PrimaryToken TokenID="RhitMobile.TestsToken" TaskName="_default">
         <TemplateType5>
           <BackgroundImageURI IsRelative="true" IsResource="false">Background.png</BackgroundImageURI>
           <Count>0</Count>
-          <Title>RhitMobile</Title>
+          <Title>RhitMobile.Tests</Title>
         </TemplateType5>
       </PrimaryToken>
     </Tokens>

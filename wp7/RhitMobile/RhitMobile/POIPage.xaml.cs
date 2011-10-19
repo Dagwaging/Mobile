@@ -36,7 +36,7 @@ namespace RhitMobile {
             if(lbi == null) return;
             lbi.Foreground = new SolidColorBrush(Colors.Green);
 
-            this.SaveState("SelectedOutline", selected);
+            RhitMapView.Instance.Select(selected);
 
             if(NavigationService.CanGoBack) NavigationService.GoBack();
             else NavigationService.Navigate(new Uri("/MapPage.xaml", UriKind.Relative));

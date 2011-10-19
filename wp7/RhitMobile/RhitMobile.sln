@@ -3,10 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RhitMobile", "RhitMobile\RhitMobile.csproj", "{5A8ECBE3-1DF1-42AD-A16D-BAF1BE0FB72D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RhitMobile.Tests", "RhitMobile.Tests\RhitMobile.Tests.csproj", "{B8E67106-8F10-414A-9D4D-673E17088174}"
+EndProject
 Global
-	GlobalSection(TestCaseManagementSettings) = postSolution
-		CategoryFile = RhitMobile1.vsmdi
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -18,6 +17,12 @@ Global
 		{5A8ECBE3-1DF1-42AD-A16D-BAF1BE0FB72D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5A8ECBE3-1DF1-42AD-A16D-BAF1BE0FB72D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5A8ECBE3-1DF1-42AD-A16D-BAF1BE0FB72D}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{B8E67106-8F10-414A-9D4D-673E17088174}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8E67106-8F10-414A-9D4D-673E17088174}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8E67106-8F10-414A-9D4D-673E17088174}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{B8E67106-8F10-414A-9D4D-673E17088174}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8E67106-8F10-414A-9D4D-673E17088174}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8E67106-8F10-414A-9D4D-673E17088174}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

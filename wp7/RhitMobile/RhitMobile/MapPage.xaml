@@ -26,7 +26,7 @@
     <phone:PhoneApplicationPage.FontSize> <StaticResource ResourceKey="PhoneFontSizeNormal"/> </phone:PhoneApplicationPage.FontSize>
     <phone:PhoneApplicationPage.Foreground> <StaticResource ResourceKey="PhoneForegroundBrush"/> </phone:PhoneApplicationPage.Foreground>
     
-    <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
+    <Grid x:Name="ContentPanel" Grid.Row="1" Margin="0,0,0,0">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>

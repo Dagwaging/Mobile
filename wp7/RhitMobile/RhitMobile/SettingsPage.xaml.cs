@@ -1,45 +1,66 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 using System.Windows;
-using System.Windows.Navigation;
+using System.Windows.Controls;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Animation;
+using System.Windows.Shapes;
 using Microsoft.Phone.Controls;
-using RhitMobile.MapSource;
+using System.Windows.Navigation;
 using RhitMobile.ObjectModel;
+using RhitMobile.MapSource;
 
 namespace RhitMobile {
     public partial class SettingsPage : PhoneApplicationPage {
-        List<ListPickerItem> bingTypes;
-        List<ListPickerItem> googleTypes;
+        private List<ListPickerObject> bingTypes;
+        private List<ListPickerObject> googleTypes;
+        private List<ToggleSwitch> toggleSwitches;
 
         /// <summary> Constructor for the application's settings page. </summary>
         public SettingsPage() {
             InitializeComponent();
-            List<ListPickerItem> sources = new List<ListPickerItem>() {
-                new ListPickerItem() { Name = "Bing", },
-                new ListPickerItem() { Name = "Google", },
-                new ListPickerItem() { Name = "OSM Mapnik", },
-                new ListPickerItem() { Name = "Osma Render", },
+            List<ListPickerObject> sources = new List<ListPickerObject>() {
+                new ListPickerObject() { Name = "Bing", },
+                new ListPickerObject() { Name = "Google", },
+                new ListPickerObject() { Name = "OSM Mapnik", },
+                new ListPickerObject() { Name = "Osma Render", },
             };
             mapSourcePicker.ItemsSource = sources;
             mapSourcePicker.SelectionChanged += new System.Windows.Controls.SelectionChangedEventHandler(mapSourcePicker_SelectionChanged);
 
-            bingTypes = new List<ListPickerItem>() {
-                new ListPickerItem() { Name = "Aerial", },
-                new ListPickerItem() { Name = "Road", },
-                new ListPickerItem() { Name = "Core Aerial", },
-                new ListPickerItem() { Name = "Core Road", },
+            bingTypes = new List<ListPickerObject>() {
+                new ListPickerObject() { Name = "Aerial", },
+                new ListPickerObject() { Name = "Hybrid", },
+                new ListPickerObject() { Name = "Road", },
             };
 
-            googleTypes = new List<ListPickerItem>() {
-                new ListPickerItem() { Name = "Hybrid", },
-                new ListPickerItem() { Name = "Physical", },
-                new ListPickerItem() { Name = "Physical Hybrid", },
-                new ListPickerItem() { Name = "Satellite", },
-                new ListPickerItem() { Name = "Street", },
-            };            
+            googleTypes = new List<ListPickerObject>() {
+                new ListPickerObject() { Name = "Hybrid", },
+                new ListPickerObject() { Name = "Physical", },
+                new ListPickerObject() { Name = "Physical Hybrid", },
+                new ListPickerObject() { Name = "Satellite", },
+                new ListPickerObject() { Name = "Street", },
+            };
+
+            List<ListPickerObject> overlays = new List<ListPickerObject>() {
+                new ListPickerObject() { Name = "Street Overlay", },
+                new ListPickerObject() { Name = "Water Overlay", },
+                new ListPickerObject() { Name = "RHIT Floor Plans", },
+            };
+
+            toggleSwitches = new List<ToggleSwitch>() {
+                floorPlanToggle,
+                waterToggle,
+                streetToggle,
+            };
         }
 
         void mapSourcePicker_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e) {
-            string sourceName = ((ListPickerItem) mapSourcePicker.SelectedItem).Name;
+            string sourceName = ((ListPickerObject) mapSourcePicker.SelectedItem).Name;
             if(sourceName == "Bing") {
                 mapTypePicker.ItemsSource = bingTypes;
                 mapTypePicker.Visibility = Visibility.Visible;
@@ -51,27 +72,23 @@ namespace RhitMobile {
             }
         }
 
-        protected override void OnNavigatedFrom(NavigationEventArgs e) {
-            string sourceName = ((ListPickerItem) mapSourcePicker.SelectedItem).Name;
-            string sourceType = ((ListPickerItem) mapTypePicker.SelectedItem).Name;
-            //this.SaveState("MapSource", source_name);
-            if (mapTypePicker.Visibility == Visibility.Collapsed)
-                RhitMapView.Instance.ChangeTileSource(sourceName);
-            else
-                RhitMapView.Instance.ChangeTileSource(sourceName, sourceType);
-
-            RhitMapView.Instance.InDebugMode = (bool) debugToggle.IsChecked;
-            RhitMapView.Instance.AreLabelsVisible = (bool) textToggle.IsChecked;
-            RhitMapView.Instance.AreOutlinesVisible = (bool) polygonToggle.IsChecked;
-
-            //this.SaveState("CurrentTileSource", sourceType);
-
-            this.SaveState("TileOverlay", tileToggle.IsChecked);
+        private void selectBase(string name) {
+            if(name == null || name == string.Empty) return;
+            foreach(ListPickerObject source in mapSourcePicker.Items)
+                if(source.Name == name)
+                    mapSourcePicker.SelectedItem = source;
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e) {
+        private void selectType(string name) {
+            if(name == null || name == string.Empty) return;
+            foreach(ListPickerObject source in mapTypePicker.Items)
+                if(source.Name == name)
+                    mapTypePicker.SelectedItem = source;
+        }
+
+        public void LoadSettings() {
             BaseTileSource source = RhitMapView.Instance.CurrentTileSource;
-            if (source is BaseBingSource) {
+            if(source is BaseBingSource) {
                 mapTypePicker.ItemsSource = bingTypes;
                 mapTypePicker.Visibility = Visibility.Visible;
                 selectBase("Bing");
@@ -86,31 +103,43 @@ namespace RhitMobile {
                 selectBase(source.Name);
             }
 
-            tileToggle.IsChecked = (bool) this.LoadState<object>("TileOverlay", false);
-
             polygonToggle.IsChecked = RhitMapView.Instance.AreOutlinesVisible;
             textToggle.IsChecked = RhitMapView.Instance.AreLabelsVisible;
-
-            //TODO: [DEBUG] Remove debugToggle before release
             debugToggle.IsChecked = RhitMapView.Instance.InDebugMode;
-        }
-        
-        private void selectBase(string name) {
-            if(name == null || name == string.Empty) return;
-            foreach(ListPickerItem source in mapSourcePicker.Items)
-                if(source.Name == name)
-                    mapSourcePicker.SelectedItem = source;
+
+            foreach(BaseTileSource overlay in RhitMapView.Instance.CurrentOverlaySources)
+                foreach(ToggleSwitch toggle in toggleSwitches)
+                    if(overlay.Name == (toggle.Header as string)) toggle.IsChecked = true;
         }
 
-        private void selectType(string name) {
-            if(name == null || name == string.Empty) return;
-            foreach(ListPickerItem source in mapTypePicker.Items)
-                if(source.Name == name)
-                    mapTypePicker.SelectedItem = source;
+        public void SaveSettings() {
+            string sourceName = ((ListPickerObject) mapSourcePicker.SelectedItem).Name;
+            string sourceType = ((ListPickerObject) mapTypePicker.SelectedItem).Name;
+            RhitMapView.Instance.ChangeTileSource(sourceName, sourceType);
+
+            RhitMapView.Instance.InDebugMode = (bool) debugToggle.IsChecked;
+            RhitMapView.Instance.AreLabelsVisible = (bool) textToggle.IsChecked;
+            RhitMapView.Instance.AreOutlinesVisible = (bool) polygonToggle.IsChecked;
+
+
+            foreach(ToggleSwitch toggle in toggleSwitches) {
+                if((bool) toggle.IsChecked)
+                    RhitMapView.Instance.AddOverlay(toggle.Header as string);
+                else
+                    RhitMapView.Instance.RemoveOverlay(toggle.Header as string);
+            }
         }
 
-        public class ListPickerItem {
-            public string Name { get; set; }
+        protected override void OnNavigatedFrom(NavigationEventArgs e) {
+            SaveSettings();
         }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e) {
+            LoadSettings();
+        }
+    }
+
+    public class ListPickerObject {
+        public string Name { get; set; }
     }
 }

@@ -6,17 +6,14 @@ using System.Resources;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("RhitMobile")]
+[assembly: AssemblyTitle("RhitMobile.Tests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Microsoft")]
-[assembly: AssemblyProduct("RhitMobile")]
+[assembly: AssemblyProduct("RhitMobile.Tests")]
 [assembly: AssemblyCopyright("Copyright © Microsoft 2011")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
-
-// Make the internal fields visible to the test project
-[assembly: InternalsVisibleTo("RhitMobile.Tests")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
@@ -24,7 +21,7 @@ using System.Resources;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("4b7de9e4-4752-41c3-b4f8-90f633131ea8")]
+[assembly: Guid("1c81a9ad-9e32-42d8-9b61-be531463e9db")]
 
 // Version information for an assembly consists of the following four values:
 //

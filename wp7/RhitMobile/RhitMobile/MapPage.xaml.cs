@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Device.Location;
 using System.Threading;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Navigation;
@@ -12,7 +13,7 @@ using Microsoft.Phone.Shell;
 using RhitMobile.Events;
 using RhitMobile.ObjectModel;
 using RhitMobile.Services;
-using System.Windows;
+using Microsoft.Silverlight.Testing;
 
 namespace RhitMobile {
     public partial class MapPage : PhoneApplicationPage {
@@ -24,6 +25,7 @@ namespace RhitMobile {
 
         public MapPage() {
             InitializeComponent();
+            Loaded += Page_Loaded;
 
             LoadMap();
 
@@ -46,17 +48,6 @@ namespace RhitMobile {
             map.VerticalAlignment = System.Windows.VerticalAlignment.Stretch;
             map.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
             map.MapZoom += new EventHandler<MapZoomEventArgs>(Map_MapZoom);
-        }
-
-        void InitGeoCordinateWatcher() {
-            _userLocationWatcher = new GeoCoordinateWatcher(GeoPositionAccuracy.High);
-
-            _userLocationWatcher.MovementThreshold = 10.0f;
-
-            _userLocationWatcher.StatusChanged += new EventHandler<GeoPositionStatusChangedEventArgs>(Watcher_StatusChanged);
-            _userLocationWatcher.PositionChanged += new EventHandler<GeoPositionChangedEventArgs<GeoCoordinate>>(Watcher_PositionChanged);
-
-            new Thread(bgWatcherUpdate).Start();
         }
 
         void InitApplicationBar() {
@@ -92,6 +83,26 @@ namespace RhitMobile {
 
             this.ApplicationBar = _appBar;
         }
+
+        void InitGeoCordinateWatcher() {
+            _userLocationWatcher = new GeoCoordinateWatcher(GeoPositionAccuracy.High);
+
+            _userLocationWatcher.MovementThreshold = 10.0f;
+
+            _userLocationWatcher.StatusChanged += new EventHandler<GeoPositionStatusChangedEventArgs>(Watcher_StatusChanged);
+            _userLocationWatcher.PositionChanged += new EventHandler<GeoPositionChangedEventArgs<GeoCoordinate>>(Watcher_PositionChanged);
+
+            new Thread(bgWatcherUpdate).Start();
+        }
+
+        void InitTesting() {
+            Content = UnitTestSystem.CreateTestPage();
+            IMobileTestPage imtp = Content as IMobileTestPage;
+
+            if(imtp != null) {
+                BackKeyPress += (x, xe) => xe.Cancel = imtp.NavigateBack();
+            }
+        }
         #endregion
 
         #region Map/Service Event Handlers
@@ -110,7 +121,7 @@ namespace RhitMobile {
 
         private void Outline_Tapped(object sender, Events.OutlineEventArgs e) {
             if(e.Outline == null) return;
-            StateManagment.SaveState(null, "SelectedOutline", RhitMapView.Instance.Select(e.Outline));
+            RhitMapView.Instance.Select(e.Outline);
         }
 
         private void SelectedPushpin_MouseLeftButtonUp(object sender, PushpinEventArgs e) {
@@ -138,11 +149,11 @@ namespace RhitMobile {
 
         #region AppBar MenuItem Event Handlers
         void Settings_Click(object sender, EventArgs e) {
-            NavigationService.Navigate(new Uri("/SettingsPage.xaml", UriKind.Relative));
+            GoToSettings();
         }
 
         void POI_Click(object sender, EventArgs e) {
-            NavigationService.Navigate(new Uri("/POIPage.xaml", UriKind.Relative));
+            GoToPoi();
         }
         #endregion
 
@@ -178,7 +189,7 @@ namespace RhitMobile {
             _userLocationWatcher.TryStart(true, TimeSpan.FromMilliseconds(60000));
         }
         #endregion
-        
+
         private void fillGrid() {
             ContentPanel.Children.Clear();
             ContentPanel.RowDefinitions.Clear();
@@ -194,20 +205,37 @@ namespace RhitMobile {
             }
         }
 
+        public void GoToSettings() {
+            NavigationService.Navigate(new Uri("/SettingsPage.xaml", UriKind.Relative));
+        }
+
+        public void GoToPoi() {
+            NavigationService.Navigate(new Uri("/POIPage.xaml", UriKind.Relative));
+        }
+
         protected override void OnNavigatedTo(NavigationEventArgs e) {
+            LoadData();
+        }
+
+        protected override void OnNavigatedFrom(NavigationEventArgs e) {
+            RhitMapView.Instance.StoreData();
+            ContentPanel.Children.Remove(RhitMapView.Instance.Map);
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e) {
+            //SystemTray.IsVisible = false;
+            InternetConnection.TestConnection();
+        }
+
+        public void LoadData() {
             if(!ContentPanel.Children.Contains(RhitMapView.Instance.Map)) LoadMap();
-            
+
             List<RhitLocation> locations = DataCollector.Instance.GetLocations(Dispatcher);
             DataCollector.Instance.UpdateAvailable += new ServerEventHandler(OnUpdateAvailable);
             if(locations != null) RhitMapView.Instance.Outlines = locations;
             //TODO: Display message if locations == null; "Map Data is Empty. Trying to download..."
 
             fillGrid();
-        }
-
-        protected override void OnNavigatedFrom(NavigationEventArgs e) {
-            RhitMapView.Instance.StoreData();
-            ContentPanel.Children.Remove(RhitMapView.Instance.Map);
         }
     }
 }

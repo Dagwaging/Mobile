@@ -3,13 +3,20 @@ using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using RhitMobile.Services;
+using RhitMobile.ObjectModel;
 
 namespace RhitMobile {
     public partial class App : Application {
         #region Fields
         private bool phoneApplicationInitialized = false;
 
-        internal const string Id = "AthZ1tu5ROM0PUWcIYFSxC1oQALFR-g0aoFIuL9tlbeGJ9Z6qKIRYoB_jGpct8Yu";
+        internal const string MapId = "AthZ1tu5ROM0PUWcIYFSxC1oQALFR-g0aoFIuL9tlbeGJ9Z6qKIRYoB_jGpct8Yu";
+
+        internal const bool RunUnitTests = true;
+
+        internal static RhitLocation LOCATION_RHIT = new RhitLocation(39.4820263, -87.3248677) {
+            Label = "",
+        };
         #endregion
 
         /// <summary>
