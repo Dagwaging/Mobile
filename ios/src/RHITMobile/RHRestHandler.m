@@ -165,225 +165,228 @@
 #pragma mark Private Methods
 
 - (void)performCheckForLocationUpdates {
-    NSManagedObjectContext *context = [[[NSManagedObjectContext alloc] init]
-                                       autorelease];
-    context.persistentStoreCoordinator = self.coordinator;
     
-    SEL failureSelector;
-    failureSelector = @selector(didFailCheckingForLocationUpdatesWithError:);
-    NSString *fullHost = [[NSString alloc] initWithFormat:@"%@:%@",
-                          self.host,
-                          self.port];
-    
-    NSString *currentVersion = self.valueStore.currentDataVersion;
-    NSString *serverPath = nil;
-    
-    if (currentVersion == nil) {
-        serverPath = kTopLevelServerPath;
-    } else {
-        NSString *escaped = [currentVersion
-                             stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-        serverPath = [[[NSString alloc] initWithFormat:@"%@?version=%@",
-                      kTopLevelServerPath, escaped] autorelease];
-    }
-    
-    NSURL *url = [[NSURL alloc] initWithScheme:self.scheme
-                                          host:fullHost
-                                          path:serverPath];
-    
-    [fullHost release];
-    
-    NSURLRequest *request = [NSURLRequest requestWithURL:url];
-    [url release];
-    
-    NSURLResponse *response = nil;
-    NSError *error = nil;
-    
-    // Because this will be done on a background thread, we can use a
-    // synchronous request for our data retrieval step.
-    NSData *data = [NSURLConnection sendSynchronousRequest:request
-                                         returningResponse:&response
-                                                     error:&error];
-
-    if (data == nil) {
-        [self notifyDelegateViaSelector:failureSelector
-                     ofFailureWithError:error];
-        return;
-    }
-
-    
-    NSInteger statusCode = ((NSHTTPURLResponse *) response).statusCode;
-    
-    if (statusCode == 204) {
-        return;
-    } else if (statusCode != 200) {
-        NSString *errorString = [[NSString alloc] initWithFormat:@"Problem "
-                                 "with server response:\nServer gave response "
-                                 "code %d", statusCode];
-        [self notifyDelegateViaSelector:failureSelector
-                   ofFailureWithMessage:errorString];
-        [errorString release];
-        return;
-    }
-    
-    error = nil;
-    NSDictionary *parsedData = [NSDictionary dictionaryWithJSONData:data
-                                                              error:&error];
-    
-    if (parsedData == nil) {
-        [self notifyDelegateViaSelector:failureSelector
-                     ofFailureWithError:error];
-        return;
-    }
-    
-    NSString *newVersion = [self stringFromDictionary:parsedData
-                                               forKey:@"Version"
-                                    withErrorSelector:failureSelector
-                                      withErrorString:@"Problem with server "
-                            "response:\nNo data version number specified"];
-    
-    self.valueStore.currentDataVersion = newVersion;
-    
-    NSArray *areas = [self arrayFromDictionary:parsedData
-                                        forKey:kLocationListKey
-                             withErrorSelector:failureSelector
-                               withErrorString:@"Problem with server response:"
-                                                "\nList of locations missing"];
-    
-    NSMutableSet *locations = [NSMutableSet setWithCapacity:[areas count]];
-    
-    // Populate new location objects for each retrieved dictionary
-    for (NSDictionary *area in areas) {
-        RHLocation *location = (RHLocation *) [RHLocation fromContext:context];
+    @synchronized(self) {
+        NSManagedObjectContext *context = [[[NSManagedObjectContext alloc] init]
+                                           autorelease];
+        context.persistentStoreCoordinator = self.coordinator;
         
-        // Name
-        location.name = [self stringFromDictionary:area
-                                            forKey:kNameKey
+        SEL failureSelector;
+        failureSelector = @selector(didFailCheckingForLocationUpdatesWithError:);
+        NSString *fullHost = [[NSString alloc] initWithFormat:@"%@:%@",
+                              self.host,
+                              self.port];
+        
+        NSString *currentVersion = self.valueStore.currentDataVersion;
+        NSString *serverPath = nil;
+        
+        if (currentVersion == nil) {
+            serverPath = kTopLevelServerPath;
+        } else {
+            NSString *escaped = [currentVersion
+                                 stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+            serverPath = [[[NSString alloc] initWithFormat:@"%@?version=%@",
+                           kTopLevelServerPath, escaped] autorelease];
+        }
+        
+        NSURL *url = [[NSURL alloc] initWithScheme:self.scheme
+                                              host:fullHost
+                                              path:serverPath];
+        
+        [fullHost release];
+        
+        NSURLRequest *request = [NSURLRequest requestWithURL:url];
+        [url release];
+        
+        NSURLResponse *response = nil;
+        NSError *error = nil;
+        
+        // Because this will be done on a background thread, we can use a
+        // synchronous request for our data retrieval step.
+        NSData *data = [NSURLConnection sendSynchronousRequest:request
+                                             returningResponse:&response
+                                                         error:&error];
+        
+        if (data == nil) {
+            [self notifyDelegateViaSelector:failureSelector
+                         ofFailureWithError:error];
+            return;
+        }
+        
+        
+        NSInteger statusCode = ((NSHTTPURLResponse *) response).statusCode;
+        
+        if (statusCode == 204) {
+            return;
+        } else if (statusCode != 200) {
+            NSString *errorString = [[NSString alloc] initWithFormat:@"Problem "
+                                     "with server response:\nServer gave response "
+                                     "code %d", statusCode];
+            [self notifyDelegateViaSelector:failureSelector
+                       ofFailureWithMessage:errorString];
+            [errorString release];
+            return;
+        }
+        
+        error = nil;
+        NSDictionary *parsedData = [NSDictionary dictionaryWithJSONData:data
+                                                                  error:&error];
+        
+        if (parsedData == nil) {
+            [self notifyDelegateViaSelector:failureSelector
+                         ofFailureWithError:error];
+            return;
+        }
+        
+        NSString *newVersion = [self stringFromDictionary:parsedData
+                                                   forKey:@"Version"
+                                        withErrorSelector:failureSelector
+                                          withErrorString:@"Problem with server "
+                                "response:\nNo data version number specified"];
+        
+        NSArray *areas = [self arrayFromDictionary:parsedData
+                                            forKey:kLocationListKey
                                  withErrorSelector:failureSelector
-                                   withErrorString:@"Problem with server "
-                         "response:\nAt least one location is missings its "
-                         "name"];
+                                   withErrorString:@"Problem with server response:"
+                          "\nList of locations missing"];
         
-        // Server identifier
-        location.serverIdentifier = [self numberFromDictionary:area
-                                                        forKey:kIdKey
-                                             withErrorSelector:failureSelector
-                                               withErrorString:@"Problem with "
-                                     "server response:\nAt least one location "
-                                     "is missing its server identifier"];
+        NSMutableSet *locations = [NSMutableSet setWithCapacity:[areas count]];
         
-        // Description
-        location.quickDescription = [self stringFromDictionary:area
-                                                        forKey:kDescriptionKey
-                                             withErrorSelector:failureSelector
-                                               withErrorString:@"Problem with "
-                                     "server response:\nAt least one location "
-                                     "is missing its description"];
-        
-        // Quick List Visibility
-        location.inQuickList = [NSNumber numberWithBool:
-                                [self booleanFromDictionary:area
-                                                     forKey:kQuickListKey
-                                          withErrorSelector:failureSelector
-                                            withErrorString:@"Problem with "
-                                 "server response:\nAt least one location is "
-                                 "missings its quick list status"]];
-        
-        NSDictionary *mapArea = [self dictionaryFromDictionary:area
-                                                        forKey:kMapAreaKey
-                                             withErrorSelector:failureSelector
-                                               withErrorString:@"Problem with "
-                                 "server response:\nAt least one location is "
-                                 "missing its map layout data"];
-        
-        if (![mapArea isKindOfClass:[NSNull class]]) {
-            // Minimum zoom level
-            location.visibleZoomLevel = [self numberFromDictionary:mapArea
-                                                            forKey:kMinZoomLevelKey
+        // Populate new location objects for each retrieved dictionary
+        for (NSDictionary *area in areas) {
+            RHLocation *location = (RHLocation *) [RHLocation fromContext:context];
+            
+            // Name
+            location.name = [self stringFromDictionary:area
+                                                forKey:kNameKey
+                                     withErrorSelector:failureSelector
+                                       withErrorString:@"Problem with server "
+                             "response:\nAt least one location is missings its "
+                             "name"];
+            
+            // Server identifier
+            location.serverIdentifier = [self numberFromDictionary:area
+                                                            forKey:kIdKey
                                                  withErrorSelector:failureSelector
                                                    withErrorString:@"Problem with "
                                          "server response:\nAt least one location "
-                                         "is missing its minimum zoom level"];
+                                         "is missing its server identifier"];
             
-            // Use boundary data to create boundary nodes
-            NSArray *retrievedBoundary = [self arrayFromDictionary:mapArea
-                                                            forKey:kCornersKey
+            // Description
+            location.quickDescription = [self stringFromDictionary:area
+                                                            forKey:kDescriptionKey
                                                  withErrorSelector:failureSelector
                                                    withErrorString:@"Problem with "
-                                          "server response:\nAt least one location "
-                                          "is missings its boundary coordinates"];
+                                         "server response:\nAt least one location "
+                                         "is missing its description"];
             
-            NSMutableArray *workingBoundary = [[[NSMutableArray alloc]
-                                                initWithCapacity:[retrievedBoundary
-                                                                  count]]
-                                               autorelease];
+            // Quick List Visibility
+            location.inQuickList = [NSNumber numberWithBool:
+                                    [self booleanFromDictionary:area
+                                                         forKey:kQuickListKey
+                                              withErrorSelector:failureSelector
+                                                withErrorString:@"Problem with "
+                                     "server response:\nAt least one location is "
+                                     "missings its quick list status"]];
             
-            for (NSDictionary *nodeDict in retrievedBoundary) {
-                RHBoundaryNode *node = (RHBoundaryNode *) [RHBoundaryNode
-                                                           fromContext:context];
+            NSDictionary *mapArea = [self dictionaryFromDictionary:area
+                                                            forKey:kMapAreaKey
+                                                 withErrorSelector:failureSelector
+                                                   withErrorString:@"Problem with "
+                                     "server response:\nAt least one location is "
+                                     "missing its map layout data"];
+            
+            if (![mapArea isKindOfClass:[NSNull class]]) {
+                // Minimum zoom level
+                location.visibleZoomLevel = [self numberFromDictionary:mapArea
+                                                                forKey:kMinZoomLevelKey
+                                                     withErrorSelector:failureSelector
+                                                       withErrorString:@"Problem with "
+                                             "server response:\nAt least one location "
+                                             "is missing its minimum zoom level"];
                 
-                node.latitude = [self numberFromDictionary:nodeDict
-                                                    forKey:kLatKey
-                                         withErrorSelector:failureSelector
-                                           withErrorString:@"Problem with server "
-                                 "response:\nAt least one location is missing a "
-                                 "latitude component for one of its boundary "
-                                 "coordinates"];
+                // Use boundary data to create boundary nodes
+                NSArray *retrievedBoundary = [self arrayFromDictionary:mapArea
+                                                                forKey:kCornersKey
+                                                     withErrorSelector:failureSelector
+                                                       withErrorString:@"Problem with "
+                                              "server response:\nAt least one location "
+                                              "is missings its boundary coordinates"];
                 
-                node.longitude  = [self numberFromDictionary:nodeDict 
-                                                      forKey:kLongKey
+                NSMutableArray *workingBoundary = [[[NSMutableArray alloc]
+                                                    initWithCapacity:[retrievedBoundary
+                                                                      count]]
+                                                   autorelease];
+                
+                for (NSDictionary *nodeDict in retrievedBoundary) {
+                    RHBoundaryNode *node = (RHBoundaryNode *) [RHBoundaryNode
+                                                               fromContext:context];
+                    
+                    node.latitude = [self numberFromDictionary:nodeDict
+                                                        forKey:kLatKey
+                                             withErrorSelector:failureSelector
+                                               withErrorString:@"Problem with server "
+                                     "response:\nAt least one location is missing a "
+                                     "latitude component for one of its boundary "
+                                     "coordinates"];
+                    
+                    node.longitude  = [self numberFromDictionary:nodeDict 
+                                                          forKey:kLongKey
+                                               withErrorSelector:failureSelector
+                                                 withErrorString:@"Problem with server "
+                                       "response:\nAt least one location is missing a "
+                                       "longitude component for one of its boundary "
+                                       "coordinates"];
+                    
+                    [workingBoundary addObject:node];
+                }
+                
+                location.orderedBoundaryNodes = workingBoundary;
+            } else {
+                location.visibleZoomLevel = [NSNumber numberWithInt:-1];
+            }
+
+
+            // Use center data to populate a center node
+            NSDictionary *center = [self dictionaryFromDictionary:area
+                                                           forKey:kCenterKey
+                                                withErrorSelector:failureSelector
+                                                  withErrorString:@"Problem with "
+                                    "server response:\nAt least one location is "
+                                    "missing its center point"];
+            
+            RHLabelNode *centerNode = (RHLabelNode *) [RHLabelNode
+                                                       fromContext:context];
+            
+            centerNode.latitude = [self numberFromDictionary:center
+                                                      forKey:kLatKey
                                            withErrorSelector:failureSelector
                                              withErrorString:@"Problem with server "
-                                   "response:\nAt least one location is missing a "
-                                   "longitude component for one of its boundary "
-                                   "coordinates"];
-                
-                [workingBoundary addObject:node];
-            }
+                                   "response:\nAt least one location is missing "
+                                   "the latitude component of its center point"];
             
-            location.orderedBoundaryNodes = workingBoundary;
-        } else {
-            location.visibleZoomLevel = [NSNumber numberWithInt:-1];
-        }
-
-        
-        // Use center data to populate a center node
-        NSDictionary *center = [self dictionaryFromDictionary:area
-                                                       forKey:kCenterKey
+            centerNode.longitude = [self numberFromDictionary:center
+                                                       forKey:kLongKey
                                             withErrorSelector:failureSelector
                                               withErrorString:@"Problem with "
-                                "server response:\nAt least one location is "
-                                "missing its center point"];
+                                    "server response:\nAt least one location is "
+                                    "missing the longitude component of its center "
+                                    "point"];
+            
+            location.labelLocation = centerNode;
+            
+            [locations addObject:location];
+        }
         
-        RHLabelNode *centerNode = (RHLabelNode *) [RHLabelNode
-                                                   fromContext:context];
+        NSError *saveError = nil;
+        [context save:&saveError];
         
-        centerNode.latitude = [self numberFromDictionary:center
-                                                  forKey:kLatKey
-                                       withErrorSelector:failureSelector
-                                         withErrorString:@"Problem with server "
-                               "response:\nAt least one location is missing "
-                               "the latitude component of its center point"];
+        self.valueStore.currentDataVersion = newVersion;
         
-        centerNode.longitude = [self numberFromDictionary:center
-                                                   forKey:kLongKey
-                                        withErrorSelector:failureSelector
-                                          withErrorString:@"Problem with "
-                                "server response:\nAt least one location is "
-                                "missing the longitude component of its center "
-                                "point"];
-        
-        location.labelLocation = centerNode;
-        
-        [locations addObject:location];
+        [delegate performSelectorOnMainThread:@selector(didFindMapLevelLocationUpdates)
+                                   withObject:nil
+                                waitUntilDone:NO];
     }
-    
-    NSError *saveError = nil;
-    [context save:&saveError];
-    
-    [delegate performSelectorOnMainThread:@selector(didFindMapLevelLocationUpdates)
-                               withObject:nil
-                            waitUntilDone:NO];
 }
 
 #pragma mark-

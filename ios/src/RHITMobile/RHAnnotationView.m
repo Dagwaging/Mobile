@@ -75,7 +75,7 @@
 - (void)setSelected:(BOOL)inSelected {
     [super setSelected:inSelected];
     if (inSelected) {
-        [delegate focusMapViewToLocation:[[self storedAnnotation] location]];
+        [delegate focusMapViewToLocation:self.storedAnnotation];
     } else {
         [delegate performSelector:@selector(clearOverlays) withObject:nil afterDelay:0.01];
         [delegate performSelector:@selector(clearOverlays) withObject:nil afterDelay:0.3];

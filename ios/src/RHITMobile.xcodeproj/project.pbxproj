@@ -27,6 +27,8 @@
 		9236CEA0144E3CBC00D0FB59 /* QuickListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9236CE9D144E3CBC00D0FB59 /* QuickListViewController.m */; };
 		9236CEA1144E3CBC00D0FB59 /* QuickListView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9236CE9E144E3CBC00D0FB59 /* QuickListView.xib */; };
 		9236CEA2144E3CBC00D0FB59 /* QuickListView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9236CE9E144E3CBC00D0FB59 /* QuickListView.xib */; };
+		9236CEA6144F33C400D0FB59 /* RHPinAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9236CEA5144F33C400D0FB59 /* RHPinAnnotationView.m */; };
+		9236CEA7144F33C400D0FB59 /* RHPinAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9236CEA5144F33C400D0FB59 /* RHPinAnnotationView.m */; };
 		923C841414298C5800DFE415 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 923C841314298C5800DFE415 /* CoreData.framework */; };
 		923C841C14298DD500DFE415 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 923C841A14298DD500DFE415 /* Model.xcdatamodeld */; };
 		923C841D14298DD500DFE415 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 923C841A14298DD500DFE415 /* Model.xcdatamodeld */; };
@@ -134,6 +136,8 @@
 		9236CE9C144E3CBC00D0FB59 /* QuickListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuickListViewController.h; sourceTree = "<group>"; };
 		9236CE9D144E3CBC00D0FB59 /* QuickListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QuickListViewController.m; sourceTree = "<group>"; };
 		9236CE9E144E3CBC00D0FB59 /* QuickListView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = QuickListView.xib; sourceTree = "<group>"; };
+		9236CEA4144F33C300D0FB59 /* RHPinAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHPinAnnotationView.h; sourceTree = "<group>"; };
+		9236CEA5144F33C400D0FB59 /* RHPinAnnotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHPinAnnotationView.m; sourceTree = "<group>"; };
 		923C841314298C5800DFE415 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		923C841B14298DD500DFE415 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		9246368A142BAAC700A5E399 /* RHLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHLocation.h; sourceTree = "<group>"; };
@@ -480,6 +484,8 @@
 				9201A4611432CA2600069863 /* RHAnnotationViewDelegate.h */,
 				92DFEACE1420245F00889314 /* RHAnnotationView.h */,
 				92DFEACF1420245F00889314 /* RHAnnotationView.m */,
+				9236CEA4144F33C300D0FB59 /* RHPinAnnotationView.h */,
+				9236CEA5144F33C400D0FB59 /* RHPinAnnotationView.m */,
 				92DFEAD214203C6400889314 /* RHMapLabel.h */,
 				92DFEAD314203C6400889314 /* RHMapLabel.m */,
 				9201A4631432E96000069863 /* RHLocationOverlay.h */,
@@ -655,6 +661,7 @@
 				9201A4651432E96000069863 /* RHLocationOverlay.m in Sources */,
 				928A6440144955EB00521EB1 /* RHPListStore.m in Sources */,
 				9236CE9F144E3CBC00D0FB59 /* QuickListViewController.m in Sources */,
+				9236CEA6144F33C400D0FB59 /* RHPinAnnotationView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -694,6 +701,7 @@
 				92747161143B6F99005B6D43 /* MKMapViewTests.m in Sources */,
 				928A6441144955EB00521EB1 /* RHPListStore.m in Sources */,
 				9236CEA0144E3CBC00D0FB59 /* QuickListViewController.m in Sources */,
+				9236CEA7144F33C400D0FB59 /* RHPinAnnotationView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

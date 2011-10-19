@@ -26,6 +26,7 @@
 
 
 @class RHRemoteHandler;
+@class RHAnnotation;
 
 /// \ingroup views
 /// View controller for the map portion of the application.
@@ -60,9 +61,13 @@
 
 @property (nonatomic, retain) NSMutableArray *quickListAnnotations;
 
+@property (nonatomic, retain) NSArray *temporaryAnnotations;
+
 /// Reload preference data, in case something has changed while the application
 /// was running.
 - (void)refreshPreferences;
+
+- (void)focusMapViewToTemporaryAnnotation:(RHAnnotation *)annotation;
 
 - (IBAction)debugZoomIn:(id)sender;
 

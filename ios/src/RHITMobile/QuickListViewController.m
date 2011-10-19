@@ -73,10 +73,16 @@
 }
 
 - (IBAction)goToLocation:(id)sender {
-    [self.mapViewController.mapView
-     selectAnnotation:[self.mapViewController.quickListAnnotations
-                       objectAtIndex:currentSelection_] animated:YES];
-    [self dismissModalViewControllerAnimated:YES];
+    RHAnnotation *annotation = (RHAnnotation *)[self.mapViewController.quickListAnnotations objectAtIndex:currentSelection_];
+    if (annotation.location.visibleZoomLevel.intValue > 0) {
+        [self.mapViewController.mapView
+         selectAnnotation:annotation animated:YES];
+        [self dismissModalViewControllerAnimated:YES];
+    } else {
+        [self dismissModalViewControllerAnimated:YES];
+        [self.mapViewController focusMapViewToTemporaryAnnotation:annotation];
+    }
+
 }
 
 - (IBAction)cancel:(id)sender {
@@ -133,7 +139,7 @@ numberOfRowsInComponent:(NSInteger)component {
     if (indexPath.row == 0) {
         cell.textLabel.text = self.currentAnnotation.location.name;
     } else {
-        cell.textLabel.numberOfLines = 3;
+        cell.textLabel.numberOfLines = 2;
         cell.textLabel.font = [UIFont systemFontOfSize:[UIFont systemFontSize]];
         cell.textLabel.text = self.currentAnnotation.location.quickDescription;
     }

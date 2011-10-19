@@ -23,11 +23,13 @@
 #import "RHAnnotation.h"
 #import "RHAnnotationView.h"
 #import "RHLocation.h"
+#import "RHNode.h"
 #import "RHLabelNode.h"
 #import "RHRestHandler.h"
 #import "RHLocationOverlay.h"
 #import "RHITMobileAppDelegate.h"
 #import "QuickListViewController.h"
+#import "RHPinAnnotationView.h"
 
 
 #pragma mark Private Method Declarations
@@ -65,6 +67,7 @@
 @synthesize managedObjectContext;
 @synthesize remoteHandler = remoteHandler_;
 @synthesize quickListAnnotations;
+@synthesize temporaryAnnotations;
 
 // Private properties
 @synthesize currentOverlay;
@@ -145,6 +148,21 @@
     [items release];
 }
 
+- (void)focusMapViewToTemporaryAnnotation:(RHAnnotation *)annotation {
+    RHAnnotation *currentAnnotation = [self.mapView.selectedAnnotations objectAtIndex:0];
+    if (currentAnnotation != nil) {
+        [self.mapView deselectAnnotation:currentAnnotation animated:NO];
+        [self.mapView removeOverlay:self.currentOverlay];
+    }
+    
+    [self performSelector:@selector(clearOverlays) withObject:nil afterDelay:0.01];
+    [self performSelector:@selector(clearOverlays) withObject:nil afterDelay:0.3];
+    self.temporaryAnnotations = [NSArray arrayWithObject:annotation];
+    [self.mapView addAnnotation:annotation];
+    [self.mapView setCenterCoordinate:annotation.location.labelLocation.coordinate zoomLevel:kRHLocationFocusZoomLevel animated:NO];
+    [self.mapView selectAnnotation:annotation animated:NO];
+}
+
 #pragma mark -
 #pragma mark Property Methods
 
@@ -190,9 +208,29 @@
 
 - (MKAnnotationView *)mapView:(MKMapView *)mapView
             viewForAnnotation:(id <MKAnnotation>)inAnnotation {
+    
     if ([inAnnotation isKindOfClass:[RHAnnotation class]]) {
         RHAnnotation *annotation = (RHAnnotation *)inAnnotation;
-        NSString *identifier = annotation.location.name;
+        
+        NSString *identifier = annotation.location.serverIdentifier.description;
+        
+        if (annotation.location.visibleZoomLevel.intValue <= 0) {
+            RHPinAnnotationView *pinView = (RHPinAnnotationView *)
+                [self.mapView
+                 dequeueReusableAnnotationViewWithIdentifier:identifier];
+            
+            if (pinView == nil) {
+                pinView = [[[RHPinAnnotationView alloc]
+                            initWithAnnotation:annotation
+                            reuseIdentifier:identifier] autorelease];
+            }
+            
+            pinView.canShowCallout = YES;
+            pinView.draggable = NO;
+            pinView.mapViewController = self;
+            
+            return pinView;
+        }
         
         RHAnnotationView *annotationView = (RHAnnotationView *)[self.mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
         
@@ -290,14 +328,22 @@
 #pragma mark -
 #pragma mark RHAnnotationView Delegate Methods
 
-- (void)focusMapViewToLocation:(RHLocation *)location {
+- (void)focusMapViewToLocation:(RHAnnotation *)annotation {
+    RHLocation *location = annotation.location;
+    
     [self.mapView removeOverlay:self.currentOverlay];
     RHLocationOverlay *overlay = [[RHLocationOverlay alloc]
                                   initWithLocation:location];
-    CLLocationCoordinate2D center = [[location labelLocation] coordinate];
-    [self.mapView setCenterCoordinate:center
+    
+    [self.mapView removeAnnotations:self.temporaryAnnotations];
+    self.temporaryAnnotations = nil;
+    
+    NSLog(@"COORDINATE: %f, %f", location.labelLocation.coordinate.latitude, location.labelLocation.coordinate.longitude);
+    
+    [self.mapView setCenterCoordinate:location.labelLocation.coordinate
                             zoomLevel:kRHLocationFocusZoomLevel
                              animated:YES];
+    
     [self.mapView addOverlay:overlay];
     self.currentOverlay = overlay;
     [overlay release];
@@ -306,7 +352,9 @@
 - (void)clearOverlays {
     if (self.mapView.selectedAnnotations == nil ||
         self.mapView.selectedAnnotations.count == 0) {
-        [mapView removeOverlay:self.currentOverlay];
+        [self.mapView removeOverlay:self.currentOverlay];
+        [self.mapView removeAnnotations:self.temporaryAnnotations];
+        self.temporaryAnnotations = nil;
         self.currentOverlay = nil;
     }
 }
@@ -326,7 +374,7 @@
     
     // Put conditions on our fetch request
     NSPredicate *predicate = [NSPredicate predicateWithFormat:
-                              @"visibleZoomLevel > 0"];
+                              @"visibleZoomLevel > 0 || inQuickList == TRUE"];
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc]
                                         initWithKey:@"name"
                                         ascending:YES];
@@ -359,7 +407,9 @@
             [self.quickListAnnotations addObject:annotation];
         }
         
-        [self.mapView addAnnotation:annotation];
+        if (location.visibleZoomLevel.intValue > 0) {
+            [self.mapView addAnnotation:annotation];
+        }
     }
 }
 
