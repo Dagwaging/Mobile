@@ -41,13 +41,13 @@
 @synthesize context;
 @synthesize operations;
 
-- (RHDummyHandler *)initWithContext:(NSManagedObjectContext *)inContext
+- (RHDummyHandler *)initWithPersistantStoreCoordinator:(NSPersistentStoreCoordinator *)inContext
                            delegate:(RHRemoteHandlerDelegate *)inDelegate {
     self = [super init];
     
     if (self) {
         self.delegate = inDelegate;
-        self.context = inContext;
+        self.context = nil; // FIXME
         self.operations = [[NSOperationQueue new] autorelease];
         
     }

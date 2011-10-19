@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="562" systemVersion="11B26" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
+<model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="872" systemVersion="11C74" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="BoundaryNode" representedClassName="RHBoundaryNode" parentEntity="Node">
         <attribute name="position" optional="YES" attributeType="Integer 16" defaultValueString="0"/>
         <relationship name="boundedLocation" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Location" inverseName="boundaryNodes" inverseEntity="Location"/>
@@ -8,6 +8,7 @@
         <relationship name="labeledLocation" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Location" inverseName="labelLocation" inverseEntity="Location"/>
     </entity>
     <entity name="Location" representedClassName="RHLocation">
+        <attribute name="inQuickList" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="quickDescription" optional="YES" attributeType="String"/>
         <attribute name="serverIdentifier" optional="YES" attributeType="Integer 16" defaultValueString="0"/>
@@ -28,7 +29,7 @@
     <elements>
         <element name="BoundaryNode" positionX="-2450" positionY="-1440" width="128" height="45"/>
         <element name="LabelNode" positionX="-2657" positionY="-1455" width="128" height="60"/>
-        <element name="Location" positionX="-2556" positionY="-1302" width="128" height="150"/>
+        <element name="Location" positionX="-2556" positionY="-1302" width="128" height="165"/>
         <element name="NavigationNode" positionX="-2250" positionY="-1449" width="128" height="90"/>
         <element name="Node" positionX="-2333" positionY="-1620" width="128" height="75"/>
     </elements>

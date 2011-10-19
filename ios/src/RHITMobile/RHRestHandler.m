@@ -35,6 +35,7 @@
 #define kNameKey @"Name"
 #define kIdKey @"Id"
 #define kDescriptionKey @"Description"
+#define kQuickListKey @"OnQuickList"
 #define kMapAreaKey @"MapArea"
 #define kMinZoomLevelKey @"MinZoomLevel"
 #define kCenterKey @"Center"
@@ -46,12 +47,17 @@
 
 @interface RHRestHandler ()
 
-@property (nonatomic, retain) NSManagedObjectContext *context;
+@property (nonatomic, retain) NSPersistentStoreCoordinator *coordinator;
 @property (nonatomic, retain) NSOperationQueue *operations;
 @property (nonatomic, retain) NSString *scheme;
 @property (nonatomic, retain) NSString *host;
 @property (nonatomic, retain) NSString *port;
 @property (nonatomic, retain) RHPListStore *valueStore;
+
+- (BOOL)booleanFromDictionary:(NSDictionary *)dictionary
+                       forKey:(NSString *)key
+            withErrorSelector:(SEL)selector
+              withErrorString:(NSString *)errorString;
 
 - (NSString *)stringFromDictionary:(NSDictionary *)dictionary
                             forKey:(NSString *)key
@@ -93,7 +99,7 @@
 #pragma mark Generic Properties
 
 @synthesize delegate;
-@synthesize context;
+@synthesize coordinator;
 @synthesize operations;
 @synthesize scheme;
 @synthesize host;
@@ -103,15 +109,14 @@
 #pragma mark -
 #pragma mark General Methods
 
-- (RHRestHandler *)initWithContext:(NSManagedObjectContext *)inContext
-                          delegate:(RHRemoteHandlerDelegate *)inDelegate {
+- (RHRestHandler *)initWithPersistantStoreCoordinator:(NSPersistentStoreCoordinator *)inCoordinator
+                                             delegate:(RHRemoteHandlerDelegate *)inDelegate {
     self = [super init];
     
     if (self) {
         self.delegate = inDelegate;
-        self.context = inContext;
+        self.coordinator = inCoordinator;
         self.operations = [[NSOperationQueue new] autorelease];
-        
         
         [NSUserDefaults resetStandardUserDefaults];
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -148,7 +153,7 @@
 
 - (void)dealloc {
     [delegate release];
-    [context release];
+    [coordinator release];
     [operations release];
     [scheme release];
     [host release];
@@ -160,6 +165,10 @@
 #pragma mark Private Methods
 
 - (void)performCheckForLocationUpdates {
+    NSManagedObjectContext *context = [[[NSManagedObjectContext alloc] init]
+                                       autorelease];
+    context.persistentStoreCoordinator = self.coordinator;
+    
     SEL failureSelector;
     failureSelector = @selector(didFailCheckingForLocationUpdatesWithError:);
     NSString *fullHost = [[NSString alloc] initWithFormat:@"%@:%@",
@@ -184,6 +193,8 @@
     
     [fullHost release];
     
+    NSLog(@"URL: %@", url.absoluteString);
+    
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     [url release];
     
@@ -195,6 +206,7 @@
     NSData *data = [NSURLConnection sendSynchronousRequest:request
                                          returningResponse:&response
                                                      error:&error];
+
     if (data == nil) {
         [self notifyDelegateViaSelector:failureSelector
                      ofFailureWithError:error];
@@ -226,7 +238,11 @@
         return;
     }
     
-    NSString *newVersion = [self stringFromDictionary:parsedData forKey:@"Version" withErrorSelector:failureSelector withErrorString:@"Couldn't find the thing"];
+    NSString *newVersion = [self stringFromDictionary:parsedData
+                                               forKey:@"Version"
+                                    withErrorSelector:failureSelector
+                                      withErrorString:@"Problem with server "
+                            "response:\nNo data version number specified"];
     
     self.valueStore.currentDataVersion = newVersion;
     
@@ -265,6 +281,15 @@
                                                withErrorString:@"Problem with "
                                      "server response:\nAt least one location "
                                      "is missing its description"];
+        
+        // Quick List Visibility
+        location.inQuickList = [NSNumber numberWithBool:
+                                [self booleanFromDictionary:area
+                                                     forKey:kQuickListKey
+                                          withErrorSelector:failureSelector
+                                            withErrorString:@"Problem with "
+                                 "server response:\nAt least one location is "
+                                 "missings its quick list status"]];
         
         NSDictionary *mapArea = [self dictionaryFromDictionary:area
                                                         forKey:kMapAreaKey
@@ -356,7 +381,7 @@
     }
     
     NSError *saveError = nil;
-    [self.context save:&saveError];
+    [context save:&saveError];
     
     [delegate performSelectorOnMainThread:@selector(didFindMapLevelLocationUpdates)
                                withObject:nil
@@ -365,6 +390,20 @@
 
 #pragma mark-
 #pragma mark Private Data Retrieval Methods
+
+- (BOOL)booleanFromDictionary:(NSDictionary *)dictionary
+                       forKey:(NSString *)key
+            withErrorSelector:(SEL)selector
+              withErrorString:(NSString *)errorString {
+    NSNumber *result = [dictionary valueForKey:key];
+    
+    if (result == nil) {
+        [self notifyDelegateViaSelector:selector
+                   ofFailureWithMessage:errorString];
+    }
+    
+    return [result boolValue];
+}
 
 - (NSString *)stringFromDictionary:(NSDictionary *)dictionary
                             forKey:(NSString *)key
@@ -400,7 +439,7 @@
                  withErrorString:(NSString *)errorString {
     NSArray *result = [dictionary valueForKey:key];
     
-    if (result ==  nil) {
+    if (result == nil) {
         [self notifyDelegateViaSelector:selector
                    ofFailureWithMessage:errorString];
     }

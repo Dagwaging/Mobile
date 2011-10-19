@@ -64,6 +64,7 @@
 @synthesize fetchedResultsController;
 @synthesize managedObjectContext;
 @synthesize remoteHandler = remoteHandler_;
+@synthesize quickListAnnotations;
 
 // Private properties
 @synthesize currentOverlay;
@@ -149,9 +150,12 @@
 
 - (RHRemoteHandler *)remoteHandler {
     if (remoteHandler_ == nil) {
+        RHITMobileAppDelegate *appDelegate;
+        appDelegate = (RHITMobileAppDelegate *)[[UIApplication
+                                                 sharedApplication] delegate];
         remoteHandler_ = (RHRemoteHandler *) [RHRestHandler alloc];
         remoteHandler_ = [remoteHandler_
-                          initWithContext:self.managedObjectContext
+                          initWithPersistantStoreCoordinator:appDelegate.persistentStoreCoordinator
                           delegate:(RHRemoteHandlerDelegate *)self];
     }
     
@@ -323,13 +327,19 @@
     // Put conditions on our fetch request
     NSPredicate *predicate = [NSPredicate predicateWithFormat:
                               @"visibleZoomLevel > 0"];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc]
+                                        initWithKey:@"name"
+                                        ascending:YES];
+    request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
     [request setPredicate:predicate];
+    [sortDescriptor release];
     
     // Retrieve what we hope is our created object
     NSError *error = nil;
     NSArray *results = [managedObjectContext executeFetchRequest:request
                                                            error:&error];
-    
+    self.quickListAnnotations = [[[NSMutableArray alloc]
+                                  initWithCapacity:results.count] autorelease];
     [self populateMapWithLocations:(NSSet *)results];
 }
 
@@ -344,6 +354,10 @@
         annotation = [[annotation initWithLocation:location
                                   currentZoomLevel:currentZoomLevel]
                       autorelease];
+        
+        if (location.inQuickList) {
+            [self.quickListAnnotations addObject:annotation];
+        }
         
         [self.mapView addAnnotation:annotation];
     }

@@ -58,6 +58,8 @@
 /// Remote data handler.
 @property (nonatomic, retain) RHRemoteHandler *remoteHandler;
 
+@property (nonatomic, retain) NSMutableArray *quickListAnnotations;
+
 /// Reload preference data, in case something has changed while the application
 /// was running.
 - (void)refreshPreferences;

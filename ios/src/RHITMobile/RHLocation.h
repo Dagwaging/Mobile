@@ -35,6 +35,8 @@
 /// Human-readable name for this RHLocation.
 @property (nonatomic, retain) NSString *name;
 
+@property (nonatomic, assign) NSNumber *inQuickList;
+
 /// Short description. Used as a subtitle for map callouts.
 @property (nonatomic, retain) NSString *quickDescription;
 

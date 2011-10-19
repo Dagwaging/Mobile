@@ -20,13 +20,20 @@
 #import <UIKit/UIKit.h>
 
 @class MapViewController;
+@class RHAnnotation;
 
 @interface QuickListViewController : UIViewController
-<UIPickerViewDelegate, UIPickerViewDataSource>
+<UIPickerViewDelegate, UIPickerViewDataSource, UITableViewDataSource>
 
 @property (nonatomic, retain) MapViewController *mapViewController;
 
 @property (nonatomic, retain) IBOutlet UIPickerView *pickerView;
+
+@property (nonatomic, retain) IBOutlet UITableView *tableView;
+
+@property (nonatomic, readonly) NSArray *quickListAnnotations;
+
+@property (nonatomic, readonly) RHAnnotation *currentAnnotation;
 
 - (IBAction)goToLocation:(id)sender;
 

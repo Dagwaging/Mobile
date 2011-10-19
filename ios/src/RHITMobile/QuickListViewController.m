@@ -19,17 +19,26 @@
 
 #import "QuickListViewController.h"
 #import "MapViewController.h"
+#import "RHAnnotation.h"
+#import "RHLocation.h"
+
+@interface QuickListViewController() {
+@private
+    NSUInteger currentSelection_;
+}
+@end
 
 @implementation QuickListViewController
 
 @synthesize mapViewController;
 @synthesize pickerView;
+@synthesize tableView;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+        currentSelection_ = 0;
     }
     return self;
 }
@@ -64,6 +73,9 @@
 }
 
 - (IBAction)goToLocation:(id)sender {
+    [self.mapViewController.mapView
+     selectAnnotation:[self.mapViewController.quickListAnnotations
+                       objectAtIndex:currentSelection_] animated:YES];
     [self dismissModalViewControllerAnimated:YES];
 }
 
@@ -71,17 +83,64 @@
     [self dismissModalViewControllerAnimated:YES];
 }
 
+- (NSArray *)quickListAnnotations {
+    return self.mapViewController.quickListAnnotations;
+}
+
+- (RHAnnotation *)currentAnnotation {
+    return [self.quickListAnnotations objectAtIndex:currentSelection_];
+}
+
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView {
     return 1;
 }
 
-- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
-    return 5;
+- (NSInteger)pickerView:(UIPickerView *)pickerView
+numberOfRowsInComponent:(NSInteger)component {
+    return self.mapViewController.quickListAnnotations.count;
 }
 
-- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
-    NSArray *items = [NSArray arrayWithObjects:@"One", @"Two", @"Three", @"Four", @"Five", nil];
-    return [items objectAtIndex:row];
+- (NSString *)pickerView:(UIPickerView *)pickerView
+             titleForRow:(NSInteger)row
+            forComponent:(NSInteger)component {
+    return ((RHAnnotation *)[self.mapViewController.quickListAnnotations
+                             objectAtIndex:row]).location.name;
+}
+
+- (void)pickerView:(UIPickerView *)pickerView
+      didSelectRow:(NSInteger)row
+       inComponent:(NSInteger)component {
+    currentSelection_ = row;
+    [self.tableView reloadData];
+}
+
+- (NSInteger)tableView:(UITableView *)tableView
+ numberOfRowsInSection:(NSInteger)section {
+    return 2;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)inTableView
+         cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    static NSString *cellIdentifier = @"RHCell";
+    UITableViewCell *cell = [tableView
+                             dequeueReusableCellWithIdentifier:cellIdentifier];
+    if (cell == nil) {
+        cell = [[[UITableViewCell alloc]
+                initWithStyle:UITableViewCellStyleDefault
+                reuseIdentifier:cellIdentifier] autorelease];
+    }
+    
+    if (indexPath.row == 0) {
+        cell.textLabel.text = self.currentAnnotation.location.name;
+    } else {
+        cell.textLabel.numberOfLines = 3;
+        cell.textLabel.font = [UIFont systemFontOfSize:[UIFont systemFontSize]];
+        cell.textLabel.text = self.currentAnnotation.location.quickDescription;
+    }
+    
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    
+    return cell;
 }
 
 @end
