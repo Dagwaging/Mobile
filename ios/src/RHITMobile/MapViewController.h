@@ -62,4 +62,10 @@
 /// was running.
 - (void)refreshPreferences;
 
+- (IBAction)debugZoomIn:(id)sender;
+
+- (IBAction)debugZoomOut:(id)sender;
+
+- (IBAction)displayQuickList:(id)sender;
+
 @end

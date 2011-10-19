@@ -23,6 +23,10 @@
 		9226035A1409C9680065F705 /* launch-icon-small.png in Resources */ = {isa = PBXBuildFile; fileRef = 922603591409C9680065F705 /* launch-icon-small.png */; };
 		9233DD0F141BAA3500B9A549 /* RHAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9233DD0E141BAA3500B9A549 /* RHAnnotation.m */; };
 		9233DD10141BAA3500B9A549 /* RHAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9233DD0E141BAA3500B9A549 /* RHAnnotation.m */; };
+		9236CE9F144E3CBC00D0FB59 /* QuickListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9236CE9D144E3CBC00D0FB59 /* QuickListViewController.m */; };
+		9236CEA0144E3CBC00D0FB59 /* QuickListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9236CE9D144E3CBC00D0FB59 /* QuickListViewController.m */; };
+		9236CEA1144E3CBC00D0FB59 /* QuickListView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9236CE9E144E3CBC00D0FB59 /* QuickListView.xib */; };
+		9236CEA2144E3CBC00D0FB59 /* QuickListView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9236CE9E144E3CBC00D0FB59 /* QuickListView.xib */; };
 		923C841414298C5800DFE415 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 923C841314298C5800DFE415 /* CoreData.framework */; };
 		923C841C14298DD500DFE415 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 923C841A14298DD500DFE415 /* Model.xcdatamodeld */; };
 		923C841D14298DD500DFE415 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 923C841A14298DD500DFE415 /* Model.xcdatamodeld */; };
@@ -127,6 +131,9 @@
 		922603591409C9680065F705 /* launch-icon-small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "launch-icon-small.png"; sourceTree = "<group>"; };
 		9233DD0D141BAA3500B9A549 /* RHAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHAnnotation.h; sourceTree = "<group>"; };
 		9233DD0E141BAA3500B9A549 /* RHAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHAnnotation.m; sourceTree = "<group>"; };
+		9236CE9C144E3CBC00D0FB59 /* QuickListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuickListViewController.h; sourceTree = "<group>"; };
+		9236CE9D144E3CBC00D0FB59 /* QuickListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QuickListViewController.m; sourceTree = "<group>"; };
+		9236CE9E144E3CBC00D0FB59 /* QuickListView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = QuickListView.xib; sourceTree = "<group>"; };
 		923C841314298C5800DFE415 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		923C841B14298DD500DFE415 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		9246368A142BAAC700A5E399 /* RHLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHLocation.h; sourceTree = "<group>"; };
@@ -488,9 +495,12 @@
 				9265FEBE1409AB5D00AE406E /* MapViewController.m */,
 				9265FEC01409AB5D00AE406E /* SearchViewController.h */,
 				9265FEC11409AB5D00AE406E /* SearchViewController.m */,
+				9236CE9C144E3CBC00D0FB59 /* QuickListViewController.h */,
+				9236CE9D144E3CBC00D0FB59 /* QuickListViewController.m */,
 				9265FEBA1409AB5D00AE406E /* MainWindow.xib */,
 				9265FEC31409AB5D00AE406E /* MapView.xib */,
 				9265FEC61409AB5D00AE406E /* SearchView.xib */,
+				9236CE9E144E3CBC00D0FB59 /* QuickListView.xib */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -578,6 +588,7 @@
 				9218208F144113B900A66923 /* Default.png in Resources */,
 				928B76E8144CBADA00D2F98D /* tab-bar-map-icon@2x.png in Resources */,
 				926088A8144D2ADB0002D50E /* RHITMobileValues.plist in Resources */,
+				9236CEA1144E3CBC00D0FB59 /* QuickListView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -588,6 +599,7 @@
 				9265FEDB1409AB5D00AE406E /* InfoPlist.strings in Resources */,
 				926D3980143D2CE400223121 /* Settings.bundle in Resources */,
 				926088A9144D2ADB0002D50E /* RHITMobileValues.plist in Resources */,
+				9236CEA2144E3CBC00D0FB59 /* QuickListView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -642,6 +654,7 @@
 				9250136A1431AB6F00CEBB35 /* CJSONSerializer.m in Sources */,
 				9201A4651432E96000069863 /* RHLocationOverlay.m in Sources */,
 				928A6440144955EB00521EB1 /* RHPListStore.m in Sources */,
+				9236CE9F144E3CBC00D0FB59 /* QuickListViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -680,6 +693,7 @@
 				9201A4661432E96000069863 /* RHLocationOverlay.m in Sources */,
 				92747161143B6F99005B6D43 /* MKMapViewTests.m in Sources */,
 				928A6441144955EB00521EB1 /* RHPListStore.m in Sources */,
+				9236CEA0144E3CBC00D0FB59 /* QuickListViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -27,6 +27,7 @@
 #import "RHRestHandler.h"
 #import "RHLocationOverlay.h"
 #import "RHITMobileAppDelegate.h"
+#import "QuickListViewController.h"
 
 
 #pragma mark Private Method Declarations
@@ -170,6 +171,14 @@
     [self.mapView setCenterCoordinate:self.mapView.region.center
                             zoomLevel:self.mapView.zoomLevel - 1
                              animated:YES];
+}
+
+- (void)displayQuickList:(id)sender {
+    QuickListViewController *quickList = [QuickListViewController alloc];
+    quickList = [quickList initWithNibName:@"QuickListView" bundle:nil];
+    quickList.mapViewController = self;
+    [self presentModalViewController:quickList animated:YES];
+    [quickList release];
 }
 
 # pragma mark -
