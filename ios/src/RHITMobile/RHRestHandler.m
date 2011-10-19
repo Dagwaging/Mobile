@@ -193,8 +193,6 @@
     
     [fullHost release];
     
-    NSLog(@"URL: %@", url.absoluteString);
-    
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     [url release];
     
