@@ -78,6 +78,7 @@
         [delegate focusMapViewToLocation:[[self storedAnnotation] location]];
     } else {
         [delegate performSelector:@selector(clearOverlays) withObject:nil afterDelay:0.01];
+        [delegate performSelector:@selector(clearOverlays) withObject:nil afterDelay:0.3];
     }
 }
 
