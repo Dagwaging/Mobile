@@ -31,6 +31,7 @@
 #import "QuickListViewController.h"
 #import "RHPinAnnotationView.h"
 #import "LocationDetailViewController.h"
+#import "SearchViewController.h"
 
 
 #pragma mark Private Method Declarations
@@ -171,6 +172,13 @@
     [self.mapView setCenterCoordinate:self.mapView.region.center
                             zoomLevel:self.mapView.zoomLevel - 1
                              animated:YES];
+}
+
+- (IBAction)displaySearch:(id)sender {
+    SearchViewController *search = [SearchViewController alloc];
+    search = [search initWithNibName:@"SearchView" bundle:nil];
+    [self.navigationController pushViewController:search animated:YES];
+    [search release];
 }
 
 - (IBAction)displayQuickList:(id)sender {

@@ -51,6 +51,7 @@
                                                 animated:NO];
     self.mapViewController.navigationItem.title = @"Map";
     self.mapViewController.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemBookmarks target:mapViewController action:@selector(displayQuickList:)] autorelease];
+    self.mapViewController.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:mapViewController action:@selector(displaySearch:)] autorelease];
     
     [self.window makeKeyAndVisible];
     [self setupDefaults];
