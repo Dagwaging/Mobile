@@ -37,8 +37,6 @@
 @interface MapViewController()
 
 @property (nonatomic, retain) RHLocationOverlay *currentOverlay;
-@property (nonatomic, assign) BOOL debugMapInfo;
-@property (nonatomic, assign) BOOL debugMapZoomControls;
 
 - (void)loadStoredLocations;
 
@@ -56,10 +54,6 @@
 #pragma mark Generic Properties
 
 @synthesize mapView;
-@synthesize toolbar;
-@synthesize zoomInButton;
-@synthesize zoomOutButton;
-@synthesize placesButton;
 @synthesize zoomLevelLabel;
 @synthesize overlaysLabel;
 @synthesize annotationsLabel;
@@ -71,8 +65,6 @@
 
 // Private properties
 @synthesize currentOverlay;
-@synthesize debugMapInfo;
-@synthesize debugMapZoomControls;
 
 
 #pragma mark -
@@ -126,26 +118,11 @@
 
 - (void)refreshPreferences {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    self.debugMapInfo = [defaults boolForKey:kRHPreferenceDebugMapInfo];
-    self.debugMapZoomControls = [defaults
-                                 boolForKey:kRHPreferenceDebugMapZoomControls];
+    BOOL debugMapInfo = [defaults boolForKey:kRHPreferenceDebugMapInfo];
     
-    self.zoomLevelLabel.hidden = !self.debugMapInfo;
-    self.overlaysLabel.hidden = !self.debugMapInfo;
-    self.annotationsLabel.hidden = !self.debugMapInfo;
-    
-    NSArray *items = [NSArray alloc];
-    
-    if (self.debugMapZoomControls) {
-        items = [items initWithObjects:self.placesButton, self.zoomInButton,
-                 self.zoomOutButton, nil];
-        self.toolbar.items = items;
-    } else {
-        items = [items initWithObjects:self.placesButton, nil];
-        self.toolbar.items = items;
-    }
-    
-    [items release];
+    self.zoomLevelLabel.hidden = !debugMapInfo;
+    self.overlaysLabel.hidden = !debugMapInfo;
+    self.annotationsLabel.hidden = !debugMapInfo;
 }
 
 - (void)focusMapViewToTemporaryAnnotation:(RHAnnotation *)annotation {
@@ -228,6 +205,10 @@
             pinView.canShowCallout = YES;
             pinView.draggable = NO;
             pinView.mapViewController = self;
+            
+            UIButton *pinDisclosureButton = [UIButton
+                                             buttonWithType:UIButtonTypeDetailDisclosure];
+            [pinView setRightCalloutAccessoryView:pinDisclosureButton];
             
             return pinView;
         }
