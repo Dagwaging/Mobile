@@ -21,7 +21,8 @@
 #import <CoreData/CoreData.h>
 
 
-@class RHBoundaryNode, RHLabelNode;
+@class RHBoundaryNode;
+@class RHLabelNode;
 
 /// \ingroup model
 /// Representation of a canonical location. An RHLocation has areas that can
@@ -37,11 +38,17 @@
 
 @property (nonatomic, assign) NSNumber *inQuickList;
 
+@property (nonatomic, assign) NSNumber *fullyPopulated;
+
 /// Short description. Used as a subtitle for map callouts.
 @property (nonatomic, retain) NSString *quickDescription;
 
 /// The minimum canonical map zoom level this RHLocation shouldbe visible at.
 @property (nonatomic, retain) NSNumber *visibleZoomLevel;
+
+@property (nonatomic, retain) NSSet *enclosedLocations;
+
+@property (nonatomic, retain) RHLocation *parent;
 
 /// The list of RHBoundaryNode objects that define the boundary of this
 /// RHLocation. The RHBoundaryNode objects contain ordering information.
@@ -63,6 +70,14 @@
 @end
 
 @interface RHLocation (CoreDataGeneratedAccessors)
+
+- (void)addEnclosedLocationsObject:(RHLocation *)location;
+
+- (void)removeEnclosedLocationsObject:(RHLocation *)location;
+
+- (void)addEnclosedLocations:(NSSet *)locations;
+
+- (void)removeEnclosedLocations:(NSSet *)locations;
 
 /// Add an RHBoundaryNode to the current boundary.
 - (void)addBoundaryNodesObject:(RHBoundaryNode *)boundaryNode;

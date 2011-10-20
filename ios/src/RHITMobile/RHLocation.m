@@ -28,7 +28,10 @@
 @dynamic name;
 @dynamic quickDescription;
 @dynamic inQuickList;
+@dynamic fullyPopulated;
 @dynamic visibleZoomLevel;
+@dynamic enclosedLocations;
+@dynamic parent;
 @dynamic boundaryNodes;
 @dynamic labelLocation;
 @dynamic navigationNodes;
