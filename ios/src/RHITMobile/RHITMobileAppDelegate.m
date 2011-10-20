@@ -47,8 +47,10 @@
     self.mapViewController = [[[MapViewController alloc]
                                initWithNibName:@"MapView" bundle:nil]
                               autorelease];
-    [self.mapNavigationViewController pushViewController:mapViewController animated:NO];
+    [self.mapNavigationViewController pushViewController:mapViewController
+                                                animated:NO];
     self.mapViewController.navigationItem.title = @"Map";
+    self.mapViewController.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemBookmarks target:mapViewController action:@selector(displayQuickList:)] autorelease];
     
     [self.window makeKeyAndVisible];
     [self setupDefaults];
