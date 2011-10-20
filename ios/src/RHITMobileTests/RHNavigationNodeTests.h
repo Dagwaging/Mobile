@@ -18,17 +18,16 @@
 //
 
 #import <SenTestingKit/SenTestingKit.h>
+#import <UIKit/UIKit.h>
 
-#import "RHNavigationNode.h"
-
-/// Unit tests (logic) for RHNavigationNode.
-
+/// \test
+/// Tests targetting the RHNavigationNode model object.
 @interface RHNavigationNodeTests : SenTestCase
 
-/// Test basic initialization.
-- (void) testInitWithAllProperties;
+/// Verify that basic creation still works.
+- (void)testInitSmokeTest;
 
-/// Test basic initialization occuring in place
-- (void) testInitWithAllPropertiesInPlace;
+/// Verify that storage and retrieval still works.
+- (void)testStorageAndRetrieval;
 
 @end

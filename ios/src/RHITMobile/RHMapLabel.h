@@ -17,11 +17,12 @@
 //  limitations under the License.
 //
 
-/// Special subclass of UILabel that attempts to emulate the MapKit look
-/// and feel for location labels in an MKMapView.
-
 #import <UIKit/UIKit.h>
 
+
+/// \ingroup map
+/// Special subclass of UILabel that attempts to emulate the MapKit look
+/// and feel for location labels in an MKMapView.
 @interface RHMapLabel : UILabel
 
 @end

@@ -17,10 +17,13 @@
 //  limitations under the License.
 //
 
-/// View controller for the search portion of the application
-
 #import <UIKit/UIKit.h>
 
-@interface SearchViewController : UIViewController
+
+/// \ingroup views
+/// View controller for the search portion of the application.
+@interface SearchViewController : UIViewController <UISearchBarDelegate>
+
+@property (nonatomic, retain) IBOutlet UISearchBar *searchBar;
 
 @end

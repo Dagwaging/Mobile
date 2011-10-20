@@ -19,21 +19,23 @@
 
 #import "RHNode.h"
 
+
 @implementation RHNode
 
-@synthesize latitude;
-@synthesize longitude;
+@dynamic latitude;
+@dynamic longitude;
 
-- (RHNode *) initWithLatitude:(double)newLatitude 
-                    longitude:(double)newLongitude {
-    self = (RHNode *)[super init];
-    
-    if (self) {
-        self.latitude = newLatitude;
-        self.longitude = newLongitude;
-    }
-    
-    return self;
++ (RHNode *)fromContext:(NSManagedObjectContext *)context {
+    RHNode *node = [NSEntityDescription insertNewObjectForEntityForName:@"Node"
+                                                 inManagedObjectContext:context];
+    return node;
+}
+
+- (CLLocationCoordinate2D)coordinate {
+    CLLocationCoordinate2D coordinate;
+    coordinate.latitude = self.latitude.doubleValue;
+    coordinate.longitude = self.longitude.doubleValue;
+    return coordinate;
 }
 
 @end

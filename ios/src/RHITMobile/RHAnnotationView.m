@@ -18,56 +18,99 @@
 //
 
 #import "RHAnnotationView.h"
+#import "RHAnnotationViewDelegate.h"
 #import "RHAnnotation.h"
+#import "RHMapLabel.h"
+#import "RHLocation.h"
+
+
+#pragma mark Private Method Declarations
+
+@interface RHAnnotationView () 
+
+- (void) createText;
+
+@end
+
+
+#pragma mark -
+#pragma mark Implementation
 
 @implementation RHAnnotationView
 
+#pragma mark -
+#pragma mark Generic Properties
+
+@synthesize delegate;
 @synthesize textView;
+
+#pragma mark -
+#pragma mark General Methods
 
 - (id)initWithAnnotation:(id<MKAnnotation>)inAnnotation
          reuseIdentifier:(NSString *)reuseIdentifier {
     self = [super initWithAnnotation:inAnnotation
                      reuseIdentifier:reuseIdentifier];
-    RHAnnotation *annotation = (RHAnnotation *)inAnnotation;
     
-    switch (annotation.annotationType) {
-        case RHAnnotationTypeText:
-            self.frame = CGRectMake(0, 0, 100, 50);
-            self.backgroundColor = [UIColor clearColor];
-            
-            textView = [[RHMapLabel alloc] initWithFrame:CGRectMake(2, 2, 96, 46)];
-            textView.backgroundColor = [UIColor clearColor];
-            textView.text = annotation.location.name;
-            textView.font = [UIFont fontWithName:@"Arial" size:10];
-            textView.textColor = [UIColor colorWithRed:101.0/255.0
-                                                 green:89.0/255.0
-                                                  blue:73.0/255.0
-                                                 alpha:1];
-            textView.textAlignment = UITextAlignmentCenter;
-            [self addSubview:textView];
-            break;
-        case RHAnnotationTypePolygon:
-            // TODO: Add polygon rendering
-            break;
-        case RHAnnotationTypeTextAndPolygon:
-            // TODO: Add polygon rendering
-            self.frame = CGRectMake(0, 0, 100, 50);
-            self.backgroundColor = [UIColor clearColor];
-            
-            textView = [[RHMapLabel alloc] initWithFrame:CGRectMake(2, 2, 96, 46)];
-            textView.backgroundColor = [UIColor clearColor];
-            textView.text = annotation.location.name;
-            textView.font = [UIFont fontWithName:@"Arial" size:10];
-            textView.textColor = [UIColor colorWithRed:101.0/255.0
-                                                 green:89.0/255.0
-                                                  blue:73.0/255.0
-                                                 alpha:1];
-            textView.textAlignment = UITextAlignmentCenter;
-            [self addSubview:textView];
-            break;
+    self.backgroundColor = [UIColor clearColor];
+    self.frame = CGRectMake(0, 0, 100, 50);
+    
+    [self createText];
+    
+    if (!self.storedAnnotation.visible) {
+        self.textView.hidden = YES;
     }
     
     return self;
+}
+
+- (void) dealloc {
+    [textView release];
+    [super dealloc];
+}
+
+#pragma mark -
+#pragma mark Property Methods
+
+- (void)setSelected:(BOOL)inSelected {
+    if (inSelected) {
+        [delegate focusMapViewToLocation:[[self storedAnnotation] location]];
+    }
+    [super setSelected:inSelected];
+}
+
+- (void)setHighlighted:(BOOL)inHighlighted {
+    if (!inHighlighted) {
+        [delegate clearOverlays];
+    }
+    [super setHighlighted:inHighlighted];
+}
+
+- (void)updateAnnotationVisibility {
+    if (!self.storedAnnotation.visible) {
+        self.textView.hidden = YES;
+    } else {
+        self.textView.hidden = NO;
+    }
+}
+
+- (RHAnnotation *)storedAnnotation {
+    return (RHAnnotation *) self.annotation;
+}
+
+#pragma mark -
+#pragma mark Private Methods
+
+- (void) createText {
+    textView = [[RHMapLabel alloc] initWithFrame:CGRectMake(2, 2, 96, 26)];
+    [textView setNumberOfLines:2];
+    [textView setLineBreakMode:UILineBreakModeWordWrap];
+    textView.backgroundColor = [UIColor clearColor];
+    textView.text = self.storedAnnotation.location.name;
+    textView.font = [UIFont fontWithName:@"Arial-BoldMT" size:10];
+    textView.textColor = [UIColor whiteColor];
+    textView.textAlignment = UITextAlignmentCenter;
+    [self addSubview:textView];
 }
 
 @end

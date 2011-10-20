@@ -17,13 +17,43 @@
 //  limitations under the License.
 //
 
-/// View controller for the map portion of the application.
-
 #import <UIKit/UIKit.h>
+#import <CoreData/CoreData.h>
+
 #import "MKMapView+ZoomLevel.h"
+#import "RHRemoteHandlerDelegate.h"
+#import "RHAnnotationViewDelegate.h"
 
-@interface MapViewController : UIViewController <MKMapViewDelegate>
 
+@class RHRemoteHandler;
+
+/// \ingroup views
+/// View controller for the map portion of the application.
+@interface MapViewController : UIViewController
+<MKMapViewDelegate, RHRemoteHandlerDelegate, RHAnnotationViewDelegate>
+
+/// Map view that is visible to the user.
 @property (nonatomic, retain) IBOutlet MKMapView *mapView;
+
+@property (nonatomic, retain) IBOutlet UIToolbar *toolbar;
+
+@property (nonatomic, retain) IBOutlet UIBarButtonItem *zoomInButton;
+
+@property (nonatomic, retain) IBOutlet UIBarButtonItem *zoomOutButton;
+
+@property (nonatomic, retain) IBOutlet UIBarButtonItem *placesButton;
+
+@property (nonatomic, retain) IBOutlet UILabel *zoomLevelLabel;
+
+/// Core Data fetched results controller.
+@property (nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
+
+/// Core Data managed object context. 
+@property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;
+
+/// Remote data handler.
+@property (nonatomic, retain) RHRemoteHandler *remoteHandler;
+
+- (void)refreshPreferences;
 
 @end

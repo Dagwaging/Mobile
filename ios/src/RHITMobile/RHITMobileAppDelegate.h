@@ -17,12 +17,16 @@
 //  limitations under the License.
 //
 
+#import <UIKit/UIKit.h>
+#import <CoreData/CoreData.h>
+
+
+@class MapViewController;
+@class SearchViewController;
+
 /// AppDelgate for the RHITMobile app. Handles application-level delegate
 /// functionality.
-
-#import <UIKit/UIKit.h>
-
-@interface RHITMobileAppDelegate : NSObject
+@interface RHITMobileAppDelegate : NSObject 
 <UIApplicationDelegate, UITabBarControllerDelegate>
 
 /// Current window.
@@ -30,5 +34,25 @@
 
 /// Main tab bar.
 @property (nonatomic, retain) IBOutlet UITabBarController *tabBarController;
+
+/// Map view controller
+@property (nonatomic, retain) IBOutlet MapViewController *mapViewController;
+
+/// Search view controller
+@property (nonatomic, retain) IBOutlet SearchViewController *searchViewController;
+
+/// Object model for the application
+@property (nonatomic, retain, readonly) NSManagedObjectModel *managedObjectModel;
+
+/// Context to execute data interactions against
+@property (nonatomic, retain, readonly) NSManagedObjectContext *managedObjectContext;
+
+/// Persistant store coordinator
+@property (nonatomic, retain, readonly) NSPersistentStoreCoordinator *persistentStoreCoordinator;
+
+- (NSString *)applicationDocumentsDirectory;
+
+/// Clears all data from this application's storage.
+- (void)clearDatabase;
 
 @end

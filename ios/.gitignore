@@ -1,15 +1,34 @@
+#OSX Stuff
 .DS_Store
-*.swp
-*~.nib
+._*
+.Spotlight-V100
+.Trashes
 
-doc/
+## Doxygen Stuff
+doc/*
+
+## Xcode Stuff
 build/
-
 *.pbxuser
-*.perspective
-*.perspectivev3
-
+!default.pbxuser
 *.mode1v3
+!default.mode1v3
 *.mode2v3
-
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+*.xcworkspace
+!default.xcworkspace
 xcuserdata
+profile
+*.moved-aside
+
+## Textmate Stuff
+*.tmproj
+*.tmproject
+tmtags
+
+## Vim Stuff
+.*.sw[a-z]
+*.un~
+Session.vim

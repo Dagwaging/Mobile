@@ -17,42 +17,88 @@
 //  limitations under the License.
 //
 
+#import <CoreLocation/CoreLocation.h>
+
 #import "RHNavigationNodeTests.h"
+#import "RHNavigationNode.h"
+#import "RHITMobileAppDelegate.h"
+
+
+#define ARC4RANDOM_MAX 0x100000000
 
 @implementation RHNavigationNodeTests
 
-- (void) testInitWithAllProperties {
-    RHNavigationNode *node = [RHNavigationNode alloc];
-    node = [node initWithLatitude:1
-                        longitude:2
-                          indoors:YES
-                            floor:RHFLOOR_FOURTH];
+- (void)testInitSmokeTest {
+    // Retrieve the App Delegate and Managed Object Context
+    RHITMobileAppDelegate *appDelegate;
+    appDelegate = (RHITMobileAppDelegate *)[[UIApplication
+                                             sharedApplication] delegate];
+    NSManagedObjectContext *context = appDelegate.managedObjectContext;
     
-    STAssertEquals(node.latitude, 1.0,
-                   @"RHNavigationNode.latitude not properly set");
-    STAssertEquals(node.longitude, 2.0,
-                   @"RHNavigationNode.longitude not properly set");
-    STAssertEquals(node.indoors, YES, 
-                   @"RHNavigationNode.indoors not properly set");
-    STAssertEquals(node.floor, RHFLOOR_FOURTH, 
-                   @"RHNavigationNode.floor not properly set");
+    // Create a new node
+    RHNavigationNode *node = (RHNavigationNode *) [RHNavigationNode fromContext:context];
+    
+    // Just make sure it exists
+    STAssertNotNil(node, @"New RHNavigationNode is nil");
 }
 
-- (void) testInitWithAllPropertiesInPlace {
-    RHNavigationNode *node = [RHNavigationNode alloc];
-    [node initWithLatitude:3
-                 longitude:4
-                   indoors:YES
-                     floor:RHFLOOR_FIFTH];
+- (void)testStorageAndRetrieval {
+    // Decide on a random latitude
+    double latValue = ((double)arc4random() / ARC4RANDOM_MAX) * 100.0;
+    NSNumber *latitude = [NSNumber numberWithDouble:latValue];
     
-    STAssertEquals(node.latitude, 3.0,
-                   @"RHNavigationNode.latitude not properly set");
-    STAssertEquals(node.longitude, 4.0,
-                   @"RHNavigationNode.longitude not properly set");
-    STAssertEquals(node.indoors, YES, 
-                   @"RHNavigationNode.indoors not properly set");
-    STAssertEquals(node.floor, RHFLOOR_FIFTH, 
-                   @"RHNavigationNode.floor not properly set");
+    // Retrieve the App Delegate and Managed Object Context
+    RHITMobileAppDelegate *appDelegate;
+    appDelegate = (RHITMobileAppDelegate *)[[UIApplication
+                                             sharedApplication] delegate];
+    NSManagedObjectContext *context = appDelegate.managedObjectContext;
+    
+    // Create and "store" a new node with our random latitude
+    RHNavigationNode *node = (RHNavigationNode *) [RHNavigationNode
+                                                   fromContext:context];
+    node.latitude = latitude;
+    node.longitude = [NSNumber numberWithDouble:0.0];
+    
+    // Describe the type of entity we'd like to retrieve
+    NSEntityDescription *entityDescription = [NSEntityDescription
+                                              entityForName:@"NavigationNode"
+                                              inManagedObjectContext:context];
+    NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
+    [request setEntity:entityDescription];
+    
+    // Put conditions on our fetch request
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:
+                              @"latitude == %@", latitude];
+    [request setPredicate:predicate];
+    
+    // Retrieve what we hope is our created object
+    NSError *error = nil;
+    NSArray *results = [context executeFetchRequest:request error:&error];
+    
+    STAssertNotNil(results, @"Results array is nil");
+    STAssertEquals(results.count, (NSUInteger) 1,
+                   @"Results array has wrong number length");
+    
+    if (results.count > 0) {
+        RHNavigationNode *storedNode;
+        storedNode = (RHNavigationNode *) [results objectAtIndex:0];
+        
+        // Verify the properties set on our retrieved object
+        STAssertEquals(storedNode.latitude, latitude, @"Latitude is incorrect");
+        STAssertEquals(storedNode.longitude.doubleValue, 0.0,
+                       @"Longitude is incorrect");
+    }
+}
+
+- (void)tearDown {
+    // Retrieve the App Delegate and Managed Object Context
+    RHITMobileAppDelegate *appDelegate;
+    appDelegate = (RHITMobileAppDelegate *)[[UIApplication
+                                             sharedApplication] delegate];
+    NSManagedObjectContext *context = appDelegate.managedObjectContext;
+    
+    // Forget about all those changes
+    [context rollback];
 }
 
 @end

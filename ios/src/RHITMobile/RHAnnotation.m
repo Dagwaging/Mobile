@@ -18,47 +18,79 @@
 //
 
 #import "RHAnnotation.h"
+#import "RHAnnotationView.h"
+#import "RHLabelNode.h"
+#import "RHLocation.h"
+
+
+#pragma mark Private Method Declarations
+
+@interface RHAnnotation ()
+
+@property (nonatomic, readonly) NSInteger visibleZoomLevel;
+
+@end
+
+
+#pragma mark -
+#pragma mark Implementation
 
 @implementation RHAnnotation
 
+#pragma mark -
+#pragma mark Generic Properties
+
 @synthesize coordinate;
-@synthesize annotationType;
+@synthesize visible;
 @synthesize location;
+@synthesize annotationView;
 
-- (RHAnnotation *) initWithLocation:(RHLocation *)newLocation
-                     annotationType:(RHAnnotationType)newAnnotationType {
-    double totalLatitude = 0;
-    double totalLongitude = 0;
-    int count = 0;
-    
-    for (RHNode *node in newLocation.boundaryNodes) {
-        totalLatitude += node.latitude;
-        totalLongitude += node.longitude;
-        count ++;
-    }
-    
-    CLLocationCoordinate2D center;
-    center.latitude = totalLatitude / count;
-    center.longitude = totalLongitude / count;
-    
-    return [self initWithLocation:newLocation
-                       coordinate:center
-                   annotationType:newAnnotationType];
-    
-}
+#pragma mark -
+#pragma mark General Methods
 
-- (RHAnnotation *) initWithLocation:(RHLocation *)newLocation
-                         coordinate:(CLLocationCoordinate2D)newCoordinate
-                       annotationType:(RHAnnotationType)newAnnotationType {
+- (RHAnnotation *)initWithLocation:(RHLocation *)inLocation
+                    currentZoomLevel:(NSUInteger)zoomLevel {
     self = [super init];
     
     if (self) {
-        self.coordinate = newCoordinate;
-        self.annotationType = newAnnotationType;
-        self.location = newLocation;
+        self.location = inLocation;
+        self.visible = zoomLevel >= self.visibleZoomLevel;
     }
     
     return self;
+}
+
+- (void)mapView:(MKMapView *)mapView didChangeZoomLevel:(NSUInteger)zoomLevel {
+    if (self.visible && zoomLevel < self.visibleZoomLevel) {
+        self.visible = NO;
+        [self.annotationView updateAnnotationVisibility];
+    } else if (!self.visible && zoomLevel >= self.visibleZoomLevel) {
+        self.visible = YES;
+        [self.annotationView updateAnnotationVisibility];
+    }
+}
+
+#pragma mark -
+#pragma mark Property Methods
+
+- (CLLocationCoordinate2D)coordinate {
+    return self.location.labelLocation.coordinate;
+}
+
+- (NSString *)title {
+    return self.location.name;
+}
+
+- (NSString *)subtitle {
+    return self.location.quickDescription;
+}
+
+
+#pragma mark -
+#pragma mark Private Methods
+
+- (NSInteger)visibleZoomLevel {
+    return self.location.visibleZoomLevel.integerValue;
 }
 
 @end
