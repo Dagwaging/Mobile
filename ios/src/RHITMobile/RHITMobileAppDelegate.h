@@ -35,8 +35,11 @@
 /// Main tab bar.
 @property (nonatomic, retain) IBOutlet UITabBarController *tabBarController;
 
+
+@property (nonatomic, retain) IBOutlet UINavigationController *mapNavigationViewController;
+
 /// Map view controller
-@property (nonatomic, retain) IBOutlet MapViewController *mapViewController;
+@property (nonatomic, retain) MapViewController *mapViewController;
 
 /// Search view controller
 @property (nonatomic, retain) IBOutlet SearchViewController *searchViewController;

@@ -32,6 +32,7 @@
 
 @synthesize window = _window;
 @synthesize tabBarController = _tabBarController;
+@synthesize mapNavigationViewController;
 @synthesize mapViewController;
 @synthesize searchViewController;
 @synthesize managedObjectModel;
@@ -43,6 +44,12 @@
     // Override point for customization after application launch.
     // Add the tab bar controller's current view as a subview of the window
     self.window.rootViewController = self.tabBarController;
+    self.mapViewController = [[[MapViewController alloc]
+                               initWithNibName:@"MapView" bundle:nil]
+                              autorelease];
+    [self.mapNavigationViewController pushViewController:mapViewController animated:NO];
+    self.mapViewController.navigationItem.title = @"Map";
+    
     [self.window makeKeyAndVisible];
     [self setupDefaults];
     return YES;
