@@ -67,4 +67,6 @@
 
 - (IBAction)displayQuickList:(id)sender;
 
+- (IBAction)discloseLocationDetails:(id)sender;
+
 @end

@@ -30,6 +30,7 @@
 #import "RHITMobileAppDelegate.h"
 #import "QuickListViewController.h"
 #import "RHPinAnnotationView.h"
+#import "LocationDetailViewController.h"
 
 
 #pragma mark Private Method Declarations
@@ -172,12 +173,20 @@
                              animated:YES];
 }
 
-- (void)displayQuickList:(id)sender {
+- (IBAction)displayQuickList:(id)sender {
     QuickListViewController *quickList = [QuickListViewController alloc];
     quickList = [quickList initWithNibName:@"QuickListView" bundle:nil];
     quickList.mapViewController = self;
     [self presentModalViewController:quickList animated:YES];
     [quickList release];
+}
+
+- (IBAction)discloseLocationDetails:(id)sender {
+    MKAnnotationView *view = (MKAnnotationView *) ((UIView *) sender).superview.superview;
+    RHAnnotation *annotation = (RHAnnotation *) view.annotation;
+    LocationDetailViewController *detailViewController = [[[LocationDetailViewController alloc] initWithNibName:@"LocationDetailView" bundle:nil] autorelease];
+    [self.navigationController pushViewController:detailViewController animated:YES];
+    self.navigationController.navigationItem.title = annotation.location.name;
 }
 
 # pragma mark -
@@ -208,6 +217,7 @@
             
             UIButton *pinDisclosureButton = [UIButton
                                              buttonWithType:UIButtonTypeDetailDisclosure];
+            [pinDisclosureButton addTarget:self action:@selector(discloseLocationDetails:) forControlEvents:UIControlEventTouchUpInside];
             [pinView setRightCalloutAccessoryView:pinDisclosureButton];
             
             return pinView;
@@ -228,6 +238,7 @@
         
         UIButton *newButton = [UIButton
                                buttonWithType:UIButtonTypeDetailDisclosure];
+        [newButton addTarget:self action:@selector(discloseLocationDetails:) forControlEvents:UIControlEventTouchUpInside];
         [annotationView setRightCalloutAccessoryView:newButton];
         
         annotation.annotationView = annotationView;
