@@ -185,8 +185,8 @@
     MKAnnotationView *view = (MKAnnotationView *) ((UIView *) sender).superview.superview;
     RHAnnotation *annotation = (RHAnnotation *) view.annotation;
     LocationDetailViewController *detailViewController = [[[LocationDetailViewController alloc] initWithNibName:@"LocationDetailView" bundle:nil] autorelease];
+    detailViewController.location = annotation.location;
     [self.navigationController pushViewController:detailViewController animated:YES];
-    self.navigationController.navigationItem.title = annotation.location.name;
 }
 
 # pragma mark -

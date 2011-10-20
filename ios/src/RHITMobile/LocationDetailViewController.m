@@ -19,11 +19,13 @@
 
 
 #import "LocationDetailViewController.h"
+#import "RHLocation.h"
 
 @implementation LocationDetailViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
+@synthesize location;
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
@@ -31,8 +33,7 @@
     return self;
 }
 
-- (void)didReceiveMemoryWarning
-{
+- (void)didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
     
@@ -41,9 +42,9 @@
 
 #pragma mark - View lifecycle
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
+    self.navigationItem.title = self.location.name;
     // Do any additional setup after loading the view from its nib.
 }
 
@@ -58,6 +59,58 @@
 {
     // Return YES for supported orientations
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
+}
+
+#pragma mark - UITableViewDelegate Methods
+
+
+#pragma mark - UITableViewDataSource Methods
+
+
+- (UITableViewCell *)tableView:(UITableView *)tableView
+         cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    static NSString *cellIdentifier = @"RHCell";
+    UITableViewCell *cell = [tableView
+                             dequeueReusableCellWithIdentifier:cellIdentifier];
+    if (cell == nil) {
+        cell = [[[UITableViewCell alloc]
+                 initWithStyle:UITableViewCellStyleDefault
+                 reuseIdentifier:cellIdentifier] autorelease];
+    }
+    
+    cell.textLabel.text = self.location.quickDescription;
+    cell.textLabel.font = [UIFont systemFontOfSize:[UIFont systemFontSize]];
+    cell.textLabel.numberOfLines = 5;
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    
+    return cell;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView
+ numberOfRowsInSection:(NSInteger)section {
+    switch (tableView.numberOfSections) {
+            case 1:
+            if (self.location.quickDescription.length > 0) {
+                return 1;
+            }
+            break;
+    }
+    return 0;
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    NSInteger result = 0;
+    
+    if (self.location.quickDescription.length > 0) {
+        result ++;
+    }
+    
+    return result;
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    return @"About";
 }
 
 @end

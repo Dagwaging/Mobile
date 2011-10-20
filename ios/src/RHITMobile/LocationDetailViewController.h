@@ -20,6 +20,11 @@
 
 #import <UIKit/UIKit.h>
 
+@class RHLocation;
+
 @interface LocationDetailViewController : UIViewController
+<UITableViewDelegate, UITableViewDataSource>
+
+@property (nonatomic, retain) RHLocation *location;
 
 @end
