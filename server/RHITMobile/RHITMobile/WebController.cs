@@ -75,7 +75,7 @@ namespace RHITMobile
 
             JsonResponse result = null;
 
-            var path = context.Request.Url.LocalPath.ToLower().Split('/').SkipWhile(String.IsNullOrEmpty);
+            var path = context.Request.Url.LocalPath.ToLower().Split('/').SkipWhile(String.IsNullOrEmpty).TakeWhile(s => !String.IsNullOrEmpty(s));
             Dictionary<string, string> query = new Dictionary<string, string>();
             if (!String.IsNullOrEmpty(context.Request.Url.Query))
             {
