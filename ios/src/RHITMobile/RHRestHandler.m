@@ -60,6 +60,7 @@
 
 - (RHLocation *)locationFromDictionary:(NSDictionary *)dictionary
                            withContext:(NSManagedObjectContext *)context
+                      andLocationsByID:(NSMutableDictionary *)locationsByID
                     andFailureSelector:(SEL)selector;
 
 - (BOOL)booleanFromDictionary:(NSDictionary *)dictionary
@@ -174,6 +175,7 @@
 
 - (RHLocation *)locationFromDictionary:(NSDictionary *)dictionary
                            withContext:(NSManagedObjectContext *)context
+                      andLocationsByID:(NSMutableDictionary *)locationsByID
                     andFailureSelector:(SEL)failureSelector {
     RHLocation *location = (RHLocation *) [RHLocation fromContext:context];
     
@@ -310,44 +312,26 @@
     
     location.retrievalStatus = RHLocationRetrievalStatusNoChildren;
     
-    NSNumber *parentId = (NSNumber *)[dictionary objectForKey:kParentKey];
+    id parentId = [dictionary objectForKey:kParentKey];
     
-    if (parentId != nil) {
-        // Perform a save in case the parent exists but hasn't been saved
-        NSError *saveError = nil;
-        [context save:&saveError];
-        
-        // Describe the type of entity we'd like to retrieve
-        NSEntityDescription *entityDescription;
-        entityDescription = [NSEntityDescription
-                             entityForName:kRHLocationCoreDataModelIdentifier
-                             inManagedObjectContext:context];
-        
-        NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
-        [request setEntity:entityDescription];
-        
-        // Put conditions on our fetch request
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:
-                                  @"serverIdentifer == %d", parentId.intValue];
-        [request setPredicate:predicate];
-        
-        // Retrieve what we hope is our created object
-        NSError *error = nil;
-        NSArray *results = [context executeFetchRequest:request
-                                                  error:&error];
-        if (results.count < 1) {
+    if (![parentId isKindOfClass:[NSNull class]]) {
+        NSNumber *parentIdentifer = (NSNumber *)parentId;
+        RHLocation *potentialParent = (RHLocation *)[locationsByID
+                                                      objectForKey:parentIdentifer.stringValue];
+        if (potentialParent == nil) {
             RHLocation *parent = [RHLocation fromContext:context];
-            parent.serverIdentifier = parentId;
+            parent.serverIdentifier = parentIdentifer;
             parent.retrievalStatus = RHLocationRetrievalStatusServerIDOnly;
             [parent addEnclosedLocationsObject:location];
             location.parent = parent;
         } else {
-            RHLocation *parent = [results objectAtIndex:0];
-            [parent addEnclosedLocationsObject:location];
-            location.parent = parent;
+            [potentialParent addEnclosedLocationsObject:location];
+            location.parent = potentialParent;
         }
-
     }
+    
+    [locationsByID setValue:location
+                     forKey:location.serverIdentifier.stringValue];
     
     return location;
 }
@@ -440,11 +424,15 @@
         
         NSMutableSet *locations = [NSMutableSet setWithCapacity:[areas count]];
         
+        NSMutableDictionary *locationsByID = [[[NSMutableDictionary alloc] init] autorelease];
+        
         // Populate new location objects for each retrieved dictionary
         for (NSDictionary *area in areas) {
-            [locations addObject:[self locationFromDictionary:area
-                                                  withContext:context
-                                           andFailureSelector:failureSelector]];
+            RHLocation *location = [self locationFromDictionary:area
+                                                    withContext:context
+                                               andLocationsByID:locationsByID
+                                             andFailureSelector:failureSelector];
+            [locations addObject:location];
         }
         
         NSError *saveError = nil;

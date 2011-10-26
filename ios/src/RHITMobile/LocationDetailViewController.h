@@ -26,5 +26,6 @@
 <UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, retain) RHLocation *location;
+@property (nonatomic, retain) NSArray *enclosedLocations;
 
 @end

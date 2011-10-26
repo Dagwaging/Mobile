@@ -21,14 +21,35 @@
 #import "LocationDetailViewController.h"
 #import "RHLocation.h"
 
+#define kAboutLabel @"About"
+#define kParentLabel @"Where It Is"
+#define kEnclosedLabel @"What's Inside"
+
+#define kAboutCellKey @"AboutCell"
+#define kParentCellKey @"ParentCell"
+#define kEnclosedCellKey @"EnclosedCell"
+
+
+@interface LocationDetailViewController ()
+
+@property (nonatomic, retain) NSMutableArray *sections;
+
+@end
+
+
 @implementation LocationDetailViewController
 
-@synthesize location;
+@synthesize location = location_;
+@synthesize enclosedLocations;
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+@synthesize sections;
+
+- (id)initWithNibName:(NSString *)nibNameOrNil
+               bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+        self.sections = [[[NSMutableArray alloc] initWithCapacity:10]
+                         autorelease];
     }
     return self;
 }
@@ -55,10 +76,29 @@
     // e.g. self.myOutlet = nil;
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)io
 {
     // Return YES for supported orientations
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+    return (io == UIInterfaceOrientationPortrait);
+}
+
+#pragma mark - Property Methods
+
+- (void)setLocation:(RHLocation *)location {
+    if (location.quickDescription.length > 0) {
+        [self.sections addObject:kAboutLabel];
+    }
+    
+    if (location.parent != nil) {
+        [self.sections addObject:kParentLabel];
+    }
+    
+    if (location.enclosedLocations.count > 0) {
+        [self.sections addObject:kEnclosedLabel];
+        self.enclosedLocations = location.enclosedLocations.allObjects;
+    }
+    
+    location_ = location;
 }
 
 #pragma mark - UITableViewDelegate Methods
@@ -70,47 +110,107 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView
          cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    static NSString *cellIdentifier = @"RHCell";
-    UITableViewCell *cell = [tableView
-                             dequeueReusableCellWithIdentifier:cellIdentifier];
-    if (cell == nil) {
-        cell = [[[UITableViewCell alloc]
-                 initWithStyle:UITableViewCellStyleDefault
-                 reuseIdentifier:cellIdentifier] autorelease];
-    }
+    NSString *sectionLabel = [self.sections objectAtIndex:[indexPath
+                                                           indexAtPosition:0]];
+    UITableViewCell *cell = nil;
     
-    cell.textLabel.text = self.location.quickDescription;
-    cell.textLabel.font = [UIFont systemFontOfSize:[UIFont systemFontSize]];
-    cell.textLabel.numberOfLines = 5;
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    if (sectionLabel == kAboutLabel) {
+        static NSString *cellIdentifier = kAboutCellKey;
+        
+        cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+        
+        if (cell == nil) {
+            cell = [[[UITableViewCell alloc]
+                     initWithStyle:UITableViewCellStyleDefault
+                     reuseIdentifier:cellIdentifier] autorelease];
+            cell.textLabel.font = [UIFont systemFontOfSize:[UIFont
+                                                            systemFontSize]];
+            cell.textLabel.numberOfLines = 5;
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        }
+        
+        cell.textLabel.text = self.location.quickDescription;
+        
+    } else if (sectionLabel == kParentLabel) {
+        static NSString *cellIdentifier = kParentCellKey;
+        
+        cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+        
+        if (cell == nil) {
+            cell = [[[UITableViewCell alloc]
+                     initWithStyle:UITableViewCellStyleDefault
+                     reuseIdentifier:cellIdentifier] autorelease];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        }
+        
+        cell.textLabel.text = self.location.parent.name;
+        
+    } else if (sectionLabel == kEnclosedLabel) {
+        static NSString *cellIdentifier = kEnclosedCellKey;
+        
+        cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+        
+        if (cell == nil) {
+            cell = [[[UITableViewCell alloc]
+                     initWithStyle:UITableViewCellStyleDefault
+                     reuseIdentifier:cellIdentifier] autorelease];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        }
+        
+        RHLocation *child = (RHLocation *) [self.enclosedLocations
+                                            objectAtIndex:[indexPath
+                                                           indexAtPosition:1]];
+        
+        cell.textLabel.text = child.name;
+    }
     
     return cell;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView
  numberOfRowsInSection:(NSInteger)section {
-    switch (tableView.numberOfSections) {
-            case 1:
-            if (self.location.quickDescription.length > 0) {
-                return 1;
-            }
-            break;
+    NSString *sectionLabel = [self.sections objectAtIndex:section];
+    
+    if (sectionLabel == kAboutLabel) {
+        return 1;
+    } else if (sectionLabel == kParentLabel) {
+        return 1;
+    } else if (sectionLabel == kEnclosedLabel) {
+        return self.location.enclosedLocations.count;
     }
+    
     return 0;
 }
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    NSInteger result = 0;
+- (void)tableView:(UITableView *)tableView
+didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSString *sectionLabel = [self.sections objectAtIndex:[indexPath indexAtPosition:0]];
     
-    if (self.location.quickDescription.length > 0) {
-        result ++;
+    if (sectionLabel == kEnclosedLabel) {
+        RHLocation *child = [self.enclosedLocations objectAtIndex:[indexPath indexAtPosition:1]];
+        
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
+        
+        LocationDetailViewController *detailViewController = [[[LocationDetailViewController alloc] initWithNibName:@"LocationDetailView" bundle:nil] autorelease];
+        detailViewController.location = child;
+        [self.navigationController pushViewController:detailViewController animated:YES];
+    } else if (sectionLabel == kParentLabel) {
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
+        
+        LocationDetailViewController *detailViewController = [[[LocationDetailViewController alloc] initWithNibName:@"LocationDetailView" bundle:nil] autorelease];
+        detailViewController.location = self.location.parent;
+        [self.navigationController pushViewController:detailViewController animated:YES];
     }
-    
-    return result;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    return @"About";
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return self.sections.count;
+}
+
+- (NSString *)tableView:(UITableView *)tableView
+titleForHeaderInSection:(NSInteger)section {
+    return [self.sections objectAtIndex:section];
 }
 
 @end

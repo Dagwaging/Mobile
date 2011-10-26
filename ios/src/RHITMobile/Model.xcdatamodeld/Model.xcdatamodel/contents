@@ -13,7 +13,7 @@
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="quickDescription" optional="YES" attributeType="String"/>
         <attribute name="retrievalStatusNumber" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
-        <attribute name="serverIdentifier" optional="YES" attributeType="Integer 16" defaultValueString="0"/>
+        <attribute name="serverIdentifier" optional="YES" attributeType="Integer 32" defaultValueString="0"/>
         <attribute name="visibleZoomLevel" optional="YES" attributeType="Integer 16" defaultValueString="0"/>
         <relationship name="boundaryNodes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="BoundaryNode" inverseName="boundedLocation" inverseEntity="BoundaryNode"/>
         <relationship name="enclosedLocations" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Location" inverseName="parent" inverseEntity="Location" syncable="YES"/>
