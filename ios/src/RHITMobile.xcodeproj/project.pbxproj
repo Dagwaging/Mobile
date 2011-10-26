@@ -8,63 +8,40 @@
 
 /* Begin PBXBuildFile section */
 		9201A4651432E96000069863 /* RHLocationOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 9201A4641432E96000069863 /* RHLocationOverlay.m */; };
-		9201A4661432E96000069863 /* RHLocationOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 9201A4641432E96000069863 /* RHLocationOverlay.m */; };
 		920656F1142FE83200D50293 /* PhysicalStorageTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 920656F0142FE83200D50293 /* PhysicalStorageTests.m */; };
 		920656F81430402E00D50293 /* RHDummyHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 920656F71430402E00D50293 /* RHDummyHandler.m */; };
-		920656F91430402E00D50293 /* RHDummyHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 920656F71430402E00D50293 /* RHDummyHandler.m */; };
 		9208547F142BA28100BE55B8 /* RHNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 9208547E142BA28100BE55B8 /* RHNode.m */; };
-		92085480142BA28100BE55B8 /* RHNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 9208547E142BA28100BE55B8 /* RHNode.m */; };
 		92085493142BA3C300BE55B8 /* RHLabelNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 92085492142BA3C300BE55B8 /* RHLabelNode.m */; };
-		92085494142BA3C300BE55B8 /* RHLabelNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 92085492142BA3C300BE55B8 /* RHLabelNode.m */; };
 		9218208D144113A800A66923 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9218208C144113A800A66923 /* Default@2x.png */; };
 		9218208F144113B900A66923 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 9218208E144113B900A66923 /* Default.png */; };
 		9226030E1409AEF00065F705 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9226030D1409AEF00065F705 /* MapKit.framework */; };
 		922603581409C9480065F705 /* launch-icon-large.png in Resources */ = {isa = PBXBuildFile; fileRef = 922603571409C9480065F705 /* launch-icon-large.png */; };
 		9226035A1409C9680065F705 /* launch-icon-small.png in Resources */ = {isa = PBXBuildFile; fileRef = 922603591409C9680065F705 /* launch-icon-small.png */; };
 		92312438144FB8470074791E /* LocationDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92312436144FB8470074791E /* LocationDetailViewController.m */; };
-		92312439144FB8470074791E /* LocationDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92312436144FB8470074791E /* LocationDetailViewController.m */; };
 		9231243A144FB8470074791E /* LocationDetailView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92312437144FB8470074791E /* LocationDetailView.xib */; };
 		9231243B144FB8470074791E /* LocationDetailView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92312437144FB8470074791E /* LocationDetailView.xib */; };
 		9233DD0F141BAA3500B9A549 /* RHAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9233DD0E141BAA3500B9A549 /* RHAnnotation.m */; };
-		9233DD10141BAA3500B9A549 /* RHAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9233DD0E141BAA3500B9A549 /* RHAnnotation.m */; };
 		9236CE9F144E3CBC00D0FB59 /* QuickListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9236CE9D144E3CBC00D0FB59 /* QuickListViewController.m */; };
-		9236CEA0144E3CBC00D0FB59 /* QuickListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9236CE9D144E3CBC00D0FB59 /* QuickListViewController.m */; };
 		9236CEA1144E3CBC00D0FB59 /* QuickListView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9236CE9E144E3CBC00D0FB59 /* QuickListView.xib */; };
 		9236CEA2144E3CBC00D0FB59 /* QuickListView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9236CE9E144E3CBC00D0FB59 /* QuickListView.xib */; };
 		9236CEA6144F33C400D0FB59 /* RHPinAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9236CEA5144F33C400D0FB59 /* RHPinAnnotationView.m */; };
-		9236CEA7144F33C400D0FB59 /* RHPinAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9236CEA5144F33C400D0FB59 /* RHPinAnnotationView.m */; };
 		923C841414298C5800DFE415 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 923C841314298C5800DFE415 /* CoreData.framework */; };
 		923C841C14298DD500DFE415 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 923C841A14298DD500DFE415 /* Model.xcdatamodeld */; };
-		923C841D14298DD500DFE415 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 923C841A14298DD500DFE415 /* Model.xcdatamodeld */; };
 		9246368C142BAAC700A5E399 /* RHLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9246368B142BAAC700A5E399 /* RHLocation.m */; };
-		9246368D142BAAC700A5E399 /* RHLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9246368B142BAAC700A5E399 /* RHLocation.m */; };
 		92463690142BAB5300A5E399 /* RHBoundaryNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 9246368F142BAB5300A5E399 /* RHBoundaryNode.m */; };
-		92463691142BAB5300A5E399 /* RHBoundaryNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 9246368F142BAB5300A5E399 /* RHBoundaryNode.m */; };
 		92463698142BAE0A00A5E399 /* RHNavigationNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 92463697142BAE0A00A5E399 /* RHNavigationNode.m */; };
-		92463699142BAE0A00A5E399 /* RHNavigationNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 92463697142BAE0A00A5E399 /* RHNavigationNode.m */; };
 		924E754D140ACC9A001DFC4C /* tab-bar-map-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 924E754C140ACC9A001DFC4C /* tab-bar-map-icon.png */; };
 		9250133C1431A7C700CEBB35 /* RHRestHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 9250133B1431A7C700CEBB35 /* RHRestHandler.m */; };
-		9250133D1431A7C700CEBB35 /* RHRestHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 9250133B1431A7C700CEBB35 /* RHRestHandler.m */; };
 		925013581431AB6F00CEBB35 /* CDataScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 925013411431AB6F00CEBB35 /* CDataScanner.m */; };
-		925013591431AB6F00CEBB35 /* CDataScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 925013411431AB6F00CEBB35 /* CDataScanner.m */; };
 		9250135A1431AB6F00CEBB35 /* CFilteringJSONSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 925013441431AB6F00CEBB35 /* CFilteringJSONSerializer.m */; };
-		9250135B1431AB6F00CEBB35 /* CFilteringJSONSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 925013441431AB6F00CEBB35 /* CFilteringJSONSerializer.m */; };
 		9250135C1431AB6F00CEBB35 /* CJSONDeserializer_BlocksExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 925013461431AB6F00CEBB35 /* CJSONDeserializer_BlocksExtensions.m */; };
-		9250135D1431AB6F00CEBB35 /* CJSONDeserializer_BlocksExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 925013461431AB6F00CEBB35 /* CJSONDeserializer_BlocksExtensions.m */; };
 		9250135E1431AB6F00CEBB35 /* CJSONSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 925013481431AB6F00CEBB35 /* CJSONSerialization.m */; };
-		9250135F1431AB6F00CEBB35 /* CJSONSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 925013481431AB6F00CEBB35 /* CJSONSerialization.m */; };
 		925013601431AB6F00CEBB35 /* CJSONSerializedData.m in Sources */ = {isa = PBXBuildFile; fileRef = 9250134A1431AB6F00CEBB35 /* CJSONSerializedData.m */; };
-		925013611431AB6F00CEBB35 /* CJSONSerializedData.m in Sources */ = {isa = PBXBuildFile; fileRef = 9250134A1431AB6F00CEBB35 /* CJSONSerializedData.m */; };
 		925013621431AB6F00CEBB35 /* CDataScanner_Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 9250134D1431AB6F00CEBB35 /* CDataScanner_Extensions.m */; };
-		925013631431AB6F00CEBB35 /* CDataScanner_Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 9250134D1431AB6F00CEBB35 /* CDataScanner_Extensions.m */; };
 		925013641431AB6F00CEBB35 /* NSDictionary_JSONExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 9250134F1431AB6F00CEBB35 /* NSDictionary_JSONExtensions.m */; };
-		925013651431AB6F00CEBB35 /* NSDictionary_JSONExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 9250134F1431AB6F00CEBB35 /* NSDictionary_JSONExtensions.m */; };
 		925013661431AB6F00CEBB35 /* CJSONDeserializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 925013521431AB6F00CEBB35 /* CJSONDeserializer.m */; };
-		925013671431AB6F00CEBB35 /* CJSONDeserializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 925013521431AB6F00CEBB35 /* CJSONDeserializer.m */; };
 		925013681431AB6F00CEBB35 /* CJSONScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 925013541431AB6F00CEBB35 /* CJSONScanner.m */; };
-		925013691431AB6F00CEBB35 /* CJSONScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 925013541431AB6F00CEBB35 /* CJSONScanner.m */; };
 		9250136A1431AB6F00CEBB35 /* CJSONSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 925013561431AB6F00CEBB35 /* CJSONSerializer.m */; };
-		9250136B1431AB6F00CEBB35 /* CJSONSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 925013561431AB6F00CEBB35 /* CJSONSerializer.m */; };
 		926088A8144D2ADB0002D50E /* RHITMobileValues.plist in Resources */ = {isa = PBXBuildFile; fileRef = 926088A7144D2ADB0002D50E /* RHITMobileValues.plist */; };
 		926088A9144D2ADB0002D50E /* RHITMobileValues.plist in Resources */ = {isa = PBXBuildFile; fileRef = 926088A7144D2ADB0002D50E /* RHITMobileValues.plist */; };
 		9265FEA91409AB5D00AE406E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9265FEA81409AB5D00AE406E /* UIKit.framework */; };
@@ -89,7 +66,6 @@
 		927866FF1432F35C00749C2E /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 927866FE1432F35C00749C2E /* CoreLocation.framework */; };
 		927867021432F36500749C2E /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 927867011432F36500749C2E /* CoreLocation.framework */; };
 		928A6440144955EB00521EB1 /* RHPListStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 928A643F144955EB00521EB1 /* RHPListStore.m */; };
-		928A6441144955EB00521EB1 /* RHPListStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 928A643F144955EB00521EB1 /* RHPListStore.m */; };
 		928B76E8144CBADA00D2F98D /* tab-bar-map-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 928B76E7144CBADA00D2F98D /* tab-bar-map-icon@2x.png */; };
 		929488F7142CD4E700820A9C /* RHNodeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 929488F6142CD4E700820A9C /* RHNodeTests.m */; };
 		929488FA142CD65500820A9C /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 929488F9142CD65500820A9C /* CoreData.framework */; };
@@ -98,12 +74,9 @@
 		92948906142D3D5B00820A9C /* RHNavigationNodeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 92948905142D3D5B00820A9C /* RHNavigationNodeTests.m */; };
 		9294890A142D3FE400820A9C /* RHLocationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 92948909142D3FE400820A9C /* RHLocationTests.m */; };
 		92DFEACA141FD4E500889314 /* MKMapView+ZoomLevel.m in Sources */ = {isa = PBXBuildFile; fileRef = 92DFEAC9141FD4E500889314 /* MKMapView+ZoomLevel.m */; };
-		92DFEACB141FD4E500889314 /* MKMapView+ZoomLevel.m in Sources */ = {isa = PBXBuildFile; fileRef = 92DFEAC9141FD4E500889314 /* MKMapView+ZoomLevel.m */; };
 		92DFEACD141FEF9100889314 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92DFEACC141FEF9100889314 /* MapKit.framework */; };
 		92DFEAD01420245F00889314 /* RHAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 92DFEACF1420245F00889314 /* RHAnnotationView.m */; };
-		92DFEAD11420245F00889314 /* RHAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 92DFEACF1420245F00889314 /* RHAnnotationView.m */; };
 		92DFEAD414203C6400889314 /* RHMapLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 92DFEAD314203C6400889314 /* RHMapLabel.m */; };
-		92DFEAD514203C6400889314 /* RHMapLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 92DFEAD314203C6400889314 /* RHMapLabel.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -682,40 +655,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9233DD10141BAA3500B9A549 /* RHAnnotation.m in Sources */,
-				92DFEACB141FD4E500889314 /* MKMapView+ZoomLevel.m in Sources */,
-				92DFEAD11420245F00889314 /* RHAnnotationView.m in Sources */,
-				92DFEAD514203C6400889314 /* RHMapLabel.m in Sources */,
-				923C841D14298DD500DFE415 /* Model.xcdatamodeld in Sources */,
-				92085480142BA28100BE55B8 /* RHNode.m in Sources */,
-				92085494142BA3C300BE55B8 /* RHLabelNode.m in Sources */,
-				9246368D142BAAC700A5E399 /* RHLocation.m in Sources */,
-				92463691142BAB5300A5E399 /* RHBoundaryNode.m in Sources */,
-				92463699142BAE0A00A5E399 /* RHNavigationNode.m in Sources */,
 				929488F7142CD4E700820A9C /* RHNodeTests.m in Sources */,
 				92948900142D380400820A9C /* RHBoundaryNodeTests.m in Sources */,
 				92948903142D3C4200820A9C /* RHLabelNodeTests.m in Sources */,
 				92948906142D3D5B00820A9C /* RHNavigationNodeTests.m in Sources */,
 				9294890A142D3FE400820A9C /* RHLocationTests.m in Sources */,
 				920656F1142FE83200D50293 /* PhysicalStorageTests.m in Sources */,
-				920656F91430402E00D50293 /* RHDummyHandler.m in Sources */,
-				9250133D1431A7C700CEBB35 /* RHRestHandler.m in Sources */,
-				925013591431AB6F00CEBB35 /* CDataScanner.m in Sources */,
-				9250135B1431AB6F00CEBB35 /* CFilteringJSONSerializer.m in Sources */,
-				9250135D1431AB6F00CEBB35 /* CJSONDeserializer_BlocksExtensions.m in Sources */,
-				9250135F1431AB6F00CEBB35 /* CJSONSerialization.m in Sources */,
-				925013611431AB6F00CEBB35 /* CJSONSerializedData.m in Sources */,
-				925013631431AB6F00CEBB35 /* CDataScanner_Extensions.m in Sources */,
-				925013651431AB6F00CEBB35 /* NSDictionary_JSONExtensions.m in Sources */,
-				925013671431AB6F00CEBB35 /* CJSONDeserializer.m in Sources */,
-				925013691431AB6F00CEBB35 /* CJSONScanner.m in Sources */,
-				9250136B1431AB6F00CEBB35 /* CJSONSerializer.m in Sources */,
-				9201A4661432E96000069863 /* RHLocationOverlay.m in Sources */,
 				92747161143B6F99005B6D43 /* MKMapViewTests.m in Sources */,
-				928A6441144955EB00521EB1 /* RHPListStore.m in Sources */,
-				9236CEA0144E3CBC00D0FB59 /* QuickListViewController.m in Sources */,
-				9236CEA7144F33C400D0FB59 /* RHPinAnnotationView.m in Sources */,
-				92312439144FB8470074791E /* LocationDetailViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

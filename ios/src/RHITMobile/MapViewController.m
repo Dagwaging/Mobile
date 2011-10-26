@@ -443,7 +443,7 @@
     
     // Put conditions on our fetch request
     NSPredicate *predicate = [NSPredicate predicateWithFormat:
-                              @"visibleZoomLevel > 0 || inQuickList == TRUE"];
+                              @"visibleZoomLevel > 0"];
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc]
                                         initWithKey:@"name"
                                         ascending:YES];
@@ -472,7 +472,7 @@
                                   currentZoomLevel:currentZoomLevel]
                       autorelease];
         
-        if (location.inQuickList) {
+        if (location.displayType == RHLocationDisplayTypeQuickList) {
             [self.quickListAnnotations addObject:annotation];
         }
         

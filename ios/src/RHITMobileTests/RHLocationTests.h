@@ -33,4 +33,7 @@
 /// Verify that storage and retrieval still works.
 - (void)testStorageAndRetrieval;
 
+/// Test values computed on the fly
+- (void)testCompotedValues;
+
 @end

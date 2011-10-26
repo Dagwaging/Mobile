@@ -281,13 +281,13 @@
                                          "is missing its description"];
             
             // Quick List Visibility
-            location.inQuickList = [NSNumber numberWithBool:
-                                    [self booleanFromDictionary:area
-                                                         forKey:kQuickListKey
-                                              withErrorSelector:failureSelector
-                                                withErrorString:@"Problem with "
-                                     "server response:\nAt least one location is "
-                                     "missings its quick list status"]];
+//            location.inQuickList = [NSNumber numberWithBool:
+//                                    [self booleanFromDictionary:area
+//                                                         forKey:kQuickListKey
+//                                              withErrorSelector:failureSelector
+//                                                withErrorString:@"Problem with "
+//                                     "server response:\nAt least one location is "
+//                                     "missings its quick list status"]];
             
             NSDictionary *mapArea = [self dictionaryFromDictionary:area
                                                             forKey:kMapAreaKey
