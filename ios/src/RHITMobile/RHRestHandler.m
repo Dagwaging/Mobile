@@ -27,6 +27,7 @@
 #import "RHLocation.h"
 #import "RHConstants.h"
 #import "RHPListStore.h"
+#import "RHITMobileAppDelegate.h"
 
 
 #define kTopLevelServerPath @"/locations/data/top"
@@ -409,6 +410,14 @@
                          ofFailureWithError:error];
             return;
         }
+        
+        RHITMobileAppDelegate *appDelegate;
+        appDelegate = (RHITMobileAppDelegate *)[[UIApplication
+                                                 sharedApplication] delegate];
+        
+        [appDelegate performSelectorOnMainThread:@selector(clearDatabase)
+                                      withObject:nil
+                                   waitUntilDone:YES];
         
         NSString *newVersion = [self stringFromDictionary:parsedData
                                                    forKey:@"Version"
