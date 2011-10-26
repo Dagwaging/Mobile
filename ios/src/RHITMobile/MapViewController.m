@@ -443,7 +443,11 @@
     
     // Put conditions on our fetch request
     NSPredicate *predicate = [NSPredicate predicateWithFormat:
-                              @"visibleZoomLevel > 0"];
+                              @"visibleZoomLevel > 0 || "
+                              "displayTypeNumber == %d || "
+                              "displayTypeNumber == %d",
+                              RHLocationDisplayTypePointOfInterest,
+                              RHLocationDisplayTypeQuickList];
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc]
                                         initWithKey:@"name"
                                         ascending:YES];

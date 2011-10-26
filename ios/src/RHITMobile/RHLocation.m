@@ -32,7 +32,7 @@
 @dynamic altNames;
 @dynamic displayTypeNumber;
 @dynamic quickDescription;
-@dynamic fullyPopulated;
+@dynamic retrievalStatusNumber;
 @dynamic visibleZoomLevel;
 @dynamic enclosedLocations;
 @dynamic parent;
@@ -48,11 +48,19 @@
 }
 
 - (RHLocationDisplayType)displayType {
-    return (RHLocationDisplayType)self.displayTypeNumber.intValue;
+    return (RHLocationDisplayType) self.displayTypeNumber.intValue;
 }
 
 - (void)setDisplayType:(RHLocationDisplayType)displayType {
     self.displayTypeNumber = [NSNumber numberWithInt:displayType];
+}
+
+- (RHLocationRetrievalStatus)retrievalStatus {
+    return (RHLocationRetrievalStatus) self.retrievalStatusNumber.intValue;
+}
+
+- (void)setRetrievalStatus:(RHLocationRetrievalStatus)retrievalStatus {
+    self.retrievalStatusNumber = [NSNumber numberWithInt:retrievalStatus];
 }
 
 - (NSArray *)alternateNames {

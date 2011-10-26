@@ -21,30 +21,10 @@
 			<string>PSToggleSwitchSpecifier</string>
 		</dict>
 		<dict>
-			<key>DefaultValue</key>
-			<false/>
-			<key>Key</key>
-			<string>map_zoom_debug_preference</string>
-			<key>Title</key>
-			<string>Map Zoom Controls</string>
-			<key>Type</key>
-			<string>PSToggleSwitchSpecifier</string>
-		</dict>
-		<dict>
 			<key>Type</key>
 			<string>PSGroupSpecifier</string>
 			<key>Title</key>
 			<string>Server Debugging Tools</string>
-		</dict>
-		<dict>
-			<key>Type</key>
-			<string>PSToggleSwitchSpecifier</string>
-			<key>Title</key>
-			<string>Use Mock Data</string>
-			<key>Key</key>
-			<string>use_mock_data_debug_preference</string>
-			<key>DefaultValue</key>
-			<false/>
 		</dict>
 		<dict>
 			<key>DefaultValue</key>

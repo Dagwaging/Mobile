@@ -34,6 +34,13 @@ typedef enum _RHLocationDisplayType {
 } RHLocationDisplayType;
 
 
+typedef enum _RHLocationRetrievalStatus {
+    RHLocationRetrievalStatusNameOnly = 0,
+    RHLocationRetrievalStatusNoChildren = 1,
+    RHLocationRetrievalStatusFull = 2,
+} RHLocationRetrievalStatus;
+
+
 /// \ingroup model
 /// Representation of a canonical location. An RHLocation has areas that can
 /// be travelled to, borders defining where it physically is, labelling
@@ -54,7 +61,9 @@ typedef enum _RHLocationDisplayType {
 
 @property (nonatomic, assign) RHLocationDisplayType displayType;
 
-@property (nonatomic, assign) NSNumber *fullyPopulated;
+@property (nonatomic, retain) NSNumber *retrievalStatusNumber;
+
+@property (nonatomic, assign) RHLocationRetrievalStatus retrievalStatus;
 
 /// Short description. Used as a subtitle for map callouts.
 @property (nonatomic, retain) NSString *quickDescription;

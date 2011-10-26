@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		9201A4651432E96000069863 /* RHLocationOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 9201A4641432E96000069863 /* RHLocationOverlay.m */; };
 		920656F1142FE83200D50293 /* PhysicalStorageTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 920656F0142FE83200D50293 /* PhysicalStorageTests.m */; };
-		920656F81430402E00D50293 /* RHDummyHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 920656F71430402E00D50293 /* RHDummyHandler.m */; };
 		9208547F142BA28100BE55B8 /* RHNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 9208547E142BA28100BE55B8 /* RHNode.m */; };
 		92085493142BA3C300BE55B8 /* RHLabelNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 92085492142BA3C300BE55B8 /* RHLabelNode.m */; };
 		9218208D144113A800A66923 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9218208C144113A800A66923 /* Default@2x.png */; };
@@ -97,8 +96,6 @@
 		920656F0142FE83200D50293 /* PhysicalStorageTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhysicalStorageTests.m; sourceTree = "<group>"; };
 		920656F414303D1400D50293 /* RHRemoteHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHRemoteHandler.h; sourceTree = "<group>"; };
 		920656F514303D4F00D50293 /* RHRemoteHandlerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHRemoteHandlerDelegate.h; sourceTree = "<group>"; };
-		920656F61430402E00D50293 /* RHDummyHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHDummyHandler.h; sourceTree = "<group>"; };
-		920656F71430402E00D50293 /* RHDummyHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHDummyHandler.m; sourceTree = "<group>"; };
 		9208547D142BA28100BE55B8 /* RHNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHNode.h; sourceTree = "<group>"; };
 		9208547E142BA28100BE55B8 /* RHNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHNode.m; sourceTree = "<group>"; };
 		92085491142BA3C300BE55B8 /* RHLabelNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHLabelNode.h; sourceTree = "<group>"; };
@@ -238,8 +235,6 @@
 			children = (
 				920656F414303D1400D50293 /* RHRemoteHandler.h */,
 				920656F514303D4F00D50293 /* RHRemoteHandlerDelegate.h */,
-				920656F61430402E00D50293 /* RHDummyHandler.h */,
-				920656F71430402E00D50293 /* RHDummyHandler.m */,
 				9250133A1431A7C700CEBB35 /* RHRestHandler.h */,
 				9250133B1431A7C700CEBB35 /* RHRestHandler.m */,
 			);
@@ -631,7 +626,6 @@
 				9246368C142BAAC700A5E399 /* RHLocation.m in Sources */,
 				92463690142BAB5300A5E399 /* RHBoundaryNode.m in Sources */,
 				92463698142BAE0A00A5E399 /* RHNavigationNode.m in Sources */,
-				920656F81430402E00D50293 /* RHDummyHandler.m in Sources */,
 				9250133C1431A7C700CEBB35 /* RHRestHandler.m in Sources */,
 				925013581431AB6F00CEBB35 /* CDataScanner.m in Sources */,
 				9250135A1431AB6F00CEBB35 /* CFilteringJSONSerializer.m in Sources */,
