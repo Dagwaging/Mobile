@@ -35,9 +35,10 @@ typedef enum _RHLocationDisplayType {
 
 
 typedef enum _RHLocationRetrievalStatus {
-    RHLocationRetrievalStatusNameOnly = 0,
-    RHLocationRetrievalStatusNoChildren = 1,
-    RHLocationRetrievalStatusFull = 2,
+    RHLocationRetrievalStatusServerIDOnly = 0,
+    RHLocationRetrievalStatusIDAndName = 1,
+    RHLocationRetrievalStatusNoChildren = 2,
+    RHLocationRetrievalStatusFull = 3,
 } RHLocationRetrievalStatus;
 
 

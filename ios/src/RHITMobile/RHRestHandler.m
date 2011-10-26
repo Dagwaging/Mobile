@@ -34,6 +34,7 @@
 #define kLocationListKey @"Locations"
 #define kNameKey @"Name"
 #define kIdKey @"Id"
+#define kParentKey @"Parent"
 #define kDescriptionKey @"Description"
 #define kDisplayTypeKey @"Type"
 #define kDisplayTypeNormal @"NL"
@@ -308,6 +309,45 @@
     location.labelLocation = centerNode;
     
     location.retrievalStatus = RHLocationRetrievalStatusNoChildren;
+    
+    NSNumber *parentId = (NSNumber *)[dictionary objectForKey:kParentKey];
+    
+    if (parentId != nil) {
+        // Perform a save in case the parent exists but hasn't been saved
+        NSError *saveError = nil;
+        [context save:&saveError];
+        
+        // Describe the type of entity we'd like to retrieve
+        NSEntityDescription *entityDescription;
+        entityDescription = [NSEntityDescription
+                             entityForName:kRHLocationCoreDataModelIdentifier
+                             inManagedObjectContext:context];
+        
+        NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
+        [request setEntity:entityDescription];
+        
+        // Put conditions on our fetch request
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:
+                                  @"serverIdentifer == %d", parentId.intValue];
+        [request setPredicate:predicate];
+        
+        // Retrieve what we hope is our created object
+        NSError *error = nil;
+        NSArray *results = [context executeFetchRequest:request
+                                                  error:&error];
+        if (results.count < 1) {
+            RHLocation *parent = [RHLocation fromContext:context];
+            parent.serverIdentifier = parentId;
+            parent.retrievalStatus = RHLocationRetrievalStatusServerIDOnly;
+            [parent addEnclosedLocationsObject:location];
+            location.parent = parent;
+        } else {
+            RHLocation *parent = [results objectAtIndex:0];
+            [parent addEnclosedLocationsObject:location];
+            location.parent = parent;
+        }
+
+    }
     
     return location;
 }
