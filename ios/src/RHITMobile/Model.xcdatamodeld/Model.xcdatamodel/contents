@@ -8,8 +8,9 @@
         <relationship name="labeledLocation" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Location" inverseName="labelLocation" inverseEntity="Location"/>
     </entity>
     <entity name="Location" representedClassName="RHLocation">
+        <attribute name="altNames" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="displayTypeNumber" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="fullyPopulated" optional="YES" attributeType="Boolean" syncable="YES"/>
-        <attribute name="inQuickList" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="quickDescription" optional="YES" attributeType="String"/>
         <attribute name="serverIdentifier" optional="YES" attributeType="Integer 16" defaultValueString="0"/>
@@ -32,7 +33,7 @@
     <elements>
         <element name="BoundaryNode" positionX="-2450" positionY="-1440" width="128" height="45"/>
         <element name="LabelNode" positionX="-2657" positionY="-1455" width="128" height="60"/>
-        <element name="Location" positionX="-2556" positionY="-1302" width="128" height="210"/>
+        <element name="Location" positionX="-2556" positionY="-1302" width="128" height="225"/>
         <element name="NavigationNode" positionX="-2250" positionY="-1449" width="128" height="90"/>
         <element name="Node" positionX="-2333" positionY="-1620" width="128" height="75"/>
     </elements>

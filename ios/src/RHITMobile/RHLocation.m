@@ -22,12 +22,16 @@
 #import "RHLabelNode.h"
 
 
+#define kAltNamesDelimiter @"|::|"
+
+
 @implementation RHLocation
 
 @dynamic serverIdentifier;
 @dynamic name;
+@dynamic altNames;
+@dynamic displayTypeNumber;
 @dynamic quickDescription;
-@dynamic inQuickList;
 @dynamic fullyPopulated;
 @dynamic visibleZoomLevel;
 @dynamic enclosedLocations;
@@ -38,9 +42,26 @@
 
 + (RHLocation *)fromContext:(NSManagedObjectContext *)context {
     RHLocation *location = [NSEntityDescription
-                            insertNewObjectForEntityForName:@"Location"
+                            insertNewObjectForEntityForName:kRHLocationCoreDataModelIdentifier
                             inManagedObjectContext:context];
     return location;
+}
+
+- (RHLocationDisplayType)displayType {
+    return (RHLocationDisplayType)self.displayTypeNumber.intValue;
+}
+
+- (void)setDisplayType:(RHLocationDisplayType)displayType {
+    self.displayTypeNumber = [NSNumber numberWithInt:displayType];
+}
+
+- (NSArray *)alternateNames {
+    return [self.altNames componentsSeparatedByString:kAltNamesDelimiter];
+}
+
+- (void)setAlternateNames:(NSArray *)alternateNames {
+    self.altNames = [alternateNames
+                     componentsJoinedByString:kAltNamesDelimiter];
 }
 
 - (void)setOrderedBoundaryNodes:(NSArray *)inBoundaryNodes {

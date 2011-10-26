@@ -20,9 +20,19 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
+#define kRHLocationCoreDataModelIdentifier @"Location"
+
 
 @class RHBoundaryNode;
 @class RHLabelNode;
+
+
+typedef enum _RHLocationDisplayType {
+    RHLocationDisplayTypeNone = 0,
+    RHLocationDisplayTypePointOfInterest = 1,
+    RHLocationDisplayTypeQuickList = 2
+} RHLocationDisplayType;
+
 
 /// \ingroup model
 /// Representation of a canonical location. An RHLocation has areas that can
@@ -36,7 +46,13 @@
 /// Human-readable name for this RHLocation.
 @property (nonatomic, retain) NSString *name;
 
-@property (nonatomic, assign) NSNumber *inQuickList;
+@property (nonatomic, retain) NSString *altNames;
+
+@property (nonatomic, retain) NSArray *alternateNames;
+
+@property (nonatomic, retain) NSNumber *displayTypeNumber;
+
+@property (nonatomic, assign) RHLocationDisplayType displayType;
 
 @property (nonatomic, assign) NSNumber *fullyPopulated;
 
