@@ -62,8 +62,8 @@
 
 - (RHLocation *)locationFromDictionary:(NSDictionary *)dictionary
                            withContext:(NSManagedObjectContext *)context
-                      andLocationsByID:(NSMutableDictionary *)locationsByID
-                    andFailureSelector:(SEL)selector;
+                     withLocationsByID:(NSMutableDictionary *)locationsByID
+                   withFailureSelector:(SEL)selector;
 
 - (BOOL)booleanFromDictionary:(NSDictionary *)dictionary
                        forKey:(NSString *)key
@@ -192,9 +192,38 @@
 
 - (RHLocation *)locationFromDictionary:(NSDictionary *)dictionary
                            withContext:(NSManagedObjectContext *)context
-                      andLocationsByID:(NSMutableDictionary *)locationsByID
-                    andFailureSelector:(SEL)failureSelector {
+                     withLocationsByID:(NSMutableDictionary *)locationsByID
+                   withFailureSelector:(SEL)failureSelector {
+    
+    // Fetch the server identifier first to see if we need to fetch at all
+    NSNumber *serverIdentifier = [self numberFromDictionary:dictionary
+                                                    forKey:kIdKey
+                                         withErrorSelector:failureSelector
+                                           withErrorString:@"Problem with "
+                                 "server response:\nAt least one location "
+                                 "is missing its server identifier"];
+    
+    // Check to see if this location already exists
+    NSEntityDescription *entityDescription = [NSEntityDescription
+                                              entityForName:@"Location"
+                                              inManagedObjectContext:context];
+    NSFetchRequest *fetchRequest = [[[NSFetchRequest alloc] init] autorelease];
+    [fetchRequest setEntity:entityDescription];
+    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:
+                              @"serverIdentifier == %d", serverIdentifier.intValue];
+    [fetchRequest setPredicate:predicate];
+    
+    NSArray *potentialMatches = [context executeFetchRequest:fetchRequest
+                                                       error:nil];
+    
+    if (potentialMatches.count > 0) {
+        return nil;
+    }
+    
     RHLocation *location = (RHLocation *) [RHLocation fromContext:context];
+    
+    location.serverIdentifier = serverIdentifier;
     
     // Name
     location.name = [self stringFromDictionary:dictionary
@@ -203,14 +232,7 @@
                                withErrorString:@"Problem with server "
                      "response:\nAt least one location is missings its "
                      "name"];
-    
-    // Server identifier
-    location.serverIdentifier = [self numberFromDictionary:dictionary
-                                                    forKey:kIdKey
-                                         withErrorSelector:failureSelector
-                                           withErrorString:@"Problem with "
-                                 "server response:\nAt least one location "
-                                 "is missing its server identifier"];
+
     
     // Description
     location.quickDescription = [self stringFromDictionary:dictionary
@@ -453,9 +475,11 @@
         for (NSDictionary *area in areas) {
             RHLocation *location = [self locationFromDictionary:area
                                                     withContext:context
-                                               andLocationsByID:locationsByID
-                                             andFailureSelector:failureSelector];
-            [locations addObject:location];
+                                               withLocationsByID:locationsByID
+                                             withFailureSelector:failureSelector];
+            if (location != nil) {
+                [locations addObject:location];    
+            }
         }
         
         NSError *saveError = nil;
@@ -545,10 +569,12 @@
                 RHLocation *childLocation = [self
                                              locationFromDictionary:dictionary
                                              withContext:context
-                                             andLocationsByID:nil
-                                             andFailureSelector:failureSelector];
-                childLocation.parent = location;
-                [location addEnclosedLocationsObject:location];
+                                             withLocationsByID:nil
+                                             withFailureSelector:failureSelector];
+                if (childLocation != nil) {
+                    childLocation.parent = location;
+                    [location addEnclosedLocationsObject:location];
+                }
             }
             
             [context save:nil];
