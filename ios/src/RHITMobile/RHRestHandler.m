@@ -31,6 +31,7 @@
 
 
 #define kTopLevelServerPath @"/locations/data/top"
+#define kUnderlyingLocationServerPath @"/locations/data/within/%d"
 
 #define kLocationListKey @"Locations"
 #define kNameKey @"Name"
@@ -90,6 +91,8 @@
                            withErrorString:(NSString *)errorString;
 
 - (void)performCheckForLocationUpdates;
+
+- (void)performPopulateUnderlyingLocations;
 
 - (void)notifyDelegateViaSelector:(SEL)selector
                ofFailureWithError:(NSError *)error;
@@ -157,6 +160,19 @@
     operation = [[operation
                   initWithTarget:self
                   selector:@selector(performCheckForLocationUpdates)
+                  object:nil] autorelease];
+    [operations addOperation:operation];
+}
+
+- (void)populateUnderlyingLocations {
+    if (self.delegate == nil) {
+        return;
+    }
+    
+    NSInvocationOperation* operation = [NSInvocationOperation alloc];
+    operation = [[operation
+                  initWithTarget:self
+                  selector:@selector(performPopulateUnderlyingLocations)
                   object:nil] autorelease];
     [operations addOperation:operation];
 }
@@ -315,7 +331,7 @@
     
     id parentId = [dictionary objectForKey:kParentKey];
     
-    if (![parentId isKindOfClass:[NSNull class]]) {
+    if (![parentId isKindOfClass:[NSNull class]] && locationsByID != nil) {
         NSNumber *parentIdentifer = (NSNumber *)parentId;
         RHLocation *potentialParent = (RHLocation *)[locationsByID
                                                       objectForKey:parentIdentifer.stringValue];
@@ -452,7 +468,96 @@
         [delegate performSelectorOnMainThread:@selector(didFindMapLevelLocationUpdates)
                                    withObject:nil
                                 waitUntilDone:NO];
+        
+        [self populateUnderlyingLocations];
     }
+}
+
+- (void)performPopulateUnderlyingLocations {
+    @synchronized(self) {
+        SEL failureSelector;
+        failureSelector = @selector(didFailCheckingForLocationUpdatesWithError:);
+        
+        NSManagedObjectContext *context = [[[NSManagedObjectContext alloc] init]
+                                           autorelease];
+        context.persistentStoreCoordinator = self.coordinator;
+        
+        NSString *fullHost = [[[NSString alloc] initWithFormat:@"%@:%@",
+                              self.host,
+                              self.port] autorelease];
+        
+        // Get all locations that we may need to populate
+        NSEntityDescription *entityDescription = [NSEntityDescription
+                                                  entityForName:@"Location"
+                                                  inManagedObjectContext:context];
+        NSFetchRequest *fetchRequest = [[[NSFetchRequest alloc] init] autorelease];
+        [fetchRequest setEntity:entityDescription];
+
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:
+                                  @"retrievalStatusNumber == %d",
+                                  RHLocationRetrievalStatusNoChildren];
+        [fetchRequest setPredicate:predicate];
+        
+        NSArray *locationsToPopulate = [context executeFetchRequest:fetchRequest
+                                                              error:nil];
+        
+        // Populate and save each location
+        for (RHLocation *location in locationsToPopulate) {
+            
+            location = (RHLocation *)[context objectWithID:location.objectID];
+            
+            NSLog(@"Fetching data for location %@", location.name);
+            
+            NSString *serverPath = [[[NSString alloc] initWithFormat:kUnderlyingLocationServerPath, location.serverIdentifier.intValue] autorelease];
+            
+            
+            NSURL *url = [[NSURL alloc] initWithScheme:self.scheme
+                                                  host:fullHost
+                                                  path:serverPath];
+
+            NSURLRequest *request = [NSURLRequest requestWithURL:url];
+            [url release];
+            
+            NSURLResponse *response = nil;
+            NSError *error = nil;
+            
+            // Because this will be done on a background thread, we can use a
+            // synchronous request for our data retrieval step.
+            NSData *data = [NSURLConnection sendSynchronousRequest:request
+                                                 returningResponse:&response
+                                                             error:&error];
+            
+            if (data == nil) {
+                [self notifyDelegateViaSelector:failureSelector
+                             ofFailureWithError:error];
+                return;
+            }
+            
+            NSDictionary *parsedData = [NSDictionary dictionaryWithJSONData:data
+                                                                      error:nil];
+            
+            NSArray* children = [self arrayFromDictionary:parsedData
+                                                   forKey:kLocationListKey
+                                        withErrorSelector:failureSelector
+                                          withErrorString:@"Problem with "
+                                 "server response:\nNo children locations "
+                                 "attribute found"];
+            
+            for (NSDictionary *dictionary in children) {
+                RHLocation *childLocation = [self
+                                             locationFromDictionary:dictionary
+                                             withContext:context
+                                             andLocationsByID:nil
+                                             andFailureSelector:failureSelector];
+                childLocation.parent = location;
+                [location addEnclosedLocationsObject:location];
+            }
+            
+            [context save:nil];
+        }
+    }
+    
+    NSLog(@"Done fetching locations");
 }
 
 #pragma mark-

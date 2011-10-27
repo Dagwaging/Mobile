@@ -325,6 +325,19 @@
     [alert release];
 }
 
+- (void)didFailPopulatingLocationsWithError:(NSError *)error {
+    NSString *title = @"Error Populating Locations";
+    NSString *message = error.localizedDescription;
+    
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
+                                                    message:message
+                                                   delegate:self
+                                          cancelButtonTitle:@"OK"
+                                          otherButtonTitles:nil, nil];
+    [alert show];
+    [alert release]; 
+}
+
 #pragma mark -
 #pragma mark RHAnnotationView Delegate Methods
 

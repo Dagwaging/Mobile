@@ -31,4 +31,6 @@
 /// Callback when something goes wrong checking for new location data.
 - (void)didFailCheckingForLocationUpdatesWithError:(NSError *)error;
 
+- (void)didFailPopulatingLocationsWithError:(NSError *)error;
+
 @end

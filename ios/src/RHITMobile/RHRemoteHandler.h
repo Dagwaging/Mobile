@@ -38,4 +38,8 @@
 /// appropriate callbacks will be called on the RHRemoteHandlerDelegate.
 - (void)checkForLocationUpdates;
 
+/// Asynchronously pull down information for all incomplete locations, as well
+/// as all locations enclosed in these locations.
+- (void)populateUnderlyingLocations;
+
 @end
