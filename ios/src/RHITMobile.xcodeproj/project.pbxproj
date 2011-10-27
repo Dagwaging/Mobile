@@ -76,6 +76,8 @@
 		92ADEE2A1459026600060A3F /* RHLocationLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 92ADEE281459026600060A3F /* RHLocationLink.m */; };
 		92ADEE2E14599D9500060A3F /* quicklist-toolbar-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 92ADEE2C14599D9500060A3F /* quicklist-toolbar-icon.png */; };
 		92ADEE2F14599D9500060A3F /* quicklist-toolbar-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 92ADEE2D14599D9500060A3F /* quicklist-toolbar-icon@2x.png */; };
+		92ADEE321459BC5E00060A3F /* tab-bar-directory-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 92ADEE301459BC5E00060A3F /* tab-bar-directory-icon.png */; };
+		92ADEE331459BC5E00060A3F /* tab-bar-directory-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 92ADEE311459BC5E00060A3F /* tab-bar-directory-icon@2x.png */; };
 		92DFEACA141FD4E500889314 /* MKMapView+ZoomLevel.m in Sources */ = {isa = PBXBuildFile; fileRef = 92DFEAC9141FD4E500889314 /* MKMapView+ZoomLevel.m */; };
 		92DFEACD141FEF9100889314 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92DFEACC141FEF9100889314 /* MapKit.framework */; };
 		92DFEAD01420245F00889314 /* RHAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 92DFEACF1420245F00889314 /* RHAnnotationView.m */; };
@@ -197,6 +199,8 @@
 		92ADEE281459026600060A3F /* RHLocationLink.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHLocationLink.m; sourceTree = "<group>"; };
 		92ADEE2C14599D9500060A3F /* quicklist-toolbar-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "quicklist-toolbar-icon.png"; sourceTree = "<group>"; };
 		92ADEE2D14599D9500060A3F /* quicklist-toolbar-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "quicklist-toolbar-icon@2x.png"; sourceTree = "<group>"; };
+		92ADEE301459BC5E00060A3F /* tab-bar-directory-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab-bar-directory-icon.png"; sourceTree = "<group>"; };
+		92ADEE311459BC5E00060A3F /* tab-bar-directory-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab-bar-directory-icon@2x.png"; sourceTree = "<group>"; };
 		92DFEAC8141FD4E500889314 /* MKMapView+ZoomLevel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MKMapView+ZoomLevel.h"; sourceTree = "<group>"; };
 		92DFEAC9141FD4E500889314 /* MKMapView+ZoomLevel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MKMapView+ZoomLevel.m"; sourceTree = "<group>"; };
 		92DFEACC141FEF9100889314 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
@@ -252,6 +256,8 @@
 		9226030B1409AC820065F705 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				92ADEE301459BC5E00060A3F /* tab-bar-directory-icon.png */,
+				92ADEE311459BC5E00060A3F /* tab-bar-directory-icon@2x.png */,
 				92ADEE2C14599D9500060A3F /* quicklist-toolbar-icon.png */,
 				92ADEE2D14599D9500060A3F /* quicklist-toolbar-icon@2x.png */,
 				928B76E7144CBADA00D2F98D /* tab-bar-map-icon@2x.png */,
@@ -588,6 +594,8 @@
 				9231243A144FB8470074791E /* LocationDetailView.xib in Resources */,
 				92ADEE2E14599D9500060A3F /* quicklist-toolbar-icon.png in Resources */,
 				92ADEE2F14599D9500060A3F /* quicklist-toolbar-icon@2x.png in Resources */,
+				92ADEE321459BC5E00060A3F /* tab-bar-directory-icon.png in Resources */,
+				92ADEE331459BC5E00060A3F /* tab-bar-directory-icon@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
