@@ -23,12 +23,14 @@
 
 
 #define kAltNamesDelimiter @"|::|"
+#define kLinksDelimiter @"@|::|@"
 
 
 @implementation RHLocation
 
 @dynamic serverIdentifier;
 @dynamic name;
+@dynamic links;
 @dynamic altNames;
 @dynamic displayTypeNumber;
 @dynamic quickDescription;

@@ -28,6 +28,7 @@
 #import "RHConstants.h"
 #import "RHPListStore.h"
 #import "RHITMobileAppDelegate.h"
+#import "RHLocationLink.h"
 
 
 #define kTopLevelServerPath @"/locations/data/top"
@@ -37,6 +38,9 @@
 #define kNameKey @"Name"
 #define kIdKey @"Id"
 #define kAltNamesKey @"AltNames"
+#define kLinksKey @"Links"
+#define kLinkNameKey @"Name"
+#define kLinkURLKey @"Url"
 #define kParentKey @"Parent"
 #define kDescriptionKey @"Description"
 #define kDisplayTypeKey @"Type"
@@ -242,6 +246,22 @@
                                         withErrorString:@"Problem with server "
                                "response:\nAt least one location is missing "
                                "its alternate names attribute"];
+    
+    // Links
+    NSArray *links = [self arrayFromDictionary:dictionary
+                                        forKey:kLinksKey
+                             withErrorSelector:failureSelector
+                               withErrorString:@"Problem with server "
+                      "response:\nAt least one location is missints its "
+                      "links attribute"];
+    
+    for (NSDictionary *dictionary in links) {
+        RHLocationLink *link = [RHLocationLink linkFromContext:context];
+        
+        link.name = [self stringFromDictionary:dictionary forKey:kLinkNameKey withErrorSelector:failureSelector withErrorString:@"Problem with server response:\nMissing link name"];
+        link.url = [self stringFromDictionary:dictionary forKey:kLinkURLKey withErrorSelector:failureSelector withErrorString:@"Problem with server response:\nMissing link URL"];
+        link.owner = location;
+    }
     
     // Description
     location.quickDescription = [self stringFromDictionary:dictionary

@@ -1,5 +1,5 @@
 //
-//  LocationDetailViewController.h
+//  RHLocationLink.m
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -17,16 +17,19 @@
 //  limitations under the License.
 //
 
+#import "RHLocationLink.h"
+#import "RHLocation.h"
 
-#import <UIKit/UIKit.h>
 
-@class RHLocation;
+@implementation RHLocationLink
 
-@interface LocationDetailViewController : UIViewController
-<UITableViewDelegate, UITableViewDataSource>
+@dynamic name;
+@dynamic url;
+@dynamic owner;
 
-@property (nonatomic, retain) RHLocation *location;
-@property (nonatomic, retain) NSArray *enclosedLocations;
-@property (nonatomic, retain) NSArray *links;
++ (RHLocationLink *)linkFromContext:(NSManagedObjectContext *)context {
+    RHLocationLink *link = [NSEntityDescription insertNewObjectForEntityForName:kRHLocationLinkCoreDataModelIdentifier inManagedObjectContext:context];
+    return link;
+}
 
 @end

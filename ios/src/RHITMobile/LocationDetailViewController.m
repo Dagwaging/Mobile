@@ -20,13 +20,16 @@
 
 #import "LocationDetailViewController.h"
 #import "RHLocation.h"
+#import "RHLocationLink.h"
 
 #define kAltNamesLabel @"Also Known As"
 #define kAboutLabel @"About"
+#define kLinksLabel @"More Info"
 #define kParentLabel @"Where It Is"
 #define kEnclosedLabel @"What's Inside"
 
 #define kAltNameCellKey @"AltNameCell"
+#define kLinkCellKey @"LinkCell"
 #define kAboutCellKey @"AboutCell"
 #define kParentCellKey @"ParentCell"
 #define kEnclosedCellKey @"EnclosedCell"
@@ -42,6 +45,7 @@
 @implementation LocationDetailViewController
 
 @synthesize location = location_;
+@synthesize links = links_;
 @synthesize enclosedLocations;
 
 @synthesize sections;
@@ -93,6 +97,11 @@
     
     if (location.quickDescription.length > 0) {
         [self.sections addObject:kAboutLabel];
+    }
+    
+    if (location.links.count > 0) {
+        [self.sections addObject:kLinksLabel];
+        self.links = location.links.allObjects;
     }
     
     if (location.parent != nil) {
@@ -190,6 +199,21 @@
         cell.textLabel.text = [self.location.alternateNames
                                objectAtIndex:[indexPath
                                               indexAtPosition:1]];
+    } else if (sectionLabel == kLinksLabel) {
+        static NSString *cellIdentifier = kLinkCellKey;
+        
+        cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+        
+        if (cell == nil) {
+            cell = [[[UITableViewCell alloc]
+                     initWithStyle:UITableViewCellStyleDefault
+                     reuseIdentifier:cellIdentifier] autorelease];
+            cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
+        }
+        
+        RHLocationLink *link = [self.links objectAtIndex:[indexPath indexAtPosition:1]];
+        
+        cell.textLabel.text = link.name;
     }
     
     return cell;
@@ -207,29 +231,45 @@
         return self.location.enclosedLocations.count;
     } else if (sectionLabel == kAltNamesLabel) {
         return self.location.alternateNames.count;
+    } else if (sectionLabel == kLinksLabel) {
+        return self.location.links.count;
     }
     
     return 0;
 }
 
-- (void)tableView:(UITableView *)tableView
+- (void)tableView:(UITableView *)inTableView
 didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSString *sectionLabel = [self.sections objectAtIndex:[indexPath indexAtPosition:0]];
     
     if (sectionLabel == kEnclosedLabel) {
         RHLocation *child = [self.enclosedLocations objectAtIndex:[indexPath indexAtPosition:1]];
         
-        [tableView deselectRowAtIndexPath:indexPath animated:YES];
+        [inTableView deselectRowAtIndexPath:indexPath animated:YES];
         
         LocationDetailViewController *detailViewController = [[[LocationDetailViewController alloc] initWithNibName:@"LocationDetailView" bundle:nil] autorelease];
         detailViewController.location = child;
         [self.navigationController pushViewController:detailViewController animated:YES];
     } else if (sectionLabel == kParentLabel) {
-        [tableView deselectRowAtIndexPath:indexPath animated:YES];
+        [inTableView deselectRowAtIndexPath:indexPath animated:YES];
         
         LocationDetailViewController *detailViewController = [[[LocationDetailViewController alloc] initWithNibName:@"LocationDetailView" bundle:nil] autorelease];
         detailViewController.location = self.location.parent;
         [self.navigationController pushViewController:detailViewController animated:YES];
+    } else if (sectionLabel == kLinksLabel) {
+        [inTableView deselectRowAtIndexPath:indexPath animated:YES];
+        
+        RHLocationLink *link = [self.links objectAtIndex:[indexPath indexAtPosition:1]];
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:link.url]];
+    }
+}
+
+- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
+    NSString *sectionLabel = [self.sections objectAtIndex:[indexPath indexAtPosition:0]];
+    
+    if (sectionLabel == kLinksLabel) {
+        RHLocationLink *link = [self.links objectAtIndex:[indexPath indexAtPosition:1]];
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:link.url]];
     }
 }
 

@@ -25,6 +25,7 @@
 
 @class RHBoundaryNode;
 @class RHLabelNode;
+@class RHLocationLink;
 
 
 typedef enum _RHLocationDisplayType {
@@ -53,6 +54,8 @@ typedef enum _RHLocationRetrievalStatus {
 
 /// Human-readable name for this RHLocation.
 @property (nonatomic, retain) NSString *name;
+
+@property (nonatomic, retain) NSSet *links;
 
 @property (nonatomic, retain) NSString *altNames;
 
@@ -104,6 +107,14 @@ typedef enum _RHLocationRetrievalStatus {
 - (void)addEnclosedLocations:(NSSet *)locations;
 
 - (void)removeEnclosedLocations:(NSSet *)locations;
+
+- (void)addLinksObject:(RHLocationLink *)link;
+
+- (void)removeLinksObject:(RHLocationLink *)link;
+
+- (void)addLinks:(NSSet *)links;
+
+- (void)removeLinks:(NSSet *)links;
 
 /// Add an RHBoundaryNode to the current boundary.
 - (void)addBoundaryNodesObject:(RHBoundaryNode *)boundaryNode;
