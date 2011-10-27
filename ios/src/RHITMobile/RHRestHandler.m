@@ -573,7 +573,6 @@
                                              withFailureSelector:failureSelector];
                 if (childLocation != nil) {
                     childLocation.parent = location;
-                    [location addEnclosedLocationsObject:location];
                 }
             }
             
