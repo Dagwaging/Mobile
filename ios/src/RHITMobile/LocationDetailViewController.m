@@ -95,7 +95,10 @@
     
     if (location.enclosedLocations.count > 0) {
         [self.sections addObject:kEnclosedLabel];
-        self.enclosedLocations = location.enclosedLocations.allObjects;
+        self.enclosedLocations = [location.enclosedLocations.allObjects
+                                  sortedArrayUsingComparator: ^(id l1, id l2) {
+            return [[l1 name] caseInsensitiveCompare:[l2 name]];
+        }];
     }
     
     location_ = location;

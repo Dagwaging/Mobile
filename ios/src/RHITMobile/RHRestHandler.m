@@ -220,26 +220,24 @@
                                  "server response:\nAt least one location "
                                  "is missing its description"];
     
-//    NSString *displayType = [self stringFromDictionary:dictionary
-//                                                forKey:kDisplayTypeKey
-//                                     withErrorSelector:failureSelector
-//                                       withErrorString:@"Problem with "
-//                             "server response:\nAt least one location "
-//                             "is missings its display type"];
-//    
-//    if (displayType == kDisplayTypeNormal) {
-//        location.displayType = RHLocationDisplayTypeNone;
-//    } else if (displayType == kDisplayTypePointOfInterest) {
-//        location.displayType = RHLocationDisplayTypePointOfInterest;
-//    } else if (displayType == kDisplayTypeQuickList) {
-//        location.displayType = RHLocationDisplayTypeQuickList;
-//    } else {
-//        [self notifyDelegateViaSelector:failureSelector
-//                   ofFailureWithMessage:@"Problem with server "
-//         "response:\nInvalid location display type"];
-//    }
+    NSString *displayType = [self stringFromDictionary:dictionary
+                                                forKey:kDisplayTypeKey
+                                     withErrorSelector:failureSelector
+                                       withErrorString:@"Problem with "
+                             "server response:\nAt least one location "
+                             "is missings its display type"];
     
-    location.displayType = RHLocationDisplayTypeQuickList;
+    if ([displayType isEqual:kDisplayTypeNormal]) {
+        location.displayType = RHLocationDisplayTypeNone;
+    } else if ([displayType isEqual:kDisplayTypePointOfInterest]) {
+        location.displayType = RHLocationDisplayTypePointOfInterest;
+    } else if ([displayType isEqual:kDisplayTypeQuickList]) {
+        location.displayType = RHLocationDisplayTypeQuickList;
+    } else {
+        [self notifyDelegateViaSelector:failureSelector
+                   ofFailureWithMessage:@"Problem with server "
+         "response:\nInvalid location display type"];
+    }
     
     NSDictionary *mapArea = [self dictionaryFromDictionary:dictionary
                                                     forKey:kMapAreaKey
