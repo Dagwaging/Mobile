@@ -64,7 +64,12 @@
 }
 
 - (NSArray *)alternateNames {
-    return [self.altNames componentsSeparatedByString:kAltNamesDelimiter];
+    NSArray *result = [self.altNames
+                       componentsSeparatedByString:kAltNamesDelimiter];
+    if ([[result objectAtIndex:0] length] < 1) {
+        return [[[NSArray alloc] init] autorelease];
+    }
+    return result;
 }
 
 - (void)setAlternateNames:(NSArray *)alternateNames {

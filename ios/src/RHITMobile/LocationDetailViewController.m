@@ -21,10 +21,12 @@
 #import "LocationDetailViewController.h"
 #import "RHLocation.h"
 
+#define kAltNamesLabel @"Also Known As"
 #define kAboutLabel @"About"
 #define kParentLabel @"Where It Is"
 #define kEnclosedLabel @"What's Inside"
 
+#define kAltNameCellKey @"AltNameCell"
 #define kAboutCellKey @"AboutCell"
 #define kParentCellKey @"ParentCell"
 #define kEnclosedCellKey @"EnclosedCell"
@@ -85,6 +87,10 @@
 #pragma mark - Property Methods
 
 - (void)setLocation:(RHLocation *)location {
+    if (location.alternateNames.count > 0) {
+        [self.sections addObject:kAltNamesLabel];
+    }
+    
     if (location.quickDescription.length > 0) {
         [self.sections addObject:kAboutLabel];
     }
@@ -166,6 +172,24 @@
                                                            indexAtPosition:1]];
         
         cell.textLabel.text = child.name;
+    } else if (sectionLabel == kAltNamesLabel) {
+        static NSString *cellIdentifier = kAltNameCellKey;
+        
+        cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+        
+        if (cell == nil) {
+            cell = [[[UITableViewCell alloc]
+                     initWithStyle:UITableViewCellStyleDefault
+                     reuseIdentifier:cellIdentifier] autorelease];
+            cell.textLabel.font = [UIFont systemFontOfSize:[UIFont
+                                                            systemFontSize]];
+            cell.textLabel.numberOfLines = 5;
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        }
+        
+        cell.textLabel.text = [self.location.alternateNames
+                               objectAtIndex:[indexPath
+                                              indexAtPosition:1]];
     }
     
     return cell;
@@ -181,6 +205,8 @@
         return 1;
     } else if (sectionLabel == kEnclosedLabel) {
         return self.location.enclosedLocations.count;
+    } else if (sectionLabel == kAltNamesLabel) {
+        return self.location.alternateNames.count;
     }
     
     return 0;

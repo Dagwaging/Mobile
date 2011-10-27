@@ -36,6 +36,7 @@
 #define kLocationListKey @"Locations"
 #define kNameKey @"Name"
 #define kIdKey @"Id"
+#define kAltNamesKey @"AltNames"
 #define kParentKey @"Parent"
 #define kDescriptionKey @"Description"
 #define kDisplayTypeKey @"Type"
@@ -233,6 +234,14 @@
                      "response:\nAt least one location is missings its "
                      "name"];
 
+    
+    // Alternate Names
+    location.alternateNames = [self arrayFromDictionary:dictionary
+                                                 forKey:kAltNamesKey
+                                      withErrorSelector:failureSelector
+                                        withErrorString:@"Problem with server "
+                               "response:\nAt least one location is missing "
+                               "its alternate names attribute"];
     
     // Description
     location.quickDescription = [self stringFromDictionary:dictionary
