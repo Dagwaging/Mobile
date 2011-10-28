@@ -17,7 +17,7 @@ fi
 VERSION=$(awk '$1 ~ /CFBundleShortVersion/ {version_next = "YES"}; \
           version_next ~ /YES/  && $1 ~ /string/ {print $1; \
           version_next = "NO"}' \
-          ios/src/RHITMobile/RHITMobile-Info.plist | \
+          src/RHITMobile/RHITMobile-Info.plist | \
           sed 's|<string>\(.*\)</string>|\1|g')
 
 cd src
