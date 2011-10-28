@@ -20,7 +20,7 @@ VERSION=$(awk '$1 ~ /CFBundleShortVersion/ {version_next = "YES"}; \
           ios/src/RHITMobile/RHITMobile-Info.plist | \
           sed 's|<string>\(.*\)</string>|\1|g')
 
-cd ios/src
+cd src
 
 # Insert generated build number
 sed -i -e "s/DEVELOPMENT_BUILD/${BUILD_TYPE}${BUILD_NUMBER}/" RHITMobile/RHITMobile-Info.plist
