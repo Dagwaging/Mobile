@@ -54,3 +54,4 @@ sed -i -e "s/DEVELOPMENT_BUILD/v${VERSION}${BUILD_TYPE}${BUILD_NUMBER}/" ios/Dox
 VIEW_URL=`echo "from urllib import quote_plus; print quote_plus('$BUILD_URL')" | python`
 DOWNLOAD_URL="itms-services%3A%2F%2F%3Faction%3Ddownload-manifest%26url%3D${VIEW_URL}artifact%2Fios%2Fapp-manifest.plist"
 curl -d "platform=ios&buildNumber=${BUILD_NUMBER}&buildType=${BUILD_CLASSIFICATION}&publishingKey=ba3a8c60e57c012eda781231391ebf76&viewURL=${VIEW_URL}&downloadURL=${DOWNLOAD_URL}" http://rhitmobilebeta-test.heroku.com/build/publish
+curl -d "platform=ios&buildNumber=${BUILD_NUMBER}&buildType=${BUILD_CLASSIFICATION}&publishingKey=89756550e57b012e21eb12313d0940b9&viewURL=${VIEW_URL}&downloadURL=${DOWNLOAD_URL}" http://rhitmobilebeta-test.heroku.com/build/publish
