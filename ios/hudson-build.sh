@@ -23,7 +23,10 @@ VERSION=$(awk '$1 ~ /CFBundleShortVersion/ {version_next = "YES"}; \
 cd src
 
 # Insert generated build number
-sed -i -e "s/DEVELOPMENT_BUILD/${BUILD_TYPE}${BUILD_NUMBER}/" RHITMobile/RHITMobile-Info.plist
+sed -i -e "s/DEVELOPMENT_BUILD/${VERSION}${BUILD_TYPE}${BUILD_NUMBER}/" RHITMobile/RHITMobile-Info.plist
+
+# Set build number for beta screen
+sed -i -e "s/#define kRHBetaBuildNumber -1/#define kRHBetaBuildNumber ${BUILD_NUMBER}/" RHITMobile/RHBeta.h
 
 # Build the project
 security list-keychains -s /Users/hudson/Library/Keychains/login.keychain

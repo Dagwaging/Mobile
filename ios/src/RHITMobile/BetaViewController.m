@@ -21,6 +21,7 @@
 #import "RHBeta.h"
 #import "CJSONDeserializer.h"
 #import "NSDictionary_JSONExtensions.h"
+#import "RHITMobileAppDelegate.h"
 
 #ifdef RHITMobile_RHBeta
 
@@ -48,15 +49,13 @@
 
 - (IBAction)switchInstallationType:(id)sender;
 
-- (void)performSwitchInstallationType;
-
 - (IBAction)checkForUpdates:(id)sender;
 
 - (void)didFindNoUpdates;
 
 - (void)didFindUpdateWithURL:(NSURL *)url;
 
-- (void)performCheckForUpdates;
+- (void)performCheckForUpdates:(NSNumber *)official;
 
 - (void)setLoadingText:(NSString *)text;
 
@@ -78,7 +77,7 @@
         self.navigationItem.title = @"Beta Tools and Info";
         self.sections = [NSArray arrayWithObjects:kBetaApplicationVersionLabel,
                          kBetaBuildNumberLabel, kBetaBuildTypeLabel,
-                         kBetaUpdateTimeLabel,kBetaMapDebugLabel, nil];
+                         kBetaUpdateTimeLabel, nil];
         self.operations = [[[NSOperationQueue alloc] init] autorelease];
     }
     return self;
@@ -257,6 +256,13 @@ titleForHeaderInSection:(NSInteger)section {
 didDismissWithButtonIndex:(NSInteger)buttonIndex {
     if (buttonIndex == 0) {
         [self setLoadingText:@"Fetching Update"];
+        self.checkingForUpdates = YES;
+        NSInvocationOperation* operation = [NSInvocationOperation alloc];
+        operation = [[operation
+                      initWithTarget:self
+                      selector:@selector(performCheckForUpdates:)
+                      object:[NSNumber numberWithBool:kRHBetaBuildNumber != kRHBetaBuildTypeOfficial]] autorelease];
+        [self.operations addOperation:operation];
     }
 }
 
@@ -265,11 +271,8 @@ didDismissWithButtonIndex:(NSInteger)buttonIndex {
 - (IBAction)switchInstallationType:(id)sender {
     UIActionSheet *actionSheet = [[[UIActionSheet alloc] initWithTitle:@"Are You Sure?" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:@"Switch Build Types" otherButtonTitles:nil] autorelease];
     
-    [actionSheet showInView:self.view];
-}
-
-- (void)performSwitchInstallationType {
-    
+    RHITMobileAppDelegate *appDelegate = (RHITMobileAppDelegate *) [UIApplication sharedApplication].delegate;
+    [actionSheet showFromTabBar:appDelegate.tabBarController.tabBar];
 }
 
 - (IBAction)checkForUpdates:(id)sender {
@@ -282,22 +285,27 @@ didDismissWithButtonIndex:(NSInteger)buttonIndex {
     NSInvocationOperation* operation = [NSInvocationOperation alloc];
     operation = [[operation
                   initWithTarget:self
-                  selector:@selector(performCheckForUpdates)
-                  object:nil] autorelease];
+                  selector:@selector(performCheckForUpdates:)
+                  object:[NSNumber numberWithBool:kRHBetaBuildNumber == kRHBetaBuildTypeOfficial]] autorelease];
     [self.operations addOperation:operation];
 }
 
-- (void)performCheckForUpdates {
+- (void)performCheckForUpdates:(NSNumber *)officialNumber {
+    BOOL official = officialNumber.boolValue;
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[kBetaServer stringByAppendingString:kBetaUpdatePath]]];
     NSURLResponse *response = nil;
     NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:nil];
     NSDictionary *parsed = [NSDictionary dictionaryWithJSONData:data error:nil];
     
     NSDictionary *relevantBuild = nil;
-    if (kRHBetaBuildType == kRHBetaBuildTypeOfficial) {
+    if (official) {
         relevantBuild = [parsed objectForKey:@"official"];
     } else {
         relevantBuild = [parsed objectForKey:@"rolling"];
+    }
+    
+    if ([relevantBuild isKindOfClass:[NSNull class]]) {
+        return [self performSelectorOnMainThread:@selector(didFindNoUpdates) withObject:nil waitUntilDone:NO];
     }
     
     NSNumberFormatter *formatter = [[[NSNumberFormatter alloc] init] autorelease];
