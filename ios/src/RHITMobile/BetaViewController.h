@@ -18,7 +18,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "RHBeta.h"
 
-@interface BetaViewController : UIViewController
+#ifdef RHITMobile_RHBeta
+
+@interface BetaViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate>
 
 @end
+
+#endif

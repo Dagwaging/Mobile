@@ -19,3 +19,17 @@
 
 // Comment out this line to build the app in non-beta mode.
 #define RHITMobile_RHBeta
+
+
+#ifdef RHITMobile_RHBeta
+
+#define kRHBetaBuildTypeRolling 0
+#define kRHBetaBuildTypeOfficial 1
+
+// Build number
+#define kRHBetaBuildNumber -1
+
+// Build type
+#define kRHBetaBuildType kRHBetaBuildTypeRolling
+
+#endif
