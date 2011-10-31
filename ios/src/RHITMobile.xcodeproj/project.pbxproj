@@ -31,6 +31,10 @@
 		92463698142BAE0A00A5E399 /* RHNavigationNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 92463697142BAE0A00A5E399 /* RHNavigationNode.m */; };
 		924DE4D4145E6EC700EEE8C6 /* BetaViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 924DE4D2145E6EC700EEE8C6 /* BetaViewController.m */; };
 		924DE4D5145E6EC700EEE8C6 /* BetaView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 924DE4D3145E6EC700EEE8C6 /* BetaView.xib */; };
+		924DE4DA145E773800EEE8C6 /* tab-bar-info-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 924DE4D8145E773800EEE8C6 /* tab-bar-info-icon.png */; };
+		924DE4DB145E773800EEE8C6 /* tab-bar-info-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 924DE4D9145E773800EEE8C6 /* tab-bar-info-icon@2x.png */; };
+		924DE4DE145E787D00EEE8C6 /* tab-bar-beta-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 924DE4DC145E787D00EEE8C6 /* tab-bar-beta-icon.png */; };
+		924DE4DF145E787D00EEE8C6 /* tab-bar-beta-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 924DE4DD145E787D00EEE8C6 /* tab-bar-beta-icon@2x.png */; };
 		924E754D140ACC9A001DFC4C /* tab-bar-map-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 924E754C140ACC9A001DFC4C /* tab-bar-map-icon.png */; };
 		9250133C1431A7C700CEBB35 /* RHRestHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 9250133B1431A7C700CEBB35 /* RHRestHandler.m */; };
 		925013581431AB6F00CEBB35 /* CDataScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 925013411431AB6F00CEBB35 /* CDataScanner.m */; };
@@ -135,6 +139,10 @@
 		924DE4D2145E6EC700EEE8C6 /* BetaViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BetaViewController.m; sourceTree = "<group>"; };
 		924DE4D3145E6EC700EEE8C6 /* BetaView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BetaView.xib; sourceTree = "<group>"; };
 		924DE4D7145E70CE00EEE8C6 /* RHBeta.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHBeta.h; sourceTree = "<group>"; };
+		924DE4D8145E773800EEE8C6 /* tab-bar-info-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab-bar-info-icon.png"; sourceTree = "<group>"; };
+		924DE4D9145E773800EEE8C6 /* tab-bar-info-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab-bar-info-icon@2x.png"; sourceTree = "<group>"; };
+		924DE4DC145E787D00EEE8C6 /* tab-bar-beta-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab-bar-beta-icon.png"; sourceTree = "<group>"; };
+		924DE4DD145E787D00EEE8C6 /* tab-bar-beta-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab-bar-beta-icon@2x.png"; sourceTree = "<group>"; };
 		924E754C140ACC9A001DFC4C /* tab-bar-map-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab-bar-map-icon.png"; sourceTree = "<group>"; };
 		9250133A1431A7C700CEBB35 /* RHRestHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHRestHandler.h; sourceTree = "<group>"; };
 		9250133B1431A7C700CEBB35 /* RHRestHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHRestHandler.m; sourceTree = "<group>"; };
@@ -262,6 +270,10 @@
 		9226030B1409AC820065F705 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				924DE4DC145E787D00EEE8C6 /* tab-bar-beta-icon.png */,
+				924DE4DD145E787D00EEE8C6 /* tab-bar-beta-icon@2x.png */,
+				924DE4D8145E773800EEE8C6 /* tab-bar-info-icon.png */,
+				924DE4D9145E773800EEE8C6 /* tab-bar-info-icon@2x.png */,
 				92ADEE301459BC5E00060A3F /* tab-bar-directory-icon.png */,
 				92ADEE311459BC5E00060A3F /* tab-bar-directory-icon@2x.png */,
 				92ADEE2C14599D9500060A3F /* quicklist-toolbar-icon.png */,
@@ -607,6 +619,10 @@
 				92ADEE321459BC5E00060A3F /* tab-bar-directory-icon.png in Resources */,
 				92ADEE331459BC5E00060A3F /* tab-bar-directory-icon@2x.png in Resources */,
 				924DE4D5145E6EC700EEE8C6 /* BetaView.xib in Resources */,
+				924DE4DA145E773800EEE8C6 /* tab-bar-info-icon.png in Resources */,
+				924DE4DB145E773800EEE8C6 /* tab-bar-info-icon@2x.png in Resources */,
+				924DE4DE145E787D00EEE8C6 /* tab-bar-beta-icon.png in Resources */,
+				924DE4DF145E787D00EEE8C6 /* tab-bar-beta-icon@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

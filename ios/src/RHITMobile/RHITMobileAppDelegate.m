@@ -62,14 +62,18 @@
     BetaViewController *beta = [[[BetaViewController alloc]
                                  initWithNibName:@"BetaView"
                                  bundle:nil] autorelease];
+
+    UINavigationController *nav = [[[UINavigationController alloc] initWithRootViewController:beta] autorelease];
     
-    beta.tabBarItem = [[[UITabBarItem alloc] initWithTitle:@"Beta"
-                                                     image:nil
+    
+    nav.tabBarItem = [[[UITabBarItem alloc] initWithTitle:@"Beta"
+                                                     image:[UIImage imageNamed:@"tab-bar-beta-icon.png"]
                                                        tag:0]
                        autorelease];
     
+
     self.tabBarController.viewControllers = [self.tabBarController.viewControllers 
-                                             arrayByAddingObject:beta];
+                                             arrayByAddingObject:nav];
 #endif
     
     [self.window makeKeyAndVisible];
