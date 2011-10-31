@@ -21,6 +21,8 @@
 #import "MapViewController.h"
 #import "SearchViewController.h"
 #import "RHRestHandler.h"
+#import "BetaViewController.h"
+#import "RHBeta.h"
 
 @interface RHITMobileAppDelegate ()
 
@@ -55,6 +57,20 @@
                                                                 initWithImage:[UIImage imageNamed:@"quicklist-toolbar-icon.png"] style:UIBarButtonItemStylePlain target:self.mapViewController action:@selector(displayQuickList:)] autorelease];
 
     self.mapViewController.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:mapViewController action:@selector(displaySearch:)] autorelease];
+    
+#ifdef RHITMobile_RHBeta
+    BetaViewController *beta = [[[BetaViewController alloc]
+                                 initWithNibName:@"BetaView"
+                                 bundle:nil] autorelease];
+    
+    beta.tabBarItem = [[[UITabBarItem alloc] initWithTitle:@"Beta"
+                                                     image:nil
+                                                       tag:0]
+                       autorelease];
+    
+    self.tabBarController.viewControllers = [self.tabBarController.viewControllers 
+                                             arrayByAddingObject:beta];
+#endif
     
     [self.window makeKeyAndVisible];
     [self setupDefaults];
