@@ -23,6 +23,8 @@
 #import "RHRestHandler.h"
 #import "BetaViewController.h"
 #import "RHBeta.h"
+#import "DirectoryViewController.h"
+#import "InfoViewController.h"
 
 @interface RHITMobileAppDelegate ()
 
@@ -35,6 +37,8 @@
 @synthesize window = _window;
 @synthesize tabBarController = _tabBarController;
 @synthesize mapNavigationViewController;
+@synthesize directoryNavigationViewController;
+@synthesize infoNavigationViewController;
 @synthesize mapViewController;
 @synthesize searchViewController;
 @synthesize managedObjectModel;
@@ -57,6 +61,18 @@
                                                                 initWithImage:[UIImage imageNamed:@"quicklist-toolbar-icon.png"] style:UIBarButtonItemStylePlain target:self.mapViewController action:@selector(displayQuickList:)] autorelease];
 
     self.mapViewController.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:mapViewController action:@selector(displaySearch:)] autorelease];
+    
+    InfoViewController *infoController = [[[InfoViewController alloc] initWithNibName:@"InfoView" bundle:nil] autorelease];
+    
+    [self.infoNavigationViewController pushViewController:infoController animated:NO];
+    
+    infoController.navigationItem.title = @"Campus Info";
+    
+    DirectoryViewController *directoryController = [[[DirectoryViewController alloc] initWithNibName:@"DirectoryView" bundle:nil] autorelease];
+    
+    [self.directoryNavigationViewController pushViewController:directoryController animated:NO];
+    
+    directoryController.navigationItem.title = @"Directory";
     
 #ifdef RHITMobile_RHBeta
     BetaViewController *beta = [[[BetaViewController alloc]

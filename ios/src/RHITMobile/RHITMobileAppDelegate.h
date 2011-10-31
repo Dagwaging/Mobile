@@ -38,6 +38,10 @@
 
 @property (nonatomic, retain) IBOutlet UINavigationController *mapNavigationViewController;
 
+@property (nonatomic, retain) IBOutlet UINavigationController *directoryNavigationViewController;
+
+@property (nonatomic, retain) IBOutlet UINavigationController *infoNavigationViewController;
+
 /// Map view controller
 @property (nonatomic, retain) MapViewController *mapViewController;
 
