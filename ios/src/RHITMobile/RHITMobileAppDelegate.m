@@ -90,10 +90,16 @@
 
     self.tabBarController.viewControllers = [self.tabBarController.viewControllers 
                                              arrayByAddingObject:nav];
+    
 #endif
     
     [self.window makeKeyAndVisible];
     [self setupDefaults];
+    
+#ifdef RHITMobile_RHBeta
+    [beta performInitialSetup];
+#endif
+    
     return YES;
 }
 

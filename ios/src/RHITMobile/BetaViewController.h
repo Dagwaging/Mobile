@@ -24,6 +24,8 @@
 
 @interface BetaViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate>
 
+- (void)performInitialSetup;
+
 @end
 
 #endif

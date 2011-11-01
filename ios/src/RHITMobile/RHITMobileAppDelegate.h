@@ -24,6 +24,10 @@
 @class MapViewController;
 @class SearchViewController;
 
+#ifdef RHITMobile_RHBeta
+@class BetaViewController;
+#endif
+
 /// AppDelgate for the RHITMobile app. Handles application-level delegate
 /// functionality.
 @interface RHITMobileAppDelegate : NSObject 
@@ -34,7 +38,6 @@
 
 /// Main tab bar.
 @property (nonatomic, retain) IBOutlet UITabBarController *tabBarController;
-
 
 @property (nonatomic, retain) IBOutlet UINavigationController *mapNavigationViewController;
 

@@ -28,6 +28,10 @@
 #define kBetaServer @"http://rhitmobilebeta-test.heroku.com"
 #define kBetaUpdatePath @"/platform/ios/builds/current"
 
+#define kBetaUpdateTimeDefault @"LastUpdateTime"
+#define kBetaAuthTokenDefault @"AuthToken"
+#define kBetaCurrentBuildDefault @"CurrentBuild"
+
 #define kBetaApplicationVersionLabel @"Application Version"
 #define kBetaApplicationVersionCell @"ApplicationVersionCell"
 #define kBetaBuildNumberLabel @"Build Number"
@@ -42,23 +46,20 @@
 @interface BetaViewController ()
 
 @property (nonatomic, retain) NSArray *sections;
-
 @property (nonatomic, assign) BOOL checkingForUpdates;
-
+@property (nonatomic, retain) NSString *authToken;
+@property (nonatomic, retain) NSDate *updateDate;
+@property (nonatomic, assign) NSInteger knownCurrentBuild;
 @property (nonatomic, retain) NSOperationQueue *operations;
 
 - (IBAction)switchInstallationType:(id)sender;
-
 - (IBAction)checkForUpdates:(id)sender;
-
 - (void)didFindNoUpdates;
-
 - (void)didFindUpdateWithURL:(NSURL *)url;
-
 - (void)performCheckForUpdates:(NSNumber *)official;
-
+- (void)performRegistration;
+- (void)performNotificationOfUpdate;
 - (void)setLoadingText:(NSString *)text;
-
 - (void)clearLoadingText;
 
 @end
@@ -68,6 +69,9 @@
 
 @synthesize sections;
 @synthesize checkingForUpdates;
+@synthesize updateDate;
+@synthesize knownCurrentBuild;
+@synthesize authToken;
 @synthesize operations;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil
@@ -88,6 +92,40 @@
     [super didReceiveMemoryWarning];
     
     // Release any cached data, images, etc that aren't in use.
+}
+
+- (void)performInitialSetup {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    
+    self.authToken = [defaults stringForKey:kBetaAuthTokenDefault];
+    
+    if ([self.authToken isKindOfClass:[NSNull class]]) {
+        // Register
+    }
+    
+    double updateNumber = [defaults doubleForKey:kBetaUpdateTimeDefault];
+    
+    if (updateNumber == 0) {
+        updateNumber = (double) [[NSDate date] timeIntervalSince1970];
+    }
+    
+    self.knownCurrentBuild = [defaults integerForKey:kBetaCurrentBuildDefault];
+    
+    if (self.knownCurrentBuild != kRHBetaBuildNumber) {
+        self.knownCurrentBuild = kRHBetaBuildNumber;
+        [defaults setInteger:self.knownCurrentBuild forKey:kBetaCurrentBuildDefault];
+        updateNumber = (double) [[NSDate date] timeIntervalSince1970];
+
+        NSInvocationOperation* operation = [NSInvocationOperation alloc];
+        operation = [[operation
+                      initWithTarget:self
+                      selector:@selector(performNotificationOfUpdate:)
+                      object:nil] autorelease];
+        [self.operations addOperation:operation];
+    }
+    
+    [defaults setDouble:updateNumber forKey:kBetaUpdateTimeDefault];
+    self.updateDate = [NSDate dateWithTimeIntervalSince1970:updateNumber];
 }
 
 #pragma mark - View lifecycle
@@ -218,7 +256,7 @@ heightForFooterInSection:(NSInteger)section {
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         
-        cell.textLabel.text = @"Last Updated";
+        cell.textLabel.text = self.updateDate.description;
     }
     
     return cell;
@@ -345,6 +383,14 @@ didDismissWithButtonIndex:(NSInteger)buttonIndex {
     [self clearLoadingText];
     self.checkingForUpdates = NO;
     [[UIApplication sharedApplication] openURL:url];
+}
+
+- (void)performRegistration {
+    
+}
+
+- (void)performNotificationOfUpdate {
+    
 }
 
 @end
