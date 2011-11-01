@@ -17,6 +17,9 @@
 //  limitations under the License.
 //
 
+#include <sys/types.h>
+#include <sys/sysctl.h>
+
 #import "BetaViewController.h"
 #import "RHBeta.h"
 #import "CJSONDeserializer.h"
@@ -394,11 +397,18 @@ didDismissWithButtonIndex:(NSInteger)buttonIndex {
 - (void)performRegistration {
     UIDevice *device = [UIDevice currentDevice];
     
+    size_t size;
+    sysctlbyname("hw.model", NULL, &size, NULL, 0);
+    char *machine = malloc(size);
+    sysctlbyname("hw.model", machine, &size, NULL, 0);
+    NSString *platform = [NSString stringWithCString:machine encoding:NSUTF8StringEncoding];
+    free(machine);
+    
     NSString *name = self.registrationName;
     NSString *email = self.registrationEmail;
     NSString *deviceID = device.uniqueIdentifier;
     NSString *operatingSystem = [NSString stringWithFormat:@"%@ %@", device.systemName, device.systemVersion];
-    NSString *model = device.model;
+    NSString *model = platform;
     
     name = [name stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     email = [email stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
