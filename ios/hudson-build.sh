@@ -35,7 +35,7 @@ xcodebuild clean build
 xcrun -sdk iphoneos PackageApplication "build/Release-iphoneos/RHITMobile.app" \
     -o "/Users/hudson/workspace/workspace/iOS/ios/RHITMobile.ipa" \
     --sign "iPhone Developer: Erik Hayes (UBJCB4G878)" \
-    --embed "/Users/hudson/TestPhoneOnly.mobileprovision"
+    --embed "/Users/hudson/RHITMobileBeta.mobileprovision"
 
 # Create the application manifest that will allow the app to be side-loaded
 sed -i -e "s/BUILD_NUMBER/${BUILD_NUMBER}/g" app-manifest.plist.in
