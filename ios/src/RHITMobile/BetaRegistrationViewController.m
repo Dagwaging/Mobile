@@ -19,6 +19,9 @@
 
 #import "BetaRegistrationViewController.h"
 #import "BetaViewController.h"
+#import "RHBeta.h"
+
+#ifdef RHITMobile_RHBeta
 
 #define kOFFSET_FOR_KEYBOARD 215.0
 
@@ -157,3 +160,5 @@
 
 
 @end
+
+#endif

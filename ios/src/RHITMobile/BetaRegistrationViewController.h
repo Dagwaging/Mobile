@@ -18,6 +18,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "RHBeta.h"
+
+#ifdef RHITMobile_RHBeta
 
 @class BetaViewController;
 
@@ -36,3 +39,5 @@
 - (IBAction)register:(id)sender;
 
 @end
+
+#endif
