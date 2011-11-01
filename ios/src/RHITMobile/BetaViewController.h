@@ -24,7 +24,13 @@
 
 @interface BetaViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate>
 
+@property (nonatomic, retain) NSString *registrationName;
+
+@property (nonatomic, retain) NSString *registrationEmail;
+
 - (void)performInitialSetup;
+
+- (void)performRegistration;
 
 @end
 

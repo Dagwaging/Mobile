@@ -82,6 +82,8 @@
 		92948903142D3C4200820A9C /* RHLabelNodeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 92948902142D3C4200820A9C /* RHLabelNodeTests.m */; };
 		92948906142D3D5B00820A9C /* RHNavigationNodeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 92948905142D3D5B00820A9C /* RHNavigationNodeTests.m */; };
 		9294890A142D3FE400820A9C /* RHLocationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 92948909142D3FE400820A9C /* RHLocationTests.m */; };
+		92A49DDC145F8BA400B6F34E /* BetaRegistrationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92A49DDA145F8BA400B6F34E /* BetaRegistrationViewController.m */; };
+		92A49DDD145F8BA400B6F34E /* BetaRegistrationView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92A49DDB145F8BA400B6F34E /* BetaRegistrationView.xib */; };
 		92ADEE291459026600060A3F /* RHLocationLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 92ADEE281459026600060A3F /* RHLocationLink.m */; };
 		92ADEE2A1459026600060A3F /* RHLocationLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 92ADEE281459026600060A3F /* RHLocationLink.m */; };
 		92ADEE2E14599D9500060A3F /* quicklist-toolbar-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 92ADEE2C14599D9500060A3F /* quicklist-toolbar-icon.png */; };
@@ -219,6 +221,9 @@
 		92948905142D3D5B00820A9C /* RHNavigationNodeTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHNavigationNodeTests.m; sourceTree = "<group>"; };
 		92948908142D3FE400820A9C /* RHLocationTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHLocationTests.h; sourceTree = "<group>"; };
 		92948909142D3FE400820A9C /* RHLocationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHLocationTests.m; sourceTree = "<group>"; };
+		92A49DD9145F8BA400B6F34E /* BetaRegistrationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BetaRegistrationViewController.h; sourceTree = "<group>"; };
+		92A49DDA145F8BA400B6F34E /* BetaRegistrationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BetaRegistrationViewController.m; sourceTree = "<group>"; };
+		92A49DDB145F8BA400B6F34E /* BetaRegistrationView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BetaRegistrationView.xib; sourceTree = "<group>"; };
 		92ADEE271459026600060A3F /* RHLocationLink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHLocationLink.h; sourceTree = "<group>"; };
 		92ADEE281459026600060A3F /* RHLocationLink.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHLocationLink.m; sourceTree = "<group>"; };
 		92ADEE2C14599D9500060A3F /* quicklist-toolbar-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "quicklist-toolbar-icon.png"; sourceTree = "<group>"; };
@@ -529,6 +534,8 @@
 				92312436144FB8470074791E /* LocationDetailViewController.m */,
 				924DE4D1145E6EC700EEE8C6 /* BetaViewController.h */,
 				924DE4D2145E6EC700EEE8C6 /* BetaViewController.m */,
+				92A49DD9145F8BA400B6F34E /* BetaRegistrationViewController.h */,
+				92A49DDA145F8BA400B6F34E /* BetaRegistrationViewController.m */,
 				924DE4E0145E79A800EEE8C6 /* InfoViewController.h */,
 				924DE4E1145E79A800EEE8C6 /* InfoViewController.m */,
 				924DE4E5145E79DF00EEE8C6 /* DirectoryViewController.h */,
@@ -541,6 +548,7 @@
 				924DE4D3145E6EC700EEE8C6 /* BetaView.xib */,
 				924DE4E2145E79A800EEE8C6 /* InfoView.xib */,
 				924DE4E7145E79DF00EEE8C6 /* DirectoryView.xib */,
+				92A49DDB145F8BA400B6F34E /* BetaRegistrationView.xib */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -641,6 +649,7 @@
 				924DE4DF145E787D00EEE8C6 /* tab-bar-beta-icon@2x.png in Resources */,
 				924DE4E4145E79A800EEE8C6 /* InfoView.xib in Resources */,
 				924DE4E9145E79DF00EEE8C6 /* DirectoryView.xib in Resources */,
+				92A49DDD145F8BA400B6F34E /* BetaRegistrationView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -713,6 +722,7 @@
 				924DE4D4145E6EC700EEE8C6 /* BetaViewController.m in Sources */,
 				924DE4E3145E79A800EEE8C6 /* InfoViewController.m in Sources */,
 				924DE4E8145E79DF00EEE8C6 /* DirectoryViewController.m in Sources */,
+				92A49DDC145F8BA400B6F34E /* BetaRegistrationViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

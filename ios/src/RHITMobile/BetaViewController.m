@@ -22,11 +22,13 @@
 #import "CJSONDeserializer.h"
 #import "NSDictionary_JSONExtensions.h"
 #import "RHITMobileAppDelegate.h"
+#import "BetaRegistrationViewController.h"
 
 #ifdef RHITMobile_RHBeta
 
 #define kBetaServer @"http://rhitmobilebeta-test.heroku.com"
 #define kBetaUpdatePath @"/platform/ios/builds/current"
+#define kBetaRegisterPath @"/device/register"
 
 #define kBetaUpdateTimeDefault @"LastUpdateTime"
 #define kBetaAuthTokenDefault @"AuthToken"
@@ -57,7 +59,6 @@
 - (void)didFindNoUpdates;
 - (void)didFindUpdateWithURL:(NSURL *)url;
 - (void)performCheckForUpdates:(NSNumber *)official;
-- (void)performRegistration;
 - (void)performNotificationOfUpdate;
 - (void)setLoadingText:(NSString *)text;
 - (void)clearLoadingText;
@@ -66,6 +67,9 @@
 
 
 @implementation BetaViewController
+
+@synthesize registrationName;
+@synthesize registrationEmail;
 
 @synthesize sections;
 @synthesize checkingForUpdates;
@@ -99,8 +103,10 @@
     
     self.authToken = [defaults stringForKey:kBetaAuthTokenDefault];
     
-    if ([self.authToken isKindOfClass:[NSNull class]]) {
-        // Register
+    if (self.authToken == nil) {
+        BetaRegistrationViewController *registrationController = [[[BetaRegistrationViewController alloc] initWithNibName:@"BetaRegistrationView" bundle:nil] autorelease];
+        registrationController.betaViewController = self;
+        [self presentModalViewController:registrationController animated:YES];
     }
     
     double updateNumber = [defaults doubleForKey:kBetaUpdateTimeDefault];
@@ -116,12 +122,12 @@
         [defaults setInteger:self.knownCurrentBuild forKey:kBetaCurrentBuildDefault];
         updateNumber = (double) [[NSDate date] timeIntervalSince1970];
 
-        NSInvocationOperation* operation = [NSInvocationOperation alloc];
-        operation = [[operation
-                      initWithTarget:self
-                      selector:@selector(performNotificationOfUpdate:)
-                      object:nil] autorelease];
-        [self.operations addOperation:operation];
+//        NSInvocationOperation* operation = [NSInvocationOperation alloc];
+//        operation = [[operation
+//                      initWithTarget:self
+//                      selector:@selector(performNotificationOfUpdate:)
+//                      object:nil] autorelease];
+//        [self.operations addOperation:operation];
     }
     
     [defaults setDouble:updateNumber forKey:kBetaUpdateTimeDefault];
@@ -386,7 +392,43 @@ didDismissWithButtonIndex:(NSInteger)buttonIndex {
 }
 
 - (void)performRegistration {
+    UIDevice *device = [UIDevice currentDevice];
     
+    NSString *name = self.registrationName;
+    NSString *email = self.registrationEmail;
+    NSString *deviceID = device.uniqueIdentifier;
+    NSString *operatingSystem = [NSString stringWithFormat:@"%@ %@", device.systemName, device.systemVersion];
+    NSString *model = device.model;
+    
+    name = [name stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    email = [email stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    deviceID = [deviceID stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    operatingSystem = [operatingSystem stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    model = [model stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    
+    NSString *parameters = [NSString stringWithFormat:@"name=%@&email=%@&deviceID=%@&build=%d&operatingSystem=%@&model=%@&platform=ios", name, email, deviceID, kRHBetaBuildNumber, operatingSystem, model];
+    
+    NSURL *url = [NSURL URLWithString:[kBetaServer stringByAppendingString:kBetaRegisterPath]];
+    
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    
+    request.HTTPMethod = @"POST";
+    request.HTTPBody = [parameters dataUsingEncoding:NSUTF8StringEncoding];
+    
+    NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
+    
+    NSString* body = [[[NSString alloc] initWithData:data
+                                           encoding:NSUTF8StringEncoding] autorelease];
+    NSLog(@"%@", body);
+    
+    NSDictionary *response = [NSDictionary dictionaryWithJSONData:data error:nil];
+    
+    self.authToken = [response valueForKey:@"authToken"];
+    
+    if (self.authToken != nil) {
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        [defaults setValue:self.authToken forKey:kBetaAuthTokenDefault];
+    }
 }
 
 - (void)performNotificationOfUpdate {

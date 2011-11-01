@@ -1,5 +1,5 @@
 //
-//  InfoViewController.h
+//  BetaRegistrationViewController.h
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -19,6 +19,20 @@
 
 #import <UIKit/UIKit.h>
 
-@interface InfoViewController : UIViewController
+@class BetaViewController;
+
+@interface BetaRegistrationViewController : UIViewController <UITextFieldDelegate>
+
+@property (nonatomic, retain) IBOutlet UITextField *nameField;
+
+@property (nonatomic, retain) IBOutlet UITextField *emailField;
+
+@property (nonatomic, retain) BetaViewController *betaViewController;
+
+@property (nonatomic, retain) NSOperationQueue *operations;
+
+- (void)setViewMovedUp:(BOOL)movedUp;
+
+- (IBAction)register:(id)sender;
 
 @end
