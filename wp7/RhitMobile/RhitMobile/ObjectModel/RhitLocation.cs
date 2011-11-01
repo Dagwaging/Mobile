@@ -3,6 +3,7 @@ using System.Runtime.Serialization;
 using System.Windows.Controls;
 using System.Windows.Media;
 using Microsoft.Phone.Controls.Maps;
+using System.Collections.Generic;
 
 namespace RhitMobile.ObjectModel {
     /// <summary>
@@ -50,6 +51,8 @@ namespace RhitMobile.ObjectModel {
 
         /// <summary> Id of the location (Used only by the service). </summary>
         public int Id { get; set; }
+
+        public bool IsPOI { get; set; }
 
         /// <summary> Name of the location. </summary>
         public string Label { get; set; }
@@ -152,6 +155,16 @@ namespace RhitMobile.ObjectModel {
             return polygon.Locations.Contains(Locations[0]);
         }
 
+        public void Merge(RhitLocation location) {
+            if(Id != location.Id) return;
+            Center = location.Center;
+            Description = location.Description;
+            IsPOI = location.IsPOI;
+            Label = location.Label;
+            LabelOnHybrid = location.LabelOnHybrid;
+            MinZoomLevel = location.MinZoomLevel;
+        }
+
         /// <summary>
         /// Makes a hidden polygon become visible again.
         /// </summary>
@@ -161,5 +174,15 @@ namespace RhitMobile.ObjectModel {
             polygon.Stroke = new SolidColorBrush(Colors.White) { Opacity = 0.7 };
         }
         #endregion
+
+        public int ParentId { get; set; }
+
+        public bool IsDepartable { get; set; }
+
+        public bool OnQuikList { get; set; }
+
+        public Dictionary<string, string> Links { get; set; }
+
+        public List<string> AltNames { get; set; }
     }
 }

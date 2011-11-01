@@ -62,20 +62,20 @@ namespace RhitMobile {
             ApplicationBarIconButton button2 = new ApplicationBarIconButton(new Uri("/Images/rose-hulman.png", UriKind.Relative)) {
                 Text = "RHIT",
             };
-            ApplicationBarIconButton button3 = new ApplicationBarIconButton(new Uri("/Images/directions.png", UriKind.Relative)) {
+            ApplicationBarIconButton button3 = new ApplicationBarIconButton(new Uri("/Images/search.png", UriKind.Relative)) {
                 Text = "Directions",
             };
             button1.Click += new EventHandler(MeButton_Click);
             button2.Click += new EventHandler(RhitButton_Click);
-            button3.Click += new EventHandler(DirectionsButton_Click);
+            button3.Click += new EventHandler(SearchButton_Click);
 
             _appBar.Buttons.Add(button1);
             _appBar.Buttons.Add(button2);
             _appBar.Buttons.Add(button3);
 
-            ApplicationBarMenuItem pointsOfInterestMenuItem = new ApplicationBarMenuItem("Points of Interest");
-            pointsOfInterestMenuItem.Click += new EventHandler(POI_Click);
-            _appBar.MenuItems.Add(pointsOfInterestMenuItem);
+            ApplicationBarMenuItem quickListMenuItem = new ApplicationBarMenuItem("Quick List");
+            quickListMenuItem.Click += new EventHandler(POI_Click);
+            _appBar.MenuItems.Add(quickListMenuItem);
 
             ApplicationBarMenuItem settingsMenuItem = new ApplicationBarMenuItem("Settings");
             settingsMenuItem.Click += new EventHandler(Settings_Click);
@@ -128,8 +128,9 @@ namespace RhitMobile {
             NavigationService.Navigate(new Uri("/DescriptionPage.xaml", UriKind.Relative));
         }
 
-        private void OnUpdateAvailable(object sender, ServerEventArgs e) {
-            RhitMapView.Instance.Outlines = e.ResponseObject.GetLocations();
+        private void OnUpdateAvailable(object sender, ServiceEventArgs e) {
+            RhitMapView.Instance.Outlines = DataCollector.Instance.GetMapAreas(Dispatcher);
+            DataCollector.Instance.GetAllLocations(Dispatcher);
         }
         #endregion
 
@@ -142,8 +143,8 @@ namespace RhitMobile {
             RhitMapView.Instance.GoToRhit();
         }
 
-        void DirectionsButton_Click(object sender, EventArgs e) {
-            //TODO: Implement directions
+        void SearchButton_Click(object sender, EventArgs e) {
+            NavigationService.Navigate(new Uri("/SearchPage.xaml", UriKind.Relative));
         }
         #endregion
 
@@ -153,7 +154,7 @@ namespace RhitMobile {
         }
 
         void POI_Click(object sender, EventArgs e) {
-            GoToPoi();
+            GoToQuikList();
         }
         #endregion
 
@@ -209,8 +210,8 @@ namespace RhitMobile {
             NavigationService.Navigate(new Uri("/SettingsPage.xaml", UriKind.Relative));
         }
 
-        public void GoToPoi() {
-            NavigationService.Navigate(new Uri("/POIPage.xaml", UriKind.Relative));
+        public void GoToQuikList() {
+            NavigationService.Navigate(new Uri("/QuickListPage.xaml", UriKind.Relative));
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e) {
@@ -228,10 +229,12 @@ namespace RhitMobile {
         }
 
         public void LoadData() {
-            if(!ContentPanel.Children.Contains(RhitMapView.Instance.Map)) LoadMap();
+            DataCollector.Instance.UpdateAvailable += new ServiceEventHandler(OnUpdateAvailable);
+            //List<RhitLocation> locations = DataCollector.Instance.GetAllLocations(Dispatcher);
+            List<RhitLocation> locations = DataCollector.Instance.GetMapAreas(Dispatcher);
 
-            List<RhitLocation> locations = DataCollector.Instance.GetLocations(Dispatcher);
-            DataCollector.Instance.UpdateAvailable += new ServerEventHandler(OnUpdateAvailable);
+            if(!ContentPanel.Children.Contains(RhitMapView.Instance.Map)) LoadMap();
+            
             if(locations != null) RhitMapView.Instance.Outlines = locations;
             //TODO: Display message if locations == null; "Map Data is Empty. Trying to download..."
 

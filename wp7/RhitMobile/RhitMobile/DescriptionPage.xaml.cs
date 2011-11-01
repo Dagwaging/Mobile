@@ -19,7 +19,8 @@ namespace RhitMobile {
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e) {
-            RhitLocation location = this.LoadState<RhitLocation>("SelectedOutline", null);
+            //RhitLocation location = this.LoadState<RhitLocation>("SelectedOutline", null);
+            RhitLocation location = RhitMapView.Instance.SelectedLocation;
             if(location == null) {
                 //TODO: Handle this better; Shouldn't give whiplash
                 if(NavigationService.CanGoBack) NavigationService.GoBack();

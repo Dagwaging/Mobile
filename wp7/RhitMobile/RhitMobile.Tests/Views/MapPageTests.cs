@@ -28,11 +28,11 @@ namespace RhitMobile.Tests.Views {
         public void SetUp() {
             Page = new MapPage();
             Assert.IsNotNull(Page);
-            GeoService.Instance.BaseAddress = "http://mobilewin.csse.rose-hulman.edu:5600";
+            DataCollector.Instance.BaseAddress = "http://mobilewin.csse.rose-hulman.edu:5600";
             Page.LoadData();
             //TODO: Utilize data from service
             // Location data should be loaded in above, but tests don't wait for data
-            List<RhitLocation> locations = DataCollector.Instance.GetLocations(App.Current.RootVisual.Dispatcher);
+            List<RhitLocation> locations = DataCollector.Instance.GetAllLocations(App.Current.RootVisual.Dispatcher);
             if(locations != null) RhitMapView.Instance.Outlines = locations;
             else RhitMapView.Instance.Outlines = Locations.ALL;
         }

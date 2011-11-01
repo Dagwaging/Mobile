@@ -11,7 +11,7 @@ namespace RhitMobile.Events {
     /// <summary>
     /// Event argument object for server-based events.
     /// </summary>
-    public class ServerEventArgs : EventArgs {
+    public class ServerEventArgs : ServiceEventArgs {
         #region Public Properties
         /// <summary>
         /// Http response model object for the corresponding request.

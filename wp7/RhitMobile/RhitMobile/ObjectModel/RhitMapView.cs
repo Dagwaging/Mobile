@@ -5,6 +5,7 @@ using System.Windows.Input;
 using Microsoft.Phone.Controls.Maps;
 using RhitMobile.Events;
 using RhitMobile.MapSource;
+using RhitMobile.Services;
 
 namespace RhitMobile.ObjectModel {
     /// <summary>
@@ -158,17 +159,21 @@ namespace RhitMobile.ObjectModel {
                 _polygonLayer.Children.Clear();
                 _textLayer.Children.Clear();
                 foreach(RhitLocation location in _locations) {
+                    if(location.OutLine == null || location.OutLine.Locations.Count <= 0) continue;
                     if(!AreOutlinesVisible) RhitLocation.HideOutline(location.OutLine);
                     else RhitLocation.ShowOutline(location.OutLine);
                     location.OutLine.MouseLeftButtonUp += new System.Windows.Input.MouseButtonEventHandler(Polgon_MouseLeftButtonUp);
                     _polygonLayer.Children.Add(location.OutLine);
                     if(AreLabelsVisible && ZoomLevel > location.MinZoomLevel) _textLayer.Children.Add(location.GetLabel());
                 }
+                DebugText = _polygonLayer.Children.Count.ToString();
             }
         }
 
         /// <summary> The available overlays to add to the map. </summary>
         public List<BaseTileSource> OverlaySources { get; private set; }
+
+        public RhitLocation SelectedLocation { get; private set; }
 
         /// <summary> Pushpin to show when a location is selected. </summary>
         public Pushpin SelectedPushpin { get; private set; }
@@ -379,13 +384,13 @@ namespace RhitMobile.ObjectModel {
         /// Loads data for the map from isolated storage.
         /// </summary>
         public void LoadData() {
-            ZoomLevel = (double) StateManagment.LoadState<object>(null, "ZoomLevel", ZoomLevel);
-            ChangeTileSource(StateManagment.LoadState<string>(null, "CurrentTileSource", CurrentTileSource.Name));
-            List<string> sourceNames = StateManagment.LoadState<List<string>>(null, "CurrentOverlaySources", new List<string>());
+            ZoomLevel = (double) DataStorage.LoadState<object>(StorageKey.ZoomLevel, ZoomLevel);
+            ChangeTileSource(DataStorage.LoadState<string>(StorageKey.TileSource, CurrentTileSource.Name));
+            List<string> sourceNames = DataStorage.LoadState<List<string>>(StorageKey.Overlays, new List<string>());
             foreach(string sourceName in sourceNames) AddOverlay(sourceName);
-            AreOutlinesVisible = (bool) StateManagment.LoadState<object>(null, "AreOutlinesVisible", AreOutlinesVisible);
-            AreLabelsVisible = (bool) StateManagment.LoadState<object>(null, "AreLabelsVisible", AreLabelsVisible);
-            User = StateManagment.LoadState<User>(null, "User", User);
+            AreOutlinesVisible = (bool) DataStorage.LoadState<object>(StorageKey.VisibleOutlines, AreOutlinesVisible);
+            AreLabelsVisible = (bool) DataStorage.LoadState<object>(StorageKey.VisibleLabels, AreLabelsVisible);
+            User = DataStorage.LoadState<User>(StorageKey.User, User);
             User.Pin.MouseLeftButtonUp += new MouseButtonEventHandler(UserPushpin_MouseLeftButtonUp);
         }
 
@@ -432,6 +437,7 @@ namespace RhitMobile.ObjectModel {
                     RhitLocation.ShowOutline(_location.OutLine);
                     Map.Center = _location.Center;
                     if(ZoomLevel < 18) ZoomLevel = 18;
+                    SelectedLocation = _location;
                     return _location;
                 }
             return null;
@@ -441,15 +447,15 @@ namespace RhitMobile.ObjectModel {
         /// Stores map data to isolated storage.
         /// </summary>
         public void StoreData() {
-            StateManagment.SaveState(null, "ZoomLevel", ZoomLevel);
-            StateManagment.SaveState(null, "CurrentTileSource", CurrentTileSource.Name);
+            DataStorage.SaveState(StorageKey.ZoomLevel, ZoomLevel);
+            DataStorage.SaveState(StorageKey.TileSource, CurrentTileSource.Name);
             List<string> sourceNames = new List<string>();
             foreach(BaseTileSource source in CurrentOverlaySources)
                 sourceNames.Add(source.Name);
-            StateManagment.SaveState(null, "CurrentOverlaySources", sourceNames);
-            StateManagment.SaveState(null, "AreOutlinesVisible", AreOutlinesVisible);
-            StateManagment.SaveState(null, "AreLabelsVisible", AreLabelsVisible);
-            StateManagment.SaveState(null, "User", User);
+            DataStorage.SaveState(StorageKey.Overlays, sourceNames);
+            DataStorage.SaveState(StorageKey.VisibleOutlines, AreOutlinesVisible);
+            DataStorage.SaveState(StorageKey.VisibleLabels, AreLabelsVisible);
+            DataStorage.SaveState(StorageKey.User, User);
             //TODO: Cache Map Tiles
         }
         #endregion

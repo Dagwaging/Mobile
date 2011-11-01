@@ -2,8 +2,8 @@
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
-using RhitMobile.Services;
 using RhitMobile.ObjectModel;
+using RhitMobile.Services;
 
 namespace RhitMobile {
     public partial class App : Application {
@@ -24,7 +24,7 @@ namespace RhitMobile {
         /// </summary>
         public App() {
             //Set the base address of the service
-            GeoService.Instance.BaseAddress = "http://mobilewin.csse.rose-hulman.edu:5600";
+            DataCollector.Instance.BaseAddress = "http://mobilewin.csse.rose-hulman.edu:5600";
 
             // Global handler for uncaught exceptions. 
             UnhandledException += Application_UnhandledException;
