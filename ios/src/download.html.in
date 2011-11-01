@@ -1,3 +1,4 @@
 <html><body>
-<a href="itms-services://?action=download-manifest&url=http://mobile.csse.rose-hulman.edu/hudson/job/iOS/BUILD_NUMBER/artifact/ios/app-manifest.plist">Install RHITMobile vVERSION</a>
+<a href="itms-services://?action=download-manifest&url=http://mobile.csse.rose-hulman.edu/hudson/job/iOS/BUILD_NUMBER/artifact/ios/app-manifest-beta.plist">Install RHITMobile Beta vVERSION</a><br />
+<a href="itms-services://?action=download-manifest&url=http://mobile.csse.rose-hulman.edu/hudson/job/iOS/BUILD_NUMBER/artifact/ios/app-manifest-clean.plist">Install RHITMobile Clean (no beta functionality) vVERSION</a>
 </body></html>

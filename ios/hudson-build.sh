@@ -28,20 +28,33 @@ sed -i -e "s/DEVELOPMENT_BUILD/${VERSION}${BUILD_TYPE}${BUILD_NUMBER}/" RHITMobi
 # Set build number for beta screen
 sed -i -e "s/#define kRHBetaBuildNumber -1/#define kRHBetaBuildNumber ${BUILD_NUMBER}/" RHITMobile/RHBeta.h
 
-# Build the project
+# Unlock the keychain
 security list-keychains -s /Users/hudson/Library/Keychains/login.keychain
 security unlock-keychain -p defaultpassword /Users/hudson/Library/Keychains/login.keychain
+
+# Build the project in beta mode
 xcodebuild clean build
 xcrun -sdk iphoneos PackageApplication "build/Release-iphoneos/RHITMobile.app" \
-    -o "/Users/hudson/workspace/workspace/iOS/ios/RHITMobile.ipa" \
+    -o "/Users/hudson/workspace/workspace/iOS/ios/RHITMobile-beta.ipa" \
     --sign "iPhone Developer: Erik Hayes (UBJCB4G878)" \
     --embed "/Users/hudson/RHITMobileBeta.mobileprovision"
+
+# Build the project in clean mode
+sed -i -e "s|#define RHITMobile_RHBeta|//#define RHITMobile_RHBeta|" RHITMobile/RHBeta.h
+xcodebuild clean build
+xcrun -sdk iphoneos PackageApplication "build/Release-iphoneos/RHITMobile.app" \
+    -o "/Users/hudson/workspace/workspace/iOS/ios/RHITMobile-clean.ipa" \
+    --sign "iPhone Developer: Erik Hayes (UBJCB4G878)" \
+    --embed "/Users/hudson/RHITMobile.mobileprovision"
+
 
 # Create the application manifest that will allow the app to be side-loaded
 sed -i -e "s/BUILD_NUMBER/${BUILD_NUMBER}/g" app-manifest.plist.in
 sed -i -e "s/VERSION/${VERSION}${BUILD_TYPE}${BUILD_NUMBER}/g" app-manifest.plist.in
-sed -i -e "s/IPA_NAME/RHITMobile.ipa/g" app-manifest.plist.in
-mv app-manifest.plist.in ../app-manifest.plist
+sed -i -e "s/IPA_NAME/RHITMobile-beta.ipa/g" app-manifest.plist.in
+cp app-manifest.plist.in ../app-manifest-beta.plist
+sed -i -e "s/RHITMobile-beta/RHITMobile-clean.ipa/g" app-manifest.plist.in
+cp app-manifest.plist.in ../app-manifest-clean.plist
 
 # Create download page
 sed -i -e "s/BUILD_NUMBER/${BUILD_NUMBER}/g" download.html.in
