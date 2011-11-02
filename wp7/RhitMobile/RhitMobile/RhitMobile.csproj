@@ -71,15 +71,15 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DescriptionPage.xaml.cs">
-      <DependentUpon>DescriptionPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Events\OutlineEventArgs.cs" />
     <Compile Include="Events\PushpinEventArgs.cs" />
     <Compile Include="Events\SearchEventArgs.cs" />
     <Compile Include="Events\ServerEventArgs.cs" />
     <Compile Include="Events\DebugEventArgs.cs" />
     <Compile Include="Events\ServiceEventArgs.cs" />
+    <Compile Include="InfoPage.xaml.cs">
+      <DependentUpon>InfoPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MapPage.xaml.cs">
       <DependentUpon>MapPage.xaml</DependentUpon>
     </Compile>
@@ -135,7 +135,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
-    <Page Include="DescriptionPage.xaml">
+    <Page Include="InfoPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

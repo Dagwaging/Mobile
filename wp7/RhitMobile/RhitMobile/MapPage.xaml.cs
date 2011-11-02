@@ -125,7 +125,7 @@ namespace RhitMobile {
         }
 
         private void SelectedPushpin_MouseLeftButtonUp(object sender, PushpinEventArgs e) {
-            NavigationService.Navigate(new Uri("/DescriptionPage.xaml", UriKind.Relative));
+            NavigationService.Navigate(new Uri("/InfoPage.xaml", UriKind.Relative));
         }
 
         private void OnUpdateAvailable(object sender, ServiceEventArgs e) {

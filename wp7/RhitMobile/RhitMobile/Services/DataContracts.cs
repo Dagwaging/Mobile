@@ -63,7 +63,7 @@ namespace RhitMobile.Services {
         [DataMember(Name = "Links")]
         public List<Link_DC> Links { get; set; }
 
-        [DataMember(Name = "ParentId")]
+        [DataMember(Name = "Parent")]
         public int ParentId { get; set; }
 
         [DataMember(Name = "OnQuickList")]

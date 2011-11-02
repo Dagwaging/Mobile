@@ -163,6 +163,11 @@ namespace RhitMobile.ObjectModel {
             Label = location.Label;
             LabelOnHybrid = location.LabelOnHybrid;
             MinZoomLevel = location.MinZoomLevel;
+            OnQuikList = location.OnQuikList;
+            ParentId = location.ParentId;
+            IsDepartable = IsDepartable;
+            Links = location.Links;
+            AltNames = location.AltNames;
         }
 
         /// <summary>
