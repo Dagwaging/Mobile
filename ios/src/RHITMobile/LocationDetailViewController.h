@@ -28,6 +28,7 @@
 @property (nonatomic, retain) RHLocation *location;
 @property (nonatomic, retain) NSArray *enclosedLocations;
 @property (nonatomic, retain) NSArray *links;
+@property (nonatomic, retain) IBOutlet UITableView *tableView;
 
 - (IBAction)displayCurrentLocationOnMap:(id)sender;
 

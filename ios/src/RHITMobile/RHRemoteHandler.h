@@ -42,4 +42,6 @@
 /// as all locations enclosed in these locations.
 - (void)populateUnderlyingLocations;
 
+- (void)rushPopulateLocationsUnderLocationWithID:(NSManagedObjectID *)objectID;
+
 @end

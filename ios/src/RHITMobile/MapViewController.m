@@ -25,6 +25,7 @@
 #import "RHLocation.h"
 #import "RHNode.h"
 #import "RHLabelNode.h"
+#import "RHRemoteHandler.h"
 #import "RHRestHandler.h"
 #import "RHLocationOverlay.h"
 #import "RHITMobileAppDelegate.h"
@@ -367,6 +368,8 @@
 
 - (void)focusMapViewToAreaAnnotation:(RHAnnotation *)annotation
                             selected:(BOOL)selected {
+    
+    [self.remoteHandler rushPopulateLocationsUnderLocationWithID:(NSManagedObjectID *)annotation.location.objectID];
 
     if (!selected) {
         [self clearAllDynamicMapArtifacts];

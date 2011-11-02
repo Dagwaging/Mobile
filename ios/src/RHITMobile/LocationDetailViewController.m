@@ -49,6 +49,7 @@
 @synthesize location = location_;
 @synthesize links = links_;
 @synthesize enclosedLocations;
+@synthesize tableView;
 
 @synthesize sections;
 
@@ -83,6 +84,11 @@
     // Do any additional setup after loading the view from its nib.
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    self.location = self.location;
+    [self.tableView reloadData];
+}
+
 - (void)viewDidUnload
 {
     [super viewDidUnload];
@@ -99,6 +105,10 @@
 #pragma mark - Property Methods
 
 - (void)setLocation:(RHLocation *)location {
+    self.sections = [[[NSMutableArray alloc] initWithCapacity:10]
+                     autorelease];
+    location = (RHLocation *) [location.managedObjectContext objectWithID:location.objectID];
+    
     if (location.alternateNames.count > 0) {
         [self.sections addObject:kAltNamesLabel];
     }
@@ -162,7 +172,7 @@ heightForFooterInSection:(NSInteger)section {
 
 #pragma mark - UITableViewDataSource Methods
         
-- (UITableViewCell *)tableView:(UITableView *)tableView
+- (UITableViewCell *)tableView:(UITableView *)inTableView
          cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     NSString *sectionLabel = [self.sections objectAtIndex:[indexPath
@@ -172,7 +182,7 @@ heightForFooterInSection:(NSInteger)section {
     if (sectionLabel == kAboutLabel) {
         static NSString *cellIdentifier = kAboutCellKey;
         
-        cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+        cell = [inTableView dequeueReusableCellWithIdentifier:cellIdentifier];
         
         if (cell == nil) {
             cell = [[[UITableViewCell alloc]
@@ -189,7 +199,7 @@ heightForFooterInSection:(NSInteger)section {
     } else if (sectionLabel == kParentLabel) {
         static NSString *cellIdentifier = kParentCellKey;
         
-        cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+        cell = [inTableView dequeueReusableCellWithIdentifier:cellIdentifier];
         
         if (cell == nil) {
             cell = [[[UITableViewCell alloc]
@@ -204,7 +214,7 @@ heightForFooterInSection:(NSInteger)section {
     } else if (sectionLabel == kEnclosedLabel) {
         static NSString *cellIdentifier = kEnclosedCellKey;
         
-        cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+        cell = [inTableView dequeueReusableCellWithIdentifier:cellIdentifier];
         
         if (cell == nil) {
             cell = [[[UITableViewCell alloc]
@@ -221,7 +231,7 @@ heightForFooterInSection:(NSInteger)section {
     } else if (sectionLabel == kAltNamesLabel) {
         static NSString *cellIdentifier = kAltNameCellKey;
         
-        cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+        cell = [inTableView dequeueReusableCellWithIdentifier:cellIdentifier];
         
         if (cell == nil) {
             cell = [[[UITableViewCell alloc]
@@ -239,7 +249,7 @@ heightForFooterInSection:(NSInteger)section {
     } else if (sectionLabel == kLinksLabel) {
         static NSString *cellIdentifier = kLinkCellKey;
         
-        cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+        cell = [inTableView dequeueReusableCellWithIdentifier:cellIdentifier];
         
         if (cell == nil) {
             cell = [[[UITableViewCell alloc]

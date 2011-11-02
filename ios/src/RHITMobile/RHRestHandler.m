@@ -99,6 +99,8 @@
 
 - (void)performPopulateUnderlyingLocations;
 
+- (void)performRushPopulateLocationsUnderLocationWithID:(NSManagedObjectID *)objectID;
+
 - (void)notifyDelegateViaSelector:(SEL)selector
                ofFailureWithError:(NSError *)error;
 
@@ -179,6 +181,19 @@
                   initWithTarget:self
                   selector:@selector(performPopulateUnderlyingLocations)
                   object:nil] autorelease];
+    [operations addOperation:operation];
+}
+
+- (void)rushPopulateLocationsUnderLocationWithID:(NSManagedObjectID *)objectID {
+    if (self.delegate == nil) {
+        return;
+    }
+    
+    NSInvocationOperation* operation = [NSInvocationOperation alloc];
+    operation = [[operation
+                  initWithTarget:self
+                  selector:@selector(performRushPopulateLocationsUnderLocationWithID:)
+                  object:objectID] autorelease];
     [operations addOperation:operation];
 }
 
@@ -557,6 +572,10 @@
             
             location = (RHLocation *)[context objectWithID:location.objectID];
             
+            if (location.retrievalStatus == RHLocationRetrievalStatusFull) {
+                continue;
+            }
+            
             NSLog(@"Fetching data for location %@", location.name);
             
             NSString *serverPath = [[[NSString alloc] initWithFormat:kUnderlyingLocationServerPath, location.serverIdentifier.intValue] autorelease];
@@ -605,11 +624,83 @@
                 }
             }
             
+            location.retrievalStatus = RHLocationRetrievalStatusFull;
             [context save:nil];
         }
     }
     
     NSLog(@"Done fetching locations");
+}
+
+- (void)performRushPopulateLocationsUnderLocationWithID:(NSManagedObjectID *)objectID {
+    NSLog(@"Rushing location");
+    SEL failureSelector = @selector(didFailPopulatingLocationsWithError:);
+    
+    NSManagedObjectContext *context = [[[NSManagedObjectContext alloc] init]
+                                       autorelease];
+    context.persistentStoreCoordinator = self.coordinator;
+    
+    NSString *fullHost = [[[NSString alloc] initWithFormat:@"%@:%@",
+                           self.host,
+                           self.port] autorelease];
+    
+    RHLocation *location = (RHLocation *) [context objectWithID:objectID];
+    
+    if (location.retrievalStatus == RHLocationRetrievalStatusFull) {
+        return;
+    }
+
+    NSString *serverPath = [[[NSString alloc] initWithFormat:kUnderlyingLocationServerPath, location.serverIdentifier.intValue] autorelease];
+    
+    
+    NSURL *url = [[NSURL alloc] initWithScheme:self.scheme
+                                          host:fullHost
+                                          path:serverPath];
+    
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    [url release];
+    
+    NSURLResponse *response = nil;
+    NSError *error = nil;
+    
+    // Because this will be done on a background thread, we can use a
+    // synchronous request for our data retrieval step.
+    NSData *data = [NSURLConnection sendSynchronousRequest:request
+                                         returningResponse:&response
+                                                     error:&error];
+    
+    if (data == nil) {
+        [self notifyDelegateViaSelector:failureSelector
+                     ofFailureWithError:error];
+        return;
+    }
+    
+    NSDictionary *parsedData = [NSDictionary dictionaryWithJSONData:data
+                                                              error:nil];
+    
+    NSArray* children = [self arrayFromDictionary:parsedData
+                                           forKey:kLocationListKey
+                                withErrorSelector:failureSelector
+                                  withErrorString:@"Problem with "
+                         "server response:\nNo children locations "
+                         "attribute found"];
+    
+    for (NSDictionary *dictionary in children) {
+        NSLog(@"Adding child");
+        RHLocation *childLocation = [self
+                                     locationFromDictionary:dictionary
+                                     withContext:context
+                                     withLocationsByID:nil
+                                     withFailureSelector:failureSelector];
+        if (childLocation != nil) {
+            childLocation.parent = location;
+        }
+    }
+    
+    location.retrievalStatus = RHLocationRetrievalStatusFull;
+    [context save:nil];
+    
+    NSLog(@"Done rushing location");
 }
 
 #pragma mark-
