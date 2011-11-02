@@ -21,8 +21,12 @@ import org.apache.http.message.BasicNameValuePair;
  */
 public abstract class RestClient {
 
+	/** The set of parameters added to the query string */
 	protected List<NameValuePair> queryParams;
+	
+	/** The path of the request */
 	protected String path;
+	
 	private String host;
 	private int port;
 	private HttpMethod method;
@@ -74,12 +78,12 @@ public abstract class RestClient {
 	 * @throws Exception On other errors, including Internal Server Errors
 	 */
 	protected HttpResponse performRequest() throws URISyntaxException, Exception {
-		String query = "";
+		String query = null;
 		if (queryParams.size() > 0) {
 			query = URLEncodedUtils.format(queryParams, "UTF-8");	
 		}
 		URI uri;
-		uri = URIUtils.createURI("http", host, port, path, query, "");
+		uri = URIUtils.createURI("http", host, port, path, query, null);
 		
 		HttpRequestBase request;
 		

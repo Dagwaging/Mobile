@@ -3,9 +3,14 @@ package edu.rosehulman.android.directory;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
+import android.content.Intent;
 import android.database.Cursor;
-import android.location.Location;
+import android.graphics.drawable.Drawable;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
@@ -19,15 +24,22 @@ import android.view.Window;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
+import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.google.android.maps.MyLocationOverlay;
 import com.google.android.maps.Overlay;
 
 import edu.rosehulman.android.directory.db.DbIterator;
-import edu.rosehulman.android.directory.db.MapAreaAdapter;
+import edu.rosehulman.android.directory.db.LocationAdapter;
 import edu.rosehulman.android.directory.db.VersionsAdapter;
-import edu.rosehulman.android.directory.model.MapArea;
-import edu.rosehulman.android.directory.model.MapAreaCollection;
+import edu.rosehulman.android.directory.maps.BoundingMapArea;
+import edu.rosehulman.android.directory.maps.BuildingOverlayLayer;
+import edu.rosehulman.android.directory.maps.OverlayManager;
+import edu.rosehulman.android.directory.maps.POILayer;
+import edu.rosehulman.android.directory.maps.TextOverlay;
+import edu.rosehulman.android.directory.maps.TextOverlayLayer;
+import edu.rosehulman.android.directory.model.Location;
+import edu.rosehulman.android.directory.model.LocationCollection;
 import edu.rosehulman.android.directory.model.VersionType;
 import edu.rosehulman.android.directory.service.MobileDirectoryService;
 
@@ -35,7 +47,21 @@ import edu.rosehulman.android.directory.service.MobileDirectoryService;
  * Main entry point into MobileDirectory
  */
 public class MainActivity extends MapActivity {
+	
+    private static final String BUILDING_SELECTED_ID = "BuildingSelectedId";
 
+    public static final String EXTRA_IS_INTERNAL = "IS_INTERNAL";
+	public static final String EXTRA_BUILDING_ID = "BUILDING_ID";
+
+	private static final int REQUEST_STARTUP_CODE = 4;
+
+	public static Intent createIntent(Context context, long buildingId) {
+		Intent intent = new Intent(context, MainActivity.class);
+		intent.putExtra(EXTRA_IS_INTERNAL, true);
+		intent.putExtra(EXTRA_BUILDING_ID, buildingId);
+		return intent;
+	}
+	
 	private BetaManagerManager betaManager;
 
     private MapView mapView;
@@ -43,12 +69,16 @@ public class MainActivity extends MapActivity {
     private LocationManager locationManager;
     private LocationListener locationListener;
 
+    private OverlayManager overlayManager;
+    private POILayer poiLayer;
     private BuildingOverlayLayer buildingLayer;
     private TextOverlayLayer textLayer;
-    
+    private EventOverlay eventLayer;
     private MyLocationOverlay myLocation;
     
     private TaskManager taskManager;
+    
+    private Bundle savedInstanceState;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,13 +90,18 @@ public class MainActivity extends MapActivity {
         betaManager = new BetaManagerManager(this);
         
         mapView = (MapView)findViewById(R.id.mapview);
+        
+        overlayManager = new OverlayManager();
         myLocation = new MyLocationOverlay(this, mapView);
+        eventLayer = new EventOverlay();
         
         if (savedInstanceState == null) {
         	
-		    if (betaManager.hasBetaManager() && betaManager.isBetaEnabled()) {
+        	Intent intent = getIntent();
+		    if (!intent.getBooleanExtra(EXTRA_IS_INTERNAL, false) && betaManager.hasBetaManager() && betaManager.isBetaEnabled()) {
 		       	if (betaManager.isBetaRegistered()) {
-		       		betaManager.launchBetaActivity(BetaManagerManager.ACTION_SHOW_STARTUP);	
+		       		Intent betaIntent = betaManager.getBetaIntent(BetaManagerManager.ACTION_SHOW_STARTUP); 
+		       		startActivityForResult(betaIntent, REQUEST_STARTUP_CODE);	
 		       	} else {
 		       		betaManager.launchBetaActivity(BetaManagerManager.ACTION_SHOW_REGISTER);
 		       	}
@@ -75,9 +110,15 @@ public class MainActivity extends MapActivity {
 	        mapView.setSatellite(true);
 	        
 	        //center the map
+	        MapController controller = mapView.getController();
 	        GeoPoint center = new GeoPoint(39483760, -87325929);
-	        mapView.getController().setCenter(center);
-	        mapView.getController().zoomToSpan(6241, 13894);    
+	        controller.setCenter(center);
+	        controller.zoomToSpan(6241, 13894);
+	        
+	    } else {
+	    	this.savedInstanceState = savedInstanceState;
+	    	
+	    	//restore state
 	    }
 
         mapView.setBuiltInZoomControls(true);
@@ -86,11 +127,27 @@ public class MainActivity extends MapActivity {
     }
     
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    	if (requestCode != REQUEST_STARTUP_CODE)
+    		return;
+    	
+    	switch (resultCode) {
+    		case Activity.RESULT_CANCELED:
+    			//The user declined an update, exit
+    			finish();
+    			break;
+    		case Activity.RESULT_OK:
+    			//We were up to date, continue on happily
+    			break;	
+    	}
+    }
+    
+    @Override
     protected void onStart() {
     	super.onStart();
     	
     	if (textLayer == null) {
-            LoadOverlays loadOverlays = new LoadOverlays();
+    		LoadOverlays loadOverlays = new LoadOverlays(savedInstanceState == null);
             taskManager.addTask(loadOverlays);
             loadOverlays.execute();
     	}
@@ -100,6 +157,9 @@ public class MainActivity extends MapActivity {
     protected void onSaveInstanceState(Bundle bundle) {
     	super.onSaveInstanceState(bundle);
     	//TODO save our state
+    	if (buildingLayer != null) {
+    		bundle.putLong(BUILDING_SELECTED_ID, buildingLayer.getSelectedBuilding());
+    	}
     }
     
     @Override
@@ -117,7 +177,7 @@ public class MainActivity extends MapActivity {
         locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         locationListener = new LocationListener() {
 			@Override
-			public void onLocationChanged(Location location) {
+			public void onLocationChanged(android.location.Location location) {
 				Log.v(C.TAG, location.toString());
 			}
 
@@ -170,6 +230,12 @@ public class MainActivity extends MapActivity {
         return true;
     }
     
+    private void showTopLocations() {
+    	TopLocations task = new TopLocations();
+    	taskManager.addTask(task);
+    	task.execute();
+    }
+    
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         //handle item selection
@@ -179,6 +245,9 @@ public class MainActivity extends MapActivity {
             return true;
         case R.id.location:
         	mapView.getController().animateTo(myLocation.getMyLocation());
+        	return true;
+        case R.id.top_level:
+        	showTopLocations();
         	return true;
         default:
             return super.onOptionsItemSelected(item);
@@ -195,42 +264,140 @@ public class MainActivity extends MapActivity {
     	List<Overlay> overlays = mapView.getOverlays();
     	overlays.clear();
     	
+    	overlays.add(eventLayer);
     	overlays.add(myLocation);
     	
-    	if (buildingLayer != null)
+    	if (buildingLayer != null) {
     		overlays.add(buildingLayer);
+    		overlayManager.addOverlay(buildingLayer);
+    	}
     	
-    	if (textLayer != null)
+    	if (textLayer != null) {
     		overlays.add(textLayer);
+    	}
+
+    	if (poiLayer != null) {
+    		overlays.add(poiLayer);
+    		overlayManager.addOverlay(poiLayer);
+    	}
     	
     	mapView.invalidate();
     }
     
-    private void generateBuildings() {
-    	BuildingOverlayLayer buildings = new BuildingOverlayLayer();
+    private class EventOverlay extends Overlay {
     	
-    	MapAreaAdapter buildingAdapter = new MapAreaAdapter();
-    	buildingAdapter.open();
-    	
-    	DbIterator<MapArea> iterator = buildingAdapter.getBuildingIterator();
-    	while (iterator.hasNext()) {
-    		MapArea area = iterator.getNext();
-    		buildingAdapter.loadCorners(area);
-    		buildings.addMapArea(area);
+    	@Override
+    	public boolean onTap(GeoPoint p, MapView mapView) {
+    		//tap not handled by any other overlay
+    		if (buildingLayer != null) {
+    			buildingLayer.setSelectedBuilding(-1);
+    		}
+    		
+    		if (poiLayer != null) {
+    			poiLayer.setFocus(null);
+    		}
+    		
+    		return true;
     	}
-    	
-    	buildingAdapter.close();
-    	
-    	this.buildingLayer = buildings;
-    	rebuildOverlays();
     }
     
-	private class LoadOverlays extends AsyncTask<Void, Void, TextOverlayLayer> {
+    private class TopLocations extends AsyncTask<Void, Void, Void> {
+    	private int[] ids;
+		private String[] names;
+    	
+		@Override
+		protected Void doInBackground(Void... params) {
+			LocationAdapter locationAdapter = new LocationAdapter();
+			locationAdapter.open();
+			
+			Cursor cursor = locationAdapter.getQuickListCursor();
+			
+			int iId = cursor.getColumnIndex(LocationAdapter.KEY_ID);
+			int iName = cursor.getColumnIndex(LocationAdapter.KEY_NAME);
+			
+			ids = new int[cursor.getCount()];
+			names = new String[cursor.getCount()];
+			
+			for (int i = 0; cursor.moveToNext(); i++) {
+				ids[i] = cursor.getInt(iId);
+				names[i] = cursor.getString(iName);
+			}
+			
+			locationAdapter.close();
+			return null;
+		}
+		
+		@Override
+		protected void onPostExecute(Void res) {
+	    	AlertDialog dialog = new AlertDialog.Builder(MainActivity.this)
+	    		.setTitle("Top Locations")
+	    		.setItems(names, new OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						if (!buildingLayer.setSelectedBuilding(ids[which])) {
+							poiLayer.setFocus(ids[which]);	
+						}
+						
+					}
+				})
+				.create();
+	    	dialog.show();
+		}
+    	
+    }
+    
+	private class LoadOverlays extends AsyncTask<Void, Void, Void> {
+		
+		private boolean refreshData;
+		
+	    private POILayer poiLayer;
+	    private BuildingOverlayLayer buildingLayer;
+	    private TextOverlayLayer textLayer;
 
-		private TextOverlayLayer buildLayer() {
+		public LoadOverlays(boolean refreshData) {
+			this.refreshData = refreshData;
+		}
+		
+	    private void generateBuildings() {
+	    	BuildingOverlayLayer buildings = new BuildingOverlayLayer(mapView);
+	    	
+	    	LocationAdapter buildingAdapter = new LocationAdapter();
+	    	buildingAdapter.open();
+	    	
+	    	DbIterator<Location> iterator = buildingAdapter.getBuildingIterator();
+	    	while (iterator.hasNext()) {
+	    		Location area = iterator.getNext();
+	    		buildingAdapter.loadMapArea(area, true);
+	    		buildings.addMapArea(area);
+	    	}
+	    	
+	    	buildingAdapter.close();
+
+	    	this.buildingLayer = buildings;
+	    }
+	    
+	    private void generatePOI() {
+	    	Drawable marker = getResources().getDrawable(R.drawable.map_marker);
+	    	POILayer poi = new POILayer(marker, mapView);
+
+	    	LocationAdapter buildingAdapter = new LocationAdapter();
+	    	buildingAdapter.open();
+	    	
+	    	DbIterator<Location> iterator = buildingAdapter.getPOIIterator();
+	    	while (iterator.hasNext()) {
+	    		Location location = iterator.getNext();
+	    		poi.add(location);
+	    	}
+	    	
+	    	buildingAdapter.close();
+	    	
+	    	this.poiLayer = poi;
+	    }
+
+		private void generateText() {
 			//get our db
-	        MapAreaAdapter buildingAdapter = new MapAreaAdapter();
-	        TextOverlayLayer textLayer = new TextOverlayLayer();
+	        LocationAdapter buildingAdapter = new LocationAdapter();
+	        textLayer = new TextOverlayLayer();
 	        buildingAdapter.open();
 	        
 	        //build out text overlays
@@ -269,11 +436,24 @@ public class MainActivity extends MapActivity {
 	        buildingOverlays.close();
 	        
 	        buildingAdapter.close();
-	        return textLayer;
+		}
+		
+		private void buildLayers() {
+			generateText();
+			publishProgress();
+			generateBuildings();
+			publishProgress();
+			generatePOI();	
 		}
 		
 		@Override
-		protected TextOverlayLayer doInBackground(Void... args) {
+		protected Void doInBackground(Void... args) {
+			
+			if (!refreshData) {
+				//skip update
+				buildLayers();
+				return null;
+			}
 
 			//check for updated map areas
 			VersionsAdapter versionsAdapter = new VersionsAdapter();
@@ -283,13 +463,14 @@ public class MainActivity extends MapActivity {
 	    	String version = versionsAdapter.getVersion(VersionType.MAP_AREAS);
 	    	versionsAdapter.close();
 			
-	        MapAreaCollection collection = null;
+	        LocationCollection collection = null;
 	        try {
-	        	collection = service.getMapAreas(version);
+	        	collection = service.getAllLocationData(version);
 			} catch (Exception e) {
 				Log.e(C.TAG, "Failed to download new map areas", e);
 				//just use our old data, it is likely up to date
-				return buildLayer();
+				buildLayers();
+				return null;
 			}
 			if (isCancelled()) {
 				return null;
@@ -297,11 +478,12 @@ public class MainActivity extends MapActivity {
 			
 			if (collection == null) {
 				//data was up to date
-				return buildLayer();
+				buildLayers();
+				return null;
 			}
 
 			//replace the building data with the new data
-	        MapAreaAdapter buildingAdapter = new MapAreaAdapter();
+	        LocationAdapter buildingAdapter = new LocationAdapter();
 	        buildingAdapter.open();
 	        buildingAdapter.replaceBuildings(collection.mapAreas);
 	        buildingAdapter.close();
@@ -313,7 +495,8 @@ public class MainActivity extends MapActivity {
 				return null;
 			}
 	        
-	        return buildLayer();
+	        buildLayers();
+	        return null;
 		}
 		
 		@Override
@@ -321,13 +504,33 @@ public class MainActivity extends MapActivity {
 			MainActivity.this.setProgressBarIndeterminateVisibility(true);
 		}
 		
-		@Override
-		protected void onPostExecute(TextOverlayLayer textLayer) {
-			//add the overlay to the map
+		private void updateOverlays() {
+			MainActivity.this.poiLayer = poiLayer;
+			MainActivity.this.buildingLayer = buildingLayer;
 			MainActivity.this.textLayer = textLayer;
 			rebuildOverlays();
+		}
+		
+		@Override
+		protected void onProgressUpdate(Void... values) {
+	    	updateOverlays();
+		}
+		
+		@Override
+		protected void onPostExecute(Void res) {
+			//add the overlay to the map;
+			updateOverlays();
+			
+			Intent intent = getIntent();
+			
+	    	if (savedInstanceState != null) {
+	    		MainActivity.this.buildingLayer.setSelectedBuilding(savedInstanceState.getLong(BUILDING_SELECTED_ID));
+	    	} else if (intent.hasExtra(EXTRA_BUILDING_ID)) {
+	    		long id = intent.getLongExtra(EXTRA_BUILDING_ID, -1);
+	    		MainActivity.this.buildingLayer.setSelectedBuilding(id);
+	    	}
+			
 	        MainActivity.this.setProgressBarIndeterminateVisibility(false);
-	        generateBuildings();
 		}
 		
 		@Override

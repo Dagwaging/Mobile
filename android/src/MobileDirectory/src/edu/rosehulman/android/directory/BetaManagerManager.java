@@ -22,11 +22,17 @@ public class BetaManagerManager extends ContextWrapper {
     /** Shown when the user starts the beta manager */
     public static String ACTION_SHOW_BETA_MANAGER = "edu.rosehulman.android.directory.beta.SHOW_BETA_MANAGER";
     
-    public static String PREFS_FILE = "PREFS_BETA";
+    /** File name for prefs file */
+	public static String PREFS_FILE = "PREFS_BETA";
+	/** Preference for whether the beta features are enabled or not */
     public static String PREF_BETA_ENABLED = "BETA_ENABLED";
+    /** Preference for whether or not the user has registered */
     public static String PREF_HAS_RUN = "HAS_RUN";
+    /** Should we use mocks for this run? */
     public static String PREF_USE_MOCKS = "USE_MOCKS";
+    /** Should we draw debug information on the map? */
     public static String PREF_DRAW_DEBUG = "DRAW_DEBUG";
+    /** Should we always use mock interfaces? */
     public static String PREF_ALWAYS_USE_MOCKS = "ALWAYS_USE_MOCKS";
 	
 	private static final String BETA_PACKAGE = "edu.rosehulman.android.directory.beta";
@@ -75,7 +81,7 @@ public class BetaManagerManager extends ContextWrapper {
      * @return True if enabled; false otherwise
      */
     public boolean isBetaEnabled() {
-    	return getBooleanParameter(PREF_BETA_ENABLED, false);    	
+    	return getBooleanParameter(PREF_BETA_ENABLED, true);    	
     }
     
     /**
@@ -120,11 +126,22 @@ public class BetaManagerManager extends ContextWrapper {
      * @param action The activity to start
      */
     public void launchBetaActivity(String action) {
-    	Intent intent = new Intent(action);
+    	Intent intent = getBetaIntent(action);
     	try {
     		startActivity(intent);
     	} catch (ActivityNotFoundException ex) {
     		Log.e(C.TAG, "Activity not found", ex);
     	}
+    }
+    
+    /**
+     * Retrieves the intent that should be started to perform a beta UI operation
+     * 
+     * @param action The activity to start
+     * @return An Intent object that should be launched 
+     */
+    public Intent getBetaIntent(String action) {
+    	Intent intent = new Intent(action);
+    	return intent;
     }
 }
