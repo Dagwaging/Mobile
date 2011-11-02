@@ -267,7 +267,10 @@ heightForFooterInSection:(NSInteger)section {
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         
-        cell.textLabel.text = self.updateDate.description;
+        NSDateFormatter *formatter = [[[NSDateFormatter alloc] init] autorelease];
+        formatter.dateStyle = NSDateFormatterMediumStyle;
+        formatter.timeStyle = NSDateFormatterShortStyle;
+        cell.textLabel.text = [formatter stringFromDate:self.updateDate];
     } else if (sectionLabel == kBetaAuthTokenLabel) {
         cell = [tableView dequeueReusableCellWithIdentifier:kBetaAuthTokenCell];
         
