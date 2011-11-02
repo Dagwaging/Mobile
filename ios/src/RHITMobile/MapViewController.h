@@ -26,6 +26,8 @@
 
 
 @class RHRemoteHandler;
+@class RHAnnotation;
+@class RHLocation;
 
 /// \ingroup views
 /// View controller for the map portion of the application.
@@ -35,15 +37,11 @@
 /// Map view that is visible to the user.
 @property (nonatomic, retain) IBOutlet MKMapView *mapView;
 
-@property (nonatomic, retain) IBOutlet UIToolbar *toolbar;
-
-@property (nonatomic, retain) IBOutlet UIBarButtonItem *zoomInButton;
-
-@property (nonatomic, retain) IBOutlet UIBarButtonItem *zoomOutButton;
-
-@property (nonatomic, retain) IBOutlet UIBarButtonItem *placesButton;
-
 @property (nonatomic, retain) IBOutlet UILabel *zoomLevelLabel;
+
+@property (nonatomic, retain) IBOutlet UILabel *overlaysLabel;
+
+@property (nonatomic, retain) IBOutlet UILabel *annotationsLabel;
 
 /// Core Data fetched results controller.
 @property (nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
@@ -54,6 +52,26 @@
 /// Remote data handler.
 @property (nonatomic, retain) RHRemoteHandler *remoteHandler;
 
+@property (nonatomic, retain) NSMutableArray *quickListAnnotations;
+
+@property (nonatomic, retain) NSArray *temporaryAnnotations;
+
+/// Reload preference data, in case something has changed while the application
+/// was running.
 - (void)refreshPreferences;
+
+- (void)focusMapViewToTemporaryAnnotation:(RHAnnotation *)annotation;
+
+- (void)focusMapViewToLocation:(RHLocation *)location;
+
+- (IBAction)debugZoomIn:(id)sender;
+
+- (IBAction)debugZoomOut:(id)sender;
+
+- (IBAction)displayQuickList:(id)sender;
+
+- (IBAction)displaySearch:(id)sender;
+
+- (IBAction)discloseLocationDetails:(id)sender;
 
 @end

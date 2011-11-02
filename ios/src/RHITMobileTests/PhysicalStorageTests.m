@@ -22,6 +22,7 @@
 #import "PhysicalStorageTests.h"
 #import "RHITMobileAppDelegate.h"
 #import "RHNode.h"
+#import "RHPListStore.h"
 
 
 #define ARC4RANDOM_MAX 0x100000000
@@ -124,6 +125,12 @@
     STAssertNotNil(results, @"Results array is nil");
     STAssertEquals(results.count, (NSUInteger) 0,
                    @"Results array has incorrect length");
+}
+
+- (void)testPListVersionNumber {
+    RHPListStore *store = [[RHPListStore alloc] init];
+    store.currentDataVersion = @"0.1";
+    STAssertEqualObjects(store.currentDataVersion, @"0.1", @"Version not saved");
 }
 
 @end

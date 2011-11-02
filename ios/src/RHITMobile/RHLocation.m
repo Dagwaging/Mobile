@@ -22,21 +22,61 @@
 #import "RHLabelNode.h"
 
 
+#define kAltNamesDelimiter @"|::|"
+#define kLinksDelimiter @"@|::|@"
+
+
 @implementation RHLocation
 
 @dynamic serverIdentifier;
 @dynamic name;
+@dynamic links;
+@dynamic altNames;
+@dynamic displayTypeNumber;
 @dynamic quickDescription;
+@dynamic retrievalStatusNumber;
 @dynamic visibleZoomLevel;
+@dynamic enclosedLocations;
+@dynamic parent;
 @dynamic boundaryNodes;
 @dynamic labelLocation;
 @dynamic navigationNodes;
 
 + (RHLocation *)fromContext:(NSManagedObjectContext *)context {
     RHLocation *location = [NSEntityDescription
-                            insertNewObjectForEntityForName:@"Location"
+                            insertNewObjectForEntityForName:kRHLocationCoreDataModelIdentifier
                             inManagedObjectContext:context];
     return location;
+}
+
+- (RHLocationDisplayType)displayType {
+    return (RHLocationDisplayType) self.displayTypeNumber.intValue;
+}
+
+- (void)setDisplayType:(RHLocationDisplayType)displayType {
+    self.displayTypeNumber = [NSNumber numberWithInt:displayType];
+}
+
+- (RHLocationRetrievalStatus)retrievalStatus {
+    return (RHLocationRetrievalStatus) self.retrievalStatusNumber.intValue;
+}
+
+- (void)setRetrievalStatus:(RHLocationRetrievalStatus)retrievalStatus {
+    self.retrievalStatusNumber = [NSNumber numberWithInt:retrievalStatus];
+}
+
+- (NSArray *)alternateNames {
+    NSArray *result = [self.altNames
+                       componentsSeparatedByString:kAltNamesDelimiter];
+    if ([[result objectAtIndex:0] length] < 1) {
+        return [[[NSArray alloc] init] autorelease];
+    }
+    return result;
+}
+
+- (void)setAlternateNames:(NSArray *)alternateNames {
+    self.altNames = [alternateNames
+                     componentsJoinedByString:kAltNamesDelimiter];
 }
 
 - (void)setOrderedBoundaryNodes:(NSArray *)inBoundaryNodes {

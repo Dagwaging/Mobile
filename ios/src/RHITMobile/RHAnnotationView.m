@@ -73,17 +73,18 @@
 #pragma mark Property Methods
 
 - (void)setSelected:(BOOL)inSelected {
-    if (inSelected) {
-        [delegate focusMapViewToLocation:[[self storedAnnotation] location]];
-    }
     [super setSelected:inSelected];
-}
-
-- (void)setHighlighted:(BOOL)inHighlighted {
-    if (!inHighlighted) {
-        [delegate clearOverlays];
+    if (inSelected) {
+        [delegate focusMapViewToAreaAnnotation:self.storedAnnotation
+                                      selected:YES];
+    } else {
+        [delegate performSelector:@selector(clearUnusedOverlays)
+                       withObject:nil
+                       afterDelay:0.01];
+        [delegate performSelector:@selector(clearUnusedOverlays)
+                       withObject:nil
+                       afterDelay:0.3];
     }
-    [super setHighlighted:inHighlighted];
 }
 
 - (void)updateAnnotationVisibility {

@@ -43,8 +43,6 @@
     self = [super init];
     if (self) {
         self.location = inLocation;
-        [self updateBoundingRect];
-        [self updatePolygon];
     }
     return self;
 }
@@ -100,7 +98,7 @@
     for (RHBoundaryNode *node in nodes) {
         coords[[nodes indexOfObject:node]] = node.coordinate;
     }
-    
+
     self.polygon = [MKPolygon polygonWithCoordinates:coords count:nodes.count];
 }
 

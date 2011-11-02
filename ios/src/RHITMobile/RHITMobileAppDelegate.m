@@ -20,11 +20,25 @@
 #import "RHITMobileAppDelegate.h"
 #import "MapViewController.h"
 #import "SearchViewController.h"
+#import "RHRestHandler.h"
+#import "BetaViewController.h"
+#import "RHBeta.h"
+#import "DirectoryViewController.h"
+#import "InfoViewController.h"
+
+@interface RHITMobileAppDelegate ()
+
+- (void)setupDefaults;
+
+@end
 
 @implementation RHITMobileAppDelegate
 
 @synthesize window = _window;
 @synthesize tabBarController = _tabBarController;
+@synthesize mapNavigationViewController;
+@synthesize directoryNavigationViewController;
+@synthesize infoNavigationViewController;
 @synthesize mapViewController;
 @synthesize searchViewController;
 @synthesize managedObjectModel;
@@ -36,9 +50,56 @@
     // Override point for customization after application launch.
     // Add the tab bar controller's current view as a subview of the window
     self.window.rootViewController = self.tabBarController;
+    self.mapViewController = [[[MapViewController alloc]
+                               initWithNibName:@"MapView" bundle:nil]
+                              autorelease];
+    [self.mapNavigationViewController pushViewController:mapViewController
+                                                animated:NO];
+    self.mapViewController.navigationItem.title = @"Map";
+    
+    self.mapViewController.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] 
+                                                                initWithImage:[UIImage imageNamed:@"quicklist-toolbar-icon.png"] style:UIBarButtonItemStylePlain target:self.mapViewController action:@selector(displayQuickList:)] autorelease];
+
+    self.mapViewController.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:mapViewController action:@selector(displaySearch:)] autorelease];
+    
+    InfoViewController *infoController = [[[InfoViewController alloc] initWithNibName:@"InfoView" bundle:nil] autorelease];
+    
+    [self.infoNavigationViewController pushViewController:infoController animated:NO];
+    
+    infoController.navigationItem.title = @"Campus Info";
+    
+    DirectoryViewController *directoryController = [[[DirectoryViewController alloc] initWithNibName:@"DirectoryView" bundle:nil] autorelease];
+    
+    [self.directoryNavigationViewController pushViewController:directoryController animated:NO];
+    
+    directoryController.navigationItem.title = @"Directory";
+    
+#ifdef RHITMobile_RHBeta
+    BetaViewController *beta = [[[BetaViewController alloc]
+                                 initWithNibName:@"BetaView"
+                                 bundle:nil] autorelease];
+
+    UINavigationController *nav = [[[UINavigationController alloc] initWithRootViewController:beta] autorelease];
+    
+    
+    nav.tabBarItem = [[[UITabBarItem alloc] initWithTitle:@"Beta"
+                                                     image:[UIImage imageNamed:@"tab-bar-beta-icon.png"]
+                                                       tag:0]
+                       autorelease];
+    
+
+    self.tabBarController.viewControllers = [self.tabBarController.viewControllers 
+                                             arrayByAddingObject:nav];
+    
+#endif
+    
     [self.window makeKeyAndVisible];
-    self.mapViewController.managedObjectContext = self.managedObjectContext;
-    [self.mapViewController refreshPreferences];
+    [self setupDefaults];
+    
+#ifdef RHITMobile_RHBeta
+    [beta performInitialSetup];
+#endif
+    
     return YES;
 }
 
@@ -77,7 +138,7 @@
      application was inactive. If the application was previously in the 
      background, optionally refresh the user interface.
      */
-    [self.mapViewController refreshPreferences];
+    [self setupDefaults];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
@@ -196,6 +257,51 @@
                                                          error:&error]) {
         /* Error for store creation should be handled in here */
     }
+}
+
+#pragma mark -
+#pragma mark Private Methods
+
+-(void)setupDefaults {
+    //get the plist location from the settings bundle
+    NSString *settingsPath = [[[NSBundle mainBundle] bundlePath]
+                              stringByAppendingPathComponent:@"Settings.bundle"];
+    NSString *plistPath = [settingsPath
+                           stringByAppendingPathComponent:@"Root.plist"];
+    
+    //get the preference specifiers array which contains the settings
+    NSDictionary *settingsDictionary = [NSDictionary
+                                        dictionaryWithContentsOfFile:plistPath];
+    NSArray *preferencesArray = [settingsDictionary
+                                 objectForKey:@"PreferenceSpecifiers"];
+    
+    //use the shared defaults object
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    
+    //for each preference item, set its default if there is no value set
+    for(NSDictionary *item in preferencesArray) {
+        
+        //get the item key, if there is no key then we can skip it
+        NSString *key = [item objectForKey:@"Key"];
+        if (key) {
+            
+            //check to see if the value and default value are set
+            //if a default value exists and the value is not set, use the default
+            id value = [defaults objectForKey:key];
+            id defaultValue = [item objectForKey:@"DefaultValue"];
+            if(defaultValue && !value) {
+                [defaults setObject:defaultValue forKey:key];
+            }
+        }
+    }
+    
+    //write the changes to disk
+    [defaults synchronize];
+    
+    // Kick off a network update
+    [self.mapViewController.remoteHandler checkForLocationUpdates];
+    
+    [self.mapViewController refreshPreferences];
 }
 
 @end
