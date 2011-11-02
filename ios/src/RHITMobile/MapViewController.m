@@ -40,6 +40,8 @@
 
 @property (nonatomic, retain) RHLocationOverlay *currentOverlay;
 
+@property (nonatomic, retain) NSMutableDictionary *locationsDisplayed;
+
 - (void)loadStoredLocations;
 
 - (void)populateMapWithLocations:(NSSet *)locations;
@@ -67,7 +69,7 @@
 
 // Private properties
 @synthesize currentOverlay;
-
+@synthesize locationsDisplayed;
 
 #pragma mark -
 #pragma mark General Methods
@@ -78,6 +80,8 @@
     self.managedObjectContext = [(RHITMobileAppDelegate *)
                                  [[UIApplication sharedApplication]
                                   delegate] managedObjectContext];
+    
+    self.locationsDisplayed = [[[NSMutableDictionary alloc] initWithCapacity:20] autorelease];
     
     // Initialize what's visible on the map
     CLLocationCoordinate2D center = {kRHCampusCenterLatitude,
@@ -140,6 +144,18 @@
     [self.mapView addAnnotation:annotation];
     [self.mapView setCenterCoordinate:annotation.location.labelLocation.coordinate zoomLevel:kRHLocationFocusZoomLevel animated:NO];
     [self.mapView selectAnnotation:annotation animated:NO];
+}
+
+- (void)focusMapViewToLocation:(RHLocation *)location {
+    RHAnnotation *annotation = [self.locationsDisplayed objectForKey:location.objectID];
+    
+    if (annotation == nil) {
+        annotation = [[[RHAnnotation alloc] initWithLocation:location
+                                  currentZoomLevel:self.mapView.zoomLevel]
+                      autorelease];
+    }
+    
+    [self focusMapViewToAnnotation:annotation];
 }
 
 #pragma mark -
@@ -439,6 +455,7 @@
 - (void)clearAllAnnotations {
     [self.mapView removeAnnotations:self.temporaryAnnotations];
     self.temporaryAnnotations = nil;
+    self.locationsDisplayed = [[[NSMutableDictionary alloc] initWithCapacity:20] autorelease];
 }
 
 #pragma mark -
@@ -488,6 +505,8 @@
         annotation = [[annotation initWithLocation:location
                                   currentZoomLevel:currentZoomLevel]
                       autorelease];
+        
+        [self.locationsDisplayed setObject:annotation forKey:location.objectID];
         
         if (location.displayType == RHLocationDisplayTypeQuickList) {
             [self.quickListAnnotations addObject:annotation];

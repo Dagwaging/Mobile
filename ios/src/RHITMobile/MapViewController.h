@@ -27,6 +27,7 @@
 
 @class RHRemoteHandler;
 @class RHAnnotation;
+@class RHLocation;
 
 /// \ingroup views
 /// View controller for the map portion of the application.
@@ -60,6 +61,8 @@
 - (void)refreshPreferences;
 
 - (void)focusMapViewToTemporaryAnnotation:(RHAnnotation *)annotation;
+
+- (void)focusMapViewToLocation:(RHLocation *)location;
 
 - (IBAction)debugZoomIn:(id)sender;
 

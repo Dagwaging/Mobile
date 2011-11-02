@@ -21,6 +21,8 @@
 #import "LocationDetailViewController.h"
 #import "RHLocation.h"
 #import "RHLocationLink.h"
+#import "RHITMobileAppDelegate.h"
+#import "MapViewController.h"
 
 #define kAltNamesLabel @"Also Known As"
 #define kAboutLabel @"About"
@@ -68,7 +70,9 @@
 }
 
 - (IBAction)displayCurrentLocationOnMap:(id)sender {
-    
+    [self.navigationController popToRootViewControllerAnimated:YES];
+    RHITMobileAppDelegate *appDelegate = (RHITMobileAppDelegate *) [UIApplication sharedApplication].delegate;
+    [appDelegate.mapViewController focusMapViewToLocation:self.location];
 }
 
 #pragma mark - View lifecycle
