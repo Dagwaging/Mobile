@@ -274,6 +274,7 @@ heightForFooterInSection:(NSInteger)section {
         if (cell == nil) {
             cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kBetaAuthTokenCell] autorelease];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.textLabel.font = [UIFont systemFontOfSize:14];
         }
         
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
