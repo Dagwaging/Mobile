@@ -67,6 +67,10 @@
     // Release any cached data, images, etc that aren't in use.
 }
 
+- (IBAction)displayCurrentLocationOnMap:(id)sender {
+    
+}
+
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad {
@@ -99,13 +103,11 @@
         [self.sections addObject:kAboutLabel];
     }
     
+    [self.sections addObject:kParentLabel];
+    
     if (location.links.count > 0) {
         [self.sections addObject:kLinksLabel];
         self.links = location.links.allObjects;
-    }
-    
-    if (location.parent != nil) {
-        [self.sections addObject:kParentLabel];
     }
     
     if (location.enclosedLocations.count > 0) {
@@ -121,10 +123,41 @@
 
 #pragma mark - UITableViewDelegate Methods
 
+- (UIView *)tableView:(UITableView *)tableView
+viewForFooterInSection:(NSInteger)section {
+    NSString *sectionLabel = [self.sections objectAtIndex:section];
+    
+    if (sectionLabel == kParentLabel) {
+        UIView *parentView = [[[UIView alloc] initWithFrame:CGRectZero] autorelease];
+        parentView.backgroundColor = [UIColor clearColor];
+        
+        UIButton *updateButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        updateButton.frame = CGRectMake(10.0, 10.0, 300.0, 44.0);
+        [updateButton addTarget:self
+                         action:@selector(displayCurrentLocationOnMap:)
+               forControlEvents:UIControlEventTouchUpInside];
+        
+        [updateButton setTitle:@"Display on Map" forState:UIControlStateNormal];
+        [parentView addSubview:updateButton];
+        return parentView;
+    }
+    
+    return nil;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView
+heightForFooterInSection:(NSInteger)section {
+    NSString *sectionLabel = [self.sections objectAtIndex:section];
+    
+    if (sectionLabel == kParentLabel) {
+        return 64;
+    }
+    
+    return 0;
+}
 
 #pragma mark - UITableViewDataSource Methods
-
-
+        
 - (UITableViewCell *)tableView:(UITableView *)tableView
          cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
@@ -226,7 +259,7 @@
     if (sectionLabel == kAboutLabel) {
         return 1;
     } else if (sectionLabel == kParentLabel) {
-        return 1;
+        return self.location.parent == nil ? 0 : 1;
     } else if (sectionLabel == kEnclosedLabel) {
         return self.location.enclosedLocations.count;
     } else if (sectionLabel == kAltNamesLabel) {

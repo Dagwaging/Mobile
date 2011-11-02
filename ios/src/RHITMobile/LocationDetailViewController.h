@@ -29,4 +29,6 @@
 @property (nonatomic, retain) NSArray *enclosedLocations;
 @property (nonatomic, retain) NSArray *links;
 
+- (IBAction)displayCurrentLocationOnMap:(id)sender;
+
 @end
