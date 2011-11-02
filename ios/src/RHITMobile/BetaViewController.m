@@ -29,7 +29,7 @@
 
 #ifdef RHITMobile_RHBeta
 
-#define kBetaServer @"http://rhitmobilebeta-test.heroku.com"
+#define kBetaServer @"http://rhitmobilebeta.heroku.com"
 #define kBetaUpdatePath @"/platform/ios/builds/current"
 #define kBetaRegisterPath @"/device/register"
 
@@ -45,6 +45,8 @@
 #define kBetaBuildTypeCell @"BuildTypeCell"
 #define kBetaUpdateTimeLabel @"Last Updated"
 #define kBetaUpdateTimeCell @"UpdateTimeCell"
+#define kBetaAuthTokenLabel @"Beta Authentication Token"
+#define kBetaAuthTokenCell @"AuthTokenCell"
 #define kBetaMapDebugLabel @"Map Debugging Tools"
 #define kBetaMapDebugCell @"MapDebugCell"
 
@@ -88,7 +90,7 @@
         self.navigationItem.title = @"Beta Tools and Info";
         self.sections = [NSArray arrayWithObjects:kBetaApplicationVersionLabel,
                          kBetaBuildNumberLabel, kBetaBuildTypeLabel,
-                         kBetaUpdateTimeLabel, nil];
+                         kBetaUpdateTimeLabel, kBetaAuthTokenLabel, nil];
         self.operations = [[[NSOperationQueue alloc] init] autorelease];
     }
     return self;
@@ -125,12 +127,12 @@
         [defaults setInteger:self.knownCurrentBuild forKey:kBetaCurrentBuildDefault];
         updateNumber = (double) [[NSDate date] timeIntervalSince1970];
 
-//        NSInvocationOperation* operation = [NSInvocationOperation alloc];
-//        operation = [[operation
-//                      initWithTarget:self
-//                      selector:@selector(performNotificationOfUpdate:)
-//                      object:nil] autorelease];
-//        [self.operations addOperation:operation];
+        NSInvocationOperation* operation = [NSInvocationOperation alloc];
+        operation = [[operation
+                      initWithTarget:self
+                      selector:@selector(performNotificationOfUpdate)
+                      object:nil] autorelease];
+        [self.operations addOperation:operation];
     }
     
     [defaults setDouble:updateNumber forKey:kBetaUpdateTimeDefault];
@@ -266,6 +268,16 @@ heightForFooterInSection:(NSInteger)section {
         }
         
         cell.textLabel.text = self.updateDate.description;
+    } else if (sectionLabel == kBetaAuthTokenLabel) {
+        cell = [tableView dequeueReusableCellWithIdentifier:kBetaAuthTokenCell];
+        
+        if (cell == nil) {
+            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kBetaAuthTokenCell] autorelease];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        }
+        
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        cell.textLabel.text = [defaults stringForKey:kBetaAuthTokenDefault];
     }
     
     return cell;
@@ -291,6 +303,8 @@ titleForHeaderInSection:(NSInteger)section {
     } else if (sectionLabel == kBetaBuildTypeLabel) {
         return 1;
     } else if (sectionLabel == kBetaUpdateTimeLabel) {
+        return 1;
+    } else if (sectionLabel == kBetaAuthTokenLabel)  {
         return 1;
     }
     
