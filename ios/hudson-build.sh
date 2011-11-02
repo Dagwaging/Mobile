@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Determine which branch we're working from
-BRANCH=$(git status | awk '$3 ~ /branch/ {print $4}')
+BRANCH=`git branch 2>/dev/null|grep -e ^\* | tr -d \*\`
 
 # Determine whether this is an alpha or beta build
 if [ "$BRANCH" = "master" ]
