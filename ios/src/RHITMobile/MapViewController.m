@@ -292,7 +292,36 @@
 }
 
 - (void)mapView:(MKMapView *)map regionDidChangeAnimated:(BOOL)animated {
+    
     NSInteger newZoomLevel = map.zoomLevel;
+    CLLocationCoordinate2D newCenter = map.centerCoordinate;
+    CLLocationCoordinate2D originalCenter = CLLocationCoordinate2DMake(kRHCampusCenterLatitude, kRHCampusCenterLongitude);
+    BOOL needsToSnapBack = NO;
+    
+    if (newZoomLevel < kRHMinimumZoomLevel) {
+        newZoomLevel = kRHMinimumZoomLevel;
+        needsToSnapBack = YES;
+    }
+    
+    if (newCenter.latitude < kRHMinimumLatitude) {
+        needsToSnapBack = YES;
+        newCenter = originalCenter;
+    } else if (newCenter.latitude > kRHMaximumLatitude) {
+        needsToSnapBack = YES;
+        newCenter = originalCenter;
+    }
+    
+    if (newCenter.longitude < kRHMinimumLongitude) {
+        needsToSnapBack = YES;
+        newCenter = originalCenter;
+    } else if (newCenter.longitude > kRHMaximumLongitude) {
+        needsToSnapBack = YES;
+        newCenter = originalCenter;
+    }
+    
+    if (needsToSnapBack) {
+        [map setCenterCoordinate:newCenter zoomLevel:newZoomLevel animated:YES];
+    }
     
     for (id annotation in self.mapView.annotations) {
         if ([annotation isKindOfClass:[RHAnnotation class]]) {
