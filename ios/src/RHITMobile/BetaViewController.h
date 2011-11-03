@@ -22,7 +22,7 @@
 
 #ifdef RHITMobile_RHBeta
 
-@interface BetaViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate>
+@interface BetaViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, UIAlertViewDelegate>
 
 @property (nonatomic, retain) NSString *registrationName;
 
