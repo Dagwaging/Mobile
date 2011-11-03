@@ -2,6 +2,7 @@
 
 # Determine which branch we're working from
 BRANCH=`git branch 2>/dev/null|grep -e ^\* | tr -d \*\ `
+echo "On branch \"$BRANCH\""
 
 # Determine whether this is an alpha or beta build
 if [ "$BRANCH" = "master" ]
@@ -12,6 +13,9 @@ else
     BUILD_TYPE="alpha"
     BUILD_CLASSIFICATION="rolling"
 fi
+
+echo "Build type: $BUILD_CLASSIFICATION"
+echo "Build version type: $BUILD_TYPE"
 
 # Bad awk and sed foo to extract the version number
 VERSION=$(awk '$1 ~ /CFBundleShortVersion/ {version_next = "YES"}; \
