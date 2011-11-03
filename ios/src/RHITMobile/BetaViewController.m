@@ -418,7 +418,8 @@ didDismissWithButtonIndex:(NSInteger)buttonIndex {
     
     // Determine if we need to actually update, then call the appropriate method
     if ([newBuildNumber compare:oldBuildNumber] == NSOrderedDescending ||
-        (official && [newBuildNumber compare:oldBuildNumber] != NSOrderedSame)) {
+        (official && [newBuildNumber compare:oldBuildNumber] != NSOrderedSame &&
+         !self.initialUpdateCheck)) {
         NSURL *url = [NSURL URLWithString:[relevantBuild
                                            objectForKey:@"downloadURL"]];
         [self performSelectorOnMainThread:@selector(didFindUpdateWithURL:)
