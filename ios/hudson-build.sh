@@ -4,6 +4,8 @@
 BRANCH=`git branch 2>/dev/null|grep -e ^\* | tr -d \*\ `
 echo "On branch \"$BRANCH\""
 echo "Branch: $GIT_BRANCH"
+BBRANCH=`git branch --contains $GIT_COMMIT`
+echo "BRANCH: $BBRANCH"
 set
 
 # Determine whether this is an alpha or beta build
