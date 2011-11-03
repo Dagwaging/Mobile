@@ -34,6 +34,7 @@
 #define kLinkCellKey @"LinkCell"
 #define kAboutCellKey @"AboutCell"
 #define kParentCellKey @"ParentCell"
+#define kEnclosedLocadingCellKey @"EnclosedLoadingCell"
 #define kEnclosedCellKey @"EnclosedCell"
 
 
@@ -105,10 +106,31 @@
 #pragma mark - Property Methods
 
 - (void)setLocation:(RHLocation *)location {
+    // Describe the type of entity we'd like to retrieve
+    NSEntityDescription *entityDescription;
+    entityDescription = [NSEntityDescription
+                         entityForName:@"Location"
+                         inManagedObjectContext:location.managedObjectContext];
+    
+    NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
+    [request setEntity:entityDescription];
+    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:
+                              @"serverIdentifier == %@", location.serverIdentifier];
+    [request setPredicate:predicate];
+    
+    NSArray *results = [location.managedObjectContext executeFetchRequest:request
+                                                           error:nil];
+    
+    if (results.count > 0) {
+        location = [results objectAtIndex:0];
+    }
+    
+    // Initialize sections
     self.sections = [[[NSMutableArray alloc] initWithCapacity:10]
                      autorelease];
-    location = (RHLocation *) [location.managedObjectContext objectWithID:location.objectID];
     
+    // Populate sections
     if (location.alternateNames.count > 0) {
         [self.sections addObject:kAltNamesLabel];
     }
@@ -130,6 +152,14 @@
                                   sortedArrayUsingComparator: ^(id l1, id l2) {
             return [[l1 name] caseInsensitiveCompare:[l2 name]];
         }];
+    }
+    
+    if (location.retrievalStatus != RHLocationRetrievalStatusFull) {
+        [self performSelector:@selector(setLocation:)
+                   withObject:location
+                   afterDelay:1.0];
+    } else {
+        [self.tableView reloadData];
     }
     
     location_ = location;
@@ -211,7 +241,7 @@ heightForFooterInSection:(NSInteger)section {
         
         cell.textLabel.text = self.location.parent.name;
         
-    } else if (sectionLabel == kEnclosedLabel) {
+    } else if (sectionLabel == kEnclosedLabel && self.location.retrievalStatus == RHLocationRetrievalStatusFull) {
         static NSString *cellIdentifier = kEnclosedCellKey;
         
         cell = [inTableView dequeueReusableCellWithIdentifier:cellIdentifier];
@@ -228,6 +258,25 @@ heightForFooterInSection:(NSInteger)section {
                                                            indexAtPosition:1]];
         
         cell.textLabel.text = child.name;
+        
+    } else if (sectionLabel == kEnclosedLabel && self.location.retrievalStatus != RHLocationRetrievalStatusFull) {
+        static NSString *cellIdentifier = kEnclosedLocadingCellKey;
+        
+        cell = [inTableView dequeueReusableCellWithIdentifier:cellIdentifier];
+        
+        if (cell == nil) {
+            cell = [[[UITableViewCell alloc]
+                     initWithStyle:UITableViewCellStyleDefault
+                     reuseIdentifier:cellIdentifier] autorelease];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.textLabel.font = [UIFont systemFontOfSize:UIFont.systemFontSize];
+            UIActivityIndicatorView *activityIndicator = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray] autorelease];
+            cell.accessoryView = activityIndicator;
+            [activityIndicator startAnimating];
+        }
+        
+        cell.textLabel.text = @"Loading...";
+        
     } else if (sectionLabel == kAltNamesLabel) {
         static NSString *cellIdentifier = kAltNameCellKey;
         
@@ -275,6 +324,9 @@ heightForFooterInSection:(NSInteger)section {
     } else if (sectionLabel == kParentLabel) {
         return self.location.parent == nil ? 0 : 1;
     } else if (sectionLabel == kEnclosedLabel) {
+        if (self.location.retrievalStatus != RHLocationRetrievalStatusFull) {
+            return 1;
+        }
         return self.location.enclosedLocations.count;
     } else if (sectionLabel == kAltNamesLabel) {
         return self.location.alternateNames.count;

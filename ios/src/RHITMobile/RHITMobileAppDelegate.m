@@ -93,6 +93,10 @@
     
 #endif
     
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(managedContextDidSave:)
+                                                 name:NSManagedObjectContextDidSaveNotification 
+                                               object:nil];
     [self.window makeKeyAndVisible];
     [self setupDefaults];
     
@@ -256,6 +260,16 @@
                                                        options:nil
                                                          error:&error]) {
         /* Error for store creation should be handled in here */
+    }
+}
+
+- (void)managedContextDidSave:(NSNotification *)notification {
+    if ([NSThread isMainThread]) {
+        [self.managedObjectContext mergeChangesFromContextDidSaveNotification:notification];
+    } else {
+        [self performSelectorOnMainThread:@selector(managedContextDidSave:) 
+                               withObject:notification
+                            waitUntilDone:YES];
     }
 }
 

@@ -65,4 +65,6 @@
 /// Clears all data from this application's storage.
 - (void)clearDatabase;
 
+- (void)managedContextDidSave:(NSNotification *)notification;
+
 @end
