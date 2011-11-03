@@ -1,17 +1,7 @@
 #!/usr/bin/env bash
 
-# Determine which branch we're working from
-BRANCH=`git branch 2>/dev/null|grep -e ^\* | tr -d \*\ `
-echo "On branch \"$BRANCH\""
-echo "Branch: $GIT_BRANCH"
+# Determine which branch we're on
 if [[ `git branch --contains $GIT_COMMIT` == *master* ]]
-then
-    echo "Master Branch"
-fi
-set
-
-# Determine whether this is an alpha or beta build
-if [ "$BRANCH" = "master" ]
 then
     BUILD_TYPE="beta"
     BUILD_CLASSIFICATION="official"
