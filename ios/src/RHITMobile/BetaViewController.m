@@ -326,7 +326,7 @@ didDismissWithButtonIndex:(NSInteger)buttonIndex {
         operation = [[operation
                       initWithTarget:self
                       selector:@selector(performCheckForUpdates:)
-                      object:[NSNumber numberWithBool:kRHBetaBuildNumber != kRHBetaBuildTypeOfficial]] autorelease];
+                      object:[NSNumber numberWithBool:(kRHBetaBuildType != kRHBetaBuildTypeOfficial)]] autorelease];
         [self.operations addOperation:operation];
     }
 }
@@ -351,7 +351,7 @@ didDismissWithButtonIndex:(NSInteger)buttonIndex {
     operation = [[operation
                   initWithTarget:self
                   selector:@selector(performCheckForUpdates:)
-                  object:[NSNumber numberWithBool:kRHBetaBuildNumber == kRHBetaBuildTypeOfficial]] autorelease];
+                  object:[NSNumber numberWithBool:kRHBetaBuildType == kRHBetaBuildTypeOfficial]] autorelease];
     [self.operations addOperation:operation];
 }
 
