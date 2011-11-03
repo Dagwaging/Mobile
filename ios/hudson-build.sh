@@ -5,6 +5,7 @@ if [[ `git branch --contains $GIT_COMMIT` == *master* ]]
 then
     BUILD_TYPE="beta"
     BUILD_CLASSIFICATION="official"
+    sed -i -e "s/#define kRHBetaBuildType kRHBetaBuildTypeRolling/#define kRHBetaBuildType kRHBetaBuildTypeOfficial" src/RHITMobile/RHBeta.h
 else
     BUILD_TYPE="alpha"
     BUILD_CLASSIFICATION="rolling"
