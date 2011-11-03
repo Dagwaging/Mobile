@@ -17,12 +17,9 @@ fi
 echo "Build type: $BUILD_CLASSIFICATION"
 echo "Build version type: $BUILD_TYPE"
 
-# Bad awk and sed foo to extract the version number
-VERSION=$(awk '$1 ~ /CFBundleShortVersion/ {version_next = "YES"}; \
-          version_next ~ /YES/  && $1 ~ /string/ {print $1; \
-          version_next = "NO"}' \
-          src/RHITMobile/RHITMobile-Info.plist | \
-          sed 's|<string>\(.*\)</string>|\1|g')
+# Find the existing version number
+VERSION=$(defaults read `pwd`/src/RHITMobile/RHITMobile-Info CFBundleShortVersionString)
+echo "Existing version number: $VERSION"
 
 cd src
 
