@@ -3,6 +3,8 @@
 # Determine which branch we're working from
 BRANCH=`git branch 2>/dev/null|grep -e ^\* | tr -d \*\ `
 echo "On branch \"$BRANCH\""
+echo "Branch: $GIT_BRANCH"
+set
 
 # Determine whether this is an alpha or beta build
 if [ "$BRANCH" = "master" ]
