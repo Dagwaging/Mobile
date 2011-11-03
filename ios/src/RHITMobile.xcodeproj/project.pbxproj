@@ -451,7 +451,7 @@
 				92948907142D3ED400820A9C /* Map */,
 				920656F314303CB200D50293 /* Web */,
 				928A643C144954A900521EB1 /* Storage */,
-				92ECC4C3141430510073C4C3 /* Views */,
+				92ECC4C3141430510073C4C3 /* ViewControllers */,
 				9226030C1409AE640065F705 /* Model */,
 				9265FEAF1409AB5D00AE406E /* Supporting Files */,
 			);
@@ -521,7 +521,7 @@
 			name = Map;
 			sourceTree = "<group>";
 		};
-		92ECC4C3141430510073C4C3 /* Views */ = {
+		92ECC4C3141430510073C4C3 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
 				9265FEBD1409AB5D00AE406E /* MapViewController.h */,
@@ -550,7 +550,7 @@
 				924DE4E7145E79DF00EEE8C6 /* DirectoryView.xib */,
 				92A49DDB145F8BA400B6F34E /* BetaRegistrationView.xib */,
 			);
-			name = Views;
+			name = ViewControllers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
