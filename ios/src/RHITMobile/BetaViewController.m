@@ -372,17 +372,28 @@ didDismissWithButtonIndex:(NSInteger)buttonIndex {
     operation = [[operation
                   initWithTarget:self
                   selector:@selector(performCheckForUpdates:)
-                  object:[NSNumber numberWithBool:kRHBetaBuildType == kRHBetaBuildTypeOfficial]] autorelease];
+                  object:[NSNumber
+                          numberWithBool:kRHBetaBuildType == kRHBetaBuildTypeOfficial]] autorelease];
     [self.operations addOperation:operation];
 }
 
 - (void)performCheckForUpdates:(NSNumber *)officialNumber {
+    // Parse out BOOL for whether or not we're looking for an official build
     BOOL official = officialNumber.boolValue;
-    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[kBetaServer stringByAppendingString:kBetaUpdatePath]]];
-    NSURLResponse *response = nil;
-    NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:nil];
-    NSDictionary *parsed = [NSDictionary dictionaryWithJSONData:data error:nil];
     
+    // Retrieve data from web service
+    NSURL *requestURL = [NSURL
+                         URLWithString:[kBetaServer 
+                                        stringByAppendingString:kBetaUpdatePath]];
+    NSURLRequest *request = [NSURLRequest requestWithURL:requestURL];
+    NSURLResponse *response = nil;
+    NSData *data = [NSURLConnection sendSynchronousRequest:request
+                                         returningResponse:&response
+                                                     error:nil];
+    NSDictionary *parsed = [NSDictionary dictionaryWithJSONData:data
+                                                          error:nil];
+    
+    // Determine which type of build we're looking for
     NSDictionary *relevantBuild = nil;
     if (official) {
         relevantBuild = [parsed objectForKey:@"official"];
@@ -391,19 +402,33 @@ didDismissWithButtonIndex:(NSInteger)buttonIndex {
     }
     
     if ([relevantBuild isKindOfClass:[NSNull class]]) {
-        return [self performSelectorOnMainThread:@selector(didFindNoUpdates) withObject:nil waitUntilDone:NO];
+        return [self performSelectorOnMainThread:@selector(didFindNoUpdates)
+                                      withObject:nil
+                                   waitUntilDone:NO];
     }
     
-    NSNumberFormatter *formatter = [[[NSNumberFormatter alloc] init] autorelease];
+    // Set up build numbers for comparison
+    NSNumberFormatter *formatter = [[[NSNumberFormatter alloc] init]
+                                    autorelease];
     [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
-    NSNumber *newBuildNumber = [formatter numberFromString:[relevantBuild objectForKey:@"buildNumber"]];
+    NSNumber *newBuildNumber = [formatter
+                                numberFromString:[relevantBuild
+                                                  objectForKey:@"buildNumber"]];
     NSNumber *oldBuildNumber = [NSNumber numberWithInt:kRHBetaBuildNumber];
     
-    if ([newBuildNumber compare:oldBuildNumber] != NSOrderedDescending) {
-        [self performSelectorOnMainThread:@selector(didFindNoUpdates) withObject:nil waitUntilDone:NO];
+    // Determine if we need to actually update, then call the appropriate method
+    if ([newBuildNumber compare:oldBuildNumber] == NSOrderedDescending ||
+        (official && [newBuildNumber compare:oldBuildNumber] != NSOrderedSame &&
+         !self.initialUpdateCheck)) {
+        NSURL *url = [NSURL URLWithString:[relevantBuild
+                                           objectForKey:@"downloadURL"]];
+        [self performSelectorOnMainThread:@selector(didFindUpdateWithURL:)
+                               withObject:url
+                            waitUntilDone:NO];
     } else {
-        NSURL *url = [NSURL URLWithString:[relevantBuild objectForKey:@"downloadURL"]];
-        [self performSelectorOnMainThread:@selector(didFindUpdateWithURL:) withObject:url waitUntilDone:NO];
+        [self performSelectorOnMainThread:@selector(didFindNoUpdates)
+                               withObject:nil
+                            waitUntilDone:NO];
     }
 }
 
