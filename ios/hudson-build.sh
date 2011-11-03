@@ -4,8 +4,10 @@
 BRANCH=`git branch 2>/dev/null|grep -e ^\* | tr -d \*\ `
 echo "On branch \"$BRANCH\""
 echo "Branch: $GIT_BRANCH"
-BBRANCH=`git branch --contains $GIT_COMMIT`
-echo "BRANCH: $BBRANCH"
+if [[`git branch --contains $GIT_COMMIT` == *master* ]]
+then
+    echo "Master Branch"
+fi
 set
 
 # Determine whether this is an alpha or beta build
