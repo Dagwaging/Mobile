@@ -54,10 +54,12 @@
 
 @property (nonatomic, retain) NSArray *sections;
 @property (nonatomic, assign) BOOL checkingForUpdates;
+@property (nonatomic, assign) BOOL initialUpdateCheck;
 @property (nonatomic, retain) NSString *authToken;
 @property (nonatomic, retain) NSDate *updateDate;
 @property (nonatomic, assign) NSInteger knownCurrentBuild;
 @property (nonatomic, retain) NSOperationQueue *operations;
+@property (nonatomic, retain) NSURL *updateURL;
 
 - (IBAction)switchInstallationType:(id)sender;
 - (IBAction)checkForUpdates:(id)sender;
@@ -78,10 +80,12 @@
 
 @synthesize sections;
 @synthesize checkingForUpdates;
+@synthesize initialUpdateCheck;
 @synthesize updateDate;
 @synthesize knownCurrentBuild;
 @synthesize authToken;
 @synthesize operations;
+@synthesize updateURL;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil
                bundle:(NSBundle *)nibBundleOrNil {
@@ -137,6 +141,14 @@
     
     [defaults setDouble:updateNumber forKey:kBetaUpdateTimeDefault];
     self.updateDate = [NSDate dateWithTimeIntervalSince1970:updateNumber];
+    self.initialUpdateCheck = YES;
+    
+    NSInvocationOperation* operation = [NSInvocationOperation alloc];
+    operation = [[operation
+                  initWithTarget:self
+                  selector:@selector(performCheckForUpdates:)
+                  object:[NSNumber numberWithBool:YES]] autorelease];
+    [self.operations addOperation:operation];
 }
 
 #pragma mark - View lifecycle
@@ -331,6 +343,15 @@ didDismissWithButtonIndex:(NSInteger)buttonIndex {
     }
 }
 
+#pragma mari - UIAlertViewDelegate Methods
+
+- (void)alertView:(UIAlertView *)alertView
+didDismissWithButtonIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 1) {
+        [[UIApplication sharedApplication] openURL:self.updateURL];
+    }
+}
+
 #pragma mark - Private Methods
 
 - (IBAction)switchInstallationType:(id)sender {
@@ -403,13 +424,24 @@ didDismissWithButtonIndex:(NSInteger)buttonIndex {
 - (void)didFindNoUpdates {
     [self clearLoadingText];
     self.checkingForUpdates = NO;
-    [[[[UIAlertView alloc] initWithTitle:@"No Updates Found" message:@"You are already using the latest version of Rose-Hulman." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] autorelease]show];
+    if (self.initialUpdateCheck) {
+        self.initialUpdateCheck = NO;
+    } else {
+        [[[[UIAlertView alloc] initWithTitle:@"No Updates Found" message:@"You are already using the latest version of Rose-Hulman." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] autorelease] show];
+    }
 }
 
 - (void)didFindUpdateWithURL:(NSURL *)url {
     [self clearLoadingText];
     self.checkingForUpdates = NO;
-    [[UIApplication sharedApplication] openURL:url];
+    
+    if (self.initialUpdateCheck) {
+        self.initialUpdateCheck = NO;
+        self.updateURL = url;
+        [[[[UIAlertView alloc] initWithTitle:@"Update Available" message:@"An update is available. Would you like to install it?" delegate:self cancelButtonTitle:@"Not Yet" otherButtonTitles:@"Install", nil] autorelease] show];
+    } else {
+        [[UIApplication sharedApplication] openURL:url];
+    }
 }
 
 - (void)performRegistration {
