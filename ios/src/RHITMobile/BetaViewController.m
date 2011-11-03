@@ -399,11 +399,16 @@ didDismissWithButtonIndex:(NSInteger)buttonIndex {
     NSNumber *newBuildNumber = [formatter numberFromString:[relevantBuild objectForKey:@"buildNumber"]];
     NSNumber *oldBuildNumber = [NSNumber numberWithInt:kRHBetaBuildNumber];
     
-    if ([newBuildNumber compare:oldBuildNumber] != NSOrderedDescending) {
-        [self performSelectorOnMainThread:@selector(didFindNoUpdates) withObject:nil waitUntilDone:NO];
-    } else {
+    if ([newBuildNumber compare:oldBuildNumber] == NSOrderedDescending ||
+        (official && [newBuildNumber compare:oldBuildNumber] != NSOrderedSame)) {
         NSURL *url = [NSURL URLWithString:[relevantBuild objectForKey:@"downloadURL"]];
-        [self performSelectorOnMainThread:@selector(didFindUpdateWithURL:) withObject:url waitUntilDone:NO];
+        [self performSelectorOnMainThread:@selector(didFindUpdateWithURL:)
+                               withObject:url
+                            waitUntilDone:NO];
+    } else {
+        [self performSelectorOnMainThread:@selector(didFindNoUpdates)
+                               withObject:nil
+                            waitUntilDone:NO];
     }
 }
 
