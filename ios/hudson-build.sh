@@ -4,7 +4,7 @@
 BRANCH=`git branch 2>/dev/null|grep -e ^\* | tr -d \*\ `
 echo "On branch \"$BRANCH\""
 echo "Branch: $GIT_BRANCH"
-if [[`git branch --contains $GIT_COMMIT` == *master* ]]
+if [[ `git branch --contains $GIT_COMMIT` == *master* ]]
 then
     echo "Master Branch"
 fi
