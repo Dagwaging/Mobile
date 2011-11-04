@@ -523,7 +523,7 @@ didDismissWithButtonIndex:(NSInteger)buttonIndex {
     NSString *token = [defaults stringForKey:kBetaAuthTokenDefault];
     token = [token stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     
-    NSString *parameters = [NSString stringWithFormat:@"authToken=%@&buildNumber=%d",
+    NSString *parameters = [NSString stringWithFormat:@"authToken=%@&build=%d",
                           token, kRHBetaBuildNumber];
     
     NSLog(@"Using parameters: %@", parameters);
