@@ -30,4 +30,7 @@
 /// Test clearing the database.
 - (void)testClearDatabase;
 
+/// Test writing and reading PList data
+- (void)testPListVersionNumber;
+
 @end

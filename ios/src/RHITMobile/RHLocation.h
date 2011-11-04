@@ -20,8 +20,28 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
+#define kRHLocationCoreDataModelIdentifier @"Location"
 
-@class RHBoundaryNode, RHLabelNode;
+
+@class RHBoundaryNode;
+@class RHLabelNode;
+@class RHLocationLink;
+
+
+typedef enum _RHLocationDisplayType {
+    RHLocationDisplayTypeNone = 0,
+    RHLocationDisplayTypePointOfInterest = 1,
+    RHLocationDisplayTypeQuickList = 2
+} RHLocationDisplayType;
+
+
+typedef enum _RHLocationRetrievalStatus {
+    RHLocationRetrievalStatusServerIDOnly = 0,
+    RHLocationRetrievalStatusIDAndName = 1,
+    RHLocationRetrievalStatusNoChildren = 2,
+    RHLocationRetrievalStatusFull = 3,
+} RHLocationRetrievalStatus;
+
 
 /// \ingroup model
 /// Representation of a canonical location. An RHLocation has areas that can
@@ -35,11 +55,29 @@
 /// Human-readable name for this RHLocation.
 @property (nonatomic, retain) NSString *name;
 
+@property (nonatomic, retain) NSSet *links;
+
+@property (nonatomic, retain) NSString *altNames;
+
+@property (nonatomic, retain) NSArray *alternateNames;
+
+@property (nonatomic, retain) NSNumber *displayTypeNumber;
+
+@property (nonatomic, assign) RHLocationDisplayType displayType;
+
+@property (nonatomic, retain) NSNumber *retrievalStatusNumber;
+
+@property (nonatomic, assign) RHLocationRetrievalStatus retrievalStatus;
+
 /// Short description. Used as a subtitle for map callouts.
 @property (nonatomic, retain) NSString *quickDescription;
 
 /// The minimum canonical map zoom level this RHLocation shouldbe visible at.
 @property (nonatomic, retain) NSNumber *visibleZoomLevel;
+
+@property (nonatomic, retain) NSSet *enclosedLocations;
+
+@property (nonatomic, retain) RHLocation *parent;
 
 /// The list of RHBoundaryNode objects that define the boundary of this
 /// RHLocation. The RHBoundaryNode objects contain ordering information.
@@ -61,6 +99,22 @@
 @end
 
 @interface RHLocation (CoreDataGeneratedAccessors)
+
+- (void)addEnclosedLocationsObject:(RHLocation *)location;
+
+- (void)removeEnclosedLocationsObject:(RHLocation *)location;
+
+- (void)addEnclosedLocations:(NSSet *)locations;
+
+- (void)removeEnclosedLocations:(NSSet *)locations;
+
+- (void)addLinksObject:(RHLocationLink *)link;
+
+- (void)removeLinksObject:(RHLocationLink *)link;
+
+- (void)addLinks:(NSSet *)links;
+
+- (void)removeLinks:(NSSet *)links;
 
 /// Add an RHBoundaryNode to the current boundary.
 - (void)addBoundaryNodesObject:(RHBoundaryNode *)boundaryNode;

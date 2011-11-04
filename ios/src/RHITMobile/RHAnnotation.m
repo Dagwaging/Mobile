@@ -70,6 +70,11 @@
     }
 }
 
+- (BOOL)area {
+    return self.location.boundaryNodes != nil &&
+        self.location.boundaryNodes.count > 0;
+}
+
 #pragma mark -
 #pragma mark Property Methods
 

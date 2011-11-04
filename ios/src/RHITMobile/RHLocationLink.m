@@ -1,5 +1,5 @@
 //
-//  RHDummyHandler.h
+//  RHLocationLink.m
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -17,13 +17,19 @@
 //  limitations under the License.
 //
 
-#import <Foundation/Foundation.h>
+#import "RHLocationLink.h"
+#import "RHLocation.h"
 
-#import "RHRemoteHandler.h"
 
+@implementation RHLocationLink
 
-/// \ingroup web
-/// RHRemoteHandler that completely synthesizes its output.
-@interface RHDummyHandler : NSObject <RHRemoteHandler>
+@dynamic name;
+@dynamic url;
+@dynamic owner;
+
++ (RHLocationLink *)linkFromContext:(NSManagedObjectContext *)context {
+    RHLocationLink *link = [NSEntityDescription insertNewObjectForEntityForName:kRHLocationLinkCoreDataModelIdentifier inManagedObjectContext:context];
+    return link;
+}
 
 @end

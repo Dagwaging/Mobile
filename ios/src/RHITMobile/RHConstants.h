@@ -86,7 +86,17 @@
 
 #define kRHLocationFocusZoomLevel 16
 
+#define kRHMinimumZoomLevel 14
+#define kRHMinimumLatitude 39.477678
+#define kRHMaximumLatitude 39.487300
+#define kRHMinimumLongitude -87.333670
+#define kRHMaximumLongitude -87.312512
+
 #define kRHPreferenceDebugMapInfo @"map_info_debug_preference"
 #define kRHPreferenceDebugMapZoomControls @"map_zoom_debug_preference"
+#define kRHPreferenceDebugMockData @"use_mock_data_debug_preference"
+#define kRHPreferenceDebugServerProtocol @"server_protocol_debug_preference"
+#define kRHPreferenceDebugServerHostname @"server_hostname_debug_preference"
+#define kRHPreferenceDebugServerPort @"server_port_number_debug_preference"
 
 #endif

@@ -1,0 +1,48 @@
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+   <key>items</key>
+   <array>
+       <dict>
+           <key>assets</key>
+           <array>
+               <dict>
+                   <key>kind</key>
+                   <string>software-package</string>
+                   <key>url</key>
+                   <string>http://mobile.csse.rose-hulman.edu/hudson/job/iOS/BUILD_NUMBER/artifact/ios/IPA_NAME</string>
+               </dict>
+               <dict>
+                   <key>kind</key>
+                   <string>display-image</string>
+                   <key>needs-shine</key>
+                   <true/>
+                   <key>url</key>
+                   <string>http://mobile.csse.rose-hulman.edu/hudson/job/iOS/BUILD_NUMBER/artifact/ios/launch-icon-small.png</string>
+               </dict>
+               <dict>
+                   <key>kind</key>
+                   <string>full-size-image</string>
+                   <key>needs-shine</key>
+                   <true/>
+                   <key>url</key>
+                   <string>http://mobile.csse.rose-hulman.edu/hudson/job/iOS/BUILD_NUMBER/artifact/ios/launch-icon-large.png</string>
+               </dict>
+           </array>
+           <key>metadata</key>
+           <dict>
+               <key>bundle-identifier</key>
+               <string>edu.rosehulman.ios.RHITMobile</string>
+               <key>bundle-version</key>
+               <string>VERSION</string>
+               <key>kind</key>
+               <string>software</string>
+               <key>title</key>
+               <string>Rose-Hulman</string>
+               <key>subtitle</key>
+               <string>Mobile Campus Directory</string>
+           </dict>
+       </dict>
+   </array>
+</dict>
+</plist>

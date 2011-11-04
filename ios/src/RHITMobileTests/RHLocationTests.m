@@ -139,6 +139,25 @@
     }
 }
 
+- (void)testCompotedValues {
+    // Retrieve the App Delegate and Managed Object Context
+    RHITMobileAppDelegate *appDelegate;
+    appDelegate = (RHITMobileAppDelegate *)[[UIApplication
+                                             sharedApplication] delegate];
+    NSManagedObjectContext *context = appDelegate.managedObjectContext;
+    
+    RHLocation *location = [RHLocation fromContext:context];
+    location.displayType = RHLocationDisplayTypeNone;
+    
+    STAssertEquals(location.displayType, RHLocationDisplayTypeNone,
+                   @"Display type set improperly");
+    
+    location.displayType = RHLocationDisplayTypeQuickList;
+    
+    STAssertEquals(location.displayType, RHLocationDisplayTypeQuickList,
+                   @"Display type set improperly");
+}
+
 - (void)tearDown {
     // Retrieve the App Delegate and Managed Object Context
     RHITMobileAppDelegate *appDelegate;
