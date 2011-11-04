@@ -23,6 +23,7 @@
 #import "RHLocationLink.h"
 #import "RHITMobileAppDelegate.h"
 #import "MapViewController.h"
+#import "WebViewController.h"
 
 #define kAltNamesLabel @"Also Known As"
 #define kAboutLabel @"About"
@@ -359,7 +360,17 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         [inTableView deselectRowAtIndexPath:indexPath animated:YES];
         
         RHLocationLink *link = [self.links objectAtIndex:[indexPath indexAtPosition:1]];
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:link.url]];
+        
+        NSURL *url = [NSURL URLWithString:link.url];
+        
+        WebViewController *webViewController = [[[WebViewController alloc] initWithNibName:@"WebView" bundle:nil] autorelease];
+        
+        
+        webViewController.url = url;
+        webViewController.title = link.name;
+        
+        [self.navigationController pushViewController:webViewController animated:YES];
+
     }
 }
 
@@ -368,7 +379,16 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (sectionLabel == kLinksLabel) {
         RHLocationLink *link = [self.links objectAtIndex:[indexPath indexAtPosition:1]];
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:link.url]];
+        
+        NSURL *url = [NSURL URLWithString:link.url];
+        
+        WebViewController *webViewController = [[[WebViewController alloc] initWithNibName:@"WebView" bundle:nil] autorelease];
+        
+        webViewController.url = url;
+        webViewController.title = link.name;
+        
+        [self.navigationController pushViewController:webViewController animated:YES];
+
     }
 }
 
