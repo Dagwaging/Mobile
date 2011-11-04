@@ -526,6 +526,8 @@ didDismissWithButtonIndex:(NSInteger)buttonIndex {
     NSString *parameters = [NSString stringWithFormat:@"authToken=%@&buildNumber=%d",
                           token, kRHBetaBuildNumber];
     
+    NSLog(@"Using parameters: %@", parameters);
+    
     NSURL *url = [NSURL URLWithString:[kBetaServer stringByAppendingString:kBetaNotifyPath]];
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
@@ -533,7 +535,9 @@ didDismissWithButtonIndex:(NSInteger)buttonIndex {
     request.HTTPMethod = @"POST";
     request.HTTPBody = [parameters dataUsingEncoding:NSUTF8StringEncoding];
     
-    NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
+    NSData *data = [NSURLConnection sendSynchronousRequest:request
+                                         returningResponse:nil
+                                                     error:nil];
     
     NSString* body = [[[NSString alloc] initWithData:data
                                             encoding:NSUTF8StringEncoding] autorelease];
