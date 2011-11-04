@@ -94,6 +94,8 @@
 		92DFEACD141FEF9100889314 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92DFEACC141FEF9100889314 /* MapKit.framework */; };
 		92DFEAD01420245F00889314 /* RHAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 92DFEACF1420245F00889314 /* RHAnnotationView.m */; };
 		92DFEAD414203C6400889314 /* RHMapLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 92DFEAD314203C6400889314 /* RHMapLabel.m */; };
+		92F20F6D1464383200603500 /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F20F6B1464383200603500 /* WebViewController.m */; };
+		92F20F6E1464383200603500 /* WebView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92F20F6C1464383200603500 /* WebView.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -238,6 +240,9 @@
 		92DFEAD214203C6400889314 /* RHMapLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHMapLabel.h; sourceTree = "<group>"; };
 		92DFEAD314203C6400889314 /* RHMapLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHMapLabel.m; sourceTree = "<group>"; };
 		92ECC4C4141434D30073C4C3 /* RHConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHConstants.h; sourceTree = "<group>"; };
+		92F20F6A1464383200603500 /* WebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewController.h; sourceTree = "<group>"; };
+		92F20F6B1464383200603500 /* WebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewController.m; sourceTree = "<group>"; };
+		92F20F6C1464383200603500 /* WebView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WebView.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -540,6 +545,8 @@
 				924DE4E1145E79A800EEE8C6 /* InfoViewController.m */,
 				924DE4E5145E79DF00EEE8C6 /* DirectoryViewController.h */,
 				924DE4E6145E79DF00EEE8C6 /* DirectoryViewController.m */,
+				92F20F6A1464383200603500 /* WebViewController.h */,
+				92F20F6B1464383200603500 /* WebViewController.m */,
 				9265FEBA1409AB5D00AE406E /* MainWindow.xib */,
 				9265FEC31409AB5D00AE406E /* MapView.xib */,
 				9265FEC61409AB5D00AE406E /* SearchView.xib */,
@@ -549,6 +556,7 @@
 				924DE4E2145E79A800EEE8C6 /* InfoView.xib */,
 				924DE4E7145E79DF00EEE8C6 /* DirectoryView.xib */,
 				92A49DDB145F8BA400B6F34E /* BetaRegistrationView.xib */,
+				92F20F6C1464383200603500 /* WebView.xib */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -650,6 +658,7 @@
 				924DE4E4145E79A800EEE8C6 /* InfoView.xib in Resources */,
 				924DE4E9145E79DF00EEE8C6 /* DirectoryView.xib in Resources */,
 				92A49DDD145F8BA400B6F34E /* BetaRegistrationView.xib in Resources */,
+				92F20F6E1464383200603500 /* WebView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -723,6 +732,7 @@
 				924DE4E3145E79A800EEE8C6 /* InfoViewController.m in Sources */,
 				924DE4E8145E79DF00EEE8C6 /* DirectoryViewController.m in Sources */,
 				92A49DDC145F8BA400B6F34E /* BetaRegistrationViewController.m in Sources */,
+				92F20F6D1464383200603500 /* WebViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

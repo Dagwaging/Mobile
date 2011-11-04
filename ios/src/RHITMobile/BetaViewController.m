@@ -32,6 +32,7 @@
 #define kBetaServer @"http://rhitmobilebeta.heroku.com"
 #define kBetaUpdatePath @"/platform/ios/builds/current"
 #define kBetaRegisterPath @"/device/register"
+#define kBetaNotifyPath @"/device/update"
 
 #define kBetaUpdateTimeDefault @"LastUpdateTime"
 #define kBetaAuthTokenDefault @"AuthToken"
@@ -128,7 +129,6 @@
     
     if (self.knownCurrentBuild != kRHBetaBuildNumber) {
         self.knownCurrentBuild = kRHBetaBuildNumber;
-        [defaults setInteger:self.knownCurrentBuild forKey:kBetaCurrentBuildDefault];
         updateNumber = (double) [[NSDate date] timeIntervalSince1970];
 
         NSInvocationOperation* operation = [NSInvocationOperation alloc];
@@ -517,7 +517,38 @@ didDismissWithButtonIndex:(NSInteger)buttonIndex {
 }
 
 - (void)performNotificationOfUpdate {
+    NSLog(@"Attempting to notify of update");
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
+    NSString *token = [defaults stringForKey:kBetaAuthTokenDefault];
+    token = [token stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    
+    NSString *parameters = [NSString stringWithFormat:@"authToken=%@&build=%d",
+                          token, kRHBetaBuildNumber];
+    
+    NSLog(@"Using parameters: %@", parameters);
+    
+    NSURL *url = [NSURL URLWithString:[kBetaServer stringByAppendingString:kBetaNotifyPath]];
+    
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    
+    request.HTTPMethod = @"POST";
+    request.HTTPBody = [parameters dataUsingEncoding:NSUTF8StringEncoding];
+    
+    NSData *data = [NSURLConnection sendSynchronousRequest:request
+                                         returningResponse:nil
+                                                     error:nil];
+    
+    NSString* body = [[[NSString alloc] initWithData:data
+                                            encoding:NSUTF8StringEncoding] autorelease];
+    NSLog(@"%@", body);
+    
+    NSDictionary *response = [NSDictionary dictionaryWithJSONData:data error:nil];
+    
+    if ([[response objectForKey:@"success"] boolValue]) {
+        NSLog(@"Updating build number");
+        [defaults setInteger:self.knownCurrentBuild forKey:kBetaCurrentBuildDefault];
+    }
 }
 
 @end
