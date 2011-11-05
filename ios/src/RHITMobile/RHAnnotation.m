@@ -25,7 +25,7 @@
 
 @implementation RHAnnotation
 
-#pragma mark - Generic Properties
+#pragma mark - General Properties
 
 @synthesize coordinate;
 @synthesize visible;
@@ -39,6 +39,8 @@
     self = [super init];
     
     if (self) {
+        // Set our location property and determine whether or not we should
+        // start out visible.
         self.location = inLocation;
         self.visible = zoomLevel >= visibleZoomLevel_;
     }
@@ -48,11 +50,19 @@
 
 - (void)mapView:(MKMapView *)mapView didChangeZoomLevel:(NSUInteger)zoomLevel {
     if (self.visible && zoomLevel < visibleZoomLevel_) {
+        
+        // We're below the minimum zoom level for displaying this annotation,
+        // so mark it as invisible.
         self.visible = NO;
         [self.annotationView updateAnnotationVisibility];
+        
     } else if (!self.visible && zoomLevel >= visibleZoomLevel_) {
+        
+        // We're within the acceptable zoom level threshold for displaying
+        // this annotation, so mark it as visible.
         self.visible = YES;
         [self.annotationView updateAnnotationVisibility];
+        
     }
 }
 
