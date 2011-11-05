@@ -26,13 +26,20 @@
 #import "DirectoryViewController.h"
 #import "InfoViewController.h"
 
+
+#pragma mark Private Category Declaration
 @interface RHITMobileAppDelegate ()
 
+#pragma mark - Private Method Signatures
 - (void)setupDefaults;
 
 @end
 
+#pragma mark - Implementation
+
 @implementation RHITMobileAppDelegate
+
+#pragma mark - General Properties
 
 @synthesize window = _window;
 @synthesize tabBarController = _tabBarController;
@@ -46,66 +53,98 @@
 @synthesize persistentStoreCoordinator;
 
 - (BOOL)application:(UIApplication *)application 
-    didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
-    // Add the tab bar controller's current view as a subview of the window
+didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    // Add tab bar controller to window
     self.window.rootViewController = self.tabBarController;
+    
+    // Create and initialize the application's map view controller
     self.mapViewController = [[[MapViewController alloc]
                                initWithNibName:@"MapView" bundle:nil]
                               autorelease];
     [self.mapNavigationViewController pushViewController:mapViewController
                                                 animated:NO];
     self.mapViewController.navigationItem.title = @"Map";
+    UIImage *quickListIcon = [UIImage imageNamed:@"quicklist-toolbar-icon.png"];
+    UIBarButtonItem *mapLeftItem = [[[UIBarButtonItem alloc] 
+                                     initWithImage:quickListIcon
+                                     style:UIBarButtonItemStylePlain
+                                     target:self.mapViewController
+                                     action:@selector(displayQuickList:)]
+                                    autorelease];
+    self.mapViewController.navigationItem.leftBarButtonItem = mapLeftItem; 
     
-    self.mapViewController.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] 
-                                                                initWithImage:[UIImage imageNamed:@"quicklist-toolbar-icon.png"] style:UIBarButtonItemStylePlain target:self.mapViewController action:@selector(displayQuickList:)] autorelease];
+    UIBarButtonItem *mapRightItem = [UIBarButtonItem alloc]; 
+    mapRightItem = [[mapRightItem
+                     initWithBarButtonSystemItem:UIBarButtonSystemItemSearch
+                     target:mapViewController
+                     action:@selector(displaySearch:)] autorelease];
 
-    self.mapViewController.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:mapViewController action:@selector(displaySearch:)] autorelease];
+    self.mapViewController.navigationItem.rightBarButtonItem = mapRightItem;
     
-    InfoViewController *infoController = [[[InfoViewController alloc] initWithNibName:@"InfoView" bundle:nil] autorelease];
+    // Create and initialize the root info view controller
+    InfoViewController *infoController = [InfoViewController alloc];
+    infoController = [[infoController initWithNibName:@"InfoView"
+                                               bundle:nil] autorelease];
     
-    [self.infoNavigationViewController pushViewController:infoController animated:NO];
+    [self.infoNavigationViewController pushViewController:infoController
+                                                 animated:NO];
     
     infoController.navigationItem.title = @"Campus Info";
     
-    DirectoryViewController *directoryController = [[[DirectoryViewController alloc] initWithNibName:@"DirectoryView" bundle:nil] autorelease];
+    // Create and initialize the root directory view controller
+    DirectoryViewController *directoryController = [DirectoryViewController
+                                                    alloc];
+    directoryController = [[directoryController initWithNibName:@"DirectoryView"
+                                                         bundle:nil]
+                           autorelease];
     
-    [self.directoryNavigationViewController pushViewController:directoryController animated:NO];
+    [self.directoryNavigationViewController
+     pushViewController:directoryController
+     animated:NO];
     
     directoryController.navigationItem.title = @"Directory";
     
+    // If this is a beta build, create and initizliaze the beta controller
 #ifdef RHITMobile_RHBeta
     BetaViewController *beta = [[[BetaViewController alloc]
                                  initWithNibName:@"BetaView"
                                  bundle:nil] autorelease];
-
-    UINavigationController *nav = [[[UINavigationController alloc] initWithRootViewController:beta] autorelease];
-    
-    
+    UINavigationController *nav = [[[UINavigationController alloc]
+                                    initWithRootViewController:beta]
+                                   autorelease];
+    UIImage *betaImage = [UIImage imageNamed:@"tab-bar-beta-icon.png"];
     nav.tabBarItem = [[[UITabBarItem alloc] initWithTitle:@"Beta"
-                                                     image:[UIImage imageNamed:@"tab-bar-beta-icon.png"]
-                                                       tag:0]
-                       autorelease];
+                                                     image:betaImage
+                                                       tag:0] autorelease];
     
 
-    self.tabBarController.viewControllers = [self.tabBarController.viewControllers 
-                                             arrayByAddingObject:nav];
+    NSArray *newControllers = [self.tabBarController.viewControllers 
+                               arrayByAddingObject:nav];
+    self.tabBarController.viewControllers = newControllers;
     
 #endif
     
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(managedContextDidSave:)
-                                                 name:NSManagedObjectContextDidSaveNotification 
-                                               object:nil];
+    // Register ourselves for other managed object context save operations
+    NSNotificationCenter *notificationCenter = [NSNotificationCenter
+                                                defaultCenter];
+    [notificationCenter addObserver:self
+                           selector:@selector(managedContextDidSave:)
+                               name:NSManagedObjectContextDidSaveNotification 
+                             object:nil];
+    
+    // Finish setup and kick off defaults syncing
     [self.window makeKeyAndVisible];
     [self setupDefaults];
     
+    // If this is a beta build, kick off initial beta setup
 #ifdef RHITMobile_RHBeta
     [beta performInitialSetup];
 #endif
     
     return YES;
 }
+
+#pragma mark - UIAppDelegate Methods
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     /*
@@ -153,6 +192,8 @@
      */
 }
 
+#pragma mark - General Methods
+
 - (void)dealloc {
     [_window release];
     [_tabBarController release];
@@ -162,19 +203,7 @@
     [super dealloc];
 }
 
-/*
-// Optional UITabBarControllerDelegate method.
-- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController
-{
-}
-*/
-
-/*
-// Optional UITabBarControllerDelegate method.
-- (void)tabBarController:(UITabBarController *)tabBarController didEndCustomizingViewControllers:(NSArray *)viewControllers changed:(BOOL)changed
-{
-}
-*/
+#pragma mark - Property Methods
 
 - (NSManagedObjectContext *)managedObjectContext {
     if (managedObjectContext != nil) {
@@ -265,7 +294,8 @@
 
 - (void)managedContextDidSave:(NSNotification *)notification {
     if ([NSThread isMainThread]) {
-        [self.managedObjectContext mergeChangesFromContextDidSaveNotification:notification];
+        [self.managedObjectContext
+         mergeChangesFromContextDidSaveNotification:notification];
     } else {
         [self performSelectorOnMainThread:@selector(managedContextDidSave:) 
                                withObject:notification
@@ -300,7 +330,8 @@
         if (key) {
             
             //check to see if the value and default value are set
-            //if a default value exists and the value is not set, use the default
+            //if a default value exists and the value is not set, use the
+            // default
             id value = [defaults objectForKey:key];
             id defaultValue = [item objectForKey:@"DefaultValue"];
             if(defaultValue && !value) {
@@ -315,6 +346,7 @@
     // Kick off a network update
     [self.mapViewController.remoteHandler checkForLocationUpdates];
     
+    // Kick off a preferences update
     [self.mapViewController refreshPreferences];
 }
 

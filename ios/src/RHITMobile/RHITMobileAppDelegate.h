@@ -24,47 +24,73 @@
 @class MapViewController;
 @class SearchViewController;
 
+// Conditionally care about beta classes.
 #ifdef RHITMobile_RHBeta
 @class BetaViewController;
 #endif
 
-/// AppDelgate for the RHITMobile app. Handles application-level delegate
-/// functionality.
-@interface RHITMobileAppDelegate : NSObject 
-<UIApplicationDelegate, UITabBarControllerDelegate>
+/// Application delegate for the RHITMobile app. This class is responsible for
+/// application-level initialization, as well as being the main owner of most of
+/// the CoreData objects that propgate throughout the main thread.
+@interface RHITMobileAppDelegate : NSObject <UIApplicationDelegate, UITabBarControllerDelegate>
 
-/// Current window.
+/// The application's window.
 @property (nonatomic, retain) IBOutlet UIWindow *window;
 
-/// Main tab bar.
+/// The application's tab bar controller.
 @property (nonatomic, retain) IBOutlet UITabBarController *tabBarController;
 
+/// The UINavigationController associated with the "Map" tab bar item. The first
+/// view controller pushed to this navigation controller upon initialization
+/// is a MapViewController.
 @property (nonatomic, retain) IBOutlet UINavigationController *mapNavigationViewController;
 
+/// The UINavigationController associated with the "Directory" tab bar item. The
+/// first view controller pushed to this navigation controller upon
+/// initialization is a DirectoryViewController.
 @property (nonatomic, retain) IBOutlet UINavigationController *directoryNavigationViewController;
 
+/// The UINavigationController associated with the "Info" tab bar item. The
+/// first view controller pushed to this navigation controller upon
+/// initialization is an InfoViewController.
 @property (nonatomic, retain) IBOutlet UINavigationController *infoNavigationViewController;
 
-/// Map view controller
+/// The single MapViewController which lives under than "Map" tab as the root
+/// view controller of that tab's view controller. There is only ever one
+/// MapViewController, and all map interactions and modifications are done
+/// through interactions with it.
 @property (nonatomic, retain) MapViewController *mapViewController;
 
 /// Search view controller
 @property (nonatomic, retain) IBOutlet SearchViewController *searchViewController;
 
-/// Object model for the application
+/// The filepath to this application's documents directory. This value is used
+/// to interact directly with the CoreData object store.
+@property (nonatomic, readonly) NSString *applicationDocumentsDirectory;
+
+/// The CoreData NSManagedObjectModel for the application.
 @property (nonatomic, retain, readonly) NSManagedObjectModel *managedObjectModel;
 
-/// Context to execute data interactions against
+/// The CoreData NSManagedObjectContext for the main thread of the application.
+/// All database persistent objects that are created or retrieved on the main
+/// thread are products of this context.
 @property (nonatomic, retain, readonly) NSManagedObjectContext *managedObjectContext;
 
-/// Persistant store coordinator
+/// The universal CoreData NSPersistentStoreCoordinator for the application.
+/// This object is used by secondary threads to create their own
+/// NSManagedObjectContext objects for database interactions.
 @property (nonatomic, retain, readonly) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
-- (NSString *)applicationDocumentsDirectory;
-
-/// Clears all data from this application's storage.
+/// Clear the entire CoreData SQLite database for the application. This should
+/// only be called immediately before a complete data reload, likely triggered
+/// by a response from the server indicating that the current data set is
+/// out of date.
 - (void)clearDatabase;
 
+/// Callback notifying the application delegate of managed object contexts
+/// performing save operations on secondary threads. This method triggers a
+/// merge and update operation on the main thread's NSManagedObjectContext so
+/// that changes made elsewhere will be reflected on the main thread.
 - (void)managedContextDidSave:(NSNotification *)notification;
 
 @end
