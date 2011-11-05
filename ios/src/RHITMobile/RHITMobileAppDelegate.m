@@ -307,30 +307,30 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 #pragma mark Private Methods
 
 -(void)setupDefaults {
-    //get the plist location from the settings bundle
+    // Get the plist location from the settings bundle
     NSString *settingsPath = [[[NSBundle mainBundle] bundlePath]
                               stringByAppendingPathComponent:@"Settings.bundle"];
     NSString *plistPath = [settingsPath
                            stringByAppendingPathComponent:@"Root.plist"];
     
-    //get the preference specifiers array which contains the settings
+    // Get the preference specifiers array which contains the settings
     NSDictionary *settingsDictionary = [NSDictionary
                                         dictionaryWithContentsOfFile:plistPath];
     NSArray *preferencesArray = [settingsDictionary
                                  objectForKey:@"PreferenceSpecifiers"];
     
-    //use the shared defaults object
+    // Use the shared defaults object
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
-    //for each preference item, set its default if there is no value set
+    // For each preference item, set its default if there is no value set
     for(NSDictionary *item in preferencesArray) {
         
-        //get the item key, if there is no key then we can skip it
+        // Get the item key, if there is no key then we can skip it
         NSString *key = [item objectForKey:@"Key"];
         if (key) {
             
-            //check to see if the value and default value are set
-            //if a default value exists and the value is not set, use the
+            // Check to see if the value and default value are set
+            // If a default value exists and the value is not set, use the
             // default
             id value = [defaults objectForKey:key];
             id defaultValue = [item objectForKey:@"DefaultValue"];
@@ -340,7 +340,7 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
         }
     }
     
-    //write the changes to disk
+    // Write the changes to disk
     [defaults synchronize];
     
     // Kick off a network update
