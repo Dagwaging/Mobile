@@ -48,11 +48,19 @@
 /// who may be assigned maintenance of this work, project advisors, or even
 /// curious developers.
 ///
-/// \section where_to_start Where To Start
+/// \section project_overview_sec Project Overview
+///
+/// TODO
+///
+/// \section application_structure_sec Application Structure
 ///
 /// For help getting a build environment set up, refer to README.md in the
 /// top-level ios directory of the repository. This documentation assumes
 /// that you have a working development environment for the project.
+///
+/// \section features_sec Features and Functionality Mapping
+///
+/// TODO
 ///
 /// \section get_familiar_sec How To Get Familiar
 ///

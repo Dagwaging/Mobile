@@ -23,60 +23,45 @@
 #import "RHLocation.h"
 
 
-#pragma mark Private Method Declarations
-
-@interface RHAnnotation ()
-
-@property (nonatomic, readonly) NSInteger visibleZoomLevel;
-
-@end
-
-
-#pragma mark -
-#pragma mark Implementation
-
 @implementation RHAnnotation
 
-#pragma mark -
-#pragma mark Generic Properties
+#pragma mark - Generic Properties
 
 @synthesize coordinate;
 @synthesize visible;
 @synthesize location;
 @synthesize annotationView;
 
-#pragma mark -
-#pragma mark General Methods
+#pragma mark - General Methods
 
-- (RHAnnotation *)initWithLocation:(RHLocation *)inLocation
-                    currentZoomLevel:(NSUInteger)zoomLevel {
+- (id)initWithLocation:(RHLocation *)inLocation
+      currentZoomLevel:(NSUInteger)zoomLevel {
     self = [super init];
     
     if (self) {
         self.location = inLocation;
-        self.visible = zoomLevel >= self.visibleZoomLevel;
+        self.visible = zoomLevel >= visibleZoomLevel_;
     }
     
     return self;
 }
 
 - (void)mapView:(MKMapView *)mapView didChangeZoomLevel:(NSUInteger)zoomLevel {
-    if (self.visible && zoomLevel < self.visibleZoomLevel) {
+    if (self.visible && zoomLevel < visibleZoomLevel_) {
         self.visible = NO;
         [self.annotationView updateAnnotationVisibility];
-    } else if (!self.visible && zoomLevel >= self.visibleZoomLevel) {
+    } else if (!self.visible && zoomLevel >= visibleZoomLevel_) {
         self.visible = YES;
         [self.annotationView updateAnnotationVisibility];
     }
 }
 
+#pragma mark - Property Methods
+
 - (BOOL)area {
     return self.location.boundaryNodes != nil &&
-        self.location.boundaryNodes.count > 0;
+    self.location.boundaryNodes.count > 0;
 }
-
-#pragma mark -
-#pragma mark Property Methods
 
 - (CLLocationCoordinate2D)coordinate {
     return self.location.labelLocation.coordinate;
@@ -91,8 +76,7 @@
 }
 
 
-#pragma mark -
-#pragma mark Private Methods
+#pragma mark - Private Methods
 
 - (NSInteger)visibleZoomLevel {
     return self.location.visibleZoomLevel.integerValue;
