@@ -43,8 +43,14 @@
 /// Very little information is stored in the actual view itself.
 /// They each utilize one of the classes found in the \ref services group.
 /// \ref objects conatins all of the object models.
-/// \ref tile_source contains all of the available map tile sources and overlays.
+/// \ref tile_sources contains all of the available map tile sources and overlays.
 /// 
+/// RhitMap
+/// RhitMap.cs
+/// \link RhitMap.cs RhitMap \endlink
+/// I am \link RhitMap.cs
+/// RhitMap
+/// \endlink
 /// - The views handle page navigation and user events.
 /// - Anytime one of the views need the map, manipulate it, or get information from it they will use the \ref RhitMap singleton class.
 /// This way the map stays up-to-date at all times.
