@@ -57,6 +57,12 @@
 /// 
 /// 
 /// 
+/// RhitMap
+/// RhitMap.cs
+/// \link RhitMap.cs RhitMap \endlink
+/// I am \link RhitMap.cs
+/// RhitMap
+/// \endlink
 /// - The views handle page navigation and user events.
 /// - Anytime one of the views need the map, manipulate it, or get information from it they will use the \ref RhitMap singleton class.
 /// This way the map stays up-to-date at all times.
