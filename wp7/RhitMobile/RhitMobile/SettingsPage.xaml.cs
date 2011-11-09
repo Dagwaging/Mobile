@@ -87,7 +87,7 @@ namespace RhitMobile {
         }
 
         public void LoadSettings() {
-            BaseTileSource source = RhitMapView.Instance.CurrentTileSource;
+            BaseTileSource source = RhitMap.Instance.CurrentTileSource;
             if(source is BaseBingSource) {
                 mapTypePicker.ItemsSource = bingTypes;
                 mapTypePicker.Visibility = Visibility.Visible;
@@ -103,11 +103,11 @@ namespace RhitMobile {
                 selectBase(source.Name);
             }
 
-            polygonToggle.IsChecked = RhitMapView.Instance.AreOutlinesVisible;
-            textToggle.IsChecked = RhitMapView.Instance.AreLabelsVisible;
-            debugToggle.IsChecked = RhitMapView.Instance.InDebugMode;
+            polygonToggle.IsChecked = RhitMap.Instance.AreOutlinesVisible;
+            textToggle.IsChecked = RhitMap.Instance.AreLabelsVisible;
+            debugToggle.IsChecked = RhitMap.Instance.InDebugMode;
 
-            foreach(BaseTileSource overlay in RhitMapView.Instance.CurrentOverlaySources)
+            foreach(BaseTileSource overlay in RhitMap.Instance.CurrentOverlaySources)
                 foreach(ToggleSwitch toggle in toggleSwitches)
                     if(overlay.Name == (toggle.Header as string)) toggle.IsChecked = true;
         }
@@ -115,18 +115,18 @@ namespace RhitMobile {
         public void SaveSettings() {
             string sourceName = ((ListPickerObject) mapSourcePicker.SelectedItem).Name;
             string sourceType = ((ListPickerObject) mapTypePicker.SelectedItem).Name;
-            RhitMapView.Instance.ChangeTileSource(sourceName, sourceType);
+            RhitMap.Instance.ChangeTileSource(sourceName, sourceType);
 
-            RhitMapView.Instance.InDebugMode = (bool) debugToggle.IsChecked;
-            RhitMapView.Instance.AreLabelsVisible = (bool) textToggle.IsChecked;
-            RhitMapView.Instance.AreOutlinesVisible = (bool) polygonToggle.IsChecked;
+            RhitMap.Instance.InDebugMode = (bool) debugToggle.IsChecked;
+            RhitMap.Instance.AreLabelsVisible = (bool) textToggle.IsChecked;
+            RhitMap.Instance.AreOutlinesVisible = (bool) polygonToggle.IsChecked;
 
 
             foreach(ToggleSwitch toggle in toggleSwitches) {
                 if((bool) toggle.IsChecked)
-                    RhitMapView.Instance.AddOverlay(toggle.Header as string);
+                    RhitMap.Instance.AddOverlay(toggle.Header as string);
                 else
-                    RhitMapView.Instance.RemoveOverlay(toggle.Header as string);
+                    RhitMap.Instance.RemoveOverlay(toggle.Header as string);
             }
         }
 

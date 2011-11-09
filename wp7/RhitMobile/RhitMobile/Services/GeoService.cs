@@ -7,7 +7,7 @@ namespace RhitMobile.Services {
     /// <summary>
     /// Singleton class for obtaining location data.
     /// </summary>
-    public class GeoService {
+    public static class GeoService {
         /// <summary>
         /// Used to send information back to the GUI thread.
         /// </summary>

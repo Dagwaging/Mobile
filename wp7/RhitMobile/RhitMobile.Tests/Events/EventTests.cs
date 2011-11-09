@@ -4,7 +4,7 @@ using System.Net;
 using Microsoft.Phone.Controls.Maps;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RhitMobile.Events;
-using RhitMobile.Services;
+using RhitMobile.ObjectModel;
 
 namespace RhitMobile.Tests.Events {
     [TestClass]

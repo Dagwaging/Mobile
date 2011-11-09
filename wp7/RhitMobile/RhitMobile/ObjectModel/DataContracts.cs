@@ -2,10 +2,8 @@
 using System.Device.Location;
 using System.Runtime.Serialization;
 using Microsoft.Phone.Controls.Maps;
-using RhitMobile.ObjectModel;
-using System;
 
-namespace RhitMobile.Services {
+namespace RhitMobile.ObjectModel {
     [DataContract]
     public class ServerObject {
         [DataMember(Name = "Version")]

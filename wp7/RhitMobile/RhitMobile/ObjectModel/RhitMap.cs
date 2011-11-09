@@ -11,9 +11,9 @@ namespace RhitMobile.ObjectModel {
     /// <summary>
     /// Singleton class to handle the map object.
     /// </summary>
-    public class RhitMapView {
+    public class RhitMap {
         #region Private Variables
-        private static RhitMapView _instance;
+        private static RhitMap _instance;
         private Map _map;
         private BaseTileSource _tileSource;
         private List<BaseTileSource> _overlaySources;
@@ -40,7 +40,7 @@ namespace RhitMobile.ObjectModel {
         public event PushpinEventHandler PushpinTapped;
         #endregion
 
-        private RhitMapView() {
+        private RhitMap() {
             CreateAvailableSources();
             Map = new Map();
             Initialize();
@@ -131,9 +131,9 @@ namespace RhitMobile.ObjectModel {
         }
 
         /// <summary> The single instance of this class. </summary>
-        public static RhitMapView Instance {
+        public static RhitMap Instance {
             get {
-                if(_instance == null) _instance = new RhitMapView();
+                if(_instance == null) _instance = new RhitMap();
                 return _instance;
             }
         }

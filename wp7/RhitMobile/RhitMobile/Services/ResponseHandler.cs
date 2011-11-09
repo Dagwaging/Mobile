@@ -1,20 +1,13 @@
 ﻿using System;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Ink;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
 using System.IO;
+using System.Net;
 using System.Runtime.Serialization.Json;
 using System.Text;
 using RhitMobile.Events;
+using RhitMobile.ObjectModel;
 
 namespace RhitMobile.Services {
-    public class ResponseHandler {
+    public static class ResponseHandler {
 
         #region Events
         public static event ServerEventHandler ResponseReceived;
@@ -24,19 +17,19 @@ namespace RhitMobile.Services {
         #endregion
 
         #region Event Raising Methods
-        protected static void OnResponse(ServerEventArgs e) {
+        private static void OnResponse(ServerEventArgs e) {
             if(ResponseReceived != null) ResponseReceived(null, e);
         }
 
-        protected static void OnAllResponse(ServerEventArgs e) {
+        private static void OnAllResponse(ServerEventArgs e) {
             if(AllResponseReceived != null) AllResponseReceived(null, e);
         }
 
-        protected static void OnTopResponse(ServerEventArgs e) {
+        private static void OnTopResponse(ServerEventArgs e) {
             if(TopResponseReceived != null) TopResponseReceived(null, e);
         }
 
-        protected static void OnSearchResponse(ServerEventArgs e) {
+        private static void OnSearchResponse(ServerEventArgs e) {
             if(SearchResponseReceived != null) SearchResponseReceived(null, e);
         }
         #endregion

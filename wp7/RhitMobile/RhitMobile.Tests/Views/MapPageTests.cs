@@ -33,8 +33,8 @@ namespace RhitMobile.Tests.Views {
             //TODO: Utilize data from service
             // Location data should be loaded in above, but tests don't wait for data
             List<RhitLocation> locations = DataCollector.Instance.GetAllLocations(App.Current.RootVisual.Dispatcher);
-            if(locations != null) RhitMapView.Instance.Outlines = locations;
-            else RhitMapView.Instance.Outlines = Locations.ALL;
+            if(locations != null) RhitMap.Instance.Outlines = locations;
+            else RhitMap.Instance.Outlines = Locations.ALL;
         }
 
         [TestCleanup]
@@ -52,18 +52,18 @@ namespace RhitMobile.Tests.Views {
         [TestMethod]
         [Description("Tests/Simulates a user tapping an outline on the map.")]
         public void OutlineTappedTest() {
-            Assert.IsNotNull(RhitMapView.Instance.Outlines);
-            Assert.IsTrue(RhitMapView.Instance.Outlines.Count > 0, "There are no map locations loaded.");
-            RhitLocation firstLocation = RhitMapView.Instance.Outlines[0];
+            Assert.IsNotNull(RhitMap.Instance.Outlines);
+            Assert.IsTrue(RhitMap.Instance.Outlines.Count > 0, "There are no map locations loaded.");
+            RhitLocation firstLocation = RhitMap.Instance.Outlines[0];
             RhitLocation secondLocation = null;
-            RhitMapView.Instance.Select(firstLocation);
-            foreach(RhitLocation location in RhitMapView.Instance.Outlines)
+            RhitMap.Instance.Select(firstLocation);
+            foreach(RhitLocation location in RhitMap.Instance.Outlines)
                 if (location.Label == firstLocation.Label) {
                     secondLocation = location;
                     break;
                 }
             Assert.IsNotNull(secondLocation, "The tapped location cannot be found.");
-            Assert.AreEqual(secondLocation.Center, RhitMapView.Instance.SelectedPushpin.Location,
+            Assert.AreEqual(secondLocation.Center, RhitMap.Instance.SelectedPushpin.Location,
                 "The information pushpin was not positioned correctly.");
             Assert.AreNotEqual(secondLocation.OutLine.Fill, Colors.Transparent, "The location is still hidden.");
             Assert.AreNotEqual(secondLocation.OutLine.Stroke, Colors.Transparent, "The location's stroke is still hidden.");

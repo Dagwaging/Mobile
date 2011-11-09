@@ -57,7 +57,7 @@ namespace RhitMobile {
             ListBox listbox = (ListBox) sender;
             RhitLocation selected = (RhitLocation) listbox.SelectedItem;
             if(selected == null) return;
-            RhitMapView.Instance.Select(selected);
+            RhitMap.Instance.Select(selected);
             listbox.SelectedItem = null;
             NavigationService.Navigate(new Uri("/InfoPage.xaml?Id=" + selected.Id.ToString(), UriKind.Relative));
         }

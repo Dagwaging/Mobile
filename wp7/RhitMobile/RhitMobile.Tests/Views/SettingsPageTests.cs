@@ -23,7 +23,7 @@ namespace RhitMobile.Tests.Views {
         [TestMethod]
         [Description("")]
         public void TileSourceTest() {
-            RhitMapView.Instance.ChangeTileSource("Bing", "Aerial");
+            RhitMap.Instance.ChangeTileSource("Bing", "Aerial");
             Page.LoadSettings();
             Assert.IsNotNull(Page.mapSourcePicker.SelectedItem);
             Assert.AreEqual("Bing", ((ListPickerObject) Page.mapSourcePicker.SelectedItem).Name);

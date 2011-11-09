@@ -68,7 +68,7 @@ namespace RhitMobile {
 
         private void Places_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             RhitLocation location = (RhitLocation) e.AddedItems[0];
-            RhitMapView.Instance.Select(location);
+            RhitMap.Instance.Select(location);
             Location = location;
             NavigationService.Navigate(new Uri("/InfoPage.xaml?Id="+location.Id.ToString(), UriKind.Relative));
         }
@@ -91,7 +91,7 @@ namespace RhitMobile {
                 int id = Convert.ToInt32(idString);
                 location = DataCollector.Instance.GetLocation(Dispatcher, id);
             }
-            else location = RhitMapView.Instance.SelectedLocation;
+            else location = RhitMap.Instance.SelectedLocation;
             if(location == null) GoBack();//TODO: Handle this better; Shouldn't give whiplash
             Location = location;
             if(location.Description == null || location.Description == "")

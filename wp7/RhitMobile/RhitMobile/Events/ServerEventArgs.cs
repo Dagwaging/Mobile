@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Net;
-using RhitMobile.Services;
+using RhitMobile.ObjectModel;
 
 namespace RhitMobile.Events {
     /// <summary>

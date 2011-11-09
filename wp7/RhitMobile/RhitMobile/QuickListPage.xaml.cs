@@ -32,7 +32,7 @@ namespace RhitMobile {
 
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             RhitLocation selected = (RhitLocation) listBox.SelectedItem;
-            RhitMapView.Instance.Select(selected);
+            RhitMap.Instance.Select(selected);
             listBox.SelectedItem = null;
             NavigationService.Navigate(new Uri("/MapPage.xaml", UriKind.Relative));
         }

@@ -91,7 +91,7 @@
     <Compile Include="MapSource\OsmaRender.cs" />
     <Compile Include="MapSource\RoseTileOverlay.cs" />
     <Compile Include="ObjectModel\RhitLocation.cs" />
-    <Compile Include="ObjectModel\RhitMapView.cs" />
+    <Compile Include="ObjectModel\RhitMap.cs" />
     <Compile Include="ObjectModel\User.cs" />
     <Compile Include="SearchPage.xaml.cs">
       <DependentUpon>SearchPage.xaml</DependentUpon>
@@ -125,7 +125,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\DataCollector.cs" />
-    <Compile Include="Services\DataContracts.cs" />
+    <Compile Include="ObjectModel\DataContracts.cs" />
     <Compile Include="Services\GeoService.cs" />
     <Compile Include="Services\InternetConnection.cs" />
   </ItemGroup>
