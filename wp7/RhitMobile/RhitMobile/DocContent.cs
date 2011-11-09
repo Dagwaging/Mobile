@@ -42,15 +42,13 @@
 /// All of these files can be found in the following group: \ref pages.
 /// Very little information is stored in the actual view itself.
 /// They each utilize one of the classes found in the \ref services group.
-/// 
-/// Other groups:
-/// - \ref objects
-/// - \ref tile_sources
+/// \ref objects conatins all of the object models.
+/// \ref tile_source contains all of the available map tile sources and overlays.
 /// 
 /// - The views handle page navigation and user events.
-/// - Anytime one of the views need the map, manipulate it, or get information from it they will use the RhitMap singleton class.
+/// - Anytime one of the views need the map, manipulate it, or get information from it they will use the \ref RhitMap singleton class.
 /// This way the map stays up-to-date at all times.
-///  - RhitMap keeps track of the current properties of the map as well as the possible tile sources avaible.
+///  - RhitMap.cs keeps track of the current properties of the map as well as the possible tile sources avaible.
 /// - If any of the views need any other information, like location data for instance, they will use the DataCollector singleton class.
 ///  - The DataCollector will try to get the requested data from the DataStorage singleton class (i.e. local storage) first.
 ///  If DataStorage has the data, then it is returned. Otherwise, it uses RequestBuilder and GeoService to make a request to the server.
