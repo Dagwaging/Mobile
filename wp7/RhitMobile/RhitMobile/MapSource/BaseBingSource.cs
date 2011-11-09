@@ -3,6 +3,7 @@ using Microsoft.Phone.Controls.Maps;
 using Microsoft.Phone.Controls.Maps.Core;
 
 namespace RhitMobile.MapSource {
+    /// \ingroup tile_sources
     /// <summary>
     /// Generic map tile source for various Bing map tile sources.
     /// Specify the MapType to change the map source.

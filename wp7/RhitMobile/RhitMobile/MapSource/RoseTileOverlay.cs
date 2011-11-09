@@ -5,6 +5,7 @@ namespace RhitMobile.MapSource {
     /// Tile source for the floor plans of Rose-Hulman.
     /// </summary>
     public class RoseTileOverlay : BaseTileSource {
+        /// \ingroup tile_sources
         /// <summary>
         /// Constructor; Defines the base uri format for the tile source
         /// </summary>

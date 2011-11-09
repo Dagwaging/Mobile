@@ -1,6 +1,7 @@
 ﻿using System;
 
 namespace RhitMobile.MapSource {
+    /// \ingroup tile_sources
     /// <summary>
     /// Base Google tile source.
     /// Change MapType to switch Google tile sources.

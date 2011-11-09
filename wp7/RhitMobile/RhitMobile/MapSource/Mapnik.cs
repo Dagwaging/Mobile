@@ -1,6 +1,7 @@
 ﻿using System;
 
 namespace RhitMobile.MapSource {
+    /// \ingroup tile_sources
     /// <summary>
     /// A tile source from the open source mapping project Mapnik (http://mapnik.org/).
     /// The tile source comes from http://openstreet.org/.

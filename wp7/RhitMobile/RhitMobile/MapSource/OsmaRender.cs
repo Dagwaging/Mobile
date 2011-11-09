@@ -1,6 +1,7 @@
 ﻿using System;
 
 namespace RhitMobile.MapSource {
+    /// \ingroup tile_sources
     /// <summary>
     /// A tile source generated as a branch from the open source OpenStreetMap dataset.
     /// The tile source comes from http://openstreet.org/.
