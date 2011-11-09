@@ -13,7 +13,6 @@ using Microsoft.Phone.Shell;
 using RhitMobile.Events;
 using RhitMobile.ObjectModel;
 using RhitMobile.Services;
-using Microsoft.Silverlight.Testing;
 
 namespace RhitMobile {
     public partial class MapPage : PhoneApplicationPage {
@@ -94,15 +93,6 @@ namespace RhitMobile {
 
             new Thread(bgWatcherUpdate).Start();
         }
-
-        void InitTesting() {
-            Content = UnitTestSystem.CreateTestPage();
-            IMobileTestPage imtp = Content as IMobileTestPage;
-
-            if(imtp != null) {
-                BackKeyPress += (x, xe) => xe.Cancel = imtp.NavigateBack();
-            }
-        }
         #endregion
 
         #region Map/Service Event Handlers
@@ -181,7 +171,7 @@ namespace RhitMobile {
 
         void Watcher_PositionChanged(object sender, GeoPositionChangedEventArgs<GeoCoordinate> e) {
             GeoCoordinate coordinate = e.Position.Location;
-            string accuracy = "0.0000000000000";
+            //string accuracy = "0.0000000000000";
             //statusTextBlock.Text = "Updated: " + coordinate.Latitude.ToString(accuracy) + ", " + coordinate.Longitude.ToString(accuracy);
             RhitMapView.Instance.User.Location = e.Position.Location;
         }
@@ -239,6 +229,9 @@ namespace RhitMobile {
             //TODO: Display message if locations == null; "Map Data is Empty. Trying to download..."
 
             fillGrid();
+
+
+            RhitMapView.Instance.Select(RhitMapView.Instance.SelectedLocation);
         }
     }
 }

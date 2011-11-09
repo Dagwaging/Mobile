@@ -8,10 +8,6 @@ namespace RhitMobile.MapSource {
     /// Specify the MapType to change the map source.
     /// </summary>
     public class BaseBingSource : BaseTileSource {
-        #region Private Fields
-        private BingType _type;
-        #endregion
-
         /// <summary>
         /// Constructor; Defines the default MapType (Bing Core Aerial).
         /// </summary>

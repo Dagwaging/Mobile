@@ -426,6 +426,7 @@ namespace RhitMobile.ObjectModel {
         /// <param name="location">Location to make visible</param>
         /// <returns>The location that was made visible</returns>
         public RhitLocation Select(RhitLocation location) {
+            if(location == null) return null;
             foreach(RhitLocation _location in Outlines)
                 if(_location.Label == location.Label) {
                     if(_lastSelected != null && !AreOutlinesVisible)

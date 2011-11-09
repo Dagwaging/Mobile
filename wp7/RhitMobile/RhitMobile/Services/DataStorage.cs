@@ -11,8 +11,8 @@ namespace RhitMobile.Services {
         #endregion
 
         private DataStorage() {
-            AllLocations = MakeDict(DataStorage.LoadState<List<RhitLocation>>(StorageKey.All, null));
-            TopLocations = MakeDict(DataStorage.LoadState<List<RhitLocation>>(StorageKey.Top, null));
+            AllLocations = DataStorage.LoadState<Dictionary<int, RhitLocation>>(StorageKey.All, new Dictionary<int, RhitLocation>());
+            TopLocations = DataStorage.LoadState<Dictionary<int, RhitLocation>>(StorageKey.Top, new Dictionary<int, RhitLocation>());
         }
 
         public static DataStorage Instance {
@@ -96,8 +96,11 @@ namespace RhitMobile.Services {
         }
 
         public static T LoadState<T>(StorageKey key, T defaultValue) where T : class {
-            if(_userSettings.Contains(key.ToString()))
-                return (T) _userSettings[key.ToString()];
+            if(_userSettings.Contains(key.ToString())) {
+                var o = _userSettings[key.ToString()];
+                return (T) o;
+
+            }
             return defaultValue;
         }
     }

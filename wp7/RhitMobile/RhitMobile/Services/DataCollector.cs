@@ -96,7 +96,10 @@ namespace RhitMobile.Services {
 
         private void GeoService_SearchResponseReceived(object sender, ServerEventArgs e) {
             ServerObject response = GetServerObject(e);
-            SearchEventArgs args = new SearchEventArgs() {}; //TODO: set properties
+            
+            SearchEventArgs args = new SearchEventArgs() {
+                Places = ServerObject.GetLocations(response.Locations),
+            };
             OnSearchUpdated(args);
         }
 
@@ -110,6 +113,11 @@ namespace RhitMobile.Services {
         #endregion
 
         #region Public Methods
+        public void SearchLocations(Dispatcher dispatcher, string search) {
+            RequestPart request = new RequestBuilder(BaseAddress, search).Locations.Data.All;
+            GeoService.MakeRequest(dispatcher, request, true);
+        }
+
         public List<RhitLocation> GetAllLocations(Dispatcher dispatcher) {
             return GetAllLocations(dispatcher, true);
         }
@@ -119,8 +127,8 @@ namespace RhitMobile.Services {
             //Note: Does not guarantee that all locations have descriptions
             if(!UpToDate || !DataStorage.IsAllFull) {
                 RequestPart request;
-                if(!withDescription) request = new RequestBuilder(BaseAddress, Version).Locations.Data.All.NoDesc;
-                else request = new RequestBuilder(BaseAddress, Version).Locations.Data.All;
+                if(!withDescription) request = new RequestBuilder(BaseAddress).Locations.Data.All.NoDesc;
+                else request = new RequestBuilder(BaseAddress).Locations.Data.All;
                 GeoService.MakeRequest(dispatcher, request);
             }
             return new List<RhitLocation>(DataStorage.Instance.AllLocations.Values);

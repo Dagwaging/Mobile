@@ -32,15 +32,9 @@ namespace RhitMobile {
 
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             RhitLocation selected = (RhitLocation) listBox.SelectedItem;
-
-            ListBoxItem lbi = (ListBoxItem) (listBox.ItemContainerGenerator.ContainerFromItem(selected));
-            if(lbi == null) return;
-            lbi.Foreground = new SolidColorBrush(Colors.Green);
-
             RhitMapView.Instance.Select(selected);
-
-            if(NavigationService.CanGoBack) NavigationService.GoBack();
-            else NavigationService.Navigate(new Uri("/MapPage.xaml", UriKind.Relative));
+            listBox.SelectedItem = null;
+            NavigationService.Navigate(new Uri("/MapPage.xaml", UriKind.Relative));
         }
     }
 }

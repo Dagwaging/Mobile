@@ -29,16 +29,17 @@
                 </StackPanel>
             </DataTemplate>
         </Grid.Resources>
-        
+
         <!--Pivot Control-->
         <controls:Pivot Title="RhitMobile Settings">
             <controls:Pivot.HeaderTemplate>
-                <DataTemplate> <TextBlock Text="{Binding}" FontSize="40"/> </DataTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding}" FontSize="40"/>
+                </DataTemplate>
             </controls:Pivot.HeaderTemplate>
 
             <controls:PivotItem Header="Tile Sources">
-                <ScrollViewer Margin="12,0,12,0">
-
+                <!--<ScrollViewer Margin="12,0,12,0">-->
                     <Grid x:Name="ContentPanel1">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
@@ -47,19 +48,16 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
-                        <toolkit:ListPicker x:Name="mapSourcePicker" ItemCountThreshold="3" Header="Map Source" Grid.Row="0"
-                                    ItemTemplate="{StaticResource PickerItemTemplate}"
-                                    FullModeItemTemplate="{StaticResource PickerFullModeItemTemplate}" FullModeHeader="Map Source"/>
-                        <toolkit:ListPicker x:Name="mapTypePicker" ItemCountThreshold="3" Header="Map Type" Grid.Row="1"
-                                    ItemTemplate="{StaticResource PickerItemTemplate}"
-                                    FullModeItemTemplate="{StaticResource PickerFullModeItemTemplate}" FullModeHeader="Map Type"/>
-                        <toolkit:ToggleSwitch Header="RHIT Floor Plans" Name="floorPlanToggle" Grid.Row="2" IsChecked="False" />
-                        <toolkit:ToggleSwitch Header="Google Street Overlays" Name="streetToggle" Grid.Row="3" IsChecked="False" />
-                        <toolkit:ToggleSwitch Header="Google Water Overlays" Name="waterToggle" Grid.Row="4" IsChecked="False" />
+                        <toolkit:ListPicker x:Name="mapSourcePicker" Grid.Row="1" Header="Map Source" ItemTemplate="{StaticResource PickerItemTemplate}"/>
+                        <toolkit:ListPicker x:Name="mapTypePicker" Grid.Row="3" Header="Map Type" ItemTemplate="{StaticResource PickerItemTemplate}"/>
+                        <toolkit:ToggleSwitch Header="RHIT Floor Plans" Name="floorPlanToggle" Grid.Row="4" IsChecked="False" />
+                        <toolkit:ToggleSwitch Header="Google Street Overlays" Name="streetToggle" Grid.Row="5" IsChecked="False" />
+                        <toolkit:ToggleSwitch Header="Google Water Overlays" Name="waterToggle" Grid.Row="6" IsChecked="False" />
                     </Grid>
-
-                </ScrollViewer>
+                <!--</ScrollViewer>-->
             </controls:PivotItem>
 
             <controls:PivotItem Header=" Options">
@@ -81,7 +79,7 @@
 
                 </ScrollViewer>
             </controls:PivotItem>
-            
+
         </controls:Pivot>
-    </Grid>    
+    </Grid>
 </phone:PhoneApplicationPage>

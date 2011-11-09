@@ -35,7 +35,7 @@ namespace RhitMobile.Services.Requests {
         protected override string FullUrl {
             get {
                 string url = BaseUrl + PartUrl;
-                if(Version != null) url += "?version=" + Version.ToString();
+                if(Version != 0) url += "?version=" + Version.ToString();
                 if(SearchText != null && SearchText != "") {
                     if(HighlightSearch) url += "?sh=" + SearchText;
                     else url += "?s=" + SearchText;

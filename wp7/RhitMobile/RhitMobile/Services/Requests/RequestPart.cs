@@ -14,7 +14,7 @@ namespace RhitMobile.Services.Requests {
 
         public string PartUrl { get; set; }
 
-        public virtual string ToString() {
+        public override string ToString() {
             return String.Format(String.Format(BaseUrl, PartUrl), "");
         }
     }

@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Windows.Navigation;
-using Microsoft.Phone.Controls;
-using RhitMobile.ObjectModel;
-using RhitMobile.Events;
-using RhitMobile.Services;
 using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
-using System.Windows;
+using System.Windows.Navigation;
+using Microsoft.Phone.Controls;
+using RhitMobile.Events;
+using RhitMobile.ObjectModel;
+using RhitMobile.Services;
 
 namespace RhitMobile {
     public partial class InfoPage : PhoneApplicationPage {
@@ -81,8 +81,7 @@ namespace RhitMobile {
         }
 
         private void GoBack() {
-            if(NavigationService.CanGoBack) NavigationService.GoBack();
-            else NavigationService.Navigate(new Uri("/MapPage.xaml", UriKind.Relative));
+            NavigationService.Navigate(new Uri("/MapPage.xaml", UriKind.Relative));
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e) {
