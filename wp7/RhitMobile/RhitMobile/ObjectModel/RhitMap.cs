@@ -8,6 +8,7 @@ using RhitMobile.MapSource;
 using RhitMobile.Services;
 
 namespace RhitMobile.ObjectModel {
+    /// \ingroup objects
     /// <summary>
     /// Singleton class to handle the map object.
     /// </summary>

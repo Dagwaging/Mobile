@@ -7,6 +7,10 @@ using RhitMobile.Events;
 using RhitMobile.ObjectModel;
 
 namespace RhitMobile.Services {
+    /// \ingroup services
+    /// <summary>
+    /// 
+    /// </summary>
     public static class ResponseHandler {
 
         #region Events

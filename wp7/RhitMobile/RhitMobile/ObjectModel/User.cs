@@ -2,6 +2,10 @@
 using Microsoft.Phone.Controls.Maps;
 
 namespace RhitMobile.ObjectModel {
+    /// \ingroup objects
+    /// <summary>
+    /// Not Implemented.
+    /// </summary>
     public class User {
         #region Private Fields
         private GeoCoordinate _location;

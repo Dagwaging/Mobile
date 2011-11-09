@@ -7,6 +7,7 @@ using RhitMobile.Services.Requests;
 using System;
 
 namespace RhitMobile.Services {
+    /// \ingroup services
     /// <summary>
     /// Singleton class used to make service calls.
     /// </summary>

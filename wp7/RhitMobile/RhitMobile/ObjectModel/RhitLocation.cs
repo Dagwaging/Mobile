@@ -6,8 +6,9 @@ using Microsoft.Phone.Controls.Maps;
 using System.Collections.Generic;
 
 namespace RhitMobile.ObjectModel {
+    /// \ingroup objects
     /// <summary>
-    /// Represents a a area, building, or room at Rose-Hulman.
+    /// Represents an area, building, or room at Rose-Hulman.
     /// </summary>
     public class RhitLocation {
         #region Private Fields

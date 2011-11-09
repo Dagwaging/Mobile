@@ -1,6 +1,10 @@
 ﻿using System;
 
 namespace RhitMobile.Services.Requests {
+    /// \ingroup services
+    /// <summary>
+    /// 
+    /// </summary>
     public class RequestBuilder : RequestPart {
         #region Constructors
         public RequestBuilder(string baseUrl) : this(baseUrl, 0) { }

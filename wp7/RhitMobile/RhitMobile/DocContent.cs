@@ -45,35 +45,18 @@
 /// \ref objects conatins all of the object models.
 /// \ref tile_sources contains all of the available map tile sources and overlays.
 /// 
-/// RhitMap
-/// RhitMap.cs
-/// \link RhitMap.cs RhitMap \endlink
-/// I am \link RhitMap.cs
-/// RhitMap
-/// \endlink
 /// 
-/// 
-/// \link RhitMobile.ObjectModel.RhitMap RhitMap \endlink
-/// 
-/// 
-/// 
-/// RhitMap
-/// RhitMap.cs
-/// \link RhitMap.cs RhitMap \endlink
-/// I am \link RhitMap.cs
-/// RhitMap
-/// \endlink
 /// - The views handle page navigation and user events.
-/// - Anytime one of the views need the map, manipulate it, or get information from it they will use the \ref RhitMap singleton class.
+/// - Anytime one of the views need the map, manipulate it, or get information from it they will use the \link RhitMobile.ObjectModel.RhitMap RhitMap \endlink singleton class.
 /// This way the map stays up-to-date at all times.
-///  - RhitMap.cs keeps track of the current properties of the map as well as the possible tile sources avaible.
-/// - If any of the views need any other information, like location data for instance, they will use the DataCollector singleton class.
-///  - The DataCollector will try to get the requested data from the DataStorage singleton class (i.e. local storage) first.
-///  If DataStorage has the data, then it is returned. Otherwise, it uses RequestBuilder and GeoService to make a request to the server.
-///  - DataCollector will also check for updates from the server on the app's initialization.
-/// - All views listen to at least one ServiceEvent handler to handle updated data.
-///  - All server responses are handled by ResponseHandler, parsed, and made into a ServiceEvent.
-///  - Data from the server responses are parsed uses the classes in DataContracts, which are then usually converted into RhitLocation objects.
+///  - \link RhitMobile.ObjectModel.RhitMap RhitMap \endlink keeps track of the current properties of the map as well as the possible tile sources avaible.
+/// - If any of the views need any other information, like location data for instance, they will use the \link RhitMobile.Services.DataCollector DataCollector \endlink singleton class.
+///  - The \link RhitMobile.Services.DataCollector DataCollector \endlink will try to get the requested data from the \link RhitMobile.Services.DataStorage DataStorage \endlink singleton class (i.e. local storage) first.
+///  If \link RhitMobile.Services.DataStorage DataStorage \endlink has the data, then it is returned. Otherwise, it uses \link RhitMobile.Services.Requests.RequestBuilder RequestBuilder \endlink and \link RhitMobile.Services.GeoService GeoService \endlink to make a request to the server.
+///  - \link RhitMobile.Services.DataCollector DataCollector \endlink will also check for updates from the server on the app's initialization.
+/// - All views listen to at least one \link RhitMobile.Events.ServiceEvent ServiceEvent \endlink handler to handle updated data.
+///  - All server responses are handled by \link RhitMobile.Services.ResponseHandler ResponseHandler \endlink, parsed, and made into a \link RhitMobile.Events.ServiceEvent ServiceEvent \endlink.
+///  - Data from the server responses are parsed uses the classes in \link RhitMobile.ObjectModel.DataContracts DataContracts \endlink, which are then usually converted into \link RhitMobile.ObjectModel.RhitLocation RhitLocation \endlink objects.
 /// 
 /// \section doc_maintenance_sec Maintaining This Documentation
 ///

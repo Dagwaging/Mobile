@@ -4,6 +4,7 @@ using System.Windows.Threading;
 using RhitMobile.Services.Requests;
 
 namespace RhitMobile.Services {
+    /// \ingroup services
     /// <summary>
     /// Singleton class for obtaining location data.
     /// </summary>

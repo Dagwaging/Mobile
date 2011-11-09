@@ -4,6 +4,10 @@ using Microsoft.Phone.Controls;
 using RhitMobile.ObjectModel;
 
 namespace RhitMobile.Services {
+    /// \ingroup services
+    /// <summary>
+    /// 
+    /// </summary>
     public class DataStorage {
         #region Private Fields
         private static DataStorage _instance;
