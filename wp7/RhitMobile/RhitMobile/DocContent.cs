@@ -35,9 +35,11 @@
 /// For help getting a build environment set up, refer to README.md in the
 /// top-level wp7 directory of the repository. This documentation assumes
 /// that you have a working development environment for the project.
+/// https://github.com/RHIT/Mobile/tree/master/wp7
 /// \link https://github.com/RHIT/Mobile/tree/master/wp7
 /// Repository
 /// \endlink
+/// <a href="https://github.com/RHIT/Mobile/tree/master/wp7">Repo</a> 
 ///
 /// \section get_familiar_sec How To Get Familiar
 ///
