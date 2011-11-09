@@ -1,5 +1,6 @@
-﻿// Doxygen group definitions for the project
+﻿//Main page documetation for automatic doxygen generation.
 
+// Doxygen group definitions for the project
 /// \defgroup map Map Functionality
 /// Classes, categories, and protocols specific to displaying and annotating
 /// MapKit MKMapViews. Most (if not all) of this code stands independent from
@@ -19,11 +20,11 @@
 
 // Doxygen main page documentation
 
-/// \mainpage RHIT Mobile iOS Developer Documentation
+/// \mainpage RHIT Mobile WP7 Developer Documentation
 ///
 /// \section intro_sec Introduction
 ///
-/// Welcome to the iOS developer documetation for the RHIT Mobile project.
+/// Welcome to the WP7 developer documetation for the RHIT Mobile project.
 /// The purpose of this documentation is to provide an easily digestable
 /// overview of how the project is structured, specifically for future teams
 /// who may be assigned maintenance of this work, project advisors, or even
@@ -32,8 +33,11 @@
 /// \section where_to_start Where To Start
 ///
 /// For help getting a build environment set up, refer to README.md in the
-/// top-level ios directory of the repository. This documentation assumes
+/// top-level wp7 directory of the repository. This documentation assumes
 /// that you have a working development environment for the project.
+/// \link https://github.com/RHIT/Mobile/tree/master/wp7
+/// Repository
+/// \endlink
 ///
 /// \section get_familiar_sec How To Get Familiar
 ///
