@@ -28,8 +28,7 @@
 
 @implementation MKMapView (ZoomLevel)
 
-#pragma mark -
-#pragma mark Map conversion methods
+#pragma mark - Map Conversion Methods
 
 - (double)longitudeToPixelSpaceX:(double)longitude {
     return round(MERCATOR_OFFSET + MERCATOR_RADIUS * longitude * M_PI / 180.0);
@@ -50,8 +49,7 @@
                                         MERCATOR_RADIUS))) * 180.0 / M_PI;
 }
 
-#pragma mark -
-#pragma mark Helper methods
+#pragma mark - Helper Methods
 
 - (MKCoordinateSpan)coordinateSpanWithMapView:(MKMapView *)mapView
                              centerCoordinate:(CLLocationCoordinate2D)center
@@ -109,8 +107,7 @@
     return (NSUInteger) 20 - log2(zoomScale);
 }
 
-#pragma mark -
-#pragma mark Public methods
+#pragma mark - Public Methods
 
 - (void)setCenterCoordinate:(CLLocationCoordinate2D)centerCoordinate
                   zoomLevel:(NSUInteger)zoomLevel
@@ -127,6 +124,8 @@
     // set the region like normal
     [self setRegion:region animated:animated];
 }
+
+#pragma mark - Property Methods
 
 - (NSUInteger)zoomLevel {
     return [self zoomLevelWithMapView:self span:self.region.span];

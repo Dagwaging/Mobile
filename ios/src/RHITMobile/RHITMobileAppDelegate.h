@@ -61,9 +61,6 @@
 /// through interactions with it.
 @property (nonatomic, retain) MapViewController *mapViewController;
 
-/// Search view controller
-@property (nonatomic, retain) IBOutlet SearchViewController *searchViewController;
-
 /// The filepath to this application's documents directory. This value is used
 /// to interact directly with the CoreData object store.
 @property (nonatomic, readonly) NSString *applicationDocumentsDirectory;

@@ -47,10 +47,11 @@
 @synthesize directoryNavigationViewController;
 @synthesize infoNavigationViewController;
 @synthesize mapViewController;
-@synthesize searchViewController;
 @synthesize managedObjectModel;
 @synthesize managedObjectContext;
 @synthesize persistentStoreCoordinator;
+
+#pragma mark - UIAppDelegate Methods
 
 - (BOOL)application:(UIApplication *)application 
 didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
@@ -143,8 +144,6 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     return YES;
 }
-
-#pragma mark - UIAppDelegate Methods
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     /*
@@ -303,8 +302,7 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     }
 }
 
-#pragma mark -
-#pragma mark Private Methods
+#pragma mark - Additional Methods
 
 -(void)setupDefaults {
     // Get the plist location from the settings bundle
