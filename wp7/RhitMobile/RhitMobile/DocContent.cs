@@ -66,25 +66,35 @@
 ///  
 /// \section features Feature Mapping
 /// 
-/// \subsection Main Page (MapPage)
+/// \subsection Main Page (\link RhitMobile.MapPage MapPage \endlink)
 /// 
-/// The app starts out in the MapPage and uses it as the main page for the app.
-/// The MapPage contains an app bar with buttons: 'me', 'rhit', and 'search'.
-/// The 'me' and 'rhit' buttons both indirectly link to methods in RhitMap that change the map's viewport.
-/// The 'search' button switches to the SearchPage.
-/// The app bar also contains two menu options: 'quicklist' and 'settings' which open the QuickListPage and SettingsPage respectively.
-/// Apart from the app bar, the MapPage also always the user to click on buildings.
+/// The app starts out in the \link RhitMobile.MapPage MapPage \endlink and uses it as the main page for the app.
+/// The \link RhitMobile.MapPage MapPage \endlink contains an app bar with buttons: 'me', 'rhit', and 'search'.
+/// The 'me' and 'rhit' buttons both indirectly link to methods in \link RhitMobile.ObjectModel.RhitMap RhitMap \endlink that change the map's viewport.
+/// The 'search' button switches to the \link RhitMobile.SearchPage SearchPage \endlink.
+/// The app bar also contains two menu options: 'quicklist' and 'settings' which open the \link RhitMobile.QuickListPage QuickListPage \endlink and \link RhitMobile.SettingsPage SettingsPage \endlink respectively.
+/// Apart from the app bar, the \link RhitMobile.MapPage MapPage \endlink also always the user to click on buildings.
 /// When a user clicks (taps) on a building, the building is highlighted and a PushPin appears with the name of the building.
-/// If the user then clicks (taps) on the PushPin, the app navigates to the InfoPage for that building.
+/// If the user then clicks (taps) on the PushPin, the app navigates to the \link RhitMobile.InfoPage InfoPage \endlink for that building.
+/// Once the user navigates away from this page, they only need to use the device's 'back' hardware button to return to this page.
 /// 
-/// \subsection Location Information Page (InfoPage)
+/// \subsection Location Information Page (\link RhitMobile.InfoPage InfoPage \endlink)
 /// 
-/// \subsection Top Locations Page (QuickListPage)
+/// This page contains all of the information pertinent to the given location.
+/// This includes the location's name, alternate names, description, links to relevant websites, and other locations contained within this location (child locations).
+/// The child locations are displayed as links to their information page.
+/// All of this information is conatined within the corresponding \link RhitMobile.ObjectModel.RhitLocation RhitLocation \endlink.
+/// This page also provides links back to map with it's location selected on the map.
 /// 
-/// \subsection Search Page (SearchPage)
+/// \subsection Top Locations Page (\link RhitMobile.QuickListPage QuickListPage \endlink)
+/// This is just a simple list of \link RhitMobile.ObjectModel.RhitLocation RhitLocations \endlink that link back to the map with the selected location PushPin shown.
 /// 
-/// \subsection Application Settings Page (SettingsPage)
+/// \subsection Search Page (\link RhitMobile.SearchPage SearchPage \endlink)
+/// This page allows the user to search for both people and places with Rose-Hulman.
 /// 
+/// \subsection Application Settings Page (\link RhitMobile.SettingsPage SettingsPage \endlink)
+/// This page allows the user to change several different options for the app.
+/// For example, the user can switch between using Bing maps to using Google maps.
 /// 
 /// \section doc_maintenance_sec Maintaining This Documentation
 /// 
