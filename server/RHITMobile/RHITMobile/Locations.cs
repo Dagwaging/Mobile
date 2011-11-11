@@ -13,6 +13,36 @@ namespace RHITMobile
         public const string StartHighlight = "<b>";
         public const string EndHighlight = "</b>";
 
+        private static Dictionary<string, string> _searchCorrections = null;
+        private static Dictionary<string, string> SearchCorrections
+        {
+            get
+            {
+                if (_searchCorrections == null)
+                {
+                    _searchCorrections = new Dictionary<string, string>();
+                    using (var connection = new SqlConnection(Program.ConnectionString))
+                    {
+                        connection.Open();
+                        var table = new DataTable();
+                        using (var command = connection.CreateCommand())
+                        {
+                            command.CommandType = CommandType.StoredProcedure;
+                            command.CommandText = "spGetLocationSearchCorrections";
+                            using (var reader = command.ExecuteReader())
+                            {
+                                while (reader.Read())
+                                {
+                                    SearchCorrections.Add(reader.GetString(0), reader.GetString(1));
+                                }
+                            }
+                        }
+                    }
+                }
+                return _searchCorrections;
+            }
+        }
+
         public LocationsHandler()
         {
             Redirects.Add("data", new LocationsDataHandler());
@@ -25,7 +55,17 @@ namespace RHITMobile
             if (query.ContainsKey("s") || query.ContainsKey("sh"))
             {
                 var sSearches = query.ContainsKey("s") ? query["s"].ToLower().Split('+') : new string[0];
+                for (int i = 0; i < sSearches.Length; i++)
+                {
+                    if (SearchCorrections.ContainsKey(sSearches[i]))
+                        sSearches[i] = SearchCorrections[sSearches[i]];
+                }
                 var shSearches = query.ContainsKey("sh") ? query["sh"].ToLower().Split('+') : new string[0];
+                for (int i = 0; i < shSearches.Length; i++)
+                {
+                    if (SearchCorrections.ContainsKey(shSearches[i]))
+                        shSearches[i] = SearchCorrections[shSearches[i]];
+                }
 
                 SortedList<double, T> newItems = new SortedList<double, T>();
                 Dictionary<double, int> numRanks = new Dictionary<double, int>();
@@ -122,6 +162,13 @@ namespace RHITMobile
         }
     }
 
+    public enum SearchHighlight
+    {
+        NA = 0,
+        S = 1,
+        SH = 2,
+    }
+
     public class LocationsDataHandler : PathHandler
     {
         public LocationsDataHandler()
@@ -158,12 +205,23 @@ namespace RHITMobile
                 {
                     yield return TM.MakeDbCall(currentThread, Program.ConnectionString, "spGetMapAreaCorners",
                         new SqlParameter("@maparea", location.Id));
-                    DataTable cornerTable = null;
-                    cornerTable = TM.GetResult<DataTable>(currentThread);
+                    DataTable cornerTable = TM.GetResult<DataTable>(currentThread);
                     foreach (DataRow cornerRow in cornerTable.Rows)
                     {
                         location.MapArea.Corners.Add(new LatLong(cornerRow));
                     }
+                }
+                if (location.HasAltNames)
+                {
+                    yield return TM.MakeDbCall(currentThread, Program.ConnectionString, "spGetLocationAltNames",
+                        new SqlParameter("@location", location.Id));
+                    location.AddAltNames(TM.GetResult<DataTable>(currentThread));
+                }
+                if (location.HasLinks && !hideDescs)
+                {
+                    yield return TM.MakeDbCall(currentThread, Program.ConnectionString, "spGetLocationLinks",
+                        new SqlParameter("@location", location.Id));
+                    location.AddLinks(TM.GetResult<DataTable>(currentThread));
                 }
                 response.Locations.Add(location);
             }
@@ -176,64 +234,52 @@ namespace RHITMobile
 
     public class LocationsDataIdHandler : PathHandler
     {
-        protected override IEnumerable<ThreadInfo> HandleUnknownPath(ThreadManager TM, IEnumerable<string> path, Dictionary<string, string> query)
+        public LocationsDataIdHandler()
         {
-            var currentThread = TM.CurrentThread;
+            IntRedirect = new LocationsDataIdIdHandler();
+        }
+    }
 
-            int location;
-            if (!Int32.TryParse(path.First(), out location) || path.Count() > 1)
-            {
-                yield return TM.Return(currentThread, new JsonResponse(HttpStatusCode.BadRequest));
-            }
-            else
-            {
-                yield return TM.Await(currentThread, LocationsDataHandler.GetLocations(TM, "spGetLocation", false, query, new SqlParameter("@location", location)));
-                yield return TM.Return(currentThread);
-            }
+    public class LocationsDataIdIdHandler : PathHandler
+    {
+        protected override IEnumerable<ThreadInfo> HandleNoPath(ThreadManager TM, Dictionary<string, string> query, object state)
+        {
+            return LocationsDataHandler.GetLocations(TM, "spGetLocation", false, query, new SqlParameter("@location", (int)state));
         }
     }
 
     public class LocationsDataWithinHandler : PathHandler
     {
-        private PathHandler _noTop = new LocationsDataWithinNoTopHandler();
-
-        protected override IEnumerable<ThreadInfo> HandleUnknownPath(ThreadManager TM, IEnumerable<string> path, Dictionary<string, string> query)
+        public LocationsDataWithinHandler()
         {
-            var currentThread = TM.CurrentThread;
-
-            int location;
-            if (!Int32.TryParse(path.First(), out location))
-            {
-                yield return TM.Return(currentThread, new JsonResponse(HttpStatusCode.BadRequest));
-            }
-            else
-            {
-                var newpath = path.Skip(1);
-                if (newpath.Any() && newpath.First() == "notop")
-                {
-                    query.Add("?id?", location.ToString());
-                    yield return TM.Await(currentThread, _noTop.HandlePath(TM, newpath.Skip(1), query));
-                }
-                else
-                {
-                    yield return TM.Await(currentThread, LocationsDataHandler.GetLocations(TM, "spGetLocationsWithin", false, query, new SqlParameter("@location", location)));
-                }
-                yield return TM.Return(currentThread);
-            }
+            IntRedirect = new LocationsDataWithinIdHandler();
         }
     }
 
-    public class LocationsDataWithinNoTopHandler : PathHandler
+    public class LocationsDataWithinIdHandler : PathHandler
     {
-        protected override IEnumerable<ThreadInfo> HandleNoPath(ThreadManager TM, Dictionary<string, string> query)
+        public LocationsDataWithinIdHandler()
         {
-            return LocationsDataHandler.GetLocations(TM, "spGetLocationsWithinNoTop", false, query, new SqlParameter("@location", Int32.Parse(query["?id?"])));
+            Redirects.Add("notop", new LocationsDataWithinIdNoTopHandler());
+        }
+
+        protected override IEnumerable<ThreadInfo> HandleNoPath(ThreadManager TM, Dictionary<string, string> query, object state)
+        {
+            return LocationsDataHandler.GetLocations(TM, "spGetLocationsWithin", false, query, new SqlParameter("@location", (int)state));
+        }
+    }
+
+    public class LocationsDataWithinIdNoTopHandler : PathHandler
+    {
+        protected override IEnumerable<ThreadInfo> HandleNoPath(ThreadManager TM, Dictionary<string, string> query, object state)
+        {
+            return LocationsDataHandler.GetLocations(TM, "spGetLocationsWithinNoTop", false, query, new SqlParameter("@location", (int)state));
         }
     }
 
     public class LocationsDataTopHandler : PathHandler
     {
-        protected override IEnumerable<ThreadInfo> HandleNoPath(ThreadManager TM, Dictionary<string, string> query)
+        protected override IEnumerable<ThreadInfo> HandleNoPath(ThreadManager TM, Dictionary<string, string> query, object state)
         {
             return LocationsDataHandler.GetLocations(TM, "spGetTopLocations", false, query);
         }
@@ -246,7 +292,7 @@ namespace RHITMobile
             Redirects.Add("nodesc", new LocationsDataAllNoDescHandler());
         }
 
-        protected override IEnumerable<ThreadInfo> HandleNoPath(ThreadManager TM, Dictionary<string, string> query)
+        protected override IEnumerable<ThreadInfo> HandleNoPath(ThreadManager TM, Dictionary<string, string> query, object state)
         {
             return LocationsDataHandler.GetLocations(TM, "spGetAllLocations", false, query);
         }
@@ -254,7 +300,7 @@ namespace RHITMobile
 
     public class LocationsDataAllNoDescHandler : PathHandler
     {
-        protected override IEnumerable<ThreadInfo> HandleNoPath(ThreadManager TM, Dictionary<string, string> query)
+        protected override IEnumerable<ThreadInfo> HandleNoPath(ThreadManager TM, Dictionary<string, string> query, object state)
         {
             return LocationsDataHandler.GetLocations(TM, "spGetAllLocationsNoDesc", true, query);
         }
@@ -264,12 +310,12 @@ namespace RHITMobile
     {
         public LocationsNamesHandler()
         {
-            Redirects.Add("alts", new LocationsNamesAltsHandler());
+            Redirects.Add("departable", new LocationsNamesDepartableHandler());
         }
 
-        protected override IEnumerable<ThreadInfo> HandleNoPath(ThreadManager TM, Dictionary<string, string> query)
+        protected override IEnumerable<ThreadInfo> HandleNoPath(ThreadManager TM, Dictionary<string, string> query, object state)
         {
-            return GetNames(TM, "spGetNames", query);
+            return GetNames(TM, "spGetLocationNames", query);
         }
 
         public static IEnumerable<ThreadInfo> GetNames(ThreadManager TM, string procedure, Dictionary<string, string> query)
@@ -303,37 +349,30 @@ namespace RHITMobile
         }
     }
 
-    public class LocationsNamesAltsHandler : PathHandler
+    public class LocationsNamesDepartableHandler : PathHandler
     {
-        protected override IEnumerable<ThreadInfo> HandleNoPath(ThreadManager TM, Dictionary<string, string> query)
+        protected override IEnumerable<ThreadInfo> HandleNoPath(ThreadManager TM, Dictionary<string, string> query, object state)
         {
-            return LocationsNamesHandler.GetNames(TM, "spGetNamesOnlyAlts", query);
+            return LocationsNamesHandler.GetNames(TM, "spGetLocationNamesDepartable", query);
         }
     }
 
     public class LocationsDescHandler : PathHandler
     {
-        protected override IEnumerable<ThreadInfo> HandleUnknownPath(ThreadManager TM, IEnumerable<string> path, Dictionary<string, string> query)
+        public LocationsDescHandler()
         {
-            var currentThread = TM.CurrentThread;
-
-            int location;
-            if (!Int32.TryParse(path.First(), out location) || path.Count() > 1)
-            {
-                yield return TM.Return(currentThread, new JsonResponse(HttpStatusCode.BadRequest));
-            }
-            else
-            {
-                yield return TM.Await(currentThread, GetDescription(TM, location));
-                yield return TM.Return(currentThread);
-            }
+            IntRedirect = new LocationsDescIdHandler();
         }
+    }
 
-        public static IEnumerable<ThreadInfo> GetDescription(ThreadManager TM, int location)
+    // Need to add links to response
+    public class LocationsDescIdHandler : PathHandler
+    {
+        protected override IEnumerable<ThreadInfo> HandleNoPath(ThreadManager TM, Dictionary<string, string> query, object state)
         {
             var currentThread = TM.CurrentThread;
 
-            yield return TM.MakeDbCall(currentThread, Program.ConnectionString, "spGetLocationDesc", new SqlParameter("@location", location));
+            yield return TM.MakeDbCall(currentThread, Program.ConnectionString, "spGetLocationDesc", new SqlParameter("@location", (int)state));
             var table = TM.GetResult<DataTable>(currentThread);
             foreach (DataRow row in table.Rows)
             {
@@ -341,12 +380,5 @@ namespace RHITMobile
             }
             yield return TM.Return(currentThread, new JsonResponse(HttpStatusCode.BadRequest));
         }
-    }
-
-    public enum SearchHighlight
-    {
-        NA = 0,
-        S = 1,
-        SH = 2,
     }
 }

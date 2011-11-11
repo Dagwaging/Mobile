@@ -10,7 +10,7 @@ namespace RHITMobileUtil
     public class Program
     {
         private static int exec = 0;
-        public static string upfile = @"C:\Users\glowskst\Desktop\Locations\Logan.txt";
+        public static string upfile = @"C:\Users\glowskst\Desktop\Locations\Olin1.txt";
         public static string trifile = @"C:\Users\glowskst\Desktop\Locations\Logan3.bmp";
 
         [STAThreadAttribute]
@@ -53,10 +53,14 @@ namespace RHITMobileUtil
 
                     commapos = line.IndexOf(',');
                     string name = line.Substring(0, commapos);
+                    line = line.Substring(commapos + 1);
+
+                    commapos = line.IndexOf(',');
                     int parentInt;
                     int? parent = null;
-                    if (Int32.TryParse(line.Substring(commapos + 1), out parentInt))
+                    if (Int32.TryParse(line.Substring(0, commapos), out parentInt))
                         parent = parentInt;
+                    string type = line.Substring(commapos + 1);
 
                     line = fileReader.ReadLine();
 
@@ -67,13 +71,15 @@ namespace RHITMobileUtil
                         line = fileReader.ReadLine();
                     }
 
+                    Dictionary<string, string> links = new Dictionary<string, string>();
+                    while (line.Length > 5 && line.Substring(0, 5) == "link:")
+                    {
+                        commapos = line.IndexOf(',');
+                        links.Add(line.Substring(5, commapos - 5), line.Substring(commapos + 1));
+                        line = fileReader.ReadLine();
+                    }
+
                     string description = line;
-
-                    line = fileReader.ReadLine();
-
-                    commapos = line.IndexOf(',');
-                    int isPOI = Int32.Parse(line.Substring(0, commapos));
-                    int onQuickList = Int32.Parse(line.Substring(commapos + 1));
 
                     line = fileReader.ReadLine();
 
@@ -106,7 +112,8 @@ namespace RHITMobileUtil
                         command.CommandText = String.Format("DELETE FROM MapAreaCorner WHERE area = {0}", locationid);
                         command.ExecuteNonQuery();
                         command = connection.CreateCommand();
-                        command.CommandText = String.Format("UPDATE Location SET name = '{1}', description = '{2}', lat = {3}, lon = {4}, labelonhybrid = {5}, minzoomlevel = {6}, parent = {7}, ispoi = {8}, onquicklist = {9}, istop = 0 WHERE id = {0}", locationid, name, description, lat, lon, labelOnHybrid ?? (object)"NULL", minZoomLevel ?? (object)"NULL", parent ?? (object)"NULL", isPOI, onQuickList);
+                        command.CommandText = String.Format("UPDATE Location SET name = '{1}', lat = {2}, lon = {3}, parent = {4}, description = '{5}', labelonhybrid = {6}, minzoomlevel = {7}, type = '{8}', hasalts = {9}, haslinks = {10}, ispoi = {11}, onquicklist = {12}, istop = 0 WHERE id = {0}",
+                                                            locationid, name, lat, lon, parent ?? (object)"NULL", description, labelOnHybrid ?? (object)"NULL", minZoomLevel ?? (object)"NULL", type, altnames.Any() ? 1 : 0, links.Any() ? 1 : 0, type == "QL" || type == "PI" ? 1 : 0, type == "QL" ? 1 : 0);
                         command.ExecuteNonQuery();
                     }
                     else
@@ -116,16 +123,35 @@ namespace RHITMobileUtil
                         command.CommandText = String.Format("DELETE FROM MapAreaCorner WHERE area = {0}", locationid);
                         command.ExecuteNonQuery();
                         command = connection.CreateCommand();
-                        command.CommandText = String.Format("INSERT INTO Location VALUES({0}, '{1}', {2}, {3}, {4}, {5}, {6}, '{7}', {8}, {9}, 0)", locationid, name, lat, lon, parent ?? (object)"NULL", isPOI, onQuickList, description, labelOnHybrid ?? (object)"NULL", minZoomLevel ?? (object)"NULL");
+                        command.CommandText = String.Format("INSERT INTO Location(id, name, lat, lon, parent, description, labelonhybrid, minzoomlevel, type, hasalts, haslinks, ispoi, onquicklist, istop VALUES({0}, '{1}', {2}, {3}, {4}, '{5}', {6}, {7}, '{8}', {9}, {10}, {11}, {12}, 0)",
+                                                            locationid, name, lat, lon, parent ?? (object)"NULL", description, labelOnHybrid ?? (object)"NULL", minZoomLevel ?? (object)"NULL", type, altnames.Any() ? 1 : 0, links.Any() ? 1 : 0, type == "QL" || type == "PI" ? 1 : 0, type == "QL" ? 1 : 0);
                         command.ExecuteNonQuery();
                     }
+
                     Console.WriteLine(locationid);
+
+                    command = connection.CreateCommand();
+                    command.CommandText = String.Format("DELETE FROM Hyperlink WHERE location = {0}", locationid);
+                    command.ExecuteNonQuery();
+                    foreach (var link in links)
+                    {
+                        command = connection.CreateCommand();
+                        command.CommandText = String.Format("INSERT INTO Hyperlink(loc, name, url) VALUES('{0}', '{1}', '{2}')",
+                                                            locationid, link.Key, link.Value);
+                        command.ExecuteNonQuery();
+                    }
+
+                    command = connection.CreateCommand();
+                    command.CommandText = String.Format("DELETE FROM LocationAltName WHERE id = {0}", locationid);
+                    command.ExecuteNonQuery();
                     foreach (string altname in altnames)
                     {
                         command = connection.CreateCommand();
-                        command.CommandText = String.Format("INSERT INTO LocationAltName VALUES('{0}', {1})", altname, locationid);
+                        command.CommandText = String.Format("INSERT INTO LocationAltName(id, name) VALUES({0}, '{1}')",
+                                                            locationid, altname);
                         command.ExecuteNonQuery();
                     }
+
                     if (isMapArea)
                     {
                         while (!String.IsNullOrEmpty(line = fileReader.ReadLine()))

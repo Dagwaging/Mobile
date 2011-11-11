@@ -54,9 +54,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Directions.cs" />
+    <Compile Include="DirectionsFinder.cs" />
     <Compile Include="Hash.cs" />
     <Compile Include="Locations.cs" />
-    <Compile Include="MapAreas.cs" />
     <Compile Include="PathHandler.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="JsonObjects.cs" />

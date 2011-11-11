@@ -94,7 +94,7 @@ namespace RHITMobile
 
             if (result == null)
             {
-                yield return TM.Await(currentThread, _handler.HandlePath(TM, path, query));
+                yield return TM.Await(currentThread, _handler.HandlePath(TM, path, query, new object()));
                 try
                 {
                     result = TM.GetResult<JsonResponse>(currentThread);
@@ -132,11 +132,11 @@ namespace RHITMobile
     {
         public InitialPathHandler()
         {
-            Redirects.Add("mapareas", new MapAreasHandler());
             Redirects.Add("locations", new LocationsHandler());
+            Redirects.Add("directions", new DirectionsHandler());
         }
 
-        protected override IEnumerable<ThreadInfo> HandleNoPath(ThreadManager TM, Dictionary<string, string> query)
+        protected override IEnumerable<ThreadInfo> HandleNoPath(ThreadManager TM, Dictionary<string, string> query, object state)
         {
             var currentThread = TM.CurrentThread;
             yield return TM.Return(currentThread, new JsonResponse(new MessageResponse("Server is active.")));

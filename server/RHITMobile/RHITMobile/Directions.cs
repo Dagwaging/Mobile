@@ -3,95 +3,85 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Net;
+using System.Data.SqlClient;
+using System.Data;
 
 namespace RHITMobile
 {
-    public class Directions
+    public class DirectionsHandler : PathHandler
     {
-        private static Hash<Directions> _directions = new Hash<Directions>(16);
-
-        public static void EnqueueMonitors(ThreadManager TM)
+        public DirectionsHandler()
         {
-            TM.Enqueue(_directions.LookForNewIndex(TM), ThreadPriority.Low);
-            TM.Enqueue(_directions.CheckForIncreaseSize(TM), ThreadPriority.Low);
+            Redirects.Add("status", new DirectionsStatusHandler());
+            Redirects.Add("fromloc", new DirectionsFromLocHandler());
+            Redirects.Add("fromgps", new DirectionsFromGpsHandler());
         }
+    }
 
-        public static void WriteStatus()
-        {
-            Console.Write("Directions in progress: ");
-            _directions.WriteStatus();
-        }
-
-        public static IEnumerable<ThreadInfo> HandleDirectionsRequest(ThreadManager TM, IEnumerable<string> path, Dictionary<string, string> query)
+    public class DirectionsStatusHandler : PathHandler
+    {
+        protected override IEnumerable<ThreadInfo> HandleIntPath(ThreadManager TM, int value, object state)
         {
             var currentThread = TM.CurrentThread;
-            if (!path.Any())
+            IntRedirect = DirectionsFinder.GetFinder(value);
+            if (IntRedirect == null)
             {
-                if (query.ContainsKey("id"))
-                {
-                    int id;
-                    if (Int32.TryParse(query["id"], out id))
-                    {
-                        if (_directions[id] != null)
-                        {
-                            yield return TM.Await(currentThread, _directions[id].ReportProgress(TM));
-                            yield return TM.Return(currentThread);
-                        }
-                        else
-                        {
-                            yield return TM.Return(currentThread, new JsonResponse(HttpStatusCode.NoContent));
-                        }
-                    }
-                    else
-                    {
-                        yield return TM.Return(currentThread, new JsonResponse(HttpStatusCode.BadRequest));
-                    }
-                }
-                else
-                {
-                    var directions = new Directions();
-                    int id = _directions.Insert(directions);
-                    TM.Enqueue(directions.GetDirections(TM, id));
-                    yield return TM.Await(currentThread, directions.ReportProgress(TM));
-                    yield return TM.Return(currentThread);
-                }
+                yield return TM.Return(currentThread, new JsonResponse(HttpStatusCode.BadRequest));
+            }
+            yield return TM.Return(currentThread, -1);
+        }
+    }
+
+    public class DirectionsFromLocHandler : PathHandler
+    {
+        protected override IEnumerable<ThreadInfo> HandleIntPath(ThreadManager TM, int value, object state)
+        {
+            var currentThread = TM.CurrentThread;
+            yield return TM.MakeDbCall(currentThread, Program.ConnectionString, "spGetLocationDepartNode",
+                new SqlParameter("@location", value));
+            var table = TM.GetResult<DataTable>(currentThread);
+            if (table.Rows.Count > 0)
+            {
+                IntRedirect = new DirectionsToHandler();
+                yield return TM.Return(currentThread, new DirectionsFinder(table.Rows[0]));
             }
             else
             {
-                yield return TM.Return(currentThread, new JsonResponse(HttpStatusCode.BadGateway));
+                IntRedirect = null;
+                yield return TM.Return(currentThread, new JsonResponse(HttpStatusCode.BadRequest));
             }
         }
+    }
 
-        private int _done = 0;
-        private int _id;
+    public class DirectionsFromGpsHandler : PathHandler
+    {
+    }
 
-        public IEnumerable<ThreadInfo> GetDirections(ThreadManager TM, int id)
+    public class DirectionsToHandler : PathHandler
+    {
+        public DirectionsToHandler()
+        {
+            Redirects.Add("toloc", new DirectionsToLocHandler());
+            Redirects.Add("tobath", new DirectionsToBathHandler());
+            Redirects.Add("toprinter", new DirectionsToPrinterHandler());
+        }
+    }
+
+    public class DirectionsToLocHandler : PathHandler
+    {
+        protected override IEnumerable<ThreadInfo> HandleIntPath(ThreadManager TM, int value, object state)
         {
             var currentThread = TM.CurrentThread;
-            _id = id;
-            for (int i = 1; i <= 100; i++)
-            {
-                yield return TM.Sleep(currentThread, 300);
-                _done = i;
-            }
-            yield return TM.Sleep(currentThread, 60000);
-            _directions.Remove(_id);
-            yield return TM.Return(currentThread);
+            IntRedirect = (DirectionsFinder)state;
+            yield return TM.Return(currentThread, value);
         }
+    }
 
-        public IEnumerable<ThreadInfo> ReportProgress(ThreadManager TM)
-        {
-            var currentThread = TM.CurrentThread;
-            yield return TM.Sleep(currentThread, 1000);
-            int done = _done;
-            if (done < 100)
-            {
-                yield return TM.Return(currentThread, new JsonResponse(new DirectionsResponse(done, _id, "Not done")));
-            }
-            else
-            {
-                yield return TM.Return(currentThread, new JsonResponse(new DirectionsResponse(100, _id, "Done!")));
-            }
-        }
+    public class DirectionsToBathHandler : PathHandler
+    {
+    }
+
+    public class DirectionsToPrinterHandler : PathHandler
+    {
     }
 }
