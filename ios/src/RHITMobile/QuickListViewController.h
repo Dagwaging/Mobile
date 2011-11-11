@@ -22,6 +22,7 @@
 @class MapViewController;
 @class RHAnnotation;
 
+/// \ingroup views
 @interface QuickListViewController : UIViewController
 <UIPickerViewDelegate, UIPickerViewDataSource, UITableViewDataSource>
 

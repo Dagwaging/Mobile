@@ -28,7 +28,7 @@
 /// Classes, categories, and protocols specific to sending to and receiving data
 /// from the server. This modules includes abstractions for both the data
 /// provider and subscriber delegate functionality.
-/// \defgroup views Application-Level Views
+/// \defgroup views View Controllers
 /// The classes and view controllers that tie everything together and make this
 /// an actual applicaction.
 /// \defgroup model Model Layer
@@ -152,21 +152,51 @@
 ///
 /// \section application_structure_sec Application Structure
 ///
-/// For help getting a build environment set up, refer to README.md in the
-/// top-level ios directory of the repository. This documentation assumes
-/// that you have a working development environment for the project.
+/// The above section highlights a high-level breakdown of the functoinality
+/// of the app, along with references to the pertinent classes for each
+/// feature, but there is some general architecture that it doesn't cover.
+/// RHIT Mobile tries greatly to conform to MVC paradigms, which is encouraged
+/// by the Cocoa Touch framework. As a result, the architecture of the app
+/// is easily partitionable into the following categories:
 ///
-/// Your best bet at getting familiar with the structure of this project is
-/// to start at the modules page and explore the class structure from there.
-/// To help you get started, here's a quick overview of the various modules:
-/// - \ref model - Start here. This is where all of the domain-level objects
-/// exist. These classes also include hooks into Core Data for persistance.
-/// - \ref web - Functionality for fetching and sending objects to and from
-/// the server. This might be a good next read.
-/// - \ref map - Map-specific data. Don't worry about this stuff unless you
-/// need to work with the map.
-/// - \ref views - Once you're familiar with the various compontents of the
-/// project, this module will show you how it's all tied together.
+/// \subsection models_classes_sec Model Classes
+///
+/// The model layer or RHIT Mobile strives to be the most application agnostic
+/// part of the project, though it does have some direct ties to data storage
+/// mechanism because of the CoreData and Cocoa Touch framework paradigms that
+/// are accepted and expected for iOS development. The full listing of model
+/// classes can be found on the \ref model page. Each model member is a subclass
+/// of NSManagedObject, which allows it to be added, deleted, queried, and
+/// updated easily through the CoreData framework. Apart from this single tie
+/// to a data storage mechanism, model classes are designed to be agnostic
+/// of the application around them.
+///
+/// \subsection controller_classes_sec Controller Classes
+///
+/// Controller classes can be broken up into three distinct classes: \ref views,
+/// \ref web, and \ref map. In a typical or generic MVC application, the view
+/// controller layer is really the only required layer, but because of the
+/// large amount of application functionality devoted to HTTP/JSON interaction
+/// and map controls and interaction, it makes logical sense to break these
+/// off into separate categories. The \ref views category contains the
+/// UIViewController subclasses responsible for displaying views described
+/// below to the user, responding to user input, and controlling program flow.
+/// Classes in the \ref map category are specific to the MapKit framework
+/// and the additions and modifications RHIT Mobile makes to it. Because the
+/// application is primarily data driven from a network separated server, there
+/// is a lot of HTTP interaction and JSON parsing that must take place to
+/// properly communicate with the server. All of this functionality is defined
+/// by classes in the \ref web category.
+///
+/// \subsection views_sec Views
+///
+/// Because RHIT Mobile utilizes the Cocoa Touch framework, there aren't entire
+/// classes devoted to providing views. Rather, views are defined in .xib files
+/// and contain layout, style, and controller instance variable connection data.
+/// For each view controller listed in the above controller section (easily
+/// browsable from the \ref views page), there is an associated layout file
+/// of the same name, without the trailing "View". These files are discoverable
+/// in the project repository and map 1:1 with each of their view controllers.
 ///
 /// \section doc_maintenance_sec Maintaining This Documentation
 ///

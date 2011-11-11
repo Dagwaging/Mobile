@@ -19,6 +19,7 @@
 
 #import <UIKit/UIKit.h>
 
+/// \ingroup views
 @interface DirectoryViewController : UIViewController
 
 @end

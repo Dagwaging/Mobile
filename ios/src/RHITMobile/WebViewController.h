@@ -19,6 +19,8 @@
 
 #import <UIKit/UIKit.h>
 
+
+/// \ingroup views
 @interface WebViewController : UIViewController
 
 @property (nonatomic, retain) IBOutlet UIWebView *webView;
