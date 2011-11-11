@@ -16,7 +16,6 @@
 /// \defgroup tile_sources Tile Sources
 /// Map tile source classes. This includes cutom overlays.
 
-
 // Doxygen main page documentation
 
 /// \mainpage RHIT Mobile WP7 Developer Documentation
