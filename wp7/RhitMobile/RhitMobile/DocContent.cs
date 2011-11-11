@@ -24,23 +24,16 @@
 /// \section intro_sec Introduction
 ///
 /// Welcome to the WP7 developer documetation for the RHIT Mobile project.
-/// The purpose of this documentation is to provide an easily digestable
-/// overview of how the project is structured, specifically for future teams
-/// who may be assigned maintenance of this work, project advisors, or even
-/// curious developers.
+/// The purpose of this documentation is to provide an easily digestable overview of how the project is structured, specifically for future teams who may be assigned maintenance of this work, project advisors, or even curious developers.
 ///
 /// \section where_to_start Where To Start
 ///
-/// For help getting a build environment set up, refer to README.md that can 
-/// be found <a href="https://github.com/RHIT/Mobile/tree/master/wp7">here</a>
-/// , the top-level wp7 directory of the repository. This documentation assumes
-/// that you have a working development environment for the project.
+/// For help getting a build environment set up, refer to README.md that can be found <a href="https://github.com/RHIT/Mobile/tree/master/wp7">here</a>, the top-level wp7 directory of the repository.
+/// This documentation assumes that you have a working development environment for the project.
 ///
 /// \section project_overview_sec Project Overview
 ///
-/// RHIT Mobile WP7 Edition is the Windows Phone 7 branch of the RHIT Mobile
-/// project, a senior project commissioned during the 2011-2012 school year
-/// and maintained by various other Rose-Hulman bodies afterwards.
+/// RHIT Mobile WP7 Edition is the Windows Phone 7 branch of the RHIT Mobile project, a senior project commissioned during the 2011-2012 school year and maintained by various other Rose-Hulman bodies afterwards.
 /// 
 /// \section overview Architecture Overview
 /// 
@@ -50,7 +43,6 @@
 /// They each utilize one of the classes found in the \ref services group.
 /// \ref objects conatins all of the object models.
 /// \ref tile_sources contains all of the available map tile sources and overlays.
-/// 
 /// 
 /// - The views handle page navigation and user events.
 /// - Anytime one of the views need the map, manipulate it, or get information from it they will use the \link RhitMobile.ObjectModel.RhitMap RhitMap \endlink singleton class.
@@ -66,7 +58,7 @@
 ///  
 /// \section features Feature Mapping
 /// 
-/// \subsection Main Page (\link RhitMobile.MapPage MapPage \endlink)
+/// \subsection main_page Main Page ( \link RhitMobile.MapPage MapPage \endlink )
 /// 
 /// The app starts out in the \link RhitMobile.MapPage MapPage \endlink and uses it as the main page for the app.
 /// The \link RhitMobile.MapPage MapPage \endlink contains an app bar with buttons: 'me', 'rhit', and 'search'.
@@ -78,7 +70,7 @@
 /// If the user then clicks (taps) on the PushPin, the app navigates to the \link RhitMobile.InfoPage InfoPage \endlink for that building.
 /// Once the user navigates away from this page, they only need to use the device's 'back' hardware button to return to this page.
 /// 
-/// \subsection Location Information Page (\link RhitMobile.InfoPage InfoPage \endlink)
+/// \subsection info_page Location Information Page (\link RhitMobile.InfoPage InfoPage \endlink)
 /// 
 /// This page contains all of the information pertinent to the given location.
 /// This includes the location's name, alternate names, description, links to relevant websites, and other locations contained within this location (child locations).
@@ -86,13 +78,13 @@
 /// All of this information is conatined within the corresponding \link RhitMobile.ObjectModel.RhitLocation RhitLocation \endlink.
 /// This page also provides links back to map with it's location selected on the map.
 /// 
-/// \subsection Top Locations Page (\link RhitMobile.QuickListPage QuickListPage \endlink)
+/// \subsection quicklist_page Top Locations Page (\link RhitMobile.QuickListPage QuickListPage \endlink)
 /// This is just a simple list of \link RhitMobile.ObjectModel.RhitLocation RhitLocations \endlink that link back to the map with the selected location PushPin shown.
 /// 
-/// \subsection Search Page (\link RhitMobile.SearchPage SearchPage \endlink)
+/// \subsection search_page Search Page (\link RhitMobile.SearchPage SearchPage \endlink)
 /// This page allows the user to search for both people and places with Rose-Hulman.
 /// 
-/// \subsection Application Settings Page (\link RhitMobile.SettingsPage SettingsPage \endlink)
+/// \subsection settings_page Application Settings Page (\link RhitMobile.SettingsPage SettingsPage \endlink)
 /// This page allows the user to change several different options for the app.
 /// For example, the user can switch between using Bing maps to using Google maps.
 /// 
