@@ -8,6 +8,7 @@ using System.Windows.Media;
 using System;
 
 namespace RhitMobile {
+    /// \ingroup pages
     public partial class SearchPage : PhoneApplicationPage {
         public SearchPage() {
             InitializeComponent();

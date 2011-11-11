@@ -36,6 +36,12 @@
 /// , the top-level wp7 directory of the repository. This documentation assumes
 /// that you have a working development environment for the project.
 ///
+/// \section project_overview_sec Project Overview
+///
+/// RHIT Mobile WP7 Edition is the Windows Phone 7 branch of the RHIT Mobile
+/// project, a senior project commissioned during the 2011-2012 school year
+/// and maintained by various other Rose-Hulman bodies afterwards.
+/// 
 /// \section overview Architecture Overview
 /// 
 /// Each view of the app has both a xaml and C# file associated with it.

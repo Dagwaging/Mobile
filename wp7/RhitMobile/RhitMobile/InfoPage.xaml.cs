@@ -10,6 +10,7 @@ using RhitMobile.ObjectModel;
 using RhitMobile.Services;
 
 namespace RhitMobile {
+    /// \ingroup pages
     public partial class InfoPage : PhoneApplicationPage {
         public InfoPage() {
             InitializeComponent();

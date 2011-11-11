@@ -15,6 +15,7 @@ using RhitMobile.ObjectModel;
 using RhitMobile.Services;
 
 namespace RhitMobile {
+    /// \ingroup pages
     public partial class MapPage : PhoneApplicationPage {
         #region Private Fields
         private GeoCoordinateWatcher _userLocationWatcher;

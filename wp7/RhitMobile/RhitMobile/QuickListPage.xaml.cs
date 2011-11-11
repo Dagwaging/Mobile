@@ -8,6 +8,7 @@ using RhitMobile.ObjectModel;
 using RhitMobile.Services;
 
 namespace RhitMobile {
+    /// \ingroup pages
     public partial class QuiuckListPage : PhoneApplicationPage {
         public QuiuckListPage() {
             InitializeComponent();

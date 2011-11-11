@@ -15,6 +15,7 @@ using RhitMobile.ObjectModel;
 using RhitMobile.MapSource;
 
 namespace RhitMobile {
+    /// \ingroup pages
     public partial class SettingsPage : PhoneApplicationPage {
         private List<ListPickerObject> bingTypes;
         private List<ListPickerObject> googleTypes;
