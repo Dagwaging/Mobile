@@ -1,21 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
+﻿using System.Collections.Generic;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
-using Microsoft.Phone.Controls;
 using System.Windows.Navigation;
-using RhitMobile.ObjectModel;
+using Microsoft.Phone.Controls;
 using RhitMobile.MapSource;
+using RhitMobile.ObjectModel;
 
 namespace RhitMobile {
     /// \ingroup pages
+    /// <summary>
+    /// 
+    /// </summary>
     public partial class SettingsPage : PhoneApplicationPage {
         private List<ListPickerObject> bingTypes;
         private List<ListPickerObject> googleTypes;

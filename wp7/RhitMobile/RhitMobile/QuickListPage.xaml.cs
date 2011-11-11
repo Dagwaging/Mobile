@@ -9,8 +9,8 @@ using RhitMobile.Services;
 
 namespace RhitMobile {
     /// \ingroup pages
-    public partial class QuiuckListPage : PhoneApplicationPage {
-        public QuiuckListPage() {
+    public partial class QuickListPage : PhoneApplicationPage {
+        public QuickListPage() {
             InitializeComponent();
 
             DataCollector.Instance.UpdateAvailable += new ServiceEventHandler(OnUpdateAvailable);

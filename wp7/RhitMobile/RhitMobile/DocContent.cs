@@ -63,9 +63,31 @@
 /// - All views listen to at least one \link RhitMobile.Events.ServiceEvent ServiceEvent \endlink handler to handle updated data.
 ///  - All server responses are handled by \link RhitMobile.Services.ResponseHandler ResponseHandler \endlink, parsed, and made into a \link RhitMobile.Events.ServiceEvent ServiceEvent \endlink.
 ///  - Data from the server responses are parsed uses the classes in \link RhitMobile.ObjectModel.DataContracts DataContracts \endlink, which are then usually converted into \link RhitMobile.ObjectModel.RhitLocation RhitLocation \endlink objects.
+///  
+/// \section features Feature Mapping
+/// 
+/// \subsection Main Page (MapPage)
+/// 
+/// The app starts out in the MapPage and uses it as the main page for the app.
+/// The MapPage contains an app bar with buttons: 'me', 'rhit', and 'search'.
+/// The 'me' and 'rhit' buttons both indirectly link to methods in RhitMap that change the map's viewport.
+/// The 'search' button switches to the SearchPage.
+/// The app bar also contains two menu options: 'quicklist' and 'settings' which open the QuickListPage and SettingsPage respectively.
+/// Apart from the app bar, the MapPage also always the user to click on buildings.
+/// When a user clicks (taps) on a building, the building is highlighted and a PushPin appears with the name of the building.
+/// If the user then clicks (taps) on the PushPin, the app navigates to the InfoPage for that building.
+/// 
+/// \subsection Location Information Page (InfoPage)
+/// 
+/// \subsection Top Locations Page (QuickListPage)
+/// 
+/// \subsection Search Page (SearchPage)
+/// 
+/// \subsection Application Settings Page (SettingsPage)
+/// 
 /// 
 /// \section doc_maintenance_sec Maintaining This Documentation
-///
+/// 
 /// For developers working on this project after its initial creation, please
 /// document any code you add or change inline, using the existing files as
 /// an example. For administrative-level documentation, including this index
