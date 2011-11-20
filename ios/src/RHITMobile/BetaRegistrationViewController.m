@@ -88,7 +88,7 @@
 -(void)setViewMovedUp:(BOOL)movedUp
 {
     [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationDuration:0.5]; // if you want to slide up the view
+    [UIView setAnimationDuration:0.25]; // if you want to slide up the view
     
     CGRect rect = self.view.frame;
     if (movedUp)

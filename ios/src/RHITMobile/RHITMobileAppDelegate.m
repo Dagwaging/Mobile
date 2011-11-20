@@ -343,9 +343,6 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     // Kick off a network update
     [self.mapViewController.remoteHandler checkForLocationUpdates];
-    
-    // Kick off a preferences update
-    [self.mapViewController refreshPreferences];
 }
 
 @end
