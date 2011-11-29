@@ -51,7 +51,7 @@
 #define kMinZoomLevelKey @"MinZoomLevel"
 #define kCenterKey @"Center"
 #define kLatKey @"Lat"
-#define kLongKey @"Long"
+#define kLongKey @"Lon"
 #define kCornersKey @"Corners"
 
 #pragma mark Private Method Declarations

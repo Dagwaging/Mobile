@@ -19,11 +19,19 @@
 
 #import <UIKit/UIKit.h>
 
+typedef enum RHSearchViewControllerType_ {
+    RHSearchViewControllerTypeLocation = 0,
+    RHSearchViewControllerTypePeople = 1
+} RHSearchViewControllerType;
 
 /// \ingroup views
 /// View controller for the search portion of the application.
-@interface SearchViewController : UIViewController <UISearchBarDelegate>
+@interface SearchViewController : UIViewController <UISearchBarDelegate, UITableViewDelegate>
+
+@property (nonatomic, assign) RHSearchViewControllerType searchType;
 
 @property (nonatomic, retain) IBOutlet UISearchBar *searchBar;
+
+@property (nonatomic, retain) IBOutlet UITableView *tableView;
 
 @end

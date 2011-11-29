@@ -23,10 +23,23 @@
 @implementation SearchViewController
 
 @synthesize searchBar;
+@synthesize searchType;
+@synthesize tableView;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.navigationItem.title = @"Search";
+    if (self.searchType == RHSearchViewControllerTypeLocation) {
+        self.navigationItem.title = @"Search Locations";
+    } else if (self.searchType == RHSearchViewControllerTypePeople) {
+        self.navigationItem.title = @"Search People";
+    } else {
+        self.navigationItem.title = @"Search";
+    }
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [self.searchBar becomeFirstResponder];
+    [super viewDidAppear:animated];
 }
 
 
@@ -54,13 +67,13 @@
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)inSearchBar {
     [inSearchBar resignFirstResponder];
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Sorry..."
-                                                    message:@"Searching isn't ready yet. We'll let you know when it is."
-                                                   delegate:nil
-                                          cancelButtonTitle:@"OK"
-                                          otherButtonTitles:nil];
-    [alert show];
-    [alert release];
+    
+    self.navigationItem.title = @"Searching...";
+    UIActivityIndicatorView* activityIndicatorView = [[[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(20, 0, 20, 20)] autorelease];
+    [activityIndicatorView startAnimating];
+    
+    UIBarButtonItem *activityButtonItem = [[[UIBarButtonItem alloc] initWithCustomView:activityIndicatorView] autorelease];
+    self.navigationItem.rightBarButtonItem = activityButtonItem;
 }
 
 @end

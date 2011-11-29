@@ -182,6 +182,7 @@
 - (IBAction)displaySearch:(id)sender {
     SearchViewController *search = [SearchViewController alloc];
     search = [search initWithNibName:@"SearchView" bundle:nil];
+    search.searchType = RHSearchViewControllerTypeLocation;
     [self.navigationController pushViewController:search animated:YES];
     [search release];
 }
