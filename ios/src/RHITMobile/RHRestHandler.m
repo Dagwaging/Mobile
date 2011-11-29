@@ -139,18 +139,11 @@
         self.operations = [[NSOperationQueue new] autorelease];
         
         [NSUserDefaults resetStandardUserDefaults];
-        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         
-        BOOL ssl = [defaults boolForKey:kRHPreferenceDebugServerProtocol];
+        self.scheme = @"http";
         
-        if (ssl) {
-            self.scheme = @"https";
-        } else {
-            self.scheme = @"http";
-        }
-        
-        self.host = [defaults objectForKey:kRHPreferenceDebugServerHostname];
-        self.port = [defaults objectForKey:kRHPreferenceDebugServerPort];
+        self.host = @"mobilewin.csse.rose-hulman.edu";
+        self.port = @"5600";
         
         self.valueStore = [[[RHPListStore alloc] init] autorelease];
     }

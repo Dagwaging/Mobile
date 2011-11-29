@@ -42,7 +42,8 @@
         // Set our location property and determine whether or not we should
         // start out visible.
         self.location = inLocation;
-        self.visible = zoomLevel >= visibleZoomLevel_;
+        visibleZoomLevel_ = inLocation.visibleZoomLevel.intValue;
+        self.visible = zoomLevel >= self.location.visibleZoomLevel.intValue;
     }
     
     return self;
