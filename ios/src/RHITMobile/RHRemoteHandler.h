@@ -22,6 +22,7 @@
 
 
 @class RHRemoteHandlerDelegate;
+@class SearchViewController;
 
 /// \ingroup web
 /// Wrapper for remote data fetching and posting.
@@ -43,5 +44,8 @@
 - (void)populateUnderlyingLocations;
 
 - (void)rushPopulateLocationsUnderLocationWithID:(NSManagedObjectID *)objectID;
+
+- (void)searchForLocations:(NSString *)searchTerms
+      searchViewController:(SearchViewController *)searchViewController;
 
 @end

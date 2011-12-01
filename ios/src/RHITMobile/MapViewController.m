@@ -183,6 +183,8 @@
     SearchViewController *search = [SearchViewController alloc];
     search = [search initWithNibName:@"SearchView" bundle:nil];
     search.searchType = RHSearchViewControllerTypeLocation;
+    search.remoteHandler = self.remoteHandler;
+    search.context = self.managedObjectContext;
     [self.navigationController pushViewController:search animated:YES];
     [search release];
 }

@@ -18,6 +18,9 @@
 //
 
 #import "SearchViewController.h"
+#import "RHRemoteHandler.h"
+#import "RHLocation.h"
+#import "LocationDetailViewController.h"
 
 
 @implementation SearchViewController
@@ -25,6 +28,8 @@
 @synthesize searchBar;
 @synthesize searchType;
 @synthesize tableView;
+@synthesize remoteHandler;
+@synthesize context;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -38,7 +43,9 @@
 }
 
 - (void)viewDidAppear:(BOOL)animated {
-    [self.searchBar becomeFirstResponder];
+    if (results_ == nil) {
+        [self.searchBar becomeFirstResponder];
+    }
     [super viewDidAppear:animated];
 }
 
@@ -58,8 +65,7 @@
     self.searchBar = nil;
 }
 
-#pragma mark -
-#pragma mark UISearchBarDelegate Methods
+#pragma mark - UISearchBarDelegate Methods
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)inSearchBar {
     [inSearchBar resignFirstResponder];
@@ -74,6 +80,66 @@
     
     UIBarButtonItem *activityButtonItem = [[[UIBarButtonItem alloc] initWithCustomView:activityIndicatorView] autorelease];
     self.navigationItem.rightBarButtonItem = activityButtonItem;
+    
+    [self.remoteHandler searchForLocations:self.searchBar.text searchViewController:self];
+}
+
+#pragma mark - UITableViewDataSource Methods
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    if (results_ == nil) {
+        return 0;
+    }
+    
+    return results_.count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)inTableView
+         cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    RHLocation *location = [results_ objectAtIndex:indexPath.row];
+    
+    UITableViewCell *cell = nil;
+    
+    cell = [inTableView dequeueReusableCellWithIdentifier:@"SearchResultCell"];
+    
+    if (cell == nil) {
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"SearchResultCell"] autorelease];
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    }
+    
+    cell.textLabel.text = location.name;
+    
+    return cell;
+}
+
+- (void)didFindSearchResults:(NSArray *)searchResults {
+    self.navigationItem.rightBarButtonItem = nil;
+    self.navigationItem.title = [NSString stringWithFormat:@"\"%@\"", self.searchBar.text];
+    
+    results_ = [[NSMutableArray alloc] initWithCapacity:searchResults.count];
+    
+    for (NSManagedObjectID *objectID in searchResults) {
+        RHLocation *location = (RHLocation *)[context objectWithID:objectID];
+        [results_ addObject:location];
+    }
+    
+    [self.tableView reloadData];
+}
+
+- (void)tableView:(UITableView *)inTableView
+didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    RHLocation *location = [results_ objectAtIndex:indexPath.row];
+    
+    [inTableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    LocationDetailViewController *details = [[[LocationDetailViewController alloc] initWithNibName:@"LocationDetailView" bundle:nil] autorelease];
+    details.location = location;
+    
+    [self.navigationController pushViewController:details animated:YES];
 }
 
 @end

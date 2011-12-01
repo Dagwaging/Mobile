@@ -29,10 +29,13 @@
 #import "RHPListStore.h"
 #import "RHITMobileAppDelegate.h"
 #import "RHLocationLink.h"
+#import "SearchViewController.h"
+#import "RHWebRequestMaker.h"
 
 
 #define kTopLevelServerPath @"/locations/data/top"
 #define kUnderlyingLocationServerPath @"/locations/data/within/%d"
+#define kSearchLocationsServerPath @"/locations/names"
 
 #define kLocationListKey @"Locations"
 #define kNameKey @"Name"
@@ -53,6 +56,7 @@
 #define kLatKey @"Lat"
 #define kLongKey @"Lon"
 #define kCornersKey @"Corners"
+#define kNamesKey @"Names"
 
 #pragma mark Private Method Declarations
 
@@ -64,6 +68,7 @@
 @property (nonatomic, retain) NSString *host;
 @property (nonatomic, retain) NSString *port;
 @property (nonatomic, retain) RHPListStore *valueStore;
+@property (nonatomic, retain) SearchViewController *searchViewController;
 
 - (RHLocation *)locationFromDictionary:(NSDictionary *)dictionary
                            withContext:(NSManagedObjectContext *)context
@@ -101,6 +106,8 @@
 
 - (void)performRushPopulateLocationsUnderLocationWithID:(NSManagedObjectID *)objectID;
 
+- (void)performSearchForLocations:(NSString *)searchTerm;
+
 - (void)notifyDelegateViaSelector:(SEL)selector
                ofFailureWithError:(NSError *)error;
 
@@ -110,13 +117,11 @@
 @end
 
 
-#pragma mark -
-#pragma mark Implementation
+#pragma mark - Implementation
 
 @implementation RHRestHandler
 
-#pragma mark -
-#pragma mark Generic Properties
+#pragma mark - Generic Properties
 
 @synthesize delegate;
 @synthesize coordinator;
@@ -125,9 +130,9 @@
 @synthesize host;
 @synthesize port;
 @synthesize valueStore;
+@synthesize searchViewController;
 
-#pragma mark -
-#pragma mark General Methods
+#pragma mark - General Methods
 
 - (RHRestHandler *)initWithPersistantStoreCoordinator:(NSPersistentStoreCoordinator *)inCoordinator
                                              delegate:(RHRemoteHandlerDelegate *)inDelegate {
@@ -200,8 +205,7 @@
     [super dealloc];
 }
 
-#pragma mark -
-#pragma mark Private Methods
+#pragma mark - Private Methods
 
 - (RHLocation *)locationFromDictionary:(NSDictionary *)dictionary
                            withContext:(NSManagedObjectContext *)context
@@ -692,12 +696,72 @@
     
     location.retrievalStatus = RHLocationRetrievalStatusFull;
     [context save:nil];
-    
-    NSLog(@"Done rushing location");
 }
 
-#pragma mark-
-#pragma mark Private Data Retrieval Methods
+- (void)searchForLocations:(NSString *)searchTerm searchViewController:(SearchViewController *)inSearchViewController {
+    if (self.delegate == nil) {
+        return;
+    }
+    
+    self.searchViewController = inSearchViewController;
+
+    NSInvocationOperation* operation = [NSInvocationOperation alloc];
+    operation = [[operation initWithTarget:self
+                                  selector:@selector(performSearchForLocations:)
+                                    object:searchTerm] autorelease];
+    [operations addOperation:operation];
+}
+
+- (void)performSearchForLocations:(NSString *)searchTerm {
+    NSLog(@"Beginning search");
+    
+    NSManagedObjectContext *context = [[[NSManagedObjectContext alloc] init]
+                                       autorelease];
+    context.persistentStoreCoordinator = self.coordinator;
+    
+    NSString *tokenizedTerm = [searchTerm stringByReplacingOccurrencesOfString:@" " withString:@"+"];
+    NSString *sanitizedSearchTerm = [tokenizedTerm stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSString *urlArgs = [NSString stringWithFormat:@"?s=%@", sanitizedSearchTerm];
+    
+    NSLog(@"Using URL args: %@", urlArgs);
+    
+    NSDictionary *jsonData = [RHWebRequestMaker JSONGetRequestWithPath:kSearchLocationsServerPath URLargs:urlArgs];
+    
+    if (jsonData == nil) {
+        NSLog(@"No search data returned. Bailing out...");
+    }
+    
+    NSArray *locations = [jsonData objectForKey:kNamesKey];
+    
+    NSMutableArray *result = [NSMutableArray arrayWithCapacity:locations.count];    
+    
+    for (NSDictionary *location in locations) {
+        NSEntityDescription *entityDescription = [NSEntityDescription
+                                                  entityForName:@"Location"
+                                                  inManagedObjectContext:context];
+        
+        NSFetchRequest *fetchRequest = [[[NSFetchRequest alloc] init] autorelease];
+        [fetchRequest setEntity:entityDescription];
+        
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:
+                                  @"serverIdentifier == %d", [[location objectForKey:kIdKey] intValue]];
+        [fetchRequest setPredicate:predicate];
+        
+        NSArray *results = [context executeFetchRequest:fetchRequest error:nil];
+        
+        if (results.count > 0) {
+            RHLocation *matchingLocation = [results objectAtIndex:0];
+            NSLog(@"Found location %@", matchingLocation.name);
+            [result addObject:matchingLocation.objectID];
+        }
+    }
+    
+    [self.searchViewController performSelectorOnMainThread:@selector(didFindSearchResults:) 
+                                                withObject:result
+                                             waitUntilDone:NO];
+}
+
+#pragma mark - Private Data Retrieval Methods
 
 - (BOOL)booleanFromDictionary:(NSDictionary *)dictionary
                        forKey:(NSString *)key
