@@ -134,7 +134,7 @@ numberOfRowsInComponent:(NSInteger)component {
     if (indexPath.row == 0) {
         cell.textLabel.text = self.currentAnnotation.location.name;
     } else {
-        cell.textLabel.numberOfLines = 2;
+        cell.textLabel.numberOfLines = 4;
         cell.textLabel.font = [UIFont systemFontOfSize:[UIFont systemFontSize]];
         cell.textLabel.text = self.currentAnnotation.location.quickDescription;
     }
@@ -142,6 +142,21 @@ numberOfRowsInComponent:(NSInteger)component {
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
     return cell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.row == 1) {
+        CGSize maximumLabelSize = CGSizeMake(290, 9999);
+        
+        CGSize expectedLabelSize = [self.currentAnnotation.location.quickDescription 
+                                    sizeWithFont:[UIFont systemFontOfSize:UIFont.systemFontSize]
+                                    constrainedToSize:maximumLabelSize 
+                                    lineBreakMode:UILineBreakModeTailTruncation]; 
+        
+        return MIN(expectedLabelSize.height + 20, 90);
+    }
+    
+    return 44;
 }
 
 @end

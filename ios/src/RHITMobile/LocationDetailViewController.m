@@ -215,6 +215,25 @@ heightForFooterInSection:(NSInteger)section {
     return 0;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView
+heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSString *sectionLabel = [self.sections objectAtIndex:[indexPath
+                                                           indexAtPosition:0]];
+    
+    if (sectionLabel == kAboutLabel) {
+        CGSize maximumLabelSize = CGSizeMake(290, 9999);
+        
+        CGSize expectedLabelSize = [self.location.quickDescription
+                                    sizeWithFont:[UIFont systemFontOfSize:UIFont.systemFontSize]
+                                    constrainedToSize:maximumLabelSize 
+                                    lineBreakMode:UILineBreakModeTailTruncation]; 
+        
+        return expectedLabelSize.height + 20;
+    }
+    
+    return 44;
+}
+
 #pragma mark - UITableViewDataSource Methods
         
 - (UITableViewCell *)tableView:(UITableView *)inTableView
@@ -235,7 +254,7 @@ heightForFooterInSection:(NSInteger)section {
                      reuseIdentifier:cellIdentifier] autorelease];
             cell.textLabel.font = [UIFont systemFontOfSize:[UIFont
                                                             systemFontSize]];
-            cell.textLabel.numberOfLines = 5;
+            cell.textLabel.numberOfLines = 0;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         
