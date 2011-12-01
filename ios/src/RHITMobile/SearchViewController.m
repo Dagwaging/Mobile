@@ -95,16 +95,28 @@
         return 0;
     }
     
-    return results_.count;
+    return MAX(results_.count, 1);
 }
 
 - (UITableViewCell *)tableView:(UITableView *)inTableView
          cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (results_.count == 0) {
+        UITableViewCell *cell = [inTableView dequeueReusableCellWithIdentifier:@"NoResultsCell"];
+        
+        if (cell == nil) {
+            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"NoResultsCell"] autorelease];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.textLabel.textAlignment = UITextAlignmentCenter;
+            cell.textLabel.text = @"No results found";
+        } 
+
+        
+        return cell;
+    }
+    
     RHLocation *location = [results_ objectAtIndex:indexPath.row];
     
-    UITableViewCell *cell = nil;
-    
-    cell = [inTableView dequeueReusableCellWithIdentifier:@"SearchResultCell"];
+    UITableViewCell *cell = [inTableView dequeueReusableCellWithIdentifier:@"SearchResultCell"];
     
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"SearchResultCell"] autorelease];
@@ -132,6 +144,10 @@
 
 - (void)tableView:(UITableView *)inTableView
 didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (results_.count == 0) {
+        return;
+    }
+    
     RHLocation *location = [results_ objectAtIndex:indexPath.row];
     
     [inTableView deselectRowAtIndexPath:indexPath animated:YES];
