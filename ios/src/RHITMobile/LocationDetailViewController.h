@@ -32,4 +32,6 @@
 
 - (IBAction)displayCurrentLocationOnMap:(id)sender;
 
+- (IBAction)getDirectionsToCurrentLocation:(id)sender;
+
 @end

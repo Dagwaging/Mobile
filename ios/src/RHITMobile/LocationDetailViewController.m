@@ -78,6 +78,10 @@
     [appDelegate.mapViewController focusMapViewToLocation:self.location];
 }
 
+- (IBAction)getDirectionsToCurrentLocation:(id)sender {
+    
+}
+
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad {
@@ -176,14 +180,24 @@ viewForFooterInSection:(NSInteger)section {
         UIView *parentView = [[[UIView alloc] initWithFrame:CGRectZero] autorelease];
         parentView.backgroundColor = [UIColor clearColor];
         
-        UIButton *updateButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-        updateButton.frame = CGRectMake(10.0, 10.0, 300.0, 44.0);
-        [updateButton addTarget:self
+        UIButton *mapButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        mapButton.frame = CGRectMake(10.0, 10.0, 145.0, 44.0);
+        [mapButton addTarget:self
                          action:@selector(displayCurrentLocationOnMap:)
                forControlEvents:UIControlEventTouchUpInside];
         
-        [updateButton setTitle:@"Display on Map" forState:UIControlStateNormal];
-        [parentView addSubview:updateButton];
+        [mapButton setTitle:@"Go to Map" forState:UIControlStateNormal];
+        
+        UIButton *directionsButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        directionsButton.frame = CGRectMake(160.0, 10.0, 145.0, 44.0);
+        [directionsButton addTarget:self
+                         action:@selector(getDirectionsToCurrentLocation:)
+               forControlEvents:UIControlEventTouchUpInside];
+        
+        [directionsButton setTitle:@"Get Directions" forState:UIControlStateNormal];
+        
+        [parentView addSubview:mapButton];
+        [parentView addSubview:directionsButton];
         return parentView;
     }
     
