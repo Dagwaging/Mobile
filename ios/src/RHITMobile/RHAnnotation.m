@@ -23,60 +23,56 @@
 #import "RHLocation.h"
 
 
-#pragma mark Private Method Declarations
-
-@interface RHAnnotation ()
-
-@property (nonatomic, readonly) NSInteger visibleZoomLevel;
-
-@end
-
-
-#pragma mark -
-#pragma mark Implementation
-
 @implementation RHAnnotation
 
-#pragma mark -
-#pragma mark Generic Properties
+#pragma mark - General Properties
 
 @synthesize coordinate;
 @synthesize visible;
 @synthesize location;
 @synthesize annotationView;
 
-#pragma mark -
-#pragma mark General Methods
+#pragma mark - General Methods
 
-- (RHAnnotation *)initWithLocation:(RHLocation *)inLocation
-                    currentZoomLevel:(NSUInteger)zoomLevel {
+- (id)initWithLocation:(RHLocation *)inLocation
+      currentZoomLevel:(NSUInteger)zoomLevel {
     self = [super init];
     
     if (self) {
+        // Set our location property and determine whether or not we should
+        // start out visible.
         self.location = inLocation;
-        self.visible = zoomLevel >= self.visibleZoomLevel;
+        visibleZoomLevel_ = inLocation.visibleZoomLevel.intValue;
+        self.visible = zoomLevel >= self.location.visibleZoomLevel.intValue;
     }
     
     return self;
 }
 
 - (void)mapView:(MKMapView *)mapView didChangeZoomLevel:(NSUInteger)zoomLevel {
-    if (self.visible && zoomLevel < self.visibleZoomLevel) {
+    if (self.visible && zoomLevel < visibleZoomLevel_) {
+        
+        // We're below the minimum zoom level for displaying this annotation,
+        // so mark it as invisible.
         self.visible = NO;
         [self.annotationView updateAnnotationVisibility];
-    } else if (!self.visible && zoomLevel >= self.visibleZoomLevel) {
+        
+    } else if (!self.visible && zoomLevel >= visibleZoomLevel_) {
+        
+        // We're within the acceptable zoom level threshold for displaying
+        // this annotation, so mark it as visible.
         self.visible = YES;
         [self.annotationView updateAnnotationVisibility];
+        
     }
 }
 
+#pragma mark - Property Methods
+
 - (BOOL)area {
     return self.location.boundaryNodes != nil &&
-        self.location.boundaryNodes.count > 0;
+    self.location.boundaryNodes.count > 0;
 }
-
-#pragma mark -
-#pragma mark Property Methods
 
 - (CLLocationCoordinate2D)coordinate {
     return self.location.labelLocation.coordinate;
@@ -91,8 +87,7 @@
 }
 
 
-#pragma mark -
-#pragma mark Private Methods
+#pragma mark - Private Methods
 
 - (NSInteger)visibleZoomLevel {
     return self.location.visibleZoomLevel.integerValue;

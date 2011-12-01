@@ -1,5 +1,5 @@
 //
-//  WebViewController.h
+//  RHWebRequestMaker.h
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -17,14 +17,11 @@
 //  limitations under the License.
 //
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 
+@interface RHWebRequestMaker : NSObject
 
-/// \ingroup views
-@interface WebViewController : UIViewController
-
-@property (nonatomic, retain) IBOutlet UIWebView *webView;
-
-@property (nonatomic, retain) NSURL *url;
++ (NSDictionary *)JSONGetRequestWithPath:(NSString *)path
+                                 URLargs:(NSString *)args;
 
 @end

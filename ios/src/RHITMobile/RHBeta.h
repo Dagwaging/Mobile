@@ -23,6 +23,7 @@
 
 #ifdef RHITMobile_RHBeta
 
+// Definitions of build types
 #define kRHBetaBuildTypeRolling 0
 #define kRHBetaBuildTypeOfficial 1
 

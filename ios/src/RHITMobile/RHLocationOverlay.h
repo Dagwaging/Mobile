@@ -20,14 +20,22 @@
 #import <Foundation/Foundation.h>
 #import <MapKit/MapKit.h>
 
+
 @class RHLocation;
 
+/// \ingroup map
+/// MKOverlay representing an RHLocation that occupies and area, not just a 
+/// single point.
 @interface RHLocationOverlay : NSObject <MKOverlay>
 
+/// The RHLocation this RHOverlay will represent.
 @property (nonatomic, retain) RHLocation *location;
 
+/// The polygon to be provided by this overlay for rendering on the map.
 @property (nonatomic, retain) MKPolygon *polygon;
 
-- (RHLocationOverlay *)initWithLocation:(RHLocation *)location;
+/// Initialize this overlay with an RHLocation object.
+/// \param location The RHLocation this RHOverlay will represent.
+- (id)initWithLocation:(RHLocation *)location;
 
 @end

@@ -37,12 +37,6 @@
 /// Map view that is visible to the user.
 @property (nonatomic, retain) IBOutlet MKMapView *mapView;
 
-@property (nonatomic, retain) IBOutlet UILabel *zoomLevelLabel;
-
-@property (nonatomic, retain) IBOutlet UILabel *overlaysLabel;
-
-@property (nonatomic, retain) IBOutlet UILabel *annotationsLabel;
-
 /// Core Data fetched results controller.
 @property (nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
 
@@ -55,10 +49,6 @@
 @property (nonatomic, retain) NSMutableArray *quickListAnnotations;
 
 @property (nonatomic, retain) NSArray *temporaryAnnotations;
-
-/// Reload preference data, in case something has changed while the application
-/// was running.
-- (void)refreshPreferences;
 
 - (void)focusMapViewToTemporaryAnnotation:(RHAnnotation *)annotation;
 

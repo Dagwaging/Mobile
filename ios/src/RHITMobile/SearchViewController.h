@@ -19,11 +19,30 @@
 
 #import <UIKit/UIKit.h>
 
+@class RHRemoteHandler;
+
+typedef enum RHSearchViewControllerType_ {
+    RHSearchViewControllerTypeLocation = 0,
+    RHSearchViewControllerTypePeople = 1
+} RHSearchViewControllerType;
 
 /// \ingroup views
 /// View controller for the search portion of the application.
-@interface SearchViewController : UIViewController <UISearchBarDelegate>
+@interface SearchViewController : UIViewController <UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource> {
+    @private
+    NSMutableArray *results_;
+}
+
+@property (nonatomic, assign) RHSearchViewControllerType searchType;
 
 @property (nonatomic, retain) IBOutlet UISearchBar *searchBar;
+
+@property (nonatomic, retain) IBOutlet UITableView *tableView;
+
+@property (nonatomic, retain) RHRemoteHandler *remoteHandler;
+
+@property (nonatomic, retain) NSManagedObjectContext *context;
+
+- (void)didFindSearchResults:(NSArray *)searchResults;
 
 @end

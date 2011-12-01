@@ -94,6 +94,7 @@
 		92DFEACD141FEF9100889314 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92DFEACC141FEF9100889314 /* MapKit.framework */; };
 		92DFEAD01420245F00889314 /* RHAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 92DFEACF1420245F00889314 /* RHAnnotationView.m */; };
 		92DFEAD414203C6400889314 /* RHMapLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 92DFEAD314203C6400889314 /* RHMapLabel.m */; };
+		92E1AA7F1487115F0005BF34 /* RHWebRequestMaker.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E1AA7E1487115F0005BF34 /* RHWebRequestMaker.m */; };
 		92F20F6D1464383200603500 /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F20F6B1464383200603500 /* WebViewController.m */; };
 		92F20F6E1464383200603500 /* WebView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92F20F6C1464383200603500 /* WebView.xib */; };
 /* End PBXBuildFile section */
@@ -239,6 +240,8 @@
 		92DFEACF1420245F00889314 /* RHAnnotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHAnnotationView.m; sourceTree = "<group>"; };
 		92DFEAD214203C6400889314 /* RHMapLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHMapLabel.h; sourceTree = "<group>"; };
 		92DFEAD314203C6400889314 /* RHMapLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHMapLabel.m; sourceTree = "<group>"; };
+		92E1AA7D1487115F0005BF34 /* RHWebRequestMaker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHWebRequestMaker.h; sourceTree = "<group>"; };
+		92E1AA7E1487115F0005BF34 /* RHWebRequestMaker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHWebRequestMaker.m; sourceTree = "<group>"; };
 		92ECC4C4141434D30073C4C3 /* RHConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHConstants.h; sourceTree = "<group>"; };
 		92F20F6A1464383200603500 /* WebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewController.h; sourceTree = "<group>"; };
 		92F20F6B1464383200603500 /* WebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewController.m; sourceTree = "<group>"; };
@@ -283,6 +286,8 @@
 				920656F514303D4F00D50293 /* RHRemoteHandlerDelegate.h */,
 				9250133A1431A7C700CEBB35 /* RHRestHandler.h */,
 				9250133B1431A7C700CEBB35 /* RHRestHandler.m */,
+				92E1AA7D1487115F0005BF34 /* RHWebRequestMaker.h */,
+				92E1AA7E1487115F0005BF34 /* RHWebRequestMaker.m */,
 			);
 			name = Web;
 			sourceTree = "<group>";
@@ -733,6 +738,7 @@
 				924DE4E8145E79DF00EEE8C6 /* DirectoryViewController.m in Sources */,
 				92A49DDC145F8BA400B6F34E /* BetaRegistrationViewController.m in Sources */,
 				92F20F6D1464383200603500 /* WebViewController.m in Sources */,
+				92E1AA7F1487115F0005BF34 /* RHWebRequestMaker.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -59,9 +59,6 @@
 #pragma mark Generic Properties
 
 @synthesize mapView;
-@synthesize zoomLevelLabel;
-@synthesize overlaysLabel;
-@synthesize annotationsLabel;
 @synthesize fetchedResultsController;
 @synthesize managedObjectContext;
 @synthesize remoteHandler = remoteHandler_;
@@ -121,15 +118,6 @@
     [remoteHandler_ release];
     [currentOverlay release];
     [super dealloc];
-}
-
-- (void)refreshPreferences {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    BOOL debugMapInfo = [defaults boolForKey:kRHPreferenceDebugMapInfo];
-    
-    self.zoomLevelLabel.hidden = !debugMapInfo;
-    self.overlaysLabel.hidden = !debugMapInfo;
-    self.annotationsLabel.hidden = !debugMapInfo;
 }
 
 - (void)focusMapViewToTemporaryAnnotation:(RHAnnotation *)annotation {
@@ -194,6 +182,9 @@
 - (IBAction)displaySearch:(id)sender {
     SearchViewController *search = [SearchViewController alloc];
     search = [search initWithNibName:@"SearchView" bundle:nil];
+    search.searchType = RHSearchViewControllerTypeLocation;
+    search.remoteHandler = self.remoteHandler;
+    search.context = self.managedObjectContext;
     [self.navigationController pushViewController:search animated:YES];
     [search release];
 }
@@ -328,27 +319,6 @@
             [annotation mapView:self.mapView didChangeZoomLevel:newZoomLevel];
         }
     }
-    
-    NSString *zoomLevelText = [[NSString alloc]
-                               initWithFormat:@"Zoom Level: %d", newZoomLevel];
-    self.zoomLevelLabel.text = zoomLevelText;
-    [zoomLevelText release];
-    
-    NSString *overlayText = [[NSString alloc]
-                             initWithFormat:@"Current Overlays: %@",
-                             self.mapView.overlays];
-    
-    self.overlaysLabel.text = overlayText;
-    
-    [overlayText release];
-    
-    NSString *annotationsText = [[NSString alloc]
-                                 initWithFormat:@"Selected Annotations: %@",
-                                 self.mapView.selectedAnnotations];
-    
-    self.annotationsLabel.text = annotationsText;
-    
-    [annotationsText release];
 }
 
 #pragma mark -
