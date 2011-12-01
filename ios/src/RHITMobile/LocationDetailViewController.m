@@ -189,7 +189,7 @@ viewForFooterInSection:(NSInteger)section {
         [mapButton setTitle:@"Go to Map" forState:UIControlStateNormal];
         
         UIButton *directionsButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-        directionsButton.frame = CGRectMake(160.0, 10.0, 145.0, 44.0);
+        directionsButton.frame = CGRectMake(165.0, 10.0, 145.0, 44.0);
         [directionsButton addTarget:self
                          action:@selector(getDirectionsToCurrentLocation:)
                forControlEvents:UIControlEventTouchUpInside];
