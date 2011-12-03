@@ -65,6 +65,7 @@ namespace Rhit.Admin.View.Controls {
                 if(oldList.Contains(point)) continue;
                 AddPoint(point);
             }
+            if(oldList == null) return;
             foreach(Point point in oldList) {
                 if(PointList.Contains(point)) continue;
                 RemovePoint(point);

@@ -1,0 +1,55 @@
+﻿<controls:ChildWindow xmlns:sdk="http://schemas.microsoft.com/winfx/2006/xaml/presentation/sdk"  x:Class="Rhit.Admin.View.Views.LinkManagementWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+    xmlns:controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls"
+    Width="400" Height="300" 
+    Title="Add/Remove Links">
+    
+    <Grid x:Name="LayoutRoot" Margin="2">
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <sdk:DataGrid x:Name="LinkGrid" AutoGenerateColumns="False" AlternatingRowBackground="LightGray" ItemsSource="{Binding VisibleLinks}">
+                <sdk:DataGrid.Columns>
+                    <sdk:DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
+                    <sdk:DataGridTextColumn Header="Address" Binding="{Binding Address}" Width="*"/>
+                </sdk:DataGrid.Columns>
+            </sdk:DataGrid>
+
+            <Button Content="Remove Link" Margin="5" Click="RemoveLinkButton_Click" HorizontalAlignment="Center" Grid.Row="1"/>
+            <Rectangle Height="1" HorizontalAlignment="Stretch" Margin="5" Grid.Row="2" Stroke="Gray"/>
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <TextBlock Text="Name:" FontWeight="Bold" Margin="5" VerticalAlignment="Center" Grid.Column="0"/>
+            <TextBox Name="LinkNameBox" Margin="5" VerticalContentAlignment="Center" Text="Enter the link's name" Grid.Column="1" KeyUp="AddLink_KeyUp"/>
+            <TextBlock Text="Address:" FontWeight="Bold" Margin="5" VerticalAlignment="Center" Grid.Column="0" Grid.Row="1"/>
+            <TextBox Name="LinkAddressBox" Margin="5" VerticalContentAlignment="Center" Text="Enter the link's address" Grid.Column="1" Grid.Row="1" KeyUp="AddLink_KeyUp"/>
+            <Button Content="Add Link" Margin="5" Click="AddLinkButton_Click" Grid.Column="2" Grid.RowSpan="2" VerticalAlignment="Center"/>
+            <Rectangle Height="1" HorizontalAlignment="Stretch" Margin="5" Grid.Row="2" Grid.ColumnSpan="3" Stroke="Gray"/>
+        </Grid>
+
+        <Button x:Name="CancelButton" Content="Cancel" Click="CancelButton_Click" Width="75" Height="23" HorizontalAlignment="Right" Margin="0,12,0,0" Grid.Row="2" />
+        <Button x:Name="OKButton" Content="OK" Click="OKButton_Click" Width="75" Height="23" HorizontalAlignment="Right" Margin="0,12,79,0" Grid.Row="2" />
+    </Grid>
+</controls:ChildWindow>

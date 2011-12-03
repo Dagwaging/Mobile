@@ -8,10 +8,13 @@
     Style="{StaticResource PageStyle}">
 
     <Grid x:Name="LayoutRoot">
-        <ScrollViewer x:Name="PageScrollViewer" Style="{StaticResource PageScrollViewerStyle}">
-            <StackPanel x:Name="ContentStackPanel">
-                <TextBlock x:Name="HeaderText" Style="{StaticResource HeaderTextStyle}" Text="Home"/>
-                <TextBlock x:Name="ContentText" Style="{StaticResource ContentTextStyle}" Text="Home page content"/>
+        <ScrollViewer Style="{StaticResource PageScrollViewerStyle}">
+            <StackPanel>
+                <TextBlock Style="{StaticResource HeaderTextStyle}" Text="Home" HorizontalAlignment="Center"/>
+                <TextBlock Style="{StaticResource ContentTextStyle}" Text="Instructions" FontWeight="Bold"/>
+                <TextBlock Style="{StaticResource ContentTextStyle}" Text="instructions"/>
+                <TextBlock Style="{StaticResource ContentTextStyle}" Text="About" FontWeight="Bold" Margin="0,10,0,0"/>
+                <TextBlock Style="{StaticResource ContentTextStyle}" Text="about"/>
             </StackPanel>
         </ScrollViewer>
     </Grid>
