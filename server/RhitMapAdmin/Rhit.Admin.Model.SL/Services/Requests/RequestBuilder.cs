@@ -1,4 +1,5 @@
 ﻿using System;
+using Rhit.Admin.Model.SL.Services.Requests;
 
 namespace Rhit.Admin.Model.Services.Requests {
     /// \ingroup services
@@ -54,6 +55,14 @@ namespace Rhit.Admin.Model.Services.Requests {
 
         public DirectionsRequestPart Directions {
             get { return new DirectionsRequestPart(FullUrl); }
+        }
+
+        public AdminRequestPart Admin(Guid token, string storedProcedure) {
+            return new AdminRequestPart(FullUrl, token, storedProcedure);
+        }
+
+        public AdminRequestPart Admin(string username, string password) {
+            return new AdminRequestPart(FullUrl, username, password);
         }
 
         public override string ToString() {

@@ -2,7 +2,7 @@
 namespace Rhit.Admin.Model.Services.Requests {
     public class DepartableRequestPart : RequestPart {
         public DepartableRequestPart(string baseUrl) : base(baseUrl) {
-            PartUrl = "/alts{0}";
+            PartUrl = "/departable{0}";
         }
     }
 }

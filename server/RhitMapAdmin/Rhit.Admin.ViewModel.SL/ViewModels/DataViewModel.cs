@@ -7,6 +7,7 @@ using System.Windows.Threading;
 using Rhit.Admin.Model;
 using Rhit.Admin.Model.Events;
 using Rhit.Admin.Model.Services;
+using Mvvm.Commands;
 
 namespace Rhit.Admin.ViewModel.ViewModels {
     public class DataViewModel : DependencyObject {
@@ -28,7 +29,13 @@ namespace Rhit.Admin.ViewModel.ViewModels {
 
             AltNames = new List<string>();
             Links = new ObservableCollection<Link>();
+
+            SaveCommand = new RelayCommand(p => SaveLocation());
         }
+
+        #region Commands
+        public ICommand SaveCommand { get; private set; }
+        #endregion
 
         #region Properties
         public RhitLocation CurrentLocation { get; set; }
@@ -141,6 +148,10 @@ namespace Rhit.Admin.ViewModel.ViewModels {
         public static readonly DependencyProperty MinZoomProperty =
             DependencyProperty.Register("MinZoom", typeof(int), typeof(DataViewModel), new PropertyMetadata(0));
         #endregion
+
+        private void SaveLocation() {
+
+        }
 
         private void OnLocationsRetrieved(object sender, ServiceEventArgs e) {
             foreach(RhitLocation location in e.Locations) {
