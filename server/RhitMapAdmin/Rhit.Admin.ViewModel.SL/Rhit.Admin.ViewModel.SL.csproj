@@ -62,6 +62,7 @@
     <Compile Include="ViewModels\DataViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\MapViewModel.cs" />
+    <Compile Include="ViewModels\Services.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mvvm.SL\Mvvm.SL.csproj">

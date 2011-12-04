@@ -11,10 +11,15 @@ using Rhit.Admin.Model.Services;
 namespace Rhit.Admin.ViewModel.ViewModels {
     public class DataViewModel : DependencyObject {
         public DataViewModel(Dispatcher dispatcher) {
-            DataCollector.Instance.BaseAddress = "http://mobilewin.csse.rose-hulman.edu:5600";
-            DataCollector.Instance.UpdateAvailable += new ServiceEventHandler(OnLocationsRetrieved);
-            DataCollector.Instance.RetrieveAllLocations(dispatcher);
+            InitializeProperties();
 
+            List<RhitLocation> locations = DataCollector.GetAllLocations();
+            if(locations == null)
+                DataCollector.Instance.UpdateAvailable += new ServiceEventHandler(OnLocationsRetrieved);
+            else OnLocationsRetrieved(this, new ServiceEventArgs() { Locations = locations, });
+        }
+
+        private void InitializeProperties() {
             ZoomRange = new List<int>() { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21 };
             LocationTree = new ObservableCollection<LocationNode>();
             Locations = new Dictionary<int, RhitLocation>();

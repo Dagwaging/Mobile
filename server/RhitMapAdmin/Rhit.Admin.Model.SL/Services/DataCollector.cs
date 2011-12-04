@@ -6,7 +6,6 @@ using Rhit.Admin.Model.Events;
 using Rhit.Admin.Model.Services.Requests;
 using System.Windows;
 
-
 namespace Rhit.Admin.Model.Services {
     public class DataCollector {
         private static DataCollector _instance;
@@ -15,6 +14,7 @@ namespace Rhit.Admin.Model.Services {
         
         private DataCollector() {
             ResponseHandler.ResponseReceived += new ServerEventHandler(GeoService_ResponseReceived);
+            Locations = new List<RhitLocation>();
             BaseAddress = "";
             Version = 0;
         }
@@ -31,6 +31,8 @@ namespace Rhit.Admin.Model.Services {
                 return _instance;
             }
         }
+
+        public List<RhitLocation> Locations { get; set; }
 
         public double Version { get; set; }
         #endregion
@@ -49,9 +51,16 @@ namespace Rhit.Admin.Model.Services {
             ServerObject response = GetServerObject(e);
             if(response == null || response.Locations == null || response.Locations.Count == 0) { return; }
 
+            List<RhitLocation> locations = ServerObject.GetLocations(response.Locations);
+
+            Version = response.Version;
+
             ServiceEventArgs args = new ServiceEventArgs() {
-                Locations = ServerObject.GetLocations(response.Locations),
+                Locations = locations,
             };
+
+            Locations = locations;
+
             OnUpdated(args);
         }
 
@@ -63,6 +72,11 @@ namespace Rhit.Admin.Model.Services {
         public void RetrieveAllLocations(Dispatcher dispatcher) {
             RequestPart request = new RequestBuilder(BaseAddress).Locations.Data.All;
             Connection.MakeRequest(dispatcher, request);
+        }
+
+        public static List<RhitLocation> GetAllLocations() {
+            if(DataCollector.Instance.Locations.Count > 0) return DataCollector.Instance.Locations;
+            return null;
         }
     }
 }
