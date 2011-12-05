@@ -15,6 +15,7 @@ namespace RHITMobile
             Redirects.Add("status", new DirectionsStatusHandler());
             Redirects.Add("fromloc", new DirectionsFromLocHandler());
             Redirects.Add("fromgps", new DirectionsFromGpsHandler());
+            Redirects.Add("testing", new TestingDirectionsHandler());
         }
     }
 
@@ -34,6 +35,11 @@ namespace RHITMobile
 
     public class DirectionsFromLocHandler : PathHandler
     {
+        public DirectionsFromLocHandler()
+        {
+            IntRedirect = new DirectionsToHandler();
+        }
+
         protected override IEnumerable<ThreadInfo> HandleIntPath(ThreadManager TM, int value, object state)
         {
             var currentThread = TM.CurrentThread;
@@ -42,12 +48,10 @@ namespace RHITMobile
             var table = TM.GetResult<DataTable>(currentThread);
             if (table.Rows.Count > 0)
             {
-                IntRedirect = new DirectionsToHandler();
                 yield return TM.Return(currentThread, new DirectionsFinder(table.Rows[0]));
             }
             else
             {
-                IntRedirect = null;
                 yield return TM.Return(currentThread, new JsonResponse(HttpStatusCode.BadRequest));
             }
         }

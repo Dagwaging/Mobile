@@ -75,7 +75,7 @@ namespace RHITMobile
 
             JsonResponse result = null;
 
-            var path = context.Request.Url.LocalPath.ToLower().Split('/').SkipWhile(String.IsNullOrEmpty).TakeWhile(s => !String.IsNullOrEmpty(s));
+            var path = context.Request.Url.LocalPath.Split('/').SkipWhile(String.IsNullOrEmpty).TakeWhile(s => !String.IsNullOrEmpty(s));
             Dictionary<string, string> query = new Dictionary<string, string>();
             if (!String.IsNullOrEmpty(context.Request.Url.Query))
             {
@@ -105,12 +105,17 @@ namespace RHITMobile
                 }
             }
 
+            var encoding = new ASCIIEncoding();
+            byte[] b;
             if (result.Json != null)
             {
-                var encoding = new ASCIIEncoding();
-                byte[] b = encoding.GetBytes(result.Json.Serialize());
-                context.Response.OutputStream.Write(b, 0, b.Length);
+                b = encoding.GetBytes(result.Json.Serialize());
             }
+            else
+            {
+                b = encoding.GetBytes(result.Message);
+            }
+            context.Response.OutputStream.Write(b, 0, b.Length);
             context.Response.StatusCode = (int)result.StatusCode;
             context.Response.Close();
             yield return TM.Return(currentThread, null);
@@ -134,6 +139,8 @@ namespace RHITMobile
         {
             Redirects.Add("locations", new LocationsHandler());
             Redirects.Add("directions", new DirectionsHandler());
+            Redirects.Add("admin", new AdminHandler());
+            Redirects.Add("clientaccesspolicy.xml", new ClientAccessPolicyHandler());
         }
 
         protected override IEnumerable<ThreadInfo> HandleNoPath(ThreadManager TM, Dictionary<string, string> query, object state)
@@ -149,15 +156,25 @@ namespace RHITMobile
         {
             Json = obj;
             StatusCode = HttpStatusCode.OK;
+            Message = "";
         }
 
         public JsonResponse(HttpStatusCode code)
         {
             Json = null;
             StatusCode = code;
+            Message = "";
+        }
+
+        public JsonResponse(string message)
+        {
+            Json = null;
+            StatusCode = HttpStatusCode.OK;
+            Message = message;
         }
 
         public JsonObject Json { get; set; }
         public HttpStatusCode StatusCode { get; set; }
+        public string Message { get; set; }
     }
 }

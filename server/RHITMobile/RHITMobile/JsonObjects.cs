@@ -321,8 +321,17 @@ namespace RHITMobile
             WeightedDist = settings.WeightedDist(this);
         }
 
+        public Path(double lat, double lon, string message, bool flag)
+        {
+            ToNode = new Node(lat, lon);
+            Dir = message;
+            Flag = flag;
+        }
+
         [DataMember]
         public string Dir { get; set; }
+        [DataMember]
+        public bool Flag { get; set; }
         [DataMember]
         public LatLong To { get { return ToNode.Pos; } set { } }
 
@@ -352,6 +361,11 @@ namespace RHITMobile
             Partition = row.Table.Columns.Contains("partition") ? (int?)row["partition"] : null;
         }
 
+        public Node(double lat, double lon)
+        {
+            Pos = new LatLong(lat, lon);
+        }
+
         public int Id { get; set; }
         public LatLong Pos { get; set; }
         public double Alt { get; set; }
@@ -368,6 +382,38 @@ namespace RHITMobile
     }
     #endregion
 
+    #region Admin Interface
+    [DataContract]
+    public class AuthenticationResponse : JsonObject
+    {
+        public AuthenticationResponse(DateTime expiration, Guid id)
+        {
+            Expiration = expiration;
+            Token = id.ToString();
+        }
+
+        [DataMember]
+        public DateTime Expiration { get; set; }
+        [DataMember]
+        public string Token { get; set; }
+    }
+
+    [DataContract]
+    public class StoredProcedureResponse : JsonObject
+    {
+        public StoredProcedureResponse()
+        {
+            Columns = new List<string>();
+            Table = new List<List<string>>();
+        }
+
+        [DataMember]
+        public List<string> Columns { get; set; }
+        [DataMember]
+        public List<List<string>> Table { get; set; }
+    }
+    #endregion
+
     #region Miscellaneous
     [DataContract]
     public class LatLong : JsonObject
@@ -376,6 +422,12 @@ namespace RHITMobile
         {
             Lat = (double)row["lat"];
             Lon = (double)row["lon"];
+        }
+
+        public LatLong(double lat, double lon)
+        {
+            Lat = lat;
+            Lon = lon;
         }
 
         [DataMember]

@@ -173,6 +173,7 @@ namespace RHITMobile
                         _paths.Insert(arrayStart, path);
                         node = path.FromNode;
                     }
+                    _paths.Last().Flag = true;
                     yield return TM.Return(currentThread);
                 }
 
@@ -426,6 +427,7 @@ namespace RHITMobile
 
             for (int i = 0; i < _paths.Count; i++)
             {
+                _done = (int)(80 + 20 * ((double)i / _paths.Count) * ((double)i / _paths.Count));
                 yield return TM.MakeDbCall(currentThread, Program.ConnectionString, "spGetDirection",
                     new SqlParameter("@startpath", _paths[i].Id));
                 using (var directionTable = TM.GetResult<DataTable>(currentThread))
@@ -478,6 +480,8 @@ namespace RHITMobile
                     }
                 }
             }
+
+            yield return TM.Return(currentThread);
         }
         #endregion
     }

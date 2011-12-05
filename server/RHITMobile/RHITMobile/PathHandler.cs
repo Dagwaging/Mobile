@@ -37,7 +37,7 @@ namespace RHITMobile
                     if (Int32.TryParse(path.First(), out intValue))
                     {
                         yield return TM.Await(currentThread, HandleIntPath(TM, intValue, state));
-                        if (IntRedirect != null)
+                        if (!(TM.GetResultNoException(currentThread) is JsonResponse))
                             yield return TM.Await(currentThread, IntRedirect.HandlePath(TM, path.Skip(1), query, TM.GetResult(currentThread)));
                     }
                     else
@@ -46,14 +46,14 @@ namespace RHITMobile
                         if (Double.TryParse(path.First(), out floatValue))
                         {
                             yield return TM.Await(currentThread, HandleFloatPath(TM, floatValue, state));
-                            if (FloatRedirect != null)
+                            if (!(TM.GetResultNoException(currentThread) is JsonResponse))
                                 yield return TM.Await(currentThread, FloatRedirect.HandlePath(TM, path.Skip(1), query, TM.GetResult(currentThread)));
                         }
                         else
                         {
                             yield return TM.Await(currentThread, HandleUnknownPath(TM, path.First(), state));
-                            if (UnknownRedirect != null)
-                                yield return TM.Await(currentThread, FloatRedirect.HandlePath(TM, path.Skip(1), query, TM.GetResult(currentThread)));
+                            if (!(TM.GetResultNoException(currentThread) is JsonResponse))
+                                yield return TM.Await(currentThread, UnknownRedirect.HandlePath(TM, path.Skip(1), query, TM.GetResult(currentThread)));
                         }
                     }
                 }
@@ -96,7 +96,14 @@ namespace RHITMobile
         protected virtual IEnumerable<ThreadInfo> HandleUnknownPath(ThreadManager TM, string path, object state)
         {
             var currentThread = TM.CurrentThread;
-            yield return TM.Return(currentThread, new JsonResponse(HttpStatusCode.BadRequest));
+            if (UnknownRedirect != null)
+            {
+                yield return TM.Return(currentThread, path);
+            }
+            else
+            {
+                yield return TM.Return(currentThread, new JsonResponse(HttpStatusCode.BadRequest));
+            }
         }
 
         protected virtual IEnumerable<ThreadInfo> HandleNoPath(ThreadManager TM, Dictionary<string, string> query, object state)
