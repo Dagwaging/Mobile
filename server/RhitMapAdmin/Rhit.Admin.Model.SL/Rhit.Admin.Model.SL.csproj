@@ -62,8 +62,11 @@
     <Compile Include="DataContracts.cs" />
     <Compile Include="Events\OutlineEventArgs.cs" />
     <Compile Include="Events\PushpinEventArgs.cs" />
+    <Compile Include="Events\SearchEventArgs.cs" />
     <Compile Include="Events\ServerEventArgs.cs" />
     <Compile Include="Events\ServiceEventArgs.cs" />
+    <Compile Include="GeoCoordinate.cs" />
+    <Compile Include="LocationType.cs" />
     <Compile Include="Maps\Modes\BingMode.cs" />
     <Compile Include="Maps\Modes\EmptyMode.cs" />
     <Compile Include="Maps\Modes\GoogleMode.cs" />
@@ -82,25 +85,33 @@
     <Compile Include="RhitLocation.cs" />
     <Compile Include="Services\Connection.cs" />
     <Compile Include="Services\DataCollector.cs" />
+    <Compile Include="Services\DataStorage.cs" />
     <Compile Include="Services\Requests\AdminRequestPart.cs" />
     <Compile Include="Services\Requests\AllRequestPart.cs" />
     <Compile Include="Services\Requests\DataRequestPart.cs" />
     <Compile Include="Services\Requests\DepartableRequestPart.cs" />
     <Compile Include="Services\Requests\DescRequestPart.cs" />
     <Compile Include="Services\Requests\DirectionsRequestPart.cs" />
+    <Compile Include="Services\Requests\FromGpsRequestPart.cs" />
     <Compile Include="Services\Requests\FromLocRequestPart.cs" />
     <Compile Include="Services\Requests\IdRequestPart.cs" />
     <Compile Include="Services\Requests\LocationRequestPart.cs" />
+    <Compile Include="Services\Requests\MensRequestPart.cs" />
     <Compile Include="Services\Requests\NamesRequestPart.cs" />
     <Compile Include="Services\Requests\NoDescRequestPart.cs" />
     <Compile Include="Services\Requests\NoTopRequestPart.cs" />
     <Compile Include="Services\Requests\RequestBuilder.cs" />
     <Compile Include="Services\Requests\RequestPart.cs" />
     <Compile Include="Services\Requests\StatusRequestPart.cs" />
+    <Compile Include="Services\Requests\ToBathRequestPart.cs" />
     <Compile Include="Services\Requests\ToLocRequestPart.cs" />
     <Compile Include="Services\Requests\TopRequestPart.cs" />
+    <Compile Include="Services\Requests\ToPrinterRequestPart.cs" />
     <Compile Include="Services\Requests\WithinRequestPart.cs" />
+    <Compile Include="Services\Requests\WomensRequestPart.cs" />
     <Compile Include="Services\ResponseHandler.cs" />
+    <Compile Include="Services\ResponseType.cs" />
+    <Compile Include="Services\StorageKey.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Binaries\Microsoft.Maps.MapControl.Common.dll" />

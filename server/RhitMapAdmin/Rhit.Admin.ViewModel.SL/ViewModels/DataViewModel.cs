@@ -14,10 +14,10 @@ namespace Rhit.Admin.ViewModel.ViewModels {
         public DataViewModel(Dispatcher dispatcher) {
             InitializeProperties();
 
-            List<RhitLocation> locations = DataCollector.GetAllLocations();
-            if(locations == null)
+            List<RhitLocation> locations = DataCollector.Instance.GetAllLocations(null);
+            if(locations == null || locations.Count <= 0)
                 DataCollector.Instance.UpdateAvailable += new ServiceEventHandler(OnLocationsRetrieved);
-            else OnLocationsRetrieved(this, new ServiceEventArgs() { Locations = locations, });
+            else OnLocationsRetrieved(this, new ServiceEventArgs());
         }
 
         private void InitializeProperties() {
@@ -31,6 +31,16 @@ namespace Rhit.Admin.ViewModel.ViewModels {
             Links = new ObservableCollection<Link>();
 
             SaveCommand = new RelayCommand(p => SaveLocation());
+
+            Types = new List<LocationType>() {
+                LocationType.NormalLocation,
+                LocationType.PointOfInterest,
+                LocationType.OnQuickList,
+                LocationType.Printer,
+                LocationType.MenRestroom,
+                LocationType.WomenRestroom,
+                LocationType.UnisexRestroom,
+            };
         }
 
         #region Commands
@@ -90,16 +100,6 @@ namespace Rhit.Admin.ViewModel.ViewModels {
             set { SetValue(IsDepartableProperty, value); }
         }
 
-        public bool IsPOI {
-            get { return (bool) GetValue(IsPOIProperty); }
-            set { SetValue(IsPOIProperty, value); }
-        }
-
-        public bool OnQuickList {
-            get { return (bool) GetValue(OnQuickListProperty); }
-            set { SetValue(OnQuickListProperty, value); }
-        }
-
         public bool LabelOnHybrid {
             get { return (bool) GetValue(LabelOnHybridProperty); }
             set { SetValue(LabelOnHybridProperty, value); }
@@ -108,6 +108,16 @@ namespace Rhit.Admin.ViewModel.ViewModels {
         public int MinZoom {
             get { return (int) GetValue(MinZoomProperty); }
             set { SetValue(MinZoomProperty, value); }
+        }
+
+        public LocationType Type {
+            get { return (LocationType) GetValue(TypeProperty); }
+            set { SetValue(TypeProperty, value); }
+        }
+
+        public List<LocationType> Types {
+            get { return (List<LocationType>) GetValue(TypesProperty); }
+            set { SetValue(TypesProperty, value); }
         }
         #endregion
 
@@ -147,6 +157,12 @@ namespace Rhit.Admin.ViewModel.ViewModels {
 
         public static readonly DependencyProperty MinZoomProperty =
             DependencyProperty.Register("MinZoom", typeof(int), typeof(DataViewModel), new PropertyMetadata(0));
+
+        public static readonly DependencyProperty TypeProperty =
+            DependencyProperty.Register("Type", typeof(LocationType), typeof(DataViewModel), new PropertyMetadata(LocationType.NormalLocation));
+
+        public static readonly DependencyProperty TypesProperty =
+            DependencyProperty.Register("Types", typeof(List<LocationType>), typeof(DataViewModel), new PropertyMetadata(new List<LocationType>()));
         #endregion
 
         private void SaveLocation() {
@@ -154,7 +170,8 @@ namespace Rhit.Admin.ViewModel.ViewModels {
         }
 
         private void OnLocationsRetrieved(object sender, ServiceEventArgs e) {
-            foreach(RhitLocation location in e.Locations) {
+            List<RhitLocation> locations = DataCollector.Instance.GetAllLocations(null);
+            foreach(RhitLocation location in locations) {
                 if(location.Id < 0) continue;
                 if(Locations.ContainsKey(location.Id)) continue;
                 Locations[location.Id] = location;
@@ -162,7 +179,7 @@ namespace Rhit.Admin.ViewModel.ViewModels {
 
             TempDict = new Dictionary<int, LocationNode>();
 
-            foreach(RhitLocation location in e.Locations)
+            foreach(RhitLocation location in locations)
                 AddNode(location);
 
             ChangeLocation(LocationTree[0] as object);
@@ -214,9 +231,8 @@ namespace Rhit.Admin.ViewModel.ViewModels {
             Description = CurrentLocation.Description;
             ParentId = CurrentLocation.ParentId;
 
-            IsPOI = CurrentLocation.IsPOI;
+            Type = CurrentLocation.Type;
             IsDepartable = CurrentLocation.IsDepartable;
-            OnQuickList = CurrentLocation.OnQuikList;
             LabelOnHybrid = CurrentLocation.LabelOnHybrid;
             MinZoom = CurrentLocation.MinZoomLevel;
 

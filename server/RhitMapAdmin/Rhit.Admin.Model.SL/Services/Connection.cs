@@ -19,20 +19,29 @@ namespace Rhit.Admin.Model.Services {
         public static Dispatcher Dispatcher { get; private set; }
 
         public static void MakeRequest(Dispatcher dispatcher, RequestPart url) {
+            Connection.MakeRequest(dispatcher, url, false);
+        }
+
+        public static void MakeRequest(Dispatcher dispatcher, RequestPart url, bool isSearch) {
             Dispatcher = dispatcher;
             HttpWebRequest request;
             try {
                 request = (HttpWebRequest) WebRequest.Create(url.ToString());
-            } catch(Exception ex) {
+            } catch {
                 //TODO: Actually do something here
                 //Raise error or notify what happened
-                throw ex;
+                return;
             }
             request.Method = "POST";
             request.ContentType = "application/json; charset=utf-8";
             //request.AllowAutoRedirect = true;
 
-            request.BeginGetResponse(new AsyncCallback(ResponseHandler.RequestCallback), request);
+            if(isSearch)
+                request.BeginGetResponse(new AsyncCallback(ResponseHandler.SearchRequestCallback), request);
+            else if(url is AllRequestPart)
+                request.BeginGetResponse(new AsyncCallback(ResponseHandler.AllRequestCallback), request);
+            else if(url is TopRequestPart)
+                request.BeginGetResponse(new AsyncCallback(ResponseHandler.TopRequestCallback), request);
         }
     }
 }

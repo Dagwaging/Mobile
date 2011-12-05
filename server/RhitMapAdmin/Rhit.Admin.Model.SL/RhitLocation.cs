@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System.Runtime.Serialization;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Collections.Generic;
 using Microsoft.Maps.MapControl;
 
 namespace Rhit.Admin.Model {
@@ -25,7 +26,7 @@ namespace Rhit.Admin.Model {
         /// <param name="latitude"></param>
         /// <param name="longitude"></param>
         public RhitLocation(double latitude, double longitude) {
-            Center = new Location(latitude, longitude);
+            Center = new GeoCoordinate(latitude, longitude);
             Initialize();
         }
 
@@ -36,14 +37,14 @@ namespace Rhit.Admin.Model {
         /// <param name="longitude">Center longitude of the location</param>
         /// <param name="altitude">Center altitude of the location</param>
         public RhitLocation(double latitude, double longitude, double altitude) {
-            Center = new Location(latitude, longitude, altitude);
+            Center = new GeoCoordinate(latitude, longitude, altitude);
             Initialize();
         }
         #endregion
 
         #region Public Properties
         /// <summary> Center of the location. </summary>
-        public Location Center { get; set; }
+        public GeoCoordinate Center { get; set; }
 
         /// <summary> Description of the location. </summary>
         public string Description { get; set; }
@@ -51,7 +52,7 @@ namespace Rhit.Admin.Model {
         /// <summary> Id of the location (Used only by the service). </summary>
         public int Id { get; set; }
 
-        public bool IsPOI { get; set; }
+        public bool IsDepartable { get; set; }
 
         /// <summary> Name of the location. </summary>
         public string Label { get; set; }
@@ -84,6 +85,14 @@ namespace Rhit.Admin.Model {
 
         /// <summary> The polygon outline of the location. </summary>
         public MapPolygon OutLine { get; private set; }
+
+        public int ParentId { get; set; }
+
+        public LocationType Type { get; set; }
+
+        public Dictionary<string, string> Links { get; set; }
+
+        public List<string> AltNames { get; set; }
         #endregion
 
         #region Private Methods
@@ -101,7 +110,7 @@ namespace Rhit.Admin.Model {
         /// Adds a corner point to the outline of the location..
         /// </summary>
         /// <param name="location">The corner point to add</param>
-        public void AddLocation(Location location) {
+        public void AddLocation(GeoCoordinate location) {
             Locations.Add(location);
         }
 
@@ -158,11 +167,10 @@ namespace Rhit.Admin.Model {
             if(Id != location.Id) return;
             Center = location.Center;
             Description = location.Description;
-            IsPOI = location.IsPOI;
+            Type = location.Type;
             Label = location.Label;
             LabelOnHybrid = location.LabelOnHybrid;
             MinZoomLevel = location.MinZoomLevel;
-            OnQuikList = location.OnQuikList;
             ParentId = location.ParentId;
             IsDepartable = IsDepartable;
             Links = location.Links;
@@ -178,15 +186,5 @@ namespace Rhit.Admin.Model {
             polygon.Stroke = new SolidColorBrush(Colors.White) { Opacity = 0.7 };
         }
         #endregion
-
-        public int ParentId { get; set; }
-
-        public bool IsDepartable { get; set; }
-
-        public bool OnQuikList { get; set; }
-
-        public Dictionary<string, string> Links { get; set; }
-
-        public List<string> AltNames { get; set; }
     }
 }

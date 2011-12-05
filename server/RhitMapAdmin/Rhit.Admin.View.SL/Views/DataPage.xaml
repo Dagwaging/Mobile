@@ -72,26 +72,22 @@
                     <TextBlock Text="Min Zoom Level:" FontWeight="Bold" VerticalAlignment="Center" Margin="5" Grid.Row="3" Grid.Column="0"/>
                     <ComboBox ItemsSource="{Binding ZoomRange}" Margin="5" HorizontalAlignment="Left" MinWidth="50" Grid.Row="3" Grid.Column="1" SelectedValue="{Binding MinZoom}"/>
 
-                    <TextBlock Text="Is Departable:" FontWeight="Bold" VerticalAlignment="Center" Margin="5" Grid.Row="4" Grid.Column="0"/>
-                    <CheckBox IsChecked="{Binding IsDepartable}" Grid.Row="4" Grid.Column="1"/>
+                    <TextBlock Text="Location Type:" FontWeight="Bold" VerticalAlignment="Center" Margin="5" Grid.Row="4" Grid.Column="0"/>
+                    <ComboBox ItemsSource="{Binding Types}" SelectedValue="{Binding Type}" Grid.Row="4" Grid.Column="1" Margin="5" HorizontalAlignment="Left" MinWidth="50"/>
 
-                    <TextBlock Text="Is POI:" FontWeight="Bold" VerticalAlignment="Center" Margin="5" Grid.Row="5" Grid.Column="0"/>
-                    <CheckBox IsChecked="{Binding IsPOI}" Grid.Row="5" Grid.Column="1"/>
+                    <TextBlock Text="Is Departable:" FontWeight="Bold" VerticalAlignment="Center" Margin="5" Grid.Row="5" Grid.Column="0"/>
+                    <CheckBox IsChecked="{Binding IsDepartable}" Grid.Row="5" Grid.Column="1"/>
 
+                    <TextBlock Text="Label On Hybrid:" FontWeight="Bold" VerticalAlignment="Center" Margin="5" Grid.Row="6" Grid.Column="0"/>
+                    <CheckBox IsChecked="{Binding LabelOnHybrid}" Grid.Row="6" Grid.Column="1"/>
 
-                    <TextBlock Text="On Quick List:" FontWeight="Bold" VerticalAlignment="Center" Margin="5" Grid.Row="6" Grid.Column="0"/>
-                    <CheckBox IsChecked="{Binding OnQuickList}" Grid.Row="6" Grid.Column="1"/>
+                    <TextBlock Text="Alternate Names:" FontWeight="Bold" VerticalAlignment="Center" Margin="5" Grid.Row="7" Grid.Column="0"/>
+                    <ListBox ItemsSource="{Binding AltNames}" VerticalContentAlignment="Center" MinWidth="100" Margin="5" Grid.Row="7" Grid.Column="1"/>
+                    <Button Content="Manage Names" Margin="5" Click="ManageAltNames_Click" Grid.Row="7" Grid.Column="2"/>
 
-                    <TextBlock Text="Label On Hybrid:" FontWeight="Bold" VerticalAlignment="Center" Margin="5" Grid.Row="7" Grid.Column="0"/>
-                    <CheckBox IsChecked="{Binding LabelOnHybrid}" Grid.Row="7" Grid.Column="1"/>
-
-                    <TextBlock Text="Alternate Names:" FontWeight="Bold" VerticalAlignment="Center" Margin="5" Grid.Row="8" Grid.Column="0"/>
-                    <ListBox ItemsSource="{Binding AltNames}" VerticalContentAlignment="Center" MinWidth="100" Margin="5" Grid.Row="8" Grid.Column="1"/>
-                    <Button Content="Manage Names" Margin="5" Click="ManageAltNames_Click" Grid.Row="8" Grid.Column="2"/>
-
-                    <TextBlock Text="Links:" FontWeight="Bold" VerticalAlignment="Center" Margin="5" Grid.Row="9" Grid.Column="0"/>
-                    <ListBox ItemsSource="{Binding Links}" ItemTemplate="{StaticResource LinkListTemplate}" MinWidth="100" Margin="5" Grid.Row="9" Grid.Column="1"/>
-                    <Button Content="Manage Links" Margin="5" Click="AddLink_Click" Grid.Row="9" Grid.Column="2"/>
+                    <TextBlock Text="Links:" FontWeight="Bold" VerticalAlignment="Center" Margin="5" Grid.Row="8" Grid.Column="0"/>
+                    <ListBox ItemsSource="{Binding Links}" ItemTemplate="{StaticResource LinkListTemplate}" MinWidth="100" Margin="5" Grid.Row="8" Grid.Column="1"/>
+                    <Button Content="Manage Links" Margin="5" Click="AddLink_Click" Grid.Row="8" Grid.Column="2"/>
                 </Grid>
 
                 <TextBlock Text="Description" FontWeight="Bold" VerticalAlignment="Center" Margin="5" HorizontalAlignment="Center"/>

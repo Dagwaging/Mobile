@@ -8,15 +8,49 @@ using System.Windows;
 
 namespace Rhit.Admin.Model.Services {
     public static class ResponseHandler {
-        public static event ServerEventHandler ResponseReceived;
 
+        #region Events
+        public static event ServerEventHandler ResponseReceived;
+        public static event ServerEventHandler AllResponseReceived;
+        public static event ServerEventHandler TopResponseReceived;
+        public static event ServerEventHandler SearchResponseReceived;
+        #endregion
+
+        #region Event Raising Methods
         private static void OnResponse(ServerEventArgs e) {
             if(ResponseReceived != null) ResponseReceived(null, e);
         }
 
-        public static void RequestCallback(IAsyncResult asyncResult) {
-            SendResults(ParseResponse(asyncResult));
+        private static void OnAllResponse(ServerEventArgs e) {
+            if(AllResponseReceived != null) AllResponseReceived(null, e);
         }
+
+        private static void OnTopResponse(ServerEventArgs e) {
+            if(TopResponseReceived != null) TopResponseReceived(null, e);
+        }
+
+        private static void OnSearchResponse(ServerEventArgs e) {
+            if(SearchResponseReceived != null) SearchResponseReceived(null, e);
+        }
+        #endregion
+
+        #region Callbacks
+        public static void RequestCallback(IAsyncResult asyncResult) {
+            SendResults(ParseResponse(asyncResult), ResponseType.Basic);
+        }
+
+        public static void AllRequestCallback(IAsyncResult asyncResult) {
+            SendResults(ParseResponse(asyncResult), ResponseType.All);
+        }
+
+        public static void TopRequestCallback(IAsyncResult asyncResult) {
+            SendResults(ParseResponse(asyncResult), ResponseType.Top);
+        }
+
+        public static void SearchRequestCallback(IAsyncResult asyncResult) {
+            SendResults(ParseResponse(asyncResult), ResponseType.Search);
+        }
+        #endregion
 
         private static ServerEventArgs ParseResponse(IAsyncResult asyncResult) {
             HttpWebRequest request = (HttpWebRequest) asyncResult.AsyncState;
@@ -37,12 +71,6 @@ namespace Rhit.Admin.Model.Services {
                     }
                 }
             }
-
-            //ServerEventArgs args = new ServerEventArgs() {
-            //    ResponseObject = new ServerObject(),
-            //    ServerResponse = HttpStatusCode.OK,
-            //};
-
             ServerEventArgs args = new ServerEventArgs() {
                 ResponseObject = obj,
                 ServerResponse = response.StatusCode,
@@ -51,8 +79,22 @@ namespace Rhit.Admin.Model.Services {
             return args;
         }
 
-        private static void SendResults(ServerEventArgs args) {
-            Connection.Dispatcher.BeginInvoke(new Action(() => OnResponse(args)));
+        private static void SendResults(ServerEventArgs args, ResponseType type) {
+            switch(type) {
+                case ResponseType.Basic:
+                    Connection.Dispatcher.BeginInvoke(new Action(() => OnResponse(args)));
+                    break;
+                case ResponseType.All:
+                    Connection.Dispatcher.BeginInvoke(new Action(() => OnAllResponse(args)));
+                    break;
+                case ResponseType.Top:
+                    Connection.Dispatcher.BeginInvoke(new Action(() => OnTopResponse(args)));
+                    break;
+                case ResponseType.Search:
+                    Connection.Dispatcher.BeginInvoke(new Action(() => OnSearchResponse(args)));
+                    break;
+            }
         }
     }
 }
+

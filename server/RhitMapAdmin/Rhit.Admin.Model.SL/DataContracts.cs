@@ -1,18 +1,67 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Microsoft.Maps.MapControl;
 
 namespace Rhit.Admin.Model {
     [DataContract]
     public class ServerObject {
-        [DataMember(Name = "Version")]
-        public double Version { get; set; }
-
+        #region LocationsResponse
         [DataMember(Name = "Locations")]
         public List<Location_DC> Locations { get; set; }
 
+        [DataMember(Name = "Version")]
+        public double Version { get; set; }
+        #endregion
+
+        #region LocationNamesResponse
         [DataMember(Name = "Names")]
         public List<Location_DC> Names { get; set; }
+
+        //Also includes Version (from LocationsResponse)
+        #endregion
+
+        #region DescriptionResponse
+        [DataMember(Name = "Description")]
+        public string Description { get; set; }
+
+        [DataMember(Name = "Links")]
+        public List<Link_DC> Links { get; set; }
+        #endregion
+
+        #region DirectionsResponse
+        [DataMember(Name = "Done")]
+        public int Done { get; set; }
+
+        [DataMember(Name = "RequestId")]
+        public int RequestId { get; set; }
+
+        [DataMember(Name = "Result")]
+        public Directions_DC Result { get; set; }
+        #endregion
+
+        #region PrinterResponse
+        //Also includes DirectionsResponse
+
+        [DataMember(Name = "Printer")]
+        public string Printer { get; set; }
+        #endregion
+
+        #region AuthenticationResponse
+        [DataMember(Name = "Expiration")]
+        public DateTime Expiration { get; set; }
+
+        [DataMember(Name = "Token")]
+        public string Token { get; set; }
+        #endregion
+
+        #region StoredProcedureResponse
+        [DataMember(Name = "Columns")]
+        public List<string> Columns { get; set; }
+
+        [DataMember(Name = "Table")]
+        public List<List<string>> Table { get; set; }
+        #endregion
 
         public static List<RhitLocation> GetLocations(List<Location_DC> locations) {
             List<RhitLocation> _locations = new List<RhitLocation>();
@@ -22,13 +71,17 @@ namespace Rhit.Admin.Model {
         }
     }
 
+    #region Location - Data Contract
     [DataContract]
     public class Location_DC {
-        [DataMember(Name = "Name")]
-        public string Label { get; set; }
-
         [DataMember(Name = "AltNames")]
         public List<string> AltNames { get; set; }
+
+        [DataMember(Name = "Center")]
+        public GeoCoordinate_DC Center { get; set; }
+
+        [DataMember(Name = "Description")]
+        public string Description { get; set; }
 
         [DataMember(Name = "Id")]
         public int Id { get; set; }
@@ -36,45 +89,40 @@ namespace Rhit.Admin.Model {
         [DataMember(Name = "IsDepartable")]
         public bool IsDepartable { get; set; }
 
-        [DataMember(Name = "Center")]
-        public Coordinate_DC Center { get; set; }
-
-        [DataMember(Name = "IsPOI")]
-        public bool IsPOI { get; set; }
-
         [DataMember(Name = "Links")]
         public List<Link_DC> Links { get; set; }
-
-        [DataMember(Name = "Parent")]
-        public int ParentId { get; set; }
-
-        [DataMember(Name = "OnQuickList")]
-        public bool OnQuickList { get; set; }
-
-        [DataMember(Name = "Description")]
-        public string Description { get; set; }
 
         [DataMember(Name = "MapArea")]
         public LocationData_DC LocationData { get; set; }
 
+        [DataMember(Name = "Name")]
+        public string Label { get; set; }
+
+        [DataMember(Name = "Parent")]
+        public int ParentId { get; set; }
+
+        [DataMember(Name = "Type")]
+        public string Type { get; set; }
+
         public RhitLocation ToRhitLocation() {
             LocationCollection locations = new LocationCollection();
             if(LocationData != null && LocationData.Locations != null) {
-                foreach(Coordinate_DC coordinate in LocationData.Locations)
-                    locations.Add(coordinate.ToLocation());
+                foreach(GeoCoordinate_DC coordinate in LocationData.Locations)
+                    locations.Add(coordinate.ToGeoCoordinate());
             }
-            Dictionary<string, string> links = new Dictionary<string,string>();
+            Dictionary<string, string> links = new Dictionary<string, string>();
             foreach(Link_DC link in Links)
                 links[link.Name] = link.Url;
 
+
+
             RhitLocation location = new RhitLocation() {
-                Center = Center.ToLocation(),
+                Center = Center.ToGeoCoordinate(),
                 Locations = locations,
                 Id = Id,
                 Description = Description,
                 Label = Label,
-                IsPOI = IsPOI,
-                OnQuikList = OnQuickList,
+                Type = ConvertTypeKeyToType(Type),
                 Links = links,
                 IsDepartable = IsDepartable,
                 AltNames = AltNames,
@@ -87,18 +135,35 @@ namespace Rhit.Admin.Model {
             return location;
         }
 
-        [OnDeserializing]
-        public void SetDefaults(StreamingContext c) {
-            ParentId = -1;
+        private LocationType ConvertTypeKeyToType(string key) {
+            switch(key) {
+                case "NL":
+                    return LocationType.NormalLocation;
+                case "PI":
+                    return LocationType.PointOfInterest;
+                case "QL":
+                    return LocationType.OnQuickList;
+                case "MB":
+                    return LocationType.MenRestroom;
+                case "WB":
+                    return LocationType.WomenRestroom;
+                case "UB":
+                    return LocationType.UnisexRestroom;
+                case "PR":
+                    return LocationType.Printer;
+            }
+            return LocationType.NormalLocation;
         }
     }
+    #endregion
 
+    #region Location Data - Data Contract
     [DataContract]
     public class LocationData_DC {
         public LocationData_DC() : base() { }
 
         [DataMember(Name = "Corners")]
-        public List<Coordinate_DC> Locations { get; set; }
+        public List<GeoCoordinate_DC> Locations { get; set; }
 
         [DataMember(Name = "MinZoomLevel")]
         public int MinZoomLevel { get; set; }
@@ -106,7 +171,9 @@ namespace Rhit.Admin.Model {
         [DataMember(Name = "LabelOnHybrid")]
         public bool LabelOnHybrid { get; set; }
     }
+    #endregion
 
+    #region Link - Data Contract
     [DataContract]
     public class Link_DC {
         public Link_DC() : base() { }
@@ -117,22 +184,63 @@ namespace Rhit.Admin.Model {
         [DataMember(Name = "Url")]
         public string Url { get; set; }
     }
+    #endregion
 
+    #region Directions - Data Contract
     [DataContract]
-    public class Coordinate_DC {
-        public Coordinate_DC() : base() { }
+    public class Directions_DC {
+        public Directions_DC() : base() { }
+
+        [DataMember(Name = "Dist")]
+        public double Distance { get; set; }
+
+        [DataMember(Name = "Paths")]
+        public List<Path_DC> Paths { get; set; }
+
+        [DataMember(Name = "StairsDown")]
+        public int StairsDown { get; set; }
+
+        [DataMember(Name = "StairsUp")]
+        public int StairsUp { get; set; }
+
+        [DataMember(Name = "Start")]
+        public GeoCoordinate_DC Start { get; set; }
+    }
+    #endregion
+
+    #region Path - Data Contract
+    [DataContract]
+    public class Path_DC {
+        public Path_DC() : base() { }
+
+        [DataMember(Name = "Dir")]
+        public string Direction { get; set; }
+
+        [DataMember(Name = "To")]
+        public GeoCoordinate_DC To { get; set; }
+
+        [DataMember(Name = "Flag")]
+        public bool Flag { get; set; }
+    }
+    #endregion
+
+    #region GeoCoordinate - Data Contract
+    [DataContract]
+    public class GeoCoordinate_DC {
+        public GeoCoordinate_DC() : base() { }
 
         [DataMember(Name = "Lat")]
         public double Latitude { get; set; }
 
-        [DataMember(Name = "Long")]
+        [DataMember(Name = "Lon")]
         public double Longitude { get; set; }
 
-        public Location ToLocation() {
-            return new Location() {
+        public GeoCoordinate ToGeoCoordinate() {
+            return new GeoCoordinate() {
                 Latitude = Latitude,
                 Longitude = Longitude,
             };
         }
     }
+    #endregion
 }

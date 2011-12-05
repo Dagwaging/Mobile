@@ -1,5 +1,4 @@
 ﻿using System;
-using Rhit.Admin.Model.SL.Services.Requests;
 
 namespace Rhit.Admin.Model.Services.Requests {
     /// \ingroup services
