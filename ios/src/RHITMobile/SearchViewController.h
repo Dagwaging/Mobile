@@ -35,11 +35,11 @@ typedef enum RHSearchViewControllerType_ {
 
 @property (nonatomic, assign) BOOL searchInitiated;
 
-@property (nonatomic, retain) NSString *currentAutocompleteTerm;
+@property (atomic, retain) NSString *currentAutocompleteTerm;
 
-@property (nonatomic, readonly) NSDictionary *autocompleteData;
+@property (atomic, readonly) NSDictionary *autocompleteData;
 
-@property (nonatomic, retain) NSMutableArray *searchResults;
+@property (atomic, retain) NSMutableArray *searchResults;
 
 @property (nonatomic, retain) IBOutlet UISearchBar *searchBar;
 

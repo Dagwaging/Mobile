@@ -38,6 +38,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.searchResults = [NSMutableArray array];
+    
     if (self.searchType == RHSearchViewControllerTypeLocation) {
         self.navigationItem.title = @"Search Locations";
     } else if (self.searchType == RHSearchViewControllerTypePeople) {
@@ -101,14 +103,6 @@
                                           waitUntilDone:NO];
         }
     }
-}
-
-- (NSArray *)searchResults {
-    if (searchResults_ == nil) {
-        searchResults_ = [NSMutableArray array];
-    }
-    
-    return searchResults_;
 }
 
 #pragma mark - UISearchBarDelegate Methods
