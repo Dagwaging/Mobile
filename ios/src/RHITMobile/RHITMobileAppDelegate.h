@@ -78,6 +78,12 @@
 /// NSManagedObjectContext objects for database interactions.
 @property (nonatomic, retain, readonly) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
+@property (nonatomic, retain) NSDictionary *locationNames;
+
++ (RHITMobileAppDelegate *)instance;
+
+- (void)prefetchLocationNames;
+
 /// Clear the entire CoreData SQLite database for the application. This should
 /// only be called immediately before a complete data reload, likely triggered
 /// by a response from the server indicating that the current data set is

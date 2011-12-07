@@ -231,7 +231,7 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath {
         return expectedLabelSize.height + 20;
     }
     
-    return 44; 
+    return 44;
 }
 
 #pragma mark - UITableViewDataSource Methods

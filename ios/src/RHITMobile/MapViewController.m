@@ -494,6 +494,8 @@
     self.quickListAnnotations = [[[NSMutableArray alloc]
                                   initWithCapacity:results.count] autorelease];
     [self populateMapWithLocations:(NSSet *)results];
+    
+    [[RHITMobileAppDelegate instance] prefetchLocationNames];
 }
 
 - (void)populateMapWithLocations:(NSSet *)locations {

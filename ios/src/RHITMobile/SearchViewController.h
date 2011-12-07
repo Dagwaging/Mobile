@@ -23,17 +23,23 @@
 
 typedef enum RHSearchViewControllerType_ {
     RHSearchViewControllerTypeLocation = 0,
-    RHSearchViewControllerTypePeople = 1
+    RHSearchViewControllerTypePeople
 } RHSearchViewControllerType;
 
 /// \ingroup views
 /// View controller for the search portion of the application.
 @interface SearchViewController : UIViewController <UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource> {
-    @private
-    NSMutableArray *results_;
 }
 
 @property (nonatomic, assign) RHSearchViewControllerType searchType;
+
+@property (nonatomic, assign) BOOL searchInitiated;
+
+@property (atomic, retain) NSString *currentAutocompleteTerm;
+
+@property (atomic, readonly) NSDictionary *autocompleteData;
+
+@property (atomic, retain) NSMutableArray *searchResults;
 
 @property (nonatomic, retain) IBOutlet UISearchBar *searchBar;
 
@@ -43,6 +49,10 @@ typedef enum RHSearchViewControllerType_ {
 
 @property (nonatomic, retain) NSManagedObjectContext *context;
 
+- (void)tryAutocomplete:(NSString *)searchTerm;
+
 - (void)didFindSearchResults:(NSArray *)searchResults;
+
+- (id)objectFromResult:(id)result;
 
 @end

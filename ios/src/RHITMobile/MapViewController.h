@@ -48,7 +48,7 @@
 
 @property (nonatomic, retain) NSMutableArray *quickListAnnotations;
 
-@property (nonatomic, retain) NSArray *temporaryAnnotations;
+@property (nonatomic, retain) NSArray *temporaryAnnotations; 
 
 - (void)focusMapViewToTemporaryAnnotation:(RHAnnotation *)annotation;
 
