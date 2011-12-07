@@ -78,7 +78,7 @@
 /// NSManagedObjectContext objects for database interactions.
 @property (nonatomic, retain, readonly) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
-@property (nonatomic, retain) NSSet *locationNames;
+@property (nonatomic, retain) NSDictionary *locationNames;
 
 + (RHITMobileAppDelegate *)instance;
 

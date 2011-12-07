@@ -226,10 +226,11 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
         NSArray *fetchResults = [managedObjectContext
                                  executeFetchRequest:request
                                  error:nil];
-        NSMutableSet *names = [NSMutableSet setWithCapacity:fetchResults.count];
+        NSMutableDictionary *names = [NSMutableDictionary
+                                      dictionaryWithCapacity:fetchResults.count];
         
         for (RHLocation *location in fetchResults) {
-            [names addObject:location.name];
+            [names setObject:location.objectID forKey:location.name];
         }
         
         self.locationNames = names;
