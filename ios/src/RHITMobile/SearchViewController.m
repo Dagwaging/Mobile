@@ -94,8 +94,6 @@
             }
         }
         
-        NSLog(@"Found %d terms", results.count);
-        
         if ([self.currentAutocompleteTerm isEqual:searchTerm]) {
             self.searchResults = results;
             [self.tableView performSelectorOnMainThread:@selector(reloadData)
@@ -227,7 +225,13 @@
 
 - (void)tableView:(UITableView *)inTableView
 didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [inTableView deselectRowAtIndexPath:indexPath animated:YES];
+    
     if (self.searchResults.count == 0 && self.searchInitiated) {
+        return;
+    }
+    
+    if (indexPath.row >= self.searchResults.count && self.searchInitiated) {
         return;
     }
     
@@ -237,8 +241,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     id result = [self.searchResults objectAtIndex:indexPath.row];
     id resultObject = [self objectFromResult:result];
-    
-    [inTableView deselectRowAtIndexPath:indexPath animated:YES];
     
     if (self.searchType == RHSearchViewControllerTypeLocation) {
         LocationDetailViewController *details = [[[LocationDetailViewController alloc] initWithNibName:@"LocationDetailView" bundle:nil] autorelease];
