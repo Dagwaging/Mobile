@@ -21,18 +21,25 @@
 #import "RHRemoteHandler.h"
 #import "RHLocation.h"
 #import "LocationDetailViewController.h"
+#import "RHITMobileAppDelegate.h"
 
 
 @implementation SearchViewController
 
 @synthesize searchBar;
+@synthesize state;
+@synthesize currentAutocompleteTerm;
 @synthesize searchType;
 @synthesize tableView;
 @synthesize remoteHandler;
 @synthesize context;
+@synthesize searchResults = searchResults_;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.state = RHSearchViewControllerStateWaiting;
+    
     if (self.searchType == RHSearchViewControllerTypeLocation) {
         self.navigationItem.title = @"Search Locations";
     } else if (self.searchType == RHSearchViewControllerTypePeople) {
@@ -43,9 +50,10 @@
 }
 
 - (void)viewDidAppear:(BOOL)animated {
-    if (results_ == nil) {
+    if (self.state == RHSearchViewControllerStateWaiting) {
         [self.searchBar becomeFirstResponder];
     }
+    
     [super viewDidAppear:animated];
 }
 
@@ -65,6 +73,51 @@
     self.searchBar = nil;
 }
 
+- (NSSet *)autocompleteData {
+    if (self.searchType == RHSearchViewControllerTypeLocation) {
+        return RHITMobileAppDelegate.instance.locationNames;
+    }
+    
+    return nil;
+}
+
+- (void)tryAutocomplete:(NSString *)searchTerm {
+    if ([NSThread isMainThread]) {
+        self.currentAutocompleteTerm = searchTerm;
+        [self performSelectorInBackground:@selector(tryAutocomplete:)
+                               withObject:searchTerm];
+    } else {
+        NSString *normalized = searchTerm.lowercaseString;
+        NSMutableArray *results = [NSMutableArray arrayWithCapacity:self.autocompleteData.count];
+        
+        for (NSString *term in self.autocompleteData) {
+            if ([term.lowercaseString hasPrefix:normalized]) {
+                [results addObject:term];
+            }
+        }
+        
+        NSLog(@"Found %d terms", results.count);
+        
+        if ([self.currentAutocompleteTerm isEqual:searchTerm]) {
+            self.searchResults = results;
+            self.state = self.searchResults.count > 0
+                ? RHSearchViewControllerStateFoundResults
+                : RHSearchViewControllerStateNoResults;
+            [self.tableView performSelectorOnMainThread:@selector(reloadData)
+                                             withObject:nil
+                                          waitUntilDone:NO];
+        }
+    }
+}
+
+- (NSArray *)searchResults {
+    if (searchResults_ == nil) {
+        searchResults_ = [NSMutableArray array];
+    }
+    
+    return searchResults_;
+}
+
 #pragma mark - UISearchBarDelegate Methods
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)inSearchBar {
@@ -73,6 +126,8 @@
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)inSearchBar {
     [inSearchBar resignFirstResponder];
+    
+    self.state = RHSearchViewControllerStateSearching;
     
     self.navigationItem.title = @"Searching...";
     UIActivityIndicatorView* activityIndicatorView = [[[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(20, 0, 20, 20)] autorelease];
@@ -84,6 +139,11 @@
     [self.remoteHandler searchForLocations:self.searchBar.text searchViewController:self];
 }
 
+- (void)searchBar:(UISearchBar *)searchBar
+    textDidChange:(NSString *)searchText {
+    [self tryAutocomplete:searchText];
+}
+
 #pragma mark - UITableViewDataSource Methods
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -91,16 +151,16 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (results_ == nil) {
+    if (self.state == RHSearchViewControllerStateWaiting) {
         return 0;
     }
     
-    return MAX(results_.count, 1);
+    return MAX(self.searchResults.count, 1);
 }
 
 - (UITableViewCell *)tableView:(UITableView *)inTableView
          cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (results_.count == 0) {
+    if (self.searchResults.count == 0) {
         UITableViewCell *cell = [inTableView dequeueReusableCellWithIdentifier:@"NoResultsCell"];
         
         if (cell == nil) {
@@ -114,7 +174,7 @@
         return cell;
     }
     
-    RHLocation *location = [results_ objectAtIndex:indexPath.row];
+    RHLocation *location = [self.searchResults objectAtIndex:indexPath.row];
     
     UITableViewCell *cell = [inTableView dequeueReusableCellWithIdentifier:@"SearchResultCell"];
     
@@ -123,32 +183,41 @@
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     
-    cell.textLabel.text = location.name;
+    if ([location isKindOfClass:[RHLocation class]]) {
+        cell.textLabel.text = location.name;
+    } else {
+        cell.textLabel.text = location;
+    }
+
     
     return cell;
 }
 
-- (void)didFindSearchResults:(NSArray *)searchResults {
+- (void)didFindSearchResults:(NSArray *)inSearchResults {
     self.navigationItem.rightBarButtonItem = nil;
     self.navigationItem.title = [NSString stringWithFormat:@"\"%@\"", self.searchBar.text];
     
-    results_ = [[NSMutableArray alloc] initWithCapacity:searchResults.count];
+    self.searchResults = [NSMutableArray arrayWithCapacity:inSearchResults.count];
     
-    for (NSManagedObjectID *objectID in searchResults) {
+    for (NSManagedObjectID *objectID in inSearchResults) {
         RHLocation *location = (RHLocation *)[context objectWithID:objectID];
-        [results_ addObject:location];
+        [self.searchResults addObject:location];
     }
+    
+    self.state = inSearchResults.count > 0
+        ? RHSearchViewControllerStateFoundResults
+        : RHSearchViewControllerStateNoResults;
     
     [self.tableView reloadData];
 }
 
 - (void)tableView:(UITableView *)inTableView
 didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (results_.count == 0) {
+    if (self.searchResults.count == 0) {
         return;
     }
     
-    RHLocation *location = [results_ objectAtIndex:indexPath.row];
+    RHLocation *location = [self.searchResults objectAtIndex:indexPath.row];
     
     [inTableView deselectRowAtIndexPath:indexPath animated:YES];
     

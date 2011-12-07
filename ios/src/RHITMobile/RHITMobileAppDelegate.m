@@ -25,6 +25,7 @@
 #import "RHBeta.h"
 #import "DirectoryViewController.h"
 #import "InfoViewController.h"
+#import "RHLocation.h"
 
 
 #pragma mark Private Category Declaration
@@ -50,11 +51,24 @@
 @synthesize managedObjectModel;
 @synthesize managedObjectContext;
 @synthesize persistentStoreCoordinator;
+@synthesize locationNames;
+
+#pragma mark - Static Methods
+static RHITMobileAppDelegate *instance_;
+
++ (RHITMobileAppDelegate *)instance {
+    return instance_;
+}
 
 #pragma mark - UIAppDelegate Methods
 
 - (BOOL)application:(UIApplication *)application 
 didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    // Set the instance_ variable if not already set to allow singleton access
+    if (instance_ == nil) {
+       instance_ = self; 
+    }
+    
     // Add tab bar controller to window
     self.window.rootViewController = self.tabBarController;
     
@@ -200,6 +214,26 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [managedObjectModel release];
     [persistentStoreCoordinator release];
     [super dealloc];
+}
+
+- (void)prefetchLocationNames {
+    if ([NSThread isMainThread]) {
+        [self performSelectorInBackground:@selector(prefetchLocationNames)
+                               withObject:nil];
+    } else {
+        NSFetchRequest *request = [NSFetchRequest
+                                   fetchRequestWithEntityName:@"Location"];
+        NSArray *fetchResults = [managedObjectContext
+                                 executeFetchRequest:request
+                                 error:nil];
+        NSMutableSet *names = [NSMutableSet setWithCapacity:fetchResults.count];
+        
+        for (RHLocation *location in fetchResults) {
+            [names addObject:location.name];
+        }
+        
+        self.locationNames = names;
+    }
 }
 
 #pragma mark - Property Methods
