@@ -1,24 +1,22 @@
 #!/usr/bin/env bash
 
-# Determine which branch we're working from
-BRANCH=`git branch 2>/dev/null|grep -e ^\* | tr -d \*\ `
-
-# Determine whether this is an alpha or beta build
-if [ "$BRANCH" = "master" ]
+# Determine which branch we're on
+if [[ `git branch --contains $GIT_COMMIT` == *master* ]]
 then
     BUILD_TYPE="beta"
     BUILD_CLASSIFICATION="official"
+    sed -i -e "s/#define kRHBetaBuildType kRHBetaBuildTypeRolling/#define kRHBetaBuildType kRHBetaBuildTypeOfficial/" src/RHITMobile/RHBeta.h
 else
     BUILD_TYPE="alpha"
     BUILD_CLASSIFICATION="rolling"
 fi
 
-# Bad awk and sed foo to extract the version number
-VERSION=$(awk '$1 ~ /CFBundleShortVersion/ {version_next = "YES"}; \
-          version_next ~ /YES/  && $1 ~ /string/ {print $1; \
-          version_next = "NO"}' \
-          src/RHITMobile/RHITMobile-Info.plist | \
-          sed 's|<string>\(.*\)</string>|\1|g')
+echo "Build type: $BUILD_CLASSIFICATION"
+echo "Build version type: $BUILD_TYPE"
+
+# Find the existing version number
+VERSION=$(defaults read `pwd`/src/RHITMobile/RHITMobile-Info CFBundleShortVersionString)
+echo "Existing version number: $VERSION"
 
 cd src
 

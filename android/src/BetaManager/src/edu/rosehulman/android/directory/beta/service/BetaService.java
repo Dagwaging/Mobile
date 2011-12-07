@@ -3,10 +3,13 @@ package edu.rosehulman.android.directory.beta.service;
 import org.json.JSONObject;
 
 import edu.rosehulman.android.directory.beta.model.LatestBuilds;
+import edu.rosehulman.android.directory.beta.model.Response;
 
 public class BetaService {
 	
-	private static final String HOST = "rhitmobilebeta-test.heroku.com";
+	private static final String HOST = "rhitmobilebeta.heroku.com";
+	//private static final String HOST = "rhitmobilebeta-test.heroku.com";
+	
 	private static final int PORT = 80;
 	
 	public BetaService() {
@@ -54,6 +57,19 @@ public class BetaService {
 		JSONObject root = client.execute();
 		
 		return LatestBuilds.deserialize(root);
+	}
+	
+	public boolean postFeedback(String authToken, String feedback) throws Exception {
+		JsonClient client = new JsonClient(HOST, PORT, "feedback/post");
+		client.setMethod(HttpMethod.POST);
+
+		client.addPostParameter("authToken", authToken);
+		client.addPostParameter("content", feedback);
+		
+		JSONObject root = client.execute();
+		Response response = Response.deserialize(root);
+		
+		return response.success;
 	}
 
 }
