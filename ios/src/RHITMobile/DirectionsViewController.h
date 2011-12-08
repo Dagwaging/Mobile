@@ -1,5 +1,5 @@
 //
-//  LocationDetailViewController.h
+//  DirectionsViewController.h
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -17,19 +17,8 @@
 //  limitations under the License.
 //
 
-
 #import <UIKit/UIKit.h>
 
-@class RHLocation;
-
-/// \ingroup views
-@interface LocationDetailViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
-
-@property (nonatomic, retain) RHLocation *location;
-@property (nonatomic, retain) NSArray *enclosedLocations;
-@property (nonatomic, retain) NSArray *links;
-@property (nonatomic, retain) IBOutlet UITableView *tableView;
-
-- (IBAction)displayCurrentLocationOnMap:(id)sender;
+@interface DirectionsViewController : UIViewController <UITableViewDataSource, UITabBarDelegate>
 
 @end

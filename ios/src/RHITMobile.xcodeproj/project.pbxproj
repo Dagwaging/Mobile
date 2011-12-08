@@ -24,6 +24,8 @@
 		9236CEA1144E3CBC00D0FB59 /* QuickListView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9236CE9E144E3CBC00D0FB59 /* QuickListView.xib */; };
 		9236CEA2144E3CBC00D0FB59 /* QuickListView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9236CE9E144E3CBC00D0FB59 /* QuickListView.xib */; };
 		9236CEA6144F33C400D0FB59 /* RHPinAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9236CEA5144F33C400D0FB59 /* RHPinAnnotationView.m */; };
+		9239561514905948007A38D4 /* DirectionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9239561314905948007A38D4 /* DirectionsViewController.m */; };
+		9239561614905948007A38D4 /* DirectionsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9239561414905948007A38D4 /* DirectionsView.xib */; };
 		923C841414298C5800DFE415 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 923C841314298C5800DFE415 /* CoreData.framework */; };
 		923C841C14298DD500DFE415 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 923C841A14298DD500DFE415 /* Model.xcdatamodeld */; };
 		9246368C142BAAC700A5E399 /* RHLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9246368B142BAAC700A5E399 /* RHLocation.m */; };
@@ -136,6 +138,9 @@
 		9236CE9E144E3CBC00D0FB59 /* QuickListView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = QuickListView.xib; sourceTree = "<group>"; };
 		9236CEA4144F33C300D0FB59 /* RHPinAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHPinAnnotationView.h; sourceTree = "<group>"; };
 		9236CEA5144F33C400D0FB59 /* RHPinAnnotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHPinAnnotationView.m; sourceTree = "<group>"; };
+		9239561214905948007A38D4 /* DirectionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DirectionsViewController.h; sourceTree = "<group>"; };
+		9239561314905948007A38D4 /* DirectionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DirectionsViewController.m; sourceTree = "<group>"; };
+		9239561414905948007A38D4 /* DirectionsView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DirectionsView.xib; sourceTree = "<group>"; };
 		923C841314298C5800DFE415 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		923C841B14298DD500DFE415 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		9246368A142BAAC700A5E399 /* RHLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHLocation.h; sourceTree = "<group>"; };
@@ -552,6 +557,8 @@
 				924DE4E6145E79DF00EEE8C6 /* DirectoryViewController.m */,
 				92F20F6A1464383200603500 /* WebViewController.h */,
 				92F20F6B1464383200603500 /* WebViewController.m */,
+				9239561214905948007A38D4 /* DirectionsViewController.h */,
+				9239561314905948007A38D4 /* DirectionsViewController.m */,
 				9265FEBA1409AB5D00AE406E /* MainWindow.xib */,
 				9265FEC31409AB5D00AE406E /* MapView.xib */,
 				9265FEC61409AB5D00AE406E /* SearchView.xib */,
@@ -562,6 +569,7 @@
 				924DE4E7145E79DF00EEE8C6 /* DirectoryView.xib */,
 				92A49DDB145F8BA400B6F34E /* BetaRegistrationView.xib */,
 				92F20F6C1464383200603500 /* WebView.xib */,
+				9239561414905948007A38D4 /* DirectionsView.xib */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -664,6 +672,7 @@
 				924DE4E9145E79DF00EEE8C6 /* DirectoryView.xib in Resources */,
 				92A49DDD145F8BA400B6F34E /* BetaRegistrationView.xib in Resources */,
 				92F20F6E1464383200603500 /* WebView.xib in Resources */,
+				9239561614905948007A38D4 /* DirectionsView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -739,6 +748,7 @@
 				92A49DDC145F8BA400B6F34E /* BetaRegistrationViewController.m in Sources */,
 				92F20F6D1464383200603500 /* WebViewController.m in Sources */,
 				92E1AA7F1487115F0005BF34 /* RHWebRequestMaker.m in Sources */,
+				9239561514905948007A38D4 /* DirectionsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
