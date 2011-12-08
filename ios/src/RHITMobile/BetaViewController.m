@@ -26,6 +26,9 @@
 #import "NSDictionary_JSONExtensions.h"
 #import "RHITMobileAppDelegate.h"
 #import "BetaRegistrationViewController.h"
+#import "MapViewController.h"
+#import "RHRemoteHandler.h"
+#import "RHPListStore.h"
 
 #ifdef RHITMobile_RHBeta
 
@@ -50,6 +53,7 @@
 #define kBetaAuthTokenCell @"AuthTokenCell"
 #define kBetaMapDebugLabel @"Map Debugging Tools"
 #define kBetaMapDebugCell @"MapDebugCell"
+#define kBetaDatabaseToolsLabel @"Database Tools"
 
 @interface BetaViewController ()
 
@@ -64,6 +68,7 @@
 
 - (IBAction)switchInstallationType:(id)sender;
 - (IBAction)checkForUpdates:(id)sender;
+- (IBAction)clearAndReloadData:(id)sender;
 - (void)didFindNoUpdates;
 - (void)didFindUpdateWithURL:(NSURL *)url;
 - (void)performCheckForUpdates:(NSNumber *)official;
@@ -95,7 +100,8 @@
         self.navigationItem.title = @"Beta Tools and Info";
         self.sections = [NSArray arrayWithObjects:kBetaApplicationVersionLabel,
                          kBetaBuildNumberLabel, kBetaBuildTypeLabel,
-                         kBetaUpdateTimeLabel, kBetaAuthTokenLabel, nil];
+                         kBetaUpdateTimeLabel, kBetaAuthTokenLabel,
+                         kBetaDatabaseToolsLabel, nil];
         self.operations = [[[NSOperationQueue alloc] init] autorelease];
     }
     return self;
@@ -175,8 +181,22 @@
 - (UIView *)tableView:(UITableView *)tableView
 viewForFooterInSection:(NSInteger)section {
     NSString *sectionLabel = [self.sections objectAtIndex:section];
-    
-    if ([sectionLabel isEqualToString:kBetaBuildTypeLabel]) {
+    if ([sectionLabel isEqualToString:kBetaDatabaseToolsLabel]) {
+        UIView *parentView = [[[UIView alloc] initWithFrame:CGRectZero] autorelease];
+        parentView.backgroundColor = [UIColor clearColor];
+        
+        UIButton *updateButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        updateButton.frame = CGRectMake(10.0, 10.0, 300.0, 44.0);
+        [updateButton addTarget:self
+                         action:@selector(clearAndReloadData:)
+               forControlEvents:UIControlEventTouchUpInside];
+        [updateButton setTitle:@"Clear and Reload Data"
+                      forState:UIControlStateNormal];
+        
+        [parentView addSubview:updateButton];
+        
+        return parentView;
+    } else if ([sectionLabel isEqualToString:kBetaBuildTypeLabel]) {
         UIView *parentView = [[[UIView alloc] initWithFrame:CGRectZero] autorelease];
         parentView.backgroundColor = [UIColor clearColor];
         
@@ -221,9 +241,15 @@ viewForFooterInSection:(NSInteger)section {
 heightForFooterInSection:(NSInteger)section {
     NSString *sectionLabel = [self.sections objectAtIndex:section];
     
+    if ([sectionLabel isEqualToString:kBetaDatabaseToolsLabel]) {
+        return 64;
+    }
+    
     if ([sectionLabel isEqualToString:kBetaBuildTypeLabel]) {
         return 64;
-    } if ([sectionLabel isEqualToString:kBetaUpdateTimeLabel]) {
+    }
+    
+    if ([sectionLabel isEqualToString:kBetaUpdateTimeLabel]) {
         return 64;
     }
     
@@ -312,7 +338,9 @@ titleForHeaderInSection:(NSInteger)section {
  numberOfRowsInSection:(NSInteger)section  {
     NSString *sectionLabel = [self.sections objectAtIndex:section];
     
-    if (sectionLabel == kBetaApplicationVersionLabel) {
+    if (sectionLabel == kBetaDatabaseToolsLabel) {
+        return 0;
+    } else if (sectionLabel == kBetaApplicationVersionLabel) {
         return 1;
     } else if (sectionLabel == kBetaBuildNumberLabel) {
         return 1;
@@ -375,6 +403,12 @@ didDismissWithButtonIndex:(NSInteger)buttonIndex {
                   object:[NSNumber
                           numberWithBool:kRHBetaBuildType == kRHBetaBuildTypeOfficial]] autorelease];
     [self.operations addOperation:operation];
+}
+
+- (IBAction)clearAndReloadData:(id)sender {
+    [RHITMobileAppDelegate.instance clearDatabase];
+    [[[[RHPListStore alloc] init] autorelease] setCurrentDataVersion:@"-1"];
+    [RHITMobileAppDelegate.instance.mapViewController.remoteHandler checkForLocationUpdates];
 }
 
 - (void)performCheckForUpdates:(NSNumber *)officialNumber {
