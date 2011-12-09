@@ -1,0 +1,229 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.20506</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{17BE6337-47BB-418E-9869-2E11A5824BE3}</ProjectGuid>
+    <ProjectTypeGuids>{C089C8C0-30E0-4E22-80C0-CE093F111A43};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Rhit.Applications.Model</RootNamespace>
+    <AssemblyName>Rhit.Applications.Model.WP7</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
+    <TargetFrameworkProfile>WindowsPhone71</TargetFrameworkProfile>
+    <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
+    <SilverlightApplication>false</SilverlightApplication>
+    <ValidateXaml>true</ValidateXaml>
+    <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>Bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;TRACE;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoWarn>0809</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>Bin\Release</OutputPath>
+    <DefineConstants>TRACE;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Phone.Controls.Maps, Version=7.0.0.0, Culture=neutral, PublicKeyToken=24eec0d8c86cda1e, processorArchitecture=MSIL" />
+    <Reference Include="System.Device" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Servicemodel.Web" />
+    <Reference Include="System.Windows" />
+    <Reference Include="system" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Net" />
+    <Reference Include="mscorlib.extensions" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\Rhit.Applications.Model.SL\DataContracts.cs">
+      <Link>DataContracts.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Events\AuthenticationEventArgs.cs">
+      <Link>Events\AuthenticationEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Events\OutlineEventArgs.cs">
+      <Link>Events\OutlineEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Events\PushpinEventArgs.cs">
+      <Link>Events\PushpinEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Events\SearchEventArgs.cs">
+      <Link>Events\SearchEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Events\ServerEventArgs.cs">
+      <Link>Events\ServerEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Events\ServiceEventArgs.cs">
+      <Link>Events\ServiceEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\LocationType.cs">
+      <Link>LocationType.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Maps\Modes\BingMode.cs">
+      <Link>Maps\Modes\BingMode.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Maps\Modes\EmptyMode.cs">
+      <Link>Maps\Modes\EmptyMode.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Maps\Modes\GoogleMode.cs">
+      <Link>Maps\Modes\GoogleMode.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Maps\Modes\MapnikMode.cs">
+      <Link>Maps\Modes\MapnikMode.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Maps\Modes\OsmaMode.cs">
+      <Link>Maps\Modes\OsmaMode.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Maps\Modes\RhitMode.cs">
+      <Link>Maps\Modes\RhitMode.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Maps\Sources\BaseTileSource.cs">
+      <Link>Maps\Sources\BaseTileSource.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Maps\Sources\BingSource.cs">
+      <Link>Maps\Sources\BingSource.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Maps\Sources\BingType.cs">
+      <Link>Maps\Sources\BingType.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Maps\Sources\GoogleSource.cs">
+      <Link>Maps\Sources\GoogleSource.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Maps\Sources\GoogleType.cs">
+      <Link>Maps\Sources\GoogleType.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Maps\Sources\MapnikSource.cs">
+      <Link>Maps\Sources\MapnikSource.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Maps\Sources\OsmaSource.cs">
+      <Link>Maps\Sources\OsmaSource.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Maps\Sources\RoseOverlay.cs">
+      <Link>Maps\Sources\RoseOverlay.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\RhitLocation.cs">
+      <Link>RhitLocation.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Services\Connection.cs">
+      <Link>Services\Connection.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Services\DataCollector.cs">
+      <Link>Services\DataCollector.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Services\DataStorage.cs">
+      <Link>Services\DataStorage.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Services\Requests\AdminRequestPart.cs">
+      <Link>Services\Requests\AdminRequestPart.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Services\Requests\AllRequestPart.cs">
+      <Link>Services\Requests\AllRequestPart.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Services\Requests\DataRequestPart.cs">
+      <Link>Services\Requests\DataRequestPart.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Services\Requests\DepartableRequestPart.cs">
+      <Link>Services\Requests\DepartableRequestPart.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Services\Requests\DescRequestPart.cs">
+      <Link>Services\Requests\DescRequestPart.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Services\Requests\DirectionsRequestPart.cs">
+      <Link>Services\Requests\DirectionsRequestPart.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Services\Requests\FromGpsRequestPart.cs">
+      <Link>Services\Requests\FromGpsRequestPart.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Services\Requests\FromLocRequestPart.cs">
+      <Link>Services\Requests\FromLocRequestPart.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Services\Requests\IdRequestPart.cs">
+      <Link>Services\Requests\IdRequestPart.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Services\Requests\LocationRequestPart.cs">
+      <Link>Services\Requests\LocationRequestPart.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Services\Requests\MensRequestPart.cs">
+      <Link>Services\Requests\MensRequestPart.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Services\Requests\NamesRequestPart.cs">
+      <Link>Services\Requests\NamesRequestPart.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Services\Requests\NoDescRequestPart.cs">
+      <Link>Services\Requests\NoDescRequestPart.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Services\Requests\NoTopRequestPart.cs">
+      <Link>Services\Requests\NoTopRequestPart.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Services\Requests\RequestBuilder.cs">
+      <Link>Services\Requests\RequestBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Services\Requests\RequestPart.cs">
+      <Link>Services\Requests\RequestPart.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Services\Requests\StatusRequestPart.cs">
+      <Link>Services\Requests\StatusRequestPart.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Services\Requests\ToBathRequestPart.cs">
+      <Link>Services\Requests\ToBathRequestPart.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Services\Requests\ToLocRequestPart.cs">
+      <Link>Services\Requests\ToLocRequestPart.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Services\Requests\TopRequestPart.cs">
+      <Link>Services\Requests\TopRequestPart.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Services\Requests\ToPrinterRequestPart.cs">
+      <Link>Services\Requests\ToPrinterRequestPart.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Services\Requests\WithinRequestPart.cs">
+      <Link>Services\Requests\WithinRequestPart.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Services\Requests\WomensRequestPart.cs">
+      <Link>Services\Requests\WomensRequestPart.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Services\ResponseHandler.cs">
+      <Link>Services\ResponseHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Services\ResponseType.cs">
+      <Link>Services\ResponseType.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Services\StorageKey.cs">
+      <Link>Services\StorageKey.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Binaries\Microsoft.Phone.Controls.Maps.dll" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.$(TargetFrameworkProfile).Overrides.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.CSharp.targets" />
+  <ProjectExtensions />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
