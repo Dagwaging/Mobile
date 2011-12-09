@@ -55,7 +55,49 @@ namespace RHITMobile
 
     public class TestingDirectionsTourHandler : PathHandler
     {
+        protected override IEnumerable<ThreadInfo> HandleNoPath(ThreadManager TM, Dictionary<string, string> query, object state)
+        {
+            var currentThread = TM.CurrentThread;
+            yield return TM.Return(currentThread, new JsonResponse(new DirectionsResponse(100, 0)
+            {
+                Result = new Directions(new LatLong(39.4829356448704, -87.3240112828813),
+                    new List<Path>()
+                    {
+                        new Path(39.4828627941384,-87.324008279888, "Turn right in the hallway", false),
+                        new Path(39.4828306460166,-87.3241490677771, null, false),
+                        new Path(39.4828620904229,-87.3241637888807, null, false),
+                        new Path(39.4828494067565,-87.3242174834412, null, false),
 
+                        new Path(39.4828290215239,-87.32431169557, "Turn right", false),
+                        new Path(39.4828717938695,-87.3243267616227, null, true),
+                        new Path(39.4828290215239,-87.32431169557, "Turn left", false),
+
+                        new Path(39.4828494067565,-87.3242174834412, null, false),
+                        new Path(39.4828620904229,-87.3241637888807, null, false),
+                        new Path(39.4828306460166,-87.3241490677771, null, false),
+                        new Path(39.4828627941384,-87.324008279888, null, false),
+                        new Path(39.4828963086285,-87.3238687475089, null, false),
+                        new Path(39.4829231475358,-87.3238794992205, null, false),
+                        new Path(39.4829323644,-87.3238428275053, null, false),
+                        new Path(39.482976927114,-87.3238606794038, null, false),
+                        new Path(39.4829813587565,-87.3238419186537, null, false),
+
+                        new Path(39.4829698321545,-87.3238144421359, null, false),
+                        new Path(39.4830197430914,-87.3236155710439, null, false),
+                        new Path(39.483097836962,-87.3236405966255, "Go up the stairs", false),
+                        new Path(39.4831005618263,-87.3236292285931, null, false),
+                        new Path(39.4837052580385,-87.3238335793924, "Turn right", false),
+                        new Path(39.483714772609,-87.3237985626965, null, true),
+                        new Path(39.4837052580385,-87.3238335793924, null, false),
+                        new Path(39.4836460794462,-87.3240577916873, "Go down all the stairs", true),
+                        new Path(39.483619680332296,-87.32420685781096, "Go outside", false),
+                        new Path(39.4835741371045,-87.32441607011413, "Continue straight", false),
+                        new Path(39.48338471835569,-87.32457566155051, "Make a slight left", false),
+                        new Path(39.483353735847345,-87.32472215518095, "Enter the building", false),
+                        new Path(39.48339203368583,-87.324730201808, null, true),
+                    })
+            }));
+        }
     }
 
     public class TestingDirectionsScheduleHandler : PathHandler

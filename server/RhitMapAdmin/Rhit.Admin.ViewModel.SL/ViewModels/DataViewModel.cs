@@ -166,7 +166,35 @@ namespace Rhit.Admin.ViewModel.ViewModels {
         #endregion
 
         private void SaveLocation() {
-
+            // Update the Location table
+            if (Name != CurrentLocation.Label
+                || Id != CurrentLocation.Id
+                || ParentId != CurrentLocation.ParentId
+                || Description != CurrentLocation.Description
+                || LabelOnHybrid != CurrentLocation.LabelOnHybrid
+                || MinZoom != CurrentLocation.MinZoomLevel
+                || Type != CurrentLocation.Type)
+            {
+                if (string.IsNullOrEmpty(Name))
+                {
+                    // Name error
+                }
+                else if (Id <= 0)
+                {
+                    // Id error
+                }
+                else if (ParentId < 0)
+                {
+                    // Parent Id error
+                }
+                else
+                {
+                    // Valid parameters
+                    if (MinZoom == 0)
+                        LabelOnHybrid = false;
+                    // TODO
+                }
+            }
         }
 
         private void OnLocationsRetrieved(object sender, ServiceEventArgs e) {

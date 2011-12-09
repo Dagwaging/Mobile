@@ -17,5 +17,10 @@ namespace Rhit.Admin.Model.Services.Requests {
         public override string ToString() {
             return String.Format(String.Format(BaseUrl, PartUrl), "");
         }
+
+        public virtual RequestQuery AddQueryParameter(string name, object value)
+        {
+            return new RequestQuery(FullUrl, name, value);
+        }
     }
 }

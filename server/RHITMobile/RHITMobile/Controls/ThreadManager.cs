@@ -309,7 +309,7 @@ namespace RHITMobile
                             continuation = _queues[ThreadPriority.Low].Dequeue();
                             break;
                         }
-                    Thread.Sleep(10);
+                    Thread.Sleep(7);
                 }
 
                 // Continue the next item in the queue
@@ -367,18 +367,6 @@ namespace RHITMobile
         #endregion
 
         #region Waiting operations
-        /// <summary>
-        /// Simply requeues the current thread, allowing other threads to continue - Should be within a "yield return"
-        /// </summary>
-        /// <param name="currentThread">Current thread</param>
-        /// <returns>string - "Requeued."</returns>
-        /*public ThreadInfo Requeue(ThreadInfo currentThread)
-        {
-            IncreaseExecutions(currentThread.Priority);
-            Enqueue(currentThread.WithResult("Requeued."));
-            return new ThreadInfo(currentThread.Priority);
-        }*/
-
         /// <summary>
         /// Sleeps for a specified amount of time - Should be within a "yield return"
         /// </summary>
