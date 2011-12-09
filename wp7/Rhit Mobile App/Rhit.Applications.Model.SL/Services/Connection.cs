@@ -27,7 +27,7 @@ namespace Rhit.Applications.Model.Services {
         }
 
         public static void MakeRequest(Dispatcher dispatcher, RequestPart url, bool isSearch) {
-            Dispatcher = dispatcher;
+            if(dispatcher != null) Dispatcher = dispatcher;
             HttpWebRequest request;
             try {
                 request = (HttpWebRequest) WebRequest.Create(url.ToString());

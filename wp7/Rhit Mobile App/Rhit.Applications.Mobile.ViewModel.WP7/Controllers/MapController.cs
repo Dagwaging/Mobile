@@ -8,12 +8,15 @@ using Microsoft.Phone.Controls.Maps;
 using Rhit.Applications.Model;
 using Rhit.Applications.Model.Maps.Modes;
 using Rhit.Applications.Model.Maps.Sources;
+using Rhit.Applications.Model.Services;
 
 namespace Rhit.Applications.ViewModel.Controllers {
     public class MapController : DependencyObject {
         private static MapController _instance;
 
         private MapController(Map map) {
+            InnerLocations = new ObservableCollection<RhitLocation>();
+
             MapControl = map;
             CreateMapLayers();
             InitializeMapResources();
@@ -151,6 +154,10 @@ namespace Rhit.Applications.ViewModel.Controllers {
             } else {
                 CurrentLocation = location;
             }
+            InnerLocations.Clear();
+
+            List<RhitLocation> locations = DataCollector.Instance.GetChildLocations(null, CurrentLocation.Id);
+            if (locations != null) foreach(RhitLocation child in locations) InnerLocations.Add(child);
         }
 
         public void UnSelect() {
@@ -158,11 +165,12 @@ namespace Rhit.Applications.ViewModel.Controllers {
                 RhitLocation.HideOutline(CurrentLocation.OutLine);
                 CurrentLocation = null;
             }
+            InnerLocations.Clear();
         }
 
         private List<RhitLocation> Locations { get; set; }
 
-        private GeoCoordinate EventCoordinate { get; set; }
+        public GeoCoordinate EventCoordinate { get; set; }
 
         private Dictionary<MapPolygon, RhitLocation> Outlines { get; set; }
 
@@ -173,6 +181,9 @@ namespace Rhit.Applications.ViewModel.Controllers {
         public ObservableCollection<RhitMode> Modes { get; set; }
 
         public ObservableCollection<BaseTileSource> Sources { get; set; }
+
+        //TODO: Should this be in here?
+        public ObservableCollection<RhitLocation> InnerLocations { get; set; }
 
         public void SetLocations(List<RhitLocation> locations) {
             Locations = locations;
@@ -227,6 +238,7 @@ namespace Rhit.Applications.ViewModel.Controllers {
         #endregion
 
         #region Dependency Properties
+        //TODO: Should this be in here?
         #region CurrentLocation
         public RhitLocation CurrentLocation {
             get { return (RhitLocation) GetValue(CurrentLocationProperty); }
@@ -485,5 +497,7 @@ namespace Rhit.Applications.ViewModel.Controllers {
         //    DataStorage.SaveState(StorageKey.User, User);
         //    //TODO: Cache Map Tiles
         //}
+
+
     }
 }

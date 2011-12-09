@@ -30,17 +30,19 @@
         </shell:ApplicationBar>
     </phone:PhoneApplicationPage.ApplicationBar>
     
-    <Grid x:Name="ContentPanel" Grid.Row="1" Margin="0,0,0,0">
+    <Grid Grid.Row="1" Margin="0,0,0,0">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <maps:Map Name="MapControl">
+        <maps:Map Name="MyMap" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
             <maps:Pushpin Tap="Pushpin_Tap"
                 Content="{Binding Path=Map.CurrentLocation, Converter={StaticResource LocationNameConverter}, Mode=TwoWay}"
                 Location="{Binding Map.CurrentLocation, Converter={StaticResource LocationCenterConverter}, Mode=TwoWay}"/>
         </maps:Map>
-        <TextBlock Text="{Binding Settings.Status, Mode=TwoWay, FallbackValue=Debug_Status}" Visibility="{Binding Settings.DebugMode, Mode=TwoWay, Converter={StaticResource VisibilityConverter}}" Grid.Row="1"/>
+        <TextBlock Grid.Row="1"
+            Text="{Binding Settings.Status, Mode=TwoWay, FallbackValue=Debug_Status}" 
+            Visibility="{Binding Settings.DebugMode, Mode=TwoWay, Converter={StaticResource VisibilityConverter}}"/>
     </Grid>
 </phone:PhoneApplicationPage>

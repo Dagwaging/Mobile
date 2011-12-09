@@ -16,7 +16,7 @@ namespace Rhit.Applications.View.Views {
         public MapPage() {
             InitializeComponent();
 
-            ViewModel = new MainViewModel(MapControl);
+            ViewModel = new MainViewModel(MyMap);
             DataContext = ViewModel;
 
             Loaded += Page_Loaded;
@@ -36,7 +36,9 @@ namespace Rhit.Applications.View.Views {
             NavigationService.Navigate(new Uri("/Views/SettingsPage.xaml", UriKind.Relative));
         }
 
+        //NOTE: Using System.Windows.Input absolute path because Microsoft.Phone.Controls also has a GestureEventArgs
         private void Pushpin_Tap(object sender, System.Windows.Input.GestureEventArgs e) {
+            ViewModel.IgnoreEvent(e.GetPosition(ViewModel.Map.MapControl));
             NavigationService.Navigate(new Uri("/Views/InfoPage.xaml", UriKind.Relative));
         }
 

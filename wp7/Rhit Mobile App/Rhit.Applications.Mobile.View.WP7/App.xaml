@@ -12,7 +12,10 @@
         <convert:BoolToVisibilityConverter x:Key="VisibilityConverter"/>
         <convert:ObjectToVisibilityConverter x:Key="ObjectConverter"/>
         <convert:LocationToStringConverter x:Key="LocationNameConverter"/>
+        <convert:LocationToStringConverter x:Key="LocationDescriptionConverter" IsDescription="True"/>
+        <convert:LocationToStringConverter x:Key="LocationAltNamesConverter" IsAltNames="True"/>
         <convert:LocationToCoordinateConverter x:Key="LocationCenterConverter"/>
+        <convert:LocationToLinkConverter x:Key="LocationLinksConverter"/>
 
         <ControlTemplate TargetType="maps:Pushpin" x:Key="myct">
             <StackPanel Background="{TemplateBinding Background}">
@@ -31,6 +34,10 @@
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="{Binding Label}" FontSize="40" VerticalAlignment="Center"/>
             </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="LinkTemplate">
+            <HyperlinkButton Content="{Binding Name}" NavigateUri="{Binding Address}" TargetName="_blank"/>
         </DataTemplate>
     </Application.Resources>
 

@@ -22,24 +22,32 @@
             
             <controls:PivotItem Header="Info">
                 <ScrollViewer Margin="12,0,12,0">
-                    <StackPanel x:Name="InfoPanel" Grid.Row="1" Margin="0,0,0,0">
-                        <TextBlock Name="Description" Text="Loading..." />
+                    <StackPanel>
+                        <TextBlock Text="{Binding Path=Map.CurrentLocation, FallbackValue=Location_Alternate_Names,
+                            Converter={StaticResource LocationAltNamesConverter}, Mode=TwoWay}"/>
+                        
+                        <TextBlock TextWrapping="Wrap"
+                            Text="{Binding Path=Map.CurrentLocation, FallbackValue=Location_Description,
+                            Converter={StaticResource LocationDescriptionConverter}, Mode=TwoWay}"/>
+
+                        <ListBox ItemTemplate="{StaticResource LinkTemplate}"
+                            ItemsSource="{Binding Path=Map.CurrentLocation, Converter={StaticResource LocationLinksConverter}, Mode=TwoWay}"/>
                     </StackPanel>
                 </ScrollViewer>
             </controls:PivotItem>
 
             <controls:PivotItem Header="Places">
                 <!--<ScrollViewer Margin="12,0,12,0">-->
-                <Grid x:Name="Places" Grid.Row="1" Margin="0,0,0,0">
-                    <TextBlock Name="PlacesTextBox" Text="Loading..." />
+                <Grid>
+                    <ListBox ItemTemplate="{StaticResource ListBoxTemplate}" Background="Transparent" ItemsSource="{Binding Map.InnerLocations}" SelectionChanged="InnerLocationSelected"/>
                 </Grid>
                 <!--</ScrollViewer>-->
             </controls:PivotItem>
 
             <controls:PivotItem Header="People">
                 <ScrollViewer Margin="12,0,12,0">
-                    <StackPanel x:Name="ContentPanel3" Grid.Row="1" Margin="0,0,0,0">
-                        <TextBlock Name="PeoplpeTextBox" Text="Not Available Yet." />
+                    <StackPanel>
+                        <TextBlock Text="Not Available Yet." />
                     </StackPanel>
                 </ScrollViewer>
             </controls:PivotItem>

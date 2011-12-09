@@ -96,6 +96,7 @@ namespace Rhit.Applications.Model {
 
         public LocationType Type { get; set; }
 
+        //TODO: Change to a custom link object (Name & Address properties)
         public Dictionary<string, string> Links { get; set; }
 
         public List<string> AltNames { get; set; }

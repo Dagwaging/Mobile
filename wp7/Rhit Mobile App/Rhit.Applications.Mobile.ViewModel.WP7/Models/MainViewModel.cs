@@ -6,7 +6,8 @@ using Rhit.Applications.Model.Services;
 using Rhit.Applications.ViewModel.Controllers;
 using System.Collections.Generic;
 using Rhit.Applications.Model;
-using System.Windows.Input;
+using System.Collections.ObjectModel;
+using Microsoft.Phone.Controls;
 
 namespace Rhit.Applications.ViewModel.Models {
     public class MainViewModel : DependencyObject {
@@ -31,6 +32,10 @@ namespace Rhit.Applications.ViewModel.Models {
             List<RhitLocation> locations = DataCollector.Instance.GetAllLocations(null);
             if(locations == null || locations.Count <= 0) return;
             Map.SetLocations(locations);
+        }
+
+        public void IgnoreEvent(Point point) {
+            Map.EventCoordinate = Map.MapControl.ViewportPointToLocation(point);
         }
     }
 }

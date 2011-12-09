@@ -180,6 +180,9 @@
     <Compile Include="..\Rhit.Applications.Model.SL\Services\Requests\RequestPart.cs">
       <Link>Services\Requests\RequestPart.cs</Link>
     </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Services\Requests\RequestQuery.cs">
+      <Link>Services\Requests\RequestQuery.cs</Link>
+    </Compile>
     <Compile Include="..\Rhit.Applications.Model.SL\Services\Requests\StatusRequestPart.cs">
       <Link>Services\Requests\StatusRequestPart.cs</Link>
     </Compile>
