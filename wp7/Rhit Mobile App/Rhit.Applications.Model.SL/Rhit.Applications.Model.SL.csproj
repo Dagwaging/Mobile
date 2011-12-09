@@ -103,6 +103,7 @@
     <Compile Include="Services\Requests\NoTopRequestPart.cs" />
     <Compile Include="Services\Requests\RequestBuilder.cs" />
     <Compile Include="Services\Requests\RequestPart.cs" />
+    <Compile Include="Services\Requests\RequestQuery.cs" />
     <Compile Include="Services\Requests\StatusRequestPart.cs" />
     <Compile Include="Services\Requests\ToBathRequestPart.cs" />
     <Compile Include="Services\Requests\ToLocRequestPart.cs" />

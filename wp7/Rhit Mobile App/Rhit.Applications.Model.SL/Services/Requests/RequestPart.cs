@@ -17,5 +17,9 @@ namespace Rhit.Applications.Model.Services.Requests {
         public override string ToString() {
             return String.Format(FullUrl, "");
         }
+
+        public virtual RequestQuery AddQueryParameter(string name, object value) {
+            return new RequestQuery(FullUrl, name, value);
+        }
     }
 }

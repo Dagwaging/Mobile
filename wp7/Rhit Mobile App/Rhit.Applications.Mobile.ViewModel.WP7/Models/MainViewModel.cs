@@ -6,6 +6,7 @@ using Rhit.Applications.Model.Services;
 using Rhit.Applications.ViewModel.Controllers;
 using System.Collections.Generic;
 using Rhit.Applications.Model;
+using System.Windows.Input;
 
 namespace Rhit.Applications.ViewModel.Models {
     public class MainViewModel : DependencyObject {
@@ -31,7 +32,5 @@ namespace Rhit.Applications.ViewModel.Models {
             if(locations == null || locations.Count <= 0) return;
             Map.SetLocations(locations);
         }
-
-
     }
 }

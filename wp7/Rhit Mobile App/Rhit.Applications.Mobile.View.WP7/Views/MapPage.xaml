@@ -37,7 +37,9 @@
         </Grid.RowDefinitions>
 
         <maps:Map Name="MapControl">
-            <maps:Pushpin Content="{Binding Path=Map.CurrentLocation, Converter={StaticResource LocationNameConverter}, Mode=TwoWay}" Location="{Binding Map.CurrentLocation, Converter={StaticResource LocationCenterConverter}, Mode=TwoWay}"/>
+            <maps:Pushpin Tap="Pushpin_Tap"
+                Content="{Binding Path=Map.CurrentLocation, Converter={StaticResource LocationNameConverter}, Mode=TwoWay}"
+                Location="{Binding Map.CurrentLocation, Converter={StaticResource LocationCenterConverter}, Mode=TwoWay}"/>
         </maps:Map>
         <TextBlock Text="{Binding Settings.Status, Mode=TwoWay, FallbackValue=Debug_Status}" Visibility="{Binding Settings.DebugMode, Mode=TwoWay, Converter={StaticResource VisibilityConverter}}" Grid.Row="1"/>
     </Grid>
