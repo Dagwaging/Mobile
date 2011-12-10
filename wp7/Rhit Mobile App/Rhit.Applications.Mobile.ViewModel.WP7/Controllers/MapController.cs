@@ -9,18 +9,53 @@ using Rhit.Applications.Model;
 using Rhit.Applications.Model.Maps.Modes;
 using Rhit.Applications.Model.Maps.Sources;
 using Rhit.Applications.Model.Services;
+using Rhit.Applications.Model.Events;
 
 namespace Rhit.Applications.ViewModel.Controllers {
     public class MapController : DependencyObject {
         private static MapController _instance;
 
         private MapController(Map map) {
-            InnerLocations = new ObservableCollection<RhitLocation>();
-
+            Initialize();
             MapControl = map;
             CreateMapLayers();
             InitializeMapResources();
             InitializeMap();
+        }
+
+        private void LocationsChanged(object sender, LocationEventArgs e) {
+            if(e.NewLocations == null) return;
+            UpdateLayers(e.NewLocations);
+        }
+
+        private void UpdateLayers(ICollection<RhitLocation> locations) {
+            LabeledLocations.Clear();
+            Outlines.Clear();
+            PolygonLayer.Children.Clear();
+            TextLayer.Children.Clear();
+
+            foreach(RhitLocation location in locations) {
+                MapPolygon polygon = location.OutLine;
+                if(polygon.Locations == null || polygon.Locations.Count <= 0) continue;
+                PolygonLayer.Children.Add(polygon);
+                if(!AreOutlinesVisible) RhitLocation.HideOutline(polygon);
+                polygon.MouseLeftButtonUp += new MouseButtonEventHandler(Outline_Tap);
+                Outlines[polygon] = location;
+                LabeledLocations[location] = location.GetLabel();
+                if(ShouldShowLabel(location)) TextLayer.Children.Add(LabeledLocations[location]);
+            }
+        }
+
+        private void CurrentLocationChanged(object sender, LocationEventArgs e) {
+            if(!AreOutlinesVisible) {
+                if(e.NewLocation == null)
+                    RhitLocation.HideOutline(e.OldLocation.OutLine);
+                else {
+                    if(e.OldLocation != null)
+                        RhitLocation.HideOutline(e.OldLocation.OutLine);
+                    RhitLocation.ShowOutline(e.NewLocation.OutLine);
+                }
+            }
         }
 
         public static void CreateMapController(Map map) {
@@ -34,6 +69,13 @@ namespace Rhit.Applications.ViewModel.Controllers {
         #endregion
 
         #region Instance Initializer Methods
+        private void Initialize() {
+            LocationsController.Instance.CurrentLocationChanged += new LocationEventHandler(CurrentLocationChanged);
+            LocationsController.Instance.LocationsChanged += new LocationEventHandler(LocationsChanged);
+            LabeledLocations = new Dictionary<RhitLocation, Pushpin>();
+            Outlines = new Dictionary<MapPolygon, RhitLocation>();
+        }
+
         private void InitializeMapResources() {
             Sources = new ObservableCollection<BaseTileSource>();
             Modes = new ObservableCollection<RhitMode>() {
@@ -75,6 +117,8 @@ namespace Rhit.Applications.ViewModel.Controllers {
             foreach(UIElement e in es) MapControl.Children.Add(e);
         }
         #endregion
+
+        
 
         #region Update Methods
         private void UpdateSources() {
@@ -118,11 +162,11 @@ namespace Rhit.Applications.ViewModel.Controllers {
         }
         #endregion
 
-        #region Map Events
+        #region Map Event Handlers
         private void MapControl_Tap(object sender, GestureEventArgs e) {
             GeoCoordinate coordinate = MapControl.ViewportPointToLocation(e.GetPosition(MapControl));
             if(EventCoordinate == coordinate) return;
-            UnSelect();
+            LocationsController.Instance.UnSelect();
         }
 
         private void Outline_Tap(object sender, MouseButtonEventArgs e) {
@@ -142,33 +186,8 @@ namespace Rhit.Applications.ViewModel.Controllers {
         #endregion
 
         private void SelectLocation(MapPolygon polygon) {
-            SelectLocation(Outlines[polygon]);
+            LocationsController.Instance.SelectLocation(Outlines[polygon]);
         }
-
-        public void SelectLocation(RhitLocation location) {
-            if(!AreOutlinesVisible) {
-                if(CurrentLocation != null)
-                    RhitLocation.HideOutline(CurrentLocation.OutLine);
-                CurrentLocation = location;
-                RhitLocation.ShowOutline(location.OutLine);
-            } else {
-                CurrentLocation = location;
-            }
-            InnerLocations.Clear();
-
-            List<RhitLocation> locations = DataCollector.Instance.GetChildLocations(null, CurrentLocation.Id);
-            if (locations != null) foreach(RhitLocation child in locations) InnerLocations.Add(child);
-        }
-
-        public void UnSelect() {
-            if(CurrentLocation != null) {
-                RhitLocation.HideOutline(CurrentLocation.OutLine);
-                CurrentLocation = null;
-            }
-            InnerLocations.Clear();
-        }
-
-        private List<RhitLocation> Locations { get; set; }
 
         public GeoCoordinate EventCoordinate { get; set; }
 
@@ -181,27 +200,6 @@ namespace Rhit.Applications.ViewModel.Controllers {
         public ObservableCollection<RhitMode> Modes { get; set; }
 
         public ObservableCollection<BaseTileSource> Sources { get; set; }
-
-        //TODO: Should this be in here?
-        public ObservableCollection<RhitLocation> InnerLocations { get; set; }
-
-        public void SetLocations(List<RhitLocation> locations) {
-            Locations = locations;
-            LabeledLocations = new Dictionary<RhitLocation, Pushpin>();
-            Outlines = new Dictionary<MapPolygon, RhitLocation>();
-            PolygonLayer.Children.Clear();
-            TextLayer.Children.Clear();
-            foreach(RhitLocation location in Locations) {
-                MapPolygon polygon = location.OutLine;
-                if(polygon.Locations == null || polygon.Locations.Count <= 0) continue;
-                PolygonLayer.Children.Add(polygon);
-                if(!AreOutlinesVisible) RhitLocation.HideOutline(polygon);
-                polygon.MouseLeftButtonUp +=new MouseButtonEventHandler(Outline_Tap);
-                Outlines[polygon] = location;
-                LabeledLocations[location] = location.GetLabel();
-                if(ShouldShowLabel(location)) TextLayer.Children.Add(LabeledLocations[location]);
-            }
-        }
 
         private bool ShouldShowLabel(RhitLocation location) {
             //TODO: Add logic to handle maps with text on them already
@@ -238,17 +236,6 @@ namespace Rhit.Applications.ViewModel.Controllers {
         #endregion
 
         #region Dependency Properties
-        //TODO: Should this be in here?
-        #region CurrentLocation
-        public RhitLocation CurrentLocation {
-            get { return (RhitLocation) GetValue(CurrentLocationProperty); }
-            set { SetValue(CurrentLocationProperty, value); }
-        }
-
-        public static readonly DependencyProperty CurrentLocationProperty =
-           DependencyProperty.Register("CurrentLocation", typeof(RhitLocation), typeof(MapController), new PropertyMetadata(null));
-        #endregion
-
         #region CurrentMode
         public RhitMode CurrentMode {
             get { return (RhitMode) GetValue(CurrentModeProperty); }

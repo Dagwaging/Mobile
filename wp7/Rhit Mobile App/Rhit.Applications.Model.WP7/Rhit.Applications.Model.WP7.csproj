@@ -60,6 +60,9 @@
     <Compile Include="..\Rhit.Applications.Model.SL\Events\AuthenticationEventArgs.cs">
       <Link>Events\AuthenticationEventArgs.cs</Link>
     </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Events\LocationEventArgs.cs">
+      <Link>Events\LocationEventArgs.cs</Link>
+    </Compile>
     <Compile Include="..\Rhit.Applications.Model.SL\Events\OutlineEventArgs.cs">
       <Link>Events\OutlineEventArgs.cs</Link>
     </Compile>

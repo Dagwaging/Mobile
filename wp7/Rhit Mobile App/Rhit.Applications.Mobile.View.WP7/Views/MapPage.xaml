@@ -23,7 +23,7 @@
                 <shell:ApplicationBarIconButton IconUri="/Assets/Icons/search.png" Text="search"/>
             </shell:ApplicationBar.Buttons>
             <shell:ApplicationBar.MenuItems>
-                <shell:ApplicationBarMenuItem Text="Quick List"/>
+                <shell:ApplicationBarMenuItem Text="Quick List" Click="QuickList_Click"/>
                 <shell:ApplicationBarMenuItem Text="Search"/>
                 <shell:ApplicationBarMenuItem Text="Settings" Click="Settings_Click"/>
             </shell:ApplicationBar.MenuItems>
@@ -38,8 +38,8 @@
 
         <maps:Map Name="MyMap" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
             <maps:Pushpin Tap="Pushpin_Tap"
-                Content="{Binding Path=Map.CurrentLocation, Converter={StaticResource LocationNameConverter}, Mode=TwoWay}"
-                Location="{Binding Map.CurrentLocation, Converter={StaticResource LocationCenterConverter}, Mode=TwoWay}"/>
+                Content="{Binding Path=Locations.CurrentLocation, Converter={StaticResource LocationNameConverter}, Mode=TwoWay}"
+                Location="{Binding Locations.CurrentLocation, Converter={StaticResource LocationCenterConverter}, Mode=TwoWay}"/>
         </maps:Map>
         <TextBlock Grid.Row="1"
             Text="{Binding Settings.Status, Mode=TwoWay, FallbackValue=Debug_Status}" 

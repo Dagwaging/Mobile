@@ -16,6 +16,7 @@ namespace Rhit.Applications.ViewModel.Models {
             MapController.CreateMapController(map);
             Map = MapController.Instance;
             Settings = SettingsController.Instance;
+            Locations = LocationsController.Instance;
         }
 
         public MainViewModel() {
@@ -28,10 +29,12 @@ namespace Rhit.Applications.ViewModel.Models {
 
         public SettingsController Settings { get; set; }
 
+        public LocationsController Locations { get; set; }
+
         private void UpdateAvailable(object sender, ServiceEventArgs e) {
             List<RhitLocation> locations = DataCollector.Instance.GetAllLocations(null);
             if(locations == null || locations.Count <= 0) return;
-            Map.SetLocations(locations);
+            Locations.SetLocations(locations);
         }
 
         public void IgnoreEvent(Point point) {

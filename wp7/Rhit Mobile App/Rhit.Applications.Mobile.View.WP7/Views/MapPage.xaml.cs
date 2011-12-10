@@ -42,6 +42,10 @@ namespace Rhit.Applications.View.Views {
             NavigationService.Navigate(new Uri("/Views/InfoPage.xaml", UriKind.Relative));
         }
 
+        private void QuickList_Click(object sender, EventArgs e) {
+            NavigationService.Navigate(new Uri("/Views/QuickListPage.xaml", UriKind.Relative));
+        }
+
 
 //        #region Initializers
 //        private void LoadMap() {

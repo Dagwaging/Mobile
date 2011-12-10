@@ -61,6 +61,7 @@
   <ItemGroup>
     <Compile Include="DataContracts.cs" />
     <Compile Include="Events\AuthenticationEventArgs.cs" />
+    <Compile Include="Events\LocationEventArgs.cs" />
     <Compile Include="Events\OutlineEventArgs.cs" />
     <Compile Include="Events\PushpinEventArgs.cs" />
     <Compile Include="Events\SearchEventArgs.cs" />
