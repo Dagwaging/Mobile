@@ -1,0 +1,108 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rhit.Applications.Model.SL", "Rhit.Applications.Model.SL\Rhit.Applications.Model.SL.csproj", "{8539E822-5EF8-49C0-B7D8-C250F48D7B9B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rhit.Applications.Model.WP7", "Rhit.Applications.Model.WP7\Rhit.Applications.Model.WP7.csproj", "{17BE6337-47BB-418E-9869-2E11A5824BE3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rhit.Applications.Mvvm.SL", "Rhit.Applications.Mvvm.SL\Rhit.Applications.Mvvm.SL.csproj", "{216E83C2-839F-4BA7-A527-D92AB653437C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rhit.Applications.Mvvm.WP7", "Rhit.Applications.Mvvm.WP7\Rhit.Applications.Mvvm.WP7.csproj", "{C4B93CFD-E240-433F-9C7D-3EA7A7786CBF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rhit.Applications.Admin.ViewModel.SL", "Rhit.Applications.Admin.ViewModel.SL\Rhit.Applications.Admin.ViewModel.SL.csproj", "{DA296C2B-A2D2-487F-B028-06289F1D3348}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rhit.Applications.Admin.View.SL", "Rhit.Applications.Admin.View.SL\Rhit.Applications.Admin.View.SL.csproj", "{272EABB9-1B7A-46BA-BF96-34CB81055718}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rhit.Applications.Admin.Web", "Rhit.Applications.Admin.Web\Rhit.Applications.Admin.Web.csproj", "{92DCDB16-7C99-4E55-B8C0-399703E16C35}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rhit.Applications.ServerTree.View.SL", "Rhit.Applications.ServerTree.View.SL\Rhit.Applications.ServerTree.View.SL.csproj", "{D45AFCA5-8C32-49EE-A0AF-9B53CF00B456}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rhit.Applications.ServerTree.Web", "Rhit.Applications.ServerTree.Web\Rhit.Applications.ServerTree.Web.csproj", "{E1964846-2C3C-48D6-A9AC-7E7AFF91404D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Admin App", "Admin App", "{D6F4FFB3-8DAD-409D-B458-E6C098A2A031}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server Tree App", "Server Tree App", "{6221945E-7F32-4E40-B817-923175387DCF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{256A21B3-412C-49EA-B402-283E1170FC28}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rhit.Applications.ServerTree.ViewModel.SL", "Rhit.Applications.ServerTree.ViewModel.SL\Rhit.Applications.ServerTree.ViewModel.SL.csproj", "{B1216305-1F93-4F87-B13F-489456CEB230}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Mobile App", "Mobile App", "{27EC6C36-7A5C-48F6-91E3-0A3D26A10CBE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rhit.Applications.Mobile.ViewModel.WP7", "Rhit.Applications.Mobile.ViewModel.WP7\Rhit.Applications.Mobile.ViewModel.WP7.csproj", "{115B1326-BD48-4BCE-ADAC-7EC12AAC2D46}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rhit.Applications.Mobile.View.WP7", "Rhit.Applications.Mobile.View.WP7\Rhit.Applications.Mobile.View.WP7.csproj", "{75C9DC8A-98C1-42FE-B2AB-FABF9C40875E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8539E822-5EF8-49C0-B7D8-C250F48D7B9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8539E822-5EF8-49C0-B7D8-C250F48D7B9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8539E822-5EF8-49C0-B7D8-C250F48D7B9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8539E822-5EF8-49C0-B7D8-C250F48D7B9B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17BE6337-47BB-418E-9869-2E11A5824BE3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17BE6337-47BB-418E-9869-2E11A5824BE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17BE6337-47BB-418E-9869-2E11A5824BE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17BE6337-47BB-418E-9869-2E11A5824BE3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{216E83C2-839F-4BA7-A527-D92AB653437C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{216E83C2-839F-4BA7-A527-D92AB653437C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{216E83C2-839F-4BA7-A527-D92AB653437C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{216E83C2-839F-4BA7-A527-D92AB653437C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4B93CFD-E240-433F-9C7D-3EA7A7786CBF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4B93CFD-E240-433F-9C7D-3EA7A7786CBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4B93CFD-E240-433F-9C7D-3EA7A7786CBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4B93CFD-E240-433F-9C7D-3EA7A7786CBF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA296C2B-A2D2-487F-B028-06289F1D3348}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA296C2B-A2D2-487F-B028-06289F1D3348}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA296C2B-A2D2-487F-B028-06289F1D3348}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA296C2B-A2D2-487F-B028-06289F1D3348}.Release|Any CPU.Build.0 = Release|Any CPU
+		{272EABB9-1B7A-46BA-BF96-34CB81055718}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{272EABB9-1B7A-46BA-BF96-34CB81055718}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{272EABB9-1B7A-46BA-BF96-34CB81055718}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{272EABB9-1B7A-46BA-BF96-34CB81055718}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92DCDB16-7C99-4E55-B8C0-399703E16C35}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92DCDB16-7C99-4E55-B8C0-399703E16C35}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92DCDB16-7C99-4E55-B8C0-399703E16C35}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D45AFCA5-8C32-49EE-A0AF-9B53CF00B456}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D45AFCA5-8C32-49EE-A0AF-9B53CF00B456}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D45AFCA5-8C32-49EE-A0AF-9B53CF00B456}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D45AFCA5-8C32-49EE-A0AF-9B53CF00B456}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E1964846-2C3C-48D6-A9AC-7E7AFF91404D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1964846-2C3C-48D6-A9AC-7E7AFF91404D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1964846-2C3C-48D6-A9AC-7E7AFF91404D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1216305-1F93-4F87-B13F-489456CEB230}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1216305-1F93-4F87-B13F-489456CEB230}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1216305-1F93-4F87-B13F-489456CEB230}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1216305-1F93-4F87-B13F-489456CEB230}.Release|Any CPU.Build.0 = Release|Any CPU
+		{115B1326-BD48-4BCE-ADAC-7EC12AAC2D46}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{115B1326-BD48-4BCE-ADAC-7EC12AAC2D46}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{115B1326-BD48-4BCE-ADAC-7EC12AAC2D46}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{115B1326-BD48-4BCE-ADAC-7EC12AAC2D46}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75C9DC8A-98C1-42FE-B2AB-FABF9C40875E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75C9DC8A-98C1-42FE-B2AB-FABF9C40875E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75C9DC8A-98C1-42FE-B2AB-FABF9C40875E}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{75C9DC8A-98C1-42FE-B2AB-FABF9C40875E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75C9DC8A-98C1-42FE-B2AB-FABF9C40875E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75C9DC8A-98C1-42FE-B2AB-FABF9C40875E}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{17BE6337-47BB-418E-9869-2E11A5824BE3} = {256A21B3-412C-49EA-B402-283E1170FC28}
+		{216E83C2-839F-4BA7-A527-D92AB653437C} = {256A21B3-412C-49EA-B402-283E1170FC28}
+		{C4B93CFD-E240-433F-9C7D-3EA7A7786CBF} = {256A21B3-412C-49EA-B402-283E1170FC28}
+		{8539E822-5EF8-49C0-B7D8-C250F48D7B9B} = {256A21B3-412C-49EA-B402-283E1170FC28}
+		{272EABB9-1B7A-46BA-BF96-34CB81055718} = {D6F4FFB3-8DAD-409D-B458-E6C098A2A031}
+		{92DCDB16-7C99-4E55-B8C0-399703E16C35} = {D6F4FFB3-8DAD-409D-B458-E6C098A2A031}
+		{DA296C2B-A2D2-487F-B028-06289F1D3348} = {D6F4FFB3-8DAD-409D-B458-E6C098A2A031}
+		{E1964846-2C3C-48D6-A9AC-7E7AFF91404D} = {6221945E-7F32-4E40-B817-923175387DCF}
+		{D45AFCA5-8C32-49EE-A0AF-9B53CF00B456} = {6221945E-7F32-4E40-B817-923175387DCF}
+		{B1216305-1F93-4F87-B13F-489456CEB230} = {6221945E-7F32-4E40-B817-923175387DCF}
+		{115B1326-BD48-4BCE-ADAC-7EC12AAC2D46} = {27EC6C36-7A5C-48F6-91E3-0A3D26A10CBE}
+		{75C9DC8A-98C1-42FE-B2AB-FABF9C40875E} = {27EC6C36-7A5C-48F6-91E3-0A3D26A10CBE}
+	EndGlobalSection
+EndGlobal

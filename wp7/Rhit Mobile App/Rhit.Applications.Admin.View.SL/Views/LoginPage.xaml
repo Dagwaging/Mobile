@@ -1,0 +1,36 @@
+﻿<navigation:Page x:Class="Rhit.Applications.View.Views.LoginPage" 
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:cmds="clr-namespace:Rhit.Applications.Mvvm.Commands;assembly=Rhit.Applications.Mvvm.SL"
+    xmlns:util="clr-namespace:Rhit.Applications.Mvvm.Utilities;assembly=Rhit.Applications.Mvvm.SL"
+    xmlns:navigation="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Navigation"
+    mc:Ignorable="d"
+    d:DesignWidth="640" d:DesignHeight="480"
+    Title="LoginPage">
+
+    <Grid x:Name="LayoutRoot">
+     
+            <StackPanel VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,30,0,0">
+                <TextBlock Text="{Binding LoginStatus, FallbackValue='Login to Access Data'}" FontWeight="Bold" FontSize="12"/>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="User Name:" Margin="5" VerticalAlignment="Center" FontWeight="Bold" Grid.Row="0" Grid.Column="0"/>
+                    <TextBox Name="UserNameBox" Text="{Binding UserName, Mode=TwoWay}" util:BindingUtility.UpdateSourceOnChange="True" MinWidth="200" Grid.Row="0" Grid.Column="1" Background="LightGray" Margin="5" KeyUp="TextBox_KeyUp"/>
+
+                    <TextBlock Text="Password:" Margin="5" VerticalAlignment="Center" FontWeight="Bold" Grid.Row="1" Grid.Column="0"/>
+                    <PasswordBox Password="{Binding Password, Mode=TwoWay}" util:BindingUtility.UpdateSourceOnChange="True" MinWidth="200" Grid.Row="1" Grid.Column="1" Background="LightGray" Margin="5" KeyUp="TextBox_KeyUp"/>
+                </Grid>
+                <Button Content="Login" HorizontalAlignment="Right" MinWidth="60" Margin="5" cmds:CommandManager.Command="{Binding LoginCommand}" cmds:CommandManager.CommandEventName="Click"/>
+            </StackPanel>
+ 
+    </Grid>
+</navigation:Page>

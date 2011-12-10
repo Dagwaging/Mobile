@@ -1,0 +1,137 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{8539E822-5EF8-49C0-B7D8-C250F48D7B9B}</ProjectGuid>
+    <ProjectTypeGuids>{A1591282-1198-4647-A2B1-27E5FF5F6F3B};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Rhit.Applications.Model.SL</RootNamespace>
+    <AssemblyName>Rhit.Applications.Model.SL</AssemblyName>
+    <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
+    <SilverlightApplication>false</SilverlightApplication>
+    <ValidateXaml>true</ValidateXaml>
+    <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
+  </PropertyGroup>
+  <!-- This property group is only here to support building this project using the 
+       MSBuild 3.5 toolset. In order to work correctly with this older toolset, it needs 
+       to set the TargetFrameworkVersion to v3.5 -->
+  <PropertyGroup Condition="'$(MSBuildToolsVersion)' == '3.5'">
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>Bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;TRACE;SILVERLIGHT</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoWarn>0809</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>Bin\Release</OutputPath>
+    <DefineConstants>TRACE;SILVERLIGHT</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Maps.MapControl, Version=1.0.1.0, Culture=neutral, PublicKeyToken=498d0d22d7936b73, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Maps.MapControl.Common, Version=1.0.1.0, Culture=neutral, PublicKeyToken=498d0d22d7936b73, processorArchitecture=MSIL" />
+    <Reference Include="mscorlib" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.Windows" />
+    <Reference Include="system" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Windows.Browser" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DataContracts.cs" />
+    <Compile Include="Events\AuthenticationEventArgs.cs" />
+    <Compile Include="Events\OutlineEventArgs.cs" />
+    <Compile Include="Events\PushpinEventArgs.cs" />
+    <Compile Include="Events\SearchEventArgs.cs" />
+    <Compile Include="Events\ServerEventArgs.cs" />
+    <Compile Include="Events\ServiceEventArgs.cs" />
+    <Compile Include="GeoCoordinate.cs" />
+    <Compile Include="LocationType.cs" />
+    <Compile Include="Maps\Modes\BingMode.cs" />
+    <Compile Include="Maps\Modes\EmptyMode.cs" />
+    <Compile Include="Maps\Modes\GoogleMode.cs" />
+    <Compile Include="Maps\Modes\MapnikMode.cs" />
+    <Compile Include="Maps\Modes\OsmaMode.cs" />
+    <Compile Include="Maps\Modes\RhitMode.cs" />
+    <Compile Include="Maps\Sources\BaseTileSource.cs" />
+    <Compile Include="Maps\Sources\BingSource.cs" />
+    <Compile Include="Maps\Sources\BingType.cs" />
+    <Compile Include="Maps\Sources\GoogleSource.cs" />
+    <Compile Include="Maps\Sources\GoogleType.cs" />
+    <Compile Include="Maps\Sources\MapnikSource.cs" />
+    <Compile Include="Maps\Sources\OsmaSource.cs" />
+    <Compile Include="Maps\Sources\RoseOverlay.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RhitLocation.cs" />
+    <Compile Include="Services\Connection.cs" />
+    <Compile Include="Services\DataCollector.cs" />
+    <Compile Include="Services\DataStorage.cs" />
+    <Compile Include="Services\Requests\AdminRequestPart.cs" />
+    <Compile Include="Services\Requests\AllRequestPart.cs" />
+    <Compile Include="Services\Requests\DataRequestPart.cs" />
+    <Compile Include="Services\Requests\DepartableRequestPart.cs" />
+    <Compile Include="Services\Requests\DescRequestPart.cs" />
+    <Compile Include="Services\Requests\DirectionsRequestPart.cs" />
+    <Compile Include="Services\Requests\FromGpsRequestPart.cs" />
+    <Compile Include="Services\Requests\FromLocRequestPart.cs" />
+    <Compile Include="Services\Requests\IdRequestPart.cs" />
+    <Compile Include="Services\Requests\LocationRequestPart.cs" />
+    <Compile Include="Services\Requests\MensRequestPart.cs" />
+    <Compile Include="Services\Requests\NamesRequestPart.cs" />
+    <Compile Include="Services\Requests\NoDescRequestPart.cs" />
+    <Compile Include="Services\Requests\NoTopRequestPart.cs" />
+    <Compile Include="Services\Requests\RequestBuilder.cs" />
+    <Compile Include="Services\Requests\RequestPart.cs" />
+    <Compile Include="Services\Requests\RequestQuery.cs" />
+    <Compile Include="Services\Requests\StatusRequestPart.cs" />
+    <Compile Include="Services\Requests\ToBathRequestPart.cs" />
+    <Compile Include="Services\Requests\ToLocRequestPart.cs" />
+    <Compile Include="Services\Requests\TopRequestPart.cs" />
+    <Compile Include="Services\Requests\ToPrinterRequestPart.cs" />
+    <Compile Include="Services\Requests\WithinRequestPart.cs" />
+    <Compile Include="Services\Requests\WomensRequestPart.cs" />
+    <Compile Include="Services\ResponseHandler.cs" />
+    <Compile Include="Services\ResponseType.cs" />
+    <Compile Include="Services\StorageKey.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Binaries\Microsoft.Maps.MapControl.Common.dll" />
+    <Content Include="Binaries\Microsoft.Maps.MapControl.dll" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{A1591282-1198-4647-A2B1-27E5FF5F6F3B}">
+        <SilverlightProjectProperties />
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
