@@ -66,8 +66,12 @@ namespace Rhit.Applications.ViewModel.Controllers {
         }
 
         public void UnSelect() {
+            LocationEventArgs args = new LocationEventArgs();
+            args.OldLocation = CurrentLocation;
             CurrentLocation = null;
+            args.NewLocation = CurrentLocation;
             InnerLocations.Clear();
+            OnCurrentLocationChanged(args);
         }
 
         public void SetLocations(List<RhitLocation> locations) {

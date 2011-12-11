@@ -106,11 +106,8 @@
     <Content Include="Background.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Binaries\GalaSoft.MvvmLight.Extras.WP7.dll" />
-    <Content Include="Binaries\GalaSoft.MvvmLight.WP7.dll" />
     <Content Include="Binaries\Microsoft.Phone.Controls.Maps.dll" />
     <Content Include="Binaries\Microsoft.Phone.Controls.Toolkit.dll" />
-    <Content Include="Binaries\System.Windows.Interactivity.dll" />
     <Content Include="SplashScreenImage.jpg" />
   </ItemGroup>
   <ItemGroup>
@@ -139,6 +136,10 @@
     <ProjectReference Include="..\Rhit.Applications.Mobile.ViewModel.WP7\Rhit.Applications.Mobile.ViewModel.WP7.csproj">
       <Project>{115B1326-BD48-4BCE-ADAC-7EC12AAC2D46}</Project>
       <Name>Rhit.Applications.Mobile.ViewModel.WP7</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Rhit.Applications.Mvvm.WP7\Rhit.Applications.Mvvm.WP7.csproj">
+      <Project>{C4B93CFD-E240-433F-9C7D-3EA7A7786CBF}</Project>
+      <Name>Rhit.Applications.Mvvm.WP7</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.$(TargetFrameworkProfile).Overrides.targets" />

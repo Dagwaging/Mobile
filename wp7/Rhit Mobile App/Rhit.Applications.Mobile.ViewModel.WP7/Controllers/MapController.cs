@@ -4,12 +4,13 @@ using System.Collections.ObjectModel;
 using System.Device.Location;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 using Microsoft.Phone.Controls.Maps;
 using Rhit.Applications.Model;
+using Rhit.Applications.Model.Events;
 using Rhit.Applications.Model.Maps.Modes;
 using Rhit.Applications.Model.Maps.Sources;
 using Rhit.Applications.Model.Services;
-using Rhit.Applications.Model.Events;
 
 namespace Rhit.Applications.ViewModel.Controllers {
     public class MapController : DependencyObject {
@@ -21,6 +22,7 @@ namespace Rhit.Applications.ViewModel.Controllers {
             CreateMapLayers();
             InitializeMapResources();
             InitializeMap();
+            Load();
         }
 
         private void LocationsChanged(object sender, LocationEventArgs e) {
@@ -56,6 +58,8 @@ namespace Rhit.Applications.ViewModel.Controllers {
                     RhitLocation.ShowOutline(e.NewLocation.OutLine);
                 }
             }
+            if(e.NewLocation != null)
+                MapControl.Center = e.NewLocation.Center;
         }
 
         public static void CreateMapController(Map map) {
@@ -102,6 +106,7 @@ namespace Rhit.Applications.ViewModel.Controllers {
             MapControl.CopyrightVisibility = Visibility.Collapsed;
             MapControl.LogoVisibility = Visibility.Collapsed;
             MapControl.Tap += new EventHandler<GestureEventArgs>(MapControl_Tap);
+            MapControl.CacheMode = new BitmapCache();
 
             //Store elements put onto the map in the view
             List<UIElement> es = new List<UIElement>();
@@ -118,14 +123,13 @@ namespace Rhit.Applications.ViewModel.Controllers {
         }
         #endregion
 
-        
-
         #region Update Methods
         private void UpdateSources() {
-            Sources.Clear();
-            foreach(BaseTileSource source in CurrentMode.Sources)
-                Sources.Add(source);
+            List<BaseTileSource> sources = new List<BaseTileSource>();
+            foreach(BaseTileSource source in Sources) sources.Add(source);
+            foreach(BaseTileSource source in CurrentMode.Sources) Sources.Add(source);
             CurrentSource = CurrentMode.CurrentSource;
+            foreach(BaseTileSource source in sources) Sources.Remove(source);
             if(Sources.Count > 1) SourceChoices = true;
             else SourceChoices = false;
         }
@@ -326,12 +330,31 @@ namespace Rhit.Applications.ViewModel.Controllers {
         #endregion
         #endregion
 
+        public void Save() {
+            DataStorage.SaveState(StorageKey.ZoomLevel, MapControl.ZoomLevel);
+            DataStorage.SaveState(StorageKey.MapCenter, MapControl.Center);
+            DataStorage.SaveState(StorageKey.MapMode, CurrentMode.Label);
+            DataStorage.SaveState(StorageKey.TileSource, CurrentSource.Label);
+            DataStorage.SaveState(StorageKey.RoseOverlay, FloorPlans);
+            DataStorage.SaveState(StorageKey.VisibleOutlines, AreOutlinesVisible);
+            DataStorage.SaveState(StorageKey.VisibleLabels, AreLabelsVisible);
+        }
 
+        public void Load() {
+            if(MapControl == null) return;
+            MapControl.ZoomLevel = (double) DataStorage.LoadState<object>(StorageKey.ZoomLevel, MapControl.ZoomLevel);
+            MapControl.Center = (GeoCoordinate) DataStorage.LoadState<GeoCoordinate>(StorageKey.MapCenter, MapControl.Center);
 
-        //public RhitLocation SelectedLocation { get; private set; }
+            string modeLabel = DataStorage.LoadState<string>(StorageKey.MapMode, string.Empty);
+            if(modeLabel != string.Empty) foreach(RhitMode mode in Modes) if(mode.Label == modeLabel) CurrentMode = mode;
 
-        ///// <summary> Pushpin to show when a location is selected. </summary>
-        //public Pushpin SelectedPushpin { get; private set; }
+            string sourceLabel = DataStorage.LoadState<string>(StorageKey.TileSource, string.Empty);
+            if(sourceLabel != string.Empty) foreach(BaseTileSource source in Sources) if(source.Label == sourceLabel) CurrentSource = source;
+
+            AreOutlinesVisible = (bool) DataStorage.LoadState<object>(StorageKey.VisibleOutlines, AreOutlinesVisible);
+            AreLabelsVisible = (bool) DataStorage.LoadState<object>(StorageKey.VisibleLabels, AreLabelsVisible);
+            FloorPlans = (bool) DataStorage.LoadState<object>(StorageKey.RoseOverlay, FloorPlans);
+        }
 
             ///// <summary> Current zoom level of the map. </summary>
         //public double ZoomLevel {
@@ -348,24 +371,6 @@ namespace Rhit.Applications.ViewModel.Controllers {
         //    }
         //}
 
-        //private void SelectedPushpin_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
-        //    if(Map.Children.Contains(SelectedPushpin)) Map.Children.Remove(SelectedPushpin);
-        //    if(_lastSelected != null && !AreOutlinesVisible)
-        //        RhitLocation.HideOutline(_lastSelected);
-        //    _lastSelected = null;
-
-        //    OnSelectedTap(new PushpinEventArgs() { SelectedPushpin = SelectedPushpin });
-        //}
-
-        //private void Polgon_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
-        //    RhitLocation location = Select((MapPolygon) sender);
-        //    RhitLocation.ShowOutline(location.OutLine);
-        //    if(_lastSelected != null && !AreOutlinesVisible)
-        //        RhitLocation.HideOutline(_lastSelected);
-        //    _lastSelected = location.OutLine;
-
-        //    OnTap(new OutlineEventArgs() { Outline = location.OutLine });
-        //}
 
         //private void Map_MapZoom(object sender, MapZoomEventArgs e) {
         //    _zoomLevel = Map.ZoomLevel;
@@ -375,116 +380,6 @@ namespace Rhit.Applications.ViewModel.Controllers {
         //        if(_zoomLevel > location.MinZoomLevel) _textLayer.Children.Add(location.GetLabel());
         //}
         //#endregion
-
-
-        //private void Initialize() {
-        //    _locations = new List<RhitLocation>();
-        //    User = new User();
-        //    _polygonLayer = new MapLayer();
-        //    _textLayer = new MapLayer();
-        //    User.Pin.MouseLeftButtonUp += new MouseButtonEventHandler(UserPushpin_MouseLeftButtonUp);
-        //    Map.Children.Add(User.Pin);
-        //    SelectedPushpin = new Pushpin();
-        //    SelectedPushpin.MouseLeftButtonUp += new MouseButtonEventHandler(SelectedPushpin_MouseLeftButtonUp);
-        //    Map.Children.Add(_polygonLayer);
-        //    Map.Children.Add(_textLayer);
-        //    LoadData();
-        //    GoToRhit(); //TODO: Load position from last time (Default here though)
-        //}
-        
-        ///// <summary>
-        ///// Makes Rose-Hulman is visible on the map.
-        ///// </summary>
-        //public void GoToRhit() {
-        //    Map.Center = App.LOCATION_RHIT.Center;
-        //    ZoomLevel = 16; //TODO: Don't hard code numbers
-        //}
-
-        ///// <summary>
-        ///// Makes the user's current location visible on the map.
-        ///// </summary>
-        //public void GoToUserLocation() {
-        //    if(User.Location == null) //TODO: Show Error Message
-        //        return;
-        //    Map.Center = User.Location;
-        //    ZoomLevel = 18; //TODO: Don't hard code numbers
-        //}
-
-        ///// <summary>
-        ///// Loads data for the map from isolated storage.
-        ///// </summary>
-        //public void LoadData() {
-        //    ZoomLevel = (double) DataStorage.LoadState<object>(StorageKey.ZoomLevel, ZoomLevel);
-        //    ChangeTileSource(DataStorage.LoadState<string>(StorageKey.TileSource, CurrentTileSource.Name));
-        //    List<string> sourceNames = DataStorage.LoadState<List<string>>(StorageKey.Overlays, new List<string>());
-        //    foreach(string sourceName in sourceNames) AddOverlay(sourceName);
-        //    AreOutlinesVisible = (bool) DataStorage.LoadState<object>(StorageKey.VisibleOutlines, AreOutlinesVisible);
-        //    AreLabelsVisible = (bool) DataStorage.LoadState<object>(StorageKey.VisibleLabels, AreLabelsVisible);
-        //    User = DataStorage.LoadState<User>(StorageKey.User, User);
-        //    User.Pin.MouseLeftButtonUp += new MouseButtonEventHandler(UserPushpin_MouseLeftButtonUp);
-        //}
-
-     
-        ///// <summary>
-        ///// Makes a location visible on the map.
-        ///// </summary>
-        ///// <param name="polygon">Polygon to make visible</param>
-        ///// <returns>The location that was made visible</returns>
-        //public RhitLocation Select(MapPolygon polygon) {
-        //    foreach(RhitLocation location in Outlines)
-        //        if(location.IsPolygonEqual(polygon)) {
-        //            return Select(location);
-        //        }
-        //    return null;
-        //}
-
-        ///// <summary>
-        ///// Makes a location visible on the map.
-        ///// </summary>
-        ///// <param name="location">Location to make visible</param>
-        ///// <returns>The location that was made visible</returns>
-        //public RhitLocation Select(RhitLocation location) {
-        //    //TODO: This is ugly code
-        //    if(location == null) return null;
-        //    if(_lastSelected != null && !AreOutlinesVisible)
-        //        RhitLocation.HideOutline(_lastSelected);
-        //    foreach(RhitLocation _location in Outlines)
-        //        if(_location.Label == location.Label) {
-        //            _lastSelected = _location.OutLine;
-        //            SelectedPushpin.Content = _location.Label + "\n(click for more)";
-        //            SelectedPushpin.Location = _location.Center;
-        //            if(!Map.Children.Contains(SelectedPushpin)) Map.Children.Add(SelectedPushpin);
-        //            RhitLocation.ShowOutline(_location.OutLine);
-        //            Map.Center = _location.Center;
-        //            if(ZoomLevel < 18) ZoomLevel = 18;
-        //            SelectedLocation = _location;
-        //            return _location;
-        //        }
-        //    SelectedPushpin.Content = location.Label + "\n(click for more)";
-        //    SelectedPushpin.Location = location.Center;
-        //    if(!Map.Children.Contains(SelectedPushpin)) Map.Children.Add(SelectedPushpin);
-        //    Map.Center = location.Center;
-        //    if(ZoomLevel < 18) ZoomLevel = 18;
-        //    SelectedLocation = location;
-        //    return SelectedLocation;
-        //}
-
-        ///// <summary>
-        ///// Stores map data to isolated storage.
-        ///// </summary>
-        //public void StoreData() {
-        //    DataStorage.SaveState(StorageKey.ZoomLevel, ZoomLevel);
-        //    DataStorage.SaveState(StorageKey.TileSource, CurrentTileSource.Name);
-        //    List<string> sourceNames = new List<string>();
-        //    foreach(BaseTileSource source in CurrentOverlaySources)
-        //        sourceNames.Add(source.Name);
-        //    DataStorage.SaveState(StorageKey.Overlays, sourceNames);
-        //    DataStorage.SaveState(StorageKey.VisibleOutlines, AreOutlinesVisible);
-        //    DataStorage.SaveState(StorageKey.VisibleLabels, AreLabelsVisible);
-        //    DataStorage.SaveState(StorageKey.User, User);
-        //    //TODO: Cache Map Tiles
-        //}
-
 
     }
 }

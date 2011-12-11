@@ -54,6 +54,7 @@
     <Compile Include="Controllers\LocationsController.cs" />
     <Compile Include="Controllers\MapController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\LocationToCoordinateConverter.cs" />
     <Compile Include="Converters\LocationToLinkConverter.cs" />
@@ -61,6 +62,7 @@
     <Compile Include="Converters\ObjectToVisibilityConverter.cs" />
     <Compile Include="Models\InfoViewModel.cs" />
     <Compile Include="Models\MainViewModel.cs" />
+    <Compile Include="Models\SearchViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services.cs" />
   </ItemGroup>
@@ -68,6 +70,10 @@
     <ProjectReference Include="..\Rhit.Applications.Model.WP7\Rhit.Applications.Model.WP7.csproj">
       <Project>{17BE6337-47BB-418E-9869-2E11A5824BE3}</Project>
       <Name>Rhit.Applications.Model.WP7</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Rhit.Applications.Mvvm.WP7\Rhit.Applications.Mvvm.WP7.csproj">
+      <Project>{C4B93CFD-E240-433F-9C7D-3EA7A7786CBF}</Project>
+      <Name>Rhit.Applications.Mvvm.WP7</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

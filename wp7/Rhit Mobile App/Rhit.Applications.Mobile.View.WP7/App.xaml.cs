@@ -3,16 +3,11 @@ using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using Rhit.Applications.ViewModel;
+using Rhit.Applications.ViewModel.Controllers;
 
 namespace Rhit.Applications.View {
     public partial class App : Application {
-        #region Fields
         private bool phoneApplicationInitialized = false;
-
-        internal const string MapId = "AthZ1tu5ROM0PUWcIYFSxC1oQALFR-g0aoFIuL9tlbeGJ9Z6qKIRYoB_jGpct8Yu";
-
-        internal const bool RunUnitTests = true;
-        #endregion
 
         /// <summary>
         /// Constructor for the Application object.
@@ -79,8 +74,7 @@ namespace Rhit.Applications.View {
         /// This will not execute when the application is reactivated.
         /// </summary>
         private void Application_Launching(object sender, LaunchingEventArgs e) {
-            //TODO: Load data from isolated storage?
-            //TODO: Make the one call to the service to update the data?
+            
         }
 
         /// <summary>
@@ -88,8 +82,7 @@ namespace Rhit.Applications.View {
         /// This code will not execute when the application is first launched.
         /// </summary>
         private void Application_Activated(object sender, ActivatedEventArgs e) {
-            //TODO: Load data from isolated storage?
-            //TODO: Make the one call to the service to update the data?
+            
         }
 
         /// <summary>
@@ -97,7 +90,7 @@ namespace Rhit.Applications.View {
         /// This code will not execute when the application is closing.
         /// </summary>
         private void Application_Deactivated(object sender, DeactivatedEventArgs e) {
-            //TODO: Save data to isolated storage?
+            MapController.Instance.Save();
         }
 
         /// <summary>
@@ -105,8 +98,10 @@ namespace Rhit.Applications.View {
         /// This code will not execute when the application is deactivated.
         /// </summary>
         private void Application_Closing(object sender, ClosingEventArgs e) {
-            //TODO: Save data to isolated storage?
+            MapController.Instance.Save();
         }
         #endregion
+
+
     }
 }

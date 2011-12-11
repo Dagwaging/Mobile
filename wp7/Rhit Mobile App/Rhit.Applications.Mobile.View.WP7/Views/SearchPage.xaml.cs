@@ -3,61 +3,35 @@ using Microsoft.Phone.Controls;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System;
+using Rhit.Applications.ViewModel.Models;
 
 namespace Rhit.Applications.View.Views {
     /// \ingroup pages
     public partial class SearchPage : PhoneApplicationPage {
         public SearchPage() {
             InitializeComponent();
-            //this.IsTabStop = true;
-            //DataCollector.Instance.SearchResultsAvailable += new SearchEventHandler(SearchResultsAvailable);
-            //PivotControl.SelectionChanged += new SelectionChangedEventHandler(PivotControl_SelectionChanged);
+
+            ViewModel = new SearchViewModel();
+            DataContext = ViewModel;
         }
 
-        //void PivotControl_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-        //    this.Focus();
-        //}
+        public SearchViewModel ViewModel { get; set; }
 
-        //void SearchResultsAvailable(object sender, SearchEventArgs e) {
-        //    if(e.Places != null && e.Places.Count > 0) {
-        //        if(SearchAllTextBox.Text != "" && AllResults.ItemsSource == null)
-        //            AllResults.ItemsSource = e.Places;
-        //        if(SearchPlacesTextBox.Text != "" && PlacesResults.ItemsSource == null)
-        //            PlacesResults.ItemsSource = e.Places;
-        //    }
-        //}
+        private void PlacesSelectionChanged(object sender, SelectionChangedEventArgs e) {
+            if((sender as ListBox).SelectedItem == null) return;
+            ViewModel.SelectLocation((sender as ListBox).SelectedItem);
+            NavigationService.Navigate(new Uri("/Views/InfoPage.xaml", UriKind.Relative));
+        }
 
-        //private void SearchAll_KeyUp(object sender, KeyEventArgs e) {
-        //    if(e.Key == Key.Enter) {
-        //        DataCollector.Instance.SearchLocations(Dispatcher, SearchAllTextBox.Text);
-        //        AllResults.ItemsSource = null;
-        //        //DataCollector.Instance.SearchPeople(Dispatcher, SearchPeopleTextBox.Text);
-        //        this.Focus();
-        //    }
-        //}
+        private void PeopleSelectionChanged(object sender, SelectionChangedEventArgs e) {
 
-        //private void SearchPlaces_KeyUp(object sender, KeyEventArgs e) {
-        //    if(e.Key == Key.Enter) {
-        //        DataCollector.Instance.SearchLocations(Dispatcher, SearchPlacesTextBox.Text);
-        //        PeopleResults.ItemsSource = null;
-        //        this.Focus();
-        //    }
-        //}
-        
-        //private void SearchPeople_KeyUp(object sender, KeyEventArgs e) {
-        //    //if(e.Key == Key.Enter) {
-        //    //    DataCollector.Instance.SearchPeople(Dispatcher, SearchPeopleTextBox.Text);
-        //    //    this.Focus();
-        //    //}
-        //}
+        }
 
-        //private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-        //    ListBox listbox = (ListBox) sender;
-        //    RhitLocation selected = (RhitLocation) listbox.SelectedItem;
-        //    if(selected == null) return;
-        //    RhitMap.Instance.Select(selected);
-        //    listbox.SelectedItem = null;
-        //    NavigationService.Navigate(new Uri("/InfoPage.xaml?Id=" + selected.Id.ToString(), UriKind.Relative));
-        //}
+        private void Search_KeyUp(object sender, KeyEventArgs e) {
+            if(e.Key == Key.Enter) {
+                ViewModel.Search((sender as PhoneTextBox).Text);
+                this.Focus(); //Closes virtual keyboard
+            }
+        }
     }
 }

@@ -29,7 +29,6 @@ namespace Rhit.Applications.ViewModel.Models {
 
         public void SelectLocation(object obj) {
             if(obj is RhitLocation) Locations.SelectLocation(obj as RhitLocation);
-            //try { Locations.SelectLocation(obj as RhitLocation); } catch { }
         }
 
         public void SetLocation(int index) {

@@ -13,7 +13,7 @@
     mc:Ignorable="d" d:DesignHeight="768" d:DesignWidth="480"
     shell:SystemTray.IsVisible="True">
 
-    <Grid x:Name="LayoutRoot" Background="Transparent">
+    <Grid Background="Transparent">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -21,11 +21,11 @@
 
         <StackPanel Grid.Row="0" Margin="12,17,0,28">
             <TextBlock Text="Major locations on Rose's campus" Style="{StaticResource PhoneTextNormalStyle}"/>
-            <TextBlock FontSize="60" Text="Quick List" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
+            <TextBlock FontSize="60" Text="Quick List" Margin="10,-5,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
         </StackPanel>
 
-        <Grid Grid.Row="1" Margin="12,0,12,0">
-            <ListBox HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="12,0,0,0" 
+        <Grid Grid.Row="1" Margin="12,-10,12,0">
+            <ListBox HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="15,0,0,0" 
                      ItemTemplate="{StaticResource ListBoxTemplate}" SelectionChanged="SelectionChanged"
                      ItemsSource="{Binding Locations.QuickList, Mode=TwoWay}"/>
         </Grid>
