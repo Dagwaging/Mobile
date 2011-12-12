@@ -282,7 +282,7 @@
         MKPolylineView *view = [[[MKPolylineView alloc] initWithPolyline:overlay] autorelease];
         view.strokeColor = [UIColor blueColor];
         view.fillColor = [UIColor blueColor];
-        view.lineWidth = 5;
+        view.lineWidth = 10;
         return view;
     }
     
