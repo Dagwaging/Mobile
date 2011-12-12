@@ -24,20 +24,17 @@
 #import "RHITMobileAppDelegate.h"
 #import "MapViewController.h"
 #import "WebViewController.h"
-#import "DirectionsViewController.h"
 
 #define kAltNamesLabel @"Also Known As"
 #define kAboutLabel @"About"
 #define kLinksLabel @"More Info"
 #define kParentLabel @"Where It Is"
-#define kLocationLabel @"How To Get There"
 #define kEnclosedLabel @"What's Inside"
 
 #define kAltNameCellKey @"AltNameCell"
 #define kLinkCellKey @"LinkCell"
 #define kAboutCellKey @"AboutCell"
 #define kParentCellKey @"ParentCell"
-#define kLocationCellKey @"LocationCell"
 #define kEnclosedLocadingCellKey @"EnclosedLoadingCell"
 #define kEnclosedCellKey @"EnclosedCell"
 
@@ -79,6 +76,10 @@
     [self.navigationController popToRootViewControllerAnimated:YES];
     RHITMobileAppDelegate *appDelegate = (RHITMobileAppDelegate *) [UIApplication sharedApplication].delegate;
     [appDelegate.mapViewController focusMapViewToLocation:self.location];
+}
+
+- (IBAction)getDirectionsToCurrentLocation:(id)sender {
+    
 }
 
 #pragma mark - View lifecycle
@@ -143,11 +144,7 @@
         [self.sections addObject:kAboutLabel];
     }
     
-    if (location.parent != nil) {
-        [self.sections addObject:kParentLabel];
-    }
-    
-    [self.sections addObject:kLocationLabel];
+    [self.sections addObject:kParentLabel];
     
     if (location.links.count > 0) {
         [self.sections addObject:kLinksLabel];
@@ -179,19 +176,28 @@
 viewForFooterInSection:(NSInteger)section {
     NSString *sectionLabel = [self.sections objectAtIndex:section];
     
-    if (sectionLabel == kLocationLabel) {
+    if (sectionLabel == kParentLabel) {
         UIView *parentView = [[[UIView alloc] initWithFrame:CGRectZero] autorelease];
         parentView.backgroundColor = [UIColor clearColor];
         
         UIButton *mapButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-        mapButton.frame = CGRectMake(10.0, 10.0, 300.0, 44.0);
+        mapButton.frame = CGRectMake(10.0, 10.0, 145.0, 44.0);
         [mapButton addTarget:self
                          action:@selector(displayCurrentLocationOnMap:)
                forControlEvents:UIControlEventTouchUpInside];
         
         [mapButton setTitle:@"Go to Map" forState:UIControlStateNormal];
         
+        UIButton *directionsButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        directionsButton.frame = CGRectMake(165.0, 10.0, 145.0, 44.0);
+        [directionsButton addTarget:self
+                         action:@selector(getDirectionsToCurrentLocation:)
+               forControlEvents:UIControlEventTouchUpInside];
+        
+        [directionsButton setTitle:@"Get Directions" forState:UIControlStateNormal];
+        
         [parentView addSubview:mapButton];
+        [parentView addSubview:directionsButton];
         return parentView;
     }
     
@@ -202,7 +208,7 @@ viewForFooterInSection:(NSInteger)section {
 heightForFooterInSection:(NSInteger)section {
     NSString *sectionLabel = [self.sections objectAtIndex:section];
     
-    if (sectionLabel == kLocationLabel) {
+    if (sectionLabel == kParentLabel) {
         return 64;
     }
     
@@ -268,19 +274,7 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath {
         }
         
         cell.textLabel.text = self.location.parent.name;
-    } else if (sectionLabel == kLocationLabel) {
-        static NSString *cellIdentifier = kLocationCellKey;
         
-        cell = [inTableView dequeueReusableCellWithIdentifier:cellIdentifier];
-        
-        if (cell == nil) {
-            cell = [[[UITableViewCell alloc]
-                     initWithStyle:UITableViewCellStyleDefault
-                     reuseIdentifier:cellIdentifier] autorelease];
-            cell.selectionStyle = UITableViewCellSelectionStyleBlue;
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            cell.textLabel.text = @"Get Directions";
-        }
     } else if (sectionLabel == kEnclosedLabel && self.location.retrievalStatus == RHLocationRetrievalStatusFull) {
         static NSString *cellIdentifier = kEnclosedCellKey;
         
@@ -362,9 +356,7 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (sectionLabel == kAboutLabel) {
         return 1;
     } else if (sectionLabel == kParentLabel) {
-        return 1;
-    } else if (sectionLabel == kLocationLabel) {
-        return 1;
+        return self.location.parent == nil ? 0 : 1;
     } else if (sectionLabel == kEnclosedLabel) {
         if (self.location.retrievalStatus != RHLocationRetrievalStatusFull) {
             return 1;
@@ -397,11 +389,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         LocationDetailViewController *detailViewController = [[[LocationDetailViewController alloc] initWithNibName:@"LocationDetailView" bundle:nil] autorelease];
         detailViewController.location = self.location.parent;
         [self.navigationController pushViewController:detailViewController animated:YES];
-    } else if (sectionLabel == kLocationLabel) {
-        [inTableView deselectRowAtIndexPath:indexPath animated:YES];
-        DirectionsViewController *directionsViewController = [[[DirectionsViewController alloc] initWithNibName:@"DirectionsView" bundle:nil] autorelease];
-        
-        [self.navigationController pushViewController:directionsViewController animated:YES];
     } else if (sectionLabel == kLinksLabel) {
         [inTableView deselectRowAtIndexPath:indexPath animated:YES];
         
