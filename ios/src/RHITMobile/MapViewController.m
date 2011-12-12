@@ -64,6 +64,9 @@
 @synthesize remoteHandler = remoteHandler_;
 @synthesize quickListAnnotations;
 @synthesize temporaryAnnotations;
+@synthesize backgroundView;
+@synthesize directionsLabel;
+@synthesize directionsPicker;
 
 // Private properties
 @synthesize currentOverlay;
@@ -533,9 +536,30 @@
     if (self.mapView.selectedAnnotations.count > 0) {
         [self.mapView deselectAnnotation:[self.mapView.selectedAnnotations objectAtIndex:0] animated:NO];
     }
+    self.backgroundView.hidden = NO;
+    self.directionsLabel.hidden = NO;
+    self.directionsPicker.hidden = NO;
+    self.mapView.frame = CGRectMake(0, 0, 320, 155);
+    
     [self clearAllDynamicMapArtifacts];
     [self.mapView addOverlay:path];
     [self.mapView setCenterCoordinate:self.mapView.centerCoordinate zoomLevel:15 animated:YES];
+}
+
+#pragma mark - UIPickerViewDelegate Methods
+
+- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
+    return @"Turn left E104";
+}
+
+#pragma mark - UIPickerViewDataSource Methods
+
+- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView {
+    return 1;
+}
+
+- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
+    return 10;
 }
 
 @end

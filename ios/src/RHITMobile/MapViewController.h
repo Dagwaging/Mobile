@@ -32,7 +32,7 @@
 /// \ingroup views
 /// View controller for the map portion of the application.
 @interface MapViewController : UIViewController
-<MKMapViewDelegate, RHRemoteHandlerDelegate, RHAnnotationViewDelegate>
+<MKMapViewDelegate, RHRemoteHandlerDelegate, RHAnnotationViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource>
 
 /// Map view that is visible to the user.
 @property (nonatomic, retain) IBOutlet MKMapView *mapView;
@@ -48,7 +48,13 @@
 
 @property (nonatomic, retain) NSMutableArray *quickListAnnotations;
 
-@property (nonatomic, retain) NSArray *temporaryAnnotations; 
+@property (nonatomic, retain) NSArray *temporaryAnnotations;
+
+@property (nonatomic, retain) IBOutlet UIView *backgroundView;
+
+@property (nonatomic, retain) IBOutlet UILabel *directionsLabel;
+
+@property (nonatomic, retain) IBOutlet UIPickerView *directionsPicker;
 
 - (void)focusMapViewToTemporaryAnnotation:(RHAnnotation *)annotation;
 
