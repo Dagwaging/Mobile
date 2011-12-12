@@ -55,6 +55,8 @@
 /// initialization is an InfoViewController.
 @property (nonatomic, retain) IBOutlet UINavigationController *infoNavigationViewController;
 
+@property (nonatomic, retain) IBOutlet UINavigationController *toursNavigationViewController;
+
 /// The single MapViewController which lives under than "Map" tab as the root
 /// view controller of that tab's view controller. There is only ever one
 /// MapViewController, and all map interactions and modifications are done

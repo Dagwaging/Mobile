@@ -26,6 +26,7 @@
 #import "DirectoryViewController.h"
 #import "InfoViewController.h"
 #import "RHLocation.h"
+#import "ToursViewController.h"
 
 
 #pragma mark Private Category Declaration
@@ -52,6 +53,7 @@
 @synthesize managedObjectContext;
 @synthesize persistentStoreCoordinator;
 @synthesize locationNames;
+@synthesize toursNavigationViewController;
 
 #pragma mark - Static Methods
 static RHITMobileAppDelegate *instance_;
@@ -118,6 +120,19 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
      animated:NO];
     
     directoryController.navigationItem.title = @"Directory";
+    
+    // Create and initialize the root directory view controller
+    ToursViewController *toursController = [ToursViewController
+                                                    alloc];
+    toursController = [[toursController initWithNibName:@"ToursView"
+                                                         bundle:nil]
+                           autorelease];
+    
+    [self.toursNavigationViewController
+     pushViewController:toursController
+     animated:NO];
+    
+    toursController.navigationItem.title = @"Tours";
     
     // If this is a beta build, create and initizliaze the beta controller
 #ifdef RHITMobile_RHBeta
