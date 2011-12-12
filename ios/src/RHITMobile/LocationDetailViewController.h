@@ -19,11 +19,16 @@
 
 
 #import <UIKit/UIKit.h>
+#import "RHDirectionsRequesterDelegate.h"
 
 @class RHLocation;
+@class RHDirectionsRequester;
 
 /// \ingroup views
-@interface LocationDetailViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
+@interface LocationDetailViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, RHDirectionsRequesterDelegate> {
+    @private
+    RHDirectionsRequester *currentDirectionsRequest_;
+}
 
 @property (nonatomic, retain) RHLocation *location;
 @property (nonatomic, retain) NSArray *enclosedLocations;

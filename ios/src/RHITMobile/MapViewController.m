@@ -277,6 +277,13 @@
         view.lineWidth = 3;
         
         return view;
+    } else if ([overlay isKindOfClass:[MKPolyline class]]) {
+        NSLog(@"Polyline view");
+        MKPolylineView *view = [[[MKPolylineView alloc] initWithPolyline:overlay] autorelease];
+        view.strokeColor = [UIColor blueColor];
+        view.fillColor = [UIColor blueColor];
+        view.lineWidth = 5;
+        return view;
     }
     
     return nil;
@@ -520,6 +527,15 @@
             [self.mapView addAnnotation:annotation];
         }
     }
+}
+
+- (void)displayPath:(MKPolyline *)path {
+    if (self.mapView.selectedAnnotations.count > 0) {
+        [self.mapView deselectAnnotation:[self.mapView.selectedAnnotations objectAtIndex:0] animated:NO];
+    }
+    [self clearAllDynamicMapArtifacts];
+    [self.mapView addOverlay:path];
+    [self.mapView setCenterCoordinate:self.mapView.centerCoordinate zoomLevel:15 animated:YES];
 }
 
 @end

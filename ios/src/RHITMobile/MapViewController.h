@@ -64,4 +64,6 @@
 
 - (IBAction)discloseLocationDetails:(id)sender;
 
+- (void)displayPath:(MKPolyline *)path;
+
 @end

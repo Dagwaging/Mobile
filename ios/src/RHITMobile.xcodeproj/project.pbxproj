@@ -51,6 +51,8 @@
 		925013661431AB6F00CEBB35 /* CJSONDeserializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 925013521431AB6F00CEBB35 /* CJSONDeserializer.m */; };
 		925013681431AB6F00CEBB35 /* CJSONScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 925013541431AB6F00CEBB35 /* CJSONScanner.m */; };
 		9250136A1431AB6F00CEBB35 /* CJSONSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 925013561431AB6F00CEBB35 /* CJSONSerializer.m */; };
+		925465A61495BC6600C12B81 /* RHDirectionsRequester.m in Sources */ = {isa = PBXBuildFile; fileRef = 925465A51495BC6600C12B81 /* RHDirectionsRequester.m */; };
+		925465AA1495C69C00C12B81 /* RHWrappedCoordinate.m in Sources */ = {isa = PBXBuildFile; fileRef = 925465A91495C69C00C12B81 /* RHWrappedCoordinate.m */; };
 		926088A8144D2ADB0002D50E /* RHITMobileValues.plist in Resources */ = {isa = PBXBuildFile; fileRef = 926088A7144D2ADB0002D50E /* RHITMobileValues.plist */; };
 		926088A9144D2ADB0002D50E /* RHITMobileValues.plist in Resources */ = {isa = PBXBuildFile; fileRef = 926088A7144D2ADB0002D50E /* RHITMobileValues.plist */; };
 		9265FEA91409AB5D00AE406E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9265FEA81409AB5D00AE406E /* UIKit.framework */; };
@@ -182,6 +184,11 @@
 		925013551431AB6F00CEBB35 /* CJSONSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJSONSerializer.h; sourceTree = "<group>"; };
 		925013561431AB6F00CEBB35 /* CJSONSerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJSONSerializer.m; sourceTree = "<group>"; };
 		925013571431AB6F00CEBB35 /* JSONRepresentation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONRepresentation.h; sourceTree = "<group>"; };
+		925465A41495BC6600C12B81 /* RHDirectionsRequester.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHDirectionsRequester.h; sourceTree = "<group>"; };
+		925465A51495BC6600C12B81 /* RHDirectionsRequester.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHDirectionsRequester.m; sourceTree = "<group>"; };
+		925465A71495BD5F00C12B81 /* RHDirectionsRequesterDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHDirectionsRequesterDelegate.h; sourceTree = "<group>"; };
+		925465A81495C69B00C12B81 /* RHWrappedCoordinate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHWrappedCoordinate.h; sourceTree = "<group>"; };
+		925465A91495C69C00C12B81 /* RHWrappedCoordinate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHWrappedCoordinate.m; sourceTree = "<group>"; };
 		926088A7144D2ADB0002D50E /* RHITMobileValues.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = RHITMobileValues.plist; sourceTree = "<group>"; };
 		9265FEA41409AB5D00AE406E /* RHITMobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RHITMobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9265FEA81409AB5D00AE406E /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -288,6 +295,9 @@
 				9250133B1431A7C700CEBB35 /* RHRestHandler.m */,
 				92E1AA7D1487115F0005BF34 /* RHWebRequestMaker.h */,
 				92E1AA7E1487115F0005BF34 /* RHWebRequestMaker.m */,
+				925465A41495BC6600C12B81 /* RHDirectionsRequester.h */,
+				925465A51495BC6600C12B81 /* RHDirectionsRequester.m */,
+				925465A71495BD5F00C12B81 /* RHDirectionsRequesterDelegate.h */,
 			);
 			name = Web;
 			sourceTree = "<group>";
@@ -527,6 +537,8 @@
 				92DFEAD314203C6400889314 /* RHMapLabel.m */,
 				9201A4631432E96000069863 /* RHLocationOverlay.h */,
 				9201A4641432E96000069863 /* RHLocationOverlay.m */,
+				925465A81495C69B00C12B81 /* RHWrappedCoordinate.h */,
+				925465A91495C69C00C12B81 /* RHWrappedCoordinate.m */,
 			);
 			name = Map;
 			sourceTree = "<group>";
@@ -739,6 +751,8 @@
 				92A49DDC145F8BA400B6F34E /* BetaRegistrationViewController.m in Sources */,
 				92F20F6D1464383200603500 /* WebViewController.m in Sources */,
 				92E1AA7F1487115F0005BF34 /* RHWebRequestMaker.m in Sources */,
+				925465A61495BC6600C12B81 /* RHDirectionsRequester.m in Sources */,
+				925465AA1495C69C00C12B81 /* RHWrappedCoordinate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
