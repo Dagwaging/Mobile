@@ -34,6 +34,7 @@
 #import "LocationDetailViewController.h"
 #import "SearchViewController.h"
 #import "RHDirectionLineItem.h"
+#import "RHSimplePointAnnotation.h"
 
 
 #pragma mark Private Method Declarations
@@ -262,6 +263,27 @@
         [annotationView setRightCalloutAccessoryView:newButton];
         
         annotation.annotationView = annotationView;
+        
+        return annotationView;
+    }
+    
+    if ([inAnnotation isKindOfClass:[RHSimplePointAnnotation class]]) {
+        MKPinAnnotationView *annotationView = (MKPinAnnotationView *)[self.mapView dequeueReusableAnnotationViewWithIdentifier:@"SimplePinView"];
+        
+        if (annotationView == nil) {
+            annotationView = [[[MKPinAnnotationView alloc] initWithAnnotation:inAnnotation reuseIdentifier:@"SimplePinView"] autorelease];
+            annotationView.animatesDrop = YES;
+        }
+        
+        RHSimplePointAnnotation *annotation = inAnnotation;
+        
+        if ([annotation color] == RHSimplePointAnnotationColorRed) {
+            annotationView.pinColor = MKPinAnnotationColorRed;
+        } else if ([annotation color] == RHSimplePointAnnotationColorGreen) {
+            annotationView.pinColor = MKPinAnnotationColorGreen;
+        } else if ([annotation color] == RHSimplePointAnnotationColorBlue) {
+            annotationView.pinColor = MKPinAnnotationColorPurple;
+        }
         
         return annotationView;
     }
@@ -588,14 +610,43 @@
     
     CLLocationCoordinate2D coords[directions.count];
     
+    RHSimplePointAnnotation *firstAnnotation = [[[RHSimplePointAnnotation alloc] init] autorelease];
+    firstAnnotation.coordinate = start.coordinate;
+    firstAnnotation.color = RHSimplePointAnnotationColorGreen;
+    [self.mapView addAnnotation:firstAnnotation];
+    
+    RHDirectionLineItem *last = [directions objectAtIndex:(directions.count - 1)];
+    
+    RHSimplePointAnnotation *lastAnnotation = [[[RHSimplePointAnnotation alloc] init] autorelease];
+    lastAnnotation.coordinate = last.coordinate;
+    lastAnnotation.color = RHSimplePointAnnotationColorRed;
+    [self.mapView addAnnotation:lastAnnotation];
+    
+    currentDirectionAnnotation_ = [[RHSimplePointAnnotation alloc] init];
+    currentDirectionAnnotation_.coordinate = start.coordinate;
+    currentDirectionAnnotation_.color = RHSimplePointAnnotationColorBlue;
+    [self.mapView addAnnotation:currentDirectionAnnotation_];
+    
+    
     for (RHDirectionLineItem *lineItem in directions) {
         coords[[directions indexOfObject:lineItem]] = lineItem.coordinate;
+        
+        if (lineItem.flagged) {
+            RHSimplePointAnnotation *annotation = [[[RHSimplePointAnnotation alloc] init] autorelease];
+            annotation.coordinate = lineItem.coordinate;
+            [self.mapView addAnnotation:annotation];
+        }
     }
     
     MKPolyline *line = [MKPolyline polylineWithCoordinates:coords
                                                      count:directions.count];
     
     [self.mapView addOverlay:line];
+    
+    currentDirections_ = directions;
+    [currentDirections_ retain];
+    
+    currentDirectionIndex_ = 0;
 }
 
 - (void)slideInDirectionsTitle:(UIView *)titleView {

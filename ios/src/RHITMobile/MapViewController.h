@@ -28,11 +28,17 @@
 @class RHRemoteHandler;
 @class RHAnnotation;
 @class RHLocation;
+@class RHSimplePointAnnotation;
 
 /// \ingroup views
 /// View controller for the map portion of the application.
 @interface MapViewController : UIViewController
-<MKMapViewDelegate, RHRemoteHandlerDelegate, RHAnnotationViewDelegate>
+<MKMapViewDelegate, RHRemoteHandlerDelegate, RHAnnotationViewDelegate> {
+    @private
+    NSArray *currentDirections_;
+    NSUInteger currentDirectionIndex_;
+    RHSimplePointAnnotation *currentDirectionAnnotation_;
+}
 
 /// Map view that is visible to the user.
 @property (nonatomic, retain) IBOutlet MKMapView *mapView;
