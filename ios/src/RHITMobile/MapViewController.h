@@ -41,6 +41,7 @@
     UILabel *directionsStatus_;
     UIView *directionsStatusBar_;
     UIToolbar *directionsControls_;
+    NSMutableArray *directionsPins_;
 }
 
 /// Map view that is visible to the user.

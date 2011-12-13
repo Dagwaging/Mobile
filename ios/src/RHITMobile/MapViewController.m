@@ -623,6 +623,8 @@
     currentDirectionAnnotation_.color = RHSimplePointAnnotationColorGreen;
     [self.mapView addAnnotation:currentDirectionAnnotation_];
     
+    directionsPins_ = [NSMutableArray arrayWithCapacity:directions.count];
+    [directionsPins_ retain];
     
     for (RHDirectionLineItem *lineItem in directions) {
         coords[[directions indexOfObject:lineItem]] = lineItem.coordinate;
@@ -631,6 +633,8 @@
             RHSimplePointAnnotation *annotation = [[[RHSimplePointAnnotation alloc] init] autorelease];
             annotation.coordinate = lineItem.coordinate;
             [self.mapView addAnnotation:annotation];
+            
+            [directionsPins_ addObject:annotation];
         }
     }
     
@@ -700,9 +704,10 @@
 - (void)exitDirections:(id)sender {
     [self.mapView removeOverlays:self.mapView.overlays];
     [self.mapView removeAnnotation:currentDirectionAnnotation_];
+    [self.mapView removeAnnotations:directionsPins_];
+    [directionsPins_ release];
     
     [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationDelay:0.5];
     [UIView setAnimationDuration:0.25];
     
     CGRect mapFrame = self.mapView.frame;
