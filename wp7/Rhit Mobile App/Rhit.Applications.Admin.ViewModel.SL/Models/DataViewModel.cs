@@ -17,6 +17,8 @@ namespace Rhit.Applications.ViewModel.Models {
             if(locations == null || locations.Count <= 0)
                 DataCollector.Instance.UpdateAvailable += new ServiceEventHandler(OnLocationsRetrieved);
             else OnLocationsRetrieved(this, new ServiceEventArgs());
+
+            DataCollector.Instance.StoredProcReturned += new StoredProcEventHandler(StoredProcReturned);
         }
 
         private void InitializeProperties() {
@@ -183,9 +185,23 @@ namespace Rhit.Applications.ViewModel.Models {
                     // Valid parameters
                     if(MinZoom == 0)
                         LabelOnHybrid = false;
-                    // TODO
+
+                    DataCollector.Instance.ExecuteStoredProcedure(Dispatcher, "spUpdateLocation", new Dictionary<string, object>() {
+                        { "id", CurrentLocation.Id },
+                        { "name", Name },
+                        { "newid", Id },
+                        { "parent", ParentId },
+                        { "description", Description },
+                        { "labelonhybrid", LabelOnHybrid },
+                        { "minzoom", MinZoom },
+                        { "type", Type },
+                    });
                 }
             }
+        }
+
+        void StoredProcReturned(object sender, StoredProcEventArgs e) {
+            
         }
 
         private void OnLocationsRetrieved(object sender, ServiceEventArgs e) {

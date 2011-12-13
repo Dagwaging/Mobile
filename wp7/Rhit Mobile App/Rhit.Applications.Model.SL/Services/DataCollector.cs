@@ -14,6 +14,7 @@ namespace Rhit.Applications.Model.Services {
         public event ServiceEventHandler UpdateAvailable;
         public event SearchEventHandler SearchResultsAvailable;
         public event AuthenticationEventHandler LoginRequestReturned;
+        public event StoredProcEventHandler StoredProcReturned;
         public event ServiceEventHandler ServerErrorReturned;
         #endregion
 
@@ -35,7 +36,7 @@ namespace Rhit.Applications.Model.Services {
 
         public static DataCollector Instance {
             get {
-                if(_instance == null) _instance = new DataCollector();
+                if (_instance == null) _instance = new DataCollector();
                 return _instance;
             }
         }
@@ -50,14 +51,14 @@ namespace Rhit.Applications.Model.Services {
             HttpStatusCode response = e.ServerResponse;
 
             ServerObject serverObject = e.ResponseObject;
-            if(serverObject == null) return null; //TODO: Raise erorr or something
+            if (serverObject == null) return null; //TODO: Raise erorr or something
             return serverObject;
         }
 
         private void ResponseReceived(object sender, ServerEventArgs e) {
             ServerObject response = GetServerObject(e);
 
-            switch(e.Type) {
+            switch (e.Type) {
                 case ResponseType.All:
                     HandleAllResponse(response);
                     break;
@@ -72,6 +73,9 @@ namespace Rhit.Applications.Model.Services {
                     break;
                 case ResponseType.Error:
                     HandleErrorResponse(response);
+                    break;
+                case ResponseType.StoredProc:
+                    HandleStoredProcResponse(response);
                     break;
                 default:
                     HandleLocationsResponse(response);
@@ -103,7 +107,7 @@ namespace Rhit.Applications.Model.Services {
         }
 
         private void HandleAllResponse(ServerObject response) {
-            if(response == null || response.Locations == null || response.Locations.Count == 0) {
+            if (response == null || response.Locations == null || response.Locations.Count == 0) {
                 UpToDate = true;
                 return;
             }
@@ -116,7 +120,7 @@ namespace Rhit.Applications.Model.Services {
         }
 
         private void HandleTopResponse(ServerObject response) {
-            if(response == null || response.Locations == null || response.Locations.Count == 0) {
+            if (response == null || response.Locations == null || response.Locations.Count == 0) {
                 UpToDate = true;
                 return;
             }
@@ -134,22 +138,26 @@ namespace Rhit.Applications.Model.Services {
             };
             OnSearchUpdated(args);
         }
+
+        private void HandleStoredProcResponse(ServerObject response) {
+
+        }
         #endregion
 
         protected virtual void OnUpdated(ServiceEventArgs e) {
-            if(UpdateAvailable != null) UpdateAvailable(this, e);
+            if (UpdateAvailable != null) UpdateAvailable(this, e);
         }
 
         protected virtual void OnSearchUpdated(SearchEventArgs e) {
-            if(SearchResultsAvailable != null) SearchResultsAvailable(this, e);
+            if (SearchResultsAvailable != null) SearchResultsAvailable(this, e);
         }
 
         protected virtual void OnLoiginRequestReturned(AuthenticationEventArgs e) {
-            if(LoginRequestReturned != null) LoginRequestReturned(this, e);
+            if (LoginRequestReturned != null) LoginRequestReturned(this, e);
         }
 
         protected virtual void OnServerError(ServiceEventArgs e) {
-            if(ServerErrorReturned != null) ServerErrorReturned(this, e);
+            if (ServerErrorReturned != null) ServerErrorReturned(this, e);
         }
 
 
@@ -171,9 +179,9 @@ namespace Rhit.Applications.Model.Services {
         public List<RhitLocation> GetAllLocations(Dispatcher dispatcher, bool withDescription) {
             //Note: This does not make service calls if the version is up to date and it has all of the locations
             //Note: Does not guarantee that all locations have descriptions
-            if(dispatcher != null && (!UpToDate || !DataStorage.IsAllFull)) {
+            if (dispatcher != null && (!UpToDate || !DataStorage.IsAllFull)) {
                 RequestPart request;
-                if(!withDescription) request = new RequestBuilder(BaseAddress).Locations.Data.All.NoDesc;
+                if (!withDescription) request = new RequestBuilder(BaseAddress).Locations.Data.All.NoDesc;
                 else request = new RequestBuilder(BaseAddress).Locations.Data.All;
                 Connection.MakeRequest(dispatcher, request);
             }
@@ -181,7 +189,7 @@ namespace Rhit.Applications.Model.Services {
         }
 
         public List<RhitLocation> GetTopLocations(Dispatcher dispatcher) {
-            if(!UpToDate) {
+            if (!UpToDate) {
                 RequestPart request = new RequestBuilder(BaseAddress, Version).Locations.Data.Top;
                 Connection.MakeRequest(dispatcher, request);
             }
@@ -189,7 +197,7 @@ namespace Rhit.Applications.Model.Services {
         }
 
         public RhitLocation GetLocation(Dispatcher dispatcher, int id) {
-            if(DataStorage.Instance.AllLocations.ContainsKey(id))
+            if (DataStorage.Instance.AllLocations.ContainsKey(id))
                 return DataStorage.Instance.AllLocations[id];
             RequestPart request = new RequestBuilder(BaseAddress).Locations.Data.Id(id);
             Connection.MakeRequest(dispatcher, request);
@@ -202,23 +210,23 @@ namespace Rhit.Applications.Model.Services {
 
         private List<RhitLocation> GetChildren(int parentId) {
             List<RhitLocation> locations = new List<RhitLocation>();
-            foreach(RhitLocation location in DataStorage.Instance.AllLocations.Values) {
-                if(location.ParentId == parentId) locations.Add(location);
+            foreach (RhitLocation location in DataStorage.Instance.AllLocations.Values) {
+                if (location.ParentId == parentId) locations.Add(location);
             }
             return locations;
         }
 
         private List<RhitLocation> GetLocations(bool departable) {
             List<RhitLocation> locations = new List<RhitLocation>();
-            foreach(RhitLocation location in DataStorage.Instance.AllLocations.Values) {
-                if(!departable || location.IsDepartable) locations.Add(location);
+            foreach (RhitLocation location in DataStorage.Instance.AllLocations.Values) {
+                if (!departable || location.IsDepartable) locations.Add(location);
             }
             return locations;
         }
 
         public List<RhitLocation> GetChildLocations(Dispatcher dispatcher, int parentId) {
             List<RhitLocation> locations = GetChildren(parentId);
-            if(locations == null || locations.Count == 0) {
+            if (locations == null || locations.Count == 0) {
                 RequestPart request = new RequestBuilder(BaseAddress).Locations.Data.Within(parentId);
                 Connection.MakeRequest(dispatcher, request);
                 return null;
@@ -231,9 +239,9 @@ namespace Rhit.Applications.Model.Services {
         }
 
         public List<RhitLocation> GetLocationNames(Dispatcher dispatcher, bool departable) {
-            if(!DataStorage.IsAllFull) {
+            if (!DataStorage.IsAllFull) {
                 RequestPart request;
-                if(!departable) request = new RequestBuilder(BaseAddress).Locations.Names;
+                if (!departable) request = new RequestBuilder(BaseAddress).Locations.Names;
                 else request = new RequestBuilder(BaseAddress).Locations.Names.Departable;
                 Connection.MakeRequest(dispatcher, request);
                 return GetLocations(departable);
@@ -252,37 +260,45 @@ namespace Rhit.Applications.Model.Services {
         }
 
         public List<RhitLocation> GetMapAreas(Dispatcher dispatcher) {
-            if(!UpToDate) {
+            if (!UpToDate) {
                 RequestPart request = new RequestBuilder(BaseAddress, Version).Locations.Data.Top;
                 Connection.MakeRequest(dispatcher, request);
             }
             List<RhitLocation> locations = new List<RhitLocation>();
-            foreach(RhitLocation location in DataStorage.Instance.TopLocations.Values)
-                if(location.Locations != null && location.Locations.Count > 0)
+            foreach (RhitLocation location in DataStorage.Instance.TopLocations.Values)
+                if (location.Locations != null && location.Locations.Count > 0)
                     locations.Add(location);
             return locations;
         }
 
-        public List<RhitLocation> GetQuikList(Dispatcher dispatcher) {
-            if(!UpToDate) {
+        public List<RhitLocation> GetQuickList(Dispatcher dispatcher) {
+            if (!UpToDate) {
                 RequestPart request = new RequestBuilder(BaseAddress, Version).Locations.Data.Top;
                 Connection.MakeRequest(dispatcher, request);
             }
             List<RhitLocation> locations = new List<RhitLocation>();
-            foreach(RhitLocation location in DataStorage.Instance.TopLocations.Values)
-                if(location.Type == LocationType.OnQuickList) locations.Add(location);
+            foreach (RhitLocation location in DataStorage.Instance.TopLocations.Values)
+                if (location.Type == LocationType.OnQuickList) locations.Add(location);
             return locations;
         }
 
         public List<RhitLocation> GetPointsOfInterest(Dispatcher dispatcher) {
-            if(!UpToDate) {
+            if (!UpToDate) {
                 RequestPart request = new RequestBuilder(BaseAddress, Version).Locations.Data.Top;
                 Connection.MakeRequest(dispatcher, request);
             }
             List<RhitLocation> locations = new List<RhitLocation>();
-            foreach(RhitLocation location in DataStorage.Instance.TopLocations.Values)
-                if(location.Type == LocationType.PointOfInterest) locations.Add(location);
+            foreach (RhitLocation location in DataStorage.Instance.TopLocations.Values)
+                if (location.Type == LocationType.PointOfInterest) locations.Add(location);
             return locations;
+        }
+
+        public void ExecuteStoredProcedure(Dispatcher dispatcher, string procedure, Dictionary<string, object> query) {
+            RequestPart request = new RequestBuilder(BaseAddress).Admin(Connection.ServiceToken, procedure);
+            foreach (var pair in query) {
+                request = request.AddQueryParameter(pair.Key, pair.Value);
+            }
+            Connection.MakeRequest(dispatcher, request);
         }
         #endregion
     }
