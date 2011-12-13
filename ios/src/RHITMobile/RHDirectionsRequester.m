@@ -26,7 +26,7 @@
 #define kResultsKey @"Result"
 #define kPathsKey @"Paths"
 #define kDirectionsNameKey @"Dir"
-#define kFlaggedKey @"Flagged"
+#define kFlaggedKey @"Flag"
 #define kCoordinateKey @"To"
 #define kLatKey @"Lat"
 #define kLngKey @"Lon"

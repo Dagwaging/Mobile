@@ -614,14 +614,14 @@
     directionsPins_ = [NSMutableArray arrayWithCapacity:directions.count];
     [directionsPins_ retain];
     
-    RHDirectionLineItem *last = [directions objectAtIndex:(directions.count - 1)];
+//    RHDirectionLineItem *last = [directions objectAtIndex:(directions.count - 1)];
+//    
+//    RHSimplePointAnnotation *lastAnnotation = [[[RHSimplePointAnnotation alloc] init] autorelease];
+//    lastAnnotation.coordinate = last.coordinate;
+//    lastAnnotation.color = RHSimplePointAnnotationColorRed;
+//    [self.mapView addAnnotation:lastAnnotation];
     
-    RHSimplePointAnnotation *lastAnnotation = [[[RHSimplePointAnnotation alloc] init] autorelease];
-    lastAnnotation.coordinate = last.coordinate;
-    lastAnnotation.color = RHSimplePointAnnotationColorRed;
-    [self.mapView addAnnotation:lastAnnotation];
-    
-    [directionsPins_ addObject:lastAnnotation];
+//    [directionsPins_ addObject:lastAnnotation];
     
     currentDirectionAnnotation_ = [[RHSimplePointAnnotation alloc] init];
     currentDirectionAnnotation_.coordinate = start.coordinate;
