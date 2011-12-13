@@ -9,10 +9,10 @@
 #import <CoreLocation/CoreLocation.h>
 #import "MKMapView+ZoomLevel.h"
 #import "ToursViewController.h"
-#import "RHDirectionsRequester.h"
 #import "RHWrappedCoordinate.h"
 #import "RHITMobileAppDelegate.h"
 #import "MapViewController.h"
+#import "RHTourRequester.h"
 
 @implementation ToursViewController
 
@@ -55,34 +55,24 @@
 }
 
 - (void)selectTour:(id)sender {
-    currentDirectionsRequest_  = [[RHDirectionsRequester alloc] initWithDelegate:self];
+    currentDirectionsRequest_  = [[RHTourRequester alloc] initWithDelegate:self];
 }
 
-- (IBAction)didFinishLoadingDirections:(NSArray *)directions {
+- (IBAction)didFinishLoadingTour:(NSArray *)directions {
     [currentDirectionsRequest_ release];
     
-    CLLocationCoordinate2D coords[directions.count];
-    
-    for (RHWrappedCoordinate *wrapped in directions) {
-        NSLog(@"Point");
-        coords[[directions indexOfObject:wrapped]] = wrapped.coordinate;
-    }
-    
-    NSLog(@"Sending path to map");
-    
-    MKPolyline *line = [MKPolyline polylineWithCoordinates:coords count:directions.count];
-    [RHITMobileAppDelegate.instance.mapViewController displayPath:line];
+    [RHITMobileAppDelegate.instance.mapViewController displayDirections:directions];
     
     // Transition to view
     UITabBarController *tabBarController = RHITMobileAppDelegate.instance.tabBarController;
     
-    UIView * fromView = tabBarController.selectedViewController.view;
-    UIView * toView = [[tabBarController.viewControllers objectAtIndex:0] view];
+    UIView *fromView = tabBarController.selectedViewController.view;
+    UIView *toView = [[tabBarController.viewControllers objectAtIndex:0] view];
     
     // Transition using a page curl.
     [UIView transitionFromView:fromView 
                         toView:toView 
-                      duration:1.0 
+                      duration:0.5 
                        options:UIViewAnimationOptionTransitionCurlDown
                     completion:^(BOOL finished) {
                         if (finished) {

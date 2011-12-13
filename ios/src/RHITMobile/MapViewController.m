@@ -654,7 +654,7 @@
 
 - (void)slideInDirectionsTitle:(UIView *)titleView {
     [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationDelay:0.5];
+    [UIView setAnimationDelay:0.75];
     [UIView setAnimationDuration:.25];
     
     CGRect frame = titleView.frame;
@@ -666,7 +666,7 @@
 
 - (void)slideInDirectionsControls:(UIToolbar *)controls {
     [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationDelay:0.5];
+    [UIView setAnimationDelay:0.75];
     [UIView setAnimationDuration:0.25];
     
     CGRect mapFrame = self.mapView.frame;

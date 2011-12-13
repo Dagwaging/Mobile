@@ -101,6 +101,7 @@
 		92E1AA7F1487115F0005BF34 /* RHWebRequestMaker.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E1AA7E1487115F0005BF34 /* RHWebRequestMaker.m */; };
 		92F1B8B51496F67900F7FFD8 /* RHDirectionLineItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F1B8B41496F67900F7FFD8 /* RHDirectionLineItem.m */; };
 		92F1B8B914972AE600F7FFD8 /* RHSimplePointAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F1B8B814972AE600F7FFD8 /* RHSimplePointAnnotation.m */; };
+		92F1B8BC1497BBE600F7FFD8 /* RHTourRequester.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F1B8BB1497BBE600F7FFD8 /* RHTourRequester.m */; };
 		92F20F6D1464383200603500 /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F20F6B1464383200603500 /* WebViewController.m */; };
 		92F20F6E1464383200603500 /* WebView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92F20F6C1464383200603500 /* WebView.xib */; };
 /* End PBXBuildFile section */
@@ -261,6 +262,9 @@
 		92F1B8B41496F67900F7FFD8 /* RHDirectionLineItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHDirectionLineItem.m; sourceTree = "<group>"; };
 		92F1B8B714972AE600F7FFD8 /* RHSimplePointAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHSimplePointAnnotation.h; sourceTree = "<group>"; };
 		92F1B8B814972AE600F7FFD8 /* RHSimplePointAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHSimplePointAnnotation.m; sourceTree = "<group>"; };
+		92F1B8BA1497BBE600F7FFD8 /* RHTourRequester.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHTourRequester.h; sourceTree = "<group>"; };
+		92F1B8BB1497BBE600F7FFD8 /* RHTourRequester.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHTourRequester.m; sourceTree = "<group>"; };
+		92F1B8BD1497BC0800F7FFD8 /* RHTourRequesterDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHTourRequesterDelegate.h; sourceTree = "<group>"; };
 		92F20F6A1464383200603500 /* WebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewController.h; sourceTree = "<group>"; };
 		92F20F6B1464383200603500 /* WebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewController.m; sourceTree = "<group>"; };
 		92F20F6C1464383200603500 /* WebView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WebView.xib; sourceTree = "<group>"; };
@@ -309,6 +313,9 @@
 				925465A41495BC6600C12B81 /* RHDirectionsRequester.h */,
 				925465A51495BC6600C12B81 /* RHDirectionsRequester.m */,
 				925465A71495BD5F00C12B81 /* RHDirectionsRequesterDelegate.h */,
+				92F1B8BA1497BBE600F7FFD8 /* RHTourRequester.h */,
+				92F1B8BB1497BBE600F7FFD8 /* RHTourRequester.m */,
+				92F1B8BD1497BC0800F7FFD8 /* RHTourRequesterDelegate.h */,
 			);
 			name = Web;
 			sourceTree = "<group>";
@@ -775,6 +782,7 @@
 				925465AE1495EB7F00C12B81 /* ToursViewController.m in Sources */,
 				92F1B8B51496F67900F7FFD8 /* RHDirectionLineItem.m in Sources */,
 				92F1B8B914972AE600F7FFD8 /* RHSimplePointAnnotation.m in Sources */,
+				92F1B8BC1497BBE600F7FFD8 /* RHTourRequester.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

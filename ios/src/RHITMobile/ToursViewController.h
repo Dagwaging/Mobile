@@ -7,13 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "RHDirectionsRequesterDelegate.h"
+#import "RHTourRequesterDelegate.h"
 
-@class RHDirectionsRequester;
+@class RHTourRequester;
 
-@interface ToursViewController : UIViewController <RHDirectionsRequesterDelegate> {
+@interface ToursViewController : UIViewController <RHTourRequesterDelegate> {
     @private
-    RHDirectionsRequester *currentDirectionsRequest_;
+    RHTourRequester *currentDirectionsRequest_;
 }
 
 - (IBAction)selectTour:(id)sender;
