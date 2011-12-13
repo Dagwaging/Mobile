@@ -3,6 +3,7 @@ using System.IO;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using Rhit.Applications.ViewModel;
+using Rhit.Applications.ViewModel.Providers;
 
 namespace Rhit.Applications.View.Controls {
     public class LocalImageLoader : IBitmapProvider {

@@ -12,7 +12,7 @@
     <RootNamespace>Rhit.Applications.ViewModel</RootNamespace>
     <AssemblyName>Rhit.Applications.Admin.ViewModel.SL</AssemblyName>
     <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
-    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
     <SilverlightApplication>false</SilverlightApplication>
     <ValidateXaml>true</ValidateXaml>
@@ -73,12 +73,24 @@
     <Reference Include="System.Windows.Browser" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IBitmapProvider.cs" />
+    <Compile Include="Behaviors\BuildingsBehavior.cs" />
+    <Compile Include="Behaviors\LocationsBehavior.cs" />
+    <Compile Include="Behaviors\MapBehavior.cs" />
+    <Compile Include="Behaviors\PathsBehavior.cs" />
+    <Compile Include="Controllers\BuildingsController.cs" />
+    <Compile Include="Controllers\ImageController.cs" />
+    <Compile Include="Controllers\LocationsController.cs" />
+    <Compile Include="Controllers\MapController.cs" />
+    <Compile Include="Controllers\SettingsController.cs" />
+    <Compile Include="Converters\LocationToCoordinateConverter.cs" />
+    <Compile Include="Converters\LocationToStringConverter.cs" />
+    <Compile Include="Providers\IBitmapProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\DataViewModel.cs" />
     <Compile Include="Models\LoginViewModel.cs" />
     <Compile Include="Models\MainViewModel.cs" />
     <Compile Include="Models\MapViewModel.cs" />
+    <Compile Include="Providers\IBuildingCornersProvider.cs" />
     <Compile Include="Services.cs" />
   </ItemGroup>
   <ItemGroup>

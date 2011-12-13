@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Data;
 using System.Globalization;
 
-namespace Rhit.Applications.View.Controls {
+namespace Rhit.Applications.View.Converters {
     public class BoolToVisibilityConverter : IValueConverter {
         public BoolToVisibilityConverter() {
             TrueValue = Visibility.Visible;
