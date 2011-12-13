@@ -245,7 +245,9 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
                                       dictionaryWithCapacity:fetchResults.count];
         
         for (RHLocation *location in fetchResults) {
-            [names setObject:location.objectID forKey:location.name];
+            if (location.name != nil) {
+                [names setObject:location.objectID forKey:location.name];
+            }
         }
         
         self.locationNames = names;
