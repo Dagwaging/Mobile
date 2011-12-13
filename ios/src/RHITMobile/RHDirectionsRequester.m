@@ -16,6 +16,7 @@
 #define kPathsKey @"Paths"
 #define kDirectionsNameKey @"Dir"
 #define kFlaggedKey @"Flagged"
+#define kCoordinateKey @"To"
 #define kLatKey @"Lat"
 #define kLngKey @"Lon"
 
@@ -51,8 +52,10 @@
         item.name = [lineItem objectForKey:kDirectionsNameKey];
         item.flagged = [[lineItem objectForKey:kFlaggedKey] intValue] == 1;
         
-        NSNumber *lat = [lineItem objectForKey:kLatKey];
-        NSNumber *lng = [lineItem objectForKey:kLngKey];
+        NSDictionary *coordinateDict = [lineItem objectForKey:kCoordinateKey];
+        
+        NSNumber *lat = [coordinateDict objectForKey:kLatKey];
+        NSNumber *lng = [coordinateDict objectForKey:kLngKey];
         
         item.coordinate = CLLocationCoordinate2DMake(lat.doubleValue, lng.doubleValue);
         

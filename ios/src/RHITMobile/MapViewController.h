@@ -32,7 +32,7 @@
 /// \ingroup views
 /// View controller for the map portion of the application.
 @interface MapViewController : UIViewController
-<MKMapViewDelegate, RHRemoteHandlerDelegate, RHAnnotationViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource>
+<MKMapViewDelegate, RHRemoteHandlerDelegate, RHAnnotationViewDelegate>
 
 /// Map view that is visible to the user.
 @property (nonatomic, retain) IBOutlet MKMapView *mapView;

@@ -327,7 +327,7 @@
     
     for (id annotation in self.mapView.annotations) {
         if ([annotation isKindOfClass:[RHAnnotation class]]) {
-            [annotation mapView:self.mapView didChangeZoomLevel:newZoomLevel];
+           [annotation mapView:self.mapView didChangeZoomLevel:newZoomLevel];
         }
     }
 }
@@ -552,6 +552,8 @@
         [self.mapView deselectAnnotation:[self.mapView.selectedAnnotations objectAtIndex:0] animated:NO];
         [self clearAllDynamicMapArtifacts];
     }
+    RHDirectionLineItem *start = [directions objectAtIndex:0];
+    [self.mapView setCenterCoordinate:start.coordinate zoomLevel:18 animated:YES];
     
     UIView *directionsView = [[[UIView alloc] initWithFrame:CGRectMake(0, -50, 320, 50)] autorelease];
     directionsView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.7];
@@ -559,7 +561,7 @@
     UILabel *directionsTitle = [[[UILabel alloc] initWithFrame:CGRectMake(35, 5, 250, 40)] autorelease];
     directionsTitle.backgroundColor = [UIColor clearColor];
     directionsTitle.textColor = [UIColor whiteColor];
-    directionsTitle.text = @"Directions to Moench Hall";
+    directionsTitle.text = [[directions objectAtIndex:0] name];
     directionsTitle.textAlignment = UITextAlignmentCenter;
     
     [directionsView addSubview:directionsTitle];
@@ -572,23 +574,28 @@
     
     UIBarButtonItem *nextItem = [[[UIBarButtonItem alloc] initWithTitle:@"Next" style:UIBarButtonItemStyleBordered target:nil action:nil] autorelease];
     
-    UILabel *currentDirectionLabel = [[[UILabel alloc] initWithFrame:CGRectMake(0, 0, 125, 37)] autorelease];
-    currentDirectionLabel.backgroundColor = [UIColor clearColor];
-    currentDirectionLabel.textColor = [UIColor whiteColor];
-    currentDirectionLabel.text = @"Go west";
-    currentDirectionLabel.textAlignment = UITextAlignmentCenter;
+    UIBarButtonItem *spaceItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil] autorelease];
     
-    UIBarButtonItem *labelItem = [[[UIBarButtonItem alloc] initWithCustomView:currentDirectionLabel] autorelease];
+    UIBarButtonItem *cancelItem = [[[UIBarButtonItem alloc] initWithTitle:@"Exit Directions" style:UIBarButtonItemStyleBordered target:nil action:nil] autorelease];
     
-    UIBarButtonItem *cancelItem = [[[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStyleBordered target:nil action:nil] autorelease];
-    
-    toolbar.items = [NSArray arrayWithObjects:prevItem, nextItem, labelItem, cancelItem, nil];
+    toolbar.items = [NSArray arrayWithObjects:prevItem, nextItem, spaceItem, cancelItem, nil];
     
     [self.view addSubview:directionsView];
     [self.view addSubview:toolbar];
     
     [self slideInDirectionsTitle:directionsView];
     [self slideInDirectionsControls:toolbar];
+    
+    CLLocationCoordinate2D coords[directions.count];
+    
+    for (RHDirectionLineItem *lineItem in directions) {
+        coords[[directions indexOfObject:lineItem]] = lineItem.coordinate;
+    }
+    
+    MKPolyline *line = [MKPolyline polylineWithCoordinates:coords
+                                                     count:directions.count];
+    
+    [self.mapView addOverlay:line];
 }
 
 - (void)slideInDirectionsTitle:(UIView *)titleView {
@@ -617,22 +624,6 @@
     controls.frame = toolbarFrame;
     
     [UIView commitAnimations];
-}
-
-#pragma mark - UIPickerViewDelegate Methods
-
-- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
-    return @"Turn left E104";
-}
-
-#pragma mark - UIPickerViewDataSource Methods
-
-- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView {
-    return 1;
-}
-
-- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
-    return 10;
 }
 
 @end
