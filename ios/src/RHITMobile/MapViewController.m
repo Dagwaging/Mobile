@@ -553,7 +553,7 @@
         [self clearAllDynamicMapArtifacts];
     }
     RHDirectionLineItem *start = [directions objectAtIndex:0];
-    [self.mapView setCenterCoordinate:start.coordinate zoomLevel:18 animated:YES];
+    [self.mapView setCenterCoordinate:start.coordinate zoomLevel:17 animated:YES];
     
     UIView *directionsView = [[[UIView alloc] initWithFrame:CGRectMake(0, -50, 320, 50)] autorelease];
     directionsView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.7];
