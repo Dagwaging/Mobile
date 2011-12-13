@@ -38,6 +38,7 @@
     NSArray *currentDirections_;
     NSUInteger currentDirectionIndex_;
     RHSimplePointAnnotation *currentDirectionAnnotation_;
+    UILabel *directionsStatus_;
 }
 
 /// Map view that is visible to the user.
@@ -75,6 +76,12 @@
 - (IBAction)displaySearch:(id)sender;
 
 - (IBAction)discloseLocationDetails:(id)sender;
+
+- (IBAction)nextDirection:(id)sender;
+
+- (IBAction)prevDirection:(id)sender;
+
+- (IBAction)exitDirections:(id)sender;
 
 - (void)displayPath:(MKPolyline *)path;
 

@@ -580,25 +580,26 @@
     UIView *directionsView = [[[UIView alloc] initWithFrame:CGRectMake(0, -50, 320, 50)] autorelease];
     directionsView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.7];
     
-    UILabel *directionsTitle = [[[UILabel alloc] initWithFrame:CGRectMake(35, 5, 250, 40)] autorelease];
-    directionsTitle.backgroundColor = [UIColor clearColor];
-    directionsTitle.textColor = [UIColor whiteColor];
-    directionsTitle.text = [[directions objectAtIndex:0] name];
-    directionsTitle.textAlignment = UITextAlignmentCenter;
+    directionsStatus_ = [[[UILabel alloc] initWithFrame:CGRectMake(5, 5, 310, 40)] autorelease];
+    directionsStatus_.backgroundColor = [UIColor clearColor];
+    directionsStatus_.textColor = [UIColor whiteColor];
+    directionsStatus_.text = [[directions objectAtIndex:0] name];
+    directionsStatus_.numberOfLines = 2;
+    directionsStatus_.textAlignment = UITextAlignmentCenter;
     
-    [directionsView addSubview:directionsTitle];
+    [directionsView addSubview:directionsStatus_];
     
     UIToolbar *toolbar = [[[UIToolbar alloc] initWithFrame:CGRectMake(0, self.mapView.frame.size.height, 320, 44)] autorelease];
     
     toolbar.tintColor = [UIColor blackColor];
     
-    UIBarButtonItem *prevItem = [[[UIBarButtonItem alloc] initWithTitle:@"Prev" style:UIBarButtonItemStyleBordered target:nil action:nil] autorelease];
+    UIBarButtonItem *prevItem = [[[UIBarButtonItem alloc] initWithTitle:@"Prev" style:UIBarButtonItemStyleBordered target:self action:@selector(prevDirection:)] autorelease];
     
-    UIBarButtonItem *nextItem = [[[UIBarButtonItem alloc] initWithTitle:@"Next" style:UIBarButtonItemStyleBordered target:nil action:nil] autorelease];
+    UIBarButtonItem *nextItem = [[[UIBarButtonItem alloc] initWithTitle:@"Next" style:UIBarButtonItemStyleBordered target:self action:@selector(nextDirection:)] autorelease];
     
     UIBarButtonItem *spaceItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil] autorelease];
     
-    UIBarButtonItem *cancelItem = [[[UIBarButtonItem alloc] initWithTitle:@"Exit Directions" style:UIBarButtonItemStyleBordered target:nil action:nil] autorelease];
+    UIBarButtonItem *cancelItem = [[[UIBarButtonItem alloc] initWithTitle:@"Exit Directions" style:UIBarButtonItemStyleBordered target:self action:@selector(exitDirections:)] autorelease];
     
     toolbar.items = [NSArray arrayWithObjects:prevItem, nextItem, spaceItem, cancelItem, nil];
     
@@ -610,11 +611,6 @@
     
     CLLocationCoordinate2D coords[directions.count];
     
-    RHSimplePointAnnotation *firstAnnotation = [[[RHSimplePointAnnotation alloc] init] autorelease];
-    firstAnnotation.coordinate = start.coordinate;
-    firstAnnotation.color = RHSimplePointAnnotationColorGreen;
-    [self.mapView addAnnotation:firstAnnotation];
-    
     RHDirectionLineItem *last = [directions objectAtIndex:(directions.count - 1)];
     
     RHSimplePointAnnotation *lastAnnotation = [[[RHSimplePointAnnotation alloc] init] autorelease];
@@ -624,7 +620,7 @@
     
     currentDirectionAnnotation_ = [[RHSimplePointAnnotation alloc] init];
     currentDirectionAnnotation_.coordinate = start.coordinate;
-    currentDirectionAnnotation_.color = RHSimplePointAnnotationColorBlue;
+    currentDirectionAnnotation_.color = RHSimplePointAnnotationColorGreen;
     [self.mapView addAnnotation:currentDirectionAnnotation_];
     
     
@@ -675,6 +671,34 @@
     controls.frame = toolbarFrame;
     
     [UIView commitAnimations];
+}
+
+- (void)nextDirection:(id)sender {
+    if (currentDirectionIndex_ < currentDirections_.count - 1) {
+        currentDirectionIndex_ ++;
+        RHDirectionLineItem *direction = [currentDirections_ objectAtIndex:currentDirectionIndex_];
+        if (![direction.name isKindOfClass:[NSNull class]]) {
+            directionsStatus_.text = direction.name;
+        }
+        currentDirectionAnnotation_.coordinate = direction.coordinate;
+        [self.mapView setCenterCoordinate:direction.coordinate animated:YES];
+    }
+}
+
+- (void)prevDirection:(id)sender {
+    if (currentDirectionIndex_ > 0) {
+        currentDirectionIndex_ --;
+        RHDirectionLineItem *direction = [currentDirections_ objectAtIndex:currentDirectionIndex_];
+        if (![direction.name isKindOfClass:[NSNull class]]) {
+            directionsStatus_.text = direction.name;
+        }
+        currentDirectionAnnotation_.coordinate = direction.coordinate;
+        [self.mapView setCenterCoordinate:direction.coordinate animated:YES];
+    }
+}
+
+- (void)exitDirections:(id)sender {
+    
 }
 
 @end
