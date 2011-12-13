@@ -33,6 +33,7 @@
 #import "RHPinAnnotationView.h"
 #import "LocationDetailViewController.h"
 #import "SearchViewController.h"
+#import "RHDirectionLineItem.h"
 
 
 #pragma mark Private Method Declarations
@@ -544,6 +545,78 @@
     [self clearAllDynamicMapArtifacts];
     [self.mapView addOverlay:path];
     [self.mapView setCenterCoordinate:self.mapView.centerCoordinate zoomLevel:15 animated:YES];
+}
+
+- (void)displayDirections:(NSArray *)directions {
+    if (self.mapView.selectedAnnotations.count > 0) {
+        [self.mapView deselectAnnotation:[self.mapView.selectedAnnotations objectAtIndex:0] animated:NO];
+        [self clearAllDynamicMapArtifacts];
+    }
+    
+    UIView *directionsView = [[[UIView alloc] initWithFrame:CGRectMake(0, -50, 320, 50)] autorelease];
+    directionsView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.7];
+    
+    UILabel *directionsTitle = [[[UILabel alloc] initWithFrame:CGRectMake(35, 5, 250, 40)] autorelease];
+    directionsTitle.backgroundColor = [UIColor clearColor];
+    directionsTitle.textColor = [UIColor whiteColor];
+    directionsTitle.text = @"Directions to Moench Hall";
+    directionsTitle.textAlignment = UITextAlignmentCenter;
+    
+    [directionsView addSubview:directionsTitle];
+    
+    UIToolbar *toolbar = [[[UIToolbar alloc] initWithFrame:CGRectMake(0, self.mapView.frame.size.height, 320, 44)] autorelease];
+    
+    toolbar.tintColor = [UIColor blackColor];
+    
+    UIBarButtonItem *prevItem = [[[UIBarButtonItem alloc] initWithTitle:@"Prev" style:UIBarButtonItemStyleBordered target:nil action:nil] autorelease];
+    
+    UIBarButtonItem *nextItem = [[[UIBarButtonItem alloc] initWithTitle:@"Next" style:UIBarButtonItemStyleBordered target:nil action:nil] autorelease];
+    
+    UILabel *currentDirectionLabel = [[[UILabel alloc] initWithFrame:CGRectMake(0, 0, 125, 37)] autorelease];
+    currentDirectionLabel.backgroundColor = [UIColor clearColor];
+    currentDirectionLabel.textColor = [UIColor whiteColor];
+    currentDirectionLabel.text = @"Go west";
+    currentDirectionLabel.textAlignment = UITextAlignmentCenter;
+    
+    UIBarButtonItem *labelItem = [[[UIBarButtonItem alloc] initWithCustomView:currentDirectionLabel] autorelease];
+    
+    UIBarButtonItem *cancelItem = [[[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStyleBordered target:nil action:nil] autorelease];
+    
+    toolbar.items = [NSArray arrayWithObjects:prevItem, nextItem, labelItem, cancelItem, nil];
+    
+    [self.view addSubview:directionsView];
+    [self.view addSubview:toolbar];
+    
+    [self slideInDirectionsTitle:directionsView];
+    [self slideInDirectionsControls:toolbar];
+}
+
+- (void)slideInDirectionsTitle:(UIView *)titleView {
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationDelay:0.5];
+    [UIView setAnimationDuration:.25];
+    
+    CGRect frame = titleView.frame;
+    frame.origin.y = 0;
+    titleView.frame = frame;
+    
+    [UIView commitAnimations];
+}
+
+- (void)slideInDirectionsControls:(UIToolbar *)controls {
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationDelay:0.5];
+    [UIView setAnimationDuration:0.25];
+    
+    CGRect mapFrame = self.mapView.frame;
+    mapFrame.size.height = mapFrame.size.height - 40;
+    self.mapView.frame = mapFrame;
+    
+    CGRect toolbarFrame = controls.frame;
+    toolbarFrame.origin.y = self.mapView.frame.size.height;
+    controls.frame = toolbarFrame;
+    
+    [UIView commitAnimations];
 }
 
 #pragma mark - UIPickerViewDelegate Methods

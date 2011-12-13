@@ -72,4 +72,10 @@
 
 - (void)displayPath:(MKPolyline *)path;
 
+- (void)displayDirections:(NSArray *)directions;
+
+- (void)slideInDirectionsTitle:(UIView *)titleView;
+
+- (void)slideInDirectionsControls:(UIToolbar *)controls;
+
 @end

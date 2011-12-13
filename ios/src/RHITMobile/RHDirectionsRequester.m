@@ -8,6 +8,16 @@
 
 #import "RHDirectionsRequester.h"
 #import "RHWrappedCoordinate.h"
+#import "RHWebRequestMaker.h"
+#import "RHDirectionLineItem.h"
+
+#define kDirectionsPath @"/directions/testing/directions"
+#define kResultsKey @"Result"
+#define kPathsKey @"Paths"
+#define kDirectionsNameKey @"Dir"
+#define kFlaggedKey @"Flagged"
+#define kLatKey @"Lat"
+#define kLngKey @"Lon"
 
 @implementation RHDirectionsRequester
 
@@ -24,19 +34,32 @@
 
 - (void)requestLocations {
     if ([NSThread isMainThread]) {
-        NSLog(@"Preparing");
         [self performSelectorInBackground:@selector(requestLocations) withObject:nil];
         return;
     }
     
-    [self.delegate didFinishLoadingDirections:[NSArray
-            arrayWithObjects:[RHWrappedCoordinate coordinateWithLatitude:39.48409 longitude:-87.32586],
-            [RHWrappedCoordinate coordinateWithLatitude:39.48344 longitude:-87.32528], 
-            [RHWrappedCoordinate coordinateWithLatitude:39.48377 longitude:-87.32470], 
-            [RHWrappedCoordinate coordinateWithLatitude:39.48399 longitude:-87.32401], 
-            [RHWrappedCoordinate coordinateWithLatitude:39.48429 longitude:-87.32288],
-            [RHWrappedCoordinate coordinateWithLatitude:39.48344 longitude:-87.32258], nil]];
+    NSDictionary *response = [RHWebRequestMaker JSONGetRequestWithPath:kDirectionsPath URLargs:@""];
     
+    NSDictionary *results = [response objectForKey:kResultsKey];
+    
+    NSArray *paths = [results objectForKey:kPathsKey];
+    
+    NSMutableArray *result = [NSMutableArray arrayWithCapacity:paths.count];
+    
+    for (NSDictionary *lineItem in paths) {
+        RHDirectionLineItem *item = [[[RHDirectionLineItem alloc] init] autorelease];
+        item.name = [lineItem objectForKey:kDirectionsNameKey];
+        item.flagged = [[lineItem objectForKey:kFlaggedKey] intValue] == 1;
+        
+        NSNumber *lat = [lineItem objectForKey:kLatKey];
+        NSNumber *lng = [lineItem objectForKey:kLngKey];
+        
+        item.coordinate = CLLocationCoordinate2DMake(lat.doubleValue, lng.doubleValue);
+        
+        [result addObject:item];
+    }
+    
+    [self.delegate didFinishLoadingDirections:result];
 }
 
 @end

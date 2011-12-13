@@ -441,19 +441,9 @@ titleForHeaderInSection:(NSInteger)section {
 
 - (void)didFinishLoadingDirections:(NSArray *)directions {
     [currentDirectionsRequest_ release];
-    
-    CLLocationCoordinate2D coords[directions.count];
-    
-    for (RHWrappedCoordinate *wrapped in directions) {
-        NSLog(@"Point");
-        coords[[directions indexOfObject:wrapped]] = wrapped.coordinate;
-    }
-    
-    NSLog(@"Sending path to map");
-    
-    MKPolyline *line = [MKPolyline polylineWithCoordinates:coords count:directions.count];
-    [RHITMobileAppDelegate.instance.mapViewController displayPath:line];
+
     [self.navigationController popToRootViewControllerAnimated:YES];
+    [RHITMobileAppDelegate.instance.mapViewController displayDirections:directions];
 }
 
 @end
