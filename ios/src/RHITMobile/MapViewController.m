@@ -577,8 +577,8 @@
     RHDirectionLineItem *start = [directions objectAtIndex:0];
     [self.mapView setCenterCoordinate:start.coordinate zoomLevel:17 animated:YES];
     
-    UIView *directionsView = [[[UIView alloc] initWithFrame:CGRectMake(0, -50, 320, 50)] autorelease];
-    directionsView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.7];
+    directionsStatusBar_ = [[[UIView alloc] initWithFrame:CGRectMake(0, -50, 320, 50)] autorelease];
+    directionsStatusBar_.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.7];
     
     directionsStatus_ = [[[UILabel alloc] initWithFrame:CGRectMake(5, 5, 310, 40)] autorelease];
     directionsStatus_.backgroundColor = [UIColor clearColor];
@@ -587,11 +587,11 @@
     directionsStatus_.numberOfLines = 2;
     directionsStatus_.textAlignment = UITextAlignmentCenter;
     
-    [directionsView addSubview:directionsStatus_];
+    [directionsStatusBar_ addSubview:directionsStatus_];
     
-    UIToolbar *toolbar = [[[UIToolbar alloc] initWithFrame:CGRectMake(0, self.mapView.frame.size.height, 320, 44)] autorelease];
+    directionsControls_ = [[[UIToolbar alloc] initWithFrame:CGRectMake(0, self.mapView.frame.size.height, 320, 44)] autorelease];
     
-    toolbar.tintColor = [UIColor blackColor];
+    directionsControls_.tintColor = [UIColor blackColor];
     
     UIBarButtonItem *prevItem = [[[UIBarButtonItem alloc] initWithTitle:@"Prev" style:UIBarButtonItemStyleBordered target:self action:@selector(prevDirection:)] autorelease];
     
@@ -601,13 +601,13 @@
     
     UIBarButtonItem *cancelItem = [[[UIBarButtonItem alloc] initWithTitle:@"Exit Directions" style:UIBarButtonItemStyleBordered target:self action:@selector(exitDirections:)] autorelease];
     
-    toolbar.items = [NSArray arrayWithObjects:prevItem, nextItem, spaceItem, cancelItem, nil];
+    directionsControls_.items = [NSArray arrayWithObjects:prevItem, nextItem, spaceItem, cancelItem, nil];
     
-    [self.view addSubview:directionsView];
-    [self.view addSubview:toolbar];
+    [self.view addSubview:directionsStatusBar_];
+    [self.view addSubview:directionsControls_];
     
-    [self slideInDirectionsTitle:directionsView];
-    [self slideInDirectionsControls:toolbar];
+    [self slideInDirectionsTitle:directionsStatusBar_];
+    [self slideInDirectionsControls:directionsControls_];
     
     CLLocationCoordinate2D coords[directions.count];
     
@@ -698,7 +698,26 @@
 }
 
 - (void)exitDirections:(id)sender {
+    [self.mapView removeOverlays:self.mapView.overlays];
+    [self.mapView removeAnnotation:currentDirectionAnnotation_];
     
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationDelay:0.5];
+    [UIView setAnimationDuration:0.25];
+    
+    CGRect mapFrame = self.mapView.frame;
+    mapFrame.size.height = mapFrame.size.height + 40;
+    self.mapView.frame = mapFrame;
+    
+    CGRect frame = directionsStatusBar_.frame;
+    frame.origin.y = -50;
+    directionsStatusBar_.frame = frame;
+    
+    CGRect toolbarFrame = directionsControls_.frame;
+    toolbarFrame.origin.y = self.mapView.frame.size.height;
+    directionsControls_.frame = toolbarFrame;
+    
+    [UIView commitAnimations];
 }
 
 @end

@@ -39,6 +39,8 @@
     NSUInteger currentDirectionIndex_;
     RHSimplePointAnnotation *currentDirectionAnnotation_;
     UILabel *directionsStatus_;
+    UIView *directionsStatusBar_;
+    UIToolbar *directionsControls_;
 }
 
 /// Map view that is visible to the user.
