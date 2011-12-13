@@ -1,103 +1,85 @@
 ﻿using System.Windows;
-using System.Windows.Media.Imaging;
-using System.Windows.Input;
+using Rhit.Applications.Model;
+using Rhit.Applications.ViewModel.Controllers;
+using Microsoft.Maps.MapControl;
+using Rhit.Applications.Model.Services;
+using Rhit.Applications.Model.Events;
 using System.Collections.Generic;
+using System.Windows.Input;
 using Rhit.Applications.Mvvm.Commands;
+using System.Collections.ObjectModel;
+using Rhit.Applications.ViewModel.Behaviors;
+using Rhit.Applications.ViewModel.Providers;
 
 namespace Rhit.Applications.ViewModel.Models {
     public class MainViewModel : DependencyObject {
-        //TODO: Utilize the horizontal and vertical checkbox group to switch the orientation of the image.
+        public MainViewModel(Map map, IBitmapProvider imageProvider, IBuildingCornersProvider cornerProvider) {
+            Locations = LocationsController.Instance;
+            InitializeBehaviors(cornerProvider);
+            MapController.CreateMapController(map);
+            ImageController.CreateImageController(imageProvider);
+            Image = ImageController.Instance;
+            Map = MapController.Instance;
+            GotoRhitCommand = new RelayCommand(p => GotoRhit());
 
-        private IBitmapProvider _imageProvider;
-        private MapViewModel _map;
-
-        public MainViewModel(MapViewModel mapViewModel, IBitmapProvider imageProvider) {
-            _map = mapViewModel;
-            _imageProvider = imageProvider;
-
-            ImageColumnWidth = GridLength.Auto;
-            ImageLoaded = false;
-
-            LoadImageCommand = new RelayCommand(p => LoadImage());
-            CloseImageCommand = new RelayCommand(p => CloseImage());
-            GotoRhitCommand = new RelayCommand(p => _map.GotoRhit());
+            List<RhitLocation> locations = DataCollector.Instance.GetAllLocations(null);
+            if(locations == null || locations.Count <= 0)
+                DataCollector.Instance.UpdateAvailable += new ServiceEventHandler(OnLocationsRetrieved);
+            else OnLocationsRetrieved(this, new ServiceEventArgs());
         }
 
-        #region Properties
-        public BitmapImage Image {
-            get { return (BitmapImage) GetValue(ImageProperty); }
-            set { SetValue(ImageProperty, value); }
+        private void OnLocationsRetrieved(object sender, ServiceEventArgs e) {
+            List<RhitLocation> locations = DataCollector.Instance.GetAllLocations(null);
+            if(locations == null || locations.Count <= 0) return;
+            Locations.SetLocations(locations);
         }
 
-        public GridLength ImageColumnWidth {
-            get { return (GridLength) GetValue(ImageColumnWidthProperty); }
-            set { SetValue(ImageColumnWidthProperty, value); }
+        private void InitializeBehaviors(IBuildingCornersProvider cornerProvider) {
+            Behaviors = new ObservableCollection<MapBehavior>() {
+                new BuildingsBehavior(cornerProvider),
+                new LocationsBehavior(),
+                new PathsBehavior(),
+            };
+            Behavior = Behaviors[0];
         }
-
-        public bool ImageLoaded {
-            get { return (bool) GetValue(ImageLoadedProperty); }
-            set { SetValue(ImageLoadedProperty, value); }
-        }
-
-        public IList<Point> ImagePoints {
-            get { return (IList<Point>) GetValue(ImagePointsProperty); }
-            set { SetValue(ImagePointsProperty, value); }
-        }
-        #endregion
 
         #region Dependency Properties
-        public static readonly DependencyProperty ImageProperty =
-            DependencyProperty.Register("Image", typeof(BitmapImage), typeof(MainViewModel), new PropertyMetadata(new BitmapImage()));
+        #region Behavior
+        public MapBehavior Behavior {
+            get { return (MapBehavior) GetValue(BehaviorProperty); }
+            set { SetValue(BehaviorProperty, value); }
+        }
 
-        public static readonly DependencyProperty ImageColumnWidthProperty =
-           DependencyProperty.Register("ImageColumnWidth", typeof(GridLength), typeof(MainViewModel), new PropertyMetadata(new GridLength()));
+        public static readonly DependencyProperty BehaviorProperty =
+           DependencyProperty.Register("Behavior", typeof(MapBehavior), typeof(MainViewModel),
+           new PropertyMetadata(null, new PropertyChangedCallback(OnBehaviorChanged)));
 
-        public static readonly DependencyProperty ImageLoadedProperty =
-           DependencyProperty.Register("ImageLoaded", typeof(bool), typeof(MainViewModel), new PropertyMetadata(false));
-
-        public static readonly DependencyProperty ImagePointsProperty =
-           DependencyProperty.Register("ImagePoints", typeof(IList<Point>), typeof(MainViewModel), new PropertyMetadata(new List<Point>()));
+        private static void OnBehaviorChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
+            MainViewModel instance = (MainViewModel) d;
+            instance.Behavior.Update();
+        }
+        #endregion
         #endregion
 
-        #region Commands
-        public ICommand LoadImageCommand { get; private set; }
-
-        public ICommand CloseImageCommand { get; private set; }
+        public ObservableCollection<MapBehavior> Behaviors { get; set; }
 
         public ICommand GotoRhitCommand { get; private set; }
-        #endregion
 
-        #region Methods
-        private void LoadImage() {
-            Image = _imageProvider.GetImage();
-            if(Image != null) {
-                ImageColumnWidth = new GridLength(1, GridUnitType.Star);
-                ImageLoaded = true;
-            }
+        public ImageController Image { get; private set; }
+
+        public LocationsController Locations { get; private set; }
+
+        public MapController Map { get; private set; }
+
+        public void GotoRhit() {
+            //TODO: Don't hard code
+            Map.MapControl.Center = new GeoCoordinate(39.4820263, -87.3248677);
+            Map.MapControl.ZoomLevel = 16;
         }
 
-        private void CloseImage() {
-            Image = null;
-            ImageLoaded = false;
-            ImageColumnWidth = new GridLength(0, GridUnitType.Pixel);
+        public void PolygonClick(MapPolygon polygon, MouseButtonEventArgs e) {
+            Map.EventCoordinate = Map.MapControl.ViewportPointToLocation(e.GetPosition(Map.MapControl)) as GeoCoordinate;
+            Behavior.SelectLocation(polygon);
         }
-
-        public void ClickImage(Point point) {
-            if(ImagePoints.Contains(point)) return;
-            IList<Point> points = new List<Point>();
-            foreach(Point p in ImagePoints)
-                points.Add(p);
-            points.Add(point);
-            ImagePoints = points;
-
-            //TODO: This method should be implemented like below
-            // The problem is that the dependency property object doesn't actually change, its children do.
-            // Use ObservableCollection instead.
-
-            //IList<Point> points = ImagePoints;
-            //points.Add(point);
-            //ImagePoints = points;
-        }
-        #endregion
     }
 }

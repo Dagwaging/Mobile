@@ -17,6 +17,7 @@
     <SilverlightApplication>false</SilverlightApplication>
     <ValidateXaml>true</ValidateXaml>
     <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <!-- This property group is only here to support building this project using the 
        MSBuild 3.5 toolset. In order to work correctly with this older toolset, it needs 
@@ -45,6 +46,22 @@
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <NoWarn>0809</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'AdminApp|AnyCPU'">
+    <OutputPath>bin\AdminApp\</OutputPath>
+    <NoConfig>true</NoConfig>
+    <NoStdLib>true</NoStdLib>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MobileApp|AnyCPU'">
+    <OutputPath>bin\MobileApp\</OutputPath>
+    <NoConfig>true</NoConfig>
+    <NoStdLib>true</NoStdLib>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ServerTreeApp|AnyCPU'">
+    <OutputPath>bin\ServerTreeApp\</OutputPath>
+    <NoConfig>true</NoConfig>
+    <NoStdLib>true</NoStdLib>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Maps.MapControl, Version=1.0.1.0, Culture=neutral, PublicKeyToken=498d0d22d7936b73, processorArchitecture=MSIL" />
@@ -61,6 +78,7 @@
   <ItemGroup>
     <Compile Include="DataContracts.cs" />
     <Compile Include="Events\AuthenticationEventArgs.cs" />
+    <Compile Include="Events\LocationEventArgs.cs" />
     <Compile Include="Events\OutlineEventArgs.cs" />
     <Compile Include="Events\PushpinEventArgs.cs" />
     <Compile Include="Events\SearchEventArgs.cs" />

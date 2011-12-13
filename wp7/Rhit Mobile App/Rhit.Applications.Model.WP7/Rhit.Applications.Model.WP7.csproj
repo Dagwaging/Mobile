@@ -40,6 +40,18 @@
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <NoWarn>0809</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'AdminApp|AnyCPU'">
+    <OutputPath>bin\AdminApp\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MobileApp|AnyCPU'">
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
+    <NoWarn>0809</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ServerTreeApp|AnyCPU'">
+    <OutputPath>bin\ServerTreeApp\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Phone.Controls.Maps, Version=7.0.0.0, Culture=neutral, PublicKeyToken=24eec0d8c86cda1e, processorArchitecture=MSIL" />
@@ -59,6 +71,9 @@
     </Compile>
     <Compile Include="..\Rhit.Applications.Model.SL\Events\AuthenticationEventArgs.cs">
       <Link>Events\AuthenticationEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Events\LocationEventArgs.cs">
+      <Link>Events\LocationEventArgs.cs</Link>
     </Compile>
     <Compile Include="..\Rhit.Applications.Model.SL\Events\OutlineEventArgs.cs">
       <Link>Events\OutlineEventArgs.cs</Link>

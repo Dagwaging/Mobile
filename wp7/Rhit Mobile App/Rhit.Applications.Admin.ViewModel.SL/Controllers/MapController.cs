@@ -1,66 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Device.Location;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
-using Microsoft.Phone.Controls.Maps;
 using Rhit.Applications.Model;
 using Rhit.Applications.Model.Events;
 using Rhit.Applications.Model.Maps.Modes;
 using Rhit.Applications.Model.Maps.Sources;
 using Rhit.Applications.Model.Services;
+using Microsoft.Maps.MapControl;
+using Rhit.Applications.ViewModel.Behaviors;
+
 
 namespace Rhit.Applications.ViewModel.Controllers {
     public class MapController : DependencyObject {
         private static MapController _instance;
 
         private MapController(Map map) {
-            Initialize();
-            MapControl = map;
             CreateMapLayers();
+            MapControl = map;
             InitializeMapResources();
             InitializeMap();
             Load();
         }
 
-        private void LocationsChanged(object sender, LocationEventArgs e) {
-            if(e.NewLocations == null) return;
-            UpdateLayers(e.NewLocations);
-        }
-
-        private void UpdateLayers(ICollection<RhitLocation> locations) {
-            LabeledLocations.Clear();
-            Outlines.Clear();
-            PolygonLayer.Children.Clear();
-            TextLayer.Children.Clear();
-
-            foreach(RhitLocation location in locations) {
-                MapPolygon polygon = location.OutLine;
-                if(polygon.Locations == null || polygon.Locations.Count <= 0) continue;
-                PolygonLayer.Children.Add(polygon);
-                if(!AreOutlinesVisible) RhitLocation.HideOutline(polygon);
-                polygon.MouseLeftButtonUp += new MouseButtonEventHandler(Outline_Tap);
-                Outlines[polygon] = location;
-                LabeledLocations[location] = location.GetLabel();
-                if(ShouldShowLabel(location)) TextLayer.Children.Add(LabeledLocations[location]);
-            }
-        }
-
-        private void CurrentLocationChanged(object sender, LocationEventArgs e) {
-            if(!AreOutlinesVisible) {
-                if(e.NewLocation == null)
-                    RhitLocation.HideOutline(e.OldLocation.OutLine);
-                else {
-                    if(e.OldLocation != null)
-                        RhitLocation.HideOutline(e.OldLocation.OutLine);
-                    RhitLocation.ShowOutline(e.NewLocation.OutLine);
-                }
-            }
-            if(e.NewLocation != null)
-                MapControl.Center = e.NewLocation.Center;
-        }
 
         public static void CreateMapController(Map map) {
             _instance = new MapController(map);
@@ -73,13 +37,6 @@ namespace Rhit.Applications.ViewModel.Controllers {
         #endregion
 
         #region Instance Initializer Methods
-        private void Initialize() {
-            LocationsController.Instance.CurrentLocationChanged += new LocationEventHandler(CurrentLocationChanged);
-            LocationsController.Instance.LocationsChanged += new LocationEventHandler(LocationsChanged);
-            LabeledLocations = new Dictionary<RhitLocation, Pushpin>();
-            Outlines = new Dictionary<MapPolygon, RhitLocation>();
-        }
-
         private void InitializeMapResources() {
             Sources = new ObservableCollection<BaseTileSource>();
             Modes = new ObservableCollection<RhitMode>() {
@@ -96,8 +53,8 @@ namespace Rhit.Applications.ViewModel.Controllers {
         private void CreateMapLayers() {
             TileLayer = new MapTileLayer();
             OverlayLayer = new MapTileLayer();
-            PolygonLayer = new MapLayer();
-            TextLayer = new MapLayer();
+            //PolygonLayer = new MapLayer();
+            //TextLayer = new MapLayer();
         }
 
         private void InitializeMap() {
@@ -105,7 +62,8 @@ namespace Rhit.Applications.ViewModel.Controllers {
             MapControl.ZoomLevel = 16; //TODO: No Hard Coding
             MapControl.CopyrightVisibility = Visibility.Collapsed;
             MapControl.LogoVisibility = Visibility.Collapsed;
-            MapControl.Tap += new EventHandler<GestureEventArgs>(MapControl_Tap);
+            MapControl.MouseClick += new EventHandler<MapMouseEventArgs>(MouseClick);
+            //MapControl.Tap += new EventHandler<GestureEventArgs>(MapControl_Tap);
             MapControl.CacheMode = new BitmapCache();
 
             //Store elements put onto the map in the view
@@ -114,9 +72,9 @@ namespace Rhit.Applications.ViewModel.Controllers {
             MapControl.Children.Clear();
 
             MapControl.Children.Add(TileLayer);
-            MapControl.Children.Add(OverlayLayer);
-            MapControl.Children.Add(PolygonLayer);
-            MapControl.Children.Add(TextLayer);
+            //MapControl.Children.Add(OverlayLayer);
+            //MapControl.Children.Add(PolygonLayer);
+            //MapControl.Children.Add(TextLayer);
 
             //Re-add elements put onto the map in the view
             foreach(UIElement e in es) MapControl.Children.Add(e);
@@ -147,35 +105,19 @@ namespace Rhit.Applications.ViewModel.Controllers {
             if(GoogleWater) OverlayLayer.TileSources.Add(new GoogleSource(GoogleType.WaterOverlay));
             if(GoogleStreet) OverlayLayer.TileSources.Add(new GoogleSource(GoogleType.StreetOverlay));
         }
-
-        private void UpdatePolygons() {
-            if(Outlines == null) return;
-            if(AreOutlinesVisible)
-                foreach(MapPolygon polygon in Outlines.Keys)
-                    RhitLocation.ShowOutline(polygon);
-            else foreach(MapPolygon polygon in Outlines.Keys)
-                    RhitLocation.HideOutline(polygon);
-        }
-
-        private void UpdateLabels() {
-            if(LabeledLocations == null) return;
-            TextLayer.Children.Clear();
-            foreach(RhitLocation location in LabeledLocations.Keys)
-                if(ShouldShowLabel(location))
-                    TextLayer.Children.Add(LabeledLocations[location]);
-        }
         #endregion
 
         #region Map Event Handlers
         private void MapControl_Tap(object sender, GestureEventArgs e) {
-            GeoCoordinate coordinate = MapControl.ViewportPointToLocation(e.GetPosition(MapControl));
+            GeoCoordinate coordinate = (GeoCoordinate) MapControl.ViewportPointToLocation(e.GetPosition(MapControl));
             if(EventCoordinate == coordinate) return;
             LocationsController.Instance.UnSelect();
         }
 
-        private void Outline_Tap(object sender, MouseButtonEventArgs e) {
-            EventCoordinate = MapControl.ViewportPointToLocation(e.GetPosition(MapControl));
-            SelectLocation(sender as MapPolygon);
+        void MouseClick(object sender, MapMouseEventArgs e) {
+            //GeoCoordinate coordinate = (GeoCoordinate) MapControl.ViewportPointToLocation(e.ViewportPoint);
+            //if(EventCoordinate == coordinate) return;
+            //LocationsController.Instance.UnSelect();
         }
         #endregion
 
@@ -189,28 +131,13 @@ namespace Rhit.Applications.ViewModel.Controllers {
         private MapLayer TextLayer { get; set; }
         #endregion
 
-        private void SelectLocation(MapPolygon polygon) {
-            LocationsController.Instance.SelectLocation(Outlines[polygon]);
-        }
-
         public GeoCoordinate EventCoordinate { get; set; }
-
-        private Dictionary<MapPolygon, RhitLocation> Outlines { get; set; }
-
-        private Dictionary<RhitLocation, Pushpin> LabeledLocations { get; set; }
 
         public Map MapControl { get; private set; }
 
         public ObservableCollection<RhitMode> Modes { get; set; }
 
         public ObservableCollection<BaseTileSource> Sources { get; set; }
-
-        private bool ShouldShowLabel(RhitLocation location) {
-            //TODO: Add logic to handle maps with text on them already
-            if(!AreLabelsVisible) return false;
-            if(MapControl.ZoomLevel < location.MinZoomLevel) return false;
-            return true;
-        }
 
         #region Property Changed Event Handlers
         private static void OnModeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
@@ -227,16 +154,6 @@ namespace Rhit.Applications.ViewModel.Controllers {
             MapController instance = (MapController) d;
             instance.UpdateOverlays();
         }
-
-        private static void OnPolygonVisibilityChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
-            MapController instance = (MapController) d;
-            instance.UpdatePolygons();
-        }
-
-        private static void OnTextVisibilityChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
-            MapController instance = (MapController) d;
-            instance.UpdateLabels();
-        }
         #endregion
 
         #region Dependency Properties
@@ -247,8 +164,8 @@ namespace Rhit.Applications.ViewModel.Controllers {
         }
 
         public static readonly DependencyProperty CurrentModeProperty =
-           DependencyProperty.Register("CurrentMode", typeof(RhitMode),
-           typeof(MapController), new PropertyMetadata(null, new PropertyChangedCallback(OnModeChanged)));
+           DependencyProperty.Register("CurrentMode", typeof(RhitMode), typeof(MapController),
+           new PropertyMetadata(null, new PropertyChangedCallback(OnModeChanged)));
         #endregion
 
         #region CurrentSource
@@ -295,28 +212,6 @@ namespace Rhit.Applications.ViewModel.Controllers {
            DependencyProperty.Register("GoogleWater", typeof(bool), typeof(MapController),
            new PropertyMetadata(false, new PropertyChangedCallback(OnOverlayChanged)));
         #endregion
-
-        #region AreOutlinesVisible
-        public bool AreOutlinesVisible {
-            get { return (bool) GetValue(AreOutlinesVisibleProperty); }
-            set { SetValue(AreOutlinesVisibleProperty, value); }
-        }
-
-        public static readonly DependencyProperty AreOutlinesVisibleProperty =
-           DependencyProperty.Register("AreOutlinesVisible", typeof(bool), typeof(MapController),
-           new PropertyMetadata(false, new PropertyChangedCallback(OnPolygonVisibilityChanged)));
-        #endregion
-
-        #region AreLabelsVisible
-        public bool AreLabelsVisible {
-            get { return (bool) GetValue(AreLabelsVisibleProperty); }
-            set { SetValue(AreLabelsVisibleProperty, value); }
-        }
-
-        public static readonly DependencyProperty AreLabelsVisibleProperty =
-           DependencyProperty.Register("AreLabelsVisible", typeof(bool), typeof(MapController),
-           new PropertyMetadata(false, new PropertyChangedCallback(OnTextVisibilityChanged)));
-        #endregion
         #endregion
 
         #region SourceChoices
@@ -336,14 +231,12 @@ namespace Rhit.Applications.ViewModel.Controllers {
             DataStorage.SaveState(StorageKey.MapMode, CurrentMode.Label);
             DataStorage.SaveState(StorageKey.TileSource, CurrentSource.Label);
             DataStorage.SaveState(StorageKey.RoseOverlay, FloorPlans);
-            DataStorage.SaveState(StorageKey.VisibleOutlines, AreOutlinesVisible);
-            DataStorage.SaveState(StorageKey.VisibleLabels, AreLabelsVisible);
         }
 
         public void Load() {
             if(MapControl == null) return;
             MapControl.ZoomLevel = (double) DataStorage.LoadState<object>(StorageKey.ZoomLevel, MapControl.ZoomLevel);
-            MapControl.Center = (GeoCoordinate) DataStorage.LoadState<GeoCoordinate>(StorageKey.MapCenter, MapControl.Center);
+            MapControl.Center = (GeoCoordinate) DataStorage.LoadState<GeoCoordinate>(StorageKey.MapCenter, MapControl.Center as GeoCoordinate);
 
             string modeLabel = DataStorage.LoadState<string>(StorageKey.MapMode, string.Empty);
             if(modeLabel != string.Empty) foreach(RhitMode mode in Modes) if(mode.Label == modeLabel) CurrentMode = mode;
@@ -351,8 +244,6 @@ namespace Rhit.Applications.ViewModel.Controllers {
             string sourceLabel = DataStorage.LoadState<string>(StorageKey.TileSource, string.Empty);
             if(sourceLabel != string.Empty) foreach(BaseTileSource source in Sources) if(source.Label == sourceLabel) CurrentSource = source;
 
-            AreOutlinesVisible = (bool) DataStorage.LoadState<object>(StorageKey.VisibleOutlines, AreOutlinesVisible);
-            AreLabelsVisible = (bool) DataStorage.LoadState<object>(StorageKey.VisibleLabels, AreLabelsVisible);
             FloorPlans = (bool) DataStorage.LoadState<object>(StorageKey.RoseOverlay, FloorPlans);
         }
 

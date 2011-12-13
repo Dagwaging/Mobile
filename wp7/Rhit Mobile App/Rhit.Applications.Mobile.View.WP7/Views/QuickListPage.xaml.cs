@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Windows.Controls;
 using System.Windows.Media;
 using Microsoft.Phone.Controls;
+using Rhit.Applications.ViewModel.Controllers;
+using Rhit.Applications.ViewModel.Models;
 
 namespace Rhit.Applications.View.Views {
     /// \ingroup pages
@@ -10,29 +12,17 @@ namespace Rhit.Applications.View.Views {
         public QuickListPage() {
             InitializeComponent();
 
-            //DataCollector.Instance.UpdateAvailable += new ServiceEventHandler(OnUpdateAvailable);
-
-            //List<RhitLocation> dataSource = DataCollector.Instance.GetQuikList(Dispatcher);
-            //if (dataSource == null) {
-            //    //TODO: Show Loading Screen
-            //    //TODO: Show a waiting text + symbol
-            //    //TODO: Add progress?
-            //    return;
-            //}
-
-            //listBox.ItemsSource = dataSource;
+            ViewModel = new InfoViewModel();
+            DataContext = ViewModel;
         }
 
-        //private void OnUpdateAvailable(object sender, ServiceEventArgs e) {
-        //    List<RhitLocation> locations = DataCollector.Instance.GetQuikList(Dispatcher);
-        //    if(locations != null) listBox.ItemsSource = locations;
-        //}
+        public InfoViewModel ViewModel { get; set; }
 
-        //private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-        //    RhitLocation selected = (RhitLocation) listBox.SelectedItem;
-        //    RhitMap.Instance.Select(selected);
-        //    listBox.SelectedItem = null;
-        //    NavigationService.Navigate(new Uri("/MapPage.xaml", UriKind.Relative));
-        //}
+        private void SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            if((sender as ListBox).SelectedItem == null) return;
+            ViewModel.SelectLocation((sender as ListBox).SelectedItem);
+            if(NavigationService.CanGoBack) NavigationService.GoBack();
+            else NavigationService.Navigate(new Uri("/Views/MapPage.xaml", UriKind.Relative));
+        }
     }
 }

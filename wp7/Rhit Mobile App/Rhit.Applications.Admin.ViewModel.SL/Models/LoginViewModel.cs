@@ -11,7 +11,7 @@ namespace Rhit.Applications.ViewModel.Models {
         public LoginViewModel() {
             LoginStatus = "Login to Access Data";
             LoginCommand = new RelayCommand(p => Login());
-            DataCollector.Instance.LoginRequestReturned += new Model.Events.AuthenticationEventHandler(LoginRequestReturned);
+            DataCollector.Instance.LoginRequestReturned += new AuthenticationEventHandler(LoginRequestReturned);
             DataCollector.Instance.ServerErrorReturned += new ServiceEventHandler(ServerErrorReturned);
         }
 
