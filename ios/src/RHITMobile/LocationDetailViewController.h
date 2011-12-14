@@ -22,8 +22,8 @@
 
 @class RHLocation;
 
-@interface LocationDetailViewController : UIViewController
-<UITableViewDelegate, UITableViewDataSource>
+/// \ingroup views
+@interface LocationDetailViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, retain) RHLocation *location;
 @property (nonatomic, retain) NSArray *enclosedLocations;
@@ -31,5 +31,7 @@
 @property (nonatomic, retain) IBOutlet UITableView *tableView;
 
 - (IBAction)displayCurrentLocationOnMap:(id)sender;
+
+- (IBAction)getDirectionsToCurrentLocation:(id)sender;
 
 @end

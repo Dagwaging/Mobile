@@ -27,8 +27,18 @@
 /// MapKit MKMapView category that includes setting a canonical zoom level.
 @interface MKMapView(ZoomLevel)
 
+/// Retrievable zoom level that is calculated based on the MapView's current
+/// region.
 @property (nonatomic, readonly) NSUInteger zoomLevel;
 
+/// Set the MapView's visible region with a more traditional Maps API
+/// mechanism.
+/// \param centerCoordinate The latitude/longitude point which will be centered
+/// in the MapView.
+/// \param zoomLevel The canonical zoom level to set the MapView to. This will
+/// affect the region that is visible in the MapView. Value-wise, this should
+/// be less than 20.
+/// \param animated Whether or not to animate the transition to this new region.
 - (void)setCenterCoordinate:(CLLocationCoordinate2D)centerCoordinate
                   zoomLevel:(NSUInteger)zoomLevel
                    animated:(BOOL)animated;

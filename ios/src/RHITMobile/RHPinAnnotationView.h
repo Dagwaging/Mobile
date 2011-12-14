@@ -19,10 +19,19 @@
 
 #import <MapKit/MapKit.h>
 
+
 @class MapViewController;
 
+
+/// \ingroup map
+/// MKPinAnnotationView subclass capable of notifying the rest of the app of
+/// when it is selected and deselected. This is specifically useful for
+/// maintaining the correct set of annotations and overlays on the campus
+/// MKMapView.
 @interface RHPinAnnotationView : MKPinAnnotationView
 
+/// The MapViewController responsible for this RHPinAnnotationView. This object
+/// will be the one receiving updates about the pin's selected status.
 @property (nonatomic, retain) MapViewController *mapViewController;
 
 @end
