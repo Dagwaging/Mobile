@@ -4,7 +4,7 @@ using Rhit.Applications.Model.Services.Requests;
 using Rhit.Applications.Model.Services;
 using System.Windows.Threading;
 
-namespace Rhit.Applications.Model.SL.Services.Requests {
+namespace Rhit.Applications.Model.Services.Requests {
     public class BatchRequest {
         private Queue<RequestPart> _queue = new Queue<RequestPart>();
         private Dispatcher _dispatcher;

@@ -90,6 +90,9 @@
     <Compile Include="..\Rhit.Applications.Model.SL\Events\ServiceEventArgs.cs">
       <Link>Events\ServiceEventArgs.cs</Link>
     </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Events\StoredProcEventArgs.cs">
+      <Link>Events\StoredProcEventArgs.cs</Link>
+    </Compile>
     <Compile Include="..\Rhit.Applications.Model.SL\LocationType.cs">
       <Link>LocationType.cs</Link>
     </Compile>
@@ -152,6 +155,9 @@
     </Compile>
     <Compile Include="..\Rhit.Applications.Model.SL\Services\Requests\AllRequestPart.cs">
       <Link>Services\Requests\AllRequestPart.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Services\Requests\BatchRequest.cs">
+      <Link>Services\Requests\BatchRequest.cs</Link>
     </Compile>
     <Compile Include="..\Rhit.Applications.Model.SL\Services\Requests\DataRequestPart.cs">
       <Link>Services\Requests\DataRequestPart.cs</Link>

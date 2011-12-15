@@ -312,7 +312,7 @@ namespace Rhit.Applications.Model.Services {
         }
 
         public void ExecuteBatchStoredProcedure(Dispatcher dispatcher, List<KeyValuePair<string, Dictionary<string, object>>> executions) {
-            var batchRequest = new Rhit.Applications.Model.SL.Services.Requests.BatchRequest(dispatcher);
+            var batchRequest = new Rhit.Applications.Model.Services.Requests.BatchRequest(dispatcher);
             foreach (var execution in executions) {
                 RequestPart request = new RequestBuilder(BaseAddress).Admin(Connection.ServiceTokenGuid, execution.Key);
                 foreach (var parameter in execution.Value) {
