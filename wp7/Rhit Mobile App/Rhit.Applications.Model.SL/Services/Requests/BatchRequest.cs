@@ -24,18 +24,26 @@ namespace Rhit.Applications.Model.SL.Services.Requests {
         }
 
         public void Start() {
-            if (!HasStarted) {
+            if (_queue.Count == 0) {
+                throw new InvalidOperationException("No requests were added to the BatchRequest."); 
+            }
+            else if (HasStarted) {
+                throw new InvalidOperationException("Cannot start a BatchRequest that has already started.");
+            }
+            else {
                 HasStarted = true;
                 SyncCallback(null);
             }
-            else
-                throw new InvalidOperationException("Cannot start a BatchRequest that has already started.");
         }
 
         public void SyncCallback(IAsyncResult result) {
-            if (_queue.Count > 0) {
+            if (_queue.Count > 1) {
                 var request = _queue.Dequeue();
                 Connection.MakeRequest(_dispatcher, request, false, this.SyncCallback);
+            }
+            else {
+                var request = _queue.Dequeue();
+                Connection.MakeRequest(_dispatcher, request, false, null);
             }
         }
     }
