@@ -179,7 +179,7 @@ namespace Rhit.Applications.Model.Services {
 
         public void SearchLocations(Dispatcher dispatcher, string search) {
             RequestPart request = new RequestBuilder(BaseAddress, search).Locations.Data.All;
-            Connection.MakeRequest(dispatcher, request, true, false);
+            Connection.MakeRequest(dispatcher, request, true, null);
         }
 
         public List<RhitLocation> GetAllLocations(Dispatcher dispatcher) {
@@ -312,20 +312,15 @@ namespace Rhit.Applications.Model.Services {
         }
 
         public void ExecuteBatchStoredProcedure(Dispatcher dispatcher, List<KeyValuePair<string, Dictionary<string, object>>> executions) {
-            StartNewThread(() => {
-                foreach (var execution in executions) {
-                    RequestPart request = new RequestBuilder(BaseAddress).Admin(Connection.ServiceTokenGuid, execution.Key);
-                    foreach (var parameter in execution.Value) {
-                        request = request.AddQueryParameter(parameter.Key, parameter.Value);
-                    }
-                    Connection.MakeSyncRequest(dispatcher, request, false);
+            var batchRequest = new Rhit.Applications.Model.SL.Services.Requests.BatchRequest(dispatcher);
+            foreach (var execution in executions) {
+                RequestPart request = new RequestBuilder(BaseAddress).Admin(Connection.ServiceTokenGuid, execution.Key);
+                foreach (var parameter in execution.Value) {
+                    request = request.AddQueryParameter(parameter.Key, parameter.Value);
                 }
-            });
-        }
-
-        private void StartNewThread(Action action) {
-            var thread = new Thread(new ThreadStart(action));
-            thread.Start();
+                batchRequest.AddRequest(request);
+            }
+            batchRequest.Start();
         }
         #endregion
     }

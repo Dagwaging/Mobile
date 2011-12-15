@@ -28,10 +28,10 @@ namespace Rhit.Applications.Model.Services {
         public static Dispatcher Dispatcher { get; private set; }
 
         public static void MakeRequest(Dispatcher dispatcher, RequestPart url) {
-            Connection.MakeRequest(dispatcher, url, false, false);
+            Connection.MakeRequest(dispatcher, url, false, null);
         }
 
-        public static IAsyncResult MakeRequest(Dispatcher dispatcher, RequestPart url, bool isSearch, bool isSync) {
+        public static IAsyncResult MakeRequest(Dispatcher dispatcher, RequestPart url, bool isSearch, Action<IAsyncResult> callback) {
             if(dispatcher != null) Dispatcher = dispatcher;
             HttpWebRequest request;
             try {
@@ -44,8 +44,8 @@ namespace Rhit.Applications.Model.Services {
             request.Method = "POST";
             request.ContentType = "application/json; charset=utf-8";
 
-            if(isSync)
-                return request.BeginGetResponse(new AsyncCallback(SyncCallback), request);
+            if(callback != null)
+                return request.BeginGetResponse(new AsyncCallback(callback), request);
             else if(isSearch)
                 return request.BeginGetResponse(new AsyncCallback(ResponseHandler.SearchRequestCallback), request);
             else if(url is AllRequestPart)
@@ -53,17 +53,6 @@ namespace Rhit.Applications.Model.Services {
             else if(url is TopRequestPart)
                 return request.BeginGetResponse(new AsyncCallback(ResponseHandler.TopRequestCallback), request);
             else return request.BeginGetResponse(new AsyncCallback(ResponseHandler.RequestCallback), request);
-        }
-
-        private static bool _syncWait = false;
-        public static void SyncCallback(IAsyncResult result) {
-            _syncWait = false;
-        }
-
-        public static void MakeSyncRequest(Dispatcher dispatcher, RequestPart url, bool isSearch) {
-            _syncWait = true;
-            var asyncResult = MakeRequest(dispatcher, url, isSearch, true);
-            while (_syncWait) Thread.Sleep(100);
         }
     }
 }

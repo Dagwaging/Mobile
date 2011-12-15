@@ -108,6 +108,7 @@
     <Compile Include="Services\DataStorage.cs" />
     <Compile Include="Services\Requests\AdminRequestPart.cs" />
     <Compile Include="Services\Requests\AllRequestPart.cs" />
+    <Compile Include="Services\Requests\BatchRequest.cs" />
     <Compile Include="Services\Requests\DataRequestPart.cs" />
     <Compile Include="Services\Requests\DepartableRequestPart.cs" />
     <Compile Include="Services\Requests\DescRequestPart.cs" />
