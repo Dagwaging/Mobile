@@ -16,11 +16,17 @@ namespace Rhit.Applications.View.Views {
         public MapPage() {
             InitializeComponent();
 
+            MyMap.MouseClick += new EventHandler<MapMouseEventArgs>(Map_MouseClick);
             MyMap.MapForeground.TemplateApplied += new EventHandler(MapForeground_TemplateApplied);
+
 
             //TODO: Don't use this class to implement IBuildingCornersProvider
             ViewModel = new MainViewModel(MyMap, new LocalImageLoader(), this);
             DataContext = ViewModel;
+        }
+
+        void Map_MouseClick(object sender, MapMouseEventArgs e) {
+            ViewModel.MapClick(e);
         }
 
         private MainViewModel ViewModel { get; set; }
@@ -33,6 +39,7 @@ namespace Rhit.Applications.View.Views {
             ViewModel.PolygonClick(sender as MapPolygon, e);
         }
 
+        #region Implementing IBuildingCornersProvider
         public void DisplayCorners(ICollection<Location> corners) {
             CornersLayer.Children.Clear();
             foreach(Location corner in corners)
@@ -46,9 +53,22 @@ namespace Rhit.Applications.View.Views {
             return corners;
         }
 
-        public void RemoveCorners() {
+        public void ClearCorners() {
+            MyMap.MouseClick -= CreateCorner;
             CornersLayer.Children.Clear();
+            
         }
+
+        public void CreateNewCorners() {
+            CornersLayer.Children.Clear();
+            MyMap.MouseClick += new EventHandler<MapMouseEventArgs>(CreateCorner);
+        }
+
+        private void CreateCorner(object sender, MapMouseEventArgs e) {
+            Location corner = MyMap.ViewportPointToLocation(e.ViewportPoint);
+            CornersLayer.Children.Add(new DraggablePushpin() { Location = corner, });
+        }
+        #endregion
 
         #region NavigationBar Initialization Methods
         void MapForeground_TemplateApplied(object sender, EventArgs e) {
@@ -60,7 +80,6 @@ namespace Rhit.Applications.View.Views {
             if(!(sender is NavigationBar)) return;
             UpdateNaviBar(sender as NavigationBar);
         }
-
 
         private void UpdateNaviBar(NavigationBar naviBar) {
             UIElementCollection children = naviBar.HorizontalPanel.Children;

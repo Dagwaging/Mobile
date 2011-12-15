@@ -41,6 +41,7 @@ namespace Rhit.Applications.ViewModel.Models {
                 new PathsBehavior(),
             };
             Behavior = Behaviors[0];
+            AreBuildingOptionsVisible = true;
         }
 
         #region Dependency Properties
@@ -57,9 +58,24 @@ namespace Rhit.Applications.ViewModel.Models {
         private static void OnBehaviorChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
             MainViewModel instance = (MainViewModel) d;
             instance.Behavior.Update();
+            if(instance.Behavior is BuildingsBehavior)
+                instance.AreBuildingOptionsVisible = true;
+            else instance.AreBuildingOptionsVisible = false;
         }
         #endregion
+
+        #region AreBuildingOptionsVisible
+        public bool AreBuildingOptionsVisible {
+            get { return (bool) GetValue(AreBuildingOptionsVisibleProperty); }
+            set { SetValue(AreBuildingOptionsVisibleProperty, value); }
+        }
+
+        public static readonly DependencyProperty AreBuildingOptionsVisibleProperty =
+           DependencyProperty.Register("AreBuildingOptionsVisible", typeof(bool), typeof(MainViewModel), new PropertyMetadata(false));
         #endregion
+        #endregion
+
+        private GeoCoordinate LastEventCoordinate { get; set; }
 
         public ObservableCollection<MapBehavior> Behaviors { get; set; }
 
@@ -78,8 +94,13 @@ namespace Rhit.Applications.ViewModel.Models {
         }
 
         public void PolygonClick(MapPolygon polygon, MouseButtonEventArgs e) {
-            Map.EventCoordinate = Map.MapControl.ViewportPointToLocation(e.GetPosition(Map.MapControl)) as GeoCoordinate;
+            LastEventCoordinate = Map.MapControl.ViewportPointToLocation(e.GetPosition(Map.MapControl)) as GeoCoordinate;
             Behavior.SelectLocation(polygon);
+        }
+
+        public void MapClick(MapMouseEventArgs e) {
+            if(LastEventCoordinate == Map.MapControl.ViewportPointToLocation(e.ViewportPoint) as GeoCoordinate) return;
+            LocationsController.Instance.UnSelect();
         }
     }
 }

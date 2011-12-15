@@ -18,7 +18,7 @@ namespace Rhit.Applications.ViewModel.Converters {
         public bool IsAltNames { get; set; }
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
-            if(value == null) return "No Location Found";
+            if(value == null) return "No Location Selected";
             if(IsDescription) return (value as RhitLocation).Description;
             if(IsAltNames) {
                 List<string> altNames = (value as RhitLocation).AltNames;

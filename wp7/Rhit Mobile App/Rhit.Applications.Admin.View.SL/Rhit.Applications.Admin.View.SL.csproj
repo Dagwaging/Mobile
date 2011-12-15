@@ -109,6 +109,7 @@
     <Compile Include="Controls\ImageViewer.cs" />
     <Compile Include="Controls\LocalImageLoader.cs" />
     <Compile Include="Converters\BoolToGridSizeConverter.cs" />
+    <Compile Include="Converters\ObjectToVisibilityConverter.cs" />
     <Compile Include="Converters\RadioButtonConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Views\DataPage.xaml.cs">

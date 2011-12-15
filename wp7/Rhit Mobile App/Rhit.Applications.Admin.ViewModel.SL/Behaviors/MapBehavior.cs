@@ -63,6 +63,16 @@ namespace Rhit.Applications.ViewModel.Behaviors {
         public static readonly DependencyProperty AreLocationsVisibleProperty =
            DependencyProperty.Register("AreLocationsVisible", typeof(bool), typeof(MapBehavior), new PropertyMetadata(false));
         #endregion
+
+        #region AreSaveCancelVisible
+        public bool AreSaveCancelVisible {
+            get { return (bool) GetValue(AreSaveCancelVisibleProperty); }
+            set { SetValue(AreSaveCancelVisibleProperty, value); }
+        }
+
+        public static readonly DependencyProperty AreSaveCancelVisibleProperty =
+           DependencyProperty.Register("AreLocationsVisible", typeof(bool), typeof(MapBehavior), new PropertyMetadata(false));
+        #endregion
         #endregion
 
         protected abstract void Save();

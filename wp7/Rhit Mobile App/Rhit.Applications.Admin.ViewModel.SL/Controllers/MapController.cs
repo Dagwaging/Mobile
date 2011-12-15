@@ -47,7 +47,6 @@ namespace Rhit.Applications.ViewModel.Controllers {
                 new OsmaMode(),
             };
             CurrentMode = Modes[2];
-            EventCoordinate = new GeoCoordinate(0, 0);
         }
 
         private void CreateMapLayers() {
@@ -62,7 +61,6 @@ namespace Rhit.Applications.ViewModel.Controllers {
             MapControl.ZoomLevel = 16; //TODO: No Hard Coding
             MapControl.CopyrightVisibility = Visibility.Collapsed;
             MapControl.LogoVisibility = Visibility.Collapsed;
-            MapControl.MouseClick += new EventHandler<MapMouseEventArgs>(MouseClick);
             //MapControl.Tap += new EventHandler<GestureEventArgs>(MapControl_Tap);
             MapControl.CacheMode = new BitmapCache();
 
@@ -107,20 +105,6 @@ namespace Rhit.Applications.ViewModel.Controllers {
         }
         #endregion
 
-        #region Map Event Handlers
-        /*private void MapControl_Tap(object sender, GestureEventArgs e) {
-            GeoCoordinate coordinate = (GeoCoordinate) MapControl.ViewportPointToLocation(e.GetPosition(MapControl));
-            if(EventCoordinate == coordinate) return;
-            LocationsController.Instance.UnSelect();
-        }*/
-
-        void MouseClick(object sender, MapMouseEventArgs e) {
-            //GeoCoordinate coordinate = (GeoCoordinate) MapControl.ViewportPointToLocation(e.ViewportPoint);
-            //if(EventCoordinate == coordinate) return;
-            //LocationsController.Instance.UnSelect();
-        }
-        #endregion
-
         #region Map Layers
         private MapTileLayer OverlayLayer { get; set; }
 
@@ -130,8 +114,6 @@ namespace Rhit.Applications.ViewModel.Controllers {
 
         private MapLayer TextLayer { get; set; }
         #endregion
-
-        public GeoCoordinate EventCoordinate { get; set; }
 
         public Map MapControl { get; private set; }
 
