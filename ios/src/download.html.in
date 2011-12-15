@@ -19,7 +19,7 @@
                     <br/>Return to this page and click the second button again.
                 </div>
                 <a href="http://dl.dropbox.com/u/14888375/RHITMobileBeta.mobileprovision" data-role="button">Install Provisioning Profile</a>
-                <a href="itms-services://?action=download-manifest&url=http://mobile.csse.rose-hulman.edu/hudson/job/iOS/BUILD_NUMBER/artifact/ios/app-manifest-beta.plist" data-role="button">Install vVERSION</a>
+                <a href="itms-services://?action=download-manifest&url=http://mobile.csse.rose-hulman.edu/hudson/job/iOS/BUILD_NUMBER/artifact/ios/app-manifest-beta.plist" data-role="button">Install RHIT Mobile Beta</a>
             </div>
         </div>
     </body>
