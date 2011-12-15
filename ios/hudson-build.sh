@@ -59,6 +59,11 @@ sed -i -e "s/BUILD_NUMBER/${BUILD_NUMBER}/g" download.html.in
 sed -i -e "s/VERSION/${VERSION}${BUILD_TYPE}${BUILD_NUMBER}/g" download.html.in
 mv download.html.in ../download.html
 
+# Create upgrade page
+sed -i -e "s/BUILD_NUMBER/${BUILD_NUMBER}/g" upgrade.html.in
+sed -i -e "s/VERSION/${VERSION}${BUILD_TYPE}${BUILD_NUMBER}/g" upgrade.html.in
+mv upgrade.html.in ../upgrade.html
+
 # Build Doxygen documentation
 cd ../../
 sed -i -e "s/DEVELOPMENT_BUILD/v${VERSION}${BUILD_TYPE}${BUILD_NUMBER}/" ios/Doxyfile
