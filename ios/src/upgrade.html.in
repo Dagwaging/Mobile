@@ -8,11 +8,12 @@
     <body>
         <div data-role="page">
             <div data-role="header">
-                <h1>RHIT Mobile Beta Upgrade</h1>
+                <h1>RHIT Mobile Beta</h1>
             </div>
             <div data-role="content">
-                <strong>IF THE INSTALLATION FAILS</strong>: Return to this page and click the button again.
-                <a href="itms-services://?action=download-manifest&url=http://mobile.csse.rose-hulman.edu/hudson/job/iOS/BUILD_NUMBER/artifact/ios/app-manifest-beta.plist" data-role="button">Upgrade to RHIT Mobile vVERSION</a>
+                <strong>IF THE INSTALLATION FAILS</strong>:
+                <br/>Return to this page and click the button again.
+                <a href="itms-services://?action=download-manifest&url=http://mobile.csse.rose-hulman.edu/hudson/job/iOS/BUILD_NUMBER/artifact/ios/app-manifest-beta.plist" data-role="button">Upgrade to vVERSION</a>
             </div>
         </div>
     </body>
