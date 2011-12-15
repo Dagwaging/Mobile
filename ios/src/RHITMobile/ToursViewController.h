@@ -1,5 +1,5 @@
 //
-//  LocationDetailViewController.h
+//  ToursViewController.h
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -17,26 +17,16 @@
 //  limitations under the License.
 //
 
-
 #import <UIKit/UIKit.h>
-#import "RHDirectionsRequesterDelegate.h"
+#import "RHTourRequesterDelegate.h"
 
-@class RHLocation;
-@class RHDirectionsRequester;
+@class RHTourRequester;
 
-/// \ingroup views
-@interface LocationDetailViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, RHDirectionsRequesterDelegate> {
+@interface ToursViewController : UIViewController <RHTourRequesterDelegate> {
     @private
-    RHDirectionsRequester *currentDirectionsRequest_;
+    RHTourRequester *currentDirectionsRequest_;
 }
 
-@property (nonatomic, retain) RHLocation *location;
-@property (nonatomic, retain) NSArray *enclosedLocations;
-@property (nonatomic, retain) NSArray *links;
-@property (nonatomic, retain) IBOutlet UITableView *tableView;
-
-- (IBAction)displayCurrentLocationOnMap:(id)sender;
-
-- (IBAction)getDirectionsToCurrentLocation:(id)sender;
+- (IBAction)selectTour:(id)sender;
 
 @end

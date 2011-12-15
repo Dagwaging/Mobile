@@ -24,6 +24,8 @@
 #import "RHITMobileAppDelegate.h"
 #import "MapViewController.h"
 #import "WebViewController.h"
+#import "RHDirectionsRequester.h"
+#import "RHWrappedCoordinate.h"
 
 #define kAltNamesLabel @"Also Known As"
 #define kAboutLabel @"About"
@@ -79,7 +81,8 @@
 }
 
 - (IBAction)getDirectionsToCurrentLocation:(id)sender {
-    
+    NSLog(@"Getting Directions");
+    currentDirectionsRequest_ = [[RHDirectionsRequester alloc] initWithDelegate:self];
 }
 
 #pragma mark - View lifecycle
@@ -432,6 +435,15 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 - (NSString *)tableView:(UITableView *)tableView
 titleForHeaderInSection:(NSInteger)section {
     return [self.sections objectAtIndex:section];
+}
+
+# pragma mark - RHDirectionsRequestDelegate Methods
+
+- (void)didFinishLoadingDirections:(NSArray *)directions {
+    [currentDirectionsRequest_ release];
+
+    [self.navigationController popToRootViewControllerAnimated:YES];
+    [RHITMobileAppDelegate.instance.mapViewController displayDirections:directions];
 }
 
 @end
