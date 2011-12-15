@@ -6,6 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:navigation="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Navigation"
     xmlns:map="clr-namespace:Microsoft.Maps.MapControl;assembly=Microsoft.Maps.MapControl"
+    xmlns:navi="clr-namespace:Microsoft.Maps.MapControl.Navigation;assembly=Microsoft.Maps.MapControl"
     xmlns:controls="clr-namespace:Rhit.Applications.View.Controls"
     xmlns:toolkit="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit"
     xmlns:cmds="clr-namespace:Rhit.Applications.Mvvm.Commands;assembly=Rhit.Applications.Mvvm.SL"
@@ -18,6 +19,33 @@
         <DataTemplate x:Name="PolygonItemTemplate">
             <map:MapPolygon Tag="{Binding Id}" MouseLeftButtonUp="MapPolygon_Click" Locations="{Binding Locations}" Fill="{StaticResource PolygonFillColorBrush}" Stroke="White" StrokeThickness="1"/>
         </DataTemplate>
+
+        <DataTemplate x:Name="NaviButtonTemplate">
+            <TextBlock Text="{Binding Label}" Foreground="White"/>
+        </DataTemplate>
+
+        <StackPanel Orientation="Horizontal" x:Name="NavigationBarItems">
+
+            <ListBox Background="Transparent" ItemsSource="{Binding Map.Modes}" ItemTemplate="{StaticResource NaviButtonTemplate}" SelectedValue="{Binding Map.CurrentMode, Mode=TwoWay}">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+            </ListBox>
+            
+            <navi:CommandSeparator/>
+
+
+            <ListBox Background="Transparent" ItemsSource="{Binding Map.Sources}" ItemTemplate="{StaticResource NaviButtonTemplate}" SelectedValue="{Binding Map.CurrentSource, Mode=TwoWay}">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+            </ListBox>
+        </StackPanel>
+
     </navigation:Page.Resources>
 
     <Grid x:Name="LayoutRoot" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
