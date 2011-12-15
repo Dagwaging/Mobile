@@ -9,8 +9,8 @@ namespace RHITMobileUtil
 {
     public class Program
     {
-        private static int exec = 1;
-        public static string upfile = @"C:\Users\glowskst\Desktop\Locations\senpromapareas.txt";
+        private static int exec = 0;
+        public static string upfile = @"C:\Users\glowskst\Desktop\Locations\a.txt";
         public static string trifile = @"C:\Users\glowskst\Desktop\Locations\Moench2.bmp";
 
         [STAThreadAttribute]
