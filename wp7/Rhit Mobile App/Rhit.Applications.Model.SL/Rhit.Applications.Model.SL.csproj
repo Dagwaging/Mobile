@@ -84,6 +84,7 @@
     <Compile Include="Events\SearchEventArgs.cs" />
     <Compile Include="Events\ServerEventArgs.cs" />
     <Compile Include="Events\ServiceEventArgs.cs" />
+    <Compile Include="Events\StoredProcEventArgs.cs" />
     <Compile Include="GeoCoordinate.cs" />
     <Compile Include="LocationType.cs" />
     <Compile Include="Maps\Modes\BingMode.cs" />

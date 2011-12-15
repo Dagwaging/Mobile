@@ -3,6 +3,8 @@ using System.Net;
 using System.Windows.Threading;
 using Rhit.Applications.Model.Events;
 using Rhit.Applications.Model.Services.Requests;
+using System;
+using System.Threading;
 
 namespace Rhit.Applications.Model.Services {
     public class DataCollector {
@@ -14,6 +16,7 @@ namespace Rhit.Applications.Model.Services {
         public event ServiceEventHandler UpdateAvailable;
         public event SearchEventHandler SearchResultsAvailable;
         public event AuthenticationEventHandler LoginRequestReturned;
+        public event StoredProcEventHandler StoredProcReturned;
         public event ServiceEventHandler ServerErrorReturned;
         #endregion
 
@@ -70,6 +73,9 @@ namespace Rhit.Applications.Model.Services {
                 case ResponseType.Authentication:
                     HandleLoginResponse(response);
                     break;
+                case ResponseType.StoredProc:
+                    HandleStoredProcResponse(response);
+                    break;
                 case ResponseType.Error:
                     HandleErrorResponse(response);
                     break;
@@ -88,7 +94,7 @@ namespace Rhit.Applications.Model.Services {
                 Expiration = response.Expiration,
                 Token = response.Token
             };
-            OnLoiginRequestReturned(args);
+            OnLoginRequestReturned(args);
         }
 
         private void HandleErrorResponse(ServerObject response) {
@@ -134,6 +140,14 @@ namespace Rhit.Applications.Model.Services {
             };
             OnSearchUpdated(args);
         }
+
+        private void HandleStoredProcResponse(ServerObject response) {
+            StoredProcEventArgs args = new StoredProcEventArgs() {
+                Columns = response.Columns,
+                Table = response.Table
+            };
+            OnStoredProcReturned(args);
+        }
         #endregion
 
         protected virtual void OnUpdated(ServiceEventArgs e) {
@@ -144,8 +158,12 @@ namespace Rhit.Applications.Model.Services {
             if(SearchResultsAvailable != null) SearchResultsAvailable(this, e);
         }
 
-        protected virtual void OnLoiginRequestReturned(AuthenticationEventArgs e) {
+        protected virtual void OnLoginRequestReturned(AuthenticationEventArgs e) {
             if(LoginRequestReturned != null) LoginRequestReturned(this, e);
+        }
+
+        protected virtual void OnStoredProcReturned(StoredProcEventArgs e) {
+            if(StoredProcReturned != null) StoredProcReturned(this, e);
         }
 
         protected virtual void OnServerError(ServiceEventArgs e) {
@@ -161,7 +179,7 @@ namespace Rhit.Applications.Model.Services {
 
         public void SearchLocations(Dispatcher dispatcher, string search) {
             RequestPart request = new RequestBuilder(BaseAddress, search).Locations.Data.All;
-            Connection.MakeRequest(dispatcher, request, true);
+            Connection.MakeRequest(dispatcher, request, true, false);
         }
 
         public List<RhitLocation> GetAllLocations(Dispatcher dispatcher) {
@@ -263,7 +281,7 @@ namespace Rhit.Applications.Model.Services {
             return locations;
         }
 
-        public List<RhitLocation> GetQuikList(Dispatcher dispatcher) {
+        public List<RhitLocation> GetQuickList(Dispatcher dispatcher) {
             if(!UpToDate) {
                 RequestPart request = new RequestBuilder(BaseAddress, Version).Locations.Data.Top;
                 Connection.MakeRequest(dispatcher, request);
@@ -283,6 +301,31 @@ namespace Rhit.Applications.Model.Services {
             foreach(RhitLocation location in DataStorage.Instance.TopLocations.Values)
                 if(location.Type == LocationType.PointOfInterest) locations.Add(location);
             return locations;
+        }
+
+        public void ExecuteStoredProcedure(Dispatcher dispatcher, string procedure, Dictionary<string, object> query) {
+            RequestPart request = new RequestBuilder(BaseAddress).Admin(Connection.ServiceTokenGuid, procedure);
+            foreach (var pair in query) {
+                request = request.AddQueryParameter(pair.Key, pair.Value);
+            }
+            Connection.MakeRequest(dispatcher, request);
+        }
+
+        public void ExecuteBatchStoredProcedure(Dispatcher dispatcher, List<KeyValuePair<string, Dictionary<string, object>>> executions) {
+            StartNewThread(() => {
+                foreach (var execution in executions) {
+                    RequestPart request = new RequestBuilder(BaseAddress).Admin(Connection.ServiceTokenGuid, execution.Key);
+                    foreach (var parameter in execution.Value) {
+                        request = request.AddQueryParameter(parameter.Key, parameter.Value);
+                    }
+                    Connection.MakeSyncRequest(dispatcher, request, false);
+                }
+            });
+        }
+
+        private void StartNewThread(Action action) {
+            var thread = new Thread(new ThreadStart(action));
+            thread.Start();
         }
         #endregion
     }
