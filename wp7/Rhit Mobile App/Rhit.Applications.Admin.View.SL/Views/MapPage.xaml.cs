@@ -8,11 +8,15 @@ using Rhit.Applications.ViewModel.Providers;
 using System;
 using System.Collections.Generic;
 using System.Windows;
+using Microsoft.Maps.MapControl.Overlays;
+using Microsoft.Maps.MapControl.Navigation;
 
 namespace Rhit.Applications.View.Views {
     public partial class MapPage : Page, IBuildingCornersProvider {
         public MapPage() {
             InitializeComponent();
+
+            MyMap.MapForeground.TemplateApplied += new EventHandler(MapForeground_TemplateApplied);
 
             //TODO: Don't use this class to implement IBuildingCornersProvider
             ViewModel = new MainViewModel(MyMap, new LocalImageLoader(), this);
@@ -20,16 +24,6 @@ namespace Rhit.Applications.View.Views {
         }
 
         private MainViewModel ViewModel { get; set; }
-
-        #region Page Navigation
-        // Executes when the user navigates to this page.
-        protected override void OnNavigatedTo(NavigationEventArgs e) { }
-
-        // Executes when the user navigates away from this page.
-        protected override void OnNavigatedFrom(NavigationEventArgs e) {
-            //LayoutRoot.Children.Remove(Map.RhitMap);
-        }
-        #endregion
 
         private void ImageViewer_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
             //ViewModel.ClickImage(e.GetPosition((sender as ImageViewer)));
@@ -55,5 +49,42 @@ namespace Rhit.Applications.View.Views {
         public void RemoveCorners() {
             CornersLayer.Children.Clear();
         }
+
+        #region NavigationBar Initialization Methods
+        void MapForeground_TemplateApplied(object sender, EventArgs e) {
+            if(!(sender is MapForeground)) return;
+            (sender as MapForeground).NavigationBar.TemplateApplied += new EventHandler(NavigationBar_TemplateApplied);
+        }
+
+        void NavigationBar_TemplateApplied(object sender, EventArgs e) {
+            if(!(sender is NavigationBar)) return;
+            UpdateNaviBar(sender as NavigationBar);
+        }
+
+
+        private void UpdateNaviBar(NavigationBar naviBar) {
+            UIElementCollection children = naviBar.HorizontalPanel.Children;
+            children.Clear();
+
+
+            List<UIElement> elements = new List<UIElement>();
+            foreach(UIElement element in NavigationBarItems.Children)
+                elements.Add(element);
+            foreach(UIElement element in elements) {
+                NavigationBarItems.Children.Remove(element);
+                naviBar.HorizontalPanel.Children.Add(element);
+            }
+        }
+        #endregion
+
+        #region Page Navigation
+        // Executes when the user navigates to this page.
+        protected override void OnNavigatedTo(NavigationEventArgs e) { }
+
+        // Executes when the user navigates away from this page.
+        protected override void OnNavigatedFrom(NavigationEventArgs e) {
+            //LayoutRoot.Children.Remove(Map.RhitMap);
+        }
+        #endregion
     }
 }
