@@ -31,14 +31,25 @@ namespace Rhit.Applications.ViewModel.Behaviors {
             AreBuildingsVisible = false;
             CornersProvider.DisplayCorners(LocationsController.Instance.CurrentLocation.Locations as ICollection<Location>);
         }
-        
-        protected override void Save() {
-            ICollection<Location> corners = CornersProvider.GetCorners();
-            //LocationsController.Instance.CurrentLocation
-            //TODO: Scott - Save above
 
-            CornersProvider.RemoveCorners();
-            AreBuildingsVisible = true;
+        protected override void Save() {
+            var corners = CornersProvider.GetCorners();
+
+            var executions = new List<KeyValuePair<string, Dictionary<string, object>>>() {
+                new KeyValuePair<string, Dictionary<string, object>>("spDeleteMapAreaCorners", new Dictionary<string, object>() {
+                    { "location", LocationsController.Instance.CurrentLocation.Id }
+                })
+            };
+
+            foreach (var corner in corners) {
+                executions.Add(new KeyValuePair<string, Dictionary<string, object>>("spAddMapAreaCorner", new Dictionary<string, object>() {
+                    { "location", LocationsController.Instance.CurrentLocation.Id },
+                    { "lat", corner.Latitude },
+                    { "lon", corner.Longitude }
+                }));
+            }
+
+            DataCollector.Instance.ExecuteBatchStoredProcedure(Dispatcher, executions);
         }
 
         protected override void Cancel() {

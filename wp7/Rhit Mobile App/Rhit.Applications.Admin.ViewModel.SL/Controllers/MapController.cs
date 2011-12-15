@@ -108,11 +108,11 @@ namespace Rhit.Applications.ViewModel.Controllers {
         #endregion
 
         #region Map Event Handlers
-        private void MapControl_Tap(object sender, GestureEventArgs e) {
+        /*private void MapControl_Tap(object sender, GestureEventArgs e) {
             GeoCoordinate coordinate = (GeoCoordinate) MapControl.ViewportPointToLocation(e.GetPosition(MapControl));
             if(EventCoordinate == coordinate) return;
             LocationsController.Instance.UnSelect();
-        }
+        }*/
 
         void MouseClick(object sender, MapMouseEventArgs e) {
             //GeoCoordinate coordinate = (GeoCoordinate) MapControl.ViewportPointToLocation(e.ViewportPoint);

@@ -39,8 +39,8 @@ namespace Rhit.Applications.View.Views {
                 CornersLayer.Children.Add(new DraggablePushpin() { Location = corner, });
         }
 
-        public ICollection<Location> GetCorners() {
-            ICollection<Location> corners = new List<Location>();
+        public List<Location> GetCorners() {
+            List<Location> corners = new List<Location>();
             foreach(UIElement element in CornersLayer.Children)
                 if(element is Pushpin) corners.Add((element as Pushpin).Location);
             return corners;

@@ -98,8 +98,8 @@ namespace Rhit.Applications.Model.Services {
             else if(response.Token != null && response.Token != string.Empty)
                 args.Type = ResponseType.Authentication;
 
-            else if(response.Table != null && response.Table.Count > 0)
-                args.Type = ResponseType.DataUpdate;
+            else if(response.Table != null && response.Columns != null)
+                args.Type = ResponseType.StoredProc;
 
             else args.Type = ResponseType.Error;
 

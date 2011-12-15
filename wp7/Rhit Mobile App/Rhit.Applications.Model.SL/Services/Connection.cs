@@ -4,6 +4,7 @@ using System.Net.NetworkInformation;
 using System.Windows.Threading;
 using Rhit.Applications.Model.Services.Requests;
 using System.Windows;
+using System.Threading;
 
 namespace Rhit.Applications.Model.Services {
     public static class Connection {
@@ -15,6 +16,10 @@ namespace Rhit.Applications.Model.Services {
 
         public static string ServiceToken { get; set; }
 
+        public static Guid ServiceTokenGuid {
+            get { return new Guid(ServiceToken); }
+        }
+
         public static DateTime Expiration { get; set; }
 
         /// <summary>
@@ -23,10 +28,10 @@ namespace Rhit.Applications.Model.Services {
         public static Dispatcher Dispatcher { get; private set; }
 
         public static void MakeRequest(Dispatcher dispatcher, RequestPart url) {
-            Connection.MakeRequest(dispatcher, url, false);
+            Connection.MakeRequest(dispatcher, url, false, null);
         }
 
-        public static void MakeRequest(Dispatcher dispatcher, RequestPart url, bool isSearch) {
+        public static IAsyncResult MakeRequest(Dispatcher dispatcher, RequestPart url, bool isSearch, Action<IAsyncResult> callback) {
             if(dispatcher != null) Dispatcher = dispatcher;
             HttpWebRequest request;
             try {
@@ -34,18 +39,20 @@ namespace Rhit.Applications.Model.Services {
             } catch {
                 //TODO: Actually do something here
                 //Raise error or notify what happened
-                return;
+                return null;
             }
             request.Method = "POST";
             request.ContentType = "application/json; charset=utf-8";
 
-            if(isSearch)
-                request.BeginGetResponse(new AsyncCallback(ResponseHandler.SearchRequestCallback), request);
+            if(callback != null)
+                return request.BeginGetResponse(new AsyncCallback(callback), request);
+            else if(isSearch)
+                return request.BeginGetResponse(new AsyncCallback(ResponseHandler.SearchRequestCallback), request);
             else if(url is AllRequestPart)
-                request.BeginGetResponse(new AsyncCallback(ResponseHandler.AllRequestCallback), request);
+                return request.BeginGetResponse(new AsyncCallback(ResponseHandler.AllRequestCallback), request);
             else if(url is TopRequestPart)
-                request.BeginGetResponse(new AsyncCallback(ResponseHandler.TopRequestCallback), request);
-            else request.BeginGetResponse(new AsyncCallback(ResponseHandler.RequestCallback), request);
+                return request.BeginGetResponse(new AsyncCallback(ResponseHandler.TopRequestCallback), request);
+            else return request.BeginGetResponse(new AsyncCallback(ResponseHandler.RequestCallback), request);
         }
     }
 }

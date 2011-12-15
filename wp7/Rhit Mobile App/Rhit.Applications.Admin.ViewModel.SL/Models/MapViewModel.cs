@@ -60,7 +60,6 @@ namespace Rhit.Applications.ViewModel.Models {
         }
 
 
-
         #region Original
         //private string _mapId;
 
