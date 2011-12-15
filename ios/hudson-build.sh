@@ -21,10 +21,12 @@ echo "Existing version number: $VERSION"
 cd src
 
 # Insert generated build number
-sed -i -e "s/DEVELOPMENT_BUILD/${VERSION}${BUILD_TYPE}${BUILD_NUMBER}/" RHITMobile/RHITMobile-Info.plist
+sed -i -e "s/DEVELOPMENT_BUILD/${VERSION}${BUILD_TYPE}${BUILD_NUMBER}/" \
+    RHITMobile/RHITMobile-Info.plist
 
 # Set build number for beta screen
-sed -i -e "s/#define kRHBetaBuildNumber -1/#define kRHBetaBuildNumber ${BUILD_NUMBER}/" RHITMobile/RHBeta.h
+sed -i -e "s/#define kRHBetaBuildNumber -1/#define kRHBetaBuildNumber ${BUILD_NUMBER}/" \
+    RHITMobile/RHBeta.h
 
 # Unlock the keychain
 security list-keychains -s /Users/hudson/Library/Keychains/login.keychain
@@ -71,6 +73,7 @@ sed -i -e "s/DEVELOPMENT_BUILD/v${VERSION}${BUILD_TYPE}${BUILD_NUMBER}/" ios/Dox
 
 # Register build
 VIEW_URL=`echo "from urllib import quote_plus; print quote_plus('$BUILD_URL')" | python`
-DOWNLOAD_URL="itms-services%3A%2F%2F%3Faction%3Ddownload-manifest%26url%3D${VIEW_URL}artifact%2Fios%2Fapp-manifest-beta.plist"
+#DOWNLOAD_URL="itms-services%3A%2F%2F%3Faction%3Ddownload-manifest%26url%3D${VIEW_URL}artifact%2Fios%2Fapp-manifest-beta.plist"
+DOWNLOAD_URL="http://mobile.csse.rose-hulman.edu/hudson/job/iOS/$BUILD_NUMBER/artifact/ios/upgrade.html"
 curl -d "platform=ios&buildNumber=${BUILD_NUMBER}&buildType=${BUILD_CLASSIFICATION}&publishingKey=413eb1c0e664012ed160123139181105&viewURL=${VIEW_URL}&downloadURL=${DOWNLOAD_URL}" http://rhitmobilebeta-test.heroku.com/build/publish
 curl -d "platform=ios&buildNumber=${BUILD_NUMBER}&buildType=${BUILD_CLASSIFICATION}&publishingKey=ed2beb20e663012ef18512313b032c8e&viewURL=${VIEW_URL}&downloadURL=${DOWNLOAD_URL}" http://rhitmobilebeta.heroku.com/build/publish
