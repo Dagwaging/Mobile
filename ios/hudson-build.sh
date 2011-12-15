@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+
 # Determine which branch we're on
 if [[ `git branch --contains $GIT_COMMIT` == *master* ]]
 then
