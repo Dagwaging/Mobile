@@ -5,17 +5,20 @@
         <script type="text/javascript" src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
         <script type="text/javascript" src="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.js"></script>
     <body>
-        <div data-role="header">
-            <h1>RHIT Mobile Beta</h1>
-        </div>
-        <div data-role="content">
-            <div>
-                <strong>REQUIRED</strong>: iOS 5.0+
+        <div data-role="page">
+            <div data-role="header">
+                <h1>RHIT Mobile Beta</h1>
             </div>
-            <div>
-                <strong>IF THE DOWNLOAD FAILS</strong>: Return to this page and click the second button again.
+            <div data-role="content">
+                <div>
+                    <strong>REQUIRED</strong>: iOS 5.0+
+                </div>
+                <div>
+                    <strong>IF THE DOWNLOAD FAILS</strong>: Return to this page and click the second button again.
+                </div>
+                <a href="http://dl.dropbox.com/u/14888375/RHITMobileBeta.mobileprovision" data-role="button">Install Provisioning Profile</a>
+                <a href="itms-services://?action=download-manifest&url=http://mobile.csse.rose-hulman.edu/hudson/job/iOS/BUILD_NUMBER/artifact/ios/app-manifest-beta.plist" data-role="button">Install RHIT Mobile vVERSION</a>
             </div>
-            <a href="http://dl.dropbox.com/u/14888375/RHITMobileBeta.mobileprovision" data-role="button">Install Provisioning Profile</a>
-            <a href="itms-services://?action=download-manifest&url=http://mobile.csse.rose-hulman.edu/hudson/job/iOS/BUILD_NUMBER/artifact/ios/app-manifest-beta.plist" data-role="button">Install RHITMobile Beta vVERSION</a>
         </div>
-</body></html>
+    </body>
+</html>
