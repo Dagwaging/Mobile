@@ -75,8 +75,6 @@ namespace Rhit.Applications.ViewModel.Models {
         #endregion
         #endregion
 
-        private GeoCoordinate LastEventCoordinate { get; set; }
-
         public ObservableCollection<MapBehavior> Behaviors { get; set; }
 
         public ICommand GotoRhitCommand { get; private set; }
@@ -93,14 +91,14 @@ namespace Rhit.Applications.ViewModel.Models {
             Map.MapControl.ZoomLevel = 16;
         }
 
-        public void PolygonClick(MapPolygon polygon, MouseButtonEventArgs e) {
-            LastEventCoordinate = Map.MapControl.ViewportPointToLocation(e.GetPosition(Map.MapControl)) as GeoCoordinate;
-            Behavior.SelectLocation(polygon);
+        public void SelectLocation(MapPolygon polygon) {
+            try {
+                LocationsController.Instance.SelectLocation((int) polygon.Tag);
+            } catch { }
         }
 
-        public void MapClick(MapMouseEventArgs e) {
-            if(LastEventCoordinate == Map.MapControl.ViewportPointToLocation(e.ViewportPoint) as GeoCoordinate) return;
-            LocationsController.Instance.UnSelect();
+        public void SelectLocation(Location coordinate) {
+            Locations.SelectLocation(new GeoCoordinate(coordinate));
         }
     }
 }

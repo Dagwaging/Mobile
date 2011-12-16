@@ -61,6 +61,7 @@ namespace Rhit.Applications.ViewModel.Behaviors {
                     break;
             }
         }
+
         private void SaveCorners() {
             var corners = CornersProvider.GetCorners();
 

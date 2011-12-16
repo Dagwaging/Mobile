@@ -27,12 +27,6 @@ namespace Rhit.Applications.ViewModel.Behaviors {
 
         protected string Label { get; set; }
 
-        public void SelectLocation(MapPolygon polygon) {
-            try {
-                LocationsController.Instance.SelectLocation((int) polygon.Tag);
-            } catch { }
-        }
-
         #region Dependency Properties
         #region AreBuildingsVisible
         public bool AreBuildingsVisible {

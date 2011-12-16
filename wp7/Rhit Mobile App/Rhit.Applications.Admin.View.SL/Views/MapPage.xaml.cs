@@ -25,19 +25,30 @@ namespace Rhit.Applications.View.Views {
             DataContext = ViewModel;
         }
 
+        private MainViewModel ViewModel { get; set; }
+
+        #region Click Event Methods/Properties
+        private Point LastEventCoordinate { get; set; }
+
         void Map_MouseClick(object sender, MapMouseEventArgs e) {
-            ViewModel.MapClick(e);
+            if(LastEventCoordinate == e.ViewportPoint) return;
+            ViewModel.Locations.UnSelect();
         }
 
-        private MainViewModel ViewModel { get; set; }
+        private void MapPolygon_Click(object sender, MouseButtonEventArgs e) {
+            LastEventCoordinate = e.GetPosition(MyMap);
+            ViewModel.SelectLocation(sender as MapPolygon);
+        }
+
+        private void Pushpin_Click(object sender, MouseButtonEventArgs e) {
+            LastEventCoordinate = e.GetPosition(MyMap);
+            ViewModel.SelectLocation((sender as Pushpin).Location);
+        }
 
         private void ImageViewer_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
             //ViewModel.ClickImage(e.GetPosition((sender as ImageViewer)));
         }
-
-        private void MapPolygon_Click(object sender, MouseButtonEventArgs e) {
-            ViewModel.PolygonClick(sender as MapPolygon, e);
-        }
+        #endregion
 
         #region Implementing IBuildingCornersProvider
         public void DisplayCorners(ICollection<Location> corners) {

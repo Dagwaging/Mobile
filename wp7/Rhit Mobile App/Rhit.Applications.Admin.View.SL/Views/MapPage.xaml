@@ -92,6 +92,9 @@
                      SelectedValue="{Binding Map.CurrentSource, Mode=TwoWay}" />
         </StackPanel>
 
+        <DataTemplate x:Name="PushpinItemTemplate">
+            <map:Pushpin Location="{Binding Center}" MouseLeftButtonUp="Pushpin_Click"/>
+        </DataTemplate>
     </navigation:Page.Resources>
 
     <Grid x:Name="LayoutRoot" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
@@ -130,7 +133,7 @@
                 <map:MapLayer>
                     <map:MapItemsControl ItemsSource="{Binding Locations.Buildings}" ItemTemplate="{StaticResource PolygonItemTemplate}" Visibility="{Binding Behavior.AreBuildingsVisible, Mode=TwoWay, Converter={StaticResource VisibilityConverter}}"/>
                     <map:MapItemsControl ItemsSource="{Binding Locations.All}" ItemTemplate="{StaticResource PushpinItemTemplate}" Visibility="{Binding Behavior.AreLocationsVisible, Mode=TwoWay, Converter={StaticResource VisibilityConverter}}"/>
-                    <map:MapItemsControl ItemsSource="{Binding Locations.Corners}" ItemTemplate="{StaticResource PushpinItemTemplate2}"/>
+                    <map:MapItemsControl ItemsSource="{Binding Locations.Corners}" ItemTemplate="{StaticResource CornerPushpinTemplate}"/>
                 </map:MapLayer>
                 <controls:DraggablePushpin 
                     Content="{Binding Path=Locations.CurrentLocation, Converter={StaticResource LocationNameConverter}, Mode=TwoWay}"
@@ -175,8 +178,8 @@
                     <Line Margin="0,5" Stroke="DarkGray"  StrokeThickness="2" Stretch="Fill" X1="0" X2="1"/>
 
                     <!--Buildings Options-->
+                    <TextBlock HorizontalAlignment="Center" FontWeight="Bold" Text="{Binding Locations.CurrentLocation, Mode=TwoWay, Converter={StaticResource LocationNameConverter}, FallbackValue=Current_Location}"/>
                     <StackPanel Visibility="{Binding AreBuildingOptionsVisible, Converter={StaticResource VisibilityConverter}}">
-                        <TextBlock HorizontalAlignment="Center" FontWeight="Bold" Text="{Binding Locations.CurrentLocation, Mode=TwoWay, Converter={StaticResource LocationNameConverter}, FallbackValue=Current_Location}"/>
                         <StackPanel Visibility="{Binding Locations.CurrentLocation, Converter={StaticResource OVisibilityConverter}}">
                             <Button Content="Move Corners" Margin="5" HorizontalAlignment="Center" cmds:CommandManager.Command="{Binding Behavior.ChangeCornersCommand}" cmds:CommandManager.CommandEventName="Click" Visibility="{Binding Behavior.AreSaveCancelVisible, Converter={StaticResource ReverseVisibilityConverter}}"/>
                             <Button Content="Add/Remove Corners" Margin="5" HorizontalAlignment="Center" cmds:CommandManager.Command="{Binding Behavior.AddCornersCommand}" cmds:CommandManager.CommandEventName="Click" Visibility="{Binding Behavior.AreSaveCancelVisible, Converter={StaticResource ReverseVisibilityConverter}}"/>

@@ -20,11 +20,7 @@
         <TextBlock Text="{Binding Name}" Foreground="White"/>
     </sdk:HierarchicalDataTemplate>
 
-    <DataTemplate x:Name="PushpinItemTemplate">
-        <map:Pushpin Location="{Binding Center}"/>
-    </DataTemplate>
-
-    <DataTemplate x:Name="PushpinItemTemplate2">
+    <DataTemplate x:Name="CornerPushpinTemplate">
         <map:Pushpin Location="{Binding}"/>
     </DataTemplate>
 
