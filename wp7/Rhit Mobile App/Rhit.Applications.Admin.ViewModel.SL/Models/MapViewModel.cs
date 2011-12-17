@@ -39,10 +39,6 @@ namespace Rhit.Applications.ViewModel.Models {
             Locations.SetLocations(locations);
         }
 
-        public void IgnoreEvent(Point point) {
-            Map.EventCoordinate = (GeoCoordinate) Map.MapControl.ViewportPointToLocation(point);
-        }
-
         public void GotoRhit() {
             //TODO: Don't hard code
             Map.MapControl.Center = new GeoCoordinate(39.4820263, -87.3248677);

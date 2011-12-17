@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using Rhit.Applications.Model.Events;
 using Rhit.Applications.Model.Services;
+using Microsoft.Maps.MapControl;
 
 namespace Rhit.Applications.ViewModel.Controllers {
     public class LocationsController : DependencyObject {
@@ -59,6 +60,14 @@ namespace Rhit.Applications.ViewModel.Controllers {
             foreach(RhitLocation location in Buildings)
                 if(location.Id == id) {
                     SelectLocation(location);
+                    return;
+                }
+        }
+
+        public void SelectLocation(GeoCoordinate coordinate) {
+            foreach(RhitLocation location in All)
+                if(location.Center == coordinate) {
+                    CurrentLocation = location;
                     return;
                 }
         }

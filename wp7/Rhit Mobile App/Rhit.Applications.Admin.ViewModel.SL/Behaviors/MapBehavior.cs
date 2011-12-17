@@ -27,12 +27,6 @@ namespace Rhit.Applications.ViewModel.Behaviors {
 
         protected string Label { get; set; }
 
-        public void SelectLocation(MapPolygon polygon) {
-            try {
-                LocationsController.Instance.SelectLocation((int) polygon.Tag);
-            } catch { }
-        }
-
         #region Dependency Properties
         #region AreBuildingsVisible
         public bool AreBuildingsVisible {
@@ -61,6 +55,16 @@ namespace Rhit.Applications.ViewModel.Behaviors {
         }
 
         public static readonly DependencyProperty AreLocationsVisibleProperty =
+           DependencyProperty.Register("AreLocationsVisible", typeof(bool), typeof(MapBehavior), new PropertyMetadata(false));
+        #endregion
+
+        #region AreSaveCancelVisible
+        public bool AreSaveCancelVisible {
+            get { return (bool) GetValue(AreSaveCancelVisibleProperty); }
+            set { SetValue(AreSaveCancelVisibleProperty, value); }
+        }
+
+        public static readonly DependencyProperty AreSaveCancelVisibleProperty =
            DependencyProperty.Register("AreLocationsVisible", typeof(bool), typeof(MapBehavior), new PropertyMetadata(false));
         #endregion
         #endregion

@@ -11,6 +11,8 @@ using Rhit.Applications.ViewModel.Providers;
 namespace Rhit.Applications.ViewModel.Behaviors {
     public class BuildingsBehavior : MapBehavior {
 
+        private enum BehaviorState { Default, MovingCorners, CreatingCorners, };
+
         public BuildingsBehavior(IBuildingCornersProvider cornerProvider) : base() {
             CornersProvider = cornerProvider;
         }
@@ -20,19 +22,47 @@ namespace Rhit.Applications.ViewModel.Behaviors {
         protected override void Initialize() {
             Label = "Buildings";
             AreBuildingsVisible = true;
+            AddCornersCommand = new RelayCommand(p => CreateCorners());
             ChangeCornersCommand = new RelayCommand(p => ShowCorners());
+            State = BehaviorState.Default;
             Update();
         }
 
+        public ICommand AddCornersCommand { get; private set; }
+
         public ICommand ChangeCornersCommand { get; private set; }
+
+        private BehaviorState State { get; set; }
+
+        private void CreateCorners() {
+            if(LocationsController.Instance.CurrentLocation == null) return;
+            AreBuildingsVisible = false;
+            CornersProvider.CreateNewCorners();
+            AreSaveCancelVisible = true;
+        }
 
         private void ShowCorners() {
             if(LocationsController.Instance.CurrentLocation == null) return;
             AreBuildingsVisible = false;
             CornersProvider.DisplayCorners(LocationsController.Instance.CurrentLocation.Locations as ICollection<Location>);
+            AreSaveCancelVisible = true;
         }
 
         protected override void Save() {
+            switch(State) {
+                case BehaviorState.Default:
+                    Cancel();
+                    break;
+                case BehaviorState.MovingCorners:
+                    SaveCorners();
+                    break;
+                case BehaviorState.CreatingCorners:
+                    OverwriteCorners();
+                    break;
+            }
+        }
+
+        private void SaveCorners() {
             var corners = CornersProvider.GetCorners();
 
             var executions = new List<KeyValuePair<string, Dictionary<string, object>>>() {
@@ -50,11 +80,23 @@ namespace Rhit.Applications.ViewModel.Behaviors {
             }
 
             DataCollector.Instance.ExecuteBatchStoredProcedure(Dispatcher, executions);
+            Cancel();
+        }
+
+        private void OverwriteCorners() {
+            var corners = CornersProvider.GetCorners();
+
+            //TODO: - Scott
+            //This is the ViewModel endpoint for adding/removing corners
+            //This maybe the same as the above method, in which case just let me know
+
+            Cancel();
         }
 
         protected override void Cancel() {
-            CornersProvider.RemoveCorners();
+            CornersProvider.ClearCorners();
             AreBuildingsVisible = true;
+            AreSaveCancelVisible = false;
         }
 
         public override void Update() {

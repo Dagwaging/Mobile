@@ -16,7 +16,9 @@ namespace Rhit.Applications.View.Views {
         public MapPage() {
             InitializeComponent();
 
+            MyMap.MouseClick += new EventHandler<MapMouseEventArgs>(Map_MouseClick);
             MyMap.MapForeground.TemplateApplied += new EventHandler(MapForeground_TemplateApplied);
+
 
             //TODO: Don't use this class to implement IBuildingCornersProvider
             ViewModel = new MainViewModel(MyMap, new LocalImageLoader(), this);
@@ -25,14 +27,30 @@ namespace Rhit.Applications.View.Views {
 
         private MainViewModel ViewModel { get; set; }
 
-        private void ImageViewer_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
-            //ViewModel.ClickImage(e.GetPosition((sender as ImageViewer)));
+        #region Click Event Methods/Properties
+        private Point LastEventCoordinate { get; set; }
+
+        void Map_MouseClick(object sender, MapMouseEventArgs e) {
+            if(LastEventCoordinate == e.ViewportPoint) return;
+            ViewModel.Locations.UnSelect();
         }
 
         private void MapPolygon_Click(object sender, MouseButtonEventArgs e) {
-            ViewModel.PolygonClick(sender as MapPolygon, e);
+            LastEventCoordinate = e.GetPosition(MyMap);
+            ViewModel.SelectLocation(sender as MapPolygon);
         }
 
+        private void Pushpin_Click(object sender, MouseButtonEventArgs e) {
+            LastEventCoordinate = e.GetPosition(MyMap);
+            ViewModel.SelectLocation((sender as Pushpin).Location);
+        }
+
+        private void ImageViewer_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            //ViewModel.ClickImage(e.GetPosition((sender as ImageViewer)));
+        }
+        #endregion
+
+        #region Implementing IBuildingCornersProvider
         public void DisplayCorners(ICollection<Location> corners) {
             CornersLayer.Children.Clear();
             foreach(Location corner in corners)
@@ -46,9 +64,22 @@ namespace Rhit.Applications.View.Views {
             return corners;
         }
 
-        public void RemoveCorners() {
+        public void ClearCorners() {
+            MyMap.MouseClick -= CreateCorner;
             CornersLayer.Children.Clear();
+            
         }
+
+        public void CreateNewCorners() {
+            CornersLayer.Children.Clear();
+            MyMap.MouseClick += new EventHandler<MapMouseEventArgs>(CreateCorner);
+        }
+
+        private void CreateCorner(object sender, MapMouseEventArgs e) {
+            Location corner = MyMap.ViewportPointToLocation(e.ViewportPoint);
+            CornersLayer.Children.Add(new DraggablePushpin() { Location = corner, });
+        }
+        #endregion
 
         #region NavigationBar Initialization Methods
         void MapForeground_TemplateApplied(object sender, EventArgs e) {
@@ -60,7 +91,6 @@ namespace Rhit.Applications.View.Views {
             if(!(sender is NavigationBar)) return;
             UpdateNaviBar(sender as NavigationBar);
         }
-
 
         private void UpdateNaviBar(NavigationBar naviBar) {
             UIElementCollection children = naviBar.HorizontalPanel.Children;

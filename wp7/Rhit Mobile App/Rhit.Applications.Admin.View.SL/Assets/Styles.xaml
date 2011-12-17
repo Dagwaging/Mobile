@@ -8,6 +8,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d">
 
+    <converter:ObjectToVisibilityConverter x:Key="OVisibilityConverter"/>
     <converter:BoolToVisibilityConverter x:Key="VisibilityConverter"/>
     <converter:BoolToVisibilityConverter x:Key="ReverseVisibilityConverter" FalseValue="Visible" TrueValue="Collapsed"/>
     <converter:BoolToGridSizeConverter x:Key="GridLengthConverter"/>
@@ -19,11 +20,7 @@
         <TextBlock Text="{Binding Name}" Foreground="White"/>
     </sdk:HierarchicalDataTemplate>
 
-    <DataTemplate x:Name="PushpinItemTemplate">
-        <map:Pushpin Location="{Binding Center}"/>
-    </DataTemplate>
-
-    <DataTemplate x:Name="PushpinItemTemplate2">
+    <DataTemplate x:Name="CornerPushpinTemplate">
         <map:Pushpin Location="{Binding}"/>
     </DataTemplate>
 
