@@ -106,7 +106,6 @@
     </Compile>
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Controls\DraggablePushpin.cs" />
-    <Compile Include="Controls\ImageViewer.cs" />
     <Compile Include="Controls\LocalImageLoader.cs" />
     <Compile Include="Converters\BoolToGridSizeConverter.cs" />
     <Compile Include="Converters\ObjectToVisibilityConverter.cs" />

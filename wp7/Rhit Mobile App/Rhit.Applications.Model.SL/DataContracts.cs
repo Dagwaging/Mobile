@@ -143,24 +143,26 @@ namespace Rhit.Applications.Model {
             return location;
         }
 
-        private LocationType ConvertTypeKeyToType(string key) {
-            switch(key) {
-                case "NL":
-                    return LocationType.NormalLocation;
-                case "PI":
-                    return LocationType.PointOfInterest;
-                case "QL":
-                    return LocationType.OnQuickList;
-                case "MB":
-                    return LocationType.MenRestroom;
-                case "WB":
-                    return LocationType.WomenRestroom;
-                case "UB":
-                    return LocationType.UnisexRestroom;
-                case "PR":
-                    return LocationType.Printer;
+        private static Dictionary<string, LocationType> _locationTypes = new Dictionary<string, LocationType>() {
+            { "NL", LocationType.NormalLocation },
+            { "PI", LocationType.PointOfInterest },
+            { "QL", LocationType.OnQuickList },
+            { "MB", LocationType.MenRestroom },
+            { "WB", LocationType.WomenRestroom },
+            { "UB", LocationType.UnisexRestroom },
+            { "PR", LocationType.Printer },
+        };
+        private static LocationType ConvertTypeKeyToType(string key) {
+            return _locationTypes[key];
+        }
+
+        public static string ConvertTypeTypeToKey(LocationType type) {
+            foreach (var kvp in _locationTypes) {
+                if (kvp.Value == type) {
+                    return kvp.Key;
+                }
             }
-            return LocationType.NormalLocation;
+            return null;
         }
     }
     #endregion

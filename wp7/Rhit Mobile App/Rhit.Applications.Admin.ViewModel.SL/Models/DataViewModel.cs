@@ -183,9 +183,6 @@ namespace Rhit.Applications.ViewModel.Models {
                     // Parent Id error
                 } else {
                     // Valid parameters
-                    if(MinZoom == 0)
-                        LabelOnHybrid = false;
-
                     DataCollector.Instance.ExecuteStoredProcedure(Dispatcher, "spUpdateLocation", new Dictionary<string, object>() {
                         { "id", CurrentLocation.Id },
                         { "name", Name },
@@ -193,10 +190,36 @@ namespace Rhit.Applications.ViewModel.Models {
                         { "parent", ParentId },
                         { "description", Description },
                         { "labelonhybrid", LabelOnHybrid },
-                        { "minzoom", MinZoom },
-                        { "type", Type },
+                        { "minzoomlevel", MinZoom },
+                        { "type", Location_DC.ConvertTypeTypeToKey(Type) },
                     });
                 }
+            }
+
+            // Update the Hyperlink table
+            bool linksChanged = Links.Count != CurrentLocation.Links.Count;
+            if(!linksChanged) {
+                foreach (var link in Links) {
+                    if (!CurrentLocation.Links.ContainsKey(link.Name) || CurrentLocation.Links[link.Name] != link.Address) {
+                        linksChanged = true;
+                        break;
+                    }
+                }
+            }
+            if (linksChanged) {
+                var executions = new List<KeyValuePair<string,Dictionary<string,object>>>() {
+                    new KeyValuePair<string,Dictionary<string,object>>("spDeleteLinks", new Dictionary<string,object>() {
+                        { "location", Id }
+                    })
+                };
+                foreach (var link in Links) {
+                    executions.Add(new KeyValuePair<string, Dictionary<string, object>>("spAddLink", new Dictionary<string, object>() {
+                        { "location", Id },
+                        { "name", link.Name },
+                        { "url", link.Address }
+                    }));
+                }
+                DataCollector.Instance.ExecuteBatchStoredProcedure(Dispatcher, executions);
             }
         }
 

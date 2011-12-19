@@ -26,9 +26,10 @@ namespace Rhit.Applications.ViewModel.Controllers {
         }
 
         void MappingFinalized(object sender, FloorMappingEventArgs e) {
-            
-
             //TODO: Scott - Do something
+            foreach (var kvp in e.Mapping) {
+                
+            }
         }
 
         public static void CreateImageController(IBitmapProvider imageProvider, IBuildingMappingProvider buildingMappingProvider) {
