@@ -95,6 +95,16 @@
         <DataTemplate x:Name="PushpinItemTemplate">
             <map:Pushpin Location="{Binding Center}" MouseLeftButtonUp="Pushpin_Click"/>
         </DataTemplate>
+
+        <DataTemplate x:Name="ImagePinTemplate">
+            <Canvas>
+                <Ellipse Fill="Orange" Width="10" Height="10" Canvas.Left="{Binding X}" Canvas.Top="{Binding Y}">
+                    <Ellipse.RenderTransform>
+                        <TranslateTransform X="-5" Y="-5"/>
+                    </Ellipse.RenderTransform>
+                </Ellipse>
+            </Canvas>
+        </DataTemplate>
     </navigation:Page.Resources>
 
     <Grid x:Name="LayoutRoot" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
@@ -131,9 +141,11 @@
             <map:Map Name="MyMap" Grid.Row="0" Grid.Column="0" CredentialsProvider="AthZ1tu5ROM0PUWcIYFSxC1oQALFR-g0aoFIuL9tlbeGJ9Z6qKIRYoB_jGpct8Yu">
                 <map:MapLayer Name="CornersLayer"/>
                 <map:MapLayer>
-                    <map:MapItemsControl ItemsSource="{Binding Locations.Buildings}" ItemTemplate="{StaticResource PolygonItemTemplate}" Visibility="{Binding Behavior.AreBuildingsVisible, Mode=TwoWay, Converter={StaticResource VisibilityConverter}}"/>
-                    <map:MapItemsControl ItemsSource="{Binding Locations.All}" ItemTemplate="{StaticResource PushpinItemTemplate}" Visibility="{Binding Behavior.AreLocationsVisible, Mode=TwoWay, Converter={StaticResource VisibilityConverter}}"/>
+                    <map:MapItemsControl ItemsSource="{Binding Locations.Buildings}" ItemTemplate="{StaticResource PolygonItemTemplate}" Visibility="{Binding Behavior.ShowBuildings, Mode=TwoWay, Converter={StaticResource VisibilityConverter}}"/>
                     <map:MapItemsControl ItemsSource="{Binding Locations.Corners}" ItemTemplate="{StaticResource CornerPushpinTemplate}"/>
+                    <map:MapItemsControl ItemsSource="{Binding Locations.All}" ItemTemplate="{StaticResource PushpinItemTemplate}" Visibility="{Binding Behavior.ShowAllLocations, Mode=TwoWay, Converter={StaticResource VisibilityConverter}}"/>
+                    <map:MapItemsControl ItemsSource="{Binding Locations.Top}" ItemTemplate="{StaticResource PushpinItemTemplate}" Visibility="{Binding Behavior.ShowTopLocations, Mode=TwoWay, Converter={StaticResource VisibilityConverter}}"/>
+                    <map:MapItemsControl ItemsSource="{Binding Locations.InnerLocations}" ItemTemplate="{StaticResource PushpinItemTemplate}" Visibility="{Binding Behavior.ShowInnerLocations, Mode=TwoWay, Converter={StaticResource VisibilityConverter}}"/>
                 </map:MapLayer>
                 <controls:DraggablePushpin 
                     Content="{Binding Path=Locations.CurrentLocation, Converter={StaticResource LocationNameConverter}, Mode=TwoWay}"
@@ -143,7 +155,10 @@
             <sdk:GridSplitter Grid.Column="1" Width="8" HorizontalAlignment="Left" VerticalAlignment="Stretch" ShowsPreview="True"/>
 
             <ScrollViewer Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Margin="5,0,0,0">
-                <controls:ImageViewer CurrentImage="{Binding Image.Bitmap}" MouseLeftButtonUp="ImageViewer_MouseLeftButtonUp" PointList="{Binding Image.ImagePoints}"/>
+                <Canvas MouseLeftButtonUp="ImageViewer_Click">
+                    <Image Source="{Binding Image.Bitmap}"/>
+                    <ItemsControl ItemsSource="{Binding Image.CalibrationPoints, Mode=TwoWay}" ItemTemplate="{StaticResource ImagePinTemplate}"/>
+                </Canvas>
             </ScrollViewer>
 
             <ScrollViewer Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
@@ -177,19 +192,26 @@
 
                     <Line Margin="0,5" Stroke="DarkGray"  StrokeThickness="2" Stretch="Fill" X1="0" X2="1"/>
 
-                    <!--Buildings Options-->
+                    
                     <TextBlock HorizontalAlignment="Center" FontWeight="Bold" Text="{Binding Locations.CurrentLocation, Mode=TwoWay, Converter={StaticResource LocationNameConverter}, FallbackValue=Current_Location}"/>
-                    <StackPanel Visibility="{Binding AreBuildingOptionsVisible, Converter={StaticResource VisibilityConverter}}">
-                        <StackPanel Visibility="{Binding Locations.CurrentLocation, Converter={StaticResource OVisibilityConverter}}">
-                            <Button Content="Move Corners" Margin="5" HorizontalAlignment="Center" cmds:CommandManager.Command="{Binding Behavior.ChangeCornersCommand}" cmds:CommandManager.CommandEventName="Click" Visibility="{Binding Behavior.AreSaveCancelVisible, Converter={StaticResource ReverseVisibilityConverter}}"/>
-                            <Button Content="Add/Remove Corners" Margin="5" HorizontalAlignment="Center" cmds:CommandManager.Command="{Binding Behavior.AddCornersCommand}" cmds:CommandManager.CommandEventName="Click" Visibility="{Binding Behavior.AreSaveCancelVisible, Converter={StaticResource ReverseVisibilityConverter}}"/>
+
+                    <!--Buildings Options-->
+                    <StackPanel Visibility="{Binding ShowLocationsOptions, Converter={StaticResource VisibilityConverter}}">
+                        <StackPanel Visibility="{Binding Locations.CurrentLocation, Converter={StaticResource ObjectVisibilityConverter}}">
+                            <Button Content="Move Corners" Margin="5" HorizontalAlignment="Center" cmds:CommandManager.Command="{Binding Behavior.ChangeCornersCommand}" cmds:CommandManager.CommandEventName="Click" Visibility="{Binding Behavior.ShowSaveCancel, Converter={StaticResource ReverseVisibilityConverter}}"/>
+                            <Button Content="Add/Remove Corners" Margin="5" HorizontalAlignment="Center" cmds:CommandManager.Command="{Binding Behavior.AddCornersCommand}" cmds:CommandManager.CommandEventName="Click" Visibility="{Binding Behavior.ShowSaveCancel, Converter={StaticResource ReverseVisibilityConverter}}"/>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                <Button Content="Save" Margin="5" HorizontalAlignment="Center" cmds:CommandManager.Command="{Binding Behavior.SaveCommand}" cmds:CommandManager.CommandEventName="Click" Visibility="{Binding Behavior.AreSaveCancelVisible, Converter={StaticResource VisibilityConverter}}"/>
-                                <Button Content="Cancel" Margin="5" HorizontalAlignment="Center" cmds:CommandManager.Command="{Binding Behavior.CancelCommand}" cmds:CommandManager.CommandEventName="Click" Visibility="{Binding Behavior.AreSaveCancelVisible, Converter={StaticResource VisibilityConverter}}"/>
+                                <Button Content="Save" Margin="5" HorizontalAlignment="Center" cmds:CommandManager.Command="{Binding Behavior.SaveCommand}" cmds:CommandManager.CommandEventName="Click" Visibility="{Binding Behavior.ShowSaveCancel, Converter={StaticResource VisibilityConverter}}"/>
+                                <Button Content="Cancel" Margin="5" HorizontalAlignment="Center" cmds:CommandManager.Command="{Binding Behavior.CancelCommand}" cmds:CommandManager.CommandEventName="Click" Visibility="{Binding Behavior.ShowSaveCancel, Converter={StaticResource VisibilityConverter}}"/>
                             </StackPanel>
                         </StackPanel>
                     </StackPanel>
+                    
+                    <StackPanel Visibility="{Binding ShowLocationsOptions, Converter={StaticResource VisibilityConverter}}">
+                        
+                    </StackPanel>
                 </StackPanel>
+
             </toolkit:Expander>
         </Grid>
     </Grid>

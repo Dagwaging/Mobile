@@ -4,6 +4,7 @@ using Microsoft.Maps.MapControl;
 using Rhit.Applications.Model.Events;
 using Rhit.Applications.Mvvm.Commands;
 using Rhit.Applications.ViewModel.Controllers;
+using System.Collections.ObjectModel;
 
 namespace Rhit.Applications.ViewModel.Behaviors {
     public abstract class MapBehavior : DependencyObject {
@@ -28,44 +29,64 @@ namespace Rhit.Applications.ViewModel.Behaviors {
         protected string Label { get; set; }
 
         #region Dependency Properties
-        #region AreBuildingsVisible
-        public bool AreBuildingsVisible {
-            get { return (bool) GetValue(AreOutlinesVisibleProperty); }
-            set { SetValue(AreOutlinesVisibleProperty, value); }
+        #region ShowBuildings
+        public bool ShowBuildings {
+            get { return (bool) GetValue(ShowBuildingsProperty); }
+            set { SetValue(ShowBuildingsProperty, value); }
         }
 
-        public static readonly DependencyProperty AreOutlinesVisibleProperty =
-           DependencyProperty.Register("AreBuildingsVisible", typeof(bool), typeof(MapBehavior), new PropertyMetadata(false));
+        public static readonly DependencyProperty ShowBuildingsProperty =
+           DependencyProperty.Register("ShowBuildings", typeof(bool), typeof(MapBehavior), new PropertyMetadata(false));
         #endregion
 
-        #region AreLabelsVisible
-        public bool AreLabelsVisible {
-            get { return (bool) GetValue(AreLabelsVisibleProperty); }
-            set { SetValue(AreLabelsVisibleProperty, value); }
+        #region ShowLabels
+        public bool ShowLabels {
+            get { return (bool) GetValue(ShowLabelsProperty); }
+            set { SetValue(ShowLabelsProperty, value); }
         }
 
-        public static readonly DependencyProperty AreLabelsVisibleProperty =
-           DependencyProperty.Register("AreLabelsVisible", typeof(bool), typeof(MapBehavior), new PropertyMetadata(false));
+        public static readonly DependencyProperty ShowLabelsProperty =
+           DependencyProperty.Register("ShowLabels", typeof(bool), typeof(MapBehavior), new PropertyMetadata(false));
         #endregion
 
-        #region AreLocationsVisible
-        public bool AreLocationsVisible {
-            get { return (bool) GetValue(AreLocationsVisibleProperty); }
-            set { SetValue(AreLocationsVisibleProperty, value); }
+        #region ShowAllLocations
+        public bool ShowAllLocations {
+            get { return (bool) GetValue(ShowAllLocationsProperty); }
+            set { SetValue(ShowAllLocationsProperty, value); }
         }
 
-        public static readonly DependencyProperty AreLocationsVisibleProperty =
-           DependencyProperty.Register("AreLocationsVisible", typeof(bool), typeof(MapBehavior), new PropertyMetadata(false));
+        public static readonly DependencyProperty ShowAllLocationsProperty =
+           DependencyProperty.Register("ShowAllLocations", typeof(bool), typeof(MapBehavior), new PropertyMetadata(false));
         #endregion
 
-        #region AreSaveCancelVisible
-        public bool AreSaveCancelVisible {
-            get { return (bool) GetValue(AreSaveCancelVisibleProperty); }
-            set { SetValue(AreSaveCancelVisibleProperty, value); }
+        #region ShowInnerLocations
+        public bool ShowInnerLocations {
+            get { return (bool) GetValue(ShowInnerLocationsProperty); }
+            set { SetValue(ShowInnerLocationsProperty, value); }
         }
 
-        public static readonly DependencyProperty AreSaveCancelVisibleProperty =
-           DependencyProperty.Register("AreLocationsVisible", typeof(bool), typeof(MapBehavior), new PropertyMetadata(false));
+        public static readonly DependencyProperty ShowInnerLocationsProperty =
+           DependencyProperty.Register("ShowInnerLocations", typeof(bool), typeof(MapBehavior), new PropertyMetadata(false));
+        #endregion
+
+        #region ShowTopLocations
+        public bool ShowTopLocations {
+            get { return (bool) GetValue(ShowTopLocationsProperty); }
+            set { SetValue(ShowTopLocationsProperty, value); }
+        }
+
+        public static readonly DependencyProperty ShowTopLocationsProperty =
+           DependencyProperty.Register("ShowTopLocations", typeof(bool), typeof(MapBehavior), new PropertyMetadata(false));
+        #endregion
+
+        #region ShowSaveCancel
+        public bool ShowSaveCancel {
+            get { return (bool) GetValue(ShowSaveCancelProperty); }
+            set { SetValue(ShowSaveCancelProperty, value); }
+        }
+
+        public static readonly DependencyProperty ShowSaveCancelProperty =
+           DependencyProperty.Register("ShowSaveCancel", typeof(bool), typeof(MapBehavior), new PropertyMetadata(false));
         #endregion
         #endregion
 

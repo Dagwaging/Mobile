@@ -240,7 +240,7 @@ namespace Rhit.Applications.ViewModel.Controllers {
         //        if(_textLayer == null) return;
         //        _textLayer.Children.Clear();
         //        foreach(RhitLocation location in Outlines)
-        //            if(AreLabelsVisible && value > location.MinZoomLevel) _textLayer.Children.Add(location.GetLabel());
+        //            if(ShowLabels && value > location.MinZoomLevel) _textLayer.Children.Add(location.GetLabel());
         //    }
         //}
 
@@ -248,7 +248,7 @@ namespace Rhit.Applications.ViewModel.Controllers {
         //private void Map_MapZoom(object sender, MapZoomEventArgs e) {
         //    _zoomLevel = Map.ZoomLevel;
         //    _textLayer.Children.Clear();
-        //    if(!AreLabelsVisible) return;
+        //    if(!ShowLabels) return;
         //    foreach(RhitLocation location in Outlines) //TODO: Make more efficient
         //        if(_zoomLevel > location.MinZoomLevel) _textLayer.Children.Add(location.GetLabel());
         //}
