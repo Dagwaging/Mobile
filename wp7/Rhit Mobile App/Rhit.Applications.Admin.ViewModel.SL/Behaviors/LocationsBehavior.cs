@@ -19,7 +19,7 @@ namespace Rhit.Applications.ViewModel.Behaviors {
         protected override void Initialize() {
             //throw new NotImplementedException();
             Label = "Locations";
-            AreLocationsVisible = true;
+            ShowTopLocations = true;
         }
 
         public override void SaveSettings() {
@@ -31,7 +31,7 @@ namespace Rhit.Applications.ViewModel.Behaviors {
         }
 
         public override void Update() {
-            AreLocationsVisible = true;
+            ShowTopLocations = true;
         }
 
         protected override void LocationsChanged(object sender, Model.Events.LocationEventArgs e) {

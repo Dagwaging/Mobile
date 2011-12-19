@@ -4,23 +4,35 @@ using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using Rhit.Applications.Mvvm.Commands;
 using Rhit.Applications.ViewModel.Providers;
+using Microsoft.Maps.MapControl;
+using System.Collections.ObjectModel;
 
 namespace Rhit.Applications.ViewModel.Controllers {
     public class ImageController : DependencyObject {
         //TODO: Utilize the horizontal and vertical checkbox group to switch the orientation of the image.
         private static ImageController _instance;
 
-        private ImageController(IBitmapProvider imageProvider) {
+        private ImageController(IBitmapProvider imageProvider, IBuildingMappingProvider buildingMappingProvider) {
             ImageProvider = imageProvider;
-
+            MappingProvider = buildingMappingProvider;
+            MappingProvider.MappingFinalized += new FloorMappingEventHandler(MappingFinalized);
             Loaded = false;
 
             LoadCommand = new RelayCommand(p => LoadImage());
             CloseCommand = new RelayCommand(p => CloseImage());
+
+            CalibrationPoints = new ObservableCollection<Point>();
+            FloorPoints = new ObservableCollection<Point>();
         }
 
-        public static void CreateImageController(IBitmapProvider imageProvider) {
-            _instance = new ImageController(imageProvider);
+        void MappingFinalized(object sender, FloorMappingEventArgs e) {
+            
+
+            //TODO: Scott - Do something
+        }
+
+        public static void CreateImageController(IBitmapProvider imageProvider, IBuildingMappingProvider buildingMappingProvider) {
+            _instance = new ImageController(imageProvider, buildingMappingProvider);
         }
 
         #region Singleton Instance
@@ -29,7 +41,13 @@ namespace Rhit.Applications.ViewModel.Controllers {
         }
         #endregion
 
+        private IBuildingMappingProvider MappingProvider { get; set; }
+
         private IBitmapProvider ImageProvider { get; set; }
+
+        public ObservableCollection<Point> CalibrationPoints { get; set; }
+
+        public ObservableCollection<Point> FloorPoints { get; set; }
 
         #region Dependency Properties
         #region Bitmap
@@ -51,16 +69,6 @@ namespace Rhit.Applications.ViewModel.Controllers {
         public static readonly DependencyProperty LoadedProperty =
            DependencyProperty.Register("Loaded", typeof(bool), typeof(ImageController), new PropertyMetadata(false));
         #endregion
-
-        #region ImagePoints
-        public IList<Point> ImagePoints {
-            get { return (IList<Point>) GetValue(ImagePointsProperty); }
-            set { SetValue(ImagePointsProperty, value); }
-        }
-
-        public static readonly DependencyProperty ImagePointsProperty =
-           DependencyProperty.Register("ImagePoints", typeof(IList<Point>), typeof(ImageController), new PropertyMetadata(new List<Point>()));
-        #endregion
         #endregion
 
         #region Commands
@@ -75,6 +83,7 @@ namespace Rhit.Applications.ViewModel.Controllers {
             if(Bitmap != null) {
                 Loaded = true;
             }
+            MappingProvider.QueryMapping();
         }
 
         private void CloseImage() {
@@ -82,21 +91,8 @@ namespace Rhit.Applications.ViewModel.Controllers {
             Loaded = false;
         }
 
-        public void ClickImage(Point point) {
-            if(ImagePoints.Contains(point)) return;
-            IList<Point> points = new List<Point>();
-            foreach(Point p in ImagePoints)
-                points.Add(p);
-            points.Add(point);
-            ImagePoints = points;
-
-            //TODO: This method should be implemented like below
-            // The problem is that the dependency property object doesn't actually change, its children do.
-            // Use ObservableCollection instead.
-
-            //IList<Point> points = ImagePoints;
-            //points.Add(point);
-            //ImagePoints = points;
+        public void AddPoint(Point point) {
+            CalibrationPoints.Add(point);
         }
         #endregion
     }

@@ -13,6 +13,7 @@ namespace Rhit.Applications.ViewModel.Controllers {
 
         private LocationsController() {
             All = new ObservableCollection<RhitLocation>();
+            Top = new ObservableCollection<RhitLocation>();
             InnerLocations = new ObservableCollection<RhitLocation>();
             Buildings = new ObservableCollection<RhitLocation>();
             QuickList = new ObservableCollection<RhitLocation>();
@@ -46,7 +47,24 @@ namespace Rhit.Applications.ViewModel.Controllers {
 
         #endregion
 
+        private void UpdateCollections() {
+            PointsOfInterest.Clear();
+            QuickList.Clear();
+            foreach(RhitLocation location in All) {
+                if(location.Type == LocationType.OnQuickList) {
+                    QuickList.Add(location);
+                    PointsOfInterest.Add(location);
+                } else if(location.Type == LocationType.PointOfInterest)
+                    PointsOfInterest.Add(location);
+                if(location.ParentId == 0)
+                    Top.Add(location);
+            }
+        }
+
+        #region Collections
         public ObservableCollection<RhitLocation> All { get; set; }
+
+        public ObservableCollection<RhitLocation> Top { get; set; }
 
         public ObservableCollection<RhitLocation> Buildings { get; set; }
 
@@ -55,7 +73,19 @@ namespace Rhit.Applications.ViewModel.Controllers {
         public ObservableCollection<RhitLocation> QuickList { get; set; }
 
         public ObservableCollection<RhitLocation> PointsOfInterest { get; set; }
+        #endregion
 
+        public void SetLocations(ICollection<RhitLocation> locations) {
+            LocationEventArgs args = new LocationEventArgs();
+            args.OldLocations = All;
+            All.Clear();
+            foreach(RhitLocation location in locations) All.Add(location);
+            args.NewLocations = All;
+            UpdateCollections();
+            OnLocationsChanged(args);
+        }
+
+        #region SelectLocation Methods
         public void SelectLocation(int id) {
             foreach(RhitLocation location in Buildings)
                 if(location.Id == id) {
@@ -84,6 +114,7 @@ namespace Rhit.Applications.ViewModel.Controllers {
 
             OnCurrentLocationChanged(args);
         }
+        #endregion
 
         public void UnSelect() {
             LocationEventArgs args = new LocationEventArgs();
@@ -92,28 +123,6 @@ namespace Rhit.Applications.ViewModel.Controllers {
             args.NewLocation = CurrentLocation;
             InnerLocations.Clear();
             OnCurrentLocationChanged(args);
-        }
-
-        public void SetLocations(ICollection<RhitLocation> locations) {
-            LocationEventArgs args = new LocationEventArgs();
-            args.OldLocations = All;
-            All.Clear();
-            foreach(RhitLocation location in locations) All.Add(location);
-            args.NewLocations = All;
-            UpdateCollections();
-            OnLocationsChanged(args);
-        }
-
-        private void UpdateCollections() {
-            PointsOfInterest.Clear();
-            QuickList.Clear();
-            foreach(RhitLocation location in All) {
-                if(location.Type == LocationType.OnQuickList) {
-                    QuickList.Add(location);
-                    PointsOfInterest.Add(location);
-                } else if(location.Type == LocationType.PointOfInterest)
-                    PointsOfInterest.Add(location);
-            }
         }
 
         #region Dependency Properties
@@ -128,12 +137,12 @@ namespace Rhit.Applications.ViewModel.Controllers {
         #endregion
         #endregion
 
-        public void RemoveBuilding(RhitLocation location) {
-            if(Buildings.Contains(location)) Buildings.Remove(location);
-        }
-
         public void AddBuilding(RhitLocation location) {
             if(!Buildings.Contains(location)) Buildings.Add(location);
         }
+
+        public void RemoveBuilding(RhitLocation location) {
+            if(Buildings.Contains(location)) Buildings.Remove(location);
+        }        
     }
 }

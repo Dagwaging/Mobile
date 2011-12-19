@@ -13,11 +13,12 @@ using Rhit.Applications.ViewModel.Providers;
 
 namespace Rhit.Applications.ViewModel.Models {
     public class MainViewModel : DependencyObject {
-        public MainViewModel(Map map, IBitmapProvider imageProvider, IBuildingCornersProvider cornerProvider) {
+        public MainViewModel(Map map, IBuildingMappingProvider buildingMappingProvider,
+            IBuildingCornersProvider cornerProvider, IBitmapProvider imageProvider) {
             Locations = LocationsController.Instance;
             InitializeBehaviors(cornerProvider);
             MapController.CreateMapController(map);
-            ImageController.CreateImageController(imageProvider);
+            ImageController.CreateImageController(imageProvider, buildingMappingProvider);
             Image = ImageController.Instance;
             Map = MapController.Instance;
             GotoRhitCommand = new RelayCommand(p => GotoRhit());

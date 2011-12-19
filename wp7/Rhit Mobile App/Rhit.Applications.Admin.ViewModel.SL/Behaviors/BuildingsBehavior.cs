@@ -21,7 +21,7 @@ namespace Rhit.Applications.ViewModel.Behaviors {
 
         protected override void Initialize() {
             Label = "Buildings";
-            AreBuildingsVisible = true;
+            ShowBuildings = true;
             AddCornersCommand = new RelayCommand(p => CreateCorners());
             ChangeCornersCommand = new RelayCommand(p => ShowCorners());
             State = BehaviorState.Default;
@@ -36,30 +36,16 @@ namespace Rhit.Applications.ViewModel.Behaviors {
 
         private void CreateCorners() {
             if(LocationsController.Instance.CurrentLocation == null) return;
-            AreBuildingsVisible = false;
+            ShowBuildings = false;
             CornersProvider.CreateNewCorners();
-            AreSaveCancelVisible = true;
+            ShowSaveCancel = true;
         }
 
         private void ShowCorners() {
             if(LocationsController.Instance.CurrentLocation == null) return;
-            AreBuildingsVisible = false;
+            ShowBuildings = false;
             CornersProvider.DisplayCorners(LocationsController.Instance.CurrentLocation.Locations as ICollection<Location>);
-            AreSaveCancelVisible = true;
-        }
-
-        protected override void Save() {
-            switch(State) {
-                case BehaviorState.Default:
-                    Cancel();
-                    break;
-                case BehaviorState.MovingCorners:
-                    SaveCorners();
-                    break;
-                case BehaviorState.CreatingCorners:
-                    OverwriteCorners();
-                    break;
-            }
+            ShowSaveCancel = true;
         }
 
         private void SaveCorners() {
@@ -71,7 +57,7 @@ namespace Rhit.Applications.ViewModel.Behaviors {
                 })
             };
 
-            foreach (var corner in corners) {
+            foreach(var corner in corners) {
                 executions.Add(new KeyValuePair<string, Dictionary<string, object>>("spAddMapAreaCorner", new Dictionary<string, object>() {
                     { "location", LocationsController.Instance.CurrentLocation.Id },
                     { "lat", corner.Latitude },
@@ -83,42 +69,46 @@ namespace Rhit.Applications.ViewModel.Behaviors {
             Cancel();
         }
 
-        private void OverwriteCorners() {
-            var corners = CornersProvider.GetCorners();
-
-            //TODO: - Scott
-            //This is the ViewModel endpoint for adding/removing corners
-            //This maybe the same as the above method, in which case just let me know
-
-            Cancel();
+        protected override void Save() {
+            switch(State) {
+                case BehaviorState.Default:
+                    Cancel();
+                    break;
+                case BehaviorState.MovingCorners:
+                    SaveCorners();
+                    break;
+                case BehaviorState.CreatingCorners:
+                    SaveCorners();
+                    break;
+            }
         }
 
         protected override void Cancel() {
             CornersProvider.ClearCorners();
-            AreBuildingsVisible = true;
-            AreSaveCancelVisible = false;
+            ShowBuildings = true;
+            ShowSaveCancel = false;
         }
 
         public override void Update() {
             LocationsChanged(this, new LocationEventArgs() { NewLocations = LocationsController.Instance.All, });
-            AreBuildingsVisible = true;
+            ShowBuildings = true;
         }
 
         private bool ShouldShowLabel(RhitLocation location) {
             //TODO: Add logic to handle maps with text on them already
-            if(!AreLabelsVisible) return false;
+            if(!ShowLabels) return false;
             //if(Controller.MapControl.ZoomLevel < location.MinZoomLevel) return false;
             return true;
         }
 
         public override void SaveSettings() {
-            DataStorage.SaveState(StorageKey.VisibleOutlines, AreBuildingsVisible);
-            DataStorage.SaveState(StorageKey.VisibleLabels, AreLabelsVisible);
+            DataStorage.SaveState(StorageKey.VisibleOutlines, ShowBuildings);
+            DataStorage.SaveState(StorageKey.VisibleLabels, ShowLabels);
         }
 
         public override void LoadSettings() {
-            AreBuildingsVisible = (bool) DataStorage.LoadState<object>(StorageKey.VisibleOutlines, AreBuildingsVisible);
-            AreLabelsVisible = (bool) DataStorage.LoadState<object>(StorageKey.VisibleLabels, AreLabelsVisible);
+            ShowBuildings = (bool) DataStorage.LoadState<object>(StorageKey.VisibleOutlines, ShowBuildings);
+            ShowLabels = (bool) DataStorage.LoadState<object>(StorageKey.VisibleLabels, ShowLabels);
         }
 
         protected override void LocationsChanged(object sender, LocationEventArgs e) {
@@ -129,7 +119,7 @@ namespace Rhit.Applications.ViewModel.Behaviors {
         }
 
         protected override void CurrentLocationChanged(object sender, LocationEventArgs e) {
-            if(!AreBuildingsVisible) {
+            if(!ShowBuildings) {
                 if(e.OldLocation != null)
                     LocationsController.Instance.RemoveBuilding(e.OldLocation);
                 if(e.NewLocation != null)
