@@ -27,8 +27,13 @@ namespace Rhit.Applications.ViewModel.Controllers {
 
         void MappingFinalized(object sender, FloorMappingEventArgs e) {
             //TODO: Scott - Do something
+            MapCalibrationPoints = new Point[3];
+            ImageCalibrationPoints = new Point[3];
+            int i = 0;
             foreach (var kvp in e.Mapping) {
-                
+                MapCalibrationPoints[i] = new Point(kvp.Key.Latitude, kvp.Key.Longitude);
+                ImageCalibrationPoints[i] = kvp.Value;
+                i++;
             }
         }
 
@@ -49,6 +54,10 @@ namespace Rhit.Applications.ViewModel.Controllers {
         public ObservableCollection<Point> CalibrationPoints { get; set; }
 
         public ObservableCollection<Point> FloorPoints { get; set; }
+
+        private Point[] MapCalibrationPoints { get; set; }
+
+        private Point[] ImageCalibrationPoints { get; set; }
 
         #region Dependency Properties
         #region Bitmap
@@ -94,6 +103,38 @@ namespace Rhit.Applications.ViewModel.Controllers {
 
         public void AddPoint(Point point) {
             CalibrationPoints.Add(point);
+        }
+
+        private static void ConvertPoint(double x, double y, Point[] from, Point[] to, out double outX, out double outY) {
+            double q = (y - from[1].Y) * (from[2].X - from[1].X)
+                - (x - from[1].X) * (from[2].Y - from[1].Y);
+            double d = (from[0].X - x) * (from[2].Y - from[1].Y)
+                - (from[0].Y - y) * (from[2].X - from[1].X);
+
+            //if (d == 0)
+            //    throw something
+
+            double r = q / d;
+            q = (y - from[1].Y) * (from[0].X - x)
+                - (x - from[1].X) * (from[0].Y - y);
+            double s = q / d;
+
+            outX = (s * to[1].X + r * to[0].X - s * to[2].X - to[1].X) / (r - 1);
+            outY = (s * to[1].Y + r * to[0].Y + s * to[2].Y - to[1].Y) / (r - 1);
+        }
+
+        public Location ConvertPointImageToMap(Point p) {
+            double lat;
+            double lon;
+            ConvertPoint(p.X, p.Y, ImageCalibrationPoints, MapCalibrationPoints, out lat, out lon);
+            return new Location(lat, lon);
+        }
+
+        public Point ConvertPointMapToImage(Location l) {
+            double x;
+            double y;
+            ConvertPoint(l.Latitude, l.Longitude, MapCalibrationPoints, ImageCalibrationPoints, out x, out y);
+            return new Point(x, y);
         }
         #endregion
     }
