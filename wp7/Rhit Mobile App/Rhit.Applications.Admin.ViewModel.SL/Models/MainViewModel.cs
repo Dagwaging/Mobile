@@ -13,6 +13,10 @@ using Rhit.Applications.ViewModel.Providers;
 
 namespace Rhit.Applications.ViewModel.Models {
     public class MainViewModel : DependencyObject {
+        //TODO: Shouldn't have this constructor
+        //need it temporarily for view
+        public MainViewModel() { }
+
         public MainViewModel(Map map, IBuildingMappingProvider buildingMappingProvider,
             IBuildingCornersProvider cornerProvider, IBitmapProvider imageProvider) {
             Locations = LocationsController.Instance;

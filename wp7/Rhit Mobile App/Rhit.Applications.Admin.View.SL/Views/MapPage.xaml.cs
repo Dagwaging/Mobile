@@ -1,21 +1,21 @@
-﻿using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Navigation;
-using Rhit.Applications.View.Controls;
-using Rhit.Applications.ViewModel.Models;
-using Microsoft.Maps.MapControl;
-using Rhit.Applications.ViewModel.Providers;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Windows;
-using Microsoft.Maps.MapControl.Overlays;
+using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Navigation;
+using Microsoft.Maps.MapControl;
 using Microsoft.Maps.MapControl.Navigation;
+using Microsoft.Maps.MapControl.Overlays;
+using Rhit.Applications.View.Controls;
+using Rhit.Applications.ViewModel.Models;
+using Rhit.Applications.ViewModel.Providers;
 
 namespace Rhit.Applications.View.Views {
     public partial class MapPage : Page, IBuildingCornersProvider, IBuildingMappingProvider {
         public MapPage() {
             InitializeComponent();
-            
+
             Calibrating = false;
 
             MyMap.MouseClick += new EventHandler<MapMouseEventArgs>(Map_MouseClick);
@@ -27,7 +27,7 @@ namespace Rhit.Applications.View.Views {
             DataContext = ViewModel;
         }
 
-        private MainViewModel ViewModel { get; set; }
+        //private MainViewModel ViewModel { get; set; }
 
         #region Click Event Methods/Properties
         private Point LastEventCoordinate { get; set; }
