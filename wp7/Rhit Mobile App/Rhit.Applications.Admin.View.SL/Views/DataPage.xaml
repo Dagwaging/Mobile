@@ -62,25 +62,25 @@
                     </Grid.ColumnDefinitions>
 
                     <TextBlock Text="Name:" FontWeight="Bold" VerticalAlignment="Center" Margin="5" Grid.Row="0" Grid.Column="0"/>
-                    <TextBox Text="{Binding Name,FallbackValue='Enter Name'}" Grid.Row="0" Grid.Column="1"/>
+                    <TextBox Text="{Binding Name,FallbackValue='Enter Name',Mode=TwoWay}" Grid.Row="0" Grid.Column="1"/>
 
                     <TextBlock Text="Id:" FontWeight="Bold" VerticalAlignment="Center" Margin="5" Grid.Row="1" Grid.Column="0"/>
-                    <TextBox Text="{Binding Id,FallbackValue='Enter Id'}" Grid.Row="1" Grid.Column="1"/>
+                    <TextBox Text="{Binding Id,FallbackValue='Enter Id',Mode=TwoWay}" Grid.Row="1" Grid.Column="1"/>
 
                     <TextBlock Text="Parent Id:" FontWeight="Bold" VerticalAlignment="Center" Margin="5" Grid.Row="2" Grid.Column="0"/>
-                    <TextBox Text="{Binding ParentId,FallbackValue='Enter Id'}" Grid.Row="2" Grid.Column="1"/>
+                    <TextBox Text="{Binding ParentId,FallbackValue='Enter Id',Mode=TwoWay}" Grid.Row="2" Grid.Column="1"/>
 
                     <TextBlock Text="Min Zoom Level:" FontWeight="Bold" VerticalAlignment="Center" Margin="5" Grid.Row="3" Grid.Column="0"/>
-                    <ComboBox ItemsSource="{Binding ZoomRange}" Margin="5" HorizontalAlignment="Left" MinWidth="50" Grid.Row="3" Grid.Column="1" SelectedValue="{Binding MinZoom}"/>
+                    <ComboBox ItemsSource="{Binding ZoomRange}" Margin="5" HorizontalAlignment="Left" MinWidth="50" Grid.Row="3" Grid.Column="1" SelectedValue="{Binding MinZoom,Mode=TwoWay}"/>
 
                     <TextBlock Text="Location Type:" FontWeight="Bold" VerticalAlignment="Center" Margin="5" Grid.Row="4" Grid.Column="0"/>
-                    <ComboBox ItemsSource="{Binding Types}" SelectedValue="{Binding Type}" Grid.Row="4" Grid.Column="1" Margin="5" HorizontalAlignment="Left" MinWidth="50"/>
+                    <ComboBox ItemsSource="{Binding Types}" SelectedValue="{Binding Type,Mode=TwoWay}" Grid.Row="4" Grid.Column="1" Margin="5" HorizontalAlignment="Left" MinWidth="50"/>
 
                     <TextBlock Text="Is Departable:" FontWeight="Bold" VerticalAlignment="Center" Margin="5" Grid.Row="5" Grid.Column="0"/>
-                    <CheckBox IsChecked="{Binding IsDepartable}" Grid.Row="5" Grid.Column="1"/>
+                    <CheckBox IsChecked="{Binding IsDepartable,Mode=TwoWay}" Grid.Row="5" Grid.Column="1"/>
 
                     <TextBlock Text="Label On Hybrid:" FontWeight="Bold" VerticalAlignment="Center" Margin="5" Grid.Row="6" Grid.Column="0"/>
-                    <CheckBox IsChecked="{Binding LabelOnHybrid}" Grid.Row="6" Grid.Column="1"/>
+                    <CheckBox IsChecked="{Binding LabelOnHybrid,Mode=TwoWay}" Grid.Row="6" Grid.Column="1"/>
 
                     <TextBlock Text="Alternate Names:" FontWeight="Bold" VerticalAlignment="Center" Margin="5" Grid.Row="7" Grid.Column="0"/>
                     <ListBox ItemsSource="{Binding AltNames}" VerticalContentAlignment="Center" MinWidth="100" Margin="5" Grid.Row="7" Grid.Column="1"/>
@@ -92,7 +92,7 @@
                 </Grid>
 
                 <TextBlock Text="Description" FontWeight="Bold" VerticalAlignment="Center" Margin="5" HorizontalAlignment="Center"/>
-                <TextBox Text="{Binding Description,FallbackValue='Enter Description'}" TextWrapping="Wrap" AcceptsReturn="True" HorizontalAlignment="Stretch"/>
+                <TextBox Text="{Binding Description,FallbackValue='Enter Description',Mode=TwoWay}" TextWrapping="Wrap" AcceptsReturn="True" HorizontalAlignment="Stretch"/>
 
                 <Button Content="Save Location" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5" cmds:CommandManager.Command="{Binding SaveCommand}" cmds:CommandManager.CommandEventName="Click"/>
             </StackPanel>

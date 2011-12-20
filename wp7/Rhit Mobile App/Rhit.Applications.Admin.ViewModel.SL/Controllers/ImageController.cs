@@ -26,9 +26,7 @@ namespace Rhit.Applications.ViewModel.Controllers {
         }
 
         void MappingFinalized(object sender, FloorMappingEventArgs e) {
-            
-
-            //TODO: Scott - Do something
+            LocationsController.Instance.SetCalibrationPoints(e.Mapping, e.FloorNumber);
         }
 
         public static void CreateImageController(IBitmapProvider imageProvider, IBuildingMappingProvider buildingMappingProvider) {
