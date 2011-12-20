@@ -97,6 +97,7 @@ namespace RHITMobile
             AltNames = new List<string>();
             Center = new LatLong(row);
             Description = hideDescs ? null : (string)row["description"];
+            Floor = (int)row["floor"];
             Links = hideDescs ? null : new List<HyperLink>();
             Id = (int)row["id"];
             IsDepartable = !row.IsNull("departnode");
@@ -118,6 +119,8 @@ namespace RHITMobile
         public LatLong Center { get; set; }
         [DataMember]
         public string Description { get; set; }
+        [DataMember]
+        public int Floor { get; set; }
         [DataMember]
         public int Id { get; set; }
         [DataMember]

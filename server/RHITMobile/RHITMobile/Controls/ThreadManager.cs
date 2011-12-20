@@ -309,7 +309,7 @@ namespace RHITMobile
                             continuation = _queues[ThreadPriority.Low].Dequeue();
                             break;
                         }
-                    Thread.Sleep(7);
+                    Thread.Sleep(4);
                 }
 
                 // Continue the next item in the queue

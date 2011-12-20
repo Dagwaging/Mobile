@@ -75,11 +75,11 @@ namespace RHITMobile
 
             JsonResponse result = null;
 
-            var path = context.Request.Url.LocalPath.Split('/').SkipWhile(String.IsNullOrEmpty).TakeWhile(s => !String.IsNullOrEmpty(s));
+            var path = Uri.UnescapeDataString(context.Request.Url.LocalPath).Split('/').SkipWhile(String.IsNullOrEmpty).TakeWhile(s => !String.IsNullOrEmpty(s));
             Dictionary<string, string> query = new Dictionary<string, string>();
             if (!String.IsNullOrEmpty(context.Request.Url.Query))
             {
-                var querySplit = context.Request.Url.Query.Split('?', '&', ';').Skip(1);
+                var querySplit = Uri.UnescapeDataString(context.Request.Url.Query).Split('?', '&', ';').Skip(1);
                 foreach (string field in querySplit)
                 {
                     int equalsPos = field.IndexOf('=');
