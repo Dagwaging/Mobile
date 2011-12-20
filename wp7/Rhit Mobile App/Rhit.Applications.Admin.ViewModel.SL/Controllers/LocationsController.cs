@@ -18,6 +18,7 @@ namespace Rhit.Applications.ViewModel.Controllers {
             Buildings = new ObservableCollection<RhitLocation>();
             QuickList = new ObservableCollection<RhitLocation>();
             PointsOfInterest = new ObservableCollection<RhitLocation>();
+            LocationsOnImage = new ObservableCollection<KeyValuePair<Point, RhitLocation>>();
         }
 
         #region Singleton Instance
@@ -73,6 +74,12 @@ namespace Rhit.Applications.ViewModel.Controllers {
         public ObservableCollection<RhitLocation> QuickList { get; set; }
 
         public ObservableCollection<RhitLocation> PointsOfInterest { get; set; }
+
+        public ObservableCollection<KeyValuePair<Point, RhitLocation>> LocationsOnImage { get; set; }
+
+        private Point[] MapCalibrationPoints { get; set; }
+
+        private Point[] ImageCalibrationPoints { get; set; }
         #endregion
 
         public void SetLocations(ICollection<RhitLocation> locations) {
@@ -143,6 +150,54 @@ namespace Rhit.Applications.ViewModel.Controllers {
 
         public void RemoveBuilding(RhitLocation location) {
             if(Buildings.Contains(location)) Buildings.Remove(location);
-        }        
+        }
+
+        public void SetCalibrationPoints(Dictionary<Location, Point> mapping, int floor) {
+            MapCalibrationPoints = new Point[3];
+            ImageCalibrationPoints = new Point[3];
+            int i = 0;
+            foreach (var kvp in mapping) {
+                MapCalibrationPoints[i] = new Point(kvp.Key.Latitude, kvp.Key.Longitude);
+                ImageCalibrationPoints[i] = kvp.Value;
+                i++;
+            }
+
+            LocationsOnImage.Clear();
+            foreach (var location in InnerLocations)
+                if (location.Floor == floor)
+                    LocationsOnImage.Add(new KeyValuePair<Point, RhitLocation>(ConvertPointMapToImage(location.Center), location));
+        }
+
+        private static void ConvertPoint(double x, double y, Point[] from, Point[] to, out double outX, out double outY) {
+            double q = (y - from[1].Y) * (from[2].X - from[1].X)
+                - (x - from[1].X) * (from[2].Y - from[1].Y);
+            double d = (from[0].X - x) * (from[2].Y - from[1].Y)
+                - (from[0].Y - y) * (from[2].X - from[1].X);
+
+            //if (d == 0)
+            //    throw something
+
+            double r = q / d;
+            q = (y - from[1].Y) * (from[0].X - x)
+                - (x - from[1].X) * (from[0].Y - y);
+            double s = q / d;
+
+            outX = (s * to[1].X + r * to[0].X - s * to[2].X - to[1].X) / (r - 1);
+            outY = (s * to[1].Y + r * to[0].Y + s * to[2].Y - to[1].Y) / (r - 1);
+        }
+
+        public Location ConvertPointImageToMap(Point p) {
+            double lat;
+            double lon;
+            ConvertPoint(p.X, p.Y, ImageCalibrationPoints, MapCalibrationPoints, out lat, out lon);
+            return new Location(lat, lon);
+        }
+
+        public Point ConvertPointMapToImage(Location l) {
+            double x;
+            double y;
+            ConvertPoint(l.Latitude, l.Longitude, MapCalibrationPoints, ImageCalibrationPoints, out x, out y);
+            return new Point(x, y);
+        }
     }
 }

@@ -55,6 +55,9 @@ namespace Rhit.Applications.Model {
         /// <summary> Description of the location. </summary>
         public string Description { get; set; }
 
+        /// <summary> Floor of the location. </summary>
+        public int Floor { get; set; }
+
         /// <summary> Id of the location (Used only by the service). </summary>
         public int Id { get; set; }
 
@@ -182,6 +185,7 @@ namespace Rhit.Applications.Model {
             IsDepartable = IsDepartable;
             Links = location.Links;
             AltNames = location.AltNames;
+            Floor = location.Floor;
         }
 
         /// <summary>

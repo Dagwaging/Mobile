@@ -92,6 +92,9 @@ namespace Rhit.Applications.Model {
         [DataMember(Name = "Description")]
         public string Description { get; set; }
 
+        [DataMember(Name = "Floor")]
+        public int Floor { get; set; }
+
         [DataMember(Name = "Id")]
         public int Id { get; set; }
 
@@ -135,6 +138,7 @@ namespace Rhit.Applications.Model {
                 IsDepartable = IsDepartable,
                 AltNames = AltNames,
                 ParentId = ParentId,
+                Floor = Floor,
             };
             if(LocationData != null) {
                 location.MinZoomLevel = LocationData.MinZoomLevel;
