@@ -13,10 +13,13 @@ using Rhit.Applications.ViewModel.Providers;
 
 namespace Rhit.Applications.ViewModel.Models {
     public class MainViewModel : DependencyObject {
-        //TODO: Shouldn't have this constructor
-        //need it temporarily for view
-        public MainViewModel(Map map, IBuildingMappingProvider buildingMappingProvider,
+        //NOTE: Requires a call to Initialize before class is usable
+        //Note: NoArg Constructor so ViewModel can be created in xaml
+        public MainViewModel() { }
+
+        public void Initialize(Map map, IBuildingMappingProvider buildingMappingProvider,
             IBuildingCornersProvider cornerProvider, IBitmapProvider imageProvider) {
+
             Locations = LocationsController.Instance;
             InitializeBehaviors(cornerProvider);
             MapController.CreateMapController(map);
@@ -30,6 +33,11 @@ namespace Rhit.Applications.ViewModel.Models {
                 DataCollector.Instance.UpdateAvailable += new ServiceEventHandler(OnLocationsRetrieved);
             else OnLocationsRetrieved(this, new ServiceEventArgs());
             Mapper = LocationPositionMapper.Instance;
+        }
+
+        public MainViewModel(Map map, IBuildingMappingProvider buildingMappingProvider,
+            IBuildingCornersProvider cornerProvider, IBitmapProvider imageProvider) {
+                Initialize(map, buildingMappingProvider, cornerProvider, imageProvider);
         }
 
         private void OnLocationsRetrieved(object sender, ServiceEventArgs e) {

@@ -9,9 +9,7 @@ using System.Windows;
 namespace Rhit.Applications.Model.Services {
     public static class ResponseHandler {
 
-
         public static event ServerEventHandler ResponseReceived;
-
 
         private static void OnResponse(ServerEventArgs e) {
             if(ResponseReceived != null) ResponseReceived(null, e);

@@ -10,19 +10,26 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 
 namespace Rhit.Applications.View.Utility {
     public class TaskContainer : DependencyObject {
         public TaskContainer() {
             Tasks = new ObservableCollection<Task>();
+            Tasks.CollectionChanged += new NotifyCollectionChangedEventHandler(Tasks_CollectionChanged);
         }
-        public TaskContainer(IEnumerable<Task> tasks) {
-            Tasks = new ObservableCollection<Task>();
-            AddTasks(tasks);
+
+        private void Tasks_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
+            if(e.Action != NotifyCollectionChangedAction.Add) return;
+            foreach(Task task in e.NewItems)
+                task.Activated += new EventHandler(Task_Activated);
+        }
+
+        private void Task_Activated(object sender, EventArgs e) {
+            CurrentTask = (sender as Task);
         }
 
         public ObservableCollection<Task> Tasks { get; private set; }
-
 
         #region Dependency Properties
         #region CurrentTask

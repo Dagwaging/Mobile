@@ -10,39 +10,49 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
+using Rhit.Applications.Mvvm.Commands;
 
 namespace Rhit.Applications.View.Utility {
     public class Task : DependencyObject {
         public Task() {
             Steps = new ObservableCollection<TaskStep>();
+            ActivateCommand = new RelayCommand(p => Activate());
         }
 
-        public Task(IEnumerable<TaskStep> collection) {
-            Steps = new ObservableCollection<TaskStep>();
-            AddSteps(collection);
+        public event EventHandler Activated;
+
+        private void OnAvtivate(EventArgs e) {
+            if(Activated != null) Activated(this, e);
         }
 
-        //public ICommand Command { get; set; }
+        public ICommand ActivateCommand { get; set; }
+
+        private void Activate() {
+            if(Steps.Count > 0)
+                CurrentStep = Steps[0];
+            OnAvtivate(new EventArgs());
+            if(StartCommand != null) StartCommand.Execute(null);
+        }
 
         #region Dependency Properties
-        #region Command
-        public ICommand Command {
-            get {
-                return (ICommand) GetValue(CommandProperty);
-            }
-            set {
-                SetValue(CommandProperty, value);
-            }
+        #region StartCommand
+        public ICommand StartCommand {
+            get { return (ICommand) GetValue(StartCommandProperty); }
+            set { SetValue(StartCommandProperty, value); }
         }
 
-        public static readonly DependencyProperty CommandProperty =
-           DependencyProperty.Register("Command", typeof(ICommand), typeof(Task), new PropertyMetadata(null, new PropertyChangedCallback(OnCommandChanged)));
+        public static readonly DependencyProperty StartCommandProperty =
+           DependencyProperty.Register("StartCommand", typeof(ICommand), typeof(Task), new PropertyMetadata(null));
+        #endregion
 
-        private static void OnCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
-            var a = d;
-            var b = e;
-            return;
+        #region CompletedCommand
+        public ICommand CompletedCommand {
+            get { return (ICommand) GetValue(CompletedCommandProperty); }
+            set { SetValue(CompletedCommandProperty, value); }
         }
+
+        public static readonly DependencyProperty CompletedCommandProperty =
+           DependencyProperty.Register("CompletedCommand", typeof(ICommand), typeof(Task), new PropertyMetadata(null));
         #endregion
 
         #region Label
@@ -53,6 +63,16 @@ namespace Rhit.Applications.View.Utility {
 
         public static readonly DependencyProperty LabelProperty =
            DependencyProperty.Register("Label", typeof(string), typeof(Task), new PropertyMetadata(""));
+        #endregion
+
+        #region ToolTip
+        public string ToolTip {
+            get { return (string) GetValue(ToolTipProperty); }
+            set { SetValue(ToolTipProperty, value); }
+        }
+
+        public static readonly DependencyProperty ToolTipProperty =
+           DependencyProperty.Register("ToolTip", typeof(string), typeof(Task), new PropertyMetadata(""));
         #endregion
 
         #region CurrentStep

@@ -11,6 +11,7 @@ using Rhit.Applications.View.Controls;
 using Rhit.Applications.ViewModel.Models;
 using Rhit.Applications.ViewModel.Providers;
 using System.Collections.ObjectModel;
+using Rhit.Applications.Mvvm.Commands;
 
 namespace Rhit.Applications.View.Views {
     public partial class MapPage : Page, IBuildingCornersProvider {
@@ -27,11 +28,10 @@ namespace Rhit.Applications.View.Views {
             MyMap.MapForeground.TemplateApplied += new EventHandler(MapForeground_TemplateApplied);
 
             //TODO: Don't use this class to implement IBuildingCornersProvider
-            ViewModel = new MainViewModel(MyMap, Calibrator, this, new LocalImageLoader());
+            ViewModel.Initialize(MyMap, Calibrator, this, new LocalImageLoader());
             DataContext = ViewModel;
-        }
 
-        public MainViewModel ViewModel { get; set; }
+        }
 
         #region Click Event Methods/Properties
         private Point LastEventCoordinate { get; set; }
@@ -121,6 +121,18 @@ namespace Rhit.Applications.View.Views {
         #endregion
 
 
+    }
+
+    public class SampleCommandStore : DependencyObject {
+        public SampleCommandStore() {
+            SampleCommand = new RelayCommand(p => Sample());
+        }
+
+        public ICommand SampleCommand { get; private set; }
+
+        private void Sample() {
+            return;
+        }
     }
 
     public class CalibrationHandler : DependencyObject, IBuildingMappingProvider {
