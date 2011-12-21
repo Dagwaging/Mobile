@@ -56,17 +56,16 @@ namespace Rhit.Applications.ViewModel.Controllers {
         private static void Convert(double x, double y, Point[] from, Point[] to, out double outX, out double outY) {
             double q = (y - from[1].Y) * (from[2].X - from[1].X) - (x - from[1].X) * (from[2].Y - from[1].Y);
             double d = (from[0].X - x) * (from[2].Y - from[1].Y) - (from[0].Y - y) * (from[2].X - from[1].X);
-
+            
             //if (d == 0)
             //    throw something
 
             double r = q / d;
-            q = (y - from[1].Y) * (from[0].X - x)
-                - (x - from[1].X) * (from[0].Y - y);
+            q = (y - from[1].Y) * (from[0].X - x) - (x - from[1].X) * (from[0].Y - y);
             double s = q / d;
 
             outX = (s * to[1].X + r * to[0].X - s * to[2].X - to[1].X) / (r - 1);
-            outY = (s * to[1].Y + r * to[0].Y + s * to[2].Y - to[1].Y) / (r - 1);
+            outY = (s * to[1].Y + r * to[0].Y - s * to[2].Y - to[1].Y) / (r - 1);
         }
 
         public Location ConvertPositionToLocation(Point p) {
