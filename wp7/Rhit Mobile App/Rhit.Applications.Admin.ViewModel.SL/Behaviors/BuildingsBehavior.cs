@@ -39,6 +39,7 @@ namespace Rhit.Applications.ViewModel.Behaviors {
 
         private void CreateCorners() {
             if(LocationsController.Instance.CurrentLocation == null) return;
+            State = BehaviorState.CreatingCorners;
             ShowBuildings = false;
             CornersProvider.CreateNewCorners();
             ShowSaveCancel = true;
@@ -46,6 +47,7 @@ namespace Rhit.Applications.ViewModel.Behaviors {
 
         private void ShowCorners() {
             if(LocationsController.Instance.CurrentLocation == null) return;
+            State = BehaviorState.MovingCorners;
             ShowBuildings = false;
             CornersProvider.DisplayCorners(LocationsController.Instance.CurrentLocation.Corners as ICollection<Location>);
             ShowSaveCancel = true;
@@ -74,13 +76,16 @@ namespace Rhit.Applications.ViewModel.Behaviors {
 
         private void LoadFloor() {
             if(LocationsController.Instance.CurrentLocation == null) return;
+            State = BehaviorState.Floor;
             ShowBuildings = false;
             ShowFloorLocations = true;
             ImageController.Instance.LoadImage();
         }
 
         private void SaveFloor() {
-
+            ImageController.Instance.CloseImage();
+            LocationPositionMapper.Instance.Save();
+            Cancel();
         }
 
         protected override void Save() {
@@ -101,9 +106,11 @@ namespace Rhit.Applications.ViewModel.Behaviors {
         }
 
         protected override void Cancel() {
+            if(State == BehaviorState.Floor) ImageController.Instance.CloseImage();
             CornersProvider.ClearCorners();
             ShowBuildings = true;
             ShowSaveCancel = false;
+            State = BehaviorState.Default;
         }
 
         public override void Update() {

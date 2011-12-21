@@ -27,8 +27,8 @@
         <DataTemplate x:Name="DualItemTemplate">
             <controls:DraggablePushpin VirtualLocation="{Binding Location, Mode=TwoWay}"/>
         </DataTemplate>
-        
-        <util:TaskContainer x:Name="TaskManager">
+
+        <util:TaskContainer x:Name="TaskManager" CompletedCommand="{Binding Behavior.SaveCommand, ElementName=ViewModel}" CanceledCommand="{Binding Behavior.CancelCommand, ElementName=ViewModel}">
             <util:TaskContainer.Tasks>
                 <util:Task Label="Move Corners" ToolTip="Move the corners of the selected building" StartCommand="{Binding Behavior.ChangeCornersCommand, ElementName=ViewModel}">
                     <util:Task.Steps>
@@ -210,7 +210,7 @@
                     <map:MapItemsControl ItemsSource="{Binding Mapper.Locations}" ItemTemplate="{StaticResource DualItemTemplate}"/>
                     <map:MapItemsControl ItemsSource="{Binding Locations, Mode=TwoWay, ElementName=Calibrator}" ItemTemplate="{StaticResource CalPushpinItemTemplate}"/>
                 </map:MapLayer>
-                <controls:DraggablePushpin 
+                <controls:DraggablePushpin
                     Content="{Binding Path=Locations.CurrentLocation, Converter={StaticResource LocationNameConverter}, Mode=TwoWay}"
                     Location="{Binding Locations.CurrentLocation, Converter={StaticResource LocationCenterConverter}, Mode=TwoWay}"/>
             </map:Map>
@@ -243,7 +243,7 @@
                     <Button cmds:CommandManager.Command="{Binding GotoRhitCommand}" cmds:CommandManager.CommandEventName="Click" Margin="5" Content="Goto RHIT" HorizontalAlignment="Center"/>
 
 
-                    <Border BorderThickness="2" BorderBrush="Black" Margin="1">
+                    <Border BorderThickness="2" BorderBrush="Black" Margin="1" Visibility="{Binding CurrentTask, ElementName=TaskManager, Converter={StaticResource RObjectVisibilityConverter}}">
                         <StackPanel>
                             <StackPanel.Resources>
                                 <DataTemplate x:Name="TaskTemplate">
@@ -258,8 +258,8 @@
                                 ItemTemplate="{StaticResource TaskTemplate}"/>
                         </StackPanel>
                     </Border>
-                    
-                    <Border BorderThickness="2" BorderBrush="Black" Margin="1">
+
+                    <Border BorderThickness="2" BorderBrush="Black" Margin="1" Visibility="{Binding CurrentTask, ElementName=TaskManager, Converter={StaticResource ObjectVisibilityConverter}}">
                         <StackPanel DataContext="{StaticResource TaskManager}">
                             <TextBlock Text="Curent Task:" Margin="5,0,0,0"/>
                             <TextBlock Text="{Binding CurrentTask.Label}" HorizontalAlignment="Center"/>
@@ -270,6 +270,10 @@
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
                             </ListBox>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <Button Content="Save" Margin="5" HorizontalAlignment="Center" cmds:CommandManager.Command="{Binding CompleteCommand}" cmds:CommandManager.CommandEventName="Click"/>
+                                <Button Content="Cancel" Margin="5" HorizontalAlignment="Center" cmds:CommandManager.Command="{Binding CancelCommand}" cmds:CommandManager.CommandEventName="Click"/>
+                            </StackPanel>
                         </StackPanel>
                     </Border>
 

@@ -3,20 +3,21 @@
            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
            xmlns:controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls"
                       xmlns:util="clr-namespace:Rhit.Applications.Mvvm.Utilities;assembly=Rhit.Applications.Mvvm.SL"
-           Width="400" Height="300" 
+           Width="Auto" Height="Auto" 
            Title="Building Floor Number">
-    <Grid x:Name="LayoutRoot" Margin="2">
+    <Grid Margin="2">
         <Grid.RowDefinitions>
-            <RowDefinition />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*"/>
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <StackPanel>
-            <TextBlock Text="Enter the floor number:"/>
-            <TextBox Text="{Binding FloorNumber, Mode=TwoWay, ValidatesOnExceptions=True}" util:BindingUtility.UpdateSourceOnChange="True" HorizontalAlignment="Left"/>
-            <TextBox/>
+            <TextBlock Margin="5" Text="Enter the corresponding floor number of the loaded image." VerticalAlignment="Center"/>
+            <TextBox x:Name="FloorNumberBox" Margin="5" MinWidth="50" VerticalAlignment="Center" Text="{Binding FloorNumber, Mode=TwoWay, ValidatesOnExceptions=True}" util:BindingUtility.UpdateSourceOnChange="True" HorizontalAlignment="Left" KeyUp="TextBox_KeyUp"/>
         </StackPanel>
-
-        <Button x:Name="CancelButton" Content="Cancel" Click="CancelButton_Click" Width="75" Height="23" HorizontalAlignment="Right" Margin="0,12,0,0" Grid.Row="1" />
-        <Button x:Name="OKButton" Content="OK" Click="OKButton_Click" Width="75" Height="23" HorizontalAlignment="Right" Margin="0,12,79,0" Grid.Row="1" />
+        <StackPanel Orientation="Horizontal" Grid.Row="2" FlowDirection="RightToLeft" Margin="0,8,0,0">
+            <!--<Button Content="Cancel" Click="CancelButton_Click" Width="75" Height="23" HorizontalAlignment="Right" Margin="5,0,0,0"/>-->
+            <Button Content="OK" Click="OKButton_Click" Width="75" Height="23" HorizontalAlignment="Right" Margin="0"/>
+        </StackPanel>
     </Grid>
 </controls:ChildWindow>

@@ -31,6 +31,10 @@ namespace Rhit.Applications.ViewModel.Controllers {
             Locations.Clear();
         }
 
+        public void Save() {
+            //TODO: Scott - save new locations of this.Locations
+        }
+
         public void ApplyMapping(Dictionary<Location, Point> mapping, int floor) {
             Clear();
             MapCalibrationPoints = new Point[3];

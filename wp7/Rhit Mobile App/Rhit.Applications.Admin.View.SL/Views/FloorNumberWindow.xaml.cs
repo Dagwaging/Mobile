@@ -15,6 +15,7 @@ namespace Rhit.Applications.View.Views {
         public FloorNumberWindow() {
             InitializeComponent();
             DataContext = this;
+            FloorNumberBox.Focus();
         }
 
         private string floorNumber;
@@ -26,10 +27,9 @@ namespace Rhit.Applications.View.Views {
                     floorNumber = value;
                     return;
                 }
-                if(!int.TryParse(value, out intValue))
-                    throw new Exception("Only enter numbers");
-                else
-                    floorNumber = value;
+                if(int.TryParse(value, out intValue)) floorNumber = value;
+                else throw new Exception("Only enter integers");
+                
             }
         }
 
@@ -45,6 +45,10 @@ namespace Rhit.Applications.View.Views {
             int intValue = 0;
             int.TryParse(floorNumber, out intValue);
             return intValue;
+        }
+
+        private void TextBox_KeyUp(object sender, KeyEventArgs e) {
+            if(e.Key == Key.Enter) this.DialogResult = true;
         }
     }
 }

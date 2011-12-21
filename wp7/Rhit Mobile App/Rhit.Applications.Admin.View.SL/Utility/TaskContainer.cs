@@ -11,13 +11,30 @@ using System.Windows.Shapes;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using Rhit.Applications.Mvvm.Commands;
 
 namespace Rhit.Applications.View.Utility {
     public class TaskContainer : DependencyObject {
         public TaskContainer() {
             Tasks = new ObservableCollection<Task>();
             Tasks.CollectionChanged += new NotifyCollectionChangedEventHandler(Tasks_CollectionChanged);
+            CompleteCommand = new RelayCommand(p => Complete());
+            CancelCommand = new RelayCommand(p => Cancel());
         }
+
+        public void Complete() {
+            CurrentTask = null;
+            if(CompletedCommand != null) CompletedCommand.Execute(null);
+        }
+
+        public void Cancel() {
+            CurrentTask = null;
+            if(CanceledCommand != null) CanceledCommand.Execute(null);
+        }
+
+        public ICommand CompleteCommand { get; set; }
+
+        public ICommand CancelCommand { get; set; }
 
         private void Tasks_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
             if(e.Action != NotifyCollectionChangedAction.Add) return;
@@ -32,6 +49,26 @@ namespace Rhit.Applications.View.Utility {
         public ObservableCollection<Task> Tasks { get; private set; }
 
         #region Dependency Properties
+        #region CompleteCommand
+        public ICommand CompletedCommand {
+            get { return (ICommand) GetValue(CompletedCommandProperty); }
+            set { SetValue(CompletedCommandProperty, value); }
+        }
+
+        public static readonly DependencyProperty CompletedCommandProperty =
+           DependencyProperty.Register("CompletedCommand", typeof(ICommand), typeof(TaskContainer), new PropertyMetadata(null));
+        #endregion
+
+        #region CancelCommand
+        public ICommand CanceledCommand {
+            get { return (ICommand) GetValue(CanceledCommandProperty); }
+            set { SetValue(CanceledCommandProperty, value); }
+        }
+
+        public static readonly DependencyProperty CanceledCommandProperty =
+           DependencyProperty.Register("CanceledCommand", typeof(ICommand), typeof(TaskContainer), new PropertyMetadata(null));
+        #endregion
+
         #region CurrentTask
         public Task CurrentTask {
             get { return (Task) GetValue(CurrentTaskProperty); }

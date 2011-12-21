@@ -28,8 +28,8 @@ namespace Rhit.Applications.View.Utility {
         public ICommand ActivateCommand { get; set; }
 
         private void Activate() {
-            if(Steps.Count > 0)
-                CurrentStep = Steps[0];
+            if(Steps.Count > 0) CurrentStep = Steps[0];
+            else CurrentStep = null;
             OnAvtivate(new EventArgs());
             if(StartCommand != null) StartCommand.Execute(null);
         }
@@ -43,16 +43,6 @@ namespace Rhit.Applications.View.Utility {
 
         public static readonly DependencyProperty StartCommandProperty =
            DependencyProperty.Register("StartCommand", typeof(ICommand), typeof(Task), new PropertyMetadata(null));
-        #endregion
-
-        #region CompletedCommand
-        public ICommand CompletedCommand {
-            get { return (ICommand) GetValue(CompletedCommandProperty); }
-            set { SetValue(CompletedCommandProperty, value); }
-        }
-
-        public static readonly DependencyProperty CompletedCommandProperty =
-           DependencyProperty.Register("CompletedCommand", typeof(ICommand), typeof(Task), new PropertyMetadata(null));
         #endregion
 
         #region Label

@@ -9,6 +9,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d">
 
     <converter:ObjectToVisibilityConverter x:Key="ObjectVisibilityConverter"/>
+    <converter:ObjectToVisibilityConverter x:Key="RObjectVisibilityConverter" NullValue="Visible" NotNullValue="Collapsed"/>
     <converter:BoolToVisibilityConverter x:Key="VisibilityConverter"/>
     <converter:BoolToVisibilityConverter x:Key="ReverseVisibilityConverter" FalseValue="Visible" TrueValue="Collapsed"/>
     <converter:BoolToGridSizeConverter x:Key="GridLengthConverter"/>
