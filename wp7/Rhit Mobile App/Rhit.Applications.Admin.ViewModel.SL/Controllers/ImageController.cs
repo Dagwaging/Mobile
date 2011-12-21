@@ -18,15 +18,12 @@ namespace Rhit.Applications.ViewModel.Controllers {
             MappingProvider.MappingFinalized += new FloorMappingEventHandler(MappingFinalized);
             Loaded = false;
 
-            LoadCommand = new RelayCommand(p => LoadImage());
-            CloseCommand = new RelayCommand(p => CloseImage());
-
             CalibrationPoints = new ObservableCollection<Point>();
             FloorPoints = new ObservableCollection<Point>();
         }
 
         void MappingFinalized(object sender, FloorMappingEventArgs e) {
-            LocationsController.Instance.SetCalibrationPoints(e.Mapping, e.FloorNumber);
+            LocationPositionMapper.Instance.ApplyMapping(e.Mapping, e.FloorNumber);
         }
 
         public static void CreateImageController(IBitmapProvider imageProvider, IBuildingMappingProvider buildingMappingProvider) {
@@ -69,14 +66,8 @@ namespace Rhit.Applications.ViewModel.Controllers {
         #endregion
         #endregion
 
-        #region Commands
-        public ICommand LoadCommand { get; private set; }
-
-        public ICommand CloseCommand { get; private set; }
-        #endregion
-
         #region Methods
-        private void LoadImage() {
+        public void LoadImage() {
             Bitmap = ImageProvider.GetImage();
             if(Bitmap != null) {
                 Loaded = true;
@@ -84,7 +75,7 @@ namespace Rhit.Applications.ViewModel.Controllers {
             MappingProvider.QueryMapping();
         }
 
-        private void CloseImage() {
+        public void CloseImage() {
             Bitmap = null;
             Loaded = false;
         }

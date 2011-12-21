@@ -2,38 +2,55 @@
 using System.Windows.Input;
 using Microsoft.Maps.MapControl;
 using Microsoft.Maps.MapControl.Core;
+using System.Windows;
+using System.Windows.Media;
 
 namespace Rhit.Applications.View.Controls {
     public class DraggablePushpin : Pushpin {
         private bool isDragging = false;
-        EventHandler<MapMouseDragEventArgs> ParentMapMousePanHandler;
-        MouseButtonEventHandler ParentMapMouseLeftButtonUpHandler;
-        MouseEventHandler ParentMapMouseMoveHandler;
+        private EventHandler<MapMouseDragEventArgs> ParentMapMousePanHandler;
+        private MouseButtonEventHandler ParentMapMouseLeftButtonUpHandler;
+        private MouseEventHandler ParentMapMouseMoveHandler;
 
         private void AddEventHandlers() {
             // Check to see if this is the event handlers have been attached yet and if not, attach them.
             // This will only happen on the first click of the Pushpin.
-            MapLayer parentLayer = Parent as MapLayer;
-            if(parentLayer != null) {
-                MapBase parentMap = parentLayer.ParentMap;
-                if(parentMap != null) {
-                    if(ParentMapMousePanHandler == null) {
-                        ParentMapMousePanHandler = new EventHandler<MapMouseDragEventArgs>(ParentMap_MousePan);
-                        parentMap.MousePan += ParentMapMousePanHandler;
-                    }
-                    if(ParentMapMouseLeftButtonUpHandler == null) {
-                        ParentMapMouseLeftButtonUpHandler = new MouseButtonEventHandler(ParentMap_MouseLeftButtonUp);
-                        parentMap.MouseLeftButtonUp += ParentMapMouseLeftButtonUpHandler;
-                    }
-                    if(ParentMapMouseMoveHandler == null) {
-                        ParentMapMouseMoveHandler = new MouseEventHandler(ParentMap_MouseMove);
-                        parentMap.MouseMove += ParentMapMouseMoveHandler;
-                    }
-                }
+            if(ParentMap == null) {
+                MapLayer parentLayer = Parent as MapLayer;
+                if(parentLayer == null) return;
+                ParentMap = parentLayer.ParentMap;
             }
+
+            if(ParentMapMousePanHandler == null) {
+                ParentMapMousePanHandler = new EventHandler<MapMouseDragEventArgs>(ParentMap_MousePan);
+                ParentMap.MousePan += ParentMapMousePanHandler;
+            }
+            if(ParentMapMouseLeftButtonUpHandler == null) {
+                ParentMapMouseLeftButtonUpHandler = new MouseButtonEventHandler(ParentMap_MouseLeftButtonUp);
+                ParentMap.MouseLeftButtonUp += ParentMapMouseLeftButtonUpHandler;
+            }
+            if(ParentMapMouseMoveHandler == null) {
+                ParentMapMouseMoveHandler = new MouseEventHandler(ParentMap_MouseMove);
+                ParentMap.MouseMove += ParentMapMouseMoveHandler;
+            }
+
         }
 
-        // Event Handler for Pushpin
+        public static MapBase ParentMap { get; set; }
+
+        public static T FindVisualParent<T>(DependencyObject obj) where T : DependencyObject {
+            DependencyObject parent = VisualTreeHelper.GetParent(obj);
+            while(parent != null) {
+                T typed = parent as T;
+                if(typed != null) {
+                    return typed;
+                }
+                parent = VisualTreeHelper.GetParent(parent);
+            }
+            return null;
+        }
+
+        #region Event Handlers
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e) {
             // I do this initialization here because it is the first point
             //   where I know the pushpin is added to the map.
@@ -45,28 +62,43 @@ namespace Rhit.Applications.View.Controls {
             base.OnMouseLeftButtonDown(e);
         }
 
-        #region "Mouse Event Handler Methods"
-
-        void ParentMap_MousePan(object sender, MapMouseDragEventArgs e) {
+        private void ParentMap_MousePan(object sender, MapMouseDragEventArgs e) {
             // If the Pushpin is being dragged, then suppress the
             //  other event handlers from firing
             if(isDragging) e.Handled = true;
         }
 
-        void ParentMap_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
-            // Left Mouse Button released, stop dragging the Pushpin
+        private void ParentMap_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            if(isDragging) VirtualLocation = Location;
             isDragging = false;
         }
 
-        void ParentMap_MouseMove(object sender, MouseEventArgs e) {
+        private void ParentMap_MouseMove(object sender, MouseEventArgs e) {
             Map map = sender as Microsoft.Maps.MapControl.Map;
-            // Check if the user is currently dragging the Pushpin
-            // If so, then move the Pushpin to where the mouse is.
+            MapLayer parentLayer = FindVisualParent<MapLayer>(this);
+
             if(isDragging) {
-                Location = map.ViewportPointToLocation(e.GetPosition(map));
+                Point mouseMapPosition = e.GetPosition(map);
+                Location mouseGeocode = map.ViewportPointToLocation(mouseMapPosition);
+                Location = mouseGeocode;
+                parentLayer.InvalidateArrange();
             }
         }
+        #endregion
 
+        #region VirtualLocation
+        public Location VirtualLocation {
+            get { return (Location) GetValue(VirtualLocationProperty); }
+            set { SetValue(VirtualLocationProperty, value); }
+        }
+
+        public static readonly DependencyProperty VirtualLocationProperty =
+           DependencyProperty.Register("VirtualLocation", typeof(Location), typeof(DraggablePushpin), new PropertyMetadata(new Location(), new PropertyChangedCallback(OnVirtualLocationChanged)));
+
+        private static void OnVirtualLocationChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
+            DraggablePushpin instance = (DraggablePushpin) d;
+            instance.Location = instance.VirtualLocation;
+        }
         #endregion
     }
 }

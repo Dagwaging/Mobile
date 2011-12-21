@@ -98,9 +98,6 @@ namespace Rhit.Applications.Model {
         [DataMember(Name = "Id")]
         public int Id { get; set; }
 
-        [DataMember(Name = "IsDepartable")]
-        public bool IsDepartable { get; set; }
-
         [DataMember(Name = "Links")]
         public List<Link_DC> Links { get; set; }
 
@@ -129,13 +126,12 @@ namespace Rhit.Applications.Model {
 
             RhitLocation location = new RhitLocation() {
                 Center = Center.ToGeoCoordinate(),
-                Locations = locations,
+                Corners = locations,
                 Id = Id,
                 Description = Description,
                 Label = Label,
                 Type = ConvertTypeKeyToType(Type),
                 Links = links,
-                IsDepartable = IsDepartable,
                 AltNames = AltNames,
                 ParentId = ParentId,
                 Floor = Floor,

@@ -15,8 +15,6 @@ namespace Rhit.Applications.ViewModel.Models {
     public class MainViewModel : DependencyObject {
         //TODO: Shouldn't have this constructor
         //need it temporarily for view
-        public MainViewModel() { }
-
         public MainViewModel(Map map, IBuildingMappingProvider buildingMappingProvider,
             IBuildingCornersProvider cornerProvider, IBitmapProvider imageProvider) {
             Locations = LocationsController.Instance;
@@ -31,6 +29,7 @@ namespace Rhit.Applications.ViewModel.Models {
             if(locations == null || locations.Count <= 0)
                 DataCollector.Instance.UpdateAvailable += new ServiceEventHandler(OnLocationsRetrieved);
             else OnLocationsRetrieved(this, new ServiceEventArgs());
+            Mapper = LocationPositionMapper.Instance;
         }
 
         private void OnLocationsRetrieved(object sender, ServiceEventArgs e) {
@@ -87,6 +86,8 @@ namespace Rhit.Applications.ViewModel.Models {
         public ImageController Image { get; private set; }
 
         public LocationsController Locations { get; private set; }
+
+        public LocationPositionMapper Mapper { get; set; }
 
         public MapController Map { get; private set; }
 

@@ -24,7 +24,7 @@ namespace Rhit.Applications.Model {
         /// <summary>
         /// Constructor; Basic initialization; Make sure to set relevant properties.
         /// </summary>
-        public RhitLocation() { Initialize(); }
+        public RhitLocation() { }
 
         /// <summary>
         /// Constructor; Initializes 'Center' property.
@@ -33,7 +33,6 @@ namespace Rhit.Applications.Model {
         /// <param name="longitude"></param>
         public RhitLocation(double latitude, double longitude) {
             Center = new GeoCoordinate(latitude, longitude);
-            Initialize();
         }
 
         /// <summary>
@@ -44,7 +43,6 @@ namespace Rhit.Applications.Model {
         /// <param name="altitude">Center altitude of the location</param>
         public RhitLocation(double latitude, double longitude, double altitude) {
             Center = new GeoCoordinate(latitude, longitude, altitude);
-            Initialize();
         }
         #endregion
 
@@ -61,8 +59,6 @@ namespace Rhit.Applications.Model {
         /// <summary> Id of the location (Used only by the service). </summary>
         public int Id { get; set; }
 
-        public bool IsDepartable { get; set; }
-
         /// <summary> Name of the location. </summary>
         public string Label { get; set; }
 
@@ -72,28 +68,10 @@ namespace Rhit.Applications.Model {
         /// <summary>
         /// Corner points used to form the outline of the location.
         /// </summary>
-        public LocationCollection Locations {
-            get {
-                if(_locations == null)
-                    Locations = new LocationCollection();
-                return _locations;
-            }
-            set {
-                _locations = value;
-                OutLine = new MapPolygon() {
-                    Fill = new SolidColorBrush(Colors.Gray) { Opacity = 0.3 },
-                    Stroke = new SolidColorBrush(Colors.White) { Opacity = 0.7 },
-                    StrokeThickness = 5,
-                    Locations = _locations,
-                };
-            }
-        }
+        public LocationCollection Corners { get; set; }
 
         /// <summary> Minimum zoom level the label should be displayed. </summary>
         public int MinZoomLevel { get; set; }
-
-        /// <summary> The polygon outline of the location. </summary>
-        public MapPolygon OutLine { get; private set; }
 
         public int ParentId { get; set; }
 
@@ -105,23 +83,13 @@ namespace Rhit.Applications.Model {
         public List<string> AltNames { get; set; }
         #endregion
 
-        #region Private Methods
-        private void Initialize() {
-            OutLine = new MapPolygon() {
-                StrokeThickness = 5,
-                Locations = _locations,
-            };
-            ShowOutline(OutLine);
-        }
-        #endregion
-
         #region Public Methods
         /// <summary>
         /// Adds a corner point to the outline of the location..
         /// </summary>
         /// <param name="location">The corner point to add</param>
         public void AddLocation(GeoCoordinate location) {
-            Locations.Add(location);
+            Corners.Add(location);
         }
 
         /// <summary>
@@ -167,34 +135,42 @@ namespace Rhit.Applications.Model {
         /// <param name="polygon">The second polygon</param>
         /// <returns>Whether their labels are equal</returns>
         public bool IsPolygonEqual(MapPolygon polygon) {
-            if(Locations.Count <= 0) return false;
+            if(Corners.Count <= 0) return false;
             if(polygon == null || polygon.Locations == null) return false;
             if(polygon.Locations.Count <= 0) return false;
-            return polygon.Locations.Contains(Locations[0]);
+            return polygon.Locations.Contains(Corners[0]);
         }
 
-        public void Merge(RhitLocation location) {
+        public RhitLocation Copy() {
+            return new RhitLocation() {
+                AltNames = AltNames,
+                Center = Center,
+                Corners = Corners,
+                Description = Description,
+                Floor = Floor,
+                Id = Id,
+                Label = Label,
+                LabelOnHybrid = LabelOnHybrid,
+                Links = Links,
+                MinZoomLevel = MinZoomLevel,
+                ParentId = ParentId,
+                Type = Type,
+            };
+        }
+
+        public void Overwrite(RhitLocation location) {
             if(Id != location.Id) return;
+            AltNames = location.AltNames;
             Center = location.Center;
+            Corners = location.Corners;
             Description = location.Description;
-            Type = location.Type;
+            Floor = location.Floor;
             Label = location.Label;
             LabelOnHybrid = location.LabelOnHybrid;
+            Links = location.Links;
             MinZoomLevel = location.MinZoomLevel;
             ParentId = location.ParentId;
-            IsDepartable = IsDepartable;
-            Links = location.Links;
-            AltNames = location.AltNames;
-            Floor = location.Floor;
-        }
-
-        /// <summary>
-        /// Makes a hidden polygon become visible again.
-        /// </summary>
-        /// <param name="polygon">Polygon to show</param>
-        public static void ShowOutline(MapPolygon polygon) {
-            polygon.Fill = new SolidColorBrush(Colors.Gray) { Opacity = 0.3 };
-            polygon.Stroke = new SolidColorBrush(Colors.White) { Opacity = 0.7 };
+            Type = location.Type;
         }
         #endregion
     }

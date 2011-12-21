@@ -78,6 +78,7 @@
     <Compile Include="Behaviors\MapBehavior.cs" />
     <Compile Include="Behaviors\PathsBehavior.cs" />
     <Compile Include="Controllers\ImageController.cs" />
+    <Compile Include="Controllers\LocationPositionMapper.cs" />
     <Compile Include="Controllers\LocationsController.cs" />
     <Compile Include="Controllers\MapController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
@@ -91,6 +92,7 @@
     <Compile Include="Providers\IBuildingCornersProvider.cs" />
     <Compile Include="Providers\IBuildingMappingProvider.cs" />
     <Compile Include="Services.cs" />
+    <Compile Include="Utility\DualLocation.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Rhit.Applications.Model.SL\Rhit.Applications.Model.SL.csproj">

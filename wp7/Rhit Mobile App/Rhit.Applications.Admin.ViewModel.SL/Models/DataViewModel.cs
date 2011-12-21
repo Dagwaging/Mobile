@@ -290,7 +290,6 @@ namespace Rhit.Applications.ViewModel.Models {
             ParentId = CurrentLocation.ParentId;
 
             Type = CurrentLocation.Type;
-            IsDepartable = CurrentLocation.IsDepartable;
             LabelOnHybrid = CurrentLocation.LabelOnHybrid;
             MinZoom = CurrentLocation.MinZoomLevel;
 

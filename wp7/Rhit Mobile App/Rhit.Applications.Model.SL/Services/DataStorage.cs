@@ -65,7 +65,7 @@ namespace Rhit.Applications.Model.Services {
             }
             foreach(RhitLocation location in locations) {
                 if(AllLocations.ContainsKey(location.Id))
-                    AllLocations[location.Id].Merge(location);
+                    AllLocations[location.Id].Overwrite(location);
                 else AllLocations[location.Id] = location;
             }
             DataStorage.SaveState(StorageKey.All, AllLocations);

@@ -11,7 +11,7 @@ using Rhit.Applications.ViewModel.Providers;
 namespace Rhit.Applications.ViewModel.Behaviors {
     public class BuildingsBehavior : MapBehavior {
 
-        private enum BehaviorState { Default, MovingCorners, CreatingCorners, };
+        private enum BehaviorState { Default, MovingCorners, CreatingCorners, Floor };
 
         public BuildingsBehavior(IBuildingCornersProvider cornerProvider) : base() {
             CornersProvider = cornerProvider;
@@ -24,6 +24,7 @@ namespace Rhit.Applications.ViewModel.Behaviors {
             ShowBuildings = true;
             AddCornersCommand = new RelayCommand(p => CreateCorners());
             ChangeCornersCommand = new RelayCommand(p => ShowCorners());
+            LoadFloorCommand = new RelayCommand(p => LoadFloor());
             State = BehaviorState.Default;
             Update();
         }
@@ -31,6 +32,8 @@ namespace Rhit.Applications.ViewModel.Behaviors {
         public ICommand AddCornersCommand { get; private set; }
 
         public ICommand ChangeCornersCommand { get; private set; }
+
+        public ICommand LoadFloorCommand { get; private set; }
 
         private BehaviorState State { get; set; }
 
@@ -44,7 +47,7 @@ namespace Rhit.Applications.ViewModel.Behaviors {
         private void ShowCorners() {
             if(LocationsController.Instance.CurrentLocation == null) return;
             ShowBuildings = false;
-            CornersProvider.DisplayCorners(LocationsController.Instance.CurrentLocation.Locations as ICollection<Location>);
+            CornersProvider.DisplayCorners(LocationsController.Instance.CurrentLocation.Corners as ICollection<Location>);
             ShowSaveCancel = true;
         }
 
@@ -69,6 +72,17 @@ namespace Rhit.Applications.ViewModel.Behaviors {
             Cancel();
         }
 
+        private void LoadFloor() {
+            if(LocationsController.Instance.CurrentLocation == null) return;
+            ShowBuildings = false;
+            ShowFloorLocations = true;
+            ImageController.Instance.LoadImage();
+        }
+
+        private void SaveFloor() {
+
+        }
+
         protected override void Save() {
             switch(State) {
                 case BehaviorState.Default:
@@ -79,6 +93,9 @@ namespace Rhit.Applications.ViewModel.Behaviors {
                     break;
                 case BehaviorState.CreatingCorners:
                     SaveCorners();
+                    break;
+                case BehaviorState.Floor:
+                    SaveFloor();
                     break;
             }
         }
@@ -113,7 +130,7 @@ namespace Rhit.Applications.ViewModel.Behaviors {
 
         protected override void LocationsChanged(object sender, LocationEventArgs e) {
             foreach(RhitLocation location in e.NewLocations) {
-                if(location.Locations == null || location.Locations.Count <= 0) continue;
+                if(location.Corners == null || location.Corners.Count <= 0) continue;
                 LocationsController.Instance.AddBuilding(location);
             }
         }

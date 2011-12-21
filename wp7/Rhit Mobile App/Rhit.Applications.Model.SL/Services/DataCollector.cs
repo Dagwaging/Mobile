@@ -226,11 +226,10 @@ namespace Rhit.Applications.Model.Services {
             return locations;
         }
 
-        private List<RhitLocation> GetLocations(bool departable) {
+        private List<RhitLocation> GetLocations() {
             List<RhitLocation> locations = new List<RhitLocation>();
-            foreach(RhitLocation location in DataStorage.Instance.AllLocations.Values) {
-                if(!departable || location.IsDepartable) locations.Add(location);
-            }
+            foreach(RhitLocation location in DataStorage.Instance.AllLocations.Values)
+                locations.Add(location);
             return locations;
         }
 
@@ -245,18 +244,13 @@ namespace Rhit.Applications.Model.Services {
         }
 
         public List<RhitLocation> GetLocationNames(Dispatcher dispatcher) {
-            return GetLocationNames(dispatcher, false);
-        }
-
-        public List<RhitLocation> GetLocationNames(Dispatcher dispatcher, bool departable) {
             if(!DataStorage.IsAllFull) {
                 RequestPart request;
-                if(!departable) request = new RequestBuilder(BaseAddress).Locations.Names;
-                else request = new RequestBuilder(BaseAddress).Locations.Names.Departable;
+                request = new RequestBuilder(BaseAddress).Locations.Names;
                 Connection.MakeRequest(dispatcher, request);
-                return GetLocations(departable);
+                return GetLocations();
             }
-            return GetLocations(departable);
+            return GetLocations();
         }
 
         public void GetLocationDescription(Dispatcher dispatcher, RhitLocation location) {
@@ -276,7 +270,7 @@ namespace Rhit.Applications.Model.Services {
             }
             List<RhitLocation> locations = new List<RhitLocation>();
             foreach(RhitLocation location in DataStorage.Instance.TopLocations.Values)
-                if(location.Locations != null && location.Locations.Count > 0)
+                if(location.Corners != null && location.Corners.Count > 0)
                     locations.Add(location);
             return locations;
         }

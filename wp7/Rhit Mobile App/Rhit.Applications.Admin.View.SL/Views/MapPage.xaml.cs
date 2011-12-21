@@ -10,46 +10,39 @@ using Microsoft.Maps.MapControl.Overlays;
 using Rhit.Applications.View.Controls;
 using Rhit.Applications.ViewModel.Models;
 using Rhit.Applications.ViewModel.Providers;
+using System.Collections.ObjectModel;
 
 namespace Rhit.Applications.View.Views {
-    public partial class MapPage : Page, IBuildingCornersProvider, IBuildingMappingProvider {
+    public partial class MapPage : Page, IBuildingCornersProvider {
         public MapPage() {
             InitializeComponent();
 
-            Calibrating = false;
+            DraggablePushpin.ParentMap = MyMap;
+            DraggableShape.ParentContainer = MyCanvas;
+
+            MyMap.MouseClick += Calibrator.Map_MouseClick;
+            MyCanvas.MouseLeftButtonUp += Calibrator.ImageViewer_Click;
 
             MyMap.MouseClick += new EventHandler<MapMouseEventArgs>(Map_MouseClick);
             MyMap.MapForeground.TemplateApplied += new EventHandler(MapForeground_TemplateApplied);
 
-
             //TODO: Don't use this class to implement IBuildingCornersProvider
-            ViewModel = new MainViewModel(MyMap, this, this, new LocalImageLoader());
+            ViewModel = new MainViewModel(MyMap, Calibrator, this, new LocalImageLoader());
             DataContext = ViewModel;
         }
 
-        //private MainViewModel ViewModel { get; set; }
+        public MainViewModel ViewModel { get; set; }
 
         #region Click Event Methods/Properties
         private Point LastEventCoordinate { get; set; }
 
         void Map_MouseClick(object sender, MapMouseEventArgs e) {
-            if(Calibrating) {
-                if(TempLocations.Count >= 3)
-                    MessageBox.Show("Only three points are needed. Still need more on the image.");
-                else {
-                    Pushpin pin = new DraggablePushpin() { Location = MyMap.ViewportPointToLocation(e.ViewportPoint), };
-                    MyMap.Children.Add(pin);
-                    TempLocations.Add(pin);
-                    if(TempPoints.Count >= 3 && TempLocations.Count >= 3)
-                        EndCalibration();
-                }
-            }
             if(LastEventCoordinate == e.ViewportPoint) return;
-            ViewModel.Locations.UnSelect();
+            //ViewModel.Locations.UnSelect();
         }
 
         private void MapPolygon_Click(object sender, MouseButtonEventArgs e) {
-            if(Calibrating) return;
+            if(Calibrator.Calibrating) return;
             LastEventCoordinate = e.GetPosition(MyMap);
             ViewModel.SelectLocation(sender as MapPolygon);
         }
@@ -58,23 +51,7 @@ namespace Rhit.Applications.View.Views {
             LastEventCoordinate = e.GetPosition(MyMap);
             ViewModel.SelectLocation((sender as Pushpin).Location);
         }
-
-        private void ImageViewer_Click(object sender, MouseButtonEventArgs e) {
-            if(Calibrating) {
-                if(TempPoints.Count >= 3)
-                    MessageBox.Show("Only three points are needed. Still need more on the map.");
-                else {
-                    Point point = e.GetPosition(sender as Canvas);
-                    TempPoints.Add(point);
-                    ViewModel.Image.AddPoint(point);
-                    if(TempPoints.Count >= 3 && TempLocations.Count >= 3)
-                        EndCalibration();
-                }
-            }
-        }
         #endregion
-
-        private bool Calibrating { get; set; }
 
         #region Implementing IBuildingCornersProvider
         public void DisplayCorners(ICollection<Location> corners) {
@@ -143,10 +120,49 @@ namespace Rhit.Applications.View.Views {
         }
         #endregion
 
-        #region Implementing IBuildingMappingProvider
-        private FloorMappingEventArgs TempArgs { get; set; }
-        private List<Pushpin> TempLocations { get; set; }
-        private List<Point> TempPoints { get; set; }
+
+    }
+
+    public class CalibrationHandler : DependencyObject, IBuildingMappingProvider {
+        public CalibrationHandler() {
+            Locations = new ObservableCollection<Location>();
+            Points = new ObservableCollection<Point>();
+            Calibrating = false;
+        }
+
+
+        public void Map_MouseClick(object sender, MapMouseEventArgs e) {
+            if(Calibrating) {
+
+                if(Locations.Count >= 3)
+                    MessageBox.Show("Only three points are needed. Still need more on the image.");
+                else {
+                    Location location = (sender as Map).ViewportPointToLocation(e.ViewportPoint);
+                    Locations.Add(location);
+                    if(Points.Count >= 3 && Locations.Count >= 3)
+                        EndCalibration();
+                }
+                e.Handled = true;
+            }
+        }
+
+        public void ImageViewer_Click(object sender, MouseButtonEventArgs e) {
+            if(Calibrating) {
+                if(Points.Count >= 3)
+                    MessageBox.Show("Only three points are needed. Still need more on the map.");
+                else {
+                    Point point = e.GetPosition(sender as Canvas);
+                    Points.Add(point);
+                    if(Points.Count >= 3 && Locations.Count >= 3)
+                        EndCalibration();
+                }
+            }
+        }
+
+
+        public int Floor { get; set; }
+        public ObservableCollection<Location> Locations { get; set; }
+        public ObservableCollection<Point> Points { get; set; }
 
         public void QueryMapping() {
             FloorNumberWindow window = new FloorNumberWindow();
@@ -157,12 +173,10 @@ namespace Rhit.Applications.View.Views {
 
         private void FloorNumber_Closed(object sender, EventArgs e) {
             FloorNumberWindow window = sender as FloorNumberWindow;
-            TempArgs = new FloorMappingEventArgs() {
-                FloorNumber = window.GetFloorNumber(),
-                Mapping = new Dictionary<Location,Point>(),
-            };
-            TempLocations = new List<Pushpin>();
-            TempPoints = new List<Point>();
+            Floor = window.GetFloorNumber();
+
+            Locations.Clear();
+            Points.Clear();
 
             Calibrating = true;
             MessageBox.Show("Click 3 points on the map and three points on the Image.");
@@ -170,19 +184,19 @@ namespace Rhit.Applications.View.Views {
 
         private void EndCalibration() {
             Calibrating = false;
-
-            for(int i=0; i<3; i++) {
-                Pushpin pin = TempLocations[i];
-                MyMap.Children.Remove(pin);
-                TempArgs.Mapping[pin.Location] = TempPoints[i];
+            FloorMappingEventArgs args = new FloorMappingEventArgs() {
+                FloorNumber = Floor,
+                Mapping = new Dictionary<Location, Point>(),
+            };
+            for(int i = 0; i < 3; i++) {
+                args.Mapping[Locations[i]] = Points[i];
             }
-            TempLocations.Clear();
-            TempPoints.Clear();
-            ViewModel.Image.CalibrationPoints.Clear();
+            Locations.Clear();
+            Points.Clear();
 
-            if(MappingFinalized != null) MappingFinalized(this, TempArgs);
-            TempArgs = null;
+            if(MappingFinalized != null) MappingFinalized(this, args);
         }
-        #endregion
+    
+        public  bool Calibrating { get; set; }
     }
 }

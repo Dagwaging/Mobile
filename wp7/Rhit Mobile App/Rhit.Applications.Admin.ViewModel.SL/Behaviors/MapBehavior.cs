@@ -79,6 +79,16 @@ namespace Rhit.Applications.ViewModel.Behaviors {
            DependencyProperty.Register("ShowTopLocations", typeof(bool), typeof(MapBehavior), new PropertyMetadata(false));
         #endregion
 
+        #region ShowFloorLocations
+        public bool ShowFloorLocations {
+            get { return (bool) GetValue(ShowFloorLocationsProperty); }
+            set { SetValue(ShowFloorLocationsProperty, value); }
+        }
+
+        public static readonly DependencyProperty ShowFloorLocationsProperty =
+           DependencyProperty.Register("ShowFloorLocations", typeof(bool), typeof(MapBehavior), new PropertyMetadata(false));
+        #endregion
+
         #region ShowSaveCancel
         public bool ShowSaveCancel {
             get { return (bool) GetValue(ShowSaveCancelProperty); }
