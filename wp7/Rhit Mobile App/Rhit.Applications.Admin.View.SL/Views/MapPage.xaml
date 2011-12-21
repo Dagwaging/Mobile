@@ -33,10 +33,23 @@
                 <util:Task Label="Move Corners" ToolTip="Move the corners of the selected building" StartCommand="{Binding Behavior.ChangeCornersCommand, ElementName=ViewModel}">
                     <util:Task.Steps>
                         <util:TaskStep Label="Move Corners" Number="1" Instructions="Click and drag the displayed pushpins to the correct locations. Make sure to keep the same order."/>
-                        <util:TaskStep Label="Click Save" Number="2" Instructions="Click the 'Save' Button"/>
+                        <util:TaskStep Label="Save" Number="2" Instructions="Click the 'Save' Button"/>
                     </util:Task.Steps>
                 </util:Task>
-                <util:Task Label="Redo Corners" ToolTip="Remove/Add the corners of the selected building"/>
+                <util:Task Label="Redo Corners" ToolTip="Remove/Add the corners of the selected building" StartCommand="{Binding Behavior.AddCornersCommand, ElementName=ViewModel}">
+                    <util:Task.Steps>
+                        <util:TaskStep Label="Place Corners" Number="1" Instructions="Click on the map to place a corner. Order matters. Skip this step to remove all corners."/>
+                        <util:TaskStep Label="Save" Number="2" Instructions="Click the 'Save' Button"/>
+                    </util:Task.Steps>
+                </util:Task>
+                <util:Task Label="Load Floor" ToolTip="Rearange locations on a floor of the selected building." StartCommand="{Binding Behavior.LoadFloorCommand, ElementName=ViewModel}">
+                    <util:Task.Steps>
+                        <util:TaskStep Label="Load Image" Number="1" Instructions="Select a floor plan to load to calibrate to the map."/>
+                        <util:TaskStep Label="Specify Floor" Number="2" Instructions="Enter the floor you wish to calibrate to the loaded image. Use negative values for lower levels. Zero is never used."/>
+                        <util:TaskStep Label="Rearrange" Number="3" Instructions="Drag either the map pushpins or the pins on the image to the desired location."/>
+                        <util:TaskStep Label="Save" Number="4" Instructions="Click the 'Save' Button"/>
+                    </util:Task.Steps>
+                </util:Task>
             </util:TaskContainer.Tasks>
         </util:TaskContainer>
 
