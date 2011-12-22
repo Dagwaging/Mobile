@@ -10,7 +10,6 @@ using Rhit.Applications.Model.Maps.Modes;
 using Rhit.Applications.Model.Maps.Sources;
 using Rhit.Applications.Model.Services;
 using Microsoft.Maps.MapControl;
-using Rhit.Applications.ViewModel.Behaviors;
 
 
 namespace Rhit.Applications.ViewModel.Controllers {

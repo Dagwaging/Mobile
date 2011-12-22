@@ -73,10 +73,6 @@
     <Reference Include="System.Windows.Browser" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Behaviors\BuildingsBehavior.cs" />
-    <Compile Include="Behaviors\LocationsBehavior.cs" />
-    <Compile Include="Behaviors\MapBehavior.cs" />
-    <Compile Include="Behaviors\PathsBehavior.cs" />
     <Compile Include="Controllers\ImageController.cs" />
     <Compile Include="Controllers\LocationPositionMapper.cs" />
     <Compile Include="Controllers\LocationsController.cs" />

@@ -87,7 +87,7 @@ namespace Rhit.Applications.ViewModel.Controllers {
 
         #region SelectLocation Methods
         public void SelectLocation(int id) {
-            foreach(RhitLocation location in Buildings)
+            foreach(RhitLocation location in All)
                 if(location.Id == id) {
                     SelectLocation(location);
                     return;
@@ -97,7 +97,7 @@ namespace Rhit.Applications.ViewModel.Controllers {
         public void SelectLocation(GeoCoordinate coordinate) {
             foreach(RhitLocation location in All)
                 if(location.Center == coordinate) {
-                    CurrentLocation = location;
+                    SelectLocation(location);
                     return;
                 }
         }
@@ -113,10 +113,12 @@ namespace Rhit.Applications.ViewModel.Controllers {
             if(locations != null) foreach(RhitLocation child in locations) InnerLocations.Add(child);
 
             OnCurrentLocationChanged(args);
+            ShowCurrent = true;
         }
         #endregion
 
         public void UnSelect() {
+            ShowCurrent = false;
             LocationEventArgs args = new LocationEventArgs();
             args.OldLocation = CurrentLocation;
             CurrentLocation = null;
@@ -134,6 +136,16 @@ namespace Rhit.Applications.ViewModel.Controllers {
 
         public static readonly DependencyProperty CurrentLocationProperty =
            DependencyProperty.Register("CurrentLocation", typeof(RhitLocation), typeof(LocationsController), new PropertyMetadata(null));
+        #endregion
+
+        #region ShowCurrent
+        public bool ShowCurrent {
+            get { return (bool) GetValue(ShowCurrentProperty); }
+            set { SetValue(ShowCurrentProperty, value); }
+        }
+
+        public static readonly DependencyProperty ShowCurrentProperty =
+           DependencyProperty.Register("ShowCurrent", typeof(bool), typeof(LocationsController), new PropertyMetadata(false));
         #endregion
         #endregion
 

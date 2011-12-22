@@ -44,7 +44,7 @@ namespace Rhit.Applications.View.Views {
         private void MapPolygon_Click(object sender, MouseButtonEventArgs e) {
             if(Calibrator.Calibrating) return;
             LastEventCoordinate = e.GetPosition(MyMap);
-            ViewModel.SelectLocation(sender as MapPolygon);
+            ViewModel.SelectLocation((int) (sender as MapPolygon).Tag, true);
         }
 
         private void Pushpin_Click(object sender, MouseButtonEventArgs e) {
@@ -121,6 +121,18 @@ namespace Rhit.Applications.View.Views {
         #endregion
 
 
+
+        private void DraggableShape_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+            LastEventCoordinate = e.GetPosition(MyMap);
+            ViewModel.SelectLocation((int) (sender as DraggableShape).Tag, false);
+        }
+
+        private void DraggablePushpin_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+            LastEventCoordinate = e.GetPosition(MyMap);
+            ViewModel.SelectLocation((int) (sender as Pushpin).Tag, false);
+        }
+
+
     }
 
     public class SampleCommandStore : DependencyObject {
@@ -191,7 +203,6 @@ namespace Rhit.Applications.View.Views {
             Points.Clear();
 
             Calibrating = true;
-            MessageBox.Show("Click 3 points on the map and three points on the Image.");
         }
 
         private void EndCalibration() {
