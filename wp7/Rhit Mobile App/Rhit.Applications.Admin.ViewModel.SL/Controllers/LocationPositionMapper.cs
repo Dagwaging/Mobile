@@ -5,6 +5,7 @@ using System.Windows;
 using Microsoft.Maps.MapControl;
 using Rhit.Applications.Model;
 using Rhit.Applications.ViewModel.Utility;
+using Rhit.Applications.Model.Services;
 
 namespace Rhit.Applications.ViewModel.Controllers {
     public class LocationPositionMapper {
@@ -32,7 +33,14 @@ namespace Rhit.Applications.ViewModel.Controllers {
         }
 
         public void Save() {
-            //TODO: Scott - save new locations of this.Locations
+            //TODO: Scott - handle adding and removing locations
+            foreach (var location in Locations) {
+                DataCollector.Instance.ExecuteStoredProcedure(location.Dispatcher, "spMoveLocationCenter", new Dictionary<string, object>() {
+                    { "location", location.BaseLocation.Id },
+                    { "lat", location.Location.Latitude },
+                    { "lon", location.Location.Longitude }
+                });
+            }
         }
 
         public void ApplyMapping(Dictionary<Location, Point> mapping, int floor) {
