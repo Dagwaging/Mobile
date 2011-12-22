@@ -156,12 +156,12 @@ namespace Rhit.Applications.ViewModel.Models {
         }
 
         private void CurrentLocationChanged(object sender, LocationEventArgs e) {
-            if(!ShowBuildings) {
-                if(e.OldLocation != null)
-                    LocationsController.Instance.RemoveBuilding(e.OldLocation);
-                if(e.NewLocation != null)
-                    LocationsController.Instance.AddBuilding(e.NewLocation);
-            }
+            //if(!ShowBuildings) {
+            //    if(e.OldLocation != null)
+            //        LocationsController.Instance.RemoveBuilding(e.OldLocation);
+            //    if(e.NewLocation != null)
+            //        LocationsController.Instance.AddBuilding(e.NewLocation);
+            //}
             if(e.NewLocation != null) MapController.Instance.MapControl.Center = e.NewLocation.Center;
         }
 
