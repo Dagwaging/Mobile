@@ -151,6 +151,16 @@ namespace Rhit.Applications.View.Views {
 
         public void QueryLocation() {
             State = BehaviorState.AddingLocation;
+            LocationIdWindow window = new LocationIdWindow();
+            window.Closed += new EventHandler(LocationId_Closed);
+            window.Show();
+        }
+
+        public int Id { get; set; }
+
+        private void LocationId_Closed(object sender, EventArgs e) {
+            LocationIdWindow window = sender as LocationIdWindow;
+            Id = window.GetIdNumber();
         }
     }
 

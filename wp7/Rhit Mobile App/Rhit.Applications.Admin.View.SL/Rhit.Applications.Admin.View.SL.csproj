@@ -132,6 +132,9 @@
     <Compile Include="Views\LinkManagementWindow.xaml.cs">
       <DependentUpon>LinkManagementWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\LocationIdWindow.xaml.cs">
+      <DependentUpon>LocationIdWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\LoginPage.xaml.cs">
       <DependentUpon>LoginPage.xaml</DependentUpon>
     </Compile>
@@ -197,6 +200,10 @@
     <Page Include="Views\LinkManagementWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\LocationIdWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\LoginPage.xaml">
       <Generator>MSBuild:Compile</Generator>

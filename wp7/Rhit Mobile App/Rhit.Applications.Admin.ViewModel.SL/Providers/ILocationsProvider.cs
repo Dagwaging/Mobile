@@ -12,6 +12,8 @@ namespace Rhit.Applications.ViewModel.Providers {
         //Allow user to create a new set of corners
         void CreateNewCorners();
 
+        int Id;
+
         //Done with corners
         void ClearLocations();
 
