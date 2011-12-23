@@ -162,7 +162,9 @@ namespace Rhit.Applications.ViewModel.Models {
         #endregion
 
         private void DeleteLocation() {
-            //TODO: Scott - Delete current location
+            DataCollector.Instance.ExecuteStoredProcedure(Dispatcher, "spDeleteLocation", new Dictionary<string, object>() {
+                { "location", CurrentLocation.Id },
+            });
         }
 
         private void SaveLocation() {

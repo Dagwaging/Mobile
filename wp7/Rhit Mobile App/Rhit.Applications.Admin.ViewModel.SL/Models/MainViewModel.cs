@@ -158,7 +158,13 @@ namespace Rhit.Applications.ViewModel.Models {
             IList<Location> locations = LocationsProvider.GetLocations();
             if(locations.Count <= 0) return;
             Location newLocation = locations[0];
-            //TODO: Scott - Add location
+            DataCollector.Instance.ExecuteStoredProcedure(Dispatcher, "spCreateLocation", new Dictionary<string, object>() {
+                { "id", 100 }, // TODO: Add required ID field
+                { "name", "" }, // TODO: Add required name field
+                { "lat", newLocation.Latitude },
+                { "lon", newLocation.Longitude },
+
+            });
 
             Cancel();
         }
