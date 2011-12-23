@@ -31,6 +31,7 @@ namespace Rhit.Applications.ViewModel.Models {
             AltNames = new List<string>();
             Links = new ObservableCollection<Link>();
 
+            DeleteCommand = new RelayCommand(p => DeleteLocation());
             SaveCommand = new RelayCommand(p => SaveLocation());
 
             Types = new List<LocationType>() {
@@ -45,6 +46,8 @@ namespace Rhit.Applications.ViewModel.Models {
         }
 
         #region Commands
+        public ICommand DeleteCommand { get; private set; }
+
         public ICommand SaveCommand { get; private set; }
         #endregion
 
@@ -165,6 +168,10 @@ namespace Rhit.Applications.ViewModel.Models {
         public static readonly DependencyProperty TypesProperty =
             DependencyProperty.Register("Types", typeof(List<LocationType>), typeof(DataViewModel), new PropertyMetadata(new List<LocationType>()));
         #endregion
+
+        private void DeleteLocation() {
+            //TODO: Scott - Delete current location
+        }
 
         private void SaveLocation() {
             // Update the Location table

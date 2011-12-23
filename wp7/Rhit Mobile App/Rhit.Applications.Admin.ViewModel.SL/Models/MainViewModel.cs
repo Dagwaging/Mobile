@@ -12,24 +12,25 @@ using Rhit.Applications.ViewModel.Providers;
 
 namespace Rhit.Applications.ViewModel.Models {
     public class MainViewModel : DependencyObject {
-        private enum BehaviorState { Default, MovingCorners, CreatingCorners, Floor };
+        private enum BehaviorState { Default, MovingCorners, CreatingCorners, Floor, AddingLocation };
 
         //NOTE: Requires a call to Initialize before class is usable
         //Note: NoArg Constructor so ViewModel can be created in xaml
         public MainViewModel() { }
 
         public void Initialize(Map map, IBuildingMappingProvider buildingMappingProvider,
-            IBuildingCornersProvider cornerProvider, IBitmapProvider imageProvider) {
+            ILocationsProvider locationsProvider, IBitmapProvider imageProvider) {
 
             Locations = LocationsController.Instance;
 
-            CornersProvider = cornerProvider;
+            LocationsProvider = locationsProvider;
             LocationsController.Instance.CurrentLocationChanged += new LocationEventHandler(CurrentLocationChanged);
             LocationsController.Instance.LocationsChanged += new LocationEventHandler(LocationsChanged);
             
             SaveCommand = new RelayCommand(p => Save());
             CancelCommand = new RelayCommand(p => Cancel());
 
+            AddLocationCommand = new RelayCommand(p => AddLocation());
             AddCornersCommand = new RelayCommand(p => CreateCorners());
             ChangeCornersCommand = new RelayCommand(p => ShowCorners());
             LoadFloorCommand = new RelayCommand(p => LoadFloor());
@@ -52,11 +53,15 @@ namespace Rhit.Applications.ViewModel.Models {
         }
 
         public MainViewModel(Map map, IBuildingMappingProvider buildingMappingProvider,
-            IBuildingCornersProvider cornerProvider, IBitmapProvider imageProvider) {
-                Initialize(map, buildingMappingProvider, cornerProvider, imageProvider);
+            ILocationsProvider locationsProvider, IBitmapProvider imageProvider) {
+                Initialize(map, buildingMappingProvider, locationsProvider, imageProvider);
         }
 
-        private IBuildingCornersProvider CornersProvider { get; set; }
+        private ILocationsProvider LocationsProvider { get; set; }
+
+        public ICommand AddLocationCommand { get; private set; }
+
+        
 
         public ICommand SaveCommand { get; private set; }
         public ICommand CancelCommand { get; private set; }
@@ -70,11 +75,17 @@ namespace Rhit.Applications.ViewModel.Models {
         private BehaviorState State { get; set; }
 
 
+        private void AddLocation() {
+            ShowBuildings = false;
+            State = BehaviorState.AddingLocation;
+            LocationsProvider.QueryLocation();
+        }
+
         private void CreateCorners() {
             if(LocationsController.Instance.CurrentLocation == null) return;
             State = BehaviorState.CreatingCorners;
             ShowBuildings = false;
-            CornersProvider.CreateNewCorners();
+            LocationsProvider.CreateNewCorners();
             ShowSave = true;
         }
 
@@ -82,12 +93,12 @@ namespace Rhit.Applications.ViewModel.Models {
             if(LocationsController.Instance.CurrentLocation == null) return;
             State = BehaviorState.MovingCorners;
             ShowBuildings = false;
-            CornersProvider.DisplayCorners(LocationsController.Instance.CurrentLocation.Corners as ICollection<Location>);
+            LocationsProvider.DisplayCorners(LocationsController.Instance.CurrentLocation.Corners as ICollection<Location>);
             ShowSave = true;
         }
 
         private void SaveCorners() {
-            var corners = CornersProvider.GetCorners();
+            var corners = LocationsProvider.GetLocations();
 
             var executions = new List<KeyValuePair<string, Dictionary<string, object>>>() {
                 new KeyValuePair<string, Dictionary<string, object>>("spDeleteMapAreaCorners", new Dictionary<string, object>() {
@@ -119,6 +130,7 @@ namespace Rhit.Applications.ViewModel.Models {
         private void SaveFloor() {
             ImageController.Instance.CloseImage();
             LocationPositionMapper.Instance.Save();
+            LocationPositionMapper.Instance.Clear();
             Cancel();
         }
 
@@ -136,12 +148,24 @@ namespace Rhit.Applications.ViewModel.Models {
                 case BehaviorState.Floor:
                     SaveFloor();
                     break;
+                case BehaviorState.AddingLocation:
+                    SaveLocation();
+                    break;
             }
+        }
+
+        private void SaveLocation() {
+            IList<Location> locations = LocationsProvider.GetLocations();
+            if(locations.Count <= 0) return;
+            Location newLocation = locations[0];
+            //TODO: Scott - Add location
+
+            Cancel();
         }
 
         private void Cancel() {
             if(State == BehaviorState.Floor) ImageController.Instance.CloseImage();
-            CornersProvider.ClearCorners();
+            LocationsProvider.ClearLocations();
             ShowBuildings = true;
             ShowSave = false;
             State = BehaviorState.Default;
@@ -156,12 +180,12 @@ namespace Rhit.Applications.ViewModel.Models {
         }
 
         private void CurrentLocationChanged(object sender, LocationEventArgs e) {
-            //if(!ShowBuildings) {
-            //    if(e.OldLocation != null)
-            //        LocationsController.Instance.RemoveBuilding(e.OldLocation);
-            //    if(e.NewLocation != null)
-            //        LocationsController.Instance.AddBuilding(e.NewLocation);
-            //}
+            if(!ShowBuildings && State != BehaviorState.Floor) {
+                if(e.OldLocation != null)
+                    LocationsController.Instance.RemoveBuilding(e.OldLocation);
+                if(e.NewLocation != null)
+                    LocationsController.Instance.AddBuilding(e.NewLocation);
+            }
             if(e.NewLocation != null) MapController.Instance.MapControl.Center = e.NewLocation.Center;
         }
 

@@ -22,7 +22,7 @@
     <navigation:Page.Resources>
         <vm:MainViewModel x:Name="ViewModel"/>
         <my:CalibrationHandler x:Name="Calibrator"/>
-        <my:SampleCommandStore x:Name="CommandStore"/>
+        <my:LocationsProvider x:Name="ViewLocations"/>
 
         <DataTemplate x:Name="DualItemTemplate">
             <controls:DraggablePushpin VirtualLocation="{Binding Location, Mode=TwoWay}" MouseLeftButtonDown="DraggablePushpin_MouseLeftButtonDown"  Tag="{Binding BaseLocation.Id}" Content="{Binding Label}"/>
@@ -30,19 +30,25 @@
 
         <util:TaskContainer x:Name="TaskManager" CompletedCommand="{Binding SaveCommand, ElementName=ViewModel}" CanceledCommand="{Binding CancelCommand, ElementName=ViewModel}">
             <util:TaskContainer.Tasks>
-                <util:Task Label="Move Corners" ToolTip="Move the corners of the selected building" StartCommand="{Binding ChangeCornersCommand, ElementName=ViewModel}">
+                <util:Task Label="Add Location" ToolTip="Add a blank location" StartCommand="{Binding AddLocationCommand, ElementName=ViewModel}" Visibility="{Binding Locations.CurrentLocation, Converter={StaticResource RObjectVisibilityConverter}, ElementName=ViewModel}">
+                    <util:Task.Steps>
+                        <util:TaskStep Label="Place Pushpin" Number="1" Instructions="Click to place a pushpin. You can drag it to desired location. Other data can be entered via the data page."/>
+                        <util:TaskStep Label="Save" Number="2" Instructions="Click the 'Save' Button"/>
+                    </util:Task.Steps>
+                </util:Task>
+                <util:Task Label="Move Corners" ToolTip="Move the corners of the selected building" StartCommand="{Binding ChangeCornersCommand, ElementName=ViewModel}" Visibility="{Binding Locations.CurrentLocation, Converter={StaticResource ObjectVisibilityConverter}, ElementName=ViewModel}">
                     <util:Task.Steps>
                         <util:TaskStep Label="Move Corners" Number="1" Instructions="Click and drag the displayed pushpins to the correct locations. Make sure to keep the same order."/>
                         <util:TaskStep Label="Save" Number="2" Instructions="Click the 'Save' Button"/>
                     </util:Task.Steps>
                 </util:Task>
-                <util:Task Label="Redo Corners" ToolTip="Remove/Add the corners of the selected building" StartCommand="{Binding AddCornersCommand, ElementName=ViewModel}">
+                <util:Task Label="Redo Corners" ToolTip="Remove/Add the corners of the selected building" StartCommand="{Binding AddCornersCommand, ElementName=ViewModel}" Visibility="{Binding Locations.CurrentLocation, Converter={StaticResource ObjectVisibilityConverter}, ElementName=ViewModel}">
                     <util:Task.Steps>
                         <util:TaskStep Label="Place Corners" Number="1" Instructions="Click on the map to place a corner. Order matters. Skip this step to remove all corners."/>
                         <util:TaskStep Label="Save" Number="2" Instructions="Click the 'Save' Button"/>
                     </util:Task.Steps>
                 </util:Task>
-                <util:Task Label="Load Floor" ToolTip="Rearange locations on a floor of the selected building." StartCommand="{Binding LoadFloorCommand, ElementName=ViewModel}">
+                <util:Task Label="Load Floor" ToolTip="Rearange locations on a floor of the selected building." StartCommand="{Binding LoadFloorCommand, ElementName=ViewModel}" Visibility="{Binding Locations.CurrentLocation, Converter={StaticResource ObjectVisibilityConverter}, ElementName=ViewModel}">
                     <util:Task.Steps>
                         <util:TaskStep Label="Load Image" Number="1" Instructions="Select a floor plan to load to calibrate to the map."/>
                         <util:TaskStep Label="Specify Floor" Number="2" Instructions="Enter the floor you wish to calibrate to the loaded image. Use negative values for lower levels. Zero is never used."/>
@@ -120,6 +126,10 @@
             <map:Pushpin Location="{Binding Center}" MouseLeftButtonUp="Pushpin_Click"/>
         </DataTemplate>
 
+        <DataTemplate x:Name="PushpinItemTemplate2">
+            <controls:DraggablePushpin Location="{Binding}"/>
+        </DataTemplate>
+
         <DataTemplate x:Name="CalImagePinTemplate">
             <controls:DraggableShape VirtualLocation="{Binding}">
                 <controls:DraggableShape.Shape>
@@ -163,14 +173,14 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <StackPanel Orientation="Horizontal" Grid.Column="0">
-                <TextBlock VerticalAlignment="Center" FontWeight="Bold" Text="["/>
-                <TextBlock VerticalAlignment="Center" FontWeight="Bold" Text="{Binding Locations.CurrentLocation, Mode=TwoWay, Converter={StaticResource LocationNameConverter}, FallbackValue=Current_Location}"/>
+                <TextBlock VerticalAlignment="Center" FontWeight="Bold" Text="[" Margin="10,0,0,0"/>
+                <TextBlock VerticalAlignment="Center" Margin="0,5" FontWeight="Bold" Text="{Binding Locations.CurrentLocation, Mode=TwoWay, Converter={StaticResource LocationNameConverter}, FallbackValue=Current_Location}"/>
                 <TextBlock VerticalAlignment="Center" FontWeight="Bold" Text="]"/>
                 <Border Visibility="{Binding Locations.CurrentLocation, Converter={StaticResource RObjectVisibilityConverter}}" Margin="10,5">
                     <Border.Background>
                         <SolidColorBrush Color="Red" Opacity="0.5"/>
                     </Border.Background>
-                    <TextBlock Text="Select a building to get started" FontWeight="Bold"/>
+                    <TextBlock Text="Select a building for more options" FontWeight="Bold"/>
                 </Border>
             </StackPanel>
         </Grid>
@@ -188,6 +198,7 @@
             <map:Map Name="MyMap" Grid.Row="0" Grid.Column="0" CredentialsProvider="AthZ1tu5ROM0PUWcIYFSxC1oQALFR-g0aoFIuL9tlbeGJ9Z6qKIRYoB_jGpct8Yu">
                 <map:MapLayer Name="CornersLayer"/>
                 <map:MapLayer>
+                    <map:MapItemsControl ItemsSource="{Binding Locations, ElementName=ViewLocations}" ItemTemplate="{StaticResource PushpinItemTemplate2}"/>
                     <map:MapItemsControl ItemsSource="{Binding Locations.Buildings}" ItemTemplate="{StaticResource PolygonItemTemplate}" Visibility="{Binding ShowBuildings, Mode=TwoWay, Converter={StaticResource VisibilityConverter}}"/>
                     <map:MapItemsControl ItemsSource="{Binding Locations.Corners}" ItemTemplate="{StaticResource CornerPushpinTemplate}"/>
                     <map:MapItemsControl ItemsSource="{Binding Locations.All}" ItemTemplate="{StaticResource PushpinItemTemplate}" Visibility="{Binding ShowAllLocations, Mode=TwoWay, Converter={StaticResource VisibilityConverter}}"/>
@@ -228,12 +239,12 @@
                 <StackPanel HorizontalAlignment="Right">
                     <Button cmds:CommandManager.Command="{Binding GotoRhitCommand}" cmds:CommandManager.CommandEventName="Click" Margin="5" Content="Goto RHIT" HorizontalAlignment="Center"/>
 
-                    <StackPanel Visibility="{Binding Locations.CurrentLocation, Converter={StaticResource ObjectVisibilityConverter}}">
+                    
                         <Border BorderThickness="2" BorderBrush="Black" Margin="1" Visibility="{Binding CurrentTask, ElementName=TaskManager, Converter={StaticResource RObjectVisibilityConverter}}">
                             <StackPanel>
                                 <StackPanel.Resources>
                                     <DataTemplate x:Name="TaskTemplate">
-                                        <Button Content="{Binding Label}" HorizontalAlignment="Center" Margin="5" ToolTipService.ToolTip="{Binding ToolTip}"
+                                        <Button Content="{Binding Label}" HorizontalAlignment="Center" Margin="5" ToolTipService.ToolTip="{Binding ToolTip}" Visibility="{Binding Visibility}"
                                             cmds:CommandManager.Command="{Binding ActivateCommand}" cmds:CommandManager.CommandEventName="Click"/>
                                     </DataTemplate>
                                 </StackPanel.Resources>
@@ -245,10 +256,10 @@
                             </StackPanel>
                         </Border>
 
-                        
-                        <StackPanel DataContext="{StaticResource TaskManager}" Visibility="{Binding CurrentLocation, Converter={StaticResource ObjectVisibilityConverter}}">
-                            
-                            <Border BorderThickness="2" BorderBrush="Black" Margin="1">
+
+                    <StackPanel DataContext="{StaticResource TaskManager}" Visibility="{Binding CurrentTask, Converter={StaticResource ObjectVisibilityConverter}}">
+
+                        <Border BorderThickness="2" BorderBrush="Black" Margin="1" >
                                 <StackPanel>
                                     <TextBlock HorizontalAlignment="Center" Text="Curent Task" FontWeight="Bold" Margin="5,0,0,0"/>
                                     <TextBlock Text="{Binding CurrentTask.Label}"/>
@@ -270,14 +281,21 @@
                                 </StackPanel>
                             </Border>
                         </StackPanel>
-                    </StackPanel>
+
 
                 </StackPanel>
 
             </toolkit:Expander>
         </Grid>
-        
-        <TextBlock Margin="5,0" FontWeight="Bold" Text="{Binding SelectedValue.Instructions, ElementName=TaskSteps, FallbackValue='After selecting a task, click on a task step to display detailed instructions.'}" Grid.Row="2" Grid.ColumnSpan="2"/>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.ColumnSpan="2">
+            <Border>
+                <Border.Background>
+                    <SolidColorBrush Color="White" Opacity="0.3"/>
+                </Border.Background>
+                <TextBlock Margin="5,0" FontWeight="Bold" Text="{Binding SelectedValue.Instructions, ElementName=TaskSteps, FallbackValue='After selecting a task, click on a task step to display detailed instructions.'}" />
+            </Border>
+        </StackPanel>
     </Grid>
 
 </navigation:Page>

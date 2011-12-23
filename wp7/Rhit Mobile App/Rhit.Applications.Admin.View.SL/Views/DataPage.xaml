@@ -93,8 +93,11 @@
 
                 <TextBlock Text="Description" FontWeight="Bold" VerticalAlignment="Center" Margin="5" HorizontalAlignment="Center"/>
                 <TextBox Text="{Binding Description,FallbackValue='Enter Description',Mode=TwoWay}" TextWrapping="Wrap" AcceptsReturn="True" HorizontalAlignment="Stretch"/>
-
-                <Button Content="Save Location" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5" cmds:CommandManager.Command="{Binding SaveCommand}" cmds:CommandManager.CommandEventName="Click"/>
+                
+                <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft">
+                    <Button Content="Delete Location" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5" cmds:CommandManager.Command="{Binding DeleteCommand}" cmds:CommandManager.CommandEventName="Click"/>
+                    <Button Content="Save Location" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5" cmds:CommandManager.Command="{Binding SaveCommand}" cmds:CommandManager.CommandEventName="Click"/>
+                </StackPanel>
             </StackPanel>
         </ScrollViewer>
 

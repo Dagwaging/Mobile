@@ -33,7 +33,6 @@ namespace Rhit.Applications.ViewModel.Controllers {
         }
 
         public void Save() {
-            //TODO: Scott - handle adding and removing locations
             foreach (var location in Locations) {
                 DataCollector.Instance.ExecuteStoredProcedure(location.Dispatcher, "spMoveLocationCenter", new Dictionary<string, object>() {
                     { "location", location.BaseLocation.Id },

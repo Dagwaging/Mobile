@@ -85,8 +85,8 @@
     <Compile Include="Models\DataViewModel.cs" />
     <Compile Include="Models\LoginViewModel.cs" />
     <Compile Include="Models\MainViewModel.cs" />
-    <Compile Include="Providers\IBuildingCornersProvider.cs" />
     <Compile Include="Providers\IBuildingMappingProvider.cs" />
+    <Compile Include="Providers\ILocationsProvider.cs" />
     <Compile Include="Services.cs" />
     <Compile Include="Utility\DualLocation.cs" />
   </ItemGroup>

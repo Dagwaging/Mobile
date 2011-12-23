@@ -14,21 +14,23 @@ using System.Collections.ObjectModel;
 using Rhit.Applications.Mvvm.Commands;
 
 namespace Rhit.Applications.View.Views {
-    public partial class MapPage : Page, IBuildingCornersProvider {
+    public partial class MapPage : Page {
         public MapPage() {
             InitializeComponent();
 
             DraggablePushpin.ParentMap = MyMap;
             DraggableShape.ParentContainer = MyCanvas;
 
-            MyMap.MouseClick += Calibrator.Map_MouseClick;
+            MyMap.MouseClick += ViewLocations.Map_Click;
+
+            MyMap.MouseClick += Calibrator.Map_Click;
             MyCanvas.MouseLeftButtonUp += Calibrator.ImageViewer_Click;
 
             MyMap.MouseClick += new EventHandler<MapMouseEventArgs>(Map_MouseClick);
             MyMap.MapForeground.TemplateApplied += new EventHandler(MapForeground_TemplateApplied);
 
             //TODO: Don't use this class to implement IBuildingCornersProvider
-            ViewModel.Initialize(MyMap, Calibrator, this, new LocalImageLoader());
+            ViewModel.Initialize(MyMap, Calibrator, ViewLocations, new LocalImageLoader());
             DataContext = ViewModel;
 
         }
@@ -38,7 +40,7 @@ namespace Rhit.Applications.View.Views {
 
         void Map_MouseClick(object sender, MapMouseEventArgs e) {
             if(LastEventCoordinate == e.ViewportPoint) return;
-            //ViewModel.Locations.UnSelect();
+            if(!Calibrator.Calibrating) ViewModel.Locations.UnSelect();
         }
 
         private void MapPolygon_Click(object sender, MouseButtonEventArgs e) {
@@ -50,37 +52,6 @@ namespace Rhit.Applications.View.Views {
         private void Pushpin_Click(object sender, MouseButtonEventArgs e) {
             LastEventCoordinate = e.GetPosition(MyMap);
             ViewModel.SelectLocation((sender as Pushpin).Location);
-        }
-        #endregion
-
-        #region Implementing IBuildingCornersProvider
-        public void DisplayCorners(ICollection<Location> corners) {
-            CornersLayer.Children.Clear();
-            foreach(Location corner in corners)
-                CornersLayer.Children.Add(new DraggablePushpin() { Location = corner, });
-        }
-
-        public List<Location> GetCorners() {
-            List<Location> corners = new List<Location>();
-            foreach(UIElement element in CornersLayer.Children)
-                if(element is Pushpin) corners.Add((element as Pushpin).Location);
-            return corners;
-        }
-
-        public void ClearCorners() {
-            MyMap.MouseClick -= CreateCorner;
-            CornersLayer.Children.Clear();
-            
-        }
-
-        public void CreateNewCorners() {
-            CornersLayer.Children.Clear();
-            MyMap.MouseClick += new EventHandler<MapMouseEventArgs>(CreateCorner);
-        }
-
-        private void CreateCorner(object sender, MapMouseEventArgs e) {
-            Location corner = MyMap.ViewportPointToLocation(e.ViewportPoint);
-            CornersLayer.Children.Add(new DraggablePushpin() { Location = corner, });
         }
         #endregion
 
@@ -120,8 +91,6 @@ namespace Rhit.Applications.View.Views {
         }
         #endregion
 
-
-
         private void DraggableShape_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
             LastEventCoordinate = e.GetPosition(MyMap);
             ViewModel.SelectLocation((int) (sender as DraggableShape).Tag, false);
@@ -131,19 +100,58 @@ namespace Rhit.Applications.View.Views {
             LastEventCoordinate = e.GetPosition(MyMap);
             ViewModel.SelectLocation((int) (sender as Pushpin).Tag, false);
         }
-
-
     }
 
-    public class SampleCommandStore : DependencyObject {
-        public SampleCommandStore() {
-            SampleCommand = new RelayCommand(p => Sample());
+    public class LocationsProvider : DependencyObject, ILocationsProvider {
+        private enum BehaviorState { Default, CreatingCorners, MovingCorners, AddingLocation };
+
+        public LocationsProvider() {
+            Locations = new ObservableCollection<Location>();
+            State = BehaviorState.Default;
         }
 
-        public ICommand SampleCommand { get; private set; }
+        private BehaviorState State { get; set; }
 
-        private void Sample() {
-            return;
+        public ObservableCollection<Location> Locations { get; set; }
+
+        public void DisplayCorners(ICollection<Location> corners) {
+            Locations.Clear();
+            foreach(Location corner in corners)
+                Locations.Add(corner);
+            State = BehaviorState.MovingCorners;
+        }
+
+        public IList<Location> GetLocations() {
+            return Locations;
+        }
+
+        public void ClearLocations() {
+            Locations.Clear();
+            State = BehaviorState.Default;
+        }
+
+        public void CreateNewCorners() {
+            Locations.Clear();
+            State = BehaviorState.CreatingCorners;
+        }
+
+        public void Map_Click(object sender, MapMouseEventArgs e) {
+            if(State == BehaviorState.CreatingCorners) {
+                Location corner = (sender as Map).ViewportPointToLocation(e.ViewportPoint);
+                Locations.Add(corner);
+                e.Handled = true;
+            }
+            if(State == BehaviorState.AddingLocation) {
+                if(Locations.Count <= 0) {
+                    Location newLocation = (sender as Map).ViewportPointToLocation(e.ViewportPoint);
+                    Locations.Add(newLocation);
+                }
+                e.Handled = true;
+            }
+        }
+
+        public void QueryLocation() {
+            State = BehaviorState.AddingLocation;
         }
     }
 
@@ -154,8 +162,7 @@ namespace Rhit.Applications.View.Views {
             Calibrating = false;
         }
 
-
-        public void Map_MouseClick(object sender, MapMouseEventArgs e) {
+        public void Map_Click(object sender, MapMouseEventArgs e) {
             if(Calibrating) {
 
                 if(Locations.Count >= 3)
@@ -182,7 +189,6 @@ namespace Rhit.Applications.View.Views {
                 }
             }
         }
-
 
         public int Floor { get; set; }
         public ObservableCollection<Location> Locations { get; set; }

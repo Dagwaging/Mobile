@@ -17,6 +17,7 @@ namespace Rhit.Applications.View.Utility {
         public Task() {
             Steps = new ObservableCollection<TaskStep>();
             ActivateCommand = new RelayCommand(p => Activate());
+            Visibility = Visibility.Visible;
         }
 
         public event EventHandler Activated;
@@ -73,6 +74,16 @@ namespace Rhit.Applications.View.Utility {
 
         public static readonly DependencyProperty CurrentStepProperty =
            DependencyProperty.Register("CurrentStep", typeof(TaskStep), typeof(Task), new PropertyMetadata(null));
+        #endregion
+
+        #region Visibility
+        public Visibility Visibility {
+            get { return (Visibility) GetValue(VisibilityProperty); }
+            set { SetValue(VisibilityProperty, value); }
+        }
+
+        public static readonly DependencyProperty VisibilityProperty =
+           DependencyProperty.Register("Visibility", typeof(Visibility), typeof(Task), new PropertyMetadata(null));
         #endregion
         #endregion
 
