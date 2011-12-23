@@ -10,5 +10,7 @@ namespace Rhit.Applications.View.Views {
         // Executes when the user navigates to this page.
         protected override void OnNavigatedTo(NavigationEventArgs e) { }
 
+        private void RefreshButton_Click(object sender, System.Windows.RoutedEventArgs e) {
+        }
     }
 }

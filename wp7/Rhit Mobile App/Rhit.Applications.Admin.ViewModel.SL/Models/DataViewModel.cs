@@ -99,11 +99,6 @@ namespace Rhit.Applications.ViewModel.Models {
             set { SetValue(LocationSelectedProperty, value); }
         }
 
-        public bool IsDepartable {
-            get { return (bool) GetValue(IsDepartableProperty); }
-            set { SetValue(IsDepartableProperty, value); }
-        }
-
         public bool LabelOnHybrid {
             get { return (bool) GetValue(LabelOnHybridProperty); }
             set { SetValue(LabelOnHybridProperty, value); }
@@ -146,9 +141,6 @@ namespace Rhit.Applications.ViewModel.Models {
 
         public static readonly DependencyProperty LocationSelectedProperty =
             DependencyProperty.Register("LocationSelected", typeof(bool), typeof(DataViewModel), new PropertyMetadata(false));
-
-        public static readonly DependencyProperty IsDepartableProperty =
-            DependencyProperty.Register("IsDepartable", typeof(bool), typeof(DataViewModel), new PropertyMetadata(false));
 
         public static readonly DependencyProperty IsPOIProperty =
             DependencyProperty.Register("IsPOI", typeof(bool), typeof(DataViewModel), new PropertyMetadata(false));

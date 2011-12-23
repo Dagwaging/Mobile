@@ -24,9 +24,9 @@ namespace Rhit.Applications.View.Views {
         public ObservableCollection<Link> VisibleLinks { get; private set; }
 
         private void OKButton_Click(object sender, RoutedEventArgs e) {
-            this.DialogResult = true;
             Links = new List<Link>();
             foreach(Link s in VisibleLinks) Links.Add(s);
+            this.DialogResult = true;
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e) {

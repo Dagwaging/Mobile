@@ -29,7 +29,6 @@ namespace Rhit.Applications.View.Views {
             MyMap.MouseClick += new EventHandler<MapMouseEventArgs>(Map_MouseClick);
             MyMap.MapForeground.TemplateApplied += new EventHandler(MapForeground_TemplateApplied);
 
-            //TODO: Don't use this class to implement IBuildingCornersProvider
             ViewModel.Initialize(MyMap, Calibrator, ViewLocations, new LocalImageLoader());
             DataContext = ViewModel;
 

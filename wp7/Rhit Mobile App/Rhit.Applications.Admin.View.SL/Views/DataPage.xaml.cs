@@ -45,13 +45,10 @@ namespace Rhit.Applications.View.Views {
 
         private void AddLink_Closed(object sender, System.EventArgs e) {
             LinkManagementWindow window = sender as LinkManagementWindow;
-            ObservableCollection<Link> list = new ObservableCollection<Link>();
-            if(window.DialogResult == true) {
-                foreach(Link link in window.Links) {
-                    list.Add(link);
-                }
-                ViewModel.Links = list;
-            }
+            ViewModel.Links.Clear();
+            if(window.DialogResult == false) return;
+            foreach(Link link in window.Links)
+                ViewModel.Links.Add(link);
         }
     }
 }

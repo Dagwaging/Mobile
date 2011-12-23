@@ -21,7 +21,6 @@ namespace Rhit.Applications.ViewModel.Controllers {
 
         private void MappingFinalized(object sender, FloorMappingEventArgs e) {
             LocationPositionMapper.Instance.ApplyMapping(e.Mapping, e.FloorNumber);
-            
         }
 
         public static void CreateImageController(IBitmapProvider imageProvider, IBuildingMappingProvider buildingMappingProvider) {
@@ -65,8 +64,9 @@ namespace Rhit.Applications.ViewModel.Controllers {
             Bitmap = ImageProvider.GetImage();
             if(Bitmap != null) {
                 Loaded = true;
+                MappingProvider.QueryMapping();
+                return;
             }
-            MappingProvider.QueryMapping();
         }
 
         public void CloseImage() {

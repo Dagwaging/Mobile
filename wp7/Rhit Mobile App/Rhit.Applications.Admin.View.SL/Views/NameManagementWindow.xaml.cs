@@ -19,9 +19,9 @@ namespace Rhit.Applications.View.Views {
         public ObservableCollection<string> Names { get; set; }
 
         private void OKButton_Click(object sender, RoutedEventArgs e) {
-            this.DialogResult = true;
             AltNames = new List<string>();
             foreach(string s in Names) AltNames.Add(s);
+            this.DialogResult = true;
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e) {
