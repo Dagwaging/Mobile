@@ -61,8 +61,6 @@ namespace Rhit.Applications.ViewModel.Models {
 
         public ICommand AddLocationCommand { get; private set; }
 
-        
-
         public ICommand SaveCommand { get; private set; }
         public ICommand CancelCommand { get; private set; }
 
@@ -73,7 +71,6 @@ namespace Rhit.Applications.ViewModel.Models {
         public ICommand LoadFloorCommand { get; private set; }
 
         private BehaviorState State { get; set; }
-
 
         private void AddLocation() {
             ShowBuildings = false;
@@ -202,7 +199,6 @@ namespace Rhit.Applications.ViewModel.Models {
             Locations.SetLocations(locations);
         }
 
-
         #region Dependency Properties
         #region ShowBuildings
         public bool ShowBuildings {
@@ -264,7 +260,6 @@ namespace Rhit.Applications.ViewModel.Models {
            DependencyProperty.Register("ShowSave", typeof(bool), typeof(MainViewModel), new PropertyMetadata(false));
         #endregion
         #endregion
-
 
         public ICommand GotoRhitCommand { get; private set; }
 

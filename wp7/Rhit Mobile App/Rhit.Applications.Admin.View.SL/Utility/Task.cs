@@ -11,14 +11,25 @@ using System.Windows.Shapes;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using Rhit.Applications.Mvvm.Commands;
+using System.Collections.Specialized;
 
 namespace Rhit.Applications.View.Utility {
     public class Task : DependencyObject {
         public Task() {
             Steps = new ObservableCollection<TaskStep>();
+            Requirements = new ObservableCollection<TaskRequirement>();
+            Requirements.CollectionChanged += new NotifyCollectionChangedEventHandler(Requirements_CollectionChanged);
             ActivateCommand = new RelayCommand(p => Activate());
             Visibility = Visibility.Visible;
+            AlwaysAvailable = false;
         }
+
+        void Requirements_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
+            //foreach(TaskRequirement req in e.NewItems)
+            return;
+        }
+
+        public ObservableCollection<TaskRequirement> Requirements { get; set; }
 
         public event EventHandler Activated;
 
@@ -34,6 +45,8 @@ namespace Rhit.Applications.View.Utility {
             OnAvtivate(new EventArgs());
             if(StartCommand != null) StartCommand.Execute(null);
         }
+
+        public bool AlwaysAvailable { get; set; }
 
         #region Dependency Properties
         #region StartCommand
@@ -101,5 +114,25 @@ namespace Rhit.Applications.View.Utility {
             foreach(TaskStep step in steps)
                 AddStep(step);
         }
+    }
+
+    public class TaskRequirement : DependencyObject {
+        public TaskRequirement() { }
+
+        #region Dependency Properties
+        #region Value
+        public bool Value {
+            get { return (bool) GetValue(ValueProperty); }
+            set { SetValue(ValueProperty, value); }
+        }
+
+        public static readonly DependencyProperty ValueProperty =
+           DependencyProperty.Register("Value", typeof(bool), typeof(TaskRequirement), new PropertyMetadata(true, new PropertyChangedCallback(OnValueChanged)));
+
+        private static void OnValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
+            return;
+        }
+        #endregion
+        #endregion
     }
 }

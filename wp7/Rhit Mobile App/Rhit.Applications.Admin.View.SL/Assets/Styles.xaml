@@ -8,6 +8,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d">
 
+    <converter:ObjectToBoolConverter x:Key="ObjectBoolConverter"/>
+    <converter:ObjectToBoolConverter x:Key="RObjectBoolConverter" Reverse="True"/>
     <converter:ObjectToVisibilityConverter x:Key="ObjectVisibilityConverter"/>
     <converter:ObjectToVisibilityConverter x:Key="RObjectVisibilityConverter" NullValue="Visible" NotNullValue="Collapsed"/>
     <converter:BoolToVisibilityConverter x:Key="VisibilityConverter"/>
