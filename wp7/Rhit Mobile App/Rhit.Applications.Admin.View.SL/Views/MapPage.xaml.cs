@@ -156,11 +156,15 @@ namespace Rhit.Applications.View.Views {
             window.Show();
         }
 
-        public int Id { get; set; }
+        private int _id { get; set; }
+
+        public int GetId() {
+            return _id;
+        }
 
         private void LocationId_Closed(object sender, EventArgs e) {
             LocationIdWindow window = sender as LocationIdWindow;
-            Id = window.GetIdNumber();
+            _id = window.GetIdNumber();
         }
     }
 

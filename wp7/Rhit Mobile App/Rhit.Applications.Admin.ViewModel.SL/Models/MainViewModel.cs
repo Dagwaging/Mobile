@@ -154,11 +154,10 @@ namespace Rhit.Applications.ViewModel.Models {
         private void SaveLocation() {
             IList<Location> locations = LocationsProvider.GetLocations();
             if(locations.Count <= 0) return;
-            //TODO: Scott - LocationsProvider.Id
             Location newLocation = locations[0];
             DataCollector.Instance.ExecuteStoredProcedure(Dispatcher, "spCreateLocation", new Dictionary<string, object>() {
-                { "id", 100 }, // TODO: Add required ID field
-                { "name", "" }, // TODO: Add required name field
+                { "id", LocationsProvider.GetId() },
+                { "name", "" },
                 { "lat", newLocation.Latitude },
                 { "lon", newLocation.Longitude },
 
