@@ -28,6 +28,8 @@ namespace Rhit.Applications.ViewModel.Controllers {
         private Point[] MapCalibrationPoints { get; set; }
         private Point[] ImageCalibrationPoints { get; set; }
 
+        public int Floor { get; set; }
+
         public void Clear() {
             Locations.Clear();
         }
@@ -62,6 +64,8 @@ namespace Rhit.Applications.ViewModel.Controllers {
                         Point = ConvertLocationToPosition(location.Center),
                     });
                 }
+
+            Floor = floor;
         }
 
         private static void Convert(double x, double y, Point[] from, Point[] to, out double outX, out double outY) {

@@ -163,7 +163,7 @@ namespace Rhit.Applications.ViewModel.Models {
                 { "name", "" },
                 { "lat", newLocation.Latitude },
                 { "lon", newLocation.Longitude },
-
+                { "floor", LocationPositionMapper.Instance.Floor }
             });
 
             Cancel();
