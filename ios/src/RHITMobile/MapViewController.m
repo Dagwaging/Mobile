@@ -33,6 +33,8 @@
 #import "RHPinAnnotationView.h"
 #import "LocationDetailViewController.h"
 #import "SearchViewController.h"
+#import "RHDirectionLineItem.h"
+#import "RHSimplePointAnnotation.h"
 
 
 #pragma mark Private Method Declarations
@@ -64,6 +66,9 @@
 @synthesize remoteHandler = remoteHandler_;
 @synthesize quickListAnnotations;
 @synthesize temporaryAnnotations;
+@synthesize backgroundView;
+@synthesize directionsLabel;
+@synthesize directionsPicker;
 
 // Private properties
 @synthesize currentOverlay;
@@ -262,6 +267,27 @@
         return annotationView;
     }
     
+    if ([inAnnotation isKindOfClass:[RHSimplePointAnnotation class]]) {
+        MKPinAnnotationView *annotationView = (MKPinAnnotationView *)[self.mapView dequeueReusableAnnotationViewWithIdentifier:@"SimplePinView"];
+        
+        if (annotationView == nil) {
+            annotationView = [[[MKPinAnnotationView alloc] initWithAnnotation:inAnnotation reuseIdentifier:@"SimplePinView"] autorelease];
+            annotationView.animatesDrop = YES;
+        }
+        
+        RHSimplePointAnnotation *annotation = inAnnotation;
+        
+        if ([annotation color] == RHSimplePointAnnotationColorRed) {
+            annotationView.pinColor = MKPinAnnotationColorRed;
+        } else if ([annotation color] == RHSimplePointAnnotationColorGreen) {
+            annotationView.pinColor = MKPinAnnotationColorGreen;
+        } else if ([annotation color] == RHSimplePointAnnotationColorBlue) {
+            annotationView.pinColor = MKPinAnnotationColorPurple;
+        }
+        
+        return annotationView;
+    }
+    
     return nil;
 }
 
@@ -276,6 +302,13 @@
         view.strokeColor = [[UIColor blueColor] colorWithAlphaComponent:0.7];
         view.lineWidth = 3;
         
+        return view;
+    } else if ([overlay isKindOfClass:[MKPolyline class]]) {
+        NSLog(@"Polyline view");
+        MKPolylineView *view = [[[MKPolylineView alloc] initWithPolyline:overlay] autorelease];
+        view.strokeColor = [UIColor blueColor];
+        view.fillColor = [UIColor blueColor];
+        view.lineWidth = 10;
         return view;
     }
     
@@ -316,7 +349,7 @@
     
     for (id annotation in self.mapView.annotations) {
         if ([annotation isKindOfClass:[RHAnnotation class]]) {
-            [annotation mapView:self.mapView didChangeZoomLevel:newZoomLevel];
+           [annotation mapView:self.mapView didChangeZoomLevel:newZoomLevel];
         }
     }
 }
@@ -520,6 +553,179 @@
             [self.mapView addAnnotation:annotation];
         }
     }
+}
+
+- (void)displayPath:(MKPolyline *)path {
+    if (self.mapView.selectedAnnotations.count > 0) {
+        [self.mapView deselectAnnotation:[self.mapView.selectedAnnotations objectAtIndex:0] animated:NO];
+    }
+    self.backgroundView.hidden = NO;
+    self.directionsLabel.hidden = NO;
+    self.directionsPicker.hidden = NO;
+    self.mapView.frame = CGRectMake(0, 0, 320, 155);
+    
+    [self clearAllDynamicMapArtifacts];
+    [self.mapView addOverlay:path];
+    [self.mapView setCenterCoordinate:self.mapView.centerCoordinate zoomLevel:15 animated:YES];
+}
+
+- (void)displayDirections:(NSArray *)directions {
+    if (self.mapView.selectedAnnotations.count > 0) {
+        [self.mapView deselectAnnotation:[self.mapView.selectedAnnotations objectAtIndex:0] animated:NO];
+        [self clearAllDynamicMapArtifacts];
+    }
+    RHDirectionLineItem *start = [directions objectAtIndex:0];
+    [self.mapView setCenterCoordinate:start.coordinate zoomLevel:17 animated:YES];
+    
+    directionsStatusBar_ = [[[UIView alloc] initWithFrame:CGRectMake(0, -50, 320, 50)] autorelease];
+    directionsStatusBar_.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.7];
+    
+    directionsStatus_ = [[[UILabel alloc] initWithFrame:CGRectMake(5, 5, 310, 40)] autorelease];
+    directionsStatus_.backgroundColor = [UIColor clearColor];
+    directionsStatus_.textColor = [UIColor whiteColor];
+    directionsStatus_.text = [[directions objectAtIndex:0] name];
+    directionsStatus_.numberOfLines = 2;
+    directionsStatus_.textAlignment = UITextAlignmentCenter;
+    
+    [directionsStatusBar_ addSubview:directionsStatus_];
+    
+    directionsControls_ = [[[UIToolbar alloc] initWithFrame:CGRectMake(0, self.mapView.frame.size.height, 320, 44)] autorelease];
+    
+    directionsControls_.tintColor = [UIColor blackColor];
+    
+    UIBarButtonItem *prevItem = [[[UIBarButtonItem alloc] initWithTitle:@"Prev" style:UIBarButtonItemStyleBordered target:self action:@selector(prevDirection:)] autorelease];
+    
+    UIBarButtonItem *nextItem = [[[UIBarButtonItem alloc] initWithTitle:@"Next" style:UIBarButtonItemStyleBordered target:self action:@selector(nextDirection:)] autorelease];
+    
+    UIBarButtonItem *spaceItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil] autorelease];
+    
+    UIBarButtonItem *cancelItem = [[[UIBarButtonItem alloc] initWithTitle:@"Exit Directions" style:UIBarButtonItemStyleBordered target:self action:@selector(exitDirections:)] autorelease];
+    
+    directionsControls_.items = [NSArray arrayWithObjects:prevItem, nextItem, spaceItem, cancelItem, nil];
+    
+    [self.view addSubview:directionsStatusBar_];
+    [self.view addSubview:directionsControls_];
+    
+    [self slideInDirectionsTitle:directionsStatusBar_];
+    [self slideInDirectionsControls:directionsControls_];
+    
+    CLLocationCoordinate2D coords[directions.count];
+    
+    directionsPins_ = [NSMutableArray arrayWithCapacity:directions.count];
+    [directionsPins_ retain];
+    
+//    RHDirectionLineItem *last = [directions objectAtIndex:(directions.count - 1)];
+//    
+//    RHSimplePointAnnotation *lastAnnotation = [[[RHSimplePointAnnotation alloc] init] autorelease];
+//    lastAnnotation.coordinate = last.coordinate;
+//    lastAnnotation.color = RHSimplePointAnnotationColorRed;
+//    [self.mapView addAnnotation:lastAnnotation];
+    
+//    [directionsPins_ addObject:lastAnnotation];
+    
+    currentDirectionAnnotation_ = [[RHSimplePointAnnotation alloc] init];
+    currentDirectionAnnotation_.coordinate = start.coordinate;
+    currentDirectionAnnotation_.color = RHSimplePointAnnotationColorGreen;
+    [self.mapView addAnnotation:currentDirectionAnnotation_];
+
+    
+    for (RHDirectionLineItem *lineItem in directions) {
+        coords[[directions indexOfObject:lineItem]] = lineItem.coordinate;
+        
+        if (lineItem.flagged) {
+            RHSimplePointAnnotation *annotation = [[[RHSimplePointAnnotation alloc] init] autorelease];
+            annotation.coordinate = lineItem.coordinate;
+            [self.mapView addAnnotation:annotation];
+            
+            [directionsPins_ addObject:annotation];
+        }
+    }
+    
+    MKPolyline *line = [MKPolyline polylineWithCoordinates:coords
+                                                     count:directions.count];
+    
+    [self.mapView addOverlay:line];
+    
+    currentDirections_ = directions;
+    [currentDirections_ retain];
+    
+    currentDirectionIndex_ = 0;
+}
+
+- (void)slideInDirectionsTitle:(UIView *)titleView {
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationDelay:0.75];
+    [UIView setAnimationDuration:.25];
+    
+    CGRect frame = titleView.frame;
+    frame.origin.y = 0;
+    titleView.frame = frame;
+    
+    [UIView commitAnimations];
+}
+
+- (void)slideInDirectionsControls:(UIToolbar *)controls {
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationDelay:0.75];
+    [UIView setAnimationDuration:0.25];
+    
+    CGRect mapFrame = self.mapView.frame;
+    mapFrame.size.height = mapFrame.size.height - 40;
+    self.mapView.frame = mapFrame;
+    
+    CGRect toolbarFrame = controls.frame;
+    toolbarFrame.origin.y = self.mapView.frame.size.height;
+    controls.frame = toolbarFrame;
+    
+    [UIView commitAnimations];
+}
+
+- (void)nextDirection:(id)sender {
+    if (currentDirectionIndex_ < currentDirections_.count - 1) {
+        currentDirectionIndex_ ++;
+        RHDirectionLineItem *direction = [currentDirections_ objectAtIndex:currentDirectionIndex_];
+        if (![direction.name isKindOfClass:[NSNull class]]) {
+            directionsStatus_.text = direction.name;
+        }
+        currentDirectionAnnotation_.coordinate = direction.coordinate;
+        [self.mapView setCenterCoordinate:direction.coordinate animated:YES];
+    }
+}
+
+- (void)prevDirection:(id)sender {
+    if (currentDirectionIndex_ > 0) {
+        currentDirectionIndex_ --;
+        RHDirectionLineItem *direction = [currentDirections_ objectAtIndex:currentDirectionIndex_];
+        if (![direction.name isKindOfClass:[NSNull class]]) {
+            directionsStatus_.text = direction.name;
+        }
+        currentDirectionAnnotation_.coordinate = direction.coordinate;
+        [self.mapView setCenterCoordinate:direction.coordinate animated:YES];
+    }
+}
+
+- (void)exitDirections:(id)sender {
+    [self.mapView removeOverlays:self.mapView.overlays];
+    [self.mapView removeAnnotation:currentDirectionAnnotation_];
+    [self.mapView removeAnnotations:directionsPins_];
+    [directionsPins_ release];
+    
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationDuration:0.25];
+    
+    CGRect mapFrame = self.mapView.frame;
+    mapFrame.size.height = mapFrame.size.height + 40;
+    self.mapView.frame = mapFrame;
+    
+    CGRect frame = directionsStatusBar_.frame;
+    frame.origin.y = -50;
+    directionsStatusBar_.frame = frame;
+    
+    CGRect toolbarFrame = directionsControls_.frame;
+    toolbarFrame.origin.y = self.mapView.frame.size.height;
+    directionsControls_.frame = toolbarFrame;
+    
+    [UIView commitAnimations];
 }
 
 @end

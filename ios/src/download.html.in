@@ -1,4 +1,29 @@
-<html><body>
-<a href="itms-services://?action=download-manifest&url=http://mobile.csse.rose-hulman.edu/hudson/job/iOS/BUILD_NUMBER/artifact/ios/app-manifest-beta.plist">Install RHITMobile Beta vVERSION</a><br />
-<a href="itms-services://?action=download-manifest&url=http://mobile.csse.rose-hulman.edu/hudson/job/iOS/BUILD_NUMBER/artifact/ios/app-manifest-clean.plist">Install RHITMobile Clean (no beta functionality) vVERSION</a>
-</body></html>
+<html>
+    <head>
+        <title>RHIT Mobile Beta Install</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1"> 
+        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.css" />
+        <script type="text/javascript" src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
+        <script type="text/javascript" src="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.js"></script>
+    <body>
+        <div data-role="page">
+            <div data-role="header">
+                <h1>RHIT Mobile Beta</h1>
+            </div>
+            <div data-role="content">
+                <div>
+                    <strong>REQUIRED</strong>: iOS 5.0+
+                </div>
+                <div>
+                    <strong>TO INSTALL</strong>: Click the following buttons in order from your device
+                </div>
+                <a href="http://dl.dropbox.com/u/14888375/RHITMobileBeta.mobileprovision" data-role="button">Install Provisioning Profile</a>
+                <a href="itms-services://?action=download-manifest&url=http://mobile.csse.rose-hulman.edu/hudson/job/iOS/BUILD_NUMBER/artifact/ios/app-manifest-beta.plist" data-role="button">Install RHIT Mobile Beta</a>
+                <div>
+                    <strong>IF THE INSTALLATION FAILS</strong>:
+                    <br/>Return to this page (by opening Safari) and click the second button again.
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

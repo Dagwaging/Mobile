@@ -626,6 +626,8 @@
         }
     }
     
+    [RHITMobileAppDelegate.instance prefetchLocationNames];
+    
     NSLog(@"Done fetching locations");
 }
 

@@ -1,5 +1,5 @@
 //
-//  LocationDetailViewController.h
+//  RHDirectionsRequester.h
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -17,26 +17,15 @@
 //  limitations under the License.
 //
 
-
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 #import "RHDirectionsRequesterDelegate.h"
 
-@class RHLocation;
-@class RHDirectionsRequester;
+@interface RHDirectionsRequester : NSObject
 
-/// \ingroup views
-@interface LocationDetailViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, RHDirectionsRequesterDelegate> {
-    @private
-    RHDirectionsRequester *currentDirectionsRequest_;
-}
+@property (nonatomic, retain) id<RHDirectionsRequesterDelegate> delegate;
 
-@property (nonatomic, retain) RHLocation *location;
-@property (nonatomic, retain) NSArray *enclosedLocations;
-@property (nonatomic, retain) NSArray *links;
-@property (nonatomic, retain) IBOutlet UITableView *tableView;
+- (id)initWithDelegate:(id<RHDirectionsRequesterDelegate>)delegate;
 
-- (IBAction)displayCurrentLocationOnMap:(id)sender;
-
-- (IBAction)getDirectionsToCurrentLocation:(id)sender;
+- (void)requestLocations;
 
 @end

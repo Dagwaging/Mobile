@@ -28,11 +28,21 @@
 @class RHRemoteHandler;
 @class RHAnnotation;
 @class RHLocation;
+@class RHSimplePointAnnotation;
 
 /// \ingroup views
 /// View controller for the map portion of the application.
 @interface MapViewController : UIViewController
-<MKMapViewDelegate, RHRemoteHandlerDelegate, RHAnnotationViewDelegate>
+<MKMapViewDelegate, RHRemoteHandlerDelegate, RHAnnotationViewDelegate> {
+    @private
+    NSArray *currentDirections_;
+    NSUInteger currentDirectionIndex_;
+    RHSimplePointAnnotation *currentDirectionAnnotation_;
+    UILabel *directionsStatus_;
+    UIView *directionsStatusBar_;
+    UIToolbar *directionsControls_;
+    NSMutableArray *directionsPins_;
+}
 
 /// Map view that is visible to the user.
 @property (nonatomic, retain) IBOutlet MKMapView *mapView;
@@ -48,7 +58,13 @@
 
 @property (nonatomic, retain) NSMutableArray *quickListAnnotations;
 
-@property (nonatomic, retain) NSArray *temporaryAnnotations; 
+@property (nonatomic, retain) NSArray *temporaryAnnotations;
+
+@property (nonatomic, retain) IBOutlet UIView *backgroundView;
+
+@property (nonatomic, retain) IBOutlet UILabel *directionsLabel;
+
+@property (nonatomic, retain) IBOutlet UIPickerView *directionsPicker;
 
 - (void)focusMapViewToTemporaryAnnotation:(RHAnnotation *)annotation;
 
@@ -63,5 +79,19 @@
 - (IBAction)displaySearch:(id)sender;
 
 - (IBAction)discloseLocationDetails:(id)sender;
+
+- (IBAction)nextDirection:(id)sender;
+
+- (IBAction)prevDirection:(id)sender;
+
+- (IBAction)exitDirections:(id)sender;
+
+- (void)displayPath:(MKPolyline *)path;
+
+- (void)displayDirections:(NSArray *)directions;
+
+- (void)slideInDirectionsTitle:(UIView *)titleView;
+
+- (void)slideInDirectionsControls:(UIToolbar *)controls;
 
 @end
