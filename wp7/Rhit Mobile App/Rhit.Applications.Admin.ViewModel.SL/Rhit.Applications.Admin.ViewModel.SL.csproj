@@ -80,6 +80,8 @@
     <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Converters\LocationToCoordinateConverter.cs" />
     <Compile Include="Converters\LocationToStringConverter.cs" />
+    <Compile Include="Models\MainInitializer.cs" />
+    <Compile Include="Models\MapViewModel.cs" />
     <Compile Include="Providers\IBitmapProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\DataViewModel.cs" />

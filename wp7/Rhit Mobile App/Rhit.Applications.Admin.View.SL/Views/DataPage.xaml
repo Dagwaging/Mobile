@@ -19,9 +19,9 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <TextBlock Text="Loading Location Data from the Server..." Margin="10" FontWeight="Bold" FontSize="18" Visibility="{Binding LocationSelected, Converter={StaticResource ReverseVisibilityConverter}}"/>
+        <TextBlock Text="Loading Location Data from the Server..." Margin="10" FontWeight="Bold" FontSize="18"/>
 
-        <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Visibility="{Binding LocationSelected, Converter={StaticResource VisibilityConverter}}">
+        <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
             <ScrollViewer.Resources>
                 <Style TargetType="TextBox">
                     <Setter Property="Margin" Value="5"/>
@@ -60,35 +60,35 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock Text="Name:" FontWeight="Bold" VerticalAlignment="Center" Margin="5" Grid.Row="0" Grid.Column="0"/>
-                    <TextBox Text="{Binding Name,FallbackValue='Enter Name',Mode=TwoWay}" Grid.Row="0" Grid.Column="1"/>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Name:" FontWeight="Bold" VerticalAlignment="Center" Margin="5"/>
+                    <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Locations.CurrentLocation.Label, FallbackValue='Enter Name', Mode=TwoWay}"/>
 
                     <TextBlock Text="Id:" FontWeight="Bold" VerticalAlignment="Center" Margin="5" Grid.Row="1" Grid.Column="0"/>
-                    <TextBox Text="{Binding Id,FallbackValue='Enter Id',Mode=TwoWay}" Grid.Row="1" Grid.Column="1"/>
+                    <TextBox Text="{Binding Locations.CurrentLocation.Id,FallbackValue='Enter Id',Mode=TwoWay}" Grid.Row="1" Grid.Column="1"/>
 
                     <TextBlock Text="Parent Id:" FontWeight="Bold" VerticalAlignment="Center" Margin="5" Grid.Row="2" Grid.Column="0"/>
-                    <TextBox Text="{Binding ParentId,FallbackValue='Enter Id',Mode=TwoWay}" Grid.Row="2" Grid.Column="1"/>
+                    <TextBox Text="{Binding Locations.CurrentLocation.ParentId,FallbackValue='Enter Id',Mode=TwoWay}" Grid.Row="2" Grid.Column="1"/>
 
                     <TextBlock Text="Min Zoom Level:" FontWeight="Bold" VerticalAlignment="Center" Margin="5" Grid.Row="3" Grid.Column="0"/>
-                    <ComboBox ItemsSource="{Binding ZoomRange}" Margin="5" HorizontalAlignment="Left" MinWidth="50" Grid.Row="3" Grid.Column="1" SelectedValue="{Binding MinZoom,Mode=TwoWay}"/>
+                    <ComboBox ItemsSource="{Binding ZoomRange}" Margin="5" HorizontalAlignment="Left" MinWidth="50" Grid.Row="3" Grid.Column="1" SelectedValue="{Binding Locations.CurrentLocation.MinZoom,Mode=TwoWay}"/>
 
                     <TextBlock Text="Location Type:" FontWeight="Bold" VerticalAlignment="Center" Margin="5" Grid.Row="4" Grid.Column="0"/>
-                    <ComboBox ItemsSource="{Binding Types}" SelectedValue="{Binding Type,Mode=TwoWay}" Grid.Row="4" Grid.Column="1" Margin="5" HorizontalAlignment="Left" MinWidth="50"/>
+                    <ComboBox ItemsSource="{Binding Locations.Types}" SelectedValue="{Binding Locations.CurrentLocation.Type,Mode=TwoWay}" Grid.Row="4" Grid.Column="1" Margin="5" HorizontalAlignment="Left" MinWidth="50"/>
 
                     <TextBlock Text="Label On Hybrid:" FontWeight="Bold" VerticalAlignment="Center" Margin="5" Grid.Row="5" Grid.Column="0"/>
-                    <CheckBox IsChecked="{Binding LabelOnHybrid,Mode=TwoWay}" Grid.Row="6" Grid.Column="1"/>
+                    <CheckBox IsChecked="{Binding Locations.CurrentLocation.LabelOnHybrid,Mode=TwoWay}" Grid.Row="6" Grid.Column="1"/>
 
                     <TextBlock Text="Alternate Names:" FontWeight="Bold" VerticalAlignment="Center" Margin="5" Grid.Row="6" Grid.Column="0"/>
-                    <ListBox ItemsSource="{Binding AltNames}" VerticalContentAlignment="Center" MinWidth="100" Margin="5" Grid.Row="6" Grid.Column="1" HorizontalAlignment="Left"/>
+                    <ListBox ItemsSource="{Binding Locations.CurrentLocation.AltNames}" VerticalContentAlignment="Center" MinWidth="100" Margin="5" Grid.Row="6" Grid.Column="1" HorizontalAlignment="Left"/>
                     <Button Content="Manage Names" Margin="5" Click="ManageAltNames_Click" Grid.Row="6" Grid.Column="2" VerticalAlignment="Center"/>
 
                     <TextBlock Text="Links:" FontWeight="Bold" VerticalAlignment="Center" Margin="5" Grid.Row="7" Grid.Column="0"/>
-                    <ListBox ItemsSource="{Binding Links}" ItemTemplate="{StaticResource LinkListTemplate}" MinWidth="100" Margin="5" Grid.Row="7" Grid.Column="1" HorizontalAlignment="Left"/>
+                    <ListBox ItemsSource="{Binding Locations.CurrentLocation.Links}" ItemTemplate="{StaticResource LinkListTemplate}" MinWidth="100" Margin="5" Grid.Row="7" Grid.Column="1" HorizontalAlignment="Left"/>
                     <Button Content="Manage Links" Margin="5" Click="AddLink_Click" Grid.Row="7" Grid.Column="2" VerticalAlignment="Center"/>
                 </Grid>
 
                 <TextBlock Text="Description" FontWeight="Bold" VerticalAlignment="Center" Margin="5" HorizontalAlignment="Center"/>
-                <TextBox Text="{Binding Description,FallbackValue='Enter Description',Mode=TwoWay}" TextWrapping="Wrap" AcceptsReturn="True" HorizontalAlignment="Stretch"/>
+                <TextBox Text="{Binding Locations.CurrentLocation.Description,FallbackValue='Enter Description',Mode=TwoWay}" TextWrapping="Wrap" AcceptsReturn="True" HorizontalAlignment="Stretch"/>
                 
                 <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft">
                     <Button Content="Delete Location" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5" cmds:CommandManager.Command="{Binding DeleteCommand}" cmds:CommandManager.CommandEventName="Click"/>
@@ -97,7 +97,7 @@
             </StackPanel>
         </ScrollViewer>
 
-        <sdk:TreeView Grid.Column="1" ItemsSource="{Binding LocationTree}" ItemTemplate="{StaticResource TreeTemplate}" SelectedItemChanged="TreeView_SelectedItemChanged" Background="Transparent"/>
+        <sdk:TreeView Grid.Column="1" ItemsSource="{Binding Locations.LocationTree}" ItemTemplate="{StaticResource TreeTemplate}" SelectedItemChanged="TreeView_SelectedItemChanged" Background="Transparent"/>
 
     </Grid>
 </navigation:Page>

@@ -156,12 +156,9 @@ namespace Rhit.Applications.Model {
             return _locationTypes[key];
         }
 
-        public static string ConvertTypeTypeToKey(LocationType type) {
-            foreach (var kvp in _locationTypes) {
-                if (kvp.Value == type) {
-                    return kvp.Key;
-                }
-            }
+        public static string ConvertTypeToTypeKey(LocationType type) {
+            foreach (var kvp in _locationTypes)
+                if (kvp.Value == type) return kvp.Key;
             return null;
         }
     }

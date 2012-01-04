@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Windows.Data;
 using Rhit.Applications.Model;
 using System.Collections.Generic;
+using Rhit.Applications.ViewModel.Controllers;
 
 namespace Rhit.Applications.ViewModel.Converters {
     public class LocationToStringConverter : IValueConverter {
@@ -19,15 +20,15 @@ namespace Rhit.Applications.ViewModel.Converters {
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
             if(value == null) return "No Location Selected";
-            if(IsDescription) return (value as RhitLocation).Description;
+            if(IsDescription) return (value as ObservableRhitLocation).Description;
             if(IsAltNames) {
-                List<string> altNames = (value as RhitLocation).AltNames;
+                IList<string> altNames = (value as ObservableRhitLocation).AltNames;
                 if(altNames == null || altNames.Count <= 0) return "";
                 string names = "";
                 foreach(string name in altNames) names += name + ',';
                 names = names.Remove(names.Length - 1, 1);
             }
-            return (value as RhitLocation).Label;
+            return (value as ObservableRhitLocation).Label;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {

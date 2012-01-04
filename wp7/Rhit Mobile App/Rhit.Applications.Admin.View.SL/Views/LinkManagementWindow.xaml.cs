@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Rhit.Applications.ViewModel.Models;
+using Rhit.Applications.ViewModel.Controllers;
 
 namespace Rhit.Applications.View.Views {
     public partial class LinkManagementWindow : ChildWindow {

@@ -6,7 +6,7 @@ using System.Windows.Input;
 
 namespace Rhit.Applications.View.Views {
     public partial class NameManagementWindow : ChildWindow {
-        public NameManagementWindow(List<string> names) {
+        public NameManagementWindow(IList<string> names) {
             InitializeComponent();
             DataContext = this;
             AltNames = names;
@@ -14,7 +14,7 @@ namespace Rhit.Applications.View.Views {
             if(names != null) foreach(string s in names) Names.Add(s);
         }
 
-        public List<string> AltNames { get; private set; }
+        public IList<string> AltNames { get; private set; }
 
         public ObservableCollection<string> Names { get; set; }
 

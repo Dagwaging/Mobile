@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -8,15 +9,15 @@ using Microsoft.Maps.MapControl;
 using Microsoft.Maps.MapControl.Navigation;
 using Microsoft.Maps.MapControl.Overlays;
 using Rhit.Applications.View.Controls;
-using Rhit.Applications.ViewModel.Models;
 using Rhit.Applications.ViewModel.Providers;
-using System.Collections.ObjectModel;
-using Rhit.Applications.Mvvm.Commands;
 
 namespace Rhit.Applications.View.Views {
     public partial class MapPage : Page {
         public MapPage() {
             InitializeComponent();
+
+            //TODO: Try not to have to do this
+            ViewModel.SetMode(MyMap);
 
             DraggablePushpin.ParentMap = MyMap;
             DraggableShape.ParentContainer = MyCanvas;
@@ -26,12 +27,12 @@ namespace Rhit.Applications.View.Views {
             MyMap.MouseClick += Calibrator.Map_Click;
             MyCanvas.MouseLeftButtonUp += Calibrator.ImageViewer_Click;
 
+            MyCanvas.MouseLeftButtonUp += ViewLocations.ImageViewer_Click;
+
             MyMap.MouseClick += new EventHandler<MapMouseEventArgs>(Map_MouseClick);
             MyMap.MapForeground.TemplateApplied += new EventHandler(MapForeground_TemplateApplied);
 
-            ViewModel.Initialize(MyMap, Calibrator, ViewLocations, new LocalImageLoader());
             DataContext = ViewModel;
-
         }
 
         #region Click Event Methods/Properties
@@ -45,12 +46,12 @@ namespace Rhit.Applications.View.Views {
         private void MapPolygon_Click(object sender, MouseButtonEventArgs e) {
             if(Calibrator.Calibrating) return;
             LastEventCoordinate = e.GetPosition(MyMap);
-            ViewModel.SelectLocation((int) (sender as MapPolygon).Tag, true);
+            ViewModel.SelectLocation((int) (sender as MapPolygon).Tag);
         }
 
         private void Pushpin_Click(object sender, MouseButtonEventArgs e) {
             LastEventCoordinate = e.GetPosition(MyMap);
-            ViewModel.SelectLocation((sender as Pushpin).Location);
+            ViewModel.SelectLocation((int) (sender as Pushpin).Tag);
         }
         #endregion
 
@@ -92,12 +93,12 @@ namespace Rhit.Applications.View.Views {
 
         private void DraggableShape_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
             LastEventCoordinate = e.GetPosition(MyMap);
-            ViewModel.SelectLocation((int) (sender as DraggableShape).Tag, false);
+            ViewModel.SelectLocation((int) (sender as DraggableShape).Tag);
         }
 
         private void DraggablePushpin_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
             LastEventCoordinate = e.GetPosition(MyMap);
-            ViewModel.SelectLocation((int) (sender as Pushpin).Tag, false);
+            ViewModel.SelectLocation((int) (sender as Pushpin).Tag);
         }
     }
 
@@ -106,12 +107,15 @@ namespace Rhit.Applications.View.Views {
 
         public LocationsProvider() {
             Locations = new ObservableCollection<Location>();
+            Points = new ObservableCollection<Point>();
             State = BehaviorState.Default;
         }
 
         private BehaviorState State { get; set; }
 
         public ObservableCollection<Location> Locations { get; set; }
+
+        public ObservableCollection<Point> Points { get; set; }
 
         public void DisplayCorners(ICollection<Location> corners) {
             Locations.Clear();
@@ -124,8 +128,13 @@ namespace Rhit.Applications.View.Views {
             return Locations;
         }
 
-        public void ClearLocations() {
+        public IList<Point> GetPoints() {
+            return Points;
+        }
+
+        public void Clear() {
             Locations.Clear();
+            Points.Clear();
             State = BehaviorState.Default;
         }
 
@@ -144,6 +153,18 @@ namespace Rhit.Applications.View.Views {
                 if(Locations.Count <= 0) {
                     Location newLocation = (sender as Map).ViewportPointToLocation(e.ViewportPoint);
                     Locations.Add(newLocation);
+                    Points.Clear();
+                }
+                e.Handled = true;
+            }
+        }
+
+        public void ImageViewer_Click(object sender, MouseButtonEventArgs e) {
+            if(State == BehaviorState.AddingLocation) {
+                if(Points.Count <= 0) {
+                    Point point = e.GetPosition(sender as Canvas);
+                    Points.Add(point);
+                    Locations.Clear();
                 }
                 e.Handled = true;
             }
@@ -156,15 +177,11 @@ namespace Rhit.Applications.View.Views {
             window.Show();
         }
 
-        private int _id { get; set; }
-
-        public int GetId() {
-            return _id;
-        }
+        public int Id { get; set; }
 
         private void LocationId_Closed(object sender, EventArgs e) {
             LocationIdWindow window = sender as LocationIdWindow;
-            _id = window.GetIdNumber();
+            Id = window.GetIdNumber();
         }
     }
 

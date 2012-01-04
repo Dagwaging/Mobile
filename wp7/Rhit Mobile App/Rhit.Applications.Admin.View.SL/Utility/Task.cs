@@ -12,25 +12,48 @@ using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using Rhit.Applications.Mvvm.Commands;
 using System.Collections.Specialized;
+using System.ComponentModel;
 
 namespace Rhit.Applications.View.Utility {
     public class Task : DependencyObject {
         public Task() {
+            Visibility = Visibility.Visible;
+            ActivateCommand = new RelayCommand(p => Activate());
             Steps = new ObservableCollection<TaskStep>();
+            InternalRequirements = new ObservableCollection<string>();
             Requirements = new ObservableCollection<TaskRequirement>();
             Requirements.CollectionChanged += new NotifyCollectionChangedEventHandler(Requirements_CollectionChanged);
-            ActivateCommand = new RelayCommand(p => Activate());
+        }
+
+        public TaskContainer Parent { get; set; }
+
+        private void Requirements_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
+            if(e.NewItems == null || e.NewItems.Count <= 0) return;
+            foreach(TaskRequirement req in e.NewItems)
+                if(req != null) req.PropertyChanged += new PropertyChangedEventHandler(Requirements_PropertyChanged);
+            CalculateVisibility();
+        }
+
+        private void Requirements_PropertyChanged(object sender, PropertyChangedEventArgs e) {
+            CalculateVisibility();
+        }
+
+        public void CalculateVisibility() {
+            foreach(TaskRequirement req in Requirements)
+                if(!req.Value) {
+                    Visibility = Visibility.Collapsed;
+                    return;
+                }
+            if(Parent != null && Parent.CurrentTask != null) {
+                if(InternalRequirements.Contains(Parent.CurrentTask.Label))
+                    Visibility = Visibility.Visible;
+                else Visibility = Visibility.Collapsed;
+                return;
+            }
             Visibility = Visibility.Visible;
-            AlwaysAvailable = false;
         }
 
-        void Requirements_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
-            //foreach(TaskRequirement req in e.NewItems)
-            return;
-        }
-
-        public ObservableCollection<TaskRequirement> Requirements { get; set; }
-
+        #region Task Activation
         public event EventHandler Activated;
 
         private void OnAvtivate(EventArgs e) {
@@ -45,8 +68,7 @@ namespace Rhit.Applications.View.Utility {
             OnAvtivate(new EventArgs());
             if(StartCommand != null) StartCommand.Execute(null);
         }
-
-        public bool AlwaysAvailable { get; set; }
+        #endregion
 
         #region Dependency Properties
         #region StartCommand
@@ -102,6 +124,10 @@ namespace Rhit.Applications.View.Utility {
 
         public ObservableCollection<TaskStep> Steps { get; private set; }
 
+        public ObservableCollection<TaskRequirement> Requirements { get; set; }
+
+        public ObservableCollection<string> InternalRequirements { get; set; }
+
         public void AddStep(TaskStep step) {
             Steps.Add(step);
         }
@@ -114,25 +140,5 @@ namespace Rhit.Applications.View.Utility {
             foreach(TaskStep step in steps)
                 AddStep(step);
         }
-    }
-
-    public class TaskRequirement : DependencyObject {
-        public TaskRequirement() { }
-
-        #region Dependency Properties
-        #region Value
-        public bool Value {
-            get { return (bool) GetValue(ValueProperty); }
-            set { SetValue(ValueProperty, value); }
-        }
-
-        public static readonly DependencyProperty ValueProperty =
-           DependencyProperty.Register("Value", typeof(bool), typeof(TaskRequirement), new PropertyMetadata(true, new PropertyChangedCallback(OnValueChanged)));
-
-        private static void OnValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
-            return;
-        }
-        #endregion
-        #endregion
     }
 }

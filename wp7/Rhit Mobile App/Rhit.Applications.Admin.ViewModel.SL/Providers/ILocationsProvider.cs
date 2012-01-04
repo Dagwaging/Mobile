@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Maps.MapControl;
+using System.Windows;
 
 namespace Rhit.Applications.ViewModel.Providers {
     public interface ILocationsProvider {
@@ -9,13 +10,15 @@ namespace Rhit.Applications.ViewModel.Providers {
         //Retrieve any changes made to the corners
         IList<Location> GetLocations();
 
+        IList<Point> GetPoints();
+
         //Allow user to create a new set of corners
         void CreateNewCorners();
 
-	int Id { get; set; }
+	    int Id { get; set; }
 
         //Done with corners
-        void ClearLocations();
+        void Clear();
 
         void QueryLocation();
     }

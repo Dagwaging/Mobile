@@ -12,21 +12,33 @@ using Rhit.Applications.ViewModel.Providers;
 
 namespace Rhit.Applications.ViewModel.Models {
     public class MainViewModel : DependencyObject {
-        private enum BehaviorState { Default, MovingCorners, CreatingCorners, Floor, AddingLocation };
+        private enum BehaviorState { Default, MovingCorners, CreatingCorners, Floor, AddingLocation, FloorAddingLocation };
 
         //NOTE: Requires a call to Initialize before class is usable
         //Note: NoArg Constructor so ViewModel can be created in xaml
         public MainViewModel() { }
 
-        public void Initialize(Map map, IBuildingMappingProvider buildingMappingProvider,
+        public void SetMode(Map map) {
+            map.Mode = Map.CurrentMode;
+
+            List<UIElement> es = new List<UIElement>();
+            foreach(UIElement e in map.Children) es.Add(e);
+            map.Children.Clear();
+
+            map.Children.Add(Map.TileLayer);
+
+            //Re-add elements put onto the map in the view
+            foreach(UIElement e in es) map.Children.Add(e);
+        }
+
+        public void Initialize(IBuildingMappingProvider buildingMappingProvider,
             ILocationsProvider locationsProvider, IBitmapProvider imageProvider) {
 
             Locations = LocationsController.Instance;
 
             LocationsProvider = locationsProvider;
             LocationsController.Instance.CurrentLocationChanged += new LocationEventHandler(CurrentLocationChanged);
-            LocationsController.Instance.LocationsChanged += new LocationEventHandler(LocationsChanged);
-            
+
             SaveCommand = new RelayCommand(p => Save());
             CancelCommand = new RelayCommand(p => Cancel());
 
@@ -38,8 +50,6 @@ namespace Rhit.Applications.ViewModel.Models {
 
             ShowBuildings = true;
 
-            
-            MapController.CreateMapController(map);
             ImageController.CreateImageController(imageProvider, buildingMappingProvider);
             Image = ImageController.Instance;
             Map = MapController.Instance;
@@ -52,9 +62,9 @@ namespace Rhit.Applications.ViewModel.Models {
             Mapper = LocationPositionMapper.Instance;
         }
 
-        public MainViewModel(Map map, IBuildingMappingProvider buildingMappingProvider,
+        public MainViewModel(IBuildingMappingProvider buildingMappingProvider,
             ILocationsProvider locationsProvider, IBitmapProvider imageProvider) {
-                Initialize(map, buildingMappingProvider, locationsProvider, imageProvider);
+            Initialize(buildingMappingProvider, locationsProvider, imageProvider);
         }
 
         private ILocationsProvider LocationsProvider { get; set; }
@@ -72,10 +82,19 @@ namespace Rhit.Applications.ViewModel.Models {
 
         private BehaviorState State { get; set; }
 
+
+
+
+
         private void AddLocation() {
-            ShowBuildings = false;
-            State = BehaviorState.AddingLocation;
-            LocationsProvider.QueryLocation();
+            if(State == BehaviorState.Floor) {
+                State = BehaviorState.FloorAddingLocation;
+                LocationsProvider.QueryLocation();
+            } else {
+                ShowBuildings = false;
+                State = BehaviorState.AddingLocation;
+                LocationsProvider.QueryLocation();
+            }
         }
 
         private void CreateCorners() {
@@ -148,48 +167,66 @@ namespace Rhit.Applications.ViewModel.Models {
                 case BehaviorState.AddingLocation:
                     SaveLocation();
                     break;
+                case BehaviorState.FloorAddingLocation:
+                    SaveLocation();
+                    break;
             }
         }
 
         private void SaveLocation() {
-            IList<Location> locations = LocationsProvider.GetLocations();
-            if(locations.Count <= 0) return;
-            Location newLocation = locations[0];
-            DataCollector.Instance.ExecuteStoredProcedure(Dispatcher, "spCreateLocation", new Dictionary<string, object>() {
-                { "id", LocationsProvider.GetId() },
-                { "name", "" },
-                { "lat", newLocation.Latitude },
-                { "lon", newLocation.Longitude },
+            if(State == BehaviorState.FloorAddingLocation) {
+                IList<Location> locations = LocationsProvider.GetLocations();
+                IList<Point> points = LocationsProvider.GetPoints();
+                Location newLocation = null;
+                if(locations.Count > 0) newLocation = locations[0];
+                else if(points.Count > 0) newLocation = LocationPositionMapper.Instance.ConvertPositionToLocation(points[0]);
+                if(newLocation != null) {
+                    DataCollector.Instance.ExecuteStoredProcedure(Dispatcher, "spCreateLocation", new Dictionary<string, object>() {
+                        { "id", LocationsProvider.Id }, 
+                        { "name", "New Location" },
+                        { "lat", newLocation.Latitude },
+                        { "lon", newLocation.Longitude },
+                        //TODO: Scott - ParentId = Locations.CurrentLocation.Id
+                    });
+                }
+            }
 
-            });
+            if(State == BehaviorState.AddingLocation) {
+                IList<Location> locations = LocationsProvider.GetLocations();
+                if(locations.Count <= 0) return;
+                Location newLocation = locations[0];
+                DataCollector.Instance.ExecuteStoredProcedure(Dispatcher, "spCreateLocation", new Dictionary<string, object>() {
+                    { "id", LocationsProvider.Id }, 
+                    { "name", "New Location" },
+                    { "lat", newLocation.Latitude },
+                    { "lon", newLocation.Longitude },
+                });
+            }
 
             Cancel();
         }
 
         private void Cancel() {
+            if(State == BehaviorState.FloorAddingLocation) {
+                LocationsProvider.Clear();
+                State = BehaviorState.Floor;
+                return;
+            }
             if(State == BehaviorState.Floor) ImageController.Instance.CloseImage();
-            LocationsProvider.ClearLocations();
+            LocationsProvider.Clear();
             ShowBuildings = true;
-            ShowSave = false;
             State = BehaviorState.Default;
             Mapper.Locations.Clear();
         }
 
-        private void LocationsChanged(object sender, LocationEventArgs e) {
-            foreach(RhitLocation location in e.NewLocations) {
-                if(location.Corners == null || location.Corners.Count <= 0) continue;
-                LocationsController.Instance.AddBuilding(location);
-            }
-        }
+
+
+
+
+
 
         private void CurrentLocationChanged(object sender, LocationEventArgs e) {
-            if(!ShowBuildings && State != BehaviorState.Floor) {
-                if(e.OldLocation != null)
-                    LocationsController.Instance.RemoveBuilding(e.OldLocation);
-                if(e.NewLocation != null)
-                    LocationsController.Instance.AddBuilding(e.NewLocation);
-            }
-            if(e.NewLocation != null) MapController.Instance.MapControl.Center = e.NewLocation.Center;
+            if(e.NewLocation != null) MapController.Instance.Center = e.NewLocation.Center;
         }
 
         private void OnLocationsRetrieved(object sender, ServiceEventArgs e) {
@@ -272,17 +309,12 @@ namespace Rhit.Applications.ViewModel.Models {
 
         public void GotoRhit() {
             //TODO: Don't hard code
-            Map.MapControl.Center = new GeoCoordinate(39.4820263, -87.3248677);
-            Map.MapControl.ZoomLevel = 16;
+            Map.Center = new GeoCoordinate(39.4820263, -87.3248677);
+            Map.ZoomLevel = 16;
         }
 
-        public void SelectLocation(int id, bool show) {
+        public void SelectLocation(int id) {
             LocationsController.Instance.SelectLocation(id);
-            if(!show) LocationsController.Instance.ShowCurrent = false;
-        }
-
-        public void SelectLocation(Location coordinate) {
-            Locations.SelectLocation(new GeoCoordinate(coordinate));
         }
     }
 }

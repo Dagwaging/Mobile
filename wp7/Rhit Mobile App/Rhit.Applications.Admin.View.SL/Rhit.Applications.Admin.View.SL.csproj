@@ -117,6 +117,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utility\Task.cs" />
     <Compile Include="Utility\TaskContainer.cs" />
+    <Compile Include="Utility\TaskRequirement.cs" />
     <Compile Include="Utility\TaskStep.cs" />
     <Compile Include="Views\DataPage.xaml.cs">
       <DependentUpon>DataPage.xaml</DependentUpon>
