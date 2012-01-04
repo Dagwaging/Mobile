@@ -15,7 +15,7 @@ namespace Rhit.Applications.ViewModel.Controllers {
         private LocationsController() {
             LocationDictionary = new Dictionary<int, RhitLocation>();
             LocationTypes = new ObservableCollection<LocationType>() {
-                                LocationType.NormalLocation,
+                LocationType.NormalLocation,
                 LocationType.PointOfInterest,
                 LocationType.OnQuickList,
                 LocationType.Printer,
@@ -32,6 +32,17 @@ namespace Rhit.Applications.ViewModel.Controllers {
             PointsOfInterest = new ObservableCollection<RhitLocation>();
             ShowAllBuildings = true;
             ShowSelectedBuilding = true;
+
+            List<RhitLocation> locations = DataCollector.Instance.GetAllLocations(null);
+            if(locations == null || locations.Count <= 0)
+                DataCollector.Instance.UpdateAvailable += new ServiceEventHandler(OnLocationsRetrieved);
+            else OnLocationsRetrieved(this, new ServiceEventArgs());
+        }
+
+        private void OnLocationsRetrieved(object sender, ServiceEventArgs e) {
+            List<RhitLocation> locations = DataCollector.Instance.GetAllLocations(null);
+            if(locations == null || locations.Count <= 0) return;
+            SetLocations(locations);
         }
 
         #region Singleton Instance
@@ -239,8 +250,8 @@ namespace Rhit.Applications.ViewModel.Controllers {
         }
 
         private void InitilizeData() {
-            AltNames = new ObservableCollection<string>();
-            foreach(string name in OriginalLocation.AltNames) AltNames.Add(name);
+            AltNames = new ObservableCollection<AlternateName>();
+            foreach(string name in OriginalLocation.AltNames) AltNames.Add(new AlternateName(name));
             Corners = new ObservableCollection<Location>();
             foreach(Location location in OriginalLocation.Corners) Corners.Add(location);
             Links = new ObservableCollection<Link>();
@@ -285,8 +296,8 @@ namespace Rhit.Applications.ViewModel.Controllers {
 
             if(AltNames.Count != location.AltNames.Count) changes.Add("AltNames");
             else {
-                foreach(string name in AltNames) {
-                    if(location.AltNames.Contains(name)) continue;
+                foreach(AlternateName altName in AltNames) {
+                    if(location.AltNames.Contains(altName.Name)) continue;
                     changes.Add("AltNames");
                     break;
                 }
@@ -299,13 +310,13 @@ namespace Rhit.Applications.ViewModel.Controllers {
 
         public RhitLocation OriginalLocation { get; private set; }
 
-        public ObservableCollection<string> AltNames { get; private set; }
+        public ObservableCollection<AlternateName> AltNames { get; set; }
 
         public ObservableCollection<Location> Corners { get; private set; }
 
-        public ObservableCollection<Link> Links { get; set; }
+        public ObservableCollection<Link> Links { get; private set; }
 
-        private void CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
+        private void CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
             CheckChanges();
         }
 
@@ -404,6 +415,12 @@ namespace Rhit.Applications.ViewModel.Controllers {
         #endregion
     }
 
+    public class AlternateName {
+        public AlternateName() { Name = ""; }
+        public AlternateName(string name) { Name = name; }
+        public string Name { get; set; }
+    }
+
     public class LocationNode {
         public LocationNode(RhitLocation location) {
             ChildLocations = new ObservableCollection<LocationNode>();
@@ -421,11 +438,27 @@ namespace Rhit.Applications.ViewModel.Controllers {
         public int Id { get; set; }
     }
 
-    public class Link {
+    public class Link : DependencyObject {
         public Link() { }
 
-        public string Name { get; set; }
+        #region Name
+        public string Name {
+            get { return (string) GetValue(NameProperty); }
+            set { SetValue(NameProperty, value); }
+        }
 
-        public string Address { get; set; }
+        public static readonly DependencyProperty NameProperty =
+            DependencyProperty.Register("Name", typeof(string), typeof(Link), new PropertyMetadata(""));
+        #endregion
+
+        #region Address
+        public string Address {
+            get { return (string) GetValue(AddressProperty); }
+            set { SetValue(AddressProperty, value); }
+        }
+
+        public static readonly DependencyProperty AddressProperty =
+            DependencyProperty.Register("Address", typeof(string), typeof(Link), new PropertyMetadata(""));
+        #endregion
     }
 }

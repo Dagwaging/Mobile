@@ -24,12 +24,12 @@
     <navigation:Page.Resources>
         <converter:ObjectToBoolConverter x:Key="ObjectBoolConverter"/>
         <converter:ObjectToBoolConverter x:Key="RObjectBoolConverter" Reverse="True"/>
-        
-        <vm:MainViewModel x:Name="ViewModel"/>
+
+        <vm:MapViewModel x:Name="ViewModel"/>
         <my:CalibrationHandler x:Name="Calibrator"/>
         <my:LocationsProvider x:Name="ViewLocations"/>
         <controls:LocalImageLoader x:Name="ImageLoader"/>
-        <vm:MainInitializer x:Name="Initializer" ViewModelInstance="{StaticResource ViewModel}"
+        <vm:MapModelInitializer x:Name="Initializer" ViewModelInstance="{StaticResource ViewModel}"
                             LocationsProvider="{StaticResource ViewLocations}"
                             BuildingMappingProvider="{StaticResource Calibrator}"
                             BitmapProvider="{StaticResource ImageLoader}"/>

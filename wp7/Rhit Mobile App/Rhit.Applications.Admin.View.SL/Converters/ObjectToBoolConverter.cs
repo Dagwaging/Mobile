@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Data;
+using System.Collections;
 
 namespace Rhit.Applications.View.Converters {
     public class ObjectToBoolConverter : IValueConverter {

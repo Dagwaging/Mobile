@@ -2,6 +2,7 @@
 using System.Windows;
 using Rhit.Applications.ViewModel;
 using Rhit.Applications.View.Views;
+using Rhit.Applications.ViewModel.Controllers;
 
 namespace Rhit.Applications.View {
     public partial class App : Application {
@@ -14,6 +15,8 @@ namespace Rhit.Applications.View {
 
             InitializeComponent();
             Services.Start(Deployment.Current.Dispatcher);
+            //Initialize Locations by just creating the instance
+            var locations = LocationsController.Instance;
         }
 
         private void Application_Startup(object sender, StartupEventArgs e) {

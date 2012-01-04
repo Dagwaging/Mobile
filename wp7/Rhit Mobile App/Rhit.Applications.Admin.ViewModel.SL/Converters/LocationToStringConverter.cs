@@ -22,7 +22,9 @@ namespace Rhit.Applications.ViewModel.Converters {
             if(value == null) return "No Location Selected";
             if(IsDescription) return (value as ObservableRhitLocation).Description;
             if(IsAltNames) {
-                IList<string> altNames = (value as ObservableRhitLocation).AltNames;
+                IList<string> altNames = new List<string>();
+                foreach(AlternateName altName in (value as ObservableRhitLocation).AltNames)
+                    altNames.Add(altName.Name);
                 if(altNames == null || altNames.Count <= 0) return "";
                 string names = "";
                 foreach(string name in altNames) names += name + ',';

@@ -1,11 +1,11 @@
 ﻿using Rhit.Applications.ViewModel.Providers;
 
 namespace Rhit.Applications.ViewModel.Models {
-    public class MainInitializer {
-        public MainInitializer() { }
+    public class MapModelInitializer {
+        public MapModelInitializer() { }
 
-        private MainViewModel _viewModelInstance;
-        public MainViewModel ViewModelInstance {
+        private MapViewModel _viewModelInstance;
+        public MapViewModel ViewModelInstance {
             get { return _viewModelInstance; }
             set {
                 _viewModelInstance = value;

@@ -3,9 +3,15 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:navigation="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Navigation"
+    xmlns:vm="clr-namespace:Rhit.Applications.ViewModel.Models;assembly=Rhit.Applications.Admin.ViewModel.SL"
+    xmlns:cmds="clr-namespace:Rhit.Applications.Mvvm.Commands;assembly=Rhit.Applications.Mvvm.SL"
     mc:Ignorable="d" d:DesignWidth="640" d:DesignHeight="480"
     Title="Home"
     Style="{StaticResource PageStyle}">
+    
+    <navigation:Page.Resources>
+        <vm:HomeViewModel x:Name="ViewModel"/>
+    </navigation:Page.Resources>
 
     <Grid x:Name="LayoutRoot">
         <ScrollViewer Style="{StaticResource PageScrollViewerStyle}">
@@ -13,29 +19,34 @@
                 <TextBlock Style="{StaticResource HeaderTextStyle}" Text="Home" HorizontalAlignment="Center"/>
                 
                 <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    
-                    
-                    
-                    <StackPanel Grid.Column="0">
-                        <TextBlock Style="{StaticResource ContentTextStyle}" Text="Instructions" FontWeight="Bold"/>
-                        <TextBlock Style="{StaticResource ContentTextStyle}" Text="instructions"/>
-                        <TextBlock Style="{StaticResource ContentTextStyle}" Text="About" FontWeight="Bold" Margin="0,10,0,0"/>
-                        <TextBlock Style="{StaticResource ContentTextStyle}" Text="about"/>
+
+                    <StackPanel>
+                        <TextBlock Style="{StaticResource ContentTextStyle}" Text="About" FontWeight="Bold"/>
+                        <TextBlock Style="{StaticResource ContentTextStyle}" Text="Created by me..."/>
                     </StackPanel>
 
-                    <StackPanel Grid.Column="1">
-                        <StackPanel.Resources>
-                            <Style TargetType="Button">
-                                <Setter Property="Margin" Value="5"/>
-                                <Setter Property="HorizontalAlignment" Value="Center"/>
-                            </Style>
-                        </StackPanel.Resources>
-                        <Button Content="Refresh Server Data" Click="RefreshButton_Click"/>
-                        <Button Content="Increase Version"/>
+                    <StackPanel Grid.Row="1" Grid.ColumnSpan="2">
+                        <TextBlock Style="{StaticResource ContentTextStyle}" Text="Instructions" FontWeight="Bold" Margin="0,10,0,0"/>
+                        <TextBlock Style="{StaticResource ContentTextStyle}" Text="Do stuff... and things"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Top">
+                        <TextBlock Text="{Binding Version}" HorizontalAlignment="Center"/>
+                        <Button Margin="5" cmds:CommandManager.Command="{Binding IncreaseVersionCommand}" cmds:CommandManager.CommandEventName="Click">
+                            <StackPanel HorizontalAlignment="Center">
+                                <TextBlock Text="Increase" HorizontalAlignment="Center"/>
+                                <TextBlock Text="Server Data" HorizontalAlignment="Center"/>
+                                <TextBlock Text="Version" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
                     </StackPanel>
                 </Grid>
             </StackPanel>

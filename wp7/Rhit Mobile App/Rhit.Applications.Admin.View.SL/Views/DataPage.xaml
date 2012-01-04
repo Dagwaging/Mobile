@@ -16,10 +16,8 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*" MinWidth="160"/>
         </Grid.ColumnDefinitions>
-
-        <TextBlock Text="Loading Location Data from the Server..." Margin="10" FontWeight="Bold" FontSize="18"/>
 
         <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
             <ScrollViewer.Resources>
@@ -59,7 +57,7 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-
+                    
                     <TextBlock Grid.Row="0" Grid.Column="0" Text="Name:" FontWeight="Bold" VerticalAlignment="Center" Margin="5"/>
                     <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Locations.CurrentLocation.Label, FallbackValue='Enter Name', Mode=TwoWay}"/>
 
@@ -73,18 +71,39 @@
                     <ComboBox ItemsSource="{Binding ZoomRange}" Margin="5" HorizontalAlignment="Left" MinWidth="50" Grid.Row="3" Grid.Column="1" SelectedValue="{Binding Locations.CurrentLocation.MinZoom,Mode=TwoWay}"/>
 
                     <TextBlock Text="Location Type:" FontWeight="Bold" VerticalAlignment="Center" Margin="5" Grid.Row="4" Grid.Column="0"/>
-                    <ComboBox ItemsSource="{Binding Locations.Types}" SelectedValue="{Binding Locations.CurrentLocation.Type,Mode=TwoWay}" Grid.Row="4" Grid.Column="1" Margin="5" HorizontalAlignment="Left" MinWidth="50"/>
+                    <ComboBox ItemsSource="{Binding Locations.LocationTypes}" SelectedValue="{Binding Locations.CurrentLocation.Type,Mode=TwoWay}" Grid.Row="4" Grid.Column="1" Margin="5" HorizontalAlignment="Left" MinWidth="50"/>
 
                     <TextBlock Text="Label On Hybrid:" FontWeight="Bold" VerticalAlignment="Center" Margin="5" Grid.Row="5" Grid.Column="0"/>
-                    <CheckBox IsChecked="{Binding Locations.CurrentLocation.LabelOnHybrid,Mode=TwoWay}" Grid.Row="6" Grid.Column="1"/>
+                    <CheckBox IsChecked="{Binding Locations.CurrentLocation.LabelOnHybrid,Mode=TwoWay}" Grid.Row="5" Grid.Column="1"/>
 
-                    <TextBlock Text="Alternate Names:" FontWeight="Bold" VerticalAlignment="Center" Margin="5" Grid.Row="6" Grid.Column="0"/>
-                    <ListBox ItemsSource="{Binding Locations.CurrentLocation.AltNames}" VerticalContentAlignment="Center" MinWidth="100" Margin="5" Grid.Row="6" Grid.Column="1" HorizontalAlignment="Left"/>
-                    <Button Content="Manage Names" Margin="5" Click="ManageAltNames_Click" Grid.Row="6" Grid.Column="2" VerticalAlignment="Center"/>
+                    <StackPanel Grid.Row="6" Grid.ColumnSpan="2">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Alternate Names:" FontWeight="Bold" VerticalAlignment="Center" Margin="5" />
+                            <Button Content="Add New Name"  Margin="5" cmds:CommandManager.Command="{Binding AddNameCommand}" cmds:CommandManager.CommandEventName="Click"/>
+                        </StackPanel>
+                        <sdk:DataGrid ItemsSource="{Binding Locations.CurrentLocation.AltNames, Mode=TwoWay}" Background="Transparent" HorizontalAlignment="Left" Margin="5" AutoGenerateColumns="True">
+                            <sdk:DataGrid.AlternatingRowBackground>
+                                <SolidColorBrush Color="LightGray" Opacity="0.7"/>
+                            </sdk:DataGrid.AlternatingRowBackground>
+                        </sdk:DataGrid>
+                    </StackPanel>
 
-                    <TextBlock Text="Links:" FontWeight="Bold" VerticalAlignment="Center" Margin="5" Grid.Row="7" Grid.Column="0"/>
-                    <ListBox ItemsSource="{Binding Locations.CurrentLocation.Links}" ItemTemplate="{StaticResource LinkListTemplate}" MinWidth="100" Margin="5" Grid.Row="7" Grid.Column="1" HorizontalAlignment="Left"/>
-                    <Button Content="Manage Links" Margin="5" Click="AddLink_Click" Grid.Row="7" Grid.Column="2" VerticalAlignment="Center"/>
+                    <StackPanel Grid.Row="7" Grid.ColumnSpan="2">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Links:" FontWeight="Bold" VerticalAlignment="Center" Margin="5" />
+                            <Button Content="Add New Link"  Margin="5" cmds:CommandManager.Command="{Binding AddLinkCommand}" cmds:CommandManager.CommandEventName="Click"/>
+                        </StackPanel>
+                        <sdk:DataGrid ItemsSource="{Binding Locations.CurrentLocation.Links, Mode=TwoWay}" HorizontalAlignment="Left" Margin="5" AutoGenerateColumns="False" Background="Transparent">
+                            <sdk:DataGrid.AlternatingRowBackground>
+                                <SolidColorBrush Color="LightGray" Opacity="0.7"/>
+                            </sdk:DataGrid.AlternatingRowBackground>
+                            <sdk:DataGrid.Columns>
+                                <sdk:DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
+                                <sdk:DataGridTextColumn Header="Address" Binding="{Binding Address}"/>
+                                <sdk:DataGridTemplateColumn Header="Link" CellTemplate="{StaticResource LinkListTemplate}" IsReadOnly="True"/>
+                            </sdk:DataGrid.Columns>
+                        </sdk:DataGrid>
+                    </StackPanel>
                 </Grid>
 
                 <TextBlock Text="Description" FontWeight="Bold" VerticalAlignment="Center" Margin="5" HorizontalAlignment="Center"/>
