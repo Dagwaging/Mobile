@@ -54,14 +54,14 @@ namespace Rhit.Applications.ViewModel.Models {
 
             //Re-add elements put onto the map in the view
             foreach(UIElement e in es) map.Children.Add(e);
+            Map.ZoomLevel = 16;
+            if(Locations.CurrentLocation != null)
+                Map.Center = Locations.CurrentLocation.Center;
         }
 
         private void CurrentLocationChanged(object sender, LocationEventArgs e) {
-            if(e.NewLocation != null) MapController.Instance.Center = e.NewLocation.Center;
+            if(e.NewLocation != null) Map.Center = e.NewLocation.Center;
         }
-
-
-        
 
 
         #region Commands
@@ -287,6 +287,7 @@ namespace Rhit.Applications.ViewModel.Models {
             State = BehaviorState.Default;
             Mapper.Locations.Clear();
         }
+
 
         public void SelectLocation(int id) {
             LocationsController.Instance.SelectLocation(id);

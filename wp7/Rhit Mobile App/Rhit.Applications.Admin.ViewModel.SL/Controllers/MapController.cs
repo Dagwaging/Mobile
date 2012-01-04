@@ -16,7 +16,6 @@ namespace Rhit.Applications.ViewModel.Controllers {
             CreateMapLayers();
             InitializeMapResources();
             InitializeMap();
-            Load();
         }
 
 
@@ -46,28 +45,12 @@ namespace Rhit.Applications.ViewModel.Controllers {
         private void CreateMapLayers() {
             TileLayer = new MapTileLayer();
             OverlayLayer = new MapTileLayer();
-            //PolygonLayer = new MapLayer();
-            //TextLayer = new MapLayer();
         }
 
         private void InitializeMap() {
             ZoomLevel = 16;
-
-            ////Store elements put onto the map in the view
-            //List<UIElement> es = new List<UIElement>();
-            //foreach(UIElement e in MapControl.Children) es.Add(e);
-            //MapControl.Children.Clear();
-
-            //MapControl.Children.Add(TileLayer);
-            ////MapControl.Children.Add(OverlayLayer);
-            ////MapControl.Children.Add(PolygonLayer);
-            ////MapControl.Children.Add(TextLayer);
-
-            ////Re-add elements put onto the map in the view
-            //foreach(UIElement e in es) MapControl.Children.Add(e);
         }
         #endregion
-
 
         #region Update Methods
         private void UpdateSources() {
@@ -216,27 +199,6 @@ namespace Rhit.Applications.ViewModel.Controllers {
            DependencyProperty.Register("SourceChoices", typeof(bool), typeof(MapController), new PropertyMetadata(false));
         #endregion
         #endregion
-
-        public void Save() {
-            DataStorage.SaveState(StorageKey.ZoomLevel, ZoomLevel);
-            DataStorage.SaveState(StorageKey.MapCenter, Center);
-            DataStorage.SaveState(StorageKey.MapMode, CurrentMode.Label);
-            DataStorage.SaveState(StorageKey.TileSource, CurrentSource.Label);
-            DataStorage.SaveState(StorageKey.RoseOverlay, FloorPlans);
-        }
-
-        public void Load() {
-            ZoomLevel = (double) DataStorage.LoadState<object>(StorageKey.ZoomLevel, ZoomLevel);
-            Center = DataStorage.LoadState<Location>(StorageKey.MapCenter, Center);
-
-            string modeLabel = DataStorage.LoadState<string>(StorageKey.MapMode, string.Empty);
-            if(modeLabel != string.Empty) foreach(RhitMode mode in Modes) if(mode.Label == modeLabel) CurrentMode = mode;
-
-            string sourceLabel = DataStorage.LoadState<string>(StorageKey.TileSource, string.Empty);
-            if(sourceLabel != string.Empty) foreach(BaseTileSource source in Sources) if(source.Label == sourceLabel) CurrentSource = source;
-
-            FloorPlans = (bool) DataStorage.LoadState<object>(StorageKey.RoseOverlay, FloorPlans);
-        }
 
             ///// <summary> Current zoom level of the map. </summary>
         //public double ZoomLevel {

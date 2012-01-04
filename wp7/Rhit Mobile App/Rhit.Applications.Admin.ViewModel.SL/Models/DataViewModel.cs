@@ -16,7 +16,8 @@ namespace Rhit.Applications.ViewModel.Models {
 
             Locations = LocationsController.Instance;
             Locations.LocationsChanged += new LocationEventHandler(LocationsChanged);
-            if(Locations.All.Count > 0) Locations.SelectLocation(Locations.All[2].Id);
+            if(Locations.All.Count > 0 && Locations.CurrentLocation == null)
+                Locations.SelectLocation(Locations.All[2].Id);
 
             DataCollector.Instance.StoredProcReturned += new StoredProcEventHandler(StoredProcReturned);
         }
@@ -31,7 +32,7 @@ namespace Rhit.Applications.ViewModel.Models {
         }
 
         private void LocationsChanged(object sender, LocationEventArgs e) {
-            if(Locations.All.Count > 0)
+            if(Locations.All.Count > 0 && Locations.CurrentLocation == null)
                 Locations.SelectLocation(Locations.All[2].Id);
         }
 

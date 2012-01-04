@@ -131,9 +131,6 @@
     <Compile Include="Views\HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\LinkManagementWindow.xaml.cs">
-      <DependentUpon>LinkManagementWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\LocationIdWindow.xaml.cs">
       <DependentUpon>LocationIdWindow.xaml</DependentUpon>
     </Compile>
@@ -145,9 +142,6 @@
     </Compile>
     <Compile Include="Views\MapPage.xaml.cs">
       <DependentUpon>MapPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\NameManagementWindow.xaml.cs">
-      <DependentUpon>NameManagementWindow.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -199,10 +193,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\LinkManagementWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Views\LocationIdWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -216,10 +206,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\MapPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\NameManagementWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

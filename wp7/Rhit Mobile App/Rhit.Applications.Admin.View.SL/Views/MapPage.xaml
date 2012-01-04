@@ -25,20 +25,21 @@
         <converter:ObjectToBoolConverter x:Key="ObjectBoolConverter"/>
         <converter:ObjectToBoolConverter x:Key="RObjectBoolConverter" Reverse="True"/>
 
-        <vm:MapViewModel x:Name="ViewModel"/>
         <my:CalibrationHandler x:Name="Calibrator"/>
         <my:LocationsProvider x:Name="ViewLocations"/>
         <controls:LocalImageLoader x:Name="ImageLoader"/>
-        <vm:MapModelInitializer x:Name="Initializer" ViewModelInstance="{StaticResource ViewModel}"
-                            LocationsProvider="{StaticResource ViewLocations}"
-                            BuildingMappingProvider="{StaticResource Calibrator}"
-                            BitmapProvider="{StaticResource ImageLoader}"/>
+        <vm:MapViewModel x:Name="ViewModel"/>
+
+        <vm:MapModelInitializer x:Name="Initializer" 
+            ViewModelInstance="{StaticResource ViewModel}"
+            LocationsProvider="{StaticResource ViewLocations}"
+                                BuildingMappingProvider="{StaticResource Calibrator}"
+            BitmapProvider="{StaticResource ImageLoader}"
+            />
 
         <DataTemplate x:Name="DualItemTemplate">
             <controls:DraggablePushpin VirtualLocation="{Binding Location, Mode=TwoWay}" MouseLeftButtonDown="DraggablePushpin_MouseLeftButtonDown"  Tag="{Binding BaseLocation.Id}" Content="{Binding Label}"/>
         </DataTemplate>
-
-        
 
         <DataTemplate x:Name="PolygonItemTemplate">
             <map:MapPolygon Tag="{Binding Id}" MouseLeftButtonUp="MapPolygon_Click" Locations="{Binding Corners}"
@@ -172,6 +173,7 @@
                             <util:TaskStep Label="Save" Number="2" Instructions="Click the 'Save' Button"/>
                         </util:Task.Steps>
                     </util:Task>
+                    <!--erogneorgineo-->
                     <util:Task Label="Move Corners" ToolTip="Move the corners of the selected building" StartCommand="{Binding ChangeCornersCommand, ElementName=ViewModel}">
                         <util:Task.Requirements>
                             <util:TaskRequirement Value="{Binding Locations.IsCurrentLocation, Source={StaticResource ViewModel}}"/>

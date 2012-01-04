@@ -87,7 +87,8 @@ namespace Rhit.Applications.View.Views {
 
         // Executes when the user navigates away from this page.
         protected override void OnNavigatedFrom(NavigationEventArgs e) {
-            //LayoutRoot.Children.Remove(Map.RhitMap);
+            LayoutRoot.Children.Remove(MyMap);
+            MyMap.Children.Clear();
         }
         #endregion
 
