@@ -278,8 +278,6 @@
                     <TextBlock Text="Tools" Style="{StaticResource ExpanderHeaderStyle}"/>
                 </toolkit:Expander.Header>
                 <StackPanel HorizontalAlignment="Right">
-                    <Button cmds:CommandManager.Command="{Binding GotoRhitCommand}" cmds:CommandManager.CommandEventName="Click" Margin="5" Content="Goto RHIT" HorizontalAlignment="Center"/>
-
                     <Border BorderThickness="2" BorderBrush="Black" Margin="1">
                         <StackPanel>
                             <StackPanel.Resources>
