@@ -1,5 +1,5 @@
 //
-//  DirectoryViewController.h
+//  PersonDetailViewController.h
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -19,7 +19,6 @@
 
 #import <UIKit/UIKit.h>
 
-/// \ingroup views
-@interface DirectoryViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
+@interface PersonDetailViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 
 @end

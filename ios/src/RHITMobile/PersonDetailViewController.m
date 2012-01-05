@@ -1,5 +1,5 @@
 //
-//  DirectoryViewController.m
+//  PersonDetailViewController.m
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -17,12 +17,11 @@
 //  limitations under the License.
 //
 
-#import "DirectoryViewController.h"
 #import "PersonDetailViewController.h"
 
-#define kCellReuseIdentifier @"DirectoryViewCell"
+#define kCellReuseIdentifier @"PersonDetailCell"
 
-@implementation DirectoryViewController
+@implementation PersonDetailViewController
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -62,32 +61,23 @@
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
+- (NSString *)title {
+    return @"Jimmy Theis";
+}
+
 #pragma mark - UITableViewDelegate Methods
 
-- (void)tableView:(UITableView *)tableView
-didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
-    PersonDetailViewController *personController = [[[PersonDetailViewController alloc] initWithNibName:@"PersonDetailView" bundle:nil] autorelease];
-    
-    [self.navigationController pushViewController:personController animated:YES];
-}
+
 
 #pragma mark - UITableViewDataSource Methods
 
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 6;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView
          cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellReuseIdentifier];
-    
-    if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1
-                                      reuseIdentifier:kCellReuseIdentifier] autorelease];
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    }
-    
-    cell.textLabel.text = @"Jimmy Theis";
-    
-    return cell;
+    return nil;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView

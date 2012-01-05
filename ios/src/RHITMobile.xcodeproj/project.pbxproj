@@ -96,6 +96,8 @@
 		92ADEE2F14599D9500060A3F /* quicklist-toolbar-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 92ADEE2D14599D9500060A3F /* quicklist-toolbar-icon@2x.png */; };
 		92ADEE321459BC5E00060A3F /* tab-bar-directory-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 92ADEE301459BC5E00060A3F /* tab-bar-directory-icon.png */; };
 		92ADEE331459BC5E00060A3F /* tab-bar-directory-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 92ADEE311459BC5E00060A3F /* tab-bar-directory-icon@2x.png */; };
+		92D3672814B60DE000EE0504 /* PersonDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92D3672614B60DE000EE0504 /* PersonDetailViewController.m */; };
+		92D3672914B60DE000EE0504 /* PersonDetailView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92D3672714B60DE000EE0504 /* PersonDetailView.xib */; };
 		92DFEACA141FD4E500889314 /* MKMapView+ZoomLevel.m in Sources */ = {isa = PBXBuildFile; fileRef = 92DFEAC9141FD4E500889314 /* MKMapView+ZoomLevel.m */; };
 		92DFEACD141FEF9100889314 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92DFEACC141FEF9100889314 /* MapKit.framework */; };
 		92DFEAD01420245F00889314 /* RHAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 92DFEACF1420245F00889314 /* RHAnnotationView.m */; };
@@ -252,6 +254,9 @@
 		92ADEE2D14599D9500060A3F /* quicklist-toolbar-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "quicklist-toolbar-icon@2x.png"; sourceTree = "<group>"; };
 		92ADEE301459BC5E00060A3F /* tab-bar-directory-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab-bar-directory-icon.png"; sourceTree = "<group>"; };
 		92ADEE311459BC5E00060A3F /* tab-bar-directory-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab-bar-directory-icon@2x.png"; sourceTree = "<group>"; };
+		92D3672514B60DE000EE0504 /* PersonDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonDetailViewController.h; sourceTree = "<group>"; };
+		92D3672614B60DE000EE0504 /* PersonDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonDetailViewController.m; sourceTree = "<group>"; };
+		92D3672714B60DE000EE0504 /* PersonDetailView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PersonDetailView.xib; sourceTree = "<group>"; };
 		92DFEAC8141FD4E500889314 /* MKMapView+ZoomLevel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MKMapView+ZoomLevel.h"; sourceTree = "<group>"; };
 		92DFEAC9141FD4E500889314 /* MKMapView+ZoomLevel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MKMapView+ZoomLevel.m"; sourceTree = "<group>"; };
 		92DFEACC141FEF9100889314 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
@@ -594,6 +599,8 @@
 				92F20F6B1464383200603500 /* WebViewController.m */,
 				925465AB1495EB7E00C12B81 /* ToursViewController.h */,
 				925465AC1495EB7E00C12B81 /* ToursViewController.m */,
+				92D3672514B60DE000EE0504 /* PersonDetailViewController.h */,
+				92D3672614B60DE000EE0504 /* PersonDetailViewController.m */,
 				9265FEBA1409AB5D00AE406E /* MainWindow.xib */,
 				9265FEC31409AB5D00AE406E /* MapView.xib */,
 				9265FEC61409AB5D00AE406E /* SearchView.xib */,
@@ -605,6 +612,7 @@
 				92A49DDB145F8BA400B6F34E /* BetaRegistrationView.xib */,
 				92F20F6C1464383200603500 /* WebView.xib */,
 				925465AD1495EB7F00C12B81 /* ToursView.xib */,
+				92D3672714B60DE000EE0504 /* PersonDetailView.xib */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -710,6 +718,7 @@
 				925465AF1495EB7F00C12B81 /* ToursView.xib in Resources */,
 				922F44A514985AE800D5C2C3 /* tab-bar-tours-icon.png in Resources */,
 				922F44A614985AE800D5C2C3 /* tab-bar-tours-icon@2x.png in Resources */,
+				92D3672914B60DE000EE0504 /* PersonDetailView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -791,6 +800,7 @@
 				92F1B8B51496F67900F7FFD8 /* RHDirectionLineItem.m in Sources */,
 				92F1B8B914972AE600F7FFD8 /* RHSimplePointAnnotation.m in Sources */,
 				92F1B8BC1497BBE600F7FFD8 /* RHTourRequester.m in Sources */,
+				92D3672814B60DE000EE0504 /* PersonDetailViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
