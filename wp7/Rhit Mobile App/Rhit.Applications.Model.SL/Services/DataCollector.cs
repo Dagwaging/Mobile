@@ -316,6 +316,11 @@ namespace Rhit.Applications.Model.Services {
             }
             batchRequest.Start();
         }
+
+        public void UpdateServerVersion(Dispatcher dispatcher) {
+            RequestPart request = new RequestBuilder(BaseAddress).Admin(Connection.ServiceTokenGuid, Version);
+            Connection.MakeRequest(dispatcher, request);
+        }
         #endregion
     }
 }

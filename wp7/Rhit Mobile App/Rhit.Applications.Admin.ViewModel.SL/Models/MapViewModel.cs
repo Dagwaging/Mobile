@@ -255,7 +255,8 @@ namespace Rhit.Applications.ViewModel.Models {
                         { "name", "New Location" },
                         { "lat", newLocation.Latitude },
                         { "lon", newLocation.Longitude },
-                        //TODO: Scott - ParentId = Locations.CurrentLocation.Id
+                        { "floor", Mapper.Floor },
+                        { "parent", Locations.CurrentLocation.Id },
                     });
                 }
             }

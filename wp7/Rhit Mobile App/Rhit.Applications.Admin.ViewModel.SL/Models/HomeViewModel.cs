@@ -22,7 +22,8 @@ namespace Rhit.Applications.ViewModel.Models {
         public ICommand IncreaseVersionCommand { get; private set; }
 
         public void IncreaseVersion() {
-            //TODO: Scott - Increase Server Data Version
+            DataCollector.Instance.Version += 0.001;
+            DataCollector.Instance.UpdateServerVersion(Dispatcher);
         }
 
         #region Version

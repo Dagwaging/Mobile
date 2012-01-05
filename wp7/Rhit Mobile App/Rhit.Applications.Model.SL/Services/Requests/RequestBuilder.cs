@@ -64,6 +64,10 @@ namespace Rhit.Applications.Model.Services.Requests {
             return new AdminRequestPart(FullUrl, username, password);
         }
 
+        public AdminRequestPart Admin(Guid token, double version) {
+            return new AdminRequestPart(FullUrl, token, version);
+        }
+
         [Obsolete("Not a valid request end point")]
         public override string ToString() {
             return base.ToString();
