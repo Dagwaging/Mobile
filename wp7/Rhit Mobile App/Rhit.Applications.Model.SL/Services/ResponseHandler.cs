@@ -96,6 +96,7 @@ namespace Rhit.Applications.Model.Services {
             else if(response.Token != null && response.Token != string.Empty)
                 args.Type = ResponseType.Authentication;
 
+            //Stored Procedure Response
             else if(response.Table != null && response.Columns != null)
                 args.Type = ResponseType.StoredProc;
 

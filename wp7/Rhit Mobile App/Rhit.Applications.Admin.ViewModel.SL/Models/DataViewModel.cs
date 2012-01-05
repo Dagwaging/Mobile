@@ -55,14 +55,17 @@ namespace Rhit.Applications.ViewModel.Models {
             if(!newLocation.HasChanged) return;
             RhitLocation oldLocation = newLocation.OriginalLocation;
 
+            if (string.IsNullOrEmpty(newLocation.Label)) return; // Name error
+            if (newLocation.Id <= 0) return; // Id error
+            if (newLocation.ParentId < 0) return; // Parent Id error
+
+            var executions = new List<KeyValuePair<string, Dictionary<string, object>>>();
             List<string> changes = newLocation.CheckChanges();
             if(changes.Contains("Center")) changes.Remove("Center");
             if(changes.Contains("Links")) {
-                var executions = new List<KeyValuePair<string, Dictionary<string, object>>>() {
-                    new KeyValuePair<string,Dictionary<string,object>>("spDeleteLinks", new Dictionary<string,object>() {
-                        { "location", oldLocation.Id }
-                    })
-                };
+                executions.Add(new KeyValuePair<string, Dictionary<string, object>>("spDeleteLinks", new Dictionary<string, object>() {
+                    { "location", oldLocation.Id }
+                }));
                 foreach(Link link in newLocation.Links) {
                     executions.Add(new KeyValuePair<string, Dictionary<string, object>>("spAddLink", new Dictionary<string, object>() {
                         { "location", oldLocation.Id },
@@ -70,26 +73,26 @@ namespace Rhit.Applications.ViewModel.Models {
                         { "url", link.Address }
                     }));
                 }
-                DataCollector.Instance.ExecuteBatchStoredProcedure(Dispatcher, executions);
 
                 changes.Remove("Links");
             }
 
             if(changes.Contains("AltNames")) {
-                //TODO: Scott - Change AltNames
-                //Use oldLocation.Id since upodating location id is last
-
+                executions.Add(new KeyValuePair<string, Dictionary<string, object>>("spDeleteAlts", new Dictionary<string, object>() {
+                    { "location", oldLocation.Id }
+                }));
+                foreach (AlternateName altName in newLocation.AltNames) {
+                    executions.Add(new KeyValuePair<string, Dictionary<string, object>>("spAddAlt", new Dictionary<string, object>() {
+                        { "location", oldLocation.Id },
+                        { "altname", altName.Name },
+                    }));
+                }
 
                 changes.Remove("AltNames");
             }
 
-            if(changes.Count <= 0) return; //No changes left
-            if(string.IsNullOrEmpty(newLocation.Label)) return; // Name error
-            if(newLocation.Id <= 0) return; // Id error
-            if(newLocation.ParentId < 0) return; // Parent Id error
-
             // Valid parameters
-            DataCollector.Instance.ExecuteStoredProcedure(Dispatcher, "spUpdateLocation", new Dictionary<string, object>() {
+            executions.Add(new KeyValuePair<string,Dictionary<string,object>>("spUpdateLocation", new Dictionary<string, object>() {
                 { "id", oldLocation.Id },
                 { "name", newLocation.Label },
                 { "newid", newLocation.Id },
@@ -98,7 +101,9 @@ namespace Rhit.Applications.ViewModel.Models {
                 { "labelonhybrid", newLocation.LabelOnHybrid },
                 { "minzoomlevel", newLocation.MinZoom },
                 { "type", Location_DC.ConvertTypeToTypeKey(newLocation.Type) },
-            });
+            }));
+
+            DataCollector.Instance.ExecuteBatchStoredProcedure(Dispatcher, executions);
         }
 
         private void DeleteLocation() {

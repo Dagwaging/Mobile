@@ -256,7 +256,6 @@ namespace Rhit.Applications.ViewModel.Models {
                         { "lat", newLocation.Latitude },
                         { "lon", newLocation.Longitude },
                         { "floor", Mapper.Floor },
-                        { "parent", Locations.CurrentLocation.Id },
                     });
                 }
             }
@@ -270,6 +269,7 @@ namespace Rhit.Applications.ViewModel.Models {
                     { "name", "New Location" },
                     { "lat", newLocation.Latitude },
                     { "lon", newLocation.Longitude },
+                    { "floor", 0 },
                 });
             }
 
