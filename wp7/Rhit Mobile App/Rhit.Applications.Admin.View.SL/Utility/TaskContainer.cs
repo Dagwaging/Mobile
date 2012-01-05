@@ -16,6 +16,7 @@ using Rhit.Applications.Mvvm.Commands;
 namespace Rhit.Applications.View.Utility {
     public class TaskContainer : DependencyObject {
         public TaskContainer() {
+            TaskStack = new Stack<Task>();
             Tasks = new ObservableCollection<Task>();
             Tasks.CollectionChanged += new NotifyCollectionChangedEventHandler(Tasks_CollectionChanged);
             CompleteCommand = new RelayCommand(p => Complete());
@@ -23,12 +24,16 @@ namespace Rhit.Applications.View.Utility {
         }
 
         public void Complete() {
-            CurrentTask = null;
+            if(TaskStack.Count <= 0) CurrentTask = null;
+            else CurrentTask = TaskStack.Pop();
+            foreach(Task task in Tasks) task.CalculateVisibility();
             if(CompletedCommand != null) CompletedCommand.Execute(null);
         }
 
         public void Cancel() {
-            CurrentTask = null;
+            if(TaskStack.Count <= 0) CurrentTask = null;
+            else CurrentTask = TaskStack.Pop();
+            foreach(Task task in Tasks) task.CalculateVisibility();
             if(CanceledCommand != null) CanceledCommand.Execute(null);
         }
 
@@ -36,17 +41,23 @@ namespace Rhit.Applications.View.Utility {
 
         public ICommand CancelCommand { get; set; }
 
+        private Stack<Task> TaskStack { get; set; }
+
         private void Tasks_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
             if(e.Action != NotifyCollectionChangedAction.Add) return;
-            foreach(Task task in e.NewItems)
+            foreach(Task task in e.NewItems) {
                 task.Activated += new EventHandler(Task_Activated);
+                task.Parent = this;
+            }
         }
 
         private void Task_Activated(object sender, EventArgs e) {
+            TaskStack.Push(CurrentTask);
             CurrentTask = (sender as Task);
+            foreach(Task task in Tasks) task.CalculateVisibility();
         }
 
-        public ObservableCollection<Task> Tasks { get; private set; }
+        public ObservableCollection<Task> Tasks { get; set; }
 
         #region Dependency Properties
         #region CompleteCommand

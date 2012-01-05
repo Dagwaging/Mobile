@@ -11,15 +11,49 @@ using System.Windows.Shapes;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using Rhit.Applications.Mvvm.Commands;
+using System.Collections.Specialized;
+using System.ComponentModel;
 
 namespace Rhit.Applications.View.Utility {
     public class Task : DependencyObject {
         public Task() {
-            Steps = new ObservableCollection<TaskStep>();
+            Visibility = Visibility.Visible;
             ActivateCommand = new RelayCommand(p => Activate());
+            Steps = new ObservableCollection<TaskStep>();
+            InternalRequirements = new ObservableCollection<string>();
+            Requirements = new ObservableCollection<TaskRequirement>();
+            Requirements.CollectionChanged += new NotifyCollectionChangedEventHandler(Requirements_CollectionChanged);
+        }
+
+        public TaskContainer Parent { get; set; }
+
+        private void Requirements_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
+            if(e.NewItems == null || e.NewItems.Count <= 0) return;
+            foreach(TaskRequirement req in e.NewItems)
+                if(req != null) req.PropertyChanged += new PropertyChangedEventHandler(Requirements_PropertyChanged);
+            CalculateVisibility();
+        }
+
+        private void Requirements_PropertyChanged(object sender, PropertyChangedEventArgs e) {
+            CalculateVisibility();
+        }
+
+        public void CalculateVisibility() {
+            foreach(TaskRequirement req in Requirements)
+                if(!req.Value) {
+                    Visibility = Visibility.Collapsed;
+                    return;
+                }
+            if(Parent != null && Parent.CurrentTask != null) {
+                if(InternalRequirements.Contains(Parent.CurrentTask.Label))
+                    Visibility = Visibility.Visible;
+                else Visibility = Visibility.Collapsed;
+                return;
+            }
             Visibility = Visibility.Visible;
         }
 
+        #region Task Activation
         public event EventHandler Activated;
 
         private void OnAvtivate(EventArgs e) {
@@ -34,6 +68,7 @@ namespace Rhit.Applications.View.Utility {
             OnAvtivate(new EventArgs());
             if(StartCommand != null) StartCommand.Execute(null);
         }
+        #endregion
 
         #region Dependency Properties
         #region StartCommand
@@ -88,6 +123,10 @@ namespace Rhit.Applications.View.Utility {
         #endregion
 
         public ObservableCollection<TaskStep> Steps { get; private set; }
+
+        public ObservableCollection<TaskRequirement> Requirements { get; set; }
+
+        public ObservableCollection<string> InternalRequirements { get; set; }
 
         public void AddStep(TaskStep step) {
             Steps.Add(step);

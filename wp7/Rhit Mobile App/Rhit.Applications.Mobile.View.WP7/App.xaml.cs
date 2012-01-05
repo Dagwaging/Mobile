@@ -4,6 +4,7 @@ using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using Rhit.Applications.ViewModel;
 using Rhit.Applications.ViewModel.Controllers;
+using System.Windows.Media;
 
 namespace Rhit.Applications.View {
     public partial class App : Application {

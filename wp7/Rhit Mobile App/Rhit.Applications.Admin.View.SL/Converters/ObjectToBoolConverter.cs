@@ -1,21 +1,18 @@
 ﻿using System;
 using System.Globalization;
-using System.Windows;
 using System.Windows.Data;
 using System.Collections;
 
 namespace Rhit.Applications.View.Converters {
-    public class ObjectToVisibilityConverter : IValueConverter {
-        public ObjectToVisibilityConverter() {
-            NotNullValue = Visibility.Visible;
-            NullValue = Visibility.Collapsed;
+    public class ObjectToBoolConverter : IValueConverter {
+        public ObjectToBoolConverter() {
+            Reverse = false;
         }
 
-        public Visibility NotNullValue { get; set; }
-        public Visibility NullValue { get; set; }
+        public bool Reverse { get; set; }
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
-            return value != null ? NotNullValue : NullValue;
+            return value == null ? Reverse : !Reverse;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {

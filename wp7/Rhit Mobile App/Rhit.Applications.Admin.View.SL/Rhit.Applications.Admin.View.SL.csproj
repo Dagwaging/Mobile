@@ -111,11 +111,13 @@
     <Compile Include="Controls\DraggablePushpin.cs" />
     <Compile Include="Controls\LocalImageLoader.cs" />
     <Compile Include="Converters\BoolToGridSizeConverter.cs" />
+    <Compile Include="Converters\ObjectToBoolConverter.cs" />
     <Compile Include="Converters\ObjectToVisibilityConverter.cs" />
     <Compile Include="Converters\RadioButtonConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utility\Task.cs" />
     <Compile Include="Utility\TaskContainer.cs" />
+    <Compile Include="Utility\TaskRequirement.cs" />
     <Compile Include="Utility\TaskStep.cs" />
     <Compile Include="Views\DataPage.xaml.cs">
       <DependentUpon>DataPage.xaml</DependentUpon>
@@ -129,9 +131,6 @@
     <Compile Include="Views\HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\LinkManagementWindow.xaml.cs">
-      <DependentUpon>LinkManagementWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\LocationIdWindow.xaml.cs">
       <DependentUpon>LocationIdWindow.xaml</DependentUpon>
     </Compile>
@@ -143,9 +142,6 @@
     </Compile>
     <Compile Include="Views\MapPage.xaml.cs">
       <DependentUpon>MapPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\NameManagementWindow.xaml.cs">
-      <DependentUpon>NameManagementWindow.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -197,10 +193,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\LinkManagementWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Views\LocationIdWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -214,10 +206,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\MapPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\NameManagementWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

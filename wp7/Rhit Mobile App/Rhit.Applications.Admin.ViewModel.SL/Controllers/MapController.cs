@@ -1,37 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
-using System.Windows.Input;
-using System.Windows.Media;
+using Microsoft.Maps.MapControl;
 using Rhit.Applications.Model;
-using Rhit.Applications.Model.Events;
 using Rhit.Applications.Model.Maps.Modes;
 using Rhit.Applications.Model.Maps.Sources;
 using Rhit.Applications.Model.Services;
-using Microsoft.Maps.MapControl;
 
 
 namespace Rhit.Applications.ViewModel.Controllers {
     public class MapController : DependencyObject {
         private static MapController _instance;
 
-        private MapController(Map map) {
+        private MapController() {
             CreateMapLayers();
-            MapControl = map;
             InitializeMapResources();
             InitializeMap();
-            Load();
         }
 
-
-        public static void CreateMapController(Map map) {
-            _instance = new MapController(map);
-        }
 
         #region Singleton Instance
         public static MapController Instance {
-            get { return _instance; }
+            get {
+                if(_instance == null)
+                    _instance = new MapController();
+                return _instance;
+            }
         }
         #endregion
 
@@ -51,30 +45,10 @@ namespace Rhit.Applications.ViewModel.Controllers {
         private void CreateMapLayers() {
             TileLayer = new MapTileLayer();
             OverlayLayer = new MapTileLayer();
-            //PolygonLayer = new MapLayer();
-            //TextLayer = new MapLayer();
         }
 
         private void InitializeMap() {
-            MapControl.Mode = CurrentMode;
-            MapControl.ZoomLevel = 16; //TODO: No Hard Coding
-            MapControl.CopyrightVisibility = Visibility.Collapsed;
-            MapControl.LogoVisibility = Visibility.Collapsed;
-            //MapControl.Tap += new EventHandler<GestureEventArgs>(MapControl_Tap);
-            MapControl.CacheMode = new BitmapCache();
-
-            //Store elements put onto the map in the view
-            List<UIElement> es = new List<UIElement>();
-            foreach(UIElement e in MapControl.Children) es.Add(e);
-            MapControl.Children.Clear();
-
-            MapControl.Children.Add(TileLayer);
-            //MapControl.Children.Add(OverlayLayer);
-            //MapControl.Children.Add(PolygonLayer);
-            //MapControl.Children.Add(TextLayer);
-
-            //Re-add elements put onto the map in the view
-            foreach(UIElement e in es) MapControl.Children.Add(e);
+            ZoomLevel = 16;
         }
         #endregion
 
@@ -88,10 +62,11 @@ namespace Rhit.Applications.ViewModel.Controllers {
             if(Sources.Count > 1) SourceChoices = true;
             else SourceChoices = false;
         }
-
+        
         private void UpdateSource() {
             if(CurrentSource == null) return;
             CurrentMode.ChangeSource(CurrentSource);
+
             TileLayer.TileSources.Clear();
             TileLayer.TileSources.Add(CurrentSource);
         }
@@ -107,14 +82,12 @@ namespace Rhit.Applications.ViewModel.Controllers {
         #region Map Layers
         private MapTileLayer OverlayLayer { get; set; }
 
-        private MapTileLayer TileLayer { get; set; }
+        public MapTileLayer TileLayer { get; set; }
 
         private MapLayer PolygonLayer { get; set; }
 
         private MapLayer TextLayer { get; set; }
         #endregion
-
-        public Map MapControl { get; private set; }
 
         public ObservableCollection<RhitMode> Modes { get; set; }
 
@@ -147,6 +120,27 @@ namespace Rhit.Applications.ViewModel.Controllers {
         public static readonly DependencyProperty CurrentModeProperty =
            DependencyProperty.Register("CurrentMode", typeof(RhitMode), typeof(MapController),
            new PropertyMetadata(null, new PropertyChangedCallback(OnModeChanged)));
+        #endregion
+
+        #region ZoomLevel
+        public double ZoomLevel {
+            get { return (double) GetValue(ZoomLevelProperty); }
+            set { SetValue(ZoomLevelProperty, value); }
+        }
+
+        public static readonly DependencyProperty ZoomLevelProperty =
+           DependencyProperty.Register("ZoomLevel", typeof(double), typeof(MapController),new PropertyMetadata(16.0));
+        #endregion
+
+
+        #region Center
+        public Location Center {
+            get { return (Location) GetValue(CenterProperty); }
+            set { SetValue(CenterProperty, value); }
+        }
+
+        public static readonly DependencyProperty CenterProperty =
+           DependencyProperty.Register("Center", typeof(Location), typeof(MapController), new PropertyMetadata(new Location()));
         #endregion
 
         #region CurrentSource
@@ -205,28 +199,6 @@ namespace Rhit.Applications.ViewModel.Controllers {
            DependencyProperty.Register("SourceChoices", typeof(bool), typeof(MapController), new PropertyMetadata(false));
         #endregion
         #endregion
-
-        public void Save() {
-            DataStorage.SaveState(StorageKey.ZoomLevel, MapControl.ZoomLevel);
-            DataStorage.SaveState(StorageKey.MapCenter, MapControl.Center);
-            DataStorage.SaveState(StorageKey.MapMode, CurrentMode.Label);
-            DataStorage.SaveState(StorageKey.TileSource, CurrentSource.Label);
-            DataStorage.SaveState(StorageKey.RoseOverlay, FloorPlans);
-        }
-
-        public void Load() {
-            if(MapControl == null) return;
-            MapControl.ZoomLevel = (double) DataStorage.LoadState<object>(StorageKey.ZoomLevel, MapControl.ZoomLevel);
-            MapControl.Center = (GeoCoordinate) DataStorage.LoadState<GeoCoordinate>(StorageKey.MapCenter, MapControl.Center as GeoCoordinate);
-
-            string modeLabel = DataStorage.LoadState<string>(StorageKey.MapMode, string.Empty);
-            if(modeLabel != string.Empty) foreach(RhitMode mode in Modes) if(mode.Label == modeLabel) CurrentMode = mode;
-
-            string sourceLabel = DataStorage.LoadState<string>(StorageKey.TileSource, string.Empty);
-            if(sourceLabel != string.Empty) foreach(BaseTileSource source in Sources) if(source.Label == sourceLabel) CurrentSource = source;
-
-            FloorPlans = (bool) DataStorage.LoadState<object>(StorageKey.RoseOverlay, FloorPlans);
-        }
 
             ///// <summary> Current zoom level of the map. </summary>
         //public double ZoomLevel {

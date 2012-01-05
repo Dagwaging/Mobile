@@ -3,6 +3,7 @@ using System.Device.Location;
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Rhit.Applications.ViewModel.Models;
+using System.Windows.Media;
 
 namespace Rhit.Applications.View.Views {
     /// \ingroup pages

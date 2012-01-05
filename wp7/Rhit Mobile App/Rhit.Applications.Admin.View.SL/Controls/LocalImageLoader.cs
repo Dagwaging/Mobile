@@ -2,12 +2,11 @@
 using System.IO;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
-using Rhit.Applications.ViewModel;
 using Rhit.Applications.ViewModel.Providers;
 
 namespace Rhit.Applications.View.Controls {
     public class LocalImageLoader : IBitmapProvider {
-
+        public LocalImageLoader() { }
 
         public BitmapImage GetImage() {
             OpenFileDialog dialog = new OpenFileDialog();
@@ -25,7 +24,7 @@ namespace Rhit.Applications.View.Controls {
                 bitmap.SetSource(stream);
                 stream.Close();
 
-            } catch(Exception exception) { }
+            } catch(Exception) { }
             return bitmap;
         }
     }
