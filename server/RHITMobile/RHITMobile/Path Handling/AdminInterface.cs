@@ -6,106 +6,80 @@ using System.Data;
 using System.Net;
 using System.Data.SqlClient;
 
-namespace RHITMobile
-{
-    public class AdminHandler : PathHandler
-    {
+namespace RHITMobile {
+    public class AdminHandler : PathHandler {
         public static Dictionary<Guid, SqlLoginData> Logins = new Dictionary<Guid, SqlLoginData>();
 
-        public AdminHandler()
-        {
+        public AdminHandler() {
             Redirects.Add("authenticate", new AdminAuthenticateHandler());
             UnknownRedirect = new AdminTokenHandler();
         }
 
-        protected override IEnumerable<ThreadInfo> HandleUnknownPath(ThreadManager TM, string path, object state)
-        {
+        protected override IEnumerable<ThreadInfo> HandleUnknownPath(ThreadManager TM, string path, object state) {
             var currentThread = TM.CurrentThread;
             bool success = true;
             Guid id = new Guid();
-            try
-            {
+            try {
                 id = new Guid((string)path);
-                if (!AdminHandler.Logins.ContainsKey(id) || Logins[id].Expiration < DateTime.Now)
-                {
+                if (!AdminHandler.Logins.ContainsKey(id) || Logins[id].Expiration < DateTime.Now) {
                     success = false;
                 }
-            }
-            catch
-            {
+            } catch {
                 success = false;
             }
-            if (success)
-            {
+            if (success) {
                 yield return TM.Return(currentThread, Logins[id]);
-            }
-            else
-            {
+            } else {
                 yield return TM.Return(currentThread, new JsonResponse(HttpStatusCode.BadRequest));
             }
         }
 
-        public static IEnumerable<ThreadInfo> DeleteExpiredLogins(ThreadManager TM)
-        {
+        public static IEnumerable<ThreadInfo> DeleteExpiredLogins(ThreadManager TM) {
             var currentThread = TM.CurrentThread;
-            while (true)
-            {
+            while (true) {
                 // Sleep for an hour
                 yield return TM.Sleep(currentThread, 3600000);
                 var expired = Logins.Where(kvp => kvp.Value.Expiration < DateTime.Now);
-                foreach (var kvp in expired)
-                {
+                foreach (var kvp in expired) {
                     Logins.Remove(kvp.Key);
                 }
             }
         }
     }
 
-    public class AdminAuthenticateHandler : PathHandler
-    {
-        public AdminAuthenticateHandler()
-        {
+    public class AdminAuthenticateHandler : PathHandler {
+        public AdminAuthenticateHandler() {
             UnknownRedirect = new AdminAuthenticateUsernameHandler();
         }
     }
 
-    public class AdminAuthenticateUsernameHandler : PathHandler
-    {
-        public AdminAuthenticateUsernameHandler()
-        {
+    public class AdminAuthenticateUsernameHandler : PathHandler {
+        public AdminAuthenticateUsernameHandler() {
             UnknownRedirect = new AdminAuthenticatePasswordHandler();
         }
 
-        protected override IEnumerable<ThreadInfo> HandleUnknownPath(ThreadManager TM, string path, object state)
-        {
+        protected override IEnumerable<ThreadInfo> HandleUnknownPath(ThreadManager TM, string path, object state) {
             var currentThread = TM.CurrentThread;
             yield return TM.Return(currentThread, new SqlLoginData((string)state, path));
         }
     }
 
-    public class AdminAuthenticatePasswordHandler : PathHandler
-    {
-        protected override IEnumerable<ThreadInfo> HandleNoPath(ThreadManager TM, Dictionary<string, string> query, object state)
-        {
+    public class AdminAuthenticatePasswordHandler : PathHandler {
+        protected override IEnumerable<ThreadInfo> HandleNoPath(ThreadManager TM, Dictionary<string, string> query, object state) {
             var currentThread = TM.CurrentThread;
             var loginData = (SqlLoginData)state;
             yield return TM.MakeDbCall(currentThread, Program.GetConnectionString(loginData.Username, loginData.Password), "spTestConnection");
             bool success = true;
-            try
-            {
+            try {
                 var result = TM.GetResult<DataTable>(currentThread);
-                if (result.Rows.Count != 1 || (int)result.Rows[0][0] != 56)
-                {
+                if (result.Rows.Count != 1 || (int)result.Rows[0][0] != 56) {
                     success = false;
                 }
-            }
-            catch
-            {
+            } catch {
                 success = false;
             }
 
-            if (success)
-            {
+            if (success) {
                 var alreadyLoggedIn = AdminHandler.Logins.Where(kvp => kvp.Value.Username == loginData.Username);
                 if (alreadyLoggedIn.Any())
                     AdminHandler.Logins.Remove(alreadyLoggedIn.First().Key);
@@ -114,107 +88,100 @@ namespace RHITMobile
                     id = Guid.NewGuid();
                 AdminHandler.Logins[id] = loginData;
                 yield return TM.Return(currentThread, new JsonResponse(new AuthenticationResponse(loginData.Expiration, id)));
-            }
-            else
-            {
+            } else {
                 yield return TM.Return(currentThread, new JsonResponse(HttpStatusCode.BadRequest));
             }
         }
     }
 
-    public class AdminTokenHandler : PathHandler
-    {
-        public AdminTokenHandler()
-        {
+    public class AdminTokenHandler : PathHandler {
+        public AdminTokenHandler() {
             Redirects.Add("storedproc", new AdminStoredProcHandler());
+            Redirects.Add("updateversion", new AdminUpdateVersionHandler());
         }
     }
 
-    public class AdminStoredProcHandler : PathHandler
-    {
-        public AdminStoredProcHandler()
-        {
+    public class AdminStoredProcHandler : PathHandler {
+        public AdminStoredProcHandler() {
             UnknownRedirect = new AdminStoredProcNameHandler();
         }
 
-        protected override IEnumerable<ThreadInfo> HandleUnknownPath(ThreadManager TM, string path, object state)
-        {
+        protected override IEnumerable<ThreadInfo> HandleUnknownPath(ThreadManager TM, string path, object state) {
             var currentThread = TM.CurrentThread;
             yield return TM.Return(currentThread, new SqlStoredProcData((SqlLoginData)state, path));
         }
     }
 
-    public class AdminStoredProcNameHandler : PathHandler
-    {
-        protected override IEnumerable<ThreadInfo> HandleNoPath(ThreadManager TM, Dictionary<string, string> query, object state)
-        {
+    public class AdminStoredProcNameHandler : PathHandler {
+        protected override IEnumerable<ThreadInfo> HandleNoPath(ThreadManager TM, Dictionary<string, string> query, object state) {
             var currentThread = TM.CurrentThread;
             var storedProcData = (SqlStoredProcData)state;
             var parameters = new SqlParameter[query.Count];
             int i = 0;
-            foreach (var kvp in query)
-            {
+            foreach (var kvp in query) {
                 parameters[i] = new SqlParameter(kvp.Key, kvp.Value);
                 i++;
             }
             yield return TM.MakeDbCall(currentThread, Program.GetConnectionString(storedProcData.LoginData.Username, storedProcData.LoginData.Password), storedProcData.StoredProcName, parameters);
             bool success = true;
             var response = new StoredProcedureResponse();
-            try
-            {
+            try {
                 var table = TM.GetResult<DataTable>(currentThread);
-                foreach (DataColumn column in table.Columns)
-                {
+                foreach (DataColumn column in table.Columns) {
                     response.Columns.Add(column.ColumnName);
                 }
                 int columns = response.Columns.Count;
-                foreach (DataRow row in table.Rows)
-                {
+                foreach (DataRow row in table.Rows) {
                     var rowList = new List<string>();
-                    for (int j = 0; j < columns; j++)
-                    {
+                    for (int j = 0; j < columns; j++) {
                         rowList.Add(row.IsNull(j) ? null : row[j].ToString());
                     }
                     response.Table.Add(rowList);
                 }
-            }
-            catch
-            {
+            } catch {
                 success = false;
             }
 
-            if (success)
-            {
+            if (success) {
                 yield return TM.Return(currentThread, new JsonResponse(response));
-            }
-            else
-            {
+            } else {
                 yield return TM.Return(currentThread, new JsonResponse(HttpStatusCode.BadRequest));
             }
         }
     }
 
-    public class SqlLoginData
-    {
+    public class AdminUpdateVersionHandler : PathHandler {
+        public AdminUpdateVersionHandler() {
+            FloatRedirect = new AdminUpdateVersionNumberHandler();
+        }
+    }
+
+    public class AdminUpdateVersionNumberHandler : PathHandler {
+        protected override IEnumerable<ThreadInfo> HandleNoPath(ThreadManager TM, Dictionary<string, string> query, object state) {
+            var currentThread = TM.CurrentThread;
+            double version = (double)state;
+            Program.WriteServerVersion(version);
+            yield return TM.Return(currentThread, new JsonResponse(new MessageResponse("Version update successful.")));
+        }
+    }
+
+    public class SqlLoginData {
         public string Username { get; set; }
         public string Password { get; set; }
         public DateTime Expiration { get; set; }
 
-        public SqlLoginData(string username, string password)
-        {
+        public SqlLoginData(string username, string password) {
             Username = username;
             Password = password;
             Expiration = DateTime.Now.AddDays(1);
         }
     }
 
-    public class SqlStoredProcData
-    {
+    public class SqlStoredProcData {
         public SqlLoginData LoginData { get; set; }
         public string StoredProcName { get; set; }
 
-        public SqlStoredProcData(SqlLoginData loginData, string name)
-        {
+        public SqlStoredProcData(SqlLoginData loginData, string name) {
             LoginData = loginData;
             StoredProcName = name;
         }

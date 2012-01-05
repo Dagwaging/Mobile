@@ -6,25 +6,19 @@ using System.Data.SqlClient;
 using System.Data;
 using System.IO;
 
-namespace RHITMobile
-{
+namespace RHITMobile {
     /// <summary>
     /// Static class for starting the application, handling console commands, and storing global parameters
     /// </summary>
-    public static class Program
-    {
+    public static class Program {
         /// <summary>
         /// Main entry for the application
         /// </summary>
-        public static void Main()
-        {
-            try
-            {
+        public static void Main() {
+            try {
                 // Get the server version from the external text file
                 UpdateServerVersion();
-            }
-            catch
-            {
+            } catch {
                 // If could not get the version, default it to 0.0
                 Console.WriteLine("Could not get version.");
                 return;
@@ -53,17 +47,13 @@ namespace RHITMobile
         /// </summary>
         /// <param name="TM">Thread Manager</param>
         /// <returns>No return</returns>
-        public static IEnumerable<ThreadInfo> HandleConsoleRequests(ThreadManager TM)
-        {
+        public static IEnumerable<ThreadInfo> HandleConsoleRequests(ThreadManager TM) {
             var currentThread = TM.CurrentThread;
-            while (true)
-            {
+            while (true) {
                 yield return TM.WaitForConsole(currentThread);
                 string request = TM.GetResult<string>(currentThread);
-                try
-                {
-                    switch (request)
-                    {
+                try {
+                    switch (request) {
                         case "help":
                             Console.WriteLine("update\nstatus\nexecutions\nqueues\nthreads\ndirections\nexit");
                             break;
@@ -95,9 +85,7 @@ namespace RHITMobile
                             Console.WriteLine("Invalid request.");
                             break;
                     }
-                }
-                catch (Exception ex)
-                {
+                } catch (Exception ex) {
                     Console.WriteLine("An exception occurred: {0}\nStack trace:\n{1}", ex.Message, ex.StackTrace);
                 }
                 Console.WriteLine();
@@ -107,17 +95,22 @@ namespace RHITMobile
         /// <summary>
         /// Set the server version based on an external text file
         /// </summary>
-        public static void UpdateServerVersion()
-        {
-            using (var fileReader = new StreamReader("version.txt"))
-            {
+        public static void UpdateServerVersion() {
+            using (var fileReader = new StreamReader("version.txt")) {
                 ServerVersion = Double.Parse(fileReader.ReadLine());
             }
             Console.WriteLine("Update successful.");
         }
 
-        public static string GetConnectionString(string username, string password)
-        {
+        public static void WriteServerVersion(double version) {
+            ServerVersion = version;
+            using (var fileWriter = new StreamWriter("version.txt", false)) {
+                fileWriter.Write(version.ToString());
+            }
+            Console.WriteLine("Version was updated.");
+        }
+
+        public static string GetConnectionString(string username, string password) {
             return String.Format(AdminConnectionString, username, password);
         }
 
