@@ -14,7 +14,10 @@
                 <a href="itms-services://?action=download-manifest&url=http://mobile.csse.rose-hulman.edu/hudson/job/iOS/BUILD_NUMBER/artifact/ios/app-manifest-beta.plist" data-role="button">Upgrade to vVERSION</a>
                 <br/>
                 <strong>IF THE INSTALLATION FAILS</strong>:
-                <br/>Return to this page (by opening Safari) and click the button again.
+                <ul>
+                    <li>Delete the partially downloaded app (long press, then tap the "X").</li>
+                    <li>Return to this page (by opening Safari) and tap the button again.</li>
+                </ul>
             </div>
         </div>
     </body>
