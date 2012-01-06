@@ -7,31 +7,39 @@ using System.Runtime.Serialization.Json;
 using System.IO;
 using System.Data;
 
-namespace RHITMobile
-{
+namespace RHITMobile {
     [DataContract]
     public abstract class JsonObject { }
 
     #region MessageResponse
     [DataContract]
-    public class MessageResponse : JsonObject
-    {
-        public MessageResponse(string message, params object[] objects)
-        {
+    public class MessageResponse : JsonObject {
+        public MessageResponse(string message, params object[] objects) {
             Message = String.Format(message, objects);
         }
 
         [DataMember]
         public string Message { get; set; }
     }
+
+    [DataContract]
+    public class VersionResponse : JsonObject {
+        public VersionResponse() {
+            ServicesVersion = Program.ServicesVersion;
+            ServerVersion = Program.ServerVersion;
+        }
+
+        [DataMember]
+        public double ServicesVersion { get; set; }
+        [DataMember]
+        public double ServerVersion { get; set; }
+    }
     #endregion
 
     #region MapAreasResponse
     [DataContract]
-    public class MapAreasResponse : JsonObject
-    {
-        public MapAreasResponse(double version)
-        {
+    public class MapAreasResponse : JsonObject {
+        public MapAreasResponse(double version) {
             Version = version;
             Areas = new List<MapArea>();
         }
@@ -43,10 +51,8 @@ namespace RHITMobile
     }
 
     [DataContract]
-    public class MapArea : JsonObject
-    {
-        public MapArea(DataRow row)
-        {
+    public class MapArea : JsonObject {
+        public MapArea(DataRow row) {
             Id = (int)row["id"];
             Name = (string)row["name"];
             Description = (string)row["description"];
@@ -75,10 +81,8 @@ namespace RHITMobile
 
     #region LocationsResponse
     [DataContract]
-    public class LocationsResponse : JsonObject
-    {
-        public LocationsResponse(double version)
-        {
+    public class LocationsResponse : JsonObject {
+        public LocationsResponse(double version) {
             Version = version;
             Locations = new List<Location>();
         }
@@ -90,10 +94,8 @@ namespace RHITMobile
     }
 
     [DataContract]
-    public class Location : JsonObject
-    {
-        public Location(DataRow row, bool hideDescs)
-        {
+    public class Location : JsonObject {
+        public Location(DataRow row, bool hideDescs) {
             AltNames = new List<string>();
             Center = new LatLong(row);
             Description = hideDescs ? null : (string)row["description"];
@@ -144,33 +146,26 @@ namespace RHITMobile
         public bool HasAltNames { get; set; }
         public bool HasLinks { get; set; }
 
-        public bool IsMapArea()
-        {
+        public bool IsMapArea() {
             return MapArea != null;
         }
 
-        public void AddAltNames(DataTable table)
-        {
-            foreach (DataRow row in table.Rows)
-            {
+        public void AddAltNames(DataTable table) {
+            foreach (DataRow row in table.Rows) {
                 AltNames.Add((string)row["name"]);
             }
         }
 
-        public void AddLinks(DataTable table)
-        {
-            foreach (DataRow row in table.Rows)
-            {
+        public void AddLinks(DataTable table) {
+            foreach (DataRow row in table.Rows) {
                 Links.Add(new HyperLink(row));
             }
         }
     }
 
     [DataContract]
-    public class MapAreaData : JsonObject
-    {
-        public MapAreaData(DataRow row)
-        {
+    public class MapAreaData : JsonObject {
+        public MapAreaData(DataRow row) {
             Corners = new List<LatLong>();
             LabelOnHybrid = (bool)row["labelonhybrid"];
             MinZoomLevel = (int)row["minzoomlevel"];
@@ -185,10 +180,8 @@ namespace RHITMobile
     }
 
     [DataContract]
-    public class HyperLink : JsonObject
-    {
-        public HyperLink(DataRow row)
-        {
+    public class HyperLink : JsonObject {
+        public HyperLink(DataRow row) {
             Name = (string)row["name"];
             Url = (string)row["url"];
         }
@@ -202,10 +195,8 @@ namespace RHITMobile
 
     #region LocationNamesResponse
     [DataContract]
-    public class LocationNamesResponse : JsonObject
-    {
-        public LocationNamesResponse(double version)
-        {
+    public class LocationNamesResponse : JsonObject {
+        public LocationNamesResponse(double version) {
             Names = new List<LocationName>();
             Version = version;
         }
@@ -217,10 +208,8 @@ namespace RHITMobile
     }
 
     [DataContract]
-    public class LocationName : JsonObject
-    {
-        public LocationName(DataRow row)
-        {
+    public class LocationName : JsonObject {
+        public LocationName(DataRow row) {
             Id = (int)row["id"];
             Name = (string)row["name"];
         }
@@ -234,10 +223,8 @@ namespace RHITMobile
 
     #region LocationDescResponse
     [DataContract]
-    public class LocationDescResponse : JsonObject
-    {
-        public LocationDescResponse(DataRow row)
-        {
+    public class LocationDescResponse : JsonObject {
+        public LocationDescResponse(DataRow row) {
             Description = (string)row["description"];
             Links = new List<HyperLink>();
         }
@@ -251,10 +238,8 @@ namespace RHITMobile
 
     #region DirectionsResponse & PrinterResponse
     [DataContract]
-    public class DirectionsResponse : JsonObject
-    {
-        public DirectionsResponse(int done, int requestId)
-        {
+    public class DirectionsResponse : JsonObject {
+        public DirectionsResponse(int done, int requestId) {
             Done = done;
             RequestId = requestId;
             Result = null;
@@ -269,11 +254,9 @@ namespace RHITMobile
     }
 
     [DataContract]
-    public class PrinterResponse : DirectionsResponse
-    {
+    public class PrinterResponse : DirectionsResponse {
         public PrinterResponse(int done, int requestId, string printer)
-            : base(done, requestId)
-        {
+            : base(done, requestId) {
             Printer = printer;
         }
 
@@ -282,11 +265,9 @@ namespace RHITMobile
     }
 
     [DataContract]
-    public class Directions : JsonObject
-    {
-        public Directions(LatLong start, List<Path> paths)
-        {
-            Dist = paths.Sum(path => path.HDist*path.HDist + path.VDist*path.VDist);
+    public class Directions : JsonObject {
+        public Directions(LatLong start, List<Path> paths) {
+            Dist = paths.Sum(path => path.HDist * path.HDist + path.VDist * path.VDist);
             Paths = paths;
             StairsDown = -paths.Sum(path => Math.Min(path.Stairs, 0));
             StairsUp = paths.Sum(path => Math.Max(path.Stairs, 0));
@@ -306,10 +287,8 @@ namespace RHITMobile
     }
 
     [DataContract]
-    public class Path : JsonObject
-    {
-        public Path(DataRow row, Node prevNode, DirectionsSettings settings)
-        {
+    public class Path : JsonObject {
+        public Path(DataRow row, Node prevNode, DirectionsSettings settings) {
             Id = (int)row["pathid"];
             Forward = (bool)row["forward"];
             Stairs = (int)row["stairs"] * (Forward ? 1 : -1);
@@ -324,8 +303,7 @@ namespace RHITMobile
             WeightedDist = settings.WeightedDist(this);
         }
 
-        public Path(double lat, double lon, string message, bool flag)
-        {
+        public Path(double lat, double lon, string message, bool flag) {
             ToNode = new Node(lat, lon);
             Dir = message;
             Flag = flag;
@@ -352,10 +330,8 @@ namespace RHITMobile
         public double WeightedDist { get; set; }
     }
 
-    public class Node
-    {
-        public Node(DataRow row)
-        {
+    public class Node {
+        public Node(DataRow row) {
             Id = (int)row["id"];
             Pos = new LatLong(row);
             Alt = (double)row["altitude"];
@@ -364,8 +340,7 @@ namespace RHITMobile
             Partition = row.Table.Columns.Contains("partition") ? (int?)row["partition"] : null;
         }
 
-        public Node(double lat, double lon)
-        {
+        public Node(double lat, double lon) {
             Pos = new LatLong(lat, lon);
         }
 
@@ -376,8 +351,7 @@ namespace RHITMobile
         public int? Location { get; set; }
         public int? Partition { get; set; }
 
-        public double HDistanceTo(Node node)
-        {
+        public double HDistanceTo(Node node) {
             var x = (node.Pos.Lon - this.Pos.Lon) * Program.DegToRad * Math.Cos((node.Pos.Lat + this.Pos.Lat) * Program.DegToRad / 2);
             var y = (node.Pos.Lat - this.Pos.Lat) * Program.DegToRad;
             return Math.Sqrt(x * x + y * y) * Program.EarthRadius;
@@ -387,10 +361,8 @@ namespace RHITMobile
 
     #region Admin Interface
     [DataContract]
-    public class AuthenticationResponse : JsonObject
-    {
-        public AuthenticationResponse(DateTime expiration, Guid id)
-        {
+    public class AuthenticationResponse : JsonObject {
+        public AuthenticationResponse(DateTime expiration, Guid id) {
             Expiration = expiration;
             Token = id.ToString();
         }
@@ -402,10 +374,8 @@ namespace RHITMobile
     }
 
     [DataContract]
-    public class StoredProcedureResponse : JsonObject
-    {
-        public StoredProcedureResponse()
-        {
+    public class StoredProcedureResponse : JsonObject {
+        public StoredProcedureResponse() {
             Columns = new List<string>();
             Table = new List<List<string>>();
         }
@@ -419,16 +389,13 @@ namespace RHITMobile
 
     #region Miscellaneous
     [DataContract]
-    public class LatLong : JsonObject
-    {
-        public LatLong(DataRow row)
-        {
+    public class LatLong : JsonObject {
+        public LatLong(DataRow row) {
             Lat = (double)row["lat"];
             Lon = (double)row["lon"];
         }
 
-        public LatLong(double lat, double lon)
-        {
+        public LatLong(double lat, double lon) {
             Lat = lat;
             Lon = lon;
         }
@@ -440,25 +407,21 @@ namespace RHITMobile
     }
     #endregion
 
-    public static class JsonUtility
-    {
+    public static class JsonUtility {
         public static T Deserialize<T>(this string json)
-            where T : JsonObject
-        {
+            where T : JsonObject {
             MemoryStream stream = new MemoryStream(Encoding.Unicode.GetBytes(json));
             DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(T));
             return (T)serializer.ReadObject(stream);
         }
 
         public static string Serialize<T>(this T obj)
-            where T : JsonObject
-        {
+            where T : JsonObject {
             MemoryStream stream = new MemoryStream();
             DataContractJsonSerializer serializer = new DataContractJsonSerializer(obj.GetType());
             serializer.WriteObject(stream, obj);
             stream.Position = 0;
-            using (var reader = new StreamReader(stream))
-            {
+            using (var reader = new StreamReader(stream)) {
                 return reader.ReadToEnd();
             }
         }

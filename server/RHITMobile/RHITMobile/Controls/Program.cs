@@ -115,6 +115,7 @@ namespace RHITMobile {
         }
 
         public static double ServerVersion;
+        public static double ServicesVersion;
         public const string ConnectionString = @"Data Source=mobilewin.csse.rose-hulman.edu\RHITMobile;Initial Catalog=MapData;User Id=server;Password=rhitMobile56";
         private const string AdminConnectionString = @"Data Source=mobilewin.csse.rose-hulman.edu\RHITMobile;Initial Catalog=MapData;User Id={0};Password={1}";
         public const double EarthRadius = 20925524.9; // feet

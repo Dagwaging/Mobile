@@ -146,7 +146,7 @@ namespace RHITMobile
         protected override IEnumerable<ThreadInfo> HandleNoPath(ThreadManager TM, Dictionary<string, string> query, object state)
         {
             var currentThread = TM.CurrentThread;
-            yield return TM.Return(currentThread, new JsonResponse(new MessageResponse("Server is active.")));
+            yield return TM.Return(currentThread, new JsonResponse(new VersionResponse()));
         }
     }
 

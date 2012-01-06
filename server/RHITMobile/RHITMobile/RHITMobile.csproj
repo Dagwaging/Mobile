@@ -62,6 +62,7 @@
     <Compile Include="Path Handling\Locations.cs" />
     <Compile Include="Path Handling\PathHandler.cs" />
     <Compile Include="Controls\Program.cs" />
+    <Compile Include="Response Handling\DirectionsFinder2.cs" />
     <Compile Include="Response Handling\JsonObjects.cs" />
     <Compile Include="Path Handling\TestingDirections.cs" />
     <Compile Include="Controls\ThreadManager.cs" />
