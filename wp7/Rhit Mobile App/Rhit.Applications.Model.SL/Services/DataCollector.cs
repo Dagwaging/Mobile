@@ -207,10 +207,10 @@ namespace Rhit.Applications.Model.Services {
         }
 
         public RhitLocation GetLocation(Dispatcher dispatcher, int id) {
-            if(DataStorage.Instance.AllLocations.ContainsKey(id))
-                return DataStorage.Instance.AllLocations[id];
             RequestPart request = new RequestBuilder(BaseAddress).Locations.Data.Id(id);
             Connection.MakeRequest(dispatcher, request);
+            if(DataStorage.Instance.AllLocations.ContainsKey(id))
+                return DataStorage.Instance.AllLocations[id];
             return null;
         }
 

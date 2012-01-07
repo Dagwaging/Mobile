@@ -17,6 +17,10 @@ namespace Rhit.Applications.ViewModel.Providers {
 
 	    int Id { get; set; }
 
+        int ParentId { get; set; }
+
+        string Name { get; set; }
+
         //Done with corners
         void Clear();
 

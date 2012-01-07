@@ -18,7 +18,7 @@
     <convert:LocationToStringConverter x:Key="LocationNameConverter"/>
     <convert:LocationToCoordinateConverter x:Key="LocationCenterConverter"/>
 
-    <sdk:HierarchicalDataTemplate x:Key="TreeTemplate" ItemsSource="{Binding ChildLocations}">
+    <sdk:HierarchicalDataTemplate x:Key="TreeTemplate" ItemsSource="{Binding ChildLocations}" >
         <TextBlock Text="{Binding Name}" Foreground="White"/>
     </sdk:HierarchicalDataTemplate>
 

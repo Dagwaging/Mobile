@@ -180,9 +180,15 @@ namespace Rhit.Applications.View.Views {
 
         public int Id { get; set; }
 
+        public int ParentId { get; set; }
+
+        public string Name { get; set; }
+
         private void LocationId_Closed(object sender, EventArgs e) {
             LocationIdWindow window = sender as LocationIdWindow;
             Id = window.GetIdNumber();
+            ParentId = window.GetParentId();
+            Name = window.NewName;
         }
     }
 

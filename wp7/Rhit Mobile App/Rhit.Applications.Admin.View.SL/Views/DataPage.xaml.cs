@@ -8,7 +8,7 @@ namespace Rhit.Applications.View.Views {
     public partial class DataPage : Page {
         public DataPage() {
             InitializeComponent();
-            ViewModel = new DataViewModel(Dispatcher);
+            ViewModel = new DataViewModel();
             DataContext = ViewModel;
         }
 

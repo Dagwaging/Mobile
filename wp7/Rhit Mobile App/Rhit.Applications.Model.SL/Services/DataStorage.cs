@@ -3,6 +3,7 @@ using System.IO.IsolatedStorage;
 
 namespace Rhit.Applications.Model.Services {
     public class DataStorage {
+
         #region Private Fields
         private static DataStorage _instance;
         private static IsolatedStorageSettings _userSettings = IsolatedStorageSettings.ApplicationSettings;
@@ -79,6 +80,7 @@ namespace Rhit.Applications.Model.Services {
             return dict;
         }
 
+
         public static void RemoveState(StorageKey key) {
             if(_userSettings.Contains(key.ToString()))
                 _userSettings.Remove(key.ToString());
@@ -98,7 +100,6 @@ namespace Rhit.Applications.Model.Services {
             if(_userSettings.Contains(key.ToString())) {
                 var o = _userSettings[key.ToString()];
                 return (T) o;
-
             }
             return defaultValue;
         }
