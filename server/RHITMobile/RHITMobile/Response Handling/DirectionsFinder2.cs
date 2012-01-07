@@ -42,7 +42,8 @@ namespace RHITMobile {
 
             if (true)//((int)state >= 0)
             {
-                TM.Enqueue(GetDirections(TM, (int)state, query));
+                // ENQUEUE
+                TM.Await(currentThread, GetDirections(TM, (int)state, query));
             }
 
             yield return TM.Sleep(currentThread, 1000);
@@ -123,28 +124,81 @@ namespace RHITMobile {
             }
 
             // Get the possible partition paths
-            List<PartitionPass> partitions = new List<PartitionPass>();
-            Node currentNode = _start;
-            while (true) {
-                yield return TM.Await(currentThread, GetNodePartitions(TM, currentNode, -1, "spGetNodePartitions"));
-                var nodePartitions = TM.GetResult<SortedSet<int>>(currentThread);
+            Stack<PartitionPass> partitions = new Stack<PartitionPass>();
+            partitions.Push(new PartitionPass(-1, _start, 0));
+            yield return TM.Await(currentThread, GetPartitionPaths(TM, partitions, goalNodes));
+            var result = TM.GetResult<List<List<PartitionPass>>>(currentThread);
+            int b = 0;
+            foreach (var a in result) {
+                b++;
             }
+            // TODO
         }
 
-        private IEnumerable<ThreadInfo> GetNodePartitions(ThreadManager TM, Node node, int skipPartition, string procedure) {
+        private IEnumerable<ThreadInfo> GetPartitionPaths(ThreadManager TM, Stack<PartitionPass> partitions, Dictionary<int, SortedSet<Node>> goalNodes) {
+            var currentThread = TM.CurrentThread;
+
+            var currentNode = partitions.Peek().Target;
+            var paths = new List<List<PartitionPass>>();
+
+            // Travel to other partitions, and get the paths through them
+            yield return TM.Await(currentThread, GetNodePartitions(TM, currentNode, "spGetNodePartitions"));
+            var nodePartitions = TM.GetResult<SortedSet<int>>(currentThread).Except(partitions.Select((PartitionPass pp) => pp.Partition));
+            foreach (int partition in nodePartitions) {
+                // See if any goal nodes are in this partition
+                if (goalNodes.ContainsKey(partition)) {
+                    foreach (var goalNode in goalNodes[partition]) {
+                        partitions.Push(new PartitionPass(partition, goalNode, _settings.WeightedDist(currentNode, goalNode)));
+                        var path = partitions.ToList().Skip(1);
+                        path.Reverse();
+                        paths.Add(path);
+                        partitions.Pop();
+                    }
+                }
+
+                // Go to all the boundaries of this partition
+                yield return TM.Await(currentThread, GetPartitionBoundaries(TM, partition));
+                var targetNodes = TM.GetResult<SortedSet<Node>>(currentThread);
+                if (goalNodes.ContainsKey(partition))
+                    targetNodes.ExceptWith(goalNodes[partition]);
+                targetNodes.Remove(currentNode);
+                foreach (var targetNode in targetNodes) {
+                    partitions.Push(new PartitionPass(partition, targetNode, _settings.WeightedDist(currentNode, targetNode)));
+                    yield return TM.Await(currentThread, GetPartitionPaths(TM, partitions, goalNodes));
+                    paths.AddRange(TM.GetResult<List<List<PartitionPass>>>(currentThread));
+                    partitions.Pop();
+                }
+            }
+
+            yield return TM.Return(currentThread, paths);
+        }
+
+        private IEnumerable<ThreadInfo> GetNodePartitions(ThreadManager TM, Node node, string procedure) {
             var currentThread = TM.CurrentThread;
 
             var partitions = new SortedSet<int>();
             yield return TM.MakeDbCall(currentThread, Program.ConnectionString, procedure, new SqlParameter("@node", node.Id));
             using (var partitionsTable = TM.GetResult<DataTable>(currentThread)) {
                 foreach (DataRow partitionRow in partitionsTable.Rows) {
-                    int partition = (int)partitionRow["partition"];
-                    if (partition != skipPartition)
-                        partitions.Add(partition);
+                    partitions.Add((int)partitionRow["partition"]);
                 }
             }
 
             yield return TM.Return(currentThread, partitions);
+        }
+
+        private IEnumerable<ThreadInfo> GetPartitionBoundaries(ThreadManager TM, int partition) {
+            var currentThread = TM.CurrentThread;
+
+            var nodes = new SortedSet<Node>(new NodeComparer());
+            yield return TM.MakeDbCall(currentThread, Program.ConnectionString, "spGetPartitionBoundaries", new SqlParameter("@partition", partition));
+            using (var boundariesTable = TM.GetResult<DataTable>(currentThread)) {
+                foreach (DataRow boundaryRow in boundariesTable.Rows) {
+                    nodes.Add(new Node(boundaryRow));
+                }
+            }
+
+            yield return TM.Return(currentThread, nodes);
         }
 
         private class ShortestPath {

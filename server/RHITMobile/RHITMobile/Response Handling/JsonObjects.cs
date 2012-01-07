@@ -266,12 +266,12 @@ namespace RHITMobile {
 
     [DataContract]
     public class Directions : JsonObject {
-        public Directions(LatLong start, List<Path> paths) {
+        public Directions(LatLong end, List<Path> paths) {
             Dist = paths.Sum(path => path.HDist * path.HDist + path.VDist * path.VDist);
             Paths = paths;
             StairsDown = -paths.Sum(path => Math.Min(path.Stairs, 0));
             StairsUp = paths.Sum(path => Math.Max(path.Stairs, 0));
-            Start = start;
+            End = end;
         }
 
         [DataMember]
@@ -283,7 +283,7 @@ namespace RHITMobile {
         [DataMember]
         public int StairsUp { get; set; }
         [DataMember]
-        public LatLong Start { get; set; }
+        public LatLong End { get; set; }
     }
 
     [DataContract]

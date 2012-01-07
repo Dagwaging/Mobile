@@ -48,7 +48,7 @@ namespace RHITMobile
             var table = TM.GetResult<DataTable>(currentThread);
             if (table.Rows.Count > 0)
             {
-                yield return TM.Return(currentThread, new DirectionsFinder(table.Rows[0]));
+                yield return TM.Return(currentThread, new DirectionsFinder2(table.Rows[0]));
             }
             else
             {
@@ -76,7 +76,7 @@ namespace RHITMobile
         protected override IEnumerable<ThreadInfo> HandleIntPath(ThreadManager TM, int value, object state)
         {
             var currentThread = TM.CurrentThread;
-            IntRedirect = (DirectionsFinder)state;
+            IntRedirect = (DirectionsFinder2)state;
             yield return TM.Return(currentThread, value);
         }
     }
