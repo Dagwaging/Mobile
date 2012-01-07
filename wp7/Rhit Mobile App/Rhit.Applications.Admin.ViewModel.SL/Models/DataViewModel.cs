@@ -11,7 +11,7 @@ using Rhit.Applications.ViewModel.Controllers;
 
 namespace Rhit.Applications.ViewModel.Models {
     public class DataViewModel : DependencyObject {
-        public DataViewModel(Dispatcher dispatcher) {
+        public DataViewModel() {
             InitializeProperties();
 
             Locations = LocationsController.Instance;

@@ -245,6 +245,7 @@ namespace Rhit.Applications.ViewModel.Models {
         private void SaveLocation() {
             if(State == BehaviorState.FloorAddingLocation) {
                 IList<Location> locations = LocationsProvider.GetLocations();
+                //TODO: Scott - Use LocationsProvider.ParentId and LocationsProvider.Name
                 IList<Point> points = LocationsProvider.GetPoints();
                 Location newLocation = null;
                 if(locations.Count > 0) newLocation = locations[0];
@@ -262,6 +263,7 @@ namespace Rhit.Applications.ViewModel.Models {
 
             if(State == BehaviorState.AddingLocation) {
                 IList<Location> locations = LocationsProvider.GetLocations();
+                //TODO: Scott - Use LocationsProvider.ParentId and LocationsProvider.Name
                 if(locations.Count <= 0) return;
                 Location newLocation = locations[0];
                 DataCollector.Instance.ExecuteStoredProcedure(Dispatcher, "spCreateLocation", new Dictionary<string, object>() {

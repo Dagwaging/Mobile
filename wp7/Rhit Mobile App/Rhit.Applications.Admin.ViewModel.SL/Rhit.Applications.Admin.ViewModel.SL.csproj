@@ -83,6 +83,7 @@
     <Compile Include="Models\HomeViewModel.cs" />
     <Compile Include="Models\MapModelInitializer.cs" />
     <Compile Include="Models\MapViewModel.cs" />
+    <Compile Include="Models\SimpleViewModel.cs" />
     <Compile Include="Providers\IBitmapProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\DataViewModel.cs" />

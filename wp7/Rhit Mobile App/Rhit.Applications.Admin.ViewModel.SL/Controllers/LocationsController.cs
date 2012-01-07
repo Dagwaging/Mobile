@@ -260,6 +260,7 @@ namespace Rhit.Applications.ViewModel.Controllers {
 
             Center = OriginalLocation.Center;
             Description = OriginalLocation.Description;
+            Floor = OriginalLocation.Floor;
             Id = OriginalLocation.Id;
             LabelOnHybrid = OriginalLocation.LabelOnHybrid;
             MinZoom = OriginalLocation.MinZoomLevel;
@@ -277,6 +278,7 @@ namespace Rhit.Applications.ViewModel.Controllers {
             List<string> changes = new List<string>();
             if(Center != location.Center) changes.Add("Center");
             if(Description != location.Description) changes.Add("Description");
+            if(Floor != location.Floor) changes.Add("Floor");
             if(Id != location.Id) changes.Add("Id");
             if(Label != location.Label) changes.Add("Label");
             if(LabelOnHybrid != location.LabelOnHybrid) changes.Add("LabelOnHybrid");
@@ -332,6 +334,16 @@ namespace Rhit.Applications.ViewModel.Controllers {
 
         public static readonly DependencyProperty DescriptionProperty =
             DependencyProperty.Register("Description", typeof(string), typeof(ObservableRhitLocation), new PropertyMetadata("", new PropertyChangedCallback(OnPropertyChanged)));
+        #endregion
+
+        #region Floor
+        public int Floor {
+            get { return (int) GetValue(FloorProperty); }
+            set { SetValue(FloorProperty, value); }
+        }
+
+        public static readonly DependencyProperty FloorProperty =
+            DependencyProperty.Register("Floor", typeof(int), typeof(ObservableRhitLocation), new PropertyMetadata(0, new PropertyChangedCallback(OnPropertyChanged)));
         #endregion
 
         #region Center

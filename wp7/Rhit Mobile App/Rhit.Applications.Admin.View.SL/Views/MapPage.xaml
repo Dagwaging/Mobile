@@ -33,8 +33,9 @@
         <vm:MapModelInitializer x:Name="Initializer" 
             ViewModelInstance="{StaticResource ViewModel}"
             LocationsProvider="{StaticResource ViewLocations}"
-                                BuildingMappingProvider="{StaticResource Calibrator}"
+            
             BitmapProvider="{StaticResource ImageLoader}"
+            BuildingMappingProvider="{StaticResource Calibrator}"
             />
 
         <DataTemplate x:Name="DualItemTemplate">
