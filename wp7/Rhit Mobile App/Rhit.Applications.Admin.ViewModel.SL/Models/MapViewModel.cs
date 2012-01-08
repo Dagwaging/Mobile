@@ -253,10 +253,11 @@ namespace Rhit.Applications.ViewModel.Models {
                 if(newLocation != null) {
                     DataCollector.Instance.ExecuteStoredProcedure(Dispatcher, "spCreateLocation", new Dictionary<string, object>() {
                         { "id", LocationsProvider.Id }, 
-                        { "name", "New Location" },
+                        { "name", LocationsProvider.Name },
                         { "lat", newLocation.Latitude },
                         { "lon", newLocation.Longitude },
                         { "floor", Mapper.Floor },
+                        { "parent", LocationsProvider.ParentId },
                     });
                 }
             }
@@ -268,10 +269,11 @@ namespace Rhit.Applications.ViewModel.Models {
                 Location newLocation = locations[0];
                 DataCollector.Instance.ExecuteStoredProcedure(Dispatcher, "spCreateLocation", new Dictionary<string, object>() {
                     { "id", LocationsProvider.Id }, 
-                    { "name", "New Location" },
+                    { "name", LocationsProvider.Name },
                     { "lat", newLocation.Latitude },
                     { "lon", newLocation.Longitude },
                     { "floor", 0 },
+                    { "parent", LocationsProvider.ParentId },
                 });
             }
 
