@@ -251,7 +251,7 @@ namespace Rhit.Applications.ViewModel.Models {
                 if(locations.Count > 0) newLocation = locations[0];
                 else if(points.Count > 0) newLocation = LocationPositionMapper.Instance.ConvertPositionToLocation(points[0]);
                 if(newLocation != null) {
-                    DataCollector.Instance.CreateLocation(LocationsProvider.Id, "New Location", newLocation.Latitude, newLocation.Longitude, Mapper.Floor);
+                    DataCollector.Instance.CreateLocation(LocationsProvider.Id, LocationsProvider.Name, newLocation.Latitude, newLocation.Longitude, Mapper.Floor, LocationsProvider.ParentId);
                 }
             }
 
@@ -260,7 +260,7 @@ namespace Rhit.Applications.ViewModel.Models {
                 //TODO: Scott - Use LocationsProvider.ParentId and LocationsProvider.Name
                 if(locations.Count <= 0) return;
                 Location newLocation = locations[0];
-                DataCollector.Instance.CreateLocation(LocationsProvider.Id, "New Location", newLocation.Latitude, newLocation.Longitude, 0);
+                DataCollector.Instance.CreateLocation(LocationsProvider.Id, LocationsProvider.Name, newLocation.Latitude, newLocation.Longitude, 0, LocationsProvider.ParentId);
             }
 
             Cancel();
