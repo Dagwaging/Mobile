@@ -108,9 +108,7 @@ namespace Rhit.Applications.ViewModel.Models {
 
         private void DeleteLocation() {
             if(Locations.CurrentLocation == null) return;
-            DataCollector.Instance.ExecuteStoredProcedure(Dispatcher, "spDeleteLocation", new Dictionary<string, object>() {
-                { "location", Locations.CurrentLocation.Id },
-            });
+            DataCollector.Instance.DeleteLocation(Locations.CurrentLocation.Id);
         }
 
         #region Commands

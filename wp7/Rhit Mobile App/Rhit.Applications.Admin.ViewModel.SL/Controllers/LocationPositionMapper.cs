@@ -35,13 +35,8 @@ namespace Rhit.Applications.ViewModel.Controllers {
         }
 
         public void Save() {
-            foreach (var location in Locations) {
-                DataCollector.Instance.ExecuteStoredProcedure(location.Dispatcher, "spMoveLocationCenter", new Dictionary<string, object>() {
-                    { "location", location.BaseLocation.Id },
-                    { "lat", location.Location.Latitude },
-                    { "lon", location.Location.Longitude }
-                });
-            }
+            foreach (var location in Locations)
+                DataCollector.Instance.MoveLocation(location.BaseLocation.Id, location.Location.Latitude, location.Location.Longitude);
         }
 
         public void ApplyMapping(Dictionary<Location, Point> mapping, int floor) {

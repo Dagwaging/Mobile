@@ -27,32 +27,24 @@ namespace Rhit.Applications.Model.Services {
         /// </summary>
         public static Dispatcher Dispatcher { get; private set; }
 
-        public static void MakeRequest(Dispatcher dispatcher, RequestPart url) {
-            Connection.MakeRequest(dispatcher, url, false, null);
+        public static void SetDispatcher(Dispatcher dispatcher) {
+            Dispatcher = dispatcher;
         }
 
-        public static IAsyncResult MakeRequest(Dispatcher dispatcher, RequestPart url, bool isSearch, Action<IAsyncResult> callback) {
-            if(dispatcher != null) Dispatcher = dispatcher;
-            HttpWebRequest request;
-            try {
-                request = (HttpWebRequest) WebRequest.Create(url.ToString());
-            } catch {
-                //TODO: Actually do something here
-                //Raise error or notify what happened
-                return null;
-            }
-            request.Method = "POST";
-            request.ContentType = "application/json; charset=utf-8";
+        public static IAsyncResult MakeRequest(RequestPart requestPart, RequestType type) {
+            ServiceRequest request = new ServiceRequest(requestPart, type);
+            return MakeRequest(request);
+        }
 
-            if(callback != null)
-                return request.BeginGetResponse(new AsyncCallback(callback), request);
-            else if(isSearch)
-                return request.BeginGetResponse(new AsyncCallback(ResponseHandler.SearchRequestCallback), request);
-            else if(url is AllRequestPart)
-                return request.BeginGetResponse(new AsyncCallback(ResponseHandler.AllRequestCallback), request);
-            else if(url is TopRequestPart)
-                return request.BeginGetResponse(new AsyncCallback(ResponseHandler.TopRequestCallback), request);
-            else return request.BeginGetResponse(new AsyncCallback(ResponseHandler.RequestCallback), request);
+        private static IAsyncResult MakeRequest(ServiceRequest request) {
+            if(Dispatcher == null) throw new ArgumentNullException("The static property 'Dispatcher' must not be null in order to receive a response");
+            return request.Send(ResponseHandler.RequestCallback);
+        }
+
+        public static IAsyncResult MakeLocationChangeRequest(RequestPart requestPart, RequestType type, int locationId) {
+            ServiceRequest request = new ServiceRequest(requestPart, type);
+            request.UserMetaData["LocationId"] = locationId;
+            return MakeRequest(request);
         }
     }
 }

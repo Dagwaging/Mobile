@@ -23,14 +23,14 @@ namespace Rhit.Applications.Model.Services.Requests {
 
         public RequestBuilder(string baseUrl, double version, string searchText, bool highlightSearch)
             : base(baseUrl) {
-            Version = version;
+            CurrentVersion = version;
             SearchText = searchText;
             HighlightSearch = highlightSearch;
             PartUrl = "{0}";
         }
         #endregion
 
-        public double Version { get; set; }
+        public double CurrentVersion { get; set; }
 
         public string SearchText { get; set; }
 
@@ -39,21 +39,13 @@ namespace Rhit.Applications.Model.Services.Requests {
         protected override string FullUrl {
             get {
                 string url = BaseUrl + PartUrl;
-                if(Version != 0) url += "?version=" + Version.ToString();
+                if(CurrentVersion != 0) url += "?version=" + CurrentVersion.ToString();
                 if(SearchText != null && SearchText != "") {
                     if(HighlightSearch) url += "?sh=" + SearchText;
                     else url += "?s=" + SearchText;
                 }
                 return url;
             }
-        }
-
-        public LocationRequestPart Locations {
-            get { return new LocationRequestPart(FullUrl); }
-        }
-
-        public DirectionsRequestPart Directions {
-            get { return new DirectionsRequestPart(FullUrl); }
         }
 
         public AdminRequestPart Admin(Guid token, string storedProcedure) {
@@ -66,6 +58,21 @@ namespace Rhit.Applications.Model.Services.Requests {
 
         public AdminRequestPart Admin(Guid token, double version) {
             return new AdminRequestPart(FullUrl, token, version);
+        }
+
+
+        public DirectionsRequestPart Directions {
+            get { return new DirectionsRequestPart(FullUrl); }
+        }
+
+
+        public LocationRequestPart Locations {
+            get { return new LocationRequestPart(FullUrl); }
+        }
+
+
+        public VersionRequestPart Version {
+            get { return new VersionRequestPart(FullUrl); }
         }
 
         [Obsolete("Not a valid request end point")]

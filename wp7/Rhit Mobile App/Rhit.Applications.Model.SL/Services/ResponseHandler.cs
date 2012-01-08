@@ -65,6 +65,15 @@ namespace Rhit.Applications.Model.Services {
         private static void SendResults(ServerEventArgs args) {
             ServerObject response = args.ResponseObject;
 
+            if(response.Message != null && response.Message == "Version update successful.") {
+                DataCollector.Instance.GetVersion();
+            }
+
+            if(response.ServerVersion != 0) {
+                DataCollector.Instance.Version = response.ServerVersion;
+            }
+
+
             //Error Response
             if(response == null || args.ServerResponse != HttpStatusCode.OK)
                 args.Type = ResponseType.Error;

@@ -14,6 +14,20 @@ using System.Runtime.Serialization;
 namespace Rhit.Applications.Model {
     [DataContract]
     public class ServerObject {
+
+        #region VersionResponse
+        [DataMember(Name = "ServerVersion")]
+        public double ServerVersion { get; set; }
+
+        [DataMember(Name = "ServicesVersion")]
+        public double ServicesVersion { get; set; }
+        #endregion
+
+        #region MessageResponse
+        [DataMember(Name = "Message")]
+        public string Message { get; set; }
+        #endregion
+
         #region LocationsResponse
         [DataMember(Name = "Locations")]
         public List<Location_DC> Locations { get; set; }
