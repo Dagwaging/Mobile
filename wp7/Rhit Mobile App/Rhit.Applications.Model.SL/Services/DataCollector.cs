@@ -298,7 +298,7 @@ namespace Rhit.Applications.Model.Services {
             request = request.AddQueryParameter("labelonhybrid", labelOnHybrid);
             request = request.AddQueryParameter("minzoomlevel", minZoom);
             request = request.AddQueryParameter("type", Location_DC.ConvertTypeToTypeKey(type));
-            //TODO: Scott - Add floor
+            request = request.AddQueryParameter("floor", floor);
             requests.Add(request);
 
             Connection.MakeLocationChangeRequest(requests, RequestType.LocationUpdate, oldId, newId);
