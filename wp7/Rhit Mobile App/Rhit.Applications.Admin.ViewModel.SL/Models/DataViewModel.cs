@@ -8,6 +8,7 @@ using Rhit.Applications.Model.Events;
 using Rhit.Applications.Model.Services;
 using Rhit.Applications.Mvvm.Commands;
 using Rhit.Applications.ViewModel.Controllers;
+using System;
 
 namespace Rhit.Applications.ViewModel.Models {
     public class DataViewModel : DependencyObject {
@@ -15,7 +16,7 @@ namespace Rhit.Applications.ViewModel.Models {
             InitializeProperties();
 
             Locations = LocationsController.Instance;
-            Locations.LocationsChanged += new LocationChangesEventHandler(LocationsChanged);
+            Locations.LocationsChanged += new EventHandler(LocationsChanged);
             if(Locations.All.Count > 0 && Locations.CurrentLocation == null)
                 Locations.SelectLocation(Locations.All[2].Id);
         }
@@ -29,7 +30,7 @@ namespace Rhit.Applications.ViewModel.Models {
             SaveCommand = new RelayCommand(p => SaveLocation());
         }
 
-        private void LocationsChanged(object sender, LocationChangesEventArgs e) {
+        private void LocationsChanged(object sender, EventArgs e) {
             if(Locations.All.Count > 0 && Locations.CurrentLocation == null)
                 Locations.SelectLocation(Locations.All[2].Id);
         }

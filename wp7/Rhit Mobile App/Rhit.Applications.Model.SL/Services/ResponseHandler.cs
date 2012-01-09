@@ -51,12 +51,12 @@ namespace Rhit.Applications.Model.Services {
             return ResponseType.ServerError;
         }
 
-        private static void ParseResponse(AsyncServiceResult asyncResult) {
-            HttpWebRequest request = (HttpWebRequest) asyncResult.AsyncState;
+        private static void ParseResponse(AsyncServiceResult result) {
+            HttpWebRequest request = result.GetWebRequest();
             HttpWebResponse response;
             Exception exception;
             try {
-                response = (HttpWebResponse) request.EndGetResponse(asyncResult);
+                response = (HttpWebResponse) request.EndGetResponse(result.BaseResult);
                 exception = null;
             } catch(WebException e) {
                 response = (HttpWebResponse) e.Response;
@@ -75,7 +75,7 @@ namespace Rhit.Applications.Model.Services {
                 type = ResponseType.ConnectionError;
             } else if(response.StatusCode == HttpStatusCode.OK) {
                 status = response.StatusCode;
-                type = ConvertType(asyncResult.Request.Type);
+                type = ConvertType(result.Request.Type);
                 using(StreamReader reader = new StreamReader(response.GetResponseStream())) {
                     responseString = reader.ReadToEnd();
                     reader.Close();
@@ -95,7 +95,7 @@ namespace Rhit.Applications.Model.Services {
                 ResponseObject = obj,
                 StatusCode = status,
                 RawResponse = responseString,
-                Request = asyncResult.Request,
+                Request = result.Request,
                 Type = type,
                 Error = exception,
             };

@@ -8,6 +8,7 @@ using Rhit.Applications.Model.Services;
 using Rhit.Applications.Mvvm.Commands;
 using Rhit.Applications.ViewModel.Controllers;
 using Rhit.Applications.ViewModel.Providers;
+using System;
 
 namespace Rhit.Applications.ViewModel.Models {
     public class MapViewModel : DependencyObject {
@@ -23,7 +24,7 @@ namespace Rhit.Applications.ViewModel.Models {
             Locations = LocationsController.Instance;
 
             LocationsProvider = locationsProvider;
-            LocationsController.Instance.CurrentLocationChanged += new LocationChangesEventHandler(CurrentLocationChanged);
+            LocationsController.Instance.CurrentLocationChanged += new EventHandler(CurrentLocationChanged);
 
             SaveCommand = new RelayCommand(p => Save());
             CancelCommand = new RelayCommand(p => Cancel());
@@ -59,8 +60,9 @@ namespace Rhit.Applications.ViewModel.Models {
                 Map.Center = Locations.CurrentLocation.Center;
         }
 
-        private void CurrentLocationChanged(object sender, LocationChangesEventArgs e) {
-            if(e.NewLocation != null) Map.Center = e.NewLocation.Center;
+        private void CurrentLocationChanged(object sender, EventArgs e) {
+            if(LocationsController.Instance.CurrentLocation != null)
+                Map.Center = LocationsController.Instance.CurrentLocation.Center;
         }
 
 

@@ -33,11 +33,21 @@ namespace Rhit.Applications.Model.Services {
 
         #region LocationsReturned
         public event LocationsEventHandler LocationsReturned;
-        protected virtual void OnLocationsUpdate(ServiceEventArgs e, ICollection<RhitLocation> locations) {
+        protected virtual void OnLocationsUpdate(ServiceEventArgs e, IList<RhitLocation> locations) {
             LocationsEventArgs args = new LocationsEventArgs(e) {
                 Locations = locations,
             };
             if(LocationsReturned != null) LocationsReturned(this, args);
+        }
+        #endregion
+
+        #region LocationDeleted
+        public event LocationEventHandler LocationDeleted;
+        protected virtual void OnLocationDeletion(ServiceEventArgs e, RhitLocation location) {
+            LocationEventArgs args = new LocationEventArgs(e) {
+                Location = location,
+            };
+            if(LocationDeleted != null) LocationDeleted(this, args);
         }
         #endregion
 
@@ -96,11 +106,11 @@ namespace Rhit.Applications.Model.Services {
                     break;
 
                 case ResponseType.Location:
+                case ResponseType.DeleteLocation:
                     HandleLocationResponse(eventArgs);
                     break;
 
                 case ResponseType.ChangeCorners:
-                case ResponseType.DeleteLocation:
                 case ResponseType.MoveLocation:
                 case ResponseType.LocationCreation:
                 case ResponseType.LocationUpdate:
@@ -151,6 +161,10 @@ namespace Rhit.Applications.Model.Services {
         }
 
         private void HandleLocationResponse(ServiceEventArgs eventArgs) {
+            if(eventArgs.Type == ResponseType.DeleteLocation) {
+                OnLocationDeletion(eventArgs, new RhitLocation() { Id = (int) eventArgs.Request.UserMetaData["LocationId"], });
+                return;
+            }
             ServerObject response = eventArgs.ResponseObject;
             if(response.Locations == null || response.Locations.Count <= 0) return;
             List<RhitLocation> locations = ServerObject.GetLocations(response.Locations);
@@ -290,8 +304,8 @@ namespace Rhit.Applications.Model.Services {
             Connection.MakeLocationChangeRequest(requests, RequestType.LocationUpdate, oldId, newId);
         }
 
-        public void UpdateServerVersion(Dispatcher dispatcher) {
-            RequestPart request = new RequestBuilder(BaseAddress).Admin(Connection.ServiceTokenGuid, Version);
+        public void IncreaseServerVersion() {
+            RequestPart request = new RequestBuilder(BaseAddress).Admin(Connection.ServiceTokenGuid, Version+0.001);
             Connection.MakeRequest(request, RequestType.IncrementVersion);
         }
         #endregion

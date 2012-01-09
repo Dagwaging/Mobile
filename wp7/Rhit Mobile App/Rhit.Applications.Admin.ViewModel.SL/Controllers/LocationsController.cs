@@ -33,14 +33,35 @@ namespace Rhit.Applications.ViewModel.Controllers {
             ShowAllBuildings = true;
             ShowSelectedBuilding = true;
 
-            List<RhitLocation> locations = DataCollector.Instance.GetAllLocations(null);
-            if(locations == null || locations.Count <= 0)
-                DataCollector.Instance.UpdateAvailable += new ServiceEventHandler(OnLocationsRetrieved);
-            else OnLocationsRetrieved(this, new ServiceEventArgs());
+            DataCollector.Instance.GetAllLocations();
+            DataCollector.Instance.LocationsReturned += new LocationsEventHandler(LocationsReturned);
+            DataCollector.Instance.LocationUpdate += new LocationEventHandler(LocationUpdate);
+            DataCollector.Instance.LocationDeleted += new LocationEventHandler(LocationDeleted);
         }
 
-        private void OnLocationsRetrieved(object sender, ServiceEventArgs e) {
-            List<RhitLocation> locations = DataCollector.Instance.GetAllLocations(null);
+        private void LocationDeleted(object sender, LocationEventArgs e) {
+            UnSelect();
+
+            if(LocationDictionary.ContainsKey(e.Location.Id))
+                All.Remove(LocationDictionary[e.Location.Id]);
+
+            UpdateCollections();
+            OnLocationsChanged(new EventArgs());
+        }
+
+        private void LocationUpdate(object sender, LocationEventArgs e) {
+            UnSelect();
+
+            if(LocationDictionary.ContainsKey(e.Location.Id))
+                All.Remove(LocationDictionary[e.Location.Id]);
+            All.Add(e.Location);
+
+            UpdateCollections();
+            OnLocationsChanged(new EventArgs());
+        }
+
+        private void LocationsReturned(object sender, LocationsEventArgs e) {
+            IList<RhitLocation> locations = e.Locations;
             if(locations == null || locations.Count <= 0) return;
             SetLocations(locations);
         }
@@ -57,15 +78,15 @@ namespace Rhit.Applications.ViewModel.Controllers {
 
         #region Events
         #region CurrentLocationChanged
-        public event LocationChangesEventHandler CurrentLocationChanged;
-        protected virtual void OnCurrentLocationChanged(LocationChangesEventArgs e) {
+        public event EventHandler CurrentLocationChanged;
+        protected virtual void OnCurrentLocationChanged(EventArgs e) {
             if(CurrentLocationChanged != null) CurrentLocationChanged(this, e);
         }
         #endregion
 
         #region LocationsChanged
-        public event LocationChangesEventHandler LocationsChanged;
-        protected virtual void OnLocationsChanged(LocationChangesEventArgs e) {
+        public event EventHandler LocationsChanged;
+        protected virtual void OnLocationsChanged(EventArgs e) {
             if(LocationsChanged != null) LocationsChanged(this, e);
         }
         #endregion
@@ -142,13 +163,10 @@ namespace Rhit.Applications.ViewModel.Controllers {
 
         public void SetLocations(ICollection<RhitLocation> locations) {
             UnSelect();
-            LocationChangesEventArgs args = new LocationChangesEventArgs();
-            args.OldLocations = All;
             All.Clear();
             foreach(RhitLocation location in locations) All.Add(location);
-            args.NewLocations = All;
             UpdateCollections();
-            OnLocationsChanged(args);
+            OnLocationsChanged(new EventArgs());
         }
 
         #region SelectLocation Methods
@@ -159,17 +177,14 @@ namespace Rhit.Applications.ViewModel.Controllers {
 
         public void SelectLocation(RhitLocation location) {
             if(!LocationDictionary.ContainsKey(location.Id)) return;
-            LocationChangesEventArgs args = new LocationChangesEventArgs();
-            if(CurrentLocation == null) args.OldLocation = null;
-            else args.OldLocation = CurrentLocation.OriginalLocation;
             CurrentLocation = new ObservableRhitLocation(location);
-            args.NewLocation = CurrentLocation.OriginalLocation;
 
             InnerLocations.Clear();
-            List<RhitLocation> locations = DataCollector.Instance.GetChildLocations(null, CurrentLocation.Id);
-            if(locations != null) foreach(RhitLocation child in locations) InnerLocations.Add(child);
+            foreach(RhitLocation child in All)
+                if(child.ParentId == CurrentLocation.Id)
+                    InnerLocations.Add(child);
 
-            OnCurrentLocationChanged(args);
+            OnCurrentLocationChanged(new EventArgs());
         }
 
         public void SelectLocation(LocationNode node) {
@@ -178,13 +193,9 @@ namespace Rhit.Applications.ViewModel.Controllers {
         #endregion
 
         public void UnSelect() {
-            LocationChangesEventArgs args = new LocationChangesEventArgs();
-            if(CurrentLocation == null) args.OldLocation = null;
-            else args.OldLocation = CurrentLocation.OriginalLocation;
             CurrentLocation = null;
-            args.NewLocation = null;
             InnerLocations.Clear();
-            OnCurrentLocationChanged(args);
+            OnCurrentLocationChanged(new EventArgs());
         }
 
         public ObservableCollection<LocationType> LocationTypes { get; private set; }
@@ -255,8 +266,8 @@ namespace Rhit.Applications.ViewModel.Controllers {
             Corners = new ObservableCollection<Location>();
             foreach(Location location in OriginalLocation.Corners) Corners.Add(location);
             Links = new ObservableCollection<Link>();
-            foreach(KeyValuePair<string, string> entry in OriginalLocation.Links)
-                Links.Add(new Link() { Name = entry.Key, Address = entry.Value, });
+            foreach(ILink link in OriginalLocation.Links)
+                Links.Add(new Link() { Name = link.Name, Address = link.Address, });
 
             Center = OriginalLocation.Center;
             Description = OriginalLocation.Description;
@@ -289,8 +300,7 @@ namespace Rhit.Applications.ViewModel.Controllers {
             if(Links.Count != location.Links.Count) changes.Add("Links");
             else {
                 foreach(Link link in Links) {
-                    if(location.Links.ContainsKey(link.Name)) continue;
-                    if(location.Links[link.Name] == link.Address) continue;
+                    if(location.Links.Contains(link)) continue;
                     changes.Add("Links");
                     break;
                 }

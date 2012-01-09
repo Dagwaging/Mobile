@@ -1,36 +1,20 @@
 ﻿using System;
 using System.Threading;
+using System.Net;
 
 namespace Rhit.Applications.Model.Services {
-    public class AsyncServiceResult : IAsyncResult {
+    public class AsyncServiceResult {
         public AsyncServiceResult(IAsyncResult result, ServiceRequest request) {
-            AsyncState = result.AsyncState;
-            AsyncWaitHandle = result.AsyncWaitHandle;
-            CompletedSynchronously = result.CompletedSynchronously;
-            IsCompleted = result.IsCompleted;
             Request = request;
+            BaseResult = result;
         }
 
-        public ServiceRequest Request { get; set; }
+        public IAsyncResult BaseResult { get; private set; }
 
-        public object AsyncState {
-            get;
-            private set;
-        }
+        public ServiceRequest Request { get; private set; }
 
-        public WaitHandle AsyncWaitHandle {
-            get;
-            private set;
-        }
-
-        public bool CompletedSynchronously {
-            get;
-            private set;
-        }
-
-        public bool IsCompleted {
-            get;
-            private set;
+        public HttpWebRequest GetWebRequest() {
+            return (HttpWebRequest) BaseResult.AsyncState;
         }
     }
 }

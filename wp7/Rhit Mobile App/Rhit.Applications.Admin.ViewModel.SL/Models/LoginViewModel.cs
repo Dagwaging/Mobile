@@ -15,8 +15,9 @@ namespace Rhit.Applications.ViewModel.Models {
             DataCollector.Instance.ServerErrorReturned += new ServiceEventHandler(ServerErrorReturned);
         }
 
-        void ServerErrorReturned(object sender, ServiceEventArgs e) {
-            LoginStatus = "Login Failed: Invalid credentials.";
+        private void ServerErrorReturned(object sender, ServiceEventArgs e) {
+            if(e.Request.Type == RequestType.Login)
+                LoginStatus = "Login Failed: Invalid credentials.";
         }
 
         public event EventHandler Authenticated;
@@ -26,10 +27,6 @@ namespace Rhit.Applications.ViewModel.Models {
         }
 
         void LoginRequestReturned(object sender, AuthenticationEventArgs e) {
-            if(!e.Authorized) {
-                LoginStatus = "Login Failed: Invalid credentials.";
-                return;
-            }
             OnAuthenticated(new EventArgs());
         }
 
@@ -71,7 +68,7 @@ namespace Rhit.Applications.ViewModel.Models {
                 LoginStatus = "Please enter both your user name and password.";
                 return;
             }
-            DataCollector.Instance.Login(Dispatcher, UserName, Password);
+            DataCollector.Instance.Login(UserName, Password);
         }
 
         private bool CanLogin() {

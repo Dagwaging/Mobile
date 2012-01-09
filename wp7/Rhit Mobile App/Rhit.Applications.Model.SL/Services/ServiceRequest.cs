@@ -13,6 +13,7 @@ namespace Rhit.Applications.Model.Services {
 
         public ServiceRequest(RequestPart request, RequestType type) : this() {
             AddRequest(request);
+            Type = type;
         }
 
         public ServiceRequest(RequestType type) : this() {

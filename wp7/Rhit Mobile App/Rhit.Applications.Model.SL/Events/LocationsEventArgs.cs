@@ -8,6 +8,6 @@ namespace Rhit.Applications.Model.Events {
         public LocationsEventArgs(ServiceEventArgs baseArgs) : base() {
             Copy(baseArgs);
         }
-        public ICollection<RhitLocation> Locations { get; set; }
+        public IList<RhitLocation> Locations { get; set; }
     }
 }

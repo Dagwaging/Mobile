@@ -7,23 +7,19 @@ namespace Rhit.Applications.ViewModel.Models {
     public class HomeViewModel : DependencyObject {
         public HomeViewModel() {
             IncreaseVersionCommand = new RelayCommand(p => IncreaseVersion());
-            Version = DataCollector.Instance.Version;
-            DataCollector.Instance.UpdateAvailable += new Model.Events.ServiceEventHandler(UpdateAvailable);
+            Version = DataCollector.Version;
+
+            DataCollector.Instance.VersionUpdate += new Model.Events.VersionEventHandler(VersionUpdate);
         }
 
-        private void UpdateAvailable(object sender, Model.Events.ServiceEventArgs e) {
-            UpdateVersion();
-        }
-
-        private void UpdateVersion() {
-            Version = DataCollector.Instance.Version;
+        private void VersionUpdate(object sender, Model.Events.VersionEventArgs e) {
+            Version = e.ServerVersion;
         }
 
         public ICommand IncreaseVersionCommand { get; private set; }
 
         public void IncreaseVersion() {
-            DataCollector.Instance.Version += 0.001;
-            DataCollector.Instance.UpdateServerVersion(Dispatcher);
+            DataCollector.Instance.IncreaseServerVersion();
         }
 
         #region Version

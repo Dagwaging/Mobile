@@ -144,8 +144,10 @@ namespace Rhit.Applications.Model {
                 AltNames = AltNames,
                 ParentId = ParentId,
                 Floor = Floor,
-                Links = (IList<ILink>) Links,
             };
+
+            foreach(ILink link in Links)
+                location.Links.Add(link);
 
             if(LocationData != null) {
                 location.MinZoomLevel = LocationData.MinZoomLevel;

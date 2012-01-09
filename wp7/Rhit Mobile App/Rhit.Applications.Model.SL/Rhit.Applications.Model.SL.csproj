@@ -78,7 +78,6 @@
   <ItemGroup>
     <Compile Include="DataContracts.cs" />
     <Compile Include="Events\AuthenticationEventArgs.cs" />
-    <Compile Include="Events\LocationChangesEventArgs.cs" />
     <Compile Include="Events\LocationEventArgs.cs" />
     <Compile Include="Events\LocationsEventArgs.cs" />
     <Compile Include="Events\ServiceEventArgs.cs" />
