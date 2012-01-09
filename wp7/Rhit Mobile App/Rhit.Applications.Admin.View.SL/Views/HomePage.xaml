@@ -36,6 +36,47 @@
                     <StackPanel Grid.Row="1" Grid.ColumnSpan="2">
                         <TextBlock Style="{StaticResource ContentTextStyle}" Text="Instructions" FontWeight="Bold" Margin="0,10,0,0"/>
                         <TextBlock Style="{StaticResource ContentTextStyle}" Text="Do stuff... and things"/>
+                        <TextBlock Style="{StaticResource ContentTextStyle}" Text="Location ID Format" FontWeight="Bold" Margin="0,10,0,0"/>
+                        <TextBlock Style="{StaticResource ContentTextStyle}" Text="When adding a location, you must specify an ID number.  This number is always going to be 7 digits long, with the following format:"/>
+                        <TextBlock Style="{StaticResource ContentTextStyle}" Margin="40,15" FontFamily="Courier New" Text="MMSFRRA"/>
+                        <TextBlock Style="{StaticResource ContentTextStyle}" Text=" • MM is the ID of the map area that the location is contained within.  The current list of map area ID's is listed below.  If the map area does not exist yet, pick an unused 2-digit number."/>
+                        <Grid Margin="40,0" HorizontalAlignment="Left">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Row="0" Grid.Column="0" Margin="6,3" FontWeight="Bold" TextAlignment="Center" Text="ID"/>
+                            <TextBlock Grid.Row="0" Grid.Column="1" Margin="6,3" FontWeight="Bold" Text="Map Area"/>
+                            <TextBlock Grid.Row="1" Grid.Column="0" Margin="6,3" TextAlignment="Center" FontFamily="Courier New" Text="11"/>
+                            <TextBlock Grid.Row="1" Grid.Column="1" Margin="6,3" FontFamily="Courier New" Text="Olin Hall"/>
+                            <TextBlock Grid.Row="2" Grid.Column="0" Margin="6,3" TextAlignment="Center" FontFamily="Courier New" Text="12"/>
+                            <TextBlock Grid.Row="2" Grid.Column="1" Margin="6,3" FontFamily="Courier New" Text="Hadley Hall"/>
+                            <TextBlock Grid.Row="3" Grid.Column="0" Margin="6,3" TextAlignment="Center" FontFamily="Courier New" Text="13"/>
+                            <TextBlock Grid.Row="3" Grid.Column="1" Margin="6,3" FontFamily="Courier New" Text="Moench Hall"/>
+                            <TextBlock Grid.Row="4" Grid.Column="0" Margin="6,3" TextAlignment="Center" FontFamily="Courier New" Text="14"/>
+                            <TextBlock Grid.Row="4" Grid.Column="1" Margin="6,3" FontFamily="Courier New" Text="Crapo Hall"/>
+                            <TextBlock Grid.Row="5" Grid.Column="0" Margin="6,3" TextAlignment="Center" FontFamily="Courier New" Text="15"/>
+                            <TextBlock Grid.Row="5" Grid.Column="1" Margin="6,3" FontFamily="Courier New" Text="Myers Hall"/>
+                            <TextBlock Grid.Row="6" Grid.Column="0" Margin="6,3" TextAlignment="Center" FontFamily="Courier New" Text="16"/>
+                            <TextBlock Grid.Row="6" Grid.Column="1" Margin="6,3" FontFamily="Courier New" Text="Rotz Mechanical Engineering Lab"/>
+                            <TextBlock Grid.Row="7" Grid.Column="0" Margin="6,3" TextAlignment="Center" FontFamily="Courier New" Text="17"/>
+                            <TextBlock Grid.Row="7" Grid.Column="1" Margin="6,3" FontFamily="Courier New" Text="Logan Library"/>
+                        </Grid>
+                        <TextBlock Style="{StaticResource ContentTextStyle}" Text=" • S is the section of the location.  If the location has no room number, this should be 0.  Otherwise, it should be between 1-9, and represent the preceding letter in the room number.  For map areas with only one section (e.g. Crapo with G), this value will be 1.  For map areas with more than one section, this value will be mapped to letters (e.g. A=1, B=2, etc.).  Lower levels count as the same sections as upper levels (e.g. A=AL)."/>
+                        <TextBlock Style="{StaticResource ContentTextStyle}" Text=" • F is the floor number.  For locations with room numbers, this value is the first digit in the room number for upper levels.  For lower levels, this value is 10 minus the floor (e.g. AL201 would have 8).  Locations that are not floor-specific should have this value as 0."/>
+                        <TextBlock Style="{StaticResource ContentTextStyle}" Text=" • RR is the last two digits in the location's room number."/>
+                        <TextBlock Style="{StaticResource ContentTextStyle}" Text=" • A is the partition of the room.  If the location does not have a partition, this value is 0 (e.g. A200 would have 0), while each partition is mapped to 1-9 (e.g. A200C would have 3)."/>
+                        <TextBlock Style="{StaticResource ContentTextStyle}" Text=" • If a location does not have a room number, RRA can be used to make this location distinguishable."/>
                     </StackPanel>
 
                     <StackPanel Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Top">
