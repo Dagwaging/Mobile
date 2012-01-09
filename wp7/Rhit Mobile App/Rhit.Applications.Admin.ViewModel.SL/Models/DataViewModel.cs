@@ -58,7 +58,8 @@ namespace Rhit.Applications.ViewModel.Models {
             if(changes.Contains("Center")) changes.Remove("Center");
 
             IList<ILink> links = null;
-            if(changes.Contains("Links")) {
+            // TODO: Fix
+            if(changes.Contains("Links") && false) {
                 links = (IList<ILink>) newLocation.Links;
                 changes.Remove("Links");
             }
