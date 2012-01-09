@@ -57,15 +57,15 @@ namespace Rhit.Applications.ViewModel.Controllers {
 
         #region Events
         #region CurrentLocationChanged
-        public event LocationEventHandler CurrentLocationChanged;
-        protected virtual void OnCurrentLocationChanged(LocationEventArgs e) {
+        public event LocationChangesEventHandler CurrentLocationChanged;
+        protected virtual void OnCurrentLocationChanged(LocationChangesEventArgs e) {
             if(CurrentLocationChanged != null) CurrentLocationChanged(this, e);
         }
         #endregion
 
         #region LocationsChanged
-        public event LocationEventHandler LocationsChanged;
-        protected virtual void OnLocationsChanged(LocationEventArgs e) {
+        public event LocationChangesEventHandler LocationsChanged;
+        protected virtual void OnLocationsChanged(LocationChangesEventArgs e) {
             if(LocationsChanged != null) LocationsChanged(this, e);
         }
         #endregion
@@ -142,7 +142,7 @@ namespace Rhit.Applications.ViewModel.Controllers {
 
         public void SetLocations(ICollection<RhitLocation> locations) {
             UnSelect();
-            LocationEventArgs args = new LocationEventArgs();
+            LocationChangesEventArgs args = new LocationChangesEventArgs();
             args.OldLocations = All;
             All.Clear();
             foreach(RhitLocation location in locations) All.Add(location);
@@ -159,7 +159,7 @@ namespace Rhit.Applications.ViewModel.Controllers {
 
         public void SelectLocation(RhitLocation location) {
             if(!LocationDictionary.ContainsKey(location.Id)) return;
-            LocationEventArgs args = new LocationEventArgs();
+            LocationChangesEventArgs args = new LocationChangesEventArgs();
             if(CurrentLocation == null) args.OldLocation = null;
             else args.OldLocation = CurrentLocation.OriginalLocation;
             CurrentLocation = new ObservableRhitLocation(location);
@@ -178,7 +178,7 @@ namespace Rhit.Applications.ViewModel.Controllers {
         #endregion
 
         public void UnSelect() {
-            LocationEventArgs args = new LocationEventArgs();
+            LocationChangesEventArgs args = new LocationChangesEventArgs();
             if(CurrentLocation == null) args.OldLocation = null;
             else args.OldLocation = CurrentLocation.OriginalLocation;
             CurrentLocation = null;
@@ -450,7 +450,7 @@ namespace Rhit.Applications.ViewModel.Controllers {
         public int Id { get; set; }
     }
 
-    public class Link : DependencyObject {
+    public class Link : DependencyObject, ILink {
         public Link() { }
 
         #region Name

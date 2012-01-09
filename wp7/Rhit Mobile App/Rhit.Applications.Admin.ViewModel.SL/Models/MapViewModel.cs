@@ -23,7 +23,7 @@ namespace Rhit.Applications.ViewModel.Models {
             Locations = LocationsController.Instance;
 
             LocationsProvider = locationsProvider;
-            LocationsController.Instance.CurrentLocationChanged += new LocationEventHandler(CurrentLocationChanged);
+            LocationsController.Instance.CurrentLocationChanged += new LocationChangesEventHandler(CurrentLocationChanged);
 
             SaveCommand = new RelayCommand(p => Save());
             CancelCommand = new RelayCommand(p => Cancel());
@@ -59,7 +59,7 @@ namespace Rhit.Applications.ViewModel.Models {
                 Map.Center = Locations.CurrentLocation.Center;
         }
 
-        private void CurrentLocationChanged(object sender, LocationEventArgs e) {
+        private void CurrentLocationChanged(object sender, LocationChangesEventArgs e) {
             if(e.NewLocation != null) Map.Center = e.NewLocation.Center;
         }
 
@@ -183,23 +183,7 @@ namespace Rhit.Applications.ViewModel.Models {
         }
 
         private void SaveCorners() {
-            var corners = LocationsProvider.GetLocations();
-
-            var executions = new List<KeyValuePair<string, Dictionary<string, object>>>() {
-                new KeyValuePair<string, Dictionary<string, object>>("spDeleteMapAreaCorners", new Dictionary<string, object>() {
-                    { "location", LocationsController.Instance.CurrentLocation.Id }
-                })
-            };
-
-            foreach(var corner in corners) {
-                executions.Add(new KeyValuePair<string, Dictionary<string, object>>("spAddMapAreaCorner", new Dictionary<string, object>() {
-                    { "location", LocationsController.Instance.CurrentLocation.Id },
-                    { "lat", corner.Latitude },
-                    { "lon", corner.Longitude }
-                }));
-            }
-
-            DataCollector.Instance.ExecuteBatchStoredProcedure(Dispatcher, executions);
+            DataCollector.Instance.ChangeLocationCorners(LocationsController.Instance.CurrentLocation.Id, LocationsProvider.GetLocations());
             Cancel();
         }
 
@@ -251,7 +235,7 @@ namespace Rhit.Applications.ViewModel.Models {
                 if(locations.Count > 0) newLocation = locations[0];
                 else if(points.Count > 0) newLocation = LocationPositionMapper.Instance.ConvertPositionToLocation(points[0]);
                 if(newLocation != null) {
-                    DataCollector.Instance.CreateLocation(LocationsProvider.Id, LocationsProvider.Name, newLocation.Latitude, newLocation.Longitude, Mapper.Floor, LocationsProvider.ParentId);
+                    DataCollector.Instance.CreateLocation(LocationsProvider.Id, LocationsProvider.ParentId, LocationsProvider.Name, newLocation.Latitude, newLocation.Longitude, Mapper.Floor);
                 }
             }
 
@@ -260,7 +244,7 @@ namespace Rhit.Applications.ViewModel.Models {
                 //TODO: Scott - Use LocationsProvider.ParentId and LocationsProvider.Name
                 if(locations.Count <= 0) return;
                 Location newLocation = locations[0];
-                DataCollector.Instance.CreateLocation(LocationsProvider.Id, LocationsProvider.Name, newLocation.Latitude, newLocation.Longitude, 0, LocationsProvider.ParentId);
+                DataCollector.Instance.CreateLocation(LocationsProvider.Id, LocationsProvider.ParentId, LocationsProvider.Name, newLocation.Latitude, newLocation.Longitude, 0);
             }
 
             Cancel();

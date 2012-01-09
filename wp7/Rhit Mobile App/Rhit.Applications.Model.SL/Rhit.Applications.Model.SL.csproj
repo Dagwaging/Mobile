@@ -78,13 +78,10 @@
   <ItemGroup>
     <Compile Include="DataContracts.cs" />
     <Compile Include="Events\AuthenticationEventArgs.cs" />
+    <Compile Include="Events\LocationChangesEventArgs.cs" />
     <Compile Include="Events\LocationEventArgs.cs" />
-    <Compile Include="Events\OutlineEventArgs.cs" />
-    <Compile Include="Events\PushpinEventArgs.cs" />
-    <Compile Include="Events\SearchEventArgs.cs" />
-    <Compile Include="Events\ServerEventArgs.cs" />
+    <Compile Include="Events\LocationsEventArgs.cs" />
     <Compile Include="Events\ServiceEventArgs.cs" />
-    <Compile Include="Events\StoredProcEventArgs.cs" />
     <Compile Include="Events\VersionEventArgs.cs" />
     <Compile Include="GeoCoordinate.cs" />
     <Compile Include="LocationType.cs" />

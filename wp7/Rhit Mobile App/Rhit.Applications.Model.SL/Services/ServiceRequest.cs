@@ -15,6 +15,10 @@ namespace Rhit.Applications.Model.Services {
             AddRequest(request);
         }
 
+        public ServiceRequest(RequestType type) : this() {
+            Type = type;
+        }
+
         public bool Sent { get; private set; }
 
         public void AddRequest(RequestPart request) {

@@ -15,11 +15,9 @@ namespace Rhit.Applications.ViewModel.Models {
             InitializeProperties();
 
             Locations = LocationsController.Instance;
-            Locations.LocationsChanged += new LocationEventHandler(LocationsChanged);
+            Locations.LocationsChanged += new LocationChangesEventHandler(LocationsChanged);
             if(Locations.All.Count > 0 && Locations.CurrentLocation == null)
                 Locations.SelectLocation(Locations.All[2].Id);
-
-            DataCollector.Instance.StoredProcReturned += new StoredProcEventHandler(StoredProcReturned);
         }
 
         private void InitializeProperties() {
@@ -31,14 +29,9 @@ namespace Rhit.Applications.ViewModel.Models {
             SaveCommand = new RelayCommand(p => SaveLocation());
         }
 
-        private void LocationsChanged(object sender, LocationEventArgs e) {
+        private void LocationsChanged(object sender, LocationChangesEventArgs e) {
             if(Locations.All.Count > 0 && Locations.CurrentLocation == null)
                 Locations.SelectLocation(Locations.All[2].Id);
-        }
-
-        private void StoredProcReturned(object sender, StoredProcEventArgs e) {
-            //TODO: Actually update location in Tree that was just saved
-            //It can take up to three calls to this method before all data is updated in database
         }
 
         private void AddAltName() {
@@ -62,48 +55,33 @@ namespace Rhit.Applications.ViewModel.Models {
             var executions = new List<KeyValuePair<string, Dictionary<string, object>>>();
             List<string> changes = newLocation.CheckChanges();
             if(changes.Contains("Center")) changes.Remove("Center");
-            if(changes.Contains("Links")) {
-                executions.Add(new KeyValuePair<string, Dictionary<string, object>>("spDeleteLinks", new Dictionary<string, object>() {
-                    { "location", oldLocation.Id }
-                }));
-                foreach(Link link in newLocation.Links) {
-                    executions.Add(new KeyValuePair<string, Dictionary<string, object>>("spAddLink", new Dictionary<string, object>() {
-                        { "location", oldLocation.Id },
-                        { "name", link.Name },
-                        { "url", link.Address }
-                    }));
-                }
 
+            IList<ILink> links = null;
+            if(changes.Contains("Links")) {
+                links = (IList<ILink>) newLocation.Links;
                 changes.Remove("Links");
             }
 
+            IList<string> altNames = null;
             if(changes.Contains("AltNames")) {
-                executions.Add(new KeyValuePair<string, Dictionary<string, object>>("spDeleteAlts", new Dictionary<string, object>() {
-                    { "location", oldLocation.Id }
-                }));
-                foreach (AlternateName altName in newLocation.AltNames) {
-                    executions.Add(new KeyValuePair<string, Dictionary<string, object>>("spAddAlt", new Dictionary<string, object>() {
-                        { "location", oldLocation.Id },
-                        { "altname", altName.Name },
-                    }));
-                }
-
+                altNames = new List<string>();
+                foreach(AlternateName altName in newLocation.AltNames)
+                    altNames.Add(altName.Name);
                 changes.Remove("AltNames");
             }
 
-            // Valid parameters
-            executions.Add(new KeyValuePair<string,Dictionary<string,object>>("spUpdateLocation", new Dictionary<string, object>() {
-                { "id", oldLocation.Id },
-                { "name", newLocation.Label },
-                { "newid", newLocation.Id },
-                { "parent", newLocation.ParentId },
-                { "description", newLocation.Description },
-                { "labelonhybrid", newLocation.LabelOnHybrid },
-                { "minzoomlevel", newLocation.MinZoom },
-                { "type", Location_DC.ConvertTypeToTypeKey(newLocation.Type) },
-            }));
-
-            DataCollector.Instance.ExecuteBatchStoredProcedure(Dispatcher, executions);
+            DataCollector.Instance.ChangeLocation(
+                oldLocation.Id,
+                newLocation.Id,
+                newLocation.Label,
+                newLocation.Floor,
+                newLocation.ParentId,
+                newLocation.Description,
+                newLocation.LabelOnHybrid,
+                newLocation.MinZoom,
+                newLocation.Type,
+                links,
+                altNames);
         }
 
         private void DeleteLocation() {

@@ -24,25 +24,9 @@ namespace Rhit.Applications.Model {
         /// <summary>
         /// Constructor; Basic initialization; Make sure to set relevant properties.
         /// </summary>
-        public RhitLocation() { }
-
-        /// <summary>
-        /// Constructor; Initializes 'Center' property.
-        /// </summary>
-        /// <param name="latitude"></param>
-        /// <param name="longitude"></param>
-        public RhitLocation(double latitude, double longitude) {
-            Center = new GeoCoordinate(latitude, longitude);
-        }
-
-        /// <summary>
-        /// Constructor; Initializes 'Center' property.
-        /// </summary>
-        /// <param name="latitude">Center latitude of the location</param>
-        /// <param name="longitude">Center longitude of the location</param>
-        /// <param name="altitude">Center altitude of the location</param>
-        public RhitLocation(double latitude, double longitude, double altitude) {
-            Center = new GeoCoordinate(latitude, longitude, altitude);
+        public RhitLocation() {
+            Links = new List<ILink>();
+            AltNames = new List<string>();
         }
         #endregion
 
@@ -78,9 +62,9 @@ namespace Rhit.Applications.Model {
         public LocationType Type { get; set; }
 
         //TODO: Change to a custom link object (Name & Address properties)
-        public Dictionary<string, string> Links { get; set; }
+        public IList<ILink> Links { get; set; }
 
-        public List<string> AltNames { get; set; }
+        public IList<string> AltNames { get; set; }
         #endregion
 
         #region Public Methods
@@ -172,6 +156,24 @@ namespace Rhit.Applications.Model {
             ParentId = location.ParentId;
             Type = location.Type;
         }
+
+        public void AddLink(string name, string address) {
+            Links.Add(new Link(name, address));
+        }
         #endregion
+
+        private class Link : ILink {
+            public Link(string name, string address) {
+                Name = name;
+                Address = Address;
+            }
+            public string Name { get; set; }
+            public string Address { get; set; }
+        }
+    }
+
+    public interface ILink {
+        string Name { get; set; }
+        string Address { get; set; }
     }
 }

@@ -5,185 +5,161 @@ using Rhit.Applications.Model.Events;
 using Rhit.Applications.Model.Services.Requests;
 using System;
 using System.Threading;
+using Microsoft.Maps.MapControl;
 
 namespace Rhit.Applications.Model.Services {
     public class DataCollector {
-        #region Private Fields
-        private static DataCollector _instance;
-        #endregion
-
         #region Events
-
         #region VersionUpdate
         public event VersionEventHandler VersionUpdate;
-        protected virtual void OnVersionUpdate(VersionEventArgs e) {
-            if(VersionUpdate != null) VersionUpdate(this, e);
+        protected virtual void OnVersionUpdate(ServiceEventArgs e, double serverVersion, double servicesVersion) {
+            VersionEventArgs args = new VersionEventArgs(e) {
+                ServerVersion = serverVersion,
+                ServicesVersion = servicesVersion,
+            };
+            if(VersionUpdate != null) VersionUpdate(this, args);
         }
         #endregion
 
+        #region LocationUpdate
+        public event LocationEventHandler LocationUpdate;
+        protected virtual void OnLocationUpdate(ServiceEventArgs e, RhitLocation location) {
+            LocationEventArgs args = new LocationEventArgs(e) {
+                Location = location,
+            };
+            if(LocationUpdate != null) LocationUpdate(this, args);
+        }
+        #endregion
 
-        public event ServiceEventHandler UpdateAvailable;
+        #region LocationsReturned
+        public event LocationsEventHandler LocationsReturned;
+        protected virtual void OnLocationsUpdate(ServiceEventArgs e, ICollection<RhitLocation> locations) {
+            LocationsEventArgs args = new LocationsEventArgs(e) {
+                Locations = locations,
+            };
+            if(LocationsReturned != null) LocationsReturned(this, args);
+        }
+        #endregion
 
-        public event SearchEventHandler SearchResultsAvailable;
-
+        #region LoginResultsReturned
         public event AuthenticationEventHandler LoginResultsReturned;
+        protected virtual void OnLoginResultsReturned(ServiceEventArgs e, string token, DateTime expiration) {
+            AuthenticationEventArgs args = new AuthenticationEventArgs(e) {
+                Token = token,
+                Expiration = expiration,
+            };
+            if(LoginResultsReturned != null) LoginResultsReturned(this, args);
+        }
+        #endregion
 
-        public event StoredProcEventHandler StoredProcReturned;
+        #region ServerErrorReturned
         public event ServiceEventHandler ServerErrorReturned;
+        protected virtual void OnServerErrorReturned(ServiceEventArgs args) {
+            if(ServerErrorReturned != null) ServerErrorReturned(this, args);
+        }
+        #endregion
         #endregion
 
         private DataCollector() {
-            ResponseHandler.ResponseReceived += new ServerEventHandler(ResponseReceived);
-            //ResponseHandler.AllResponseReceived += new ServerEventHandler(GeoService_AllResponseReceived);
-            //ResponseHandler.TopResponseReceived += new ServerEventHandler(GeoService_TopResponseReceived);
-            //ResponseHandler.SearchResponseReceived += new ServerEventHandler(GeoService_SearchResponseReceived);
+            ResponseHandler.ResponseReceived += new ServiceEventHandler(ResponseReceived);
             BaseAddress = "";
-            Version = 0;
-            UpToDate = false;
         }
 
-        #region Public Properties
-        /// <summary>
-        /// The base address of the service.
-        /// </summary>
-        public string BaseAddress { get; set; }
-
+        #region Instance
+        private static DataCollector _instance;
         public static DataCollector Instance {
             get {
                 if(_instance == null) _instance = new DataCollector();
                 return _instance;
             }
         }
-
-        public double Version { get; set; }
-
-        public bool UpToDate { get; set; }
         #endregion
 
-        private ServerObject GetServerObject(ServerEventArgs e) {
-            //TODO: Use response to do display error messages
-            HttpStatusCode response = e.ServerResponse;
+        public string BaseAddress { get; set; }
 
-            ServerObject serverObject = e.ResponseObject;
-            if(serverObject == null) return null; //TODO: Raise erorr or something
-            return serverObject;
+        public static double Version { get; private set; }
+
+        private void SetVersion(double version, ServiceEventArgs args) {
+            if(version == Version) return;
+            Version = version;
+            OnVersionUpdate(args, version, 0);
         }
 
-        private void ResponseReceived(object sender, ServerEventArgs e) {
-            ServerObject response = GetServerObject(e);
+        private void ResponseReceived(object sender, ServiceEventArgs eventArgs) {
 
-            switch(e.Type) {
-                case ResponseType.All:
-                    HandleAllResponse(response);
+            switch(eventArgs.Type) {
+                case ResponseType.AllLocations:
+                case ResponseType.TopLocations:
+                case ResponseType.InternalLocations:
+                case ResponseType.LocationsSearch:
+                    HandleLocationsResponse(eventArgs);
                     break;
-                case ResponseType.Top:
-                    HandleTopResponse(response);
+
+                case ResponseType.Location:
+                    HandleLocationResponse(eventArgs);
                     break;
-                case ResponseType.Search:
-                    HandleSearchResponse(response);
+
+                case ResponseType.ChangeCorners:
+                case ResponseType.DeleteLocation:
+                case ResponseType.MoveLocation:
+                case ResponseType.LocationCreation:
+                case ResponseType.LocationUpdate:
+                    HandleChangeLocationResponse(eventArgs);
                     break;
-                case ResponseType.Authentication:
-                    HandleLoginResponse(response);
+
+                case ResponseType.IncrementVersion:
+                    GetVersion();
                     break;
-                case ResponseType.StoredProc:
-                    HandleStoredProcResponse(response);
+
+                case ResponseType.Version:
+                    SetVersion(eventArgs.ResponseObject.ServerVersion, eventArgs);
                     break;
-                case ResponseType.Error:
-                    HandleErrorResponse(response);
+
+                case ResponseType.Login:
+                    HandleLoginResponse(eventArgs);
                     break;
-                default:
-                    HandleLocationsResponse(response);
+
+                case ResponseType.ServerError:
+                case ResponseType.ConnectionError:
+                    OnServerErrorReturned(eventArgs);
                     break;
+
             }
         }
 
         #region Response Handlers
-        private void HandleLoginResponse(ServerObject response) {
+        private void HandleLocationsResponse(ServiceEventArgs eventArgs) {
+            ServerObject response = eventArgs.ResponseObject;
+            if(response.Locations == null || response.Locations.Count <= 0) return;
+            List<RhitLocation> locations = ServerObject.GetLocations(response.Locations);
+            SetVersion(response.Version, eventArgs);
+            OnLocationsUpdate(eventArgs, locations);
+        }
+
+        private void HandleChangeLocationResponse(ServiceEventArgs eventArgs) {
+            var dict = eventArgs.Request.UserMetaData;
+            if(dict.ContainsKey("LocationId")) GetLocation((int) dict["LocationId"]);
+            if(dict.ContainsKey("OldLocationId")) GetLocation((int) dict["OldLocationId"]);
+            if(dict.ContainsKey("NewLocationId")) GetLocation((int) dict["NewLocationId"]);
+        }
+
+        private void HandleLoginResponse(ServiceEventArgs eventArgs) {
+            ServerObject response = eventArgs.ResponseObject;
             Connection.ServiceToken = response.Token;
             Connection.Expiration = response.Expiration;
-            AuthenticationEventArgs args = new AuthenticationEventArgs() {
-                Authorized = true,
-                Expiration = response.Expiration,
-                Token = response.Token
-            };
-            OnLoginRequestReturned(args);
+            OnLoginResultsReturned(eventArgs, response.Token, response.Expiration);
         }
 
-        private void HandleErrorResponse(ServerObject response) {
-            //TODO: Provide More information about the error
-            OnServerError(new ServiceEventArgs());
-        }
-
-        private void HandleLocationsResponse(ServerObject response) {
+        private void HandleLocationResponse(ServiceEventArgs eventArgs) {
+            ServerObject response = eventArgs.ResponseObject;
+            if(response.Locations == null || response.Locations.Count <= 0) return;
             List<RhitLocation> locations = ServerObject.GetLocations(response.Locations);
-            DataStorage.Instance.MergeData(locations, StorageKey.All);
-            OnUpdated(new ServiceEventArgs());
-        }
-
-        private void HandleAllResponse(ServerObject response) {
-            if(response == null || response.Locations == null || response.Locations.Count == 0) {
-                UpToDate = true;
-                return;
-            }
-            List<RhitLocation> locations = ServerObject.GetLocations(response.Locations);
-            DataStorage.Instance.OverwriteData(locations, StorageKey.All);
-            Version = response.Version;
-            DataStorage.Version = Version;
-            OnUpdated(new ServiceEventArgs());
-            UpToDate = true;
-        }
-
-        private void HandleTopResponse(ServerObject response) {
-            if(response == null || response.Locations == null || response.Locations.Count == 0) {
-                UpToDate = true;
-                return;
-            }
-            List<RhitLocation> locations = ServerObject.GetLocations(response.Locations);
-            DataStorage.Instance.OverwriteData(locations, StorageKey.Top);
-            Version = response.Version;
-            DataStorage.Version = Version;
-            OnUpdated(new ServiceEventArgs());
-            UpToDate = true;
-        }
-
-        private void HandleSearchResponse(ServerObject response) {
-            SearchEventArgs args = new SearchEventArgs() {
-                Places = ServerObject.GetLocations(response.Locations),
-            };
-            OnSearchUpdated(args);
-        }
-
-        private void HandleStoredProcResponse(ServerObject response) {
-            StoredProcEventArgs args = new StoredProcEventArgs() {
-                Columns = response.Columns,
-                Table = response.Table
-            };
-            OnStoredProcReturned(args);
+            SetVersion(response.Version, eventArgs);
+            OnLocationUpdate(eventArgs, locations[0]);
         }
         #endregion
 
-        protected virtual void OnUpdated(ServiceEventArgs e) {
-            if(UpdateAvailable != null) UpdateAvailable(this, e);
-        }
-
-        protected virtual void OnSearchUpdated(SearchEventArgs e) {
-            if(SearchResultsAvailable != null) SearchResultsAvailable(this, e);
-        }
-
-        protected virtual void OnLoginRequestReturned(AuthenticationEventArgs e) {
-            if(LoginResultsReturned != null) LoginResultsReturned(this, e);
-        }
-
-        protected virtual void OnStoredProcReturned(StoredProcEventArgs e) {
-            if(StoredProcReturned != null) StoredProcReturned(this, e);
-        }
-
-        protected virtual void OnServerError(ServiceEventArgs e) {
-            if(ServerErrorReturned != null) ServerErrorReturned(this, e);
-        }
-
-
-        #region Public Methods
+        #region Request Methods
         public void Login(string username, string password) {
             RequestPart request = new RequestBuilder(BaseAddress).Admin(username, password);
             Connection.MakeRequest(request, RequestType.Login);
@@ -220,40 +196,26 @@ namespace Rhit.Applications.Model.Services {
 
         public void GetChildLocations(RhitLocation parent) { GetChildLocations(parent.Id); }
 
-
         public void GetChildLocations(int parentId) {
             RequestPart request = new RequestBuilder(BaseAddress).Locations.Data.Within(parentId);
             Connection.MakeRequest(request, RequestType.InternalLocations);
         }
 
-        public void GetLocationNames() {
-                RequestPart request = new RequestBuilder(BaseAddress).Locations.Names;
-                Connection.MakeRequest(request, RequestType.Names);
-        }
-
-        public void GetDescription(RhitLocation location) {
-            GetDescription(location.Id);
-        }
-
-        public void GetDescription(int id) {
-            RequestPart request = new RequestBuilder(BaseAddress).Locations.Desc(id);
-            Connection.MakeRequest(request, RequestType.LocationDescription);
-        }
-
-        public void CreateLocation(int id, string name, double latitude, double longitude, int floor) {
+        public void CreateLocation(int id, int parentId, string name, double latitude, double longitude, int floor) {
             RequestPart request = new RequestBuilder(BaseAddress).Admin(Connection.ServiceTokenGuid, "spCreateLocation");
-            request = request.AddQueryParameter("location", id);
+            request = request.AddQueryParameter("id", id);
             request = request.AddQueryParameter("name", name);
             request = request.AddQueryParameter("lat", latitude);
             request = request.AddQueryParameter("lon", longitude);
             request = request.AddQueryParameter("floor", floor);
-            Connection.MakeLocationChangeRequest(request, RequestType.LocationCreation, id);
+            request = request.AddQueryParameter("parent", parentId);
+            Connection.MakeLocationRequest(request, RequestType.LocationCreation, id);
         }
 
         public void DeleteLocation(int id) {
             RequestPart request = new RequestBuilder(BaseAddress).Admin(Connection.ServiceTokenGuid, "spDeleteLocation");
             request = request.AddQueryParameter("location", id);
-            Connection.MakeLocationChangeRequest(request, RequestType.DeleteLocation, id);
+            Connection.MakeLocationRequest(request, RequestType.DeleteLocation, id);
         }
 
         public void MoveLocation(int id, double latitude, double longitude) {
@@ -261,19 +223,71 @@ namespace Rhit.Applications.Model.Services {
             request = request.AddQueryParameter("location", id);
             request = request.AddQueryParameter("lat", latitude);
             request = request.AddQueryParameter("lon", longitude);
-            Connection.MakeLocationChangeRequest(request, RequestType.MoveLocation, id);
+            Connection.MakeLocationRequest(request, RequestType.MoveLocation, id);
         }
 
-        public void ExecuteBatchStoredProcedure(Dispatcher dispatcher, List<KeyValuePair<string, Dictionary<string, object>>> executions) {
-            var batchRequest = new Rhit.Applications.Model.Services.Requests.BatchRequest(dispatcher);
-            foreach (var execution in executions) {
-                RequestPart request = new RequestBuilder(BaseAddress).Admin(Connection.ServiceTokenGuid, execution.Key);
-                foreach (var parameter in execution.Value) {
-                    request = request.AddQueryParameter(parameter.Key, parameter.Value);
-                }
-                batchRequest.AddRequest(request);
+        public void ChangeLocationCorners(int id, IList<Location> newCorners) {
+            List<RequestPart> requests = new List<RequestPart>();
+
+            RequestPart request = new RequestBuilder(BaseAddress).Admin(Connection.ServiceTokenGuid, "spDeleteMapAreaCorners");
+            request = request.AddQueryParameter("location", id);
+            requests.Add(request);
+
+            foreach(Location corner in newCorners) {
+                request = new RequestBuilder(BaseAddress).Admin(Connection.ServiceTokenGuid, "spAddMapAreaCorner");
+                request = request.AddQueryParameter("location", id);
+                request = request.AddQueryParameter("lat", corner.Latitude);
+                request = request.AddQueryParameter("lon", corner.Longitude);
+                requests.Add(request);
             }
-            batchRequest.Start();
+
+            Connection.MakeLocationRequests(requests, RequestType.ChangeCorners, id);
+        }
+
+        public void ChangeLocation(int oldId, int newId, string name, int floor, int parentId, string description, bool labelOnHybrid, int minZoom, LocationType type, IList<ILink> links, IList<string> altNames) {
+            List<RequestPart> requests = new List<RequestPart>();
+            RequestPart request;
+
+            if(links != null) {
+                request = new RequestBuilder(BaseAddress).Admin(Connection.ServiceTokenGuid, "spDeleteLinks");
+                request = request.AddQueryParameter("location", oldId);
+                requests.Add(request);
+
+                foreach(ILink _link in links) {
+                    request = new RequestBuilder(BaseAddress).Admin(Connection.ServiceTokenGuid, "spAddLink");
+                    request = request.AddQueryParameter("location", oldId);
+                    request = request.AddQueryParameter("name", _link.Name);
+                    request = request.AddQueryParameter("url", _link.Address);
+                    requests.Add(request);
+                }
+            }
+
+            if(altNames != null) {
+                request = new RequestBuilder(BaseAddress).Admin(Connection.ServiceTokenGuid, "spDeleteAlts");
+                request = request.AddQueryParameter("location", oldId);
+                requests.Add(request);
+
+                foreach(string _name in altNames) {
+                    request = new RequestBuilder(BaseAddress).Admin(Connection.ServiceTokenGuid, "spAddAlt");
+                    request = request.AddQueryParameter("location", oldId);
+                    request = request.AddQueryParameter("altname", _name);
+                    requests.Add(request);
+                }
+            }
+
+            request = new RequestBuilder(BaseAddress).Admin(Connection.ServiceTokenGuid, "spUpdateLocation");
+            request = request.AddQueryParameter("id", oldId);
+            request = request.AddQueryParameter("name", name);
+            request = request.AddQueryParameter("newid", newId);
+            request = request.AddQueryParameter("parent", parentId);
+            request = request.AddQueryParameter("description", description);
+            request = request.AddQueryParameter("labelonhybrid", labelOnHybrid);
+            request = request.AddQueryParameter("minzoomlevel", minZoom);
+            request = request.AddQueryParameter("type", Location_DC.ConvertTypeToTypeKey(type));
+            //TODO: Scott - Add floor
+            requests.Add(request);
+
+            Connection.MakeLocationChangeRequest(requests, RequestType.LocationUpdate, oldId, newId);
         }
 
         public void UpdateServerVersion(Dispatcher dispatcher) {

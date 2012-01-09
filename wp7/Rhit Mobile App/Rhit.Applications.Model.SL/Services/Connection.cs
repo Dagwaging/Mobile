@@ -5,6 +5,7 @@ using System.Windows.Threading;
 using Rhit.Applications.Model.Services.Requests;
 using System.Windows;
 using System.Threading;
+using System.Collections.Generic;
 
 namespace Rhit.Applications.Model.Services {
     public static class Connection {
@@ -41,9 +42,30 @@ namespace Rhit.Applications.Model.Services {
             return request.Send(ResponseHandler.RequestCallback);
         }
 
-        public static IAsyncResult MakeLocationChangeRequest(RequestPart requestPart, RequestType type, int locationId) {
+        public static IAsyncResult MakeLocationRequest(RequestPart requestPart, RequestType type, int locationId) {
             ServiceRequest request = new ServiceRequest(requestPart, type);
             request.UserMetaData["LocationId"] = locationId;
+            return MakeRequest(request);
+        }
+
+        public static IAsyncResult MakeRequests(IList<RequestPart> requests, RequestType type) {
+            ServiceRequest request = new ServiceRequest(type);
+            foreach(RequestPart req in requests) request.AddRequest(req);
+            return MakeRequest(request);
+        }
+
+        public static IAsyncResult MakeLocationRequests(IList<RequestPart> requests, RequestType type, int locationId) {
+            ServiceRequest request = new ServiceRequest(type);
+            foreach(RequestPart req in requests) request.AddRequest(req);
+            request.UserMetaData["LocationId"] = locationId;
+            return MakeRequest(request);
+        }
+
+        public static IAsyncResult MakeLocationChangeRequest(IList<RequestPart> requests, RequestType type, int oldId, int newId) {
+            ServiceRequest request = new ServiceRequest(type);
+            foreach(RequestPart req in requests) request.AddRequest(req);
+            request.UserMetaData["OldLocationId"] = oldId;
+            request.UserMetaData["NewLocationId"] = newId;
             return MakeRequest(request);
         }
     }

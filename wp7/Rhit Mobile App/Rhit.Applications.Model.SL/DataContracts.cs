@@ -133,10 +133,6 @@ namespace Rhit.Applications.Model {
                 foreach(GeoCoordinate_DC coordinate in LocationData.Locations)
                     locations.Add(coordinate.ToGeoCoordinate());
             }
-            Dictionary<string, string> links = new Dictionary<string, string>();
-            if (Links != null)
-                foreach(Link_DC link in Links)
-                    links[link.Name] = link.Url;
 
             RhitLocation location = new RhitLocation() {
                 Center = Center.ToGeoCoordinate(),
@@ -145,11 +141,12 @@ namespace Rhit.Applications.Model {
                 Description = Description,
                 Label = Label,
                 Type = ConvertTypeKeyToType(Type),
-                Links = links,
                 AltNames = AltNames,
                 ParentId = ParentId,
                 Floor = Floor,
+                Links = (IList<ILink>) Links,
             };
+
             if(LocationData != null) {
                 location.MinZoomLevel = LocationData.MinZoomLevel;
                 location.LabelOnHybrid = LocationData.LabelOnHybrid;
@@ -196,14 +193,14 @@ namespace Rhit.Applications.Model {
 
     #region Link - Data Contract
     [DataContract]
-    public class Link_DC {
+    public class Link_DC : ILink {
         public Link_DC() : base() { }
 
         [DataMember(Name = "Name")]
         public string Name { get; set; }
 
         [DataMember(Name = "Url")]
-        public string Url { get; set; }
+        public string Address { get; set; }
     }
     #endregion
 

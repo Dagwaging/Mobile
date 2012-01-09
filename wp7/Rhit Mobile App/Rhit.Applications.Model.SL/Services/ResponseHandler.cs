@@ -2,48 +2,80 @@
 using System.IO;
 using System.Net;
 using System.Runtime.Serialization.Json;
+using System.Security;
 using System.Text;
 using Rhit.Applications.Model.Events;
-using System.Windows;
 
 namespace Rhit.Applications.Model.Services {
     public static class ResponseHandler {
 
-        public static event ServerEventHandler ResponseReceived;
+        public static event ServiceEventHandler ResponseReceived;
 
-        private static void OnResponse(ServerEventArgs e) {
+        private static void OnResponse(ServiceEventArgs e) {
             if(ResponseReceived != null) ResponseReceived(null, e);
         }
 
-        #region Callbacks
-        public static void RequestCallback(IAsyncResult asyncResult) {
-            SendResults(ParseResponse(asyncResult));
+        public static void RequestCallback(AsyncServiceResult asyncResult) {
+            ParseResponse(asyncResult);
         }
 
-        public static void AllRequestCallback(IAsyncResult asyncResult) {
-            SendResults(ParseResponse(asyncResult), ResponseType.All);
+        private static ResponseType ConvertType(RequestType request) {
+            switch(request) {
+                case RequestType.AllLocations:
+                    return ResponseType.AllLocations;
+                case RequestType.ChangeCorners:
+                    return ResponseType.ChangeCorners;
+                case RequestType.DeleteLocation:
+                    return ResponseType.DeleteLocation;
+                case RequestType.IncrementVersion:
+                    return ResponseType.IncrementVersion;
+                case RequestType.InternalLocations:
+                    return ResponseType.InternalLocations;
+                case RequestType.Location:
+                    return ResponseType.Location;
+                case RequestType.LocationCreation:
+                    return ResponseType.LocationCreation;
+                case RequestType.LocationSearch:
+                    return ResponseType.LocationsSearch;
+                case RequestType.LocationUpdate:
+                    return ResponseType.LocationUpdate;
+                case RequestType.Login:
+                    return ResponseType.Login;
+                case RequestType.MoveLocation:
+                    return ResponseType.MoveLocation;
+                case RequestType.TopLocations:
+                    return ResponseType.TopLocations;
+                case RequestType.Version:
+                    return ResponseType.Version;
+            }
+            return ResponseType.ServerError;
         }
 
-        public static void TopRequestCallback(IAsyncResult asyncResult) {
-            SendResults(ParseResponse(asyncResult), ResponseType.Top);
-        }
-
-        public static void SearchRequestCallback(IAsyncResult asyncResult) {
-            SendResults(ParseResponse(asyncResult), ResponseType.Search);
-        }
-        #endregion
-
-        private static ServerEventArgs ParseResponse(IAsyncResult asyncResult) {
+        private static void ParseResponse(AsyncServiceResult asyncResult) {
             HttpWebRequest request = (HttpWebRequest) asyncResult.AsyncState;
             HttpWebResponse response;
+            Exception exception;
             try {
                 response = (HttpWebResponse) request.EndGetResponse(asyncResult);
+                exception = null;
             } catch(WebException e) {
                 response = (HttpWebResponse) e.Response;
+                exception = e;
+            } catch(SecurityException e) {
+                response = null;
+                exception = e;
             }
             ServerObject obj = null;
             string responseString = "";
-            if(response.StatusCode == HttpStatusCode.OK) {
+            HttpStatusCode status;
+            ResponseType type;
+
+            if(response == null) {
+                status = HttpStatusCode.NotFound;
+                type = ResponseType.ConnectionError;
+            } else if(response.StatusCode == HttpStatusCode.OK) {
+                status = response.StatusCode;
+                type = ConvertType(asyncResult.Request.Type);
                 using(StreamReader reader = new StreamReader(response.GetResponseStream())) {
                     responseString = reader.ReadToEnd();
                     reader.Close();
@@ -52,70 +84,24 @@ namespace Rhit.Applications.Model.Services {
                         obj = (ServerObject) serializer.ReadObject(ms);
                     }
                 }
+            } else {
+                type = ResponseType.ServerError;
+                status = response.StatusCode;
             }
-            ServerEventArgs args = new ServerEventArgs() {
+
+            if(obj == null) type = ResponseType.ServerError;
+
+            ServiceEventArgs args = new ServiceEventArgs() {
                 ResponseObject = obj,
-                ServerResponse = response.StatusCode,
+                StatusCode = status,
                 RawResponse = responseString,
+                Request = asyncResult.Request,
+                Type = type,
+                Error = exception,
             };
+
             response.Close();
-            return args;
-        }
 
-        private static void SendResults(ServerEventArgs args) {
-            ServerObject response = args.ResponseObject;
-
-            if(response.Message != null && response.Message == "Version update successful.") {
-                DataCollector.Instance.GetVersion();
-            }
-
-            if(response.ServerVersion != 0) {
-                DataCollector.Instance.Version = response.ServerVersion;
-            }
-
-
-            //Error Response
-            if(response == null || args.ServerResponse != HttpStatusCode.OK)
-                args.Type = ResponseType.Error;
-
-            //Locations Response
-            else if(response.Locations != null && response.Locations.Count > 0)
-                args.Type = ResponseType.Locations;
-
-            //Location Names Response
-            else if(response.Names != null && response.Names.Count > 0)
-                args.Type = ResponseType.Names;
-
-            //Desription Response
-            //TODO: This doesn't work, description can be empty
-            else if(response.Description != null && response.Description != string.Empty)
-                args.Type = ResponseType.Description;
-
-            //Directions Response
-            //TODO: Does this work? Can 'Done' be 0?
-            else if(response.Done != 0)
-                args.Type = ResponseType.Directions;
-
-            //Printer Response
-            //TODO: Does this work? Can 'Printer' be empty?
-            else if(response.Printer != null && response.Printer != string.Empty)
-                args.Type = ResponseType.Printer;
-
-            //Authentication Response
-            else if(response.Token != null && response.Token != string.Empty)
-                args.Type = ResponseType.Authentication;
-
-            //Stored Procedure Response
-            else if(response.Table != null && response.Columns != null)
-                args.Type = ResponseType.StoredProc;
-
-            else args.Type = ResponseType.Error;
-
-            Connection.Dispatcher.BeginInvoke(new Action(() => OnResponse(args)));
-        }
-
-        private static void SendResults(ServerEventArgs args, ResponseType type) {
-            args.Type = type;
             Connection.Dispatcher.BeginInvoke(new Action(() => OnResponse(args)));
         }
     }
