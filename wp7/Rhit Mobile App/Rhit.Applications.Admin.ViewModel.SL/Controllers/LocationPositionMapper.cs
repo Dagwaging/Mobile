@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.Windows;
 using Microsoft.Maps.MapControl;
 using Rhit.Applications.Model;
-using Rhit.Applications.ViewModel.Utility;
 using Rhit.Applications.Model.Services;
+using Rhit.Applications.ViewModel.Utility;
 
 namespace Rhit.Applications.ViewModel.Controllers {
     public class LocationPositionMapper {
@@ -13,6 +13,11 @@ namespace Rhit.Applications.ViewModel.Controllers {
 
         private LocationPositionMapper() {
             Locations = new ObservableCollection<DualLocation>();
+            LocationsController.Instance.LocationsChanged += new EventHandler(LocationsChanged);
+        }
+
+        private void LocationsChanged(object sender, EventArgs e) {
+            Refresh();
         }
 
         public static LocationPositionMapper Instance {
@@ -39,19 +44,28 @@ namespace Rhit.Applications.ViewModel.Controllers {
                 DataCollector.Instance.MoveLocation(location.BaseLocation.Id, location.Location.Latitude, location.Location.Longitude);
         }
 
+        private Dictionary<Location, Point> Mapping { get; set; }
+
         public void ApplyMapping(Dictionary<Location, Point> mapping, int floor) {
+            Mapping = mapping;
+            Floor = floor;
+            Refresh();
+        }
+
+        public void Refresh() {
+            if(Mapping == null) 
             Clear();
             MapCalibrationPoints = new Point[3];
             ImageCalibrationPoints = new Point[3];
             int i = 0;
-            foreach(KeyValuePair<Location, Point> kvp in mapping) {
+            foreach(KeyValuePair<Location, Point> kvp in Mapping) {
                 MapCalibrationPoints[i] = new Point(kvp.Key.Latitude, kvp.Key.Longitude);
                 ImageCalibrationPoints[i] = kvp.Value;
                 i++;
             }
 
             foreach(RhitLocation location in LocationsController.Instance.InnerLocations)
-                if(location.Floor == floor) {
+                if(location.Floor == Floor) {
                     Locations.Add(new DualLocation() {
                         BaseLocation = location,
                         Label = location.Label,
@@ -59,8 +73,6 @@ namespace Rhit.Applications.ViewModel.Controllers {
                         Point = ConvertLocationToPosition(location.Center),
                     });
                 }
-
-            Floor = floor;
         }
 
         private static void Convert(double x, double y, Point[] from, Point[] to, out double outX, out double outY) {

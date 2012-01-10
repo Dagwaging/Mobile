@@ -40,16 +40,22 @@ namespace Rhit.Applications.ViewModel.Controllers {
         }
 
         private void LocationDeleted(object sender, LocationEventArgs e) {
+            int currentId = -1;
+            if(CurrentLocation != null) currentId = CurrentLocation.Id;
             UnSelect();
 
             if(LocationDictionary.ContainsKey(e.Location.Id))
                 All.Remove(LocationDictionary[e.Location.Id]);
 
             UpdateCollections();
+            if(currentId != -1 && LocationDictionary.ContainsKey(currentId))
+                SelectLocation(LocationDictionary[currentId]);
             OnLocationsChanged(new EventArgs());
         }
 
         private void LocationUpdate(object sender, LocationEventArgs e) {
+            int currentId = -1;
+            if(CurrentLocation != null) currentId = CurrentLocation.Id;
             UnSelect();
 
             if(LocationDictionary.ContainsKey(e.Location.Id))
@@ -57,6 +63,8 @@ namespace Rhit.Applications.ViewModel.Controllers {
             All.Add(e.Location);
 
             UpdateCollections();
+            if(currentId != -1 && LocationDictionary.ContainsKey(currentId))
+                SelectLocation(LocationDictionary[currentId]);
             OnLocationsChanged(new EventArgs());
         }
 
