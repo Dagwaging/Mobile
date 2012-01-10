@@ -110,7 +110,7 @@
         </DataTemplate>
 
         <DataTemplate x:Name="PushpinItemTemplate2">
-            <controls:DraggablePushpin Location="{Binding}"/>
+            <controls:DraggablePushpin Location="{Binding Location, Mode=TwoWay}"/>
         </DataTemplate>
 
         <DataTemplate x:Name="CalImagePinTemplate">
@@ -239,7 +239,7 @@
             <map:Map x:Name="MyMap" Grid.Row="0" Grid.Column="0" CredentialsProvider="AthZ1tu5ROM0PUWcIYFSxC1oQALFR-g0aoFIuL9tlbeGJ9Z6qKIRYoB_jGpct8Yu" ZoomLevel="{Binding Map.ZoomLevel, Mode=TwoWay}" CopyrightVisibility="Collapsed" Center="{Binding Map.Center, Mode=TwoWay}">
                 <!--<map:MapTileLayer Content="{Binding Map.Tiles}"/>-->
                 <map:MapLayer>
-                    <map:MapItemsControl ItemsSource="{Binding Locations, ElementName=ViewLocations}" ItemTemplate="{StaticResource PushpinItemTemplate2}"/>
+                    <map:MapItemsControl ItemsSource="{Binding Locations, ElementName=ViewLocations, Mode=TwoWay}" ItemTemplate="{StaticResource PushpinItemTemplate2}"/>
                     <map:MapItemsControl ItemsSource="{Binding Locations.Buildings}" ItemTemplate="{StaticResource PolygonItemTemplate}" Visibility="{Binding ShowBuildings, Mode=TwoWay, Converter={StaticResource VisibilityConverter}}"/>
                     <map:MapItemsControl ItemsSource="{Binding Locations.Corners}" ItemTemplate="{StaticResource CornerPushpinTemplate}"/>
                     <map:MapItemsControl ItemsSource="{Binding Locations.All}" ItemTemplate="{StaticResource PushpinItemTemplate}" Visibility="{Binding ShowAllLocations, Mode=TwoWay, Converter={StaticResource VisibilityConverter}}"/>

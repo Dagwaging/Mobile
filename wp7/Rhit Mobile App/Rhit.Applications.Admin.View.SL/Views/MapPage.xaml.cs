@@ -40,7 +40,7 @@ namespace Rhit.Applications.View.Views {
 
         void Map_MouseClick(object sender, MapMouseEventArgs e) {
             if(LastEventCoordinate == e.ViewportPoint) return;
-            if(!Calibrator.Calibrating) ViewModel.Locations.UnSelect();
+            if(!Calibrator.Calibrating && !ViewLocations.Working) ViewModel.Locations.UnSelect();
         }
 
         private void MapPolygon_Click(object sender, MouseButtonEventArgs e) {
@@ -107,26 +107,41 @@ namespace Rhit.Applications.View.Views {
         private enum BehaviorState { Default, CreatingCorners, MovingCorners, AddingLocation };
 
         public LocationsProvider() {
-            Locations = new ObservableCollection<Location>();
+            Locations = new ObservableCollection<LocationWrapper>();
             Points = new ObservableCollection<Point>();
             State = BehaviorState.Default;
         }
 
-        private BehaviorState State { get; set; }
+        public bool Working { get; private set; }
 
-        public ObservableCollection<Location> Locations { get; set; }
+        #region private BehaviorState State
+        private BehaviorState _state;
+        private BehaviorState State {
+            get { return _state; }
+            set {
+                _state = value;
+                if(_state == BehaviorState.Default) Working = false;
+                else Working = true;
+            }
+        }
+        #endregion
+
+        public ObservableCollection<LocationWrapper> Locations { get; set; }
 
         public ObservableCollection<Point> Points { get; set; }
 
         public void DisplayCorners(ICollection<Location> corners) {
             Locations.Clear();
             foreach(Location corner in corners)
-                Locations.Add(corner);
+                Locations.Add(new LocationWrapper(corner));
             State = BehaviorState.MovingCorners;
         }
 
         public IList<Location> GetLocations() {
-            return Locations;
+            IList<Location> locations = new List<Location>();
+            foreach(LocationWrapper location in Locations)
+                locations.Add(location.Location);
+            return locations;
         }
 
         public IList<Point> GetPoints() {
@@ -147,13 +162,13 @@ namespace Rhit.Applications.View.Views {
         public void Map_Click(object sender, MapMouseEventArgs e) {
             if(State == BehaviorState.CreatingCorners) {
                 Location corner = (sender as Map).ViewportPointToLocation(e.ViewportPoint);
-                Locations.Add(corner);
+                Locations.Add(new LocationWrapper(corner));
                 e.Handled = true;
             }
             if(State == BehaviorState.AddingLocation) {
                 if(Locations.Count <= 0) {
                     Location newLocation = (sender as Map).ViewportPointToLocation(e.ViewportPoint);
-                    Locations.Add(newLocation);
+                    Locations.Add(new LocationWrapper(newLocation));
                     Points.Clear();
                 }
                 e.Handled = true;
@@ -189,6 +204,19 @@ namespace Rhit.Applications.View.Views {
             Id = window.GetIdNumber();
             ParentId = window.GetParentId();
             Name = window.NewName;
+        }
+
+        public class LocationWrapper : DependencyObject {
+            public LocationWrapper(Location location) { Location = location; }
+            #region Location
+            public Location Location {
+                get { return (Location) GetValue(LocationProperty); }
+                set { SetValue(LocationProperty, value); }
+            }
+
+            public static readonly DependencyProperty LocationProperty =
+               DependencyProperty.Register("Location", typeof(Location), typeof(LocationWrapper), new PropertyMetadata(new Location()));
+            #endregion
         }
     }
 
