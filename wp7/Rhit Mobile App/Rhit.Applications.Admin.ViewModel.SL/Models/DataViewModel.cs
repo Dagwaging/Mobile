@@ -91,6 +91,14 @@ namespace Rhit.Applications.ViewModel.Models {
             DataCollector.Instance.DeleteLocation(Locations.CurrentLocation.Id);
         }
 
+        public void DeleteAltName(int index) {
+            Locations.CurrentLocation.AltNames.RemoveAt(index);
+        }
+
+        public void DeleteLink(int index) {
+            Locations.CurrentLocation.Links.RemoveAt(index);
+        }
+
         #region Commands
         public ICommand AddNameCommand { get; private set; }
 

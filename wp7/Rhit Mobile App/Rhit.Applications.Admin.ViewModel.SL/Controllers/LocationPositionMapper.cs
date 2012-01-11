@@ -42,27 +42,29 @@ namespace Rhit.Applications.ViewModel.Controllers {
         public void Save() {
             foreach (var location in Locations)
                 DataCollector.Instance.MoveLocation(location.BaseLocation.Id, location.Location.Latitude, location.Location.Longitude);
+            Clear();
+            MapCalibrationPoints = null;
+            ImageCalibrationPoints = null;
         }
-
-        private Dictionary<Location, Point> Mapping { get; set; }
 
         public void ApplyMapping(Dictionary<Location, Point> mapping, int floor) {
-            Mapping = mapping;
             Floor = floor;
-            Refresh();
-        }
 
-        public void Refresh() {
-            if(Mapping == null) 
-            Clear();
             MapCalibrationPoints = new Point[3];
             ImageCalibrationPoints = new Point[3];
             int i = 0;
-            foreach(KeyValuePair<Location, Point> kvp in Mapping) {
+            foreach(KeyValuePair<Location, Point> kvp in mapping) {
                 MapCalibrationPoints[i] = new Point(kvp.Key.Latitude, kvp.Key.Longitude);
                 ImageCalibrationPoints[i] = kvp.Value;
                 i++;
             }
+
+            Refresh();
+        }
+
+        public void Refresh() {
+            if(MapCalibrationPoints == null || ImageCalibrationPoints == null) return;
+            Clear();
 
             foreach(RhitLocation location in LocationsController.Instance.InnerLocations)
                 if(location.Floor == Floor) {

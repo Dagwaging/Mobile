@@ -82,7 +82,7 @@
                             <TextBlock Text="Alternate Names:" FontWeight="Bold" VerticalAlignment="Center" Margin="5" />
                             <Button Content="Add New Name"  Margin="5" cmds:CommandManager.Command="{Binding AddNameCommand}" cmds:CommandManager.CommandEventName="Click"/>
                         </StackPanel>
-                        <sdk:DataGrid ItemsSource="{Binding Locations.CurrentLocation.AltNames, Mode=TwoWay}" Background="Transparent" HorizontalAlignment="Left" Margin="5" AutoGenerateColumns="True">
+                        <sdk:DataGrid ItemsSource="{Binding Locations.CurrentLocation.AltNames, Mode=TwoWay}" Background="Transparent" HorizontalAlignment="Left" Margin="5" AutoGenerateColumns="True" KeyUp="AltNameGrid_KeyUp">
                             <sdk:DataGrid.AlternatingRowBackground>
                                 <SolidColorBrush Color="LightGray" Opacity="0.7"/>
                             </sdk:DataGrid.AlternatingRowBackground>
@@ -94,7 +94,7 @@
                             <TextBlock Text="Links:" FontWeight="Bold" VerticalAlignment="Center" Margin="5" />
                             <Button Content="Add New Link"  Margin="5" cmds:CommandManager.Command="{Binding AddLinkCommand}" cmds:CommandManager.CommandEventName="Click"/>
                         </StackPanel>
-                        <sdk:DataGrid ItemsSource="{Binding Locations.CurrentLocation.Links, Mode=TwoWay}" HorizontalAlignment="Left" Margin="5" AutoGenerateColumns="False" Background="Transparent">
+                        <sdk:DataGrid KeyUp="LinksGrid_KeyUp" ItemsSource="{Binding Locations.CurrentLocation.Links, Mode=TwoWay}" HorizontalAlignment="Left" Margin="5" AutoGenerateColumns="False" Background="Transparent">
                             <sdk:DataGrid.AlternatingRowBackground>
                                 <SolidColorBrush Color="LightGray" Opacity="0.7"/>
                             </sdk:DataGrid.AlternatingRowBackground>
