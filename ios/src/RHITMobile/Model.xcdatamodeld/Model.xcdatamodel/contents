@@ -4,6 +4,11 @@
         <attribute name="position" optional="YES" attributeType="Integer 16" defaultValueString="0"/>
         <relationship name="boundedLocation" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Location" inverseName="boundaryNodes" inverseEntity="Location"/>
     </entity>
+    <entity name="Department" representedClassName="RHDepartment" syncable="YES">
+        <attribute name="info" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="people" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Person" inverseName="department" inverseEntity="Person" syncable="YES"/>
+    </entity>
     <entity name="LabelNode" representedClassName="RHLabelNode" parentEntity="Node">
         <relationship name="labeledLocation" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Location" inverseName="labelLocation" inverseEntity="Location"/>
     </entity>
@@ -21,6 +26,7 @@
         <relationship name="links" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="LocationLink" inverseName="owner" inverseEntity="LocationLink" syncable="YES"/>
         <relationship name="navigationNodes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="NavigationNode" inverseName="enclosingLocation" inverseEntity="NavigationNode"/>
         <relationship name="parent" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Location" inverseName="enclosedLocations" inverseEntity="Location" syncable="YES"/>
+        <relationship name="resident" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Person" inverseName="location" inverseEntity="Person" syncable="YES"/>
     </entity>
     <entity name="LocationLink" representedClassName="RHLocationLink" syncable="YES">
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
@@ -36,6 +42,18 @@
         <attribute name="latitude" optional="YES" attributeType="Double" defaultValueString="0.0"/>
         <attribute name="longitude" optional="YES" attributeType="Double" defaultValueString="0.0"/>
     </entity>
+    <entity name="Person" representedClassName="RHPerson" syncable="YES">
+        <attribute name="campusMailbox" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="emailAddress" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="firstName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="lastName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="middleName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="phoneNumber" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="position" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="role" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <relationship name="department" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Department" inverseName="people" inverseEntity="Department" syncable="YES"/>
+        <relationship name="location" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Location" inverseName="resident" inverseEntity="Location" syncable="YES"/>
+    </entity>
     <entity name="ServiceCategory" representedClassName="RHServiceCategory" parentEntity="ServiceItem" syncable="YES">
         <relationship name="contents" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="ServiceItem" inverseName="parent" inverseEntity="ServiceItem" syncable="YES"/>
     </entity>
@@ -49,12 +67,14 @@
     <elements>
         <element name="BoundaryNode" positionX="-2450" positionY="-1440" width="128" height="45"/>
         <element name="LabelNode" positionX="-2657" positionY="-1455" width="128" height="60"/>
-        <element name="Location" positionX="-2556" positionY="-1302" width="128" height="225"/>
+        <element name="Location" positionX="-2556" positionY="-1302" width="128" height="255"/>
         <element name="LocationLink" positionX="160" positionY="192" width="128" height="90"/>
         <element name="NavigationNode" positionX="-2250" positionY="-1449" width="128" height="90"/>
         <element name="Node" positionX="-2333" positionY="-1620" width="128" height="75"/>
-        <element name="ServiceItem" positionX="-101" positionY="9" width="128" height="75"/>
         <element name="ServiceCategory" positionX="36" positionY="-9" width="128" height="60"/>
+        <element name="ServiceItem" positionX="-101" positionY="9" width="128" height="75"/>
         <element name="ServiceLink" positionX="-36" positionY="99" width="128" height="60"/>
+        <element name="Department" positionX="160" positionY="192" width="128" height="90"/>
+        <element name="Person" positionX="160" positionY="192" width="128" height="195"/>
     </elements>
 </model>
