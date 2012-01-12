@@ -36,12 +36,25 @@
         <attribute name="latitude" optional="YES" attributeType="Double" defaultValueString="0.0"/>
         <attribute name="longitude" optional="YES" attributeType="Double" defaultValueString="0.0"/>
     </entity>
+    <entity name="ServiceCategory" representedClassName="RHServiceCategory" parentEntity="ServiceItem" syncable="YES">
+        <relationship name="contents" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="ServiceItem" inverseName="parent" inverseEntity="ServiceItem" syncable="YES"/>
+    </entity>
+    <entity name="ServiceItem" representedClassName="RHServiceItem" isAbstract="YES" syncable="YES">
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="parent" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="ServiceCategory" inverseName="contents" inverseEntity="ServiceCategory" syncable="YES"/>
+    </entity>
+    <entity name="ServiceLink" representedClassName="RHServiceLink" parentEntity="ServiceItem" syncable="YES">
+        <attribute name="url" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
     <elements>
         <element name="BoundaryNode" positionX="-2450" positionY="-1440" width="128" height="45"/>
         <element name="LabelNode" positionX="-2657" positionY="-1455" width="128" height="60"/>
         <element name="Location" positionX="-2556" positionY="-1302" width="128" height="225"/>
+        <element name="LocationLink" positionX="160" positionY="192" width="128" height="90"/>
         <element name="NavigationNode" positionX="-2250" positionY="-1449" width="128" height="90"/>
         <element name="Node" positionX="-2333" positionY="-1620" width="128" height="75"/>
-        <element name="LocationLink" positionX="160" positionY="192" width="128" height="90"/>
+        <element name="ServiceItem" positionX="-101" positionY="9" width="128" height="75"/>
+        <element name="ServiceCategory" positionX="36" positionY="-9" width="128" height="60"/>
+        <element name="ServiceLink" positionX="-36" positionY="99" width="128" height="60"/>
     </elements>
 </model>
