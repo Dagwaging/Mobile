@@ -25,6 +25,14 @@
 
 @interface RHServiceCategory : RHServiceItem
 
-@property (nonatomic, retain) RHServiceItem *contents;
+@property (nonatomic, retain) NSSet *contents;
 
+@end
+
+@interface RHServiceCategory (CoreDataGeneratedAccessors)
+
+- (void)addContentsObject:(RHServiceItem *)value;
+- (void)removeContentsObject:(RHServiceItem *)value;
+- (void)addContents:(NSSet *)values;
+- (void)removeContents:(NSSet *)values;
 @end

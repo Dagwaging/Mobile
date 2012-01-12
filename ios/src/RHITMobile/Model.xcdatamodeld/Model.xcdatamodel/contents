@@ -55,7 +55,7 @@
         <relationship name="location" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Location" inverseName="resident" inverseEntity="Location" syncable="YES"/>
     </entity>
     <entity name="ServiceCategory" representedClassName="RHServiceCategory" parentEntity="ServiceItem" syncable="YES">
-        <relationship name="contents" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="ServiceItem" inverseName="parent" inverseEntity="ServiceItem" syncable="YES"/>
+        <relationship name="contents" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ServiceItem" inverseName="parent" inverseEntity="ServiceItem" syncable="YES"/>
     </entity>
     <entity name="ServiceItem" representedClassName="RHServiceItem" isAbstract="YES" syncable="YES">
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
@@ -67,7 +67,7 @@
     <elements>
         <element name="BoundaryNode" positionX="-2450" positionY="-1440" width="128" height="45"/>
         <element name="LabelNode" positionX="-2657" positionY="-1455" width="128" height="60"/>
-        <element name="Location" positionX="-2556" positionY="-1302" width="128" height="255"/>
+        <element name="Location" positionX="-2556" positionY="-1302" width="128" height="225"/>
         <element name="LocationLink" positionX="160" positionY="192" width="128" height="90"/>
         <element name="NavigationNode" positionX="-2250" positionY="-1449" width="128" height="90"/>
         <element name="Node" positionX="-2333" positionY="-1620" width="128" height="75"/>
