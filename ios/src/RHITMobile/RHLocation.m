@@ -41,6 +41,7 @@
 @dynamic boundaryNodes;
 @dynamic labelLocation;
 @dynamic navigationNodes;
+@dynamic resident;
 
 + (RHLocation *)fromContext:(NSManagedObjectContext *)context {
     RHLocation *location = [NSEntityDescription

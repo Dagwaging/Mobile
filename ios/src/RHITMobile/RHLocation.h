@@ -26,6 +26,7 @@
 @class RHBoundaryNode;
 @class RHLabelNode;
 @class RHLocationLink;
+@class RHPerson;
 
 
 typedef enum _RHLocationDisplayType {
@@ -66,6 +67,8 @@ typedef enum _RHLocationRetrievalStatus {
 @property (nonatomic, assign) RHLocationDisplayType displayType;
 
 @property (nonatomic, retain) NSNumber *retrievalStatusNumber;
+
+@property (nonatomic, retain) RHPerson *resident;
 
 @property (nonatomic, assign) RHLocationRetrievalStatus retrievalStatus;
 
