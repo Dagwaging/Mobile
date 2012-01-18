@@ -26,9 +26,9 @@
 
 @interface RHLocationLink : NSManagedObject
 
-@property (nonatomic, retain) NSString *name;
-@property (nonatomic, retain) NSString *url;
-@property (nonatomic, retain) RHLocation *owner;
+@property (nonatomic, strong) NSString *name;
+@property (nonatomic, strong) NSString *url;
+@property (nonatomic, strong) RHLocation *owner;
 
 + (RHLocationLink *)linkFromContext:(NSManagedObjectContext *)context;
 

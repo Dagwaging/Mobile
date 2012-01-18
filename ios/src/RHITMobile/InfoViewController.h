@@ -22,8 +22,8 @@
 @class RHServiceCategory;
 
 /// \ingroup views
-@interface InfoViewController : UIViewController <UIITableViewDataSource>
+@interface InfoViewController : UIViewController <UITableViewDataSource>
 
-@property (nonatomic, retain) RHServiceCategory *category;
+@property (nonatomic, strong) RHServiceCategory *category;
 
 @end

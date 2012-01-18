@@ -18,7 +18,7 @@
 //
 
 #import "SearchViewController.h"
-#import "RHRemoteHandler.h"
+#import "RHRestHandler.h"
 #import "RHLocation.h"
 #import "LocationDetailViewController.h"
 #import "RHITMobileAppDelegate.h"
@@ -116,10 +116,10 @@
     self.searchInitiated = YES;
     
     self.navigationItem.title = @"Searching...";
-    UIActivityIndicatorView* activityIndicatorView = [[[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(20, 0, 20, 20)] autorelease];
+    UIActivityIndicatorView* activityIndicatorView = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(20, 0, 20, 20)];
     [activityIndicatorView startAnimating];
     
-    UIBarButtonItem *activityButtonItem = [[[UIBarButtonItem alloc] initWithCustomView:activityIndicatorView] autorelease];
+    UIBarButtonItem *activityButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicatorView];
     self.navigationItem.rightBarButtonItem = activityButtonItem;
     
     [self.remoteHandler searchForLocations:self.searchBar.text searchViewController:self];
@@ -154,7 +154,7 @@
         cell = [inTableView dequeueReusableCellWithIdentifier:@"NoResultsCell"];
         
         if (cell == nil) {
-            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"NoResultsCell"] autorelease];
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"NoResultsCell"];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.textLabel.textAlignment = UITextAlignmentCenter;
             cell.textLabel.text = @"No results found";
@@ -167,7 +167,7 @@
             cell = [inTableView dequeueReusableCellWithIdentifier:@"AutocompleteMoreCell"];
             
             if (cell == nil) {
-                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"AutocompleteMoreCell"] autorelease];
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"AutocompleteMoreCell"];
                 cell.textLabel.textAlignment = UITextAlignmentCenter;
                 cell.textLabel.textColor = [UIColor blueColor];
                 cell.textLabel.text = @"More results...";
@@ -179,14 +179,14 @@
         cell = [inTableView dequeueReusableCellWithIdentifier:@"AutocompleteResultCell"];
         
         if (cell == nil) {
-            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"AutocompleteResultCell"] autorelease];
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"AutocompleteResultCell"];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
     } else {
         cell = [inTableView dequeueReusableCellWithIdentifier:@"SearchResultCell"];
         
         if (cell == nil) {
-            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"SearchResultCell"] autorelease];
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"SearchResultCell"];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
     }
@@ -237,7 +237,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     id resultObject = [self objectFromResult:result];
     
     if (self.searchType == RHSearchViewControllerTypeLocation) {
-        LocationDetailViewController *details = [[[LocationDetailViewController alloc] initWithNibName:@"LocationDetailView" bundle:nil] autorelease];
+        LocationDetailViewController *details = [[LocationDetailViewController alloc] initWithNibName:@"LocationDetailView" bundle:nil];
         details.location = (RHLocation *) resultObject;
         
         [self.navigationController pushViewController:details animated:YES];

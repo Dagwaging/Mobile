@@ -21,7 +21,7 @@
 #import <CoreData/CoreData.h>
 
 
-@class RHRemoteHandlerDelegate;
+@class MapViewController;
 @class SearchViewController;
 
 /// \ingroup web
@@ -29,11 +29,11 @@
 @protocol RHRemoteHandler <NSObject>
 
 /// RHRemoteHandlerDelgate to interact with.
-@property (nonatomic, retain) RHRemoteHandlerDelegate *delegate;
+@property (nonatomic, retain) MapViewController *delegate;
 
 /// Init with a managed object context for object creation;
 - (id)initWithPersistantStoreCoordinator:(NSPersistentStoreCoordinator *)coordinator
-                                delegate:(RHRemoteHandlerDelegate *)delegate;
+                                delegate:(MapViewController *)delegate;
 
 /// Asynchronously check for new data from the server. If there is new data,
 /// appropriate callbacks will be called on the RHRemoteHandlerDelegate.

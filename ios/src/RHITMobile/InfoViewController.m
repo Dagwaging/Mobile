@@ -75,7 +75,7 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kReuseIdentifier];
     
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:kReuseIdentifier] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:kReuseIdentifier];
     }
     
     cell.textLabel.text = @"Working";

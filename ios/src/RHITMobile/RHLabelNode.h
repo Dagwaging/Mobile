@@ -31,6 +31,6 @@
 @interface RHLabelNode : RHNode
 
 /// The RHLocation being labeled by this RHLabelNode.
-@property (nonatomic, retain) RHLocation *labeledLocation;
+@property (nonatomic, strong) RHLocation *labeledLocation;
 
 @end

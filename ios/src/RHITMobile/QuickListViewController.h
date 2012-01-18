@@ -26,15 +26,15 @@
 @interface QuickListViewController : UIViewController
 <UIPickerViewDelegate, UIPickerViewDataSource, UITableViewDataSource, UITableViewDelegate>
 
-@property (nonatomic, retain) MapViewController *mapViewController;
+@property (nonatomic, strong) MapViewController *mapViewController;
 
-@property (nonatomic, retain) IBOutlet UIPickerView *pickerView;
+@property (nonatomic, strong) IBOutlet UIPickerView *pickerView;
 
-@property (nonatomic, retain) IBOutlet UITableView *tableView;
+@property (nonatomic, strong) IBOutlet UITableView *tableView;
 
-@property (nonatomic, readonly) NSArray *quickListAnnotations;
+@property (unsafe_unretained, nonatomic, readonly) NSArray *quickListAnnotations;
 
-@property (nonatomic, readonly) RHAnnotation *currentAnnotation;
+@property (unsafe_unretained, nonatomic, readonly) RHAnnotation *currentAnnotation;
 
 - (IBAction)goToLocation:(id)sender;
 

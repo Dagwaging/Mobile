@@ -24,7 +24,7 @@
 
 @interface RHServiceItem : NSManagedObject
 
-@property (nonatomic, retain) NSString * name;
-@property (nonatomic, retain) RHServiceCategory *parent;
+@property (nonatomic, strong) NSString * name;
+@property (nonatomic, strong) RHServiceCategory *parent;
 
 @end

@@ -59,7 +59,7 @@
     NSMutableArray *result = [NSMutableArray arrayWithCapacity:paths.count];
     
     for (NSDictionary *lineItem in paths) {
-        RHDirectionLineItem *item = [[[RHDirectionLineItem alloc] init] autorelease];
+        RHDirectionLineItem *item = [[RHDirectionLineItem alloc] init];
         item.name = [lineItem objectForKey:kDirectionsNameKey];
         item.flagged = [[lineItem objectForKey:kFlaggedKey] intValue] == 1;
         

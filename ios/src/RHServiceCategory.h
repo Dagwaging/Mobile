@@ -25,7 +25,7 @@
 
 @interface RHServiceCategory : RHServiceItem
 
-@property (nonatomic, retain) NSSet *contents;
+@property (nonatomic, strong) NSSet *contents;
 
 @end
 

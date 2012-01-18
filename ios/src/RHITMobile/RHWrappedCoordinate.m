@@ -13,7 +13,7 @@
 @synthesize coordinate;
 
 + (id)coordinateWithcoordinate2D:(CLLocationCoordinate2D)inCoordinate {
-    RHWrappedCoordinate *result = [[[RHWrappedCoordinate alloc] init] autorelease];
+    RHWrappedCoordinate *result = [[RHWrappedCoordinate alloc] init];
     result.coordinate = inCoordinate;
     return result;
 }

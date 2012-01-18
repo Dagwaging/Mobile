@@ -24,6 +24,6 @@
 
 @interface RHServiceLink : RHServiceItem
 
-@property (nonatomic, retain) NSString * url;
+@property (nonatomic, strong) NSString * url;
 
 @end

@@ -126,9 +126,9 @@ numberOfRowsInComponent:(NSInteger)component {
     UITableViewCell *cell = [tableView
                              dequeueReusableCellWithIdentifier:cellIdentifier];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc]
+        cell = [[UITableViewCell alloc]
                 initWithStyle:UITableViewCellStyleDefault
-                reuseIdentifier:cellIdentifier] autorelease];
+                reuseIdentifier:cellIdentifier];
     }
     
     if (indexPath.row == 0) {

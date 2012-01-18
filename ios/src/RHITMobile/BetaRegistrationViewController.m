@@ -36,7 +36,7 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        self.operations = [[[NSOperationQueue alloc] init] autorelease];
+        self.operations = [[NSOperationQueue alloc] init];
     }
     return self;
 }
@@ -132,18 +132,18 @@
 
 - (IBAction)register:(id)sender {
     if (self.emailField.text.length < 1) {
-        [[[[UIAlertView alloc] initWithTitle:@"Email Address Required" message:@"You must enter an email address to register for the beta program" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] autorelease] show];
+        [[[UIAlertView alloc] initWithTitle:@"Email Address Required" message:@"You must enter an email address to register for the beta program" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
     } else if (self.nameField.text.length < 1) {
-        [[[[UIAlertView alloc] initWithTitle:@"Name Required" message:@"You must enter your name to register for the beta program" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] autorelease] show];
+        [[[UIAlertView alloc] initWithTitle:@"Name Required" message:@"You must enter your name to register for the beta program" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
     } else {
         self.betaViewController.registrationName = self.nameField.text;
         self.betaViewController.registrationEmail = self.emailField.text;
         
         NSInvocationOperation* operation = [NSInvocationOperation alloc];
-        operation = [[operation
+        operation = [operation
                       initWithTarget:self.betaViewController
                       selector:@selector(performRegistration)
-                      object:nil] autorelease];
+                      object:nil];
         [self.operations addOperation:operation];
         
         [self dismissModalViewControllerAnimated:YES];

@@ -29,10 +29,10 @@
 @interface RHLocationOverlay : NSObject <MKOverlay>
 
 /// The RHLocation this RHOverlay will represent.
-@property (nonatomic, retain) RHLocation *location;
+@property (nonatomic, strong) RHLocation *location;
 
 /// The polygon to be provided by this overlay for rendering on the map.
-@property (nonatomic, retain) MKPolygon *polygon;
+@property (nonatomic, strong) MKPolygon *polygon;
 
 /// Initialize this overlay with an RHLocation object.
 /// \param location The RHLocation this RHOverlay will represent.

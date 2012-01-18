@@ -68,7 +68,7 @@
 didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    PersonDetailViewController *personController = [[[PersonDetailViewController alloc] initWithNibName:@"PersonDetailView" bundle:nil] autorelease];
+    PersonDetailViewController *personController = [[PersonDetailViewController alloc] initWithNibName:@"PersonDetailView" bundle:nil];
     
     [self.navigationController pushViewController:personController animated:YES];
 }
@@ -80,8 +80,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellReuseIdentifier];
     
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1
-                                      reuseIdentifier:kCellReuseIdentifier] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1
+                                      reuseIdentifier:kCellReuseIdentifier];
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     

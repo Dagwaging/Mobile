@@ -24,15 +24,15 @@
 
 @interface RHPerson : NSManagedObject
 
-@property (nonatomic, retain) NSString * firstName;
-@property (nonatomic, retain) NSString * lastName;
-@property (nonatomic, retain) NSString * middleName;
-@property (nonatomic, retain) NSNumber * role;
-@property (nonatomic, retain) NSString * emailAddress;
-@property (nonatomic, retain) NSString * campusMailbox;
-@property (nonatomic, retain) NSString * position;
-@property (nonatomic, retain) NSString * phoneNumber;
-@property (nonatomic, retain) NSManagedObject *department;
-@property (nonatomic, retain) RHLocation *location;
+@property (nonatomic, strong) NSString * firstName;
+@property (nonatomic, strong) NSString * lastName;
+@property (nonatomic, strong) NSString * middleName;
+@property (nonatomic, strong) NSNumber * role;
+@property (nonatomic, strong) NSString * emailAddress;
+@property (nonatomic, strong) NSString * campusMailbox;
+@property (nonatomic, strong) NSString * position;
+@property (nonatomic, strong) NSString * phoneNumber;
+@property (nonatomic, strong) NSManagedObject *department;
+@property (nonatomic, strong) RHLocation *location;
 
 @end

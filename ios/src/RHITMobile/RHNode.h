@@ -28,10 +28,10 @@
 @interface RHNode : NSManagedObject
 
 /// Latitude of this point in space.
-@property (nonatomic, retain) NSNumber *latitude;
+@property (nonatomic, strong) NSNumber *latitude;
 
 /// Longitude of this point in space.
-@property (nonatomic, retain) NSNumber *longitude;
+@property (nonatomic, strong) NSNumber *longitude;
 
 /// CLLocationCoordinate2D assembled from latitude and longitude values.
 @property (nonatomic, readonly) CLLocationCoordinate2D coordinate;

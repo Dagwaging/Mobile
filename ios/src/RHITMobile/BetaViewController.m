@@ -27,7 +27,7 @@
 #import "RHITMobileAppDelegate.h"
 #import "BetaRegistrationViewController.h"
 #import "MapViewController.h"
-#import "RHRemoteHandler.h"
+#import "RHRestHandler.h"
 #import "RHPListStore.h"
 
 #ifdef RHITMobile_RHBeta
@@ -57,14 +57,14 @@
 
 @interface BetaViewController ()
 
-@property (nonatomic, retain) NSArray *sections;
+@property (nonatomic, strong) NSArray *sections;
 @property (nonatomic, assign) BOOL checkingForUpdates;
 @property (nonatomic, assign) BOOL initialUpdateCheck;
-@property (nonatomic, retain) NSString *authToken;
-@property (nonatomic, retain) NSDate *updateDate;
+@property (nonatomic, strong) NSString *authToken;
+@property (nonatomic, strong) NSDate *updateDate;
 @property (nonatomic, assign) NSInteger knownCurrentBuild;
-@property (nonatomic, retain) NSOperationQueue *operations;
-@property (nonatomic, retain) NSURL *updateURL;
+@property (nonatomic, strong) NSOperationQueue *operations;
+@property (nonatomic, strong) NSURL *updateURL;
 
 - (IBAction)switchInstallationType:(id)sender;
 - (IBAction)checkForUpdates:(id)sender;
@@ -102,7 +102,7 @@
                          kBetaBuildNumberLabel, kBetaBuildTypeLabel,
                          kBetaUpdateTimeLabel, kBetaAuthTokenLabel,
                          kBetaDatabaseToolsLabel, nil];
-        self.operations = [[[NSOperationQueue alloc] init] autorelease];
+        self.operations = [[NSOperationQueue alloc] init];
     }
     return self;
 }
@@ -120,7 +120,7 @@
     self.authToken = [defaults stringForKey:kBetaAuthTokenDefault];
     
     if (self.authToken == nil) {
-        BetaRegistrationViewController *registrationController = [[[BetaRegistrationViewController alloc] initWithNibName:@"BetaRegistrationView" bundle:nil] autorelease];
+        BetaRegistrationViewController *registrationController = [[BetaRegistrationViewController alloc] initWithNibName:@"BetaRegistrationView" bundle:nil];
         registrationController.betaViewController = self;
         [self presentModalViewController:registrationController animated:YES];
     }
@@ -138,10 +138,10 @@
         updateNumber = (double) [[NSDate date] timeIntervalSince1970];
 
         NSInvocationOperation* operation = [NSInvocationOperation alloc];
-        operation = [[operation
+        operation = [operation
                       initWithTarget:self
                       selector:@selector(performNotificationOfUpdate)
-                      object:nil] autorelease];
+                      object:nil];
         [self.operations addOperation:operation];
     }
     
@@ -150,10 +150,10 @@
     self.initialUpdateCheck = YES;
     
     NSInvocationOperation* operation = [NSInvocationOperation alloc];
-    operation = [[operation
+    operation = [operation
                   initWithTarget:self
                   selector:@selector(performCheckForUpdates:)
-                  object:[NSNumber numberWithBool:YES]] autorelease];
+                  object:[NSNumber numberWithBool:YES]];
     [self.operations addOperation:operation];
 }
 
@@ -182,7 +182,7 @@
 viewForFooterInSection:(NSInteger)section {
     NSString *sectionLabel = [self.sections objectAtIndex:section];
     if ([sectionLabel isEqualToString:kBetaDatabaseToolsLabel]) {
-        UIView *parentView = [[[UIView alloc] initWithFrame:CGRectZero] autorelease];
+        UIView *parentView = [[UIView alloc] initWithFrame:CGRectZero];
         parentView.backgroundColor = [UIColor clearColor];
         
         UIButton *updateButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
@@ -197,7 +197,7 @@ viewForFooterInSection:(NSInteger)section {
         
         return parentView;
     } else if ([sectionLabel isEqualToString:kBetaBuildTypeLabel]) {
-        UIView *parentView = [[[UIView alloc] initWithFrame:CGRectZero] autorelease];
+        UIView *parentView = [[UIView alloc] initWithFrame:CGRectZero];
         parentView.backgroundColor = [UIColor clearColor];
         
         UIButton *updateButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
@@ -218,7 +218,7 @@ viewForFooterInSection:(NSInteger)section {
         [parentView addSubview:updateButton];
         return parentView;
     } else if ([sectionLabel isEqualToString:kBetaUpdateTimeLabel]) {
-        UIView *parentView = [[[UIView alloc] initWithFrame:CGRectZero] autorelease];
+        UIView *parentView = [[UIView alloc] initWithFrame:CGRectZero];
         parentView.backgroundColor = [UIColor clearColor];
         
         UIButton *updateButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
@@ -267,7 +267,7 @@ heightForFooterInSection:(NSInteger)section {
         cell = [tableView dequeueReusableCellWithIdentifier:kBetaApplicationVersionCell];
         
         if (cell == nil) {
-            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kBetaApplicationVersionCell] autorelease];
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kBetaApplicationVersionCell];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         
@@ -278,17 +278,17 @@ heightForFooterInSection:(NSInteger)section {
         cell = [tableView dequeueReusableCellWithIdentifier:kBetaBuildNumberCell];
         
         if (cell == nil) {
-            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kBetaBuildNumberCell] autorelease];
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kBetaBuildNumberCell];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         
-        cell.textLabel.text = [[[NSString alloc] initWithFormat:@"%d",
-                                kRHBetaBuildNumber] autorelease];
+        cell.textLabel.text = [[NSString alloc] initWithFormat:@"%d",
+                                kRHBetaBuildNumber];
     } else if (sectionLabel == kBetaBuildTypeLabel) {
         cell = [tableView dequeueReusableCellWithIdentifier:kBetaBuildTypeCell];
         
         if (cell == nil) {
-            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kBetaBuildTypeCell] autorelease];
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kBetaBuildTypeCell];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         
@@ -301,11 +301,11 @@ heightForFooterInSection:(NSInteger)section {
         cell = [tableView dequeueReusableCellWithIdentifier:kBetaUpdateTimeCell];
         
         if (cell == nil) {
-            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kBetaUpdateTimeCell] autorelease];
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kBetaUpdateTimeCell];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         
-        NSDateFormatter *formatter = [[[NSDateFormatter alloc] init] autorelease];
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
         formatter.dateStyle = NSDateFormatterMediumStyle;
         formatter.timeStyle = NSDateFormatterShortStyle;
         cell.textLabel.text = [formatter stringFromDate:self.updateDate];
@@ -313,7 +313,7 @@ heightForFooterInSection:(NSInteger)section {
         cell = [tableView dequeueReusableCellWithIdentifier:kBetaAuthTokenCell];
         
         if (cell == nil) {
-            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kBetaAuthTokenCell] autorelease];
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kBetaAuthTokenCell];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.textLabel.font = [UIFont systemFontOfSize:14];
         }
@@ -363,10 +363,10 @@ didDismissWithButtonIndex:(NSInteger)buttonIndex {
         [self setLoadingText:@"Fetching Update"];
         self.checkingForUpdates = YES;
         NSInvocationOperation* operation = [NSInvocationOperation alloc];
-        operation = [[operation
+        operation = [operation
                       initWithTarget:self
                       selector:@selector(performCheckForUpdates:)
-                      object:[NSNumber numberWithBool:(kRHBetaBuildType != kRHBetaBuildTypeOfficial)]] autorelease];
+                      object:[NSNumber numberWithBool:(kRHBetaBuildType != kRHBetaBuildTypeOfficial)]];
         [self.operations addOperation:operation];
     }
 }
@@ -383,7 +383,7 @@ didDismissWithButtonIndex:(NSInteger)buttonIndex {
 #pragma mark - Private Methods
 
 - (IBAction)switchInstallationType:(id)sender {
-    UIActionSheet *actionSheet = [[[UIActionSheet alloc] initWithTitle:@"Are You Sure?" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:@"Switch Build Types" otherButtonTitles:nil] autorelease];
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"Are You Sure?" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:@"Switch Build Types" otherButtonTitles:nil];
     
     RHITMobileAppDelegate *appDelegate = (RHITMobileAppDelegate *) [UIApplication sharedApplication].delegate;
     [actionSheet showFromTabBar:appDelegate.tabBarController.tabBar];
@@ -397,17 +397,17 @@ didDismissWithButtonIndex:(NSInteger)buttonIndex {
     self.checkingForUpdates = YES;
     [self setLoadingText:@"Checking for Updates"];
     NSInvocationOperation* operation = [NSInvocationOperation alloc];
-    operation = [[operation
+    operation = [operation
                   initWithTarget:self
                   selector:@selector(performCheckForUpdates:)
                   object:[NSNumber
-                          numberWithBool:kRHBetaBuildType == kRHBetaBuildTypeOfficial]] autorelease];
+                          numberWithBool:kRHBetaBuildType == kRHBetaBuildTypeOfficial]];
     [self.operations addOperation:operation];
 }
 
 - (IBAction)clearAndReloadData:(id)sender {
     [RHITMobileAppDelegate.instance clearDatabase];
-    [[[[RHPListStore alloc] init] autorelease] setCurrentDataVersion:@"-1"];
+    [[[RHPListStore alloc] init] setCurrentDataVersion:@"-1"];
     [RHITMobileAppDelegate.instance.mapViewController.remoteHandler checkForLocationUpdates];
 }
 
@@ -442,8 +442,7 @@ didDismissWithButtonIndex:(NSInteger)buttonIndex {
     }
     
     // Set up build numbers for comparison
-    NSNumberFormatter *formatter = [[[NSNumberFormatter alloc] init]
-                                    autorelease];
+    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
     [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
     NSNumber *newBuildNumber = [formatter
                                 numberFromString:[relevantBuild
@@ -468,10 +467,10 @@ didDismissWithButtonIndex:(NSInteger)buttonIndex {
 
 - (void)setLoadingText:(NSString *)text {
     self.navigationItem.title = text;
-    UIActivityIndicatorView* activityIndicatorView = [[[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(20, 0, 20, 20)] autorelease];
+    UIActivityIndicatorView* activityIndicatorView = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(20, 0, 20, 20)];
     [activityIndicatorView startAnimating];
     
-    UIBarButtonItem *activityButtonItem = [[[UIBarButtonItem alloc] initWithCustomView:activityIndicatorView] autorelease];
+    UIBarButtonItem *activityButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicatorView];
     self.navigationItem.leftBarButtonItem = activityButtonItem;
 }
 
@@ -486,7 +485,7 @@ didDismissWithButtonIndex:(NSInteger)buttonIndex {
     if (self.initialUpdateCheck) {
         self.initialUpdateCheck = NO;
     } else {
-        [[[[UIAlertView alloc] initWithTitle:@"No Updates Found" message:@"You are already using the latest version of Rose-Hulman." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] autorelease] show];
+        [[[UIAlertView alloc] initWithTitle:@"No Updates Found" message:@"You are already using the latest version of Rose-Hulman." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
     }
 }
 
@@ -497,7 +496,7 @@ didDismissWithButtonIndex:(NSInteger)buttonIndex {
     if (self.initialUpdateCheck) {
         self.initialUpdateCheck = NO;
         self.updateURL = url;
-        [[[[UIAlertView alloc] initWithTitle:@"Update Available" message:@"An update is available. Would you like to install it?" delegate:self cancelButtonTitle:@"Not Yet" otherButtonTitles:@"Install", nil] autorelease] show];
+        [[[UIAlertView alloc] initWithTitle:@"Update Available" message:@"An update is available. Would you like to install it?" delegate:self cancelButtonTitle:@"Not Yet" otherButtonTitles:@"Install", nil] show];
     } else {
         [[UIApplication sharedApplication] openURL:url];
     }
@@ -536,8 +535,8 @@ didDismissWithButtonIndex:(NSInteger)buttonIndex {
     
     NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
     
-    NSString* body = [[[NSString alloc] initWithData:data
-                                           encoding:NSUTF8StringEncoding] autorelease];
+    NSString* body = [[NSString alloc] initWithData:data
+                                           encoding:NSUTF8StringEncoding];
     NSLog(@"%@", body);
     
     NSDictionary *response = [NSDictionary dictionaryWithJSONData:data error:nil];
@@ -573,8 +572,8 @@ didDismissWithButtonIndex:(NSInteger)buttonIndex {
                                          returningResponse:nil
                                                      error:nil];
     
-    NSString* body = [[[NSString alloc] initWithData:data
-                                            encoding:NSUTF8StringEncoding] autorelease];
+    NSString* body = [[NSString alloc] initWithData:data
+                                            encoding:NSUTF8StringEncoding];
     NSLog(@"%@", body);
     
     NSDictionary *response = [NSDictionary dictionaryWithJSONData:data error:nil];

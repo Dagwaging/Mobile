@@ -19,7 +19,7 @@
 
 #import <UIKit/UIKit.h>
 
-@class RHRemoteHandler;
+@class RHRestHandler;
 
 typedef enum RHSearchViewControllerType_ {
     RHSearchViewControllerTypeLocation = 0,
@@ -35,19 +35,19 @@ typedef enum RHSearchViewControllerType_ {
 
 @property (nonatomic, assign) BOOL searchInitiated;
 
-@property (atomic, retain) NSString *currentAutocompleteTerm;
+@property (atomic, strong) NSString *currentAutocompleteTerm;
 
-@property (atomic, readonly) NSDictionary *autocompleteData;
+@property (unsafe_unretained, atomic, readonly) NSDictionary *autocompleteData;
 
-@property (atomic, retain) NSMutableArray *searchResults;
+@property (atomic, strong) NSMutableArray *searchResults;
 
-@property (nonatomic, retain) IBOutlet UISearchBar *searchBar;
+@property (nonatomic, strong) IBOutlet UISearchBar *searchBar;
 
-@property (nonatomic, retain) IBOutlet UITableView *tableView;
+@property (nonatomic, strong) IBOutlet UITableView *tableView;
 
-@property (nonatomic, retain) RHRemoteHandler *remoteHandler;
+@property (nonatomic, strong) RHRestHandler *remoteHandler;
 
-@property (nonatomic, retain) NSManagedObjectContext *context;
+@property (nonatomic, strong) NSManagedObjectContext *context;
 
 - (void)tryAutocomplete:(NSString *)searchTerm;
 

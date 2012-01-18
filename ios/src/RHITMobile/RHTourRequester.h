@@ -22,7 +22,7 @@
 
 @interface RHTourRequester : NSObject
 
-@property (nonatomic, retain) id<RHTourRequesterDelegate> delegate;
+@property (nonatomic, strong) id<RHTourRequesterDelegate> delegate;
 
 - (id)initWithDelegate:(id<RHTourRequesterDelegate>)delegate;
 

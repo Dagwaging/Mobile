@@ -22,7 +22,7 @@
 
 @interface RHDirectionsRequester : NSObject
 
-@property (nonatomic, retain) id<RHDirectionsRequesterDelegate> delegate;
+@property (nonatomic, strong) id<RHDirectionsRequesterDelegate> delegate;
 
 - (id)initWithDelegate:(id<RHDirectionsRequesterDelegate>)delegate;
 

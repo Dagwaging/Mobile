@@ -70,7 +70,6 @@
 }
 
 - (IBAction)didFinishLoadingTour:(NSArray *)directions {
-    [currentDirectionsRequest_ release];
     
     [RHITMobileAppDelegate.instance.mapViewController displayDirections:directions];
     

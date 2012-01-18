@@ -43,7 +43,7 @@
 
 @interface LocationDetailViewController ()
 
-@property (nonatomic, retain) NSMutableArray *sections;
+@property (nonatomic, strong) NSMutableArray *sections;
 
 @end
 
@@ -61,8 +61,7 @@
                bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        self.sections = [[[NSMutableArray alloc] initWithCapacity:10]
-                         autorelease];
+        self.sections = [[NSMutableArray alloc] initWithCapacity:10];
     }
     return self;
 }
@@ -120,7 +119,7 @@
                          entityForName:@"Location"
                          inManagedObjectContext:location.managedObjectContext];
     
-    NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
     [request setEntity:entityDescription];
     
     NSPredicate *predicate = [NSPredicate predicateWithFormat:
@@ -135,8 +134,7 @@
     }
     
     // Initialize sections
-    self.sections = [[[NSMutableArray alloc] initWithCapacity:10]
-                     autorelease];
+    self.sections = [[NSMutableArray alloc] initWithCapacity:10];
     
     // Populate sections
     if (location.alternateNames.count > 0) {
@@ -180,7 +178,7 @@ viewForFooterInSection:(NSInteger)section {
     NSString *sectionLabel = [self.sections objectAtIndex:section];
     
     if (sectionLabel == kParentLabel) {
-        UIView *parentView = [[[UIView alloc] initWithFrame:CGRectZero] autorelease];
+        UIView *parentView = [[UIView alloc] initWithFrame:CGRectZero];
         parentView.backgroundColor = [UIColor clearColor];
         
         UIButton *mapButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
@@ -252,9 +250,9 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath {
         cell = [inTableView dequeueReusableCellWithIdentifier:cellIdentifier];
         
         if (cell == nil) {
-            cell = [[[UITableViewCell alloc]
+            cell = [[UITableViewCell alloc]
                      initWithStyle:UITableViewCellStyleDefault
-                     reuseIdentifier:cellIdentifier] autorelease];
+                     reuseIdentifier:cellIdentifier];
             cell.textLabel.font = [UIFont systemFontOfSize:[UIFont
                                                             systemFontSize]];
             cell.textLabel.numberOfLines = 0;
@@ -269,9 +267,9 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath {
         cell = [inTableView dequeueReusableCellWithIdentifier:cellIdentifier];
         
         if (cell == nil) {
-            cell = [[[UITableViewCell alloc]
+            cell = [[UITableViewCell alloc]
                      initWithStyle:UITableViewCellStyleDefault
-                     reuseIdentifier:cellIdentifier] autorelease];
+                     reuseIdentifier:cellIdentifier];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
@@ -284,9 +282,9 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath {
         cell = [inTableView dequeueReusableCellWithIdentifier:cellIdentifier];
         
         if (cell == nil) {
-            cell = [[[UITableViewCell alloc]
+            cell = [[UITableViewCell alloc]
                      initWithStyle:UITableViewCellStyleDefault
-                     reuseIdentifier:cellIdentifier] autorelease];
+                     reuseIdentifier:cellIdentifier];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
         
@@ -302,12 +300,12 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath {
         cell = [inTableView dequeueReusableCellWithIdentifier:cellIdentifier];
         
         if (cell == nil) {
-            cell = [[[UITableViewCell alloc]
+            cell = [[UITableViewCell alloc]
                      initWithStyle:UITableViewCellStyleDefault
-                     reuseIdentifier:cellIdentifier] autorelease];
+                     reuseIdentifier:cellIdentifier];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.textLabel.font = [UIFont systemFontOfSize:UIFont.systemFontSize];
-            UIActivityIndicatorView *activityIndicator = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray] autorelease];
+            UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
             cell.accessoryView = activityIndicator;
             [activityIndicator startAnimating];
         }
@@ -320,9 +318,9 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath {
         cell = [inTableView dequeueReusableCellWithIdentifier:cellIdentifier];
         
         if (cell == nil) {
-            cell = [[[UITableViewCell alloc]
+            cell = [[UITableViewCell alloc]
                      initWithStyle:UITableViewCellStyleDefault
-                     reuseIdentifier:cellIdentifier] autorelease];
+                     reuseIdentifier:cellIdentifier];
             cell.textLabel.font = [UIFont systemFontOfSize:[UIFont
                                                             systemFontSize]];
             cell.textLabel.numberOfLines = 5;
@@ -338,9 +336,9 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath {
         cell = [inTableView dequeueReusableCellWithIdentifier:cellIdentifier];
         
         if (cell == nil) {
-            cell = [[[UITableViewCell alloc]
+            cell = [[UITableViewCell alloc]
                      initWithStyle:UITableViewCellStyleDefault
-                     reuseIdentifier:cellIdentifier] autorelease];
+                     reuseIdentifier:cellIdentifier];
             cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
         }
         
@@ -383,13 +381,13 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         
         [inTableView deselectRowAtIndexPath:indexPath animated:YES];
         
-        LocationDetailViewController *detailViewController = [[[LocationDetailViewController alloc] initWithNibName:@"LocationDetailView" bundle:nil] autorelease];
+        LocationDetailViewController *detailViewController = [[LocationDetailViewController alloc] initWithNibName:@"LocationDetailView" bundle:nil];
         detailViewController.location = child;
         [self.navigationController pushViewController:detailViewController animated:YES];
     } else if (sectionLabel == kParentLabel) {
         [inTableView deselectRowAtIndexPath:indexPath animated:YES];
         
-        LocationDetailViewController *detailViewController = [[[LocationDetailViewController alloc] initWithNibName:@"LocationDetailView" bundle:nil] autorelease];
+        LocationDetailViewController *detailViewController = [[LocationDetailViewController alloc] initWithNibName:@"LocationDetailView" bundle:nil];
         detailViewController.location = self.location.parent;
         [self.navigationController pushViewController:detailViewController animated:YES];
     } else if (sectionLabel == kLinksLabel) {
@@ -399,7 +397,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         
         NSURL *url = [NSURL URLWithString:link.url];
         
-        WebViewController *webViewController = [[[WebViewController alloc] initWithNibName:@"WebView" bundle:nil] autorelease];
+        WebViewController *webViewController = [[WebViewController alloc] initWithNibName:@"WebView" bundle:nil];
         
         
         webViewController.url = url;
@@ -418,7 +416,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         
         NSURL *url = [NSURL URLWithString:link.url];
         
-        WebViewController *webViewController = [[[WebViewController alloc] initWithNibName:@"WebView" bundle:nil] autorelease];
+        WebViewController *webViewController = [[WebViewController alloc] initWithNibName:@"WebView" bundle:nil];
         
         webViewController.url = url;
         webViewController.title = link.name;
@@ -440,7 +438,6 @@ titleForHeaderInSection:(NSInteger)section {
 # pragma mark - RHDirectionsRequestDelegate Methods
 
 - (void)didFinishLoadingDirections:(NSArray *)directions {
-    [currentDirectionsRequest_ release];
 
     [self.navigationController popToRootViewControllerAnimated:YES];
     [RHITMobileAppDelegate.instance.mapViewController displayDirections:directions];

@@ -26,13 +26,13 @@
 
 @interface BetaRegistrationViewController : UIViewController <UITextFieldDelegate>
 
-@property (nonatomic, retain) IBOutlet UITextField *nameField;
+@property (nonatomic, strong) IBOutlet UITextField *nameField;
 
-@property (nonatomic, retain) IBOutlet UITextField *emailField;
+@property (nonatomic, strong) IBOutlet UITextField *emailField;
 
-@property (nonatomic, retain) BetaViewController *betaViewController;
+@property (nonatomic, strong) BetaViewController *betaViewController;
 
-@property (nonatomic, retain) NSOperationQueue *operations;
+@property (nonatomic, strong) NSOperationQueue *operations;
 
 - (void)setViewMovedUp:(BOOL)movedUp;
 
