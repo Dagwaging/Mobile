@@ -21,4 +21,8 @@
 
 @interface PersonDetailViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 
+@property (nonatomic, strong) NSArray *sections;
+
+@property (nonatomic, strong) NSDictionary *displayValues;
+
 @end
