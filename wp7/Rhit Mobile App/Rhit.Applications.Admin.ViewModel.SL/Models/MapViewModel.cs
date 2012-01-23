@@ -14,7 +14,7 @@ namespace Rhit.Applications.ViewModel.Models {
     public class MapViewModel : DependencyObject {
         private enum BehaviorState { Default, MovingCorners, CreatingCorners, Floor, AddingLocation, FloorAddingLocation };
 
-        //NOTE: Requires a call to Initialize before class is usable
+        //NOTE: Requires a call to Initialize and SetMode before class is usable
         //Note: NoArg Constructor so ViewModel can be created in xaml
         public MapViewModel() {}
 
@@ -264,7 +264,6 @@ namespace Rhit.Applications.ViewModel.Models {
             State = BehaviorState.Default;
             Mapper.Locations.Clear();
         }
-
 
         public void SelectLocation(int id) {
             LocationsController.Instance.SelectLocation(id);

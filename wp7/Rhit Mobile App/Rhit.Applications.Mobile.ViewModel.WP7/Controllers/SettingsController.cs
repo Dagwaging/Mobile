@@ -18,7 +18,6 @@ namespace Rhit.Applications.ViewModel.Controllers {
         }
         #endregion
 
-        #region Dependency Properties
         #region DebugMode
         public bool DebugMode {
             get { return (bool) GetValue(DebugModeProperty); }
@@ -38,7 +37,5 @@ namespace Rhit.Applications.ViewModel.Controllers {
         public static readonly DependencyProperty StatusProperty =
            DependencyProperty.Register("Status", typeof(string), typeof(SettingsController), new PropertyMetadata(""));
         #endregion
-        #endregion
-        
     }
 }

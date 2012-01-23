@@ -73,17 +73,18 @@
     <Reference Include="System.Windows.Browser" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AlternateName.cs" />
     <Compile Include="Controllers\ImageController.cs" />
     <Compile Include="Controllers\LocationPositionMapper.cs" />
     <Compile Include="Controllers\LocationsController.cs" />
     <Compile Include="Controllers\MapController.cs" />
-    <Compile Include="Controllers\SettingsController.cs" />
-    <Compile Include="Converters\LocationToCoordinateConverter.cs" />
-    <Compile Include="Converters\LocationToStringConverter.cs" />
+    <Compile Include="Link.cs" />
+    <Compile Include="LocationNode.cs" />
     <Compile Include="Models\HomeViewModel.cs" />
     <Compile Include="Models\MapModelInitializer.cs" />
     <Compile Include="Models\MapViewModel.cs" />
     <Compile Include="Models\SimpleViewModel.cs" />
+    <Compile Include="ObservableRhitLocation.cs" />
     <Compile Include="Providers\IBitmapProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\DataViewModel.cs" />
@@ -91,7 +92,7 @@
     <Compile Include="Providers\IBuildingMappingProvider.cs" />
     <Compile Include="Providers\ILocationsProvider.cs" />
     <Compile Include="Services.cs" />
-    <Compile Include="Utility\DualLocation.cs" />
+    <Compile Include="DualLocation.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Rhit.Applications.Model.SL\Rhit.Applications.Model.SL.csproj">

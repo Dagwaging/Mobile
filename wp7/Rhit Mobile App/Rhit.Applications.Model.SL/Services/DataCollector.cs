@@ -5,7 +5,12 @@ using Rhit.Applications.Model.Events;
 using Rhit.Applications.Model.Services.Requests;
 using System;
 using System.Threading;
+
+#if WINDOWS_PHONE
+using System.Device.Location;
+#else
 using Microsoft.Maps.MapControl;
+#endif
 
 namespace Rhit.Applications.Model.Services {
     public class DataCollector {
@@ -240,14 +245,23 @@ namespace Rhit.Applications.Model.Services {
             Connection.MakeLocationRequest(request, RequestType.MoveLocation, id);
         }
 
+#if !WINDOWS_PHONE
         public void ChangeLocationCorners(int id, IList<Location> newCorners) {
+            IList<GeoCoordinate> _list = new List<GeoCoordinate>();
+            foreach(Location location in newCorners)
+                _list.Add(new GeoCoordinate(location));
+            ChangeLocationCorners(id, _list);
+        }
+#endif
+
+        public void ChangeLocationCorners(int id, IList<GeoCoordinate> newCorners) {
             List<RequestPart> requests = new List<RequestPart>();
 
             RequestPart request = new RequestBuilder(BaseAddress).Admin(Connection.ServiceTokenGuid, "spDeleteMapAreaCorners");
             request = request.AddQueryParameter("location", id);
             requests.Add(request);
 
-            foreach(Location corner in newCorners) {
+            foreach(GeoCoordinate corner in newCorners) {
                 request = new RequestBuilder(BaseAddress).Admin(Connection.ServiceTokenGuid, "spAddMapAreaCorner");
                 request = request.AddQueryParameter("location", id);
                 request = request.AddQueryParameter("lat", corner.Latitude);

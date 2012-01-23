@@ -115,6 +115,8 @@
     <Compile Include="Converters\ObjectToVisibilityConverter.cs" />
     <Compile Include="Converters\RadioButtonConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utility\CalibrationHandler.cs" />
+    <Compile Include="Utility\LocationsProvider.cs" />
     <Compile Include="Utility\Task.cs" />
     <Compile Include="Utility\TaskContainer.cs" />
     <Compile Include="Utility\TaskRequirement.cs" />

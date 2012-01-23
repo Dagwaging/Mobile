@@ -174,10 +174,9 @@
                             <util:TaskStep Label="Save" Number="2" Instructions="Click the 'Save' Button"/>
                         </util:Task.Steps>
                     </util:Task>
-                    <!--erogneorgineo-->
                     <util:Task Label="Move Corners" ToolTip="Move the corners of the selected building" StartCommand="{Binding ChangeCornersCommand, ElementName=ViewModel}">
                         <util:Task.Requirements>
-                            <util:TaskRequirement Value="{Binding Locations.IsCurrentLocation, Source={StaticResource ViewModel}}"/>
+                            <util:TaskRequirement Value="{Binding Locations.CurrentLocation, Converter={StaticResource ObjectBoolConverter}, Source={StaticResource ViewModel}}"/>
                         </util:Task.Requirements>
                         <util:Task.Steps>
                             <util:TaskStep Label="Move Corners" Number="1" Instructions="Click and drag the displayed pushpins to the correct locations. Make sure to keep the same order."/>
@@ -215,7 +214,7 @@
             </Grid.ColumnDefinitions>
             <StackPanel Orientation="Horizontal" Grid.Column="0">
                 <TextBlock VerticalAlignment="Center" FontWeight="Bold" Text="[" Margin="10,0,0,0"/>
-                <TextBlock VerticalAlignment="Center" Margin="0,5" FontWeight="Bold" Text="{Binding Locations.CurrentLocation, Mode=TwoWay, Converter={StaticResource LocationNameConverter}, FallbackValue=Current_Location}"/>
+                <TextBlock VerticalAlignment="Center" Margin="0,5" FontWeight="Bold" Text="{Binding Locations.CurrentLocation.Label, Mode=TwoWay, FallbackValue='No Location Selected'}"/>
                 <TextBlock VerticalAlignment="Center" FontWeight="Bold" Text="]"/>
                 <Border Visibility="{Binding Locations.CurrentLocation, Converter={StaticResource RObjectVisibilityConverter}}" Margin="10,5">
                     <Border.Background>
@@ -240,17 +239,18 @@
                 <!--<map:MapTileLayer Content="{Binding Map.Tiles}"/>-->
                 <map:MapLayer>
                     <map:MapItemsControl ItemsSource="{Binding Locations, ElementName=ViewLocations, Mode=TwoWay}" ItemTemplate="{StaticResource PushpinItemTemplate2}"/>
-                    <map:MapItemsControl ItemsSource="{Binding Locations.Buildings}" ItemTemplate="{StaticResource PolygonItemTemplate}" Visibility="{Binding ShowBuildings, Mode=TwoWay, Converter={StaticResource VisibilityConverter}}"/>
+                    <map:MapItemsControl ItemsSource="{Binding Locations.Buildings}" ItemTemplate="{StaticResource PolygonItemTemplate}" Visibility="{Binding ShowBuildings, Converter={StaticResource VisibilityConverter}}"/>
                     <map:MapItemsControl ItemsSource="{Binding Locations.Corners}" ItemTemplate="{StaticResource CornerPushpinTemplate}"/>
-                    <map:MapItemsControl ItemsSource="{Binding Locations.All}" ItemTemplate="{StaticResource PushpinItemTemplate}" Visibility="{Binding ShowAllLocations, Mode=TwoWay, Converter={StaticResource VisibilityConverter}}"/>
-                    <map:MapItemsControl ItemsSource="{Binding Locations.Top}" ItemTemplate="{StaticResource PushpinItemTemplate}" Visibility="{Binding ShowTopLocations, Mode=TwoWay, Converter={StaticResource VisibilityConverter}}"/>
-                    <map:MapItemsControl ItemsSource="{Binding Locations.InnerLocations}" ItemTemplate="{StaticResource PushpinItemTemplate}" Visibility="{Binding ShowInnerLocations, Mode=TwoWay, Converter={StaticResource VisibilityConverter}}"/>
+                    <map:MapItemsControl ItemsSource="{Binding Locations.All}" ItemTemplate="{StaticResource PushpinItemTemplate}" Visibility="{Binding ShowAllLocations, Converter={StaticResource VisibilityConverter}}"/>
+                    <map:MapItemsControl ItemsSource="{Binding Locations.Top}" ItemTemplate="{StaticResource PushpinItemTemplate}" Visibility="{Binding ShowTopLocations, Converter={StaticResource VisibilityConverter}}"/>
+                    <map:MapItemsControl ItemsSource="{Binding Locations.InnerLocations}" ItemTemplate="{StaticResource PushpinItemTemplate}" Visibility="{Binding ShowInnerLocations, Converter={StaticResource VisibilityConverter}}"/>
                     <map:MapItemsControl ItemsSource="{Binding Mapper.Locations}" ItemTemplate="{StaticResource DualItemTemplate}"/>
                     <map:MapItemsControl ItemsSource="{Binding Locations, Mode=TwoWay, ElementName=Calibrator}" ItemTemplate="{StaticResource CalPushpinItemTemplate}"/>
                 </map:MapLayer>
                 <controls:DraggablePushpin
-                    Content="{Binding Path=Locations.CurrentLocation, Converter={StaticResource LocationNameConverter}, Mode=TwoWay}"
-                    Location="{Binding Locations.CurrentLocation, Converter={StaticResource LocationCenterConverter}, Mode=TwoWay}"/>
+                    Content="{Binding Locations.CurrentLocation.Label, Mode=TwoWay}"
+                    Location="{Binding Locations.CurrentLocation.Center, Mode=TwoWay}"
+                    Visibility="{Binding Locations.CurrentLocation, Converter={StaticResource ObjectVisibilityConverter}}"/>
             </map:Map>
 
             <sdk:GridSplitter Grid.Column="1" Width="8" HorizontalAlignment="Left" VerticalAlignment="Stretch" ShowsPreview="True"/>

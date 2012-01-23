@@ -75,23 +75,14 @@
     <Compile Include="..\Rhit.Applications.Model.SL\Events\LocationEventArgs.cs">
       <Link>Events\LocationEventArgs.cs</Link>
     </Compile>
-    <Compile Include="..\Rhit.Applications.Model.SL\Events\OutlineEventArgs.cs">
-      <Link>Events\OutlineEventArgs.cs</Link>
-    </Compile>
-    <Compile Include="..\Rhit.Applications.Model.SL\Events\PushpinEventArgs.cs">
-      <Link>Events\PushpinEventArgs.cs</Link>
-    </Compile>
-    <Compile Include="..\Rhit.Applications.Model.SL\Events\SearchEventArgs.cs">
-      <Link>Events\SearchEventArgs.cs</Link>
-    </Compile>
-    <Compile Include="..\Rhit.Applications.Model.SL\Events\ServerEventArgs.cs">
-      <Link>Events\ServerEventArgs.cs</Link>
+    <Compile Include="..\Rhit.Applications.Model.SL\Events\LocationsEventArgs.cs">
+      <Link>Events\LocationsEventArgs.cs</Link>
     </Compile>
     <Compile Include="..\Rhit.Applications.Model.SL\Events\ServiceEventArgs.cs">
       <Link>Events\ServiceEventArgs.cs</Link>
     </Compile>
-    <Compile Include="..\Rhit.Applications.Model.SL\Events\StoredProcEventArgs.cs">
-      <Link>Events\StoredProcEventArgs.cs</Link>
+    <Compile Include="..\Rhit.Applications.Model.SL\Events\VersionEventArgs.cs">
+      <Link>Events\VersionEventArgs.cs</Link>
     </Compile>
     <Compile Include="..\Rhit.Applications.Model.SL\LocationType.cs">
       <Link>LocationType.cs</Link>
@@ -141,6 +132,9 @@
     <Compile Include="..\Rhit.Applications.Model.SL\RhitLocation.cs">
       <Link>RhitLocation.cs</Link>
     </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Services\AsyncServiceResult.cs">
+      <Link>Services\AsyncServiceResult.cs</Link>
+    </Compile>
     <Compile Include="..\Rhit.Applications.Model.SL\Services\Connection.cs">
       <Link>Services\Connection.cs</Link>
     </Compile>
@@ -155,9 +149,6 @@
     </Compile>
     <Compile Include="..\Rhit.Applications.Model.SL\Services\Requests\AllRequestPart.cs">
       <Link>Services\Requests\AllRequestPart.cs</Link>
-    </Compile>
-    <Compile Include="..\Rhit.Applications.Model.SL\Services\Requests\BatchRequest.cs">
-      <Link>Services\Requests\BatchRequest.cs</Link>
     </Compile>
     <Compile Include="..\Rhit.Applications.Model.SL\Services\Requests\DataRequestPart.cs">
       <Link>Services\Requests\DataRequestPart.cs</Link>
@@ -219,17 +210,26 @@
     <Compile Include="..\Rhit.Applications.Model.SL\Services\Requests\ToPrinterRequestPart.cs">
       <Link>Services\Requests\ToPrinterRequestPart.cs</Link>
     </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Services\Requests\VersionRequestPart.cs">
+      <Link>Services\Requests\VersionRequestPart.cs</Link>
+    </Compile>
     <Compile Include="..\Rhit.Applications.Model.SL\Services\Requests\WithinRequestPart.cs">
       <Link>Services\Requests\WithinRequestPart.cs</Link>
     </Compile>
     <Compile Include="..\Rhit.Applications.Model.SL\Services\Requests\WomensRequestPart.cs">
       <Link>Services\Requests\WomensRequestPart.cs</Link>
     </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Services\RequestType.cs">
+      <Link>Services\RequestType.cs</Link>
+    </Compile>
     <Compile Include="..\Rhit.Applications.Model.SL\Services\ResponseHandler.cs">
       <Link>Services\ResponseHandler.cs</Link>
     </Compile>
     <Compile Include="..\Rhit.Applications.Model.SL\Services\ResponseType.cs">
       <Link>Services\ResponseType.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Services\ServiceRequest.cs">
+      <Link>Services\ServiceRequest.cs</Link>
     </Compile>
     <Compile Include="..\Rhit.Applications.Model.SL\Services\StorageKey.cs">
       <Link>Services\StorageKey.cs</Link>

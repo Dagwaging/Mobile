@@ -77,6 +77,12 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\BoolToGridSizeConverter.cs" />
+    <Compile Include="Converters\BoolToVisibilityConverter.cs" />
+    <Compile Include="Converters\ListToVisibilityConverter.cs" />
+    <Compile Include="Converters\ObjectToBoolConverter.cs" />
+    <Compile Include="Converters\ObjectToVisibilityConverter.cs" />
+    <Compile Include="Converters\RadioButtonConverter.cs" />
     <Compile Include="DocContent.cs" />
     <Compile Include="Views\InfoPage.xaml.cs">
       <DependentUpon>InfoPage.xaml</DependentUpon>
@@ -144,6 +150,10 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ApplicationBarExtentions\ApplicationBarExtentions.csproj">
+      <Project>{FA63663B-E07A-42AA-A9BE-64E85AEA9BFC}</Project>
+      <Name>ApplicationBarExtentions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Rhit.Applications.Mobile.ViewModel.WP7\Rhit.Applications.Mobile.ViewModel.WP7.csproj">
       <Project>{115B1326-BD48-4BCE-ADAC-7EC12AAC2D46}</Project>
       <Name>Rhit.Applications.Mobile.ViewModel.WP7</Name>

@@ -91,7 +91,7 @@ namespace Rhit.Applications.View {
         /// This code will not execute when the application is closing.
         /// </summary>
         private void Application_Deactivated(object sender, DeactivatedEventArgs e) {
-            MapController.Instance.Save();
+            //TODO: Save to Isolated Storage
         }
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace Rhit.Applications.View {
         /// This code will not execute when the application is deactivated.
         /// </summary>
         private void Application_Closing(object sender, ClosingEventArgs e) {
-            MapController.Instance.Save();
+            //TODO: Save to Isolated Storage
         }
         #endregion
 

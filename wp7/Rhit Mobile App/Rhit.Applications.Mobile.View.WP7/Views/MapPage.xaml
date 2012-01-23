@@ -8,30 +8,24 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:maps="clr-namespace:Microsoft.Phone.Controls.Maps;assembly=Microsoft.Phone.Controls.Maps"
     xmlns:cmds="clr-namespace:Rhit.Applications.Mvvm.Commands;assembly=Rhit.Applications.Mvvm.WP7"
+    xmlns:vm="clr-namespace:Rhit.Applications.ViewModel.Models;assembly=Rhit.Applications.Mobile.ViewModel.WP7"
+    xmlns:appbar="clr-namespace:ApplicationBarExtentions;assembly=ApplicationBarExtentions"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="Portrait" Orientation="Portrait"
     mc:Ignorable="d" d:DesignHeight="768" d:DesignWidth="480"
     shell:SystemTray.IsVisible="True">
 
-    <phone:PhoneApplicationPage.FontFamily> <StaticResource ResourceKey="PhoneFontFamilyNormal"/> </phone:PhoneApplicationPage.FontFamily>
-    <phone:PhoneApplicationPage.FontSize> <StaticResource ResourceKey="PhoneFontSizeNormal"/> </phone:PhoneApplicationPage.FontSize>
-    <phone:PhoneApplicationPage.Foreground> <StaticResource ResourceKey="PhoneForegroundBrush"/> </phone:PhoneApplicationPage.Foreground>
+    <phone:PhoneApplicationPage.Resources>
+        <vm:MapViewModel x:Name="ViewModel"/>
+        <SolidColorBrush x:Name="PolygonFillColorBrush" Color="DarkBlue" Opacity="0.5"/>
+        <DataTemplate x:Name="PolygonItemTemplate">
+            <maps:MapPolygon Tag="{Binding Id}" Tap="MapPolygon_Tap" Locations="{Binding Corners}"
+                            Fill="{StaticResource PolygonFillColorBrush}" Stroke="White" StrokeThickness="1"/>
+        </DataTemplate>
+    </phone:PhoneApplicationPage.Resources>
 
-    <phone:PhoneApplicationPage.ApplicationBar>
-        <!--Note: Would use command binding for the appbar, but it was not available during development and wasn't worth it to implement it-->
-        <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True" Opacity="0.5">
-            <shell:ApplicationBar.Buttons>
-                <shell:ApplicationBarIconButton IconUri="/Assets/Icons/position.png" Text="me" Click="GotoUser_Click"/>
-                <shell:ApplicationBarIconButton IconUri="/Assets/Icons/rose-hulman.png" Text="rhit" Click="GotoRhit_Click"/>
-                <shell:ApplicationBarIconButton IconUri="/Assets/Icons/search.png" Text="search" Click="Search_Click"/>
-            </shell:ApplicationBar.Buttons>
-            <shell:ApplicationBar.MenuItems>
-                <shell:ApplicationBarMenuItem Text="Quick List" Click="QuickList_Click"/>
-                <shell:ApplicationBarMenuItem Text="Search" Click="Search_Click"/>
-                <shell:ApplicationBarMenuItem Text="Settings" Click="Settings_Click"/>
-            </shell:ApplicationBar.MenuItems>
-        </shell:ApplicationBar>
-    </phone:PhoneApplicationPage.ApplicationBar>
-    
     <Grid Grid.Row="1" Margin="0,0,0,0">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -39,14 +33,28 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <maps:Map Name="MyMap" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" CredentialsProvider="AthZ1tu5ROM0PUWcIYFSxC1oQALFR-g0aoFIuL9tlbeGJ9Z6qKIRYoB_jGpct8Yu">
-            <maps:Pushpin Tap="Pushpin_Tap"
-                Content="{Binding Path=Locations.CurrentLocation, Converter={StaticResource LocationNameConverter}, Mode=TwoWay}"
-                Location="{Binding Locations.CurrentLocation, Converter={StaticResource LocationCenterConverter}, Mode=TwoWay}"/>
-            <maps:Pushpin Location="{Binding User.Location, Mode=TwoWay}"/>
+        <maps:Map Name="MyMap" DataContext="{StaticResource ViewModel}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ZoomLevel="{Binding Map.ZoomLevel, Mode=TwoWay}" Center="{Binding Map.Center, Mode=TwoWay}" CredentialsProvider="AthZ1tu5ROM0PUWcIYFSxC1oQALFR-g0aoFIuL9tlbeGJ9Z6qKIRYoB_jGpct8Yu">
+            <maps:MapLayer>
+                <maps:MapItemsControl ItemsSource="{Binding Locations.Buildings}" ItemTemplate="{StaticResource PolygonItemTemplate}" Visibility="{Binding ShowBuildings, Converter={StaticResource VisibilityConverter}}"/>
+            </maps:MapLayer>
+            <maps:Pushpin Content="{Binding Locations.CurrentLocation.Label}" Location="{Binding Locations.CurrentLocation.Center}" Tap="Pushpin_Tap"/>
+            <maps:Pushpin Location="{Binding User.Location}"/>
         </maps:Map>
-        <TextBlock Grid.Row="1"
-            Text="{Binding Settings.Status, Mode=TwoWay, FallbackValue=Debug_Status}" 
-            Visibility="{Binding Settings.DebugMode, Mode=TwoWay, Converter={StaticResource VisibilityConverter}}"/>
+        <TextBlock Grid.Row="1"  DataContext="{StaticResource ViewModel}"
+            Text="{Binding Settings.Status, FallbackValue='Debug Status'}" 
+            Visibility="{Binding Settings.DebugMode, Converter={StaticResource VisibilityConverter}}"/>
+
+        <appbar:AppBar x:Name="AppBar" BarOpacity="0.5" Grid.RowSpan="3" VerticalAlignment="Bottom">
+            <appbar:AppBar.Buttons>
+                <appbar:AppBarButton Text="me" IconUri="/Assets/Icons/position.png" Command="{Binding GotoUserCommand, Source={StaticResource ViewModel}}"/>
+                <appbar:AppBarButton Text="rhit" IconUri="/Assets/Icons/rose-hulman.png" Command="{Binding GotoRhitCommand, Source={StaticResource ViewModel}}"/>
+                <appbar:AppBarButton Text="search" IconUri="/Assets/Icons/search.png" Command="{Binding SearchCommand}"/>
+            </appbar:AppBar.Buttons>
+            <appbar:AppBar.MenuItems>
+                <appbar:AppBarMenuItem Text="Quick List" Command="{Binding QuickListCommand}"/>
+                <appbar:AppBarMenuItem Text="Search" Command="{Binding SearchCommand}"/>
+                <appbar:AppBarMenuItem Text="Settings" Command="{Binding SettingsCommand}"/>
+            </appbar:AppBar.MenuItems>
+        </appbar:AppBar>
     </Grid>
 </phone:PhoneApplicationPage>

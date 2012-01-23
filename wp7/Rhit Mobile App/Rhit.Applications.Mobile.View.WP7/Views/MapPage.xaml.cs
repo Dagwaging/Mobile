@@ -1,57 +1,66 @@
 ﻿using System;
-using System.Device.Location;
-using System.Windows.Navigation;
+using System.Windows;
 using Microsoft.Phone.Controls;
-using Rhit.Applications.ViewModel.Models;
-using System.Windows.Media;
+using Microsoft.Phone.Controls.Maps;
+using System.Windows.Input;
+using Rhit.Applications.Mvvm.Commands;
 
 namespace Rhit.Applications.View.Views {
     /// \ingroup pages
     public partial class MapPage : PhoneApplicationPage {
-        //private GeoCoordinateWatcher _userLocationWatcher;
 
         public MapPage() {
+            DataContext = this;
             InitializeComponent();
 
-            ViewModel = new MainViewModel(MyMap);
-            DataContext = ViewModel;
+            //TODO: Try not to have to do this
+            ViewModel.SetMode(MyMap);
+            MyMap.Tap += new EventHandler<System.Windows.Input.GestureEventArgs>(Map_Tap);
+
+            QuickListCommand = new RelayCommand(p => GotoQuickList());
+            SearchCommand = new RelayCommand(p => GotoSearch());
+            SettingsCommand = new RelayCommand(p => GotoSettings());
         }
 
-        public MainViewModel ViewModel { get; set; }
+        #region QuickList Command
+        public ICommand QuickListCommand { get; private set; }
 
-        private GeoCoordinateWatcher UserWatcher { get; set; }
-
-        #region Event Handlers
-        //Note: Would use command binding for the appbar, but it was not available during development and wasn't worth it to implement it
-        private void Settings_Click(object sender, EventArgs e) {
-            NavigationService.Navigate(new Uri("/Views/SettingsPage.xaml", UriKind.Relative));
-        }
-
-        //NOTE: Using System.Windows.Input absolute path because Microsoft.Phone.Controls also has a GestureEventArgs
-        private void Pushpin_Tap(object sender, System.Windows.Input.GestureEventArgs e) {
-            ViewModel.IgnoreEvent(e.GetPosition(ViewModel.Map.MapControl));
-            NavigationService.Navigate(new Uri("/Views/InfoPage.xaml", UriKind.Relative));
-        }
-
-        private void QuickList_Click(object sender, EventArgs e) {
+        private void GotoQuickList() {
             NavigationService.Navigate(new Uri("/Views/QuickListPage.xaml", UriKind.Relative));
-        }
-
-        private void Search_Click(object sender, EventArgs e) {
-            NavigationService.Navigate(new Uri("/Views/SearchPage.xaml", UriKind.Relative));
-        }
-
-        private void GotoRhit_Click(object sender, EventArgs e) {
-            ViewModel.GotoRhit();
-        }
-
-        private void GotoUser_Click(object sender, EventArgs e) {
-            ViewModel.GotoUser();
         }
         #endregion
 
-        protected override void OnNavigatedTo(NavigationEventArgs e) {
-            ViewModel.GotoCurrentLocation();
+        #region Search Command
+        public ICommand SearchCommand { get; private set; }
+
+        private void GotoSearch() {
+            NavigationService.Navigate(new Uri("/Views/SearchPage.xaml", UriKind.Relative));
+        }
+        #endregion
+
+        #region Settings Command
+        public ICommand SettingsCommand { get; private set; }
+
+        private void GotoSettings() {
+            NavigationService.Navigate(new Uri("/Views/SettingsPage.xaml", UriKind.Relative));
+        }
+        #endregion
+
+        private Point LastEventCoordinate { get; set; }
+
+        private void Map_Tap(object sender, System.Windows.Input.GestureEventArgs e) {
+            if(LastEventCoordinate == e.GetPosition(MyMap)) return;
+            ViewModel.Locations.UnSelect();
+        }
+
+        private void MapPolygon_Tap(object sender, System.Windows.Input.GestureEventArgs e) {
+            LastEventCoordinate = e.GetPosition(MyMap);
+            ViewModel.SelectLocation((int) (sender as MapPolygon).Tag);
+        }
+
+        private void Pushpin_Tap(object sender, System.Windows.Input.GestureEventArgs e) {
+            LastEventCoordinate = e.GetPosition(MyMap);
+            NavigationService.Navigate(new Uri("/Views/InfoPage.xaml", UriKind.Relative));
         }
     }
 }

@@ -10,10 +10,10 @@ namespace Rhit.Applications.View.Views {
 
         public SettingsPage() {
             InitializeComponent();
-            ViewModel = new MainViewModel();
+            ViewModel = new MapViewModel();
             DataContext = ViewModel;
         }
 
-        public MainViewModel ViewModel { get; set; }
+        public MapViewModel ViewModel { get; set; }
     }
 }

@@ -76,55 +76,6 @@ namespace Rhit.Applications.Model {
             Corners.Add(location);
         }
 
-        /// <summary>
-        /// The label to show for this location.
-        /// </summary>
-        /// <returns>Pushpin to be added to the map</returns>
-        public Pushpin GetLabel() {
-            return new Pushpin() {
-                Location = this.Center,
-                Content = this.Label,
-                Background = new SolidColorBrush(Colors.Transparent),
-                PositionOrigin = PositionOrigin.Center,
-            };
-        }
-
-        /// <summary>
-        /// The label to show for this location.
-        /// </summary>
-        /// <param name="template">Template to be applied to the pushpin</param>
-        /// <returns>Pushpin to be added to the map</returns>
-        public Pushpin GetLabel(ControlTemplate template) {
-            return new Pushpin() {
-                Location = this.Center,
-                Template = template,
-                Content = this.Label,
-                Background = new SolidColorBrush(Colors.Transparent),
-                PositionOrigin = PositionOrigin.Center,
-            };
-        }
-
-        /// <summary>
-        /// Turns a polygon invisible
-        /// </summary>
-        /// <param name="polygon">The polygon to hide</param>
-        public static void HideOutline(MapPolygon polygon) {
-            polygon.Fill = new SolidColorBrush(Colors.Transparent);
-            polygon.Stroke = new SolidColorBrush(Colors.Transparent);
-        }
-
-        /// <summary>
-        /// Compares polygons by their label
-        /// </summary>
-        /// <param name="polygon">The second polygon</param>
-        /// <returns>Whether their labels are equal</returns>
-        public bool IsPolygonEqual(MapPolygon polygon) {
-            if(Corners.Count <= 0) return false;
-            if(polygon == null || polygon.Locations == null) return false;
-            if(polygon.Locations.Count <= 0) return false;
-            return polygon.Locations.Contains(Corners[0]);
-        }
-
         public RhitLocation Copy() {
             return new RhitLocation() {
                 AltNames = AltNames,

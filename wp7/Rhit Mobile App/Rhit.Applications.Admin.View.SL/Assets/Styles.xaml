@@ -15,8 +15,6 @@
     <converter:BoolToVisibilityConverter x:Key="ReverseVisibilityConverter" FalseValue="Visible" TrueValue="Collapsed"/>
     <converter:BoolToGridSizeConverter x:Key="GridLengthConverter"/>
     <converter:RadioButtonConverter x:Key="RadioButtonConverter"/>
-    <convert:LocationToStringConverter x:Key="LocationNameConverter"/>
-    <convert:LocationToCoordinateConverter x:Key="LocationCenterConverter"/>
 
     <sdk:HierarchicalDataTemplate x:Key="TreeTemplate" ItemsSource="{Binding ChildLocations}" >
         <TextBlock Text="{Binding Name}" Foreground="White"/>

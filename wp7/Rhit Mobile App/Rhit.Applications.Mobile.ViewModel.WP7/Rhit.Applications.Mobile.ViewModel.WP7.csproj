@@ -66,13 +66,9 @@
     <Compile Include="Controllers\MapController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Controllers\UserController.cs" />
-    <Compile Include="Converters\BoolToVisibilityConverter.cs" />
-    <Compile Include="Converters\LocationToCoordinateConverter.cs" />
-    <Compile Include="Converters\LocationToLinkConverter.cs" />
-    <Compile Include="Converters\LocationToStringConverter.cs" />
-    <Compile Include="Converters\ObjectToVisibilityConverter.cs" />
+    <Compile Include="LocationNode.cs" />
     <Compile Include="Models\InfoViewModel.cs" />
-    <Compile Include="Models\MainViewModel.cs" />
+    <Compile Include="Models\MapViewModel.cs" />
     <Compile Include="Models\SearchViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services.cs" />

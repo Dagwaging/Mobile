@@ -1,15 +1,7 @@
 ﻿using System;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Ink;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
 using System.Device.Location;
 using System.Threading;
+using System.Windows;
 
 namespace Rhit.Applications.ViewModel.Controllers {
     public class UserController : DependencyObject {
@@ -33,7 +25,6 @@ namespace Rhit.Applications.ViewModel.Controllers {
 
         private Thread TrackerThread { get; set; }
 
-        #region Dependency Properties
         #region Location
         public GeoCoordinate Location {
             get { return (GeoCoordinate) GetValue(LocationProperty); }
@@ -43,9 +34,8 @@ namespace Rhit.Applications.ViewModel.Controllers {
         public static readonly DependencyProperty LocationProperty =
            DependencyProperty.Register("Location", typeof(GeoCoordinate), typeof(UserController), new PropertyMetadata(null));
         #endregion
-        #endregion
 
-        void InitGeoCordinateWatcher() {
+        private void InitGeoCordinateWatcher() {
             UserTracker = new GeoCoordinateWatcher(GeoPositionAccuracy.High);
 
             UserTracker.MovementThreshold = 10;

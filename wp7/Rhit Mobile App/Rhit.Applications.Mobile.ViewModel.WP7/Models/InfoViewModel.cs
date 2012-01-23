@@ -1,27 +1,14 @@
-﻿using System;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Ink;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
-using Rhit.Applications.ViewModel.Controllers;
+﻿using System.Collections.Generic;
 using Rhit.Applications.Model;
-using System.Collections.Generic;
+using Rhit.Applications.ViewModel.Controllers;
 
 namespace Rhit.Applications.ViewModel.Models {
     public class InfoViewModel {
         public InfoViewModel() {
-            Map = MapController.Instance;
             Locations = LocationsController.Instance;
             if(LocationStack == null)
                 LocationStack = new Dictionary<int, RhitLocation>();
         }
-
-        public MapController Map { get; set; }
 
         public LocationsController Locations { get; set; }
 

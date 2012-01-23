@@ -5,17 +5,14 @@
     xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
     xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
     xmlns:maps="clr-namespace:Microsoft.Phone.Controls.Maps;assembly=Microsoft.Phone.Controls.Maps"
-    xmlns:convert="clr-namespace:Rhit.Applications.ViewModel.Converters;assembly=Rhit.Applications.Mobile.ViewModel.WP7">
+    xmlns:convert="clr-namespace:Rhit.Applications.View.Converters"
+    >
 
     <!--Application Resources-->
     <Application.Resources>
         <convert:BoolToVisibilityConverter x:Key="VisibilityConverter"/>
         <convert:ObjectToVisibilityConverter x:Key="ObjectConverter"/>
-        <convert:LocationToStringConverter x:Key="LocationNameConverter"/>
-        <convert:LocationToStringConverter x:Key="LocationDescriptionConverter" IsDescription="True"/>
-        <convert:LocationToStringConverter x:Key="LocationAltNamesConverter" IsAltNames="True"/>
-        <convert:LocationToCoordinateConverter x:Key="LocationCenterConverter"/>
-        <convert:LocationToLinkConverter x:Key="LocationLinksConverter"/>
+        <convert:ListToVisibilityConverter x:Key="ListVisibilityConverter"/>
 
         <ControlTemplate TargetType="maps:Pushpin" x:Key="myct">
             <StackPanel Background="{TemplateBinding Background}">
@@ -37,7 +34,7 @@
         </DataTemplate>
 
         <DataTemplate x:Key="LinkTemplate">
-            <HyperlinkButton Content="{Binding Name}" NavigateUri="{Binding Address}" TargetName="_blank"/>
+            <HyperlinkButton Content="{Binding Name}" Foreground="LightBlue" NavigateUri="{Binding Address}" TargetName="_blank"/>
         </DataTemplate>
     </Application.Resources>
 
