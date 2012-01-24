@@ -5,6 +5,7 @@ using System.Windows;
 using Microsoft.Maps.MapControl;
 using Rhit.Applications.Model;
 using Rhit.Applications.Model.Services;
+using Rhit.Applications.ViewModel.Utility;
 
 namespace Rhit.Applications.ViewModel.Controllers {
     public class LocationPositionMapper {

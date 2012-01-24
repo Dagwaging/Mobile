@@ -16,10 +16,6 @@ namespace Rhit.Applications.Model {
     /// Represents an area, building, or room at Rose-Hulman.
     /// </summary>
     public class RhitLocation {
-        #region Private Fields
-        private LocationCollection _locations;
-        #endregion
-
         #region Constructors
         /// <summary>
         /// Constructor; Basic initialization; Make sure to set relevant properties.

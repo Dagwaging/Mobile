@@ -12,7 +12,7 @@
     <RootNamespace>Rhit.Applications.ViewModel</RootNamespace>
     <AssemblyName>Rhit.Applications.Admin.ViewModel.SL</AssemblyName>
     <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
     <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
     <SilverlightApplication>false</SilverlightApplication>
     <ValidateXaml>true</ValidateXaml>
@@ -78,6 +78,7 @@
     <Compile Include="Controllers\LocationPositionMapper.cs" />
     <Compile Include="Controllers\LocationsController.cs" />
     <Compile Include="Controllers\MapController.cs" />
+    <Compile Include="DualLocation.cs" />
     <Compile Include="Link.cs" />
     <Compile Include="LocationNode.cs" />
     <Compile Include="Models\HomeViewModel.cs" />
@@ -92,7 +93,6 @@
     <Compile Include="Providers\IBuildingMappingProvider.cs" />
     <Compile Include="Providers\ILocationsProvider.cs" />
     <Compile Include="Services.cs" />
-    <Compile Include="DualLocation.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Rhit.Applications.Model.SL\Rhit.Applications.Model.SL.csproj">

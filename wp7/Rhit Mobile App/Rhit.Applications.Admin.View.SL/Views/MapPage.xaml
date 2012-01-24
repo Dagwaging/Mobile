@@ -25,8 +25,8 @@
         <converter:ObjectToBoolConverter x:Key="ObjectBoolConverter"/>
         <converter:ObjectToBoolConverter x:Key="RObjectBoolConverter" Reverse="True"/>
 
-        <my:CalibrationHandler x:Name="Calibrator"/>
-        <my:LocationsProvider x:Name="ViewLocations"/>
+        <util:CalibrationHandler x:Name="Calibrator"/>
+        <util:LocationsProvider x:Name="ViewLocations"/>
         <controls:LocalImageLoader x:Name="ImageLoader"/>
         <vm:MapViewModel x:Name="ViewModel"/>
 
