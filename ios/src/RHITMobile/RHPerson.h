@@ -1,5 +1,5 @@
 //
-//  RHNodeTests.h
+//  RHPerson.h
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -17,20 +17,22 @@
 //  limitations under the License.
 //
 
-#import <SenTestingKit/SenTestingKit.h>
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
 
-/// \test
-/// Tests targetting the abstract RHNode model object.
-@interface RHNodeTests : SenTestCase
+@class RHLocation;
 
-/// Verify that basic creation still works.
-- (void)testInitSmokeTest;
+@interface RHPerson : NSManagedObject
 
-/// Verify that storage and retrieval still works.
-- (void)testStorageAndRetrieval;
-
-/// Test the accuracy of the generated CLLocationCoordinate2D in RHNode objects.
-- (void)testComputedCoordinate;
+@property (nonatomic, strong) NSString * firstName;
+@property (nonatomic, strong) NSString * lastName;
+@property (nonatomic, strong) NSString * middleName;
+@property (nonatomic, strong) NSNumber * role;
+@property (nonatomic, strong) NSString * emailAddress;
+@property (nonatomic, strong) NSString * campusMailbox;
+@property (nonatomic, strong) NSString * position;
+@property (nonatomic, strong) NSString * phoneNumber;
+@property (nonatomic, strong) NSManagedObject *department;
+@property (nonatomic, strong) RHLocation *location;
 
 @end

@@ -31,6 +31,7 @@
 #import "RHLocationLink.h"
 #import "SearchViewController.h"
 #import "RHWebRequestMaker.h"
+#import "MapViewController.h"
 
 
 #define kTopLevelServerPath @"/locations/data/top"
@@ -62,13 +63,13 @@
 
 @interface RHRestHandler ()
 
-@property (nonatomic, retain) NSPersistentStoreCoordinator *coordinator;
-@property (nonatomic, retain) NSOperationQueue *operations;
-@property (nonatomic, retain) NSString *scheme;
-@property (nonatomic, retain) NSString *host;
-@property (nonatomic, retain) NSString *port;
-@property (nonatomic, retain) RHPListStore *valueStore;
-@property (nonatomic, retain) SearchViewController *searchViewController;
+@property (nonatomic, strong) NSPersistentStoreCoordinator *coordinator;
+@property (nonatomic, strong) NSOperationQueue *operations;
+@property (nonatomic, strong) NSString *scheme;
+@property (nonatomic, strong) NSString *host;
+@property (nonatomic, strong) NSString *port;
+@property (nonatomic, strong) RHPListStore *valueStore;
+@property (nonatomic, strong) SearchViewController *searchViewController;
 
 - (RHLocation *)locationFromDictionary:(NSDictionary *)dictionary
                            withContext:(NSManagedObjectContext *)context
@@ -135,13 +136,13 @@
 #pragma mark - General Methods
 
 - (RHRestHandler *)initWithPersistantStoreCoordinator:(NSPersistentStoreCoordinator *)inCoordinator
-                                             delegate:(RHRemoteHandlerDelegate *)inDelegate {
+                                             delegate:(MapViewController *)inDelegate {
     self = [super init];
     
     if (self) {
         self.delegate = inDelegate;
         self.coordinator = inCoordinator;
-        self.operations = [[NSOperationQueue new] autorelease];
+        self.operations = [NSOperationQueue new];
         
         [NSUserDefaults resetStandardUserDefaults];
         
@@ -150,7 +151,7 @@
         self.host = @"mobilewin.csse.rose-hulman.edu";
         self.port = @"5600";
         
-        self.valueStore = [[[RHPListStore alloc] init] autorelease];
+        self.valueStore = [[RHPListStore alloc] init];
     }
     
     return self;
@@ -162,10 +163,10 @@
     }
     
     NSInvocationOperation* operation = [NSInvocationOperation alloc];
-    operation = [[operation
+    operation = [operation
                   initWithTarget:self
                   selector:@selector(performCheckForLocationUpdates)
-                  object:nil] autorelease];
+                  object:nil];
     [operations addOperation:operation];
 }
 
@@ -175,10 +176,10 @@
     }
     
     NSInvocationOperation* operation = [NSInvocationOperation alloc];
-    operation = [[operation
+    operation = [operation
                   initWithTarget:self
                   selector:@selector(performPopulateUnderlyingLocations)
-                  object:nil] autorelease];
+                  object:nil];
     [operations addOperation:operation];
 }
 
@@ -188,22 +189,13 @@
     }
     
     NSInvocationOperation* operation = [NSInvocationOperation alloc];
-    operation = [[operation
+    operation = [operation
                   initWithTarget:self
                   selector:@selector(performRushPopulateLocationsUnderLocationWithID:)
-                  object:objectID] autorelease];
+                  object:objectID];
     [operations addOperation:operation];
 }
 
-- (void)dealloc {
-    [delegate release];
-    [coordinator release];
-    [operations release];
-    [scheme release];
-    [host release];
-    [port release];
-    [super dealloc];
-}
 
 #pragma mark - Private Methods
 
@@ -224,7 +216,7 @@
     NSEntityDescription *entityDescription = [NSEntityDescription
                                               entityForName:@"Location"
                                               inManagedObjectContext:context];
-    NSFetchRequest *fetchRequest = [[[NSFetchRequest alloc] init] autorelease];
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     [fetchRequest setEntity:entityDescription];
     
     NSPredicate *predicate = [NSPredicate predicateWithFormat:
@@ -326,10 +318,9 @@
                                       "server response:\nAt least one location "
                                       "is missings its boundary coordinates"];
         
-        NSMutableArray *workingBoundary = [[[NSMutableArray alloc]
+        NSMutableArray *workingBoundary = [[NSMutableArray alloc]
                                             initWithCapacity:[retrievedBoundary
-                                                              count]]
-                                           autorelease];
+                                                              count]];
         
         for (NSDictionary *nodeDict in retrievedBoundary) {
             RHBoundaryNode *node = (RHBoundaryNode *) [RHBoundaryNode
@@ -417,8 +408,7 @@
 - (void)performCheckForLocationUpdates {
     
     @synchronized(self) {
-        NSManagedObjectContext *context = [[[NSManagedObjectContext alloc] init]
-                                           autorelease];
+        NSManagedObjectContext *context = [[NSManagedObjectContext alloc] init];
         context.persistentStoreCoordinator = self.coordinator;
         
         SEL failureSelector;
@@ -435,18 +425,16 @@
         } else {
             NSString *escaped = [currentVersion
                                  stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-            serverPath = [[[NSString alloc] initWithFormat:@"%@?version=%@",
-                           kTopLevelServerPath, escaped] autorelease];
+            serverPath = [[NSString alloc] initWithFormat:@"%@?version=%@",
+                           kTopLevelServerPath, escaped];
         }
         
         NSURL *url = [[NSURL alloc] initWithScheme:self.scheme
                                               host:fullHost
                                               path:serverPath];
         
-        [fullHost release];
         
         NSURLRequest *request = [NSURLRequest requestWithURL:url];
-        [url release];
         
         NSURLResponse *response = nil;
         NSError *error = nil;
@@ -474,7 +462,6 @@
                                      "code %d", statusCode];
             [self notifyDelegateViaSelector:failureSelector
                        ofFailureWithMessage:errorString];
-            [errorString release];
             return;
         }
         
@@ -510,7 +497,7 @@
         
         NSMutableSet *locations = [NSMutableSet setWithCapacity:[areas count]];
         
-        NSMutableDictionary *locationsByID = [[[NSMutableDictionary alloc] init] autorelease];
+        NSMutableDictionary *locationsByID = [[NSMutableDictionary alloc] init];
         
         // Populate new location objects for each retrieved dictionary
         for (NSDictionary *area in areas) {
@@ -541,19 +528,18 @@
         SEL failureSelector;
         failureSelector = @selector(didFailCheckingForLocationUpdatesWithError:);
         
-        NSManagedObjectContext *context = [[[NSManagedObjectContext alloc] init]
-                                           autorelease];
+        NSManagedObjectContext *context = [[NSManagedObjectContext alloc] init];
         context.persistentStoreCoordinator = self.coordinator;
         
-        NSString *fullHost = [[[NSString alloc] initWithFormat:@"%@:%@",
+        NSString *fullHost = [[NSString alloc] initWithFormat:@"%@:%@",
                               self.host,
-                              self.port] autorelease];
+                              self.port];
         
         // Get all locations that we may need to populate
         NSEntityDescription *entityDescription = [NSEntityDescription
                                                   entityForName:@"Location"
                                                   inManagedObjectContext:context];
-        NSFetchRequest *fetchRequest = [[[NSFetchRequest alloc] init] autorelease];
+        NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
         [fetchRequest setEntity:entityDescription];
 
         NSPredicate *predicate = [NSPredicate predicateWithFormat:
@@ -565,7 +551,7 @@
                                                               error:nil];
         
         // Populate and save each location
-        for (RHLocation *location in locationsToPopulate) {
+        for (__strong RHLocation *location in locationsToPopulate) {
             
             location = (RHLocation *)[context objectWithID:location.objectID];
             
@@ -575,7 +561,7 @@
             
             NSLog(@"Fetching data for location %@", location.name);
             
-            NSString *serverPath = [[[NSString alloc] initWithFormat:kUnderlyingLocationServerPath, location.serverIdentifier.intValue] autorelease];
+            NSString *serverPath = [[NSString alloc] initWithFormat:kUnderlyingLocationServerPath, location.serverIdentifier.intValue];
             
             
             NSURL *url = [[NSURL alloc] initWithScheme:self.scheme
@@ -583,7 +569,6 @@
                                                   path:serverPath];
 
             NSURLRequest *request = [NSURLRequest requestWithURL:url];
-            [url release];
             
             NSURLResponse *response = nil;
             NSError *error = nil;
@@ -635,13 +620,12 @@
     NSLog(@"Rushing location");
     SEL failureSelector = @selector(didFailPopulatingLocationsWithError:);
     
-    NSManagedObjectContext *context = [[[NSManagedObjectContext alloc] init]
-                                       autorelease];
+    NSManagedObjectContext *context = [[NSManagedObjectContext alloc] init];
     context.persistentStoreCoordinator = self.coordinator;
     
-    NSString *fullHost = [[[NSString alloc] initWithFormat:@"%@:%@",
+    NSString *fullHost = [[NSString alloc] initWithFormat:@"%@:%@",
                            self.host,
-                           self.port] autorelease];
+                           self.port];
     
     RHLocation *location = (RHLocation *) [context objectWithID:objectID];
     
@@ -649,7 +633,7 @@
         return;
     }
 
-    NSString *serverPath = [[[NSString alloc] initWithFormat:kUnderlyingLocationServerPath, location.serverIdentifier.intValue] autorelease];
+    NSString *serverPath = [[NSString alloc] initWithFormat:kUnderlyingLocationServerPath, location.serverIdentifier.intValue];
     
     
     NSURL *url = [[NSURL alloc] initWithScheme:self.scheme
@@ -657,7 +641,6 @@
                                           path:serverPath];
     
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
-    [url release];
     
     NSURLResponse *response = nil;
     NSError *error = nil;
@@ -708,17 +691,16 @@
     self.searchViewController = inSearchViewController;
 
     NSInvocationOperation* operation = [NSInvocationOperation alloc];
-    operation = [[operation initWithTarget:self
+    operation = [operation initWithTarget:self
                                   selector:@selector(performSearchForLocations:)
-                                    object:searchTerm] autorelease];
+                                    object:searchTerm];
     [operations addOperation:operation];
 }
 
 - (void)performSearchForLocations:(NSString *)searchTerm {
     NSLog(@"Beginning search");
     
-    NSManagedObjectContext *context = [[[NSManagedObjectContext alloc] init]
-                                       autorelease];
+    NSManagedObjectContext *context = [[NSManagedObjectContext alloc] init];
     context.persistentStoreCoordinator = self.coordinator;
     
     NSString *tokenizedTerm = [searchTerm stringByReplacingOccurrencesOfString:@" " withString:@"+"];
@@ -742,7 +724,7 @@
                                                   entityForName:@"Location"
                                                   inManagedObjectContext:context];
         
-        NSFetchRequest *fetchRequest = [[[NSFetchRequest alloc] init] autorelease];
+        NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
         [fetchRequest setEntity:entityDescription];
         
         NSPredicate *predicate = [NSPredicate predicateWithFormat:

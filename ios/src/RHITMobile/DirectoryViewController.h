@@ -20,6 +20,6 @@
 #import <UIKit/UIKit.h>
 
 /// \ingroup views
-@interface DirectoryViewController : UIViewController
+@interface DirectoryViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 
 @end

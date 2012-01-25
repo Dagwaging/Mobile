@@ -1,5 +1,5 @@
 //
-//  MKMapViewTests.h
+//  RHServiceCategory.h
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -17,16 +17,22 @@
 //  limitations under the License.
 //
 
-#import <SenTestingKit/SenTestingKit.h>
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
+#import "RHServiceItem.h"
 
-/// \test
-/// Tests regarding the added functionality of the zoom level MKMapView 
-/// category.
-@interface MKMapViewTests : SenTestCase
+@class RHServiceItem;
 
-/// Verify that if a zoom level is set directly, the same zoom level is
-/// returned when the map view is asked to calculate its zoom level.
-- (void)testZoomLevelSetAndGetIntegrity;
+@interface RHServiceCategory : RHServiceItem
 
+@property (nonatomic, strong) NSSet *contents;
+
+@end
+
+@interface RHServiceCategory (CoreDataGeneratedAccessors)
+
+- (void)addContentsObject:(RHServiceItem *)value;
+- (void)removeContentsObject:(RHServiceItem *)value;
+- (void)addContents:(NSSet *)values;
+- (void)removeContents:(NSSet *)values;
 @end

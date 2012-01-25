@@ -22,6 +22,7 @@
 #import "RHAnnotation.h"
 #import "RHMapLabel.h"
 #import "RHLocation.h"
+#import "MapViewController.h"
 
 
 #pragma mark Private Method Declarations
@@ -64,10 +65,6 @@
     return self;
 }
 
-- (void) dealloc {
-    [textView release];
-    [super dealloc];
-}
 
 #pragma mark -
 #pragma mark Property Methods

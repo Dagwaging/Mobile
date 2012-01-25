@@ -38,7 +38,6 @@
     NSLog(@"Making web request: %@", url.description);
     
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
-    [url release];
     
     NSURLResponse *response = nil;
     

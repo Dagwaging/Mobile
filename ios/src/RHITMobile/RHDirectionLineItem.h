@@ -22,7 +22,7 @@
 
 @interface RHDirectionLineItem : NSObject
 
-@property (nonatomic, retain) NSString *name;
+@property (nonatomic, strong) NSString *name;
 
 @property (nonatomic, assign) BOOL flagged;
 

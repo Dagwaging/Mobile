@@ -1,5 +1,5 @@
 //
-//  RHLabelNodeTests.h
+//  RHPerson.m
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -17,17 +17,21 @@
 //  limitations under the License.
 //
 
-#import <SenTestingKit/SenTestingKit.h>
-#import <UIKit/UIKit.h>
+#import "RHPerson.h"
+#import "RHLocation.h"
 
-/// \test
-/// Tests targetting the RHLabelNode model object.
-@interface RHLabelNodeTests : SenTestCase
 
-/// Verify that basic creation still works.
-- (void)testInitSmokeTest;
+@implementation RHPerson
 
-/// Verify that storage and retrieval still works.
-- (void)testStorageAndRetrieval;
+@dynamic firstName;
+@dynamic lastName;
+@dynamic middleName;
+@dynamic role;
+@dynamic emailAddress;
+@dynamic campusMailbox;
+@dynamic position;
+@dynamic phoneNumber;
+@dynamic department;
+@dynamic location;
 
 @end

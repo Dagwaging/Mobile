@@ -26,8 +26,8 @@
 
 @interface RHPListStore ()
 
-@property (nonatomic, retain) NSString *path;
-@property (nonatomic, retain) NSDictionary *data;
+@property (nonatomic, strong) NSString *path;
+@property (nonatomic, strong) NSDictionary *data;
 
 @end
 

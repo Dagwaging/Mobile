@@ -1,5 +1,5 @@
 //
-//  RHLocationTests.h
+//  PersonDetailViewController.h
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -17,23 +17,12 @@
 //  limitations under the License.
 //
 
-#import <SenTestingKit/SenTestingKit.h>
 #import <UIKit/UIKit.h>
 
-/// \test
-/// Tests targetting the RHLocation model object.
-@interface RHLocationTests : SenTestCase
+@interface PersonDetailViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 
-/// Verify that basic creation still works.
-- (void)testInitSmokeTest;
+@property (nonatomic, strong) NSArray *sections;
 
-/// Test synthetic ordering of boundary nodes.
-- (void)testBoundaryNodeOrdering;
-
-/// Verify that storage and retrieval still works.
-- (void)testStorageAndRetrieval;
-
-/// Test values computed on the fly
-- (void)testCompotedValues;
+@property (nonatomic, strong) NSDictionary *displayValues;
 
 @end

@@ -19,7 +19,11 @@
 
 #import <UIKit/UIKit.h>
 
+@class RHServiceCategory;
+
 /// \ingroup views
-@interface InfoViewController : UIViewController
+@interface InfoViewController : UIViewController <UITableViewDataSource>
+
+@property (nonatomic, strong) RHServiceCategory *category;
 
 @end

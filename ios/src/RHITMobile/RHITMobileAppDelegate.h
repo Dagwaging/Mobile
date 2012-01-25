@@ -35,52 +35,52 @@
 @interface RHITMobileAppDelegate : NSObject <UIApplicationDelegate, UITabBarControllerDelegate>
 
 /// The application's window.
-@property (nonatomic, retain) IBOutlet UIWindow *window;
+@property (nonatomic, strong) IBOutlet UIWindow *window;
 
 /// The application's tab bar controller.
-@property (nonatomic, retain) IBOutlet UITabBarController *tabBarController;
+@property (nonatomic, strong) IBOutlet UITabBarController *tabBarController;
 
 /// The UINavigationController associated with the "Map" tab bar item. The first
 /// view controller pushed to this navigation controller upon initialization
 /// is a MapViewController.
-@property (nonatomic, retain) IBOutlet UINavigationController *mapNavigationViewController;
+@property (nonatomic, strong) IBOutlet UINavigationController *mapNavigationViewController;
 
 /// The UINavigationController associated with the "Directory" tab bar item. The
 /// first view controller pushed to this navigation controller upon
 /// initialization is a DirectoryViewController.
-@property (nonatomic, retain) IBOutlet UINavigationController *directoryNavigationViewController;
+@property (nonatomic, strong) IBOutlet UINavigationController *directoryNavigationViewController;
 
 /// The UINavigationController associated with the "Info" tab bar item. The
 /// first view controller pushed to this navigation controller upon
 /// initialization is an InfoViewController.
-@property (nonatomic, retain) IBOutlet UINavigationController *infoNavigationViewController;
+@property (nonatomic, strong) IBOutlet UINavigationController *infoNavigationViewController;
 
-@property (nonatomic, retain) IBOutlet UINavigationController *toursNavigationViewController;
+@property (nonatomic, strong) IBOutlet UINavigationController *toursNavigationViewController;
 
 /// The single MapViewController which lives under than "Map" tab as the root
 /// view controller of that tab's view controller. There is only ever one
 /// MapViewController, and all map interactions and modifications are done
 /// through interactions with it.
-@property (nonatomic, retain) MapViewController *mapViewController;
+@property (nonatomic, strong) MapViewController *mapViewController;
 
 /// The filepath to this application's documents directory. This value is used
 /// to interact directly with the CoreData object store.
-@property (nonatomic, readonly) NSString *applicationDocumentsDirectory;
+@property (unsafe_unretained, nonatomic, readonly) NSString *applicationDocumentsDirectory;
 
 /// The CoreData NSManagedObjectModel for the application.
-@property (nonatomic, retain, readonly) NSManagedObjectModel *managedObjectModel;
+@property (nonatomic, strong, readonly) NSManagedObjectModel *managedObjectModel;
 
 /// The CoreData NSManagedObjectContext for the main thread of the application.
 /// All database persistent objects that are created or retrieved on the main
 /// thread are products of this context.
-@property (nonatomic, retain, readonly) NSManagedObjectContext *managedObjectContext;
+@property (nonatomic, strong, readonly) NSManagedObjectContext *managedObjectContext;
 
 /// The universal CoreData NSPersistentStoreCoordinator for the application.
 /// This object is used by secondary threads to create their own
 /// NSManagedObjectContext objects for database interactions.
-@property (nonatomic, retain, readonly) NSPersistentStoreCoordinator *persistentStoreCoordinator;
+@property (nonatomic, strong, readonly) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
-@property (nonatomic, retain) NSDictionary *locationNames;
+@property (nonatomic, strong) NSDictionary *locationNames;
 
 + (RHITMobileAppDelegate *)instance;
 

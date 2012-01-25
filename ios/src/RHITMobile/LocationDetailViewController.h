@@ -30,10 +30,10 @@
     RHDirectionsRequester *currentDirectionsRequest_;
 }
 
-@property (nonatomic, retain) RHLocation *location;
-@property (nonatomic, retain) NSArray *enclosedLocations;
-@property (nonatomic, retain) NSArray *links;
-@property (nonatomic, retain) IBOutlet UITableView *tableView;
+@property (nonatomic, strong) RHLocation *location;
+@property (nonatomic, strong) NSArray *enclosedLocations;
+@property (nonatomic, strong) NSArray *links;
+@property (nonatomic, strong) IBOutlet UITableView *tableView;
 
 - (IBAction)displayCurrentLocationOnMap:(id)sender;
 

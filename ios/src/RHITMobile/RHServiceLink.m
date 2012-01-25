@@ -1,5 +1,5 @@
 //
-//  RHNavigationNodeTests.h
+//  RHServiceLink.m
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -17,17 +17,11 @@
 //  limitations under the License.
 //
 
-#import <SenTestingKit/SenTestingKit.h>
-#import <UIKit/UIKit.h>
+#import "RHServiceLink.h"
 
-/// \test
-/// Tests targetting the RHNavigationNode model object.
-@interface RHNavigationNodeTests : SenTestCase
 
-/// Verify that basic creation still works.
-- (void)testInitSmokeTest;
+@implementation RHServiceLink
 
-/// Verify that storage and retrieval still works.
-- (void)testStorageAndRetrieval;
+@dynamic url;
 
 @end

@@ -1,5 +1,5 @@
 //
-//  main.m
+//  RHDepartment.m
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -17,11 +17,14 @@
 //  limitations under the License.
 //
 
-#import <UIKit/UIKit.h>
+#import "RHDepartment.h"
+#import "RHPerson.h"
 
-int main(int argc, char *argv[]) {
-    @autoreleasepool {
-        int retVal = UIApplicationMain(argc, argv, nil, nil);
-        return retVal;
-    }
-}
+
+@implementation RHDepartment
+
+@dynamic name;
+@dynamic info;
+@dynamic people;
+
+@end

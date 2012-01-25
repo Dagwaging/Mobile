@@ -23,8 +23,8 @@
 /// \ingroup views
 @interface WebViewController : UIViewController
 
-@property (nonatomic, retain) IBOutlet UIWebView *webView;
+@property (nonatomic, strong) IBOutlet UIWebView *webView;
 
-@property (nonatomic, retain) NSURL *url;
+@property (nonatomic, strong) NSURL *url;
 
 @end

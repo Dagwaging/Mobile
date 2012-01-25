@@ -41,9 +41,9 @@
 
 @interface MapViewController()
 
-@property (nonatomic, retain) RHLocationOverlay *currentOverlay;
+@property (nonatomic, strong) RHLocationOverlay *currentOverlay;
 
-@property (nonatomic, retain) NSMutableDictionary *locationsDisplayed;
+@property (nonatomic, strong) NSMutableDictionary *locationsDisplayed;
 
 - (void)loadStoredLocations;
 
@@ -84,7 +84,7 @@
                                  [[UIApplication sharedApplication]
                                   delegate] managedObjectContext];
     
-    self.locationsDisplayed = [[[NSMutableDictionary alloc] initWithCapacity:20] autorelease];
+    self.locationsDisplayed = [[NSMutableDictionary alloc] initWithCapacity:20];
     
     // Initialize what's visible on the map
     CLLocationCoordinate2D center = {kRHCampusCenterLatitude,
@@ -116,14 +116,6 @@
     self.mapView = nil;
 }
 
-- (void)dealloc {
-    [mapView release];
-    [fetchedResultsController release];
-    [managedObjectContext release];
-    [remoteHandler_ release];
-    [currentOverlay release];
-    [super dealloc];
-}
 
 - (void)focusMapViewToTemporaryAnnotation:(RHAnnotation *)annotation {
     RHAnnotation *currentAnnotation = [self.mapView.selectedAnnotations objectAtIndex:0];
@@ -144,9 +136,8 @@
     RHAnnotation *annotation = [self.locationsDisplayed objectForKey:location.objectID];
     
     if (annotation == nil) {
-        annotation = [[[RHAnnotation alloc] initWithLocation:location
-                                  currentZoomLevel:self.mapView.zoomLevel]
-                      autorelease];
+        annotation = [[RHAnnotation alloc] initWithLocation:location
+                                  currentZoomLevel:self.mapView.zoomLevel];
     }
     
     [self focusMapViewToAnnotation:annotation];
@@ -155,15 +146,15 @@
 #pragma mark -
 #pragma mark Property Methods
 
-- (RHRemoteHandler *)remoteHandler {
+- (RHRestHandler *)remoteHandler {
     if (remoteHandler_ == nil) {
         RHITMobileAppDelegate *appDelegate;
         appDelegate = (RHITMobileAppDelegate *)[[UIApplication
                                                  sharedApplication] delegate];
-        remoteHandler_ = (RHRemoteHandler *) [RHRestHandler alloc];
+        remoteHandler_ = [RHRestHandler alloc];
         remoteHandler_ = [remoteHandler_
                           initWithPersistantStoreCoordinator:appDelegate.persistentStoreCoordinator
-                          delegate:(RHRemoteHandlerDelegate *)self];
+                          delegate:self];
     }
     
     return remoteHandler_;
@@ -191,7 +182,6 @@
     search.remoteHandler = self.remoteHandler;
     search.context = self.managedObjectContext;
     [self.navigationController pushViewController:search animated:YES];
-    [search release];
 }
 
 - (IBAction)displayQuickList:(id)sender {
@@ -199,13 +189,12 @@
     quickList = [quickList initWithNibName:@"QuickListView" bundle:nil];
     quickList.mapViewController = self;
     [self presentModalViewController:quickList animated:YES];
-    [quickList release];
 }
 
 - (IBAction)discloseLocationDetails:(id)sender {
     MKAnnotationView *view = (MKAnnotationView *) ((UIView *) sender).superview.superview;
     RHAnnotation *annotation = (RHAnnotation *) view.annotation;
-    LocationDetailViewController *detailViewController = [[[LocationDetailViewController alloc] initWithNibName:@"LocationDetailView" bundle:nil] autorelease];
+    LocationDetailViewController *detailViewController = [[LocationDetailViewController alloc] initWithNibName:@"LocationDetailView" bundle:nil];
     detailViewController.location = annotation.location;
     [self.navigationController pushViewController:detailViewController animated:YES];
 }
@@ -227,9 +216,9 @@
                  dequeueReusableAnnotationViewWithIdentifier:identifier];
             
             if (pinView == nil) {
-                pinView = [[[RHPinAnnotationView alloc]
+                pinView = [[RHPinAnnotationView alloc]
                             initWithAnnotation:annotation
-                            reuseIdentifier:identifier] autorelease];
+                            reuseIdentifier:identifier];
             }
             
             pinView.canShowCallout = YES;
@@ -247,15 +236,15 @@
         RHAnnotationView *annotationView = (RHAnnotationView *)[self.mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
         
         if (annotationView == nil) {
-            annotationView = [[[RHAnnotationView alloc]
+            annotationView = [[RHAnnotationView alloc]
                                initWithAnnotation:annotation
-                               reuseIdentifier:identifier] autorelease];
+                               reuseIdentifier:identifier];
         }
         
         [annotationView setEnabled:YES];
         [annotationView setCanShowCallout:YES];
         [annotationView setDraggable:NO];
-        [annotationView setDelegate:(RHAnnotationViewDelegate *)self];
+        [annotationView setDelegate:self];
         
         UIButton *newButton = [UIButton
                                buttonWithType:UIButtonTypeDetailDisclosure];
@@ -271,7 +260,7 @@
         MKPinAnnotationView *annotationView = (MKPinAnnotationView *)[self.mapView dequeueReusableAnnotationViewWithIdentifier:@"SimplePinView"];
         
         if (annotationView == nil) {
-            annotationView = [[[MKPinAnnotationView alloc] initWithAnnotation:inAnnotation reuseIdentifier:@"SimplePinView"] autorelease];
+            annotationView = [[MKPinAnnotationView alloc] initWithAnnotation:inAnnotation reuseIdentifier:@"SimplePinView"];
             annotationView.animatesDrop = YES;
         }
         
@@ -295,8 +284,7 @@
             viewForOverlay:(id<MKOverlay>)overlay {
     if ([overlay isKindOfClass:[RHLocationOverlay class]]) {
         MKPolygon *polygon = ((RHLocationOverlay *) overlay).polygon;
-        MKPolygonView *view = [[[MKPolygonView alloc] initWithPolygon:polygon]
-                               autorelease];
+        MKPolygonView *view = [[MKPolygonView alloc] initWithPolygon:polygon];
         
         view.fillColor = [[UIColor cyanColor] colorWithAlphaComponent:0.2];
         view.strokeColor = [[UIColor blueColor] colorWithAlphaComponent:0.7];
@@ -305,7 +293,7 @@
         return view;
     } else if ([overlay isKindOfClass:[MKPolyline class]]) {
         NSLog(@"Polyline view");
-        MKPolylineView *view = [[[MKPolylineView alloc] initWithPolyline:overlay] autorelease];
+        MKPolylineView *view = [[MKPolylineView alloc] initWithPolyline:overlay];
         view.strokeColor = [UIColor blueColor];
         view.fillColor = [UIColor blueColor];
         view.lineWidth = 10;
@@ -371,7 +359,6 @@
                                           cancelButtonTitle:@"OK"
                                           otherButtonTitles:nil, nil];
     [alert show];
-    [alert release];
 }
 
 - (void)didFailPopulatingLocationsWithError:(NSError *)error {
@@ -384,7 +371,6 @@
                                           cancelButtonTitle:@"OK"
                                           otherButtonTitles:nil, nil];
     [alert show];
-    [alert release]; 
 }
 
 #pragma mark -
@@ -412,9 +398,8 @@
     [self clearAllOverlays];
     [self clearUnusedAnnotations];
     
-    self.currentOverlay = [[[RHLocationOverlay alloc]
-                            initWithLocation:annotation.location]
-                           autorelease];
+    self.currentOverlay = [[RHLocationOverlay alloc]
+                            initWithLocation:annotation.location];
     [self.mapView addOverlay:self.currentOverlay];
     [self.mapView
      setCenterCoordinate:annotation.location.labelLocation.coordinate
@@ -490,7 +475,7 @@
 - (void)clearAllAnnotations {
     [self.mapView removeAnnotations:self.temporaryAnnotations];
     self.temporaryAnnotations = nil;
-    self.locationsDisplayed = [[[NSMutableDictionary alloc] initWithCapacity:20] autorelease];
+    self.locationsDisplayed = [[NSMutableDictionary alloc] initWithCapacity:20];
 }
 
 #pragma mark -
@@ -503,7 +488,7 @@
                          entityForName:@"Location"
                          inManagedObjectContext:managedObjectContext];
     
-    NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
     [request setEntity:entityDescription];
     
     // Put conditions on our fetch request
@@ -518,14 +503,13 @@
                                         ascending:YES];
     request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
     [request setPredicate:predicate];
-    [sortDescriptor release];
     
     // Retrieve what we hope is our created object
     NSError *error = nil;
     NSArray *results = [managedObjectContext executeFetchRequest:request
                                                            error:&error];
-    self.quickListAnnotations = [[[NSMutableArray alloc]
-                                  initWithCapacity:results.count] autorelease];
+    self.quickListAnnotations = [[NSMutableArray alloc]
+                                  initWithCapacity:results.count];
     [self populateMapWithLocations:(NSSet *)results];
     
     [[RHITMobileAppDelegate instance] prefetchLocationNames];
@@ -539,9 +523,8 @@
     
     for (RHLocation *location in locations) {
         RHAnnotation *annotation = [RHAnnotation alloc];
-        annotation = [[annotation initWithLocation:location
-                                  currentZoomLevel:currentZoomLevel]
-                      autorelease];
+        annotation = [annotation initWithLocation:location
+                                  currentZoomLevel:currentZoomLevel];
         
         [self.locationsDisplayed setObject:annotation forKey:location.objectID];
         
@@ -577,10 +560,10 @@
     RHDirectionLineItem *start = [directions objectAtIndex:0];
     [self.mapView setCenterCoordinate:start.coordinate zoomLevel:17 animated:YES];
     
-    directionsStatusBar_ = [[[UIView alloc] initWithFrame:CGRectMake(0, -50, 320, 50)] autorelease];
+    directionsStatusBar_ = [[UIView alloc] initWithFrame:CGRectMake(0, -50, 320, 50)];
     directionsStatusBar_.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.7];
     
-    directionsStatus_ = [[[UILabel alloc] initWithFrame:CGRectMake(5, 5, 310, 40)] autorelease];
+    directionsStatus_ = [[UILabel alloc] initWithFrame:CGRectMake(5, 5, 310, 40)];
     directionsStatus_.backgroundColor = [UIColor clearColor];
     directionsStatus_.textColor = [UIColor whiteColor];
     directionsStatus_.text = [[directions objectAtIndex:0] name];
@@ -589,17 +572,17 @@
     
     [directionsStatusBar_ addSubview:directionsStatus_];
     
-    directionsControls_ = [[[UIToolbar alloc] initWithFrame:CGRectMake(0, self.mapView.frame.size.height, 320, 44)] autorelease];
+    directionsControls_ = [[UIToolbar alloc] initWithFrame:CGRectMake(0, self.mapView.frame.size.height, 320, 44)];
     
     directionsControls_.tintColor = [UIColor blackColor];
     
-    UIBarButtonItem *prevItem = [[[UIBarButtonItem alloc] initWithTitle:@"Prev" style:UIBarButtonItemStyleBordered target:self action:@selector(prevDirection:)] autorelease];
+    UIBarButtonItem *prevItem = [[UIBarButtonItem alloc] initWithTitle:@"Prev" style:UIBarButtonItemStyleBordered target:self action:@selector(prevDirection:)];
     
-    UIBarButtonItem *nextItem = [[[UIBarButtonItem alloc] initWithTitle:@"Next" style:UIBarButtonItemStyleBordered target:self action:@selector(nextDirection:)] autorelease];
+    UIBarButtonItem *nextItem = [[UIBarButtonItem alloc] initWithTitle:@"Next" style:UIBarButtonItemStyleBordered target:self action:@selector(nextDirection:)];
     
-    UIBarButtonItem *spaceItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil] autorelease];
+    UIBarButtonItem *spaceItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
     
-    UIBarButtonItem *cancelItem = [[[UIBarButtonItem alloc] initWithTitle:@"Exit Directions" style:UIBarButtonItemStyleBordered target:self action:@selector(exitDirections:)] autorelease];
+    UIBarButtonItem *cancelItem = [[UIBarButtonItem alloc] initWithTitle:@"Exit Directions" style:UIBarButtonItemStyleBordered target:self action:@selector(exitDirections:)];
     
     directionsControls_.items = [NSArray arrayWithObjects:prevItem, nextItem, spaceItem, cancelItem, nil];
     
@@ -612,7 +595,6 @@
     CLLocationCoordinate2D coords[directions.count];
     
     directionsPins_ = [NSMutableArray arrayWithCapacity:directions.count];
-    [directionsPins_ retain];
     
 //    RHDirectionLineItem *last = [directions objectAtIndex:(directions.count - 1)];
 //    
@@ -633,7 +615,7 @@
         coords[[directions indexOfObject:lineItem]] = lineItem.coordinate;
         
         if (lineItem.flagged) {
-            RHSimplePointAnnotation *annotation = [[[RHSimplePointAnnotation alloc] init] autorelease];
+            RHSimplePointAnnotation *annotation = [[RHSimplePointAnnotation alloc] init];
             annotation.coordinate = lineItem.coordinate;
             [self.mapView addAnnotation:annotation];
             
@@ -647,7 +629,6 @@
     [self.mapView addOverlay:line];
     
     currentDirections_ = directions;
-    [currentDirections_ retain];
     
     currentDirectionIndex_ = 0;
 }
@@ -708,7 +689,6 @@
     [self.mapView removeOverlays:self.mapView.overlays];
     [self.mapView removeAnnotation:currentDirectionAnnotation_];
     [self.mapView removeAnnotations:directionsPins_];
-    [directionsPins_ release];
     
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationDuration:0.25];

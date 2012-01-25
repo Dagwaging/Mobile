@@ -25,7 +25,7 @@
 #import "RHAnnotationViewDelegate.h"
 
 
-@class RHRemoteHandler;
+@class RHRestHandler;
 @class RHAnnotation;
 @class RHLocation;
 @class RHSimplePointAnnotation;
@@ -45,26 +45,26 @@
 }
 
 /// Map view that is visible to the user.
-@property (nonatomic, retain) IBOutlet MKMapView *mapView;
+@property (nonatomic, strong) IBOutlet MKMapView *mapView;
 
 /// Core Data fetched results controller.
-@property (nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
+@property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
 
 /// Core Data managed object context. 
-@property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;
+@property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
 
 /// Remote data handler.
-@property (nonatomic, retain) RHRemoteHandler *remoteHandler;
+@property (nonatomic, strong) RHRestHandler *remoteHandler;
 
-@property (nonatomic, retain) NSMutableArray *quickListAnnotations;
+@property (nonatomic, strong) NSMutableArray *quickListAnnotations;
 
-@property (nonatomic, retain) NSArray *temporaryAnnotations;
+@property (nonatomic, strong) NSArray *temporaryAnnotations;
 
-@property (nonatomic, retain) IBOutlet UIView *backgroundView;
+@property (nonatomic, strong) IBOutlet UIView *backgroundView;
 
-@property (nonatomic, retain) IBOutlet UILabel *directionsLabel;
+@property (nonatomic, strong) IBOutlet UILabel *directionsLabel;
 
-@property (nonatomic, retain) IBOutlet UIPickerView *directionsPicker;
+@property (nonatomic, strong) IBOutlet UIPickerView *directionsPicker;
 
 - (void)focusMapViewToTemporaryAnnotation:(RHAnnotation *)annotation;
 

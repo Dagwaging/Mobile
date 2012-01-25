@@ -1,5 +1,5 @@
 //
-//  RHBoundaryNodeTests.h
+//  RHServiceItem.m
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -17,17 +17,13 @@
 //  limitations under the License.
 //
 
-#import <SenTestingKit/SenTestingKit.h>
-#import <UIKit/UIKit.h>
+#import "RHServiceItem.h"
+#import "RHServiceCategory.h"
 
-/// \test
-/// Tests targetting the RHBoundaryNode model object.
-@interface RHBoundaryNodeTests : SenTestCase
 
-/// Verify that basic creation still works.
-- (void)testInitSmokeTest;
+@implementation RHServiceItem
 
-/// Verify that storage and retrieval still works.
-- (void)testStorageAndRetrieval;
+@dynamic name;
+@dynamic parent;
 
 @end

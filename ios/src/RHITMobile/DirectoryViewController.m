@@ -18,6 +18,9 @@
 //
 
 #import "DirectoryViewController.h"
+#import "PersonDetailViewController.h"
+
+#define kCellReuseIdentifier @"DirectoryViewCell"
 
 @implementation DirectoryViewController
 
@@ -57,6 +60,39 @@
 {
     // Return YES for supported orientations
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
+}
+
+#pragma mark - UITableViewDelegate Methods
+
+- (void)tableView:(UITableView *)tableView
+didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    PersonDetailViewController *personController = [[PersonDetailViewController alloc] initWithNibName:@"PersonDetailView" bundle:nil];
+    
+    [self.navigationController pushViewController:personController animated:YES];
+}
+
+#pragma mark - UITableViewDataSource Methods
+
+- (UITableViewCell *)tableView:(UITableView *)tableView
+         cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellReuseIdentifier];
+    
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1
+                                      reuseIdentifier:kCellReuseIdentifier];
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    }
+    
+    cell.textLabel.text = @"Jimmy Theis";
+    
+    return cell;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView
+ numberOfRowsInSection:(NSInteger)section {
+    return 1;
 }
 
 @end

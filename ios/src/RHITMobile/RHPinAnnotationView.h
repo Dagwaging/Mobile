@@ -32,6 +32,6 @@
 
 /// The MapViewController responsible for this RHPinAnnotationView. This object
 /// will be the one receiving updates about the pin's selected status.
-@property (nonatomic, retain) MapViewController *mapViewController;
+@property (nonatomic, strong) MapViewController *mapViewController;
 
 @end

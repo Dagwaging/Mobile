@@ -1,5 +1,5 @@
 //
-//  main.m
+//  RHServiceLink.h
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -17,11 +17,13 @@
 //  limitations under the License.
 //
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
+#import "RHServiceItem.h"
 
-int main(int argc, char *argv[]) {
-    @autoreleasepool {
-        int retVal = UIApplicationMain(argc, argv, nil, nil);
-        return retVal;
-    }
-}
+
+@interface RHServiceLink : RHServiceItem
+
+@property (nonatomic, strong) NSString * url;
+
+@end

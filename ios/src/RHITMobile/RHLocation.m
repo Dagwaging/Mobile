@@ -41,6 +41,7 @@
 @dynamic boundaryNodes;
 @dynamic labelLocation;
 @dynamic navigationNodes;
+@dynamic resident;
 
 + (RHLocation *)fromContext:(NSManagedObjectContext *)context {
     RHLocation *location = [NSEntityDescription
@@ -69,7 +70,7 @@
     NSArray *result = [self.altNames
                        componentsSeparatedByString:kAltNamesDelimiter];
     if ([[result objectAtIndex:0] length] < 1) {
-        return [[[NSArray alloc] init] autorelease];
+        return [[NSArray alloc] init];
     }
     return result;
 }

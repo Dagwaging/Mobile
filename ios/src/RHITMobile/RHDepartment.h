@@ -1,5 +1,5 @@
 //
-//  main.m
+//  RHDepartment.h
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -17,11 +17,15 @@
 //  limitations under the License.
 //
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
 
-int main(int argc, char *argv[]) {
-    @autoreleasepool {
-        int retVal = UIApplicationMain(argc, argv, nil, nil);
-        return retVal;
-    }
-}
+@class RHPerson;
+
+@interface RHDepartment : NSManagedObject
+
+@property (nonatomic, strong) NSString * name;
+@property (nonatomic, strong) NSString * info;
+@property (nonatomic, strong) RHPerson *people;
+
+@end

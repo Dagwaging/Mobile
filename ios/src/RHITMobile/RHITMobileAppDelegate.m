@@ -75,33 +75,31 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     self.window.rootViewController = self.tabBarController;
     
     // Create and initialize the application's map view controller
-    self.mapViewController = [[[MapViewController alloc]
-                               initWithNibName:@"MapView" bundle:nil]
-                              autorelease];
+    self.mapViewController = [[MapViewController alloc]
+                               initWithNibName:@"MapView" bundle:nil];
     [self.mapNavigationViewController pushViewController:mapViewController
                                                 animated:NO];
     self.mapViewController.navigationItem.title = @"Map";
     UIImage *quickListIcon = [UIImage imageNamed:@"quicklist-toolbar-icon.png"];
-    UIBarButtonItem *mapLeftItem = [[[UIBarButtonItem alloc] 
+    UIBarButtonItem *mapLeftItem = [[UIBarButtonItem alloc] 
                                      initWithImage:quickListIcon
                                      style:UIBarButtonItemStylePlain
                                      target:self.mapViewController
-                                     action:@selector(displayQuickList:)]
-                                    autorelease];
+                                     action:@selector(displayQuickList:)];
     self.mapViewController.navigationItem.leftBarButtonItem = mapLeftItem; 
     
     UIBarButtonItem *mapRightItem = [UIBarButtonItem alloc]; 
-    mapRightItem = [[mapRightItem
+    mapRightItem = [mapRightItem
                      initWithBarButtonSystemItem:UIBarButtonSystemItemSearch
                      target:mapViewController
-                     action:@selector(displaySearch:)] autorelease];
+                     action:@selector(displaySearch:)];
 
     self.mapViewController.navigationItem.rightBarButtonItem = mapRightItem;
     
     // Create and initialize the root info view controller
     InfoViewController *infoController = [InfoViewController alloc];
-    infoController = [[infoController initWithNibName:@"InfoView"
-                                               bundle:nil] autorelease];
+    infoController = [infoController initWithNibName:@"InfoView"
+                                               bundle:nil];
     
     [self.infoNavigationViewController pushViewController:infoController
                                                  animated:NO];
@@ -111,9 +109,8 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Create and initialize the root directory view controller
     DirectoryViewController *directoryController = [DirectoryViewController
                                                     alloc];
-    directoryController = [[directoryController initWithNibName:@"DirectoryView"
-                                                         bundle:nil]
-                           autorelease];
+    directoryController = [directoryController initWithNibName:@"DirectoryView"
+                                                         bundle:nil];
     
     [self.directoryNavigationViewController
      pushViewController:directoryController
@@ -124,9 +121,8 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Create and initialize the root directory view controller
     ToursViewController *toursController = [ToursViewController
                                                     alloc];
-    toursController = [[toursController initWithNibName:@"ToursView"
-                                                         bundle:nil]
-                           autorelease];
+    toursController = [toursController initWithNibName:@"ToursView"
+                                                         bundle:nil];
     
     [self.toursNavigationViewController
      pushViewController:toursController
@@ -136,16 +132,15 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     // If this is a beta build, create and initizliaze the beta controller
 #ifdef RHITMobile_RHBeta
-    BetaViewController *beta = [[[BetaViewController alloc]
+    BetaViewController *beta = [[BetaViewController alloc]
                                  initWithNibName:@"BetaView"
-                                 bundle:nil] autorelease];
-    UINavigationController *nav = [[[UINavigationController alloc]
-                                    initWithRootViewController:beta]
-                                   autorelease];
+                                 bundle:nil];
+    UINavigationController *nav = [[UINavigationController alloc]
+                                    initWithRootViewController:beta];
     UIImage *betaImage = [UIImage imageNamed:@"tab-bar-beta-icon.png"];
-    nav.tabBarItem = [[[UITabBarItem alloc] initWithTitle:@"Beta"
+    nav.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Beta"
                                                      image:betaImage
-                                                       tag:0] autorelease];
+                                                       tag:0];
     
 
     NSArray *newControllers = [self.tabBarController.viewControllers 
@@ -222,14 +217,6 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 
 #pragma mark - General Methods
 
-- (void)dealloc {
-    [_window release];
-    [_tabBarController release];
-    [managedObjectContext release];
-    [managedObjectModel release];
-    [persistentStoreCoordinator release];
-    [super dealloc];
-}
 
 - (void)prefetchLocationNames {
     if ([NSThread isMainThread]) {
@@ -277,8 +264,7 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
         return managedObjectModel;
     }
     
-    managedObjectModel = [[NSManagedObjectModel mergedModelFromBundles:nil]
-                          retain];
+    managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:nil];
     
     return managedObjectModel;
 }

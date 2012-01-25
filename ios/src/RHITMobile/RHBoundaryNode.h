@@ -33,9 +33,9 @@
 
 /// Position in the unordered set that Core Data provides. Used to enforce
 /// order when connecting boundary nodes.
-@property (nonatomic, retain) NSNumber *position;
+@property (nonatomic, strong) NSNumber *position;
 
 /// The RHLocation that this RHBoundaryNode borders.
-@property (nonatomic, retain) RHLocation *boundedLocation;
+@property (nonatomic, strong) RHLocation *boundedLocation;
 
 @end

@@ -26,6 +26,7 @@
 @class RHBoundaryNode;
 @class RHLabelNode;
 @class RHLocationLink;
+@class RHPerson;
 
 
 typedef enum _RHLocationDisplayType {
@@ -50,44 +51,46 @@ typedef enum _RHLocationRetrievalStatus {
 @interface RHLocation : NSManagedObject
 
 /// Server-generated integer ID for this RHLocation
-@property (nonatomic, retain) NSNumber *serverIdentifier;
+@property (nonatomic, strong) NSNumber *serverIdentifier;
 
 /// Human-readable name for this RHLocation.
-@property (nonatomic, retain) NSString *name;
+@property (nonatomic, strong) NSString *name;
 
-@property (nonatomic, retain) NSSet *links;
+@property (nonatomic, strong) NSSet *links;
 
-@property (nonatomic, retain) NSString *altNames;
+@property (nonatomic, strong) NSString *altNames;
 
-@property (nonatomic, retain) NSArray *alternateNames;
+@property (nonatomic, strong) NSArray *alternateNames;
 
-@property (nonatomic, retain) NSNumber *displayTypeNumber;
+@property (nonatomic, strong) NSNumber *displayTypeNumber;
 
 @property (nonatomic, assign) RHLocationDisplayType displayType;
 
-@property (nonatomic, retain) NSNumber *retrievalStatusNumber;
+@property (nonatomic, strong) NSNumber *retrievalStatusNumber;
+
+@property (nonatomic, strong) RHPerson *resident;
 
 @property (nonatomic, assign) RHLocationRetrievalStatus retrievalStatus;
 
 /// Short description. Used as a subtitle for map callouts.
-@property (nonatomic, retain) NSString *quickDescription;
+@property (nonatomic, strong) NSString *quickDescription;
 
 /// The minimum canonical map zoom level this RHLocation shouldbe visible at.
-@property (nonatomic, retain) NSNumber *visibleZoomLevel;
+@property (nonatomic, strong) NSNumber *visibleZoomLevel;
 
-@property (nonatomic, retain) NSSet *enclosedLocations;
+@property (nonatomic, strong) NSSet *enclosedLocations;
 
-@property (nonatomic, retain) RHLocation *parent;
+@property (nonatomic, strong) RHLocation *parent;
 
 /// The list of RHBoundaryNode objects that define the boundary of this
 /// RHLocation. The RHBoundaryNode objects contain ordering information.
-@property (nonatomic, retain) NSSet *boundaryNodes;
+@property (nonatomic, strong) NSSet *boundaryNodes;
 
 /// The location at which the label for this RHLocation should appear.
-@property (nonatomic, retain) RHLabelNode *labelLocation;
+@property (nonatomic, strong) RHLabelNode *labelLocation;
 
 /// The navigable RHNavigationNode objects that are enclosed by this RHLocation.
-@property (nonatomic, retain) NSSet *navigationNodes;
+@property (nonatomic, strong) NSSet *navigationNodes;
 
 /// The ordered set of RHBoundaryNode objects that Core Data can't provide as of
 /// iOS 4.

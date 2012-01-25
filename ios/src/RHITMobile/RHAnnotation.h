@@ -58,12 +58,12 @@
 /// call instead, as it is unlikely to change. Much of the data associated
 /// with the RHAnnotation is pulled from this enclosed RHLocation, so it
 /// is absolutely necessary that this property be set.
-@property (nonatomic, retain) RHLocation *location;
+@property (nonatomic, strong) RHLocation *location;
 
 /// The RHAnnotationView tied to this RHAnnotation once it is rendered to the
 /// map. This reference is used to tell the view when it needs to hide or show
 /// the annotation's text.
-@property (nonatomic, retain) RHAnnotationView *annotationView;
+@property (nonatomic, strong) RHAnnotationView *annotationView;
 
 /// General initializer method for the RHAnnotation class. When this method
 /// is called, the object has all that it needs to be successfully added

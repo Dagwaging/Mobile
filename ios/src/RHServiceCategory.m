@@ -1,5 +1,5 @@
 //
-//  PhysicalStorageTests.h
+//  RHServiceCategory.m
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -17,20 +17,12 @@
 //  limitations under the License.
 //
 
-#import <SenTestingKit/SenTestingKit.h>
-#import <UIKit/UIKit.h>
+#import "RHServiceCategory.h"
+#import "RHServiceItem.h"
 
-/// \test
-/// Tests targetting actually storing data on the device and retrieving it.
-@interface PhysicalStorageTests : SenTestCase
 
-/// Test simply storing and retrieving an object.
-- (void)testSimpleStorageAndRetrieval;
+@implementation RHServiceCategory
 
-/// Test clearing the database.
-- (void)testClearDatabase;
-
-/// Test writing and reading PList data
-- (void)testPListVersionNumber;
+@dynamic contents;
 
 @end

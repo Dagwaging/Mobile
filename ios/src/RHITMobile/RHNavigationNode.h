@@ -31,12 +31,12 @@
 @interface RHNavigationNode : RHNode
 
 /// Integer representing which floor this node is on.
-@property (nonatomic, retain) NSNumber *floor;
+@property (nonatomic, strong) NSNumber *floor;
 
 /// Integer representing whether or not this floor is indoors.
-@property (nonatomic, retain) NSNumber *indoors;
+@property (nonatomic, strong) NSNumber *indoors;
 
 /// RHLocation that contains this RHNavigationNode.
-@property (nonatomic, retain) RHLocation *enclosingLocation;
+@property (nonatomic, strong) RHLocation *enclosingLocation;
 
 @end
