@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.Net;
 using System.Windows.Threading;
 using Rhit.Applications.Model.Events;
 using Rhit.Applications.Model.Services.Requests;
 using System;
-using System.Threading;
+
 
 #if WINDOWS_PHONE
 using System.Device.Location;
@@ -134,6 +133,10 @@ namespace Rhit.Applications.Model.Services {
                     HandleLoginResponse(eventArgs);
                     break;
 
+                case ResponseType.PathData:
+                    HandlePathDataResponse(eventArgs);
+                    break;
+
                 case ResponseType.ServerError:
                 case ResponseType.ConnectionError:
                     OnServerErrorReturned(eventArgs);
@@ -176,11 +179,26 @@ namespace Rhit.Applications.Model.Services {
             SetVersion(response.Version, eventArgs);
             OnLocationUpdate(eventArgs, locations[0]);
         }
+
+        private void HandlePathDataResponse(ServiceEventArgs eventArgs) {
+            ServerObject response = eventArgs.ResponseObject;
+            if(response.Directions == null || response.Directions.Count <= 0) return;
+            if(response.Messages == null || response.Messages.Count <= 0) return;
+            if(response.Nodes == null || response.Nodes.Count <= 0) return;
+            if(response.Partitions == null || response.Partitions.Count <= 0) return;
+            if(response.Paths == null || response.Paths.Count <= 0) return;
+            SetVersion(response.Version, eventArgs);
+
+            //TODO: Bryan - Send data to ViewModel
+            //Example:
+            //      List<RhitLocation> locations = ServerObject.GetLocations(response.Locations);
+            //      OnLocationsUpdate(eventArgs, locations);
+        }
         #endregion
 
         #region Request Methods
         public void Login(string username, string password) {
-            RequestPart request = new RequestBuilder(BaseAddress).Admin(username, password);
+            RequestPart request = new RequestBuilder(BaseAddress).Admin.Authenticate(username, password);
             Connection.MakeRequest(request, RequestType.Login);
         }
 
@@ -220,8 +238,13 @@ namespace Rhit.Applications.Model.Services {
             Connection.MakeRequest(request, RequestType.InternalLocations);
         }
 
+        public void GetPathData() {
+            RequestPart request = new RequestBuilder(BaseAddress).Admin.PathData(Connection.ServiceTokenGuid);
+            Connection.MakeRequest(request, RequestType.PathData);
+        }
+
         public void CreateLocation(int id, int parentId, string name, double latitude, double longitude, int floor) {
-            RequestPart request = new RequestBuilder(BaseAddress).Admin(Connection.ServiceTokenGuid, "spCreateLocation");
+            RequestPart request = new RequestBuilder(BaseAddress).Admin.StoredProcedure(Connection.ServiceTokenGuid, "spCreateLocation");
             request = request.AddQueryParameter("id", id);
             request = request.AddQueryParameter("name", name);
             request = request.AddQueryParameter("lat", latitude);
@@ -232,13 +255,13 @@ namespace Rhit.Applications.Model.Services {
         }
 
         public void DeleteLocation(int id) {
-            RequestPart request = new RequestBuilder(BaseAddress).Admin(Connection.ServiceTokenGuid, "spDeleteLocation");
+            RequestPart request = new RequestBuilder(BaseAddress).Admin.StoredProcedure(Connection.ServiceTokenGuid, "spDeleteLocation");
             request = request.AddQueryParameter("location", id);
             Connection.MakeLocationRequest(request, RequestType.DeleteLocation, id);
         }
 
         public void MoveLocation(int id, double latitude, double longitude) {
-            RequestPart request = new RequestBuilder(BaseAddress).Admin(Connection.ServiceTokenGuid, "spMoveLocationCenter");
+            RequestPart request = new RequestBuilder(BaseAddress).Admin.StoredProcedure(Connection.ServiceTokenGuid, "spMoveLocationCenter");
             request = request.AddQueryParameter("location", id);
             request = request.AddQueryParameter("lat", latitude);
             request = request.AddQueryParameter("lon", longitude);
@@ -257,12 +280,12 @@ namespace Rhit.Applications.Model.Services {
         public void ChangeLocationCorners(int id, IList<GeoCoordinate> newCorners) {
             List<RequestPart> requests = new List<RequestPart>();
 
-            RequestPart request = new RequestBuilder(BaseAddress).Admin(Connection.ServiceTokenGuid, "spDeleteMapAreaCorners");
+            RequestPart request = new RequestBuilder(BaseAddress).Admin.StoredProcedure(Connection.ServiceTokenGuid, "spDeleteMapAreaCorners");
             request = request.AddQueryParameter("location", id);
             requests.Add(request);
 
             foreach(GeoCoordinate corner in newCorners) {
-                request = new RequestBuilder(BaseAddress).Admin(Connection.ServiceTokenGuid, "spAddMapAreaCorner");
+                request = new RequestBuilder(BaseAddress).Admin.StoredProcedure(Connection.ServiceTokenGuid, "spAddMapAreaCorner");
                 request = request.AddQueryParameter("location", id);
                 request = request.AddQueryParameter("lat", corner.Latitude);
                 request = request.AddQueryParameter("lon", corner.Longitude);
@@ -277,12 +300,12 @@ namespace Rhit.Applications.Model.Services {
             RequestPart request;
 
             if(links != null) {
-                request = new RequestBuilder(BaseAddress).Admin(Connection.ServiceTokenGuid, "spDeleteLinks");
+                request = new RequestBuilder(BaseAddress).Admin.StoredProcedure(Connection.ServiceTokenGuid, "spDeleteLinks");
                 request = request.AddQueryParameter("location", oldId);
                 requests.Add(request);
 
                 foreach(ILink _link in links) {
-                    request = new RequestBuilder(BaseAddress).Admin(Connection.ServiceTokenGuid, "spAddLink");
+                    request = new RequestBuilder(BaseAddress).Admin.StoredProcedure(Connection.ServiceTokenGuid, "spAddLink");
                     request = request.AddQueryParameter("location", oldId);
                     request = request.AddQueryParameter("name", _link.Name);
                     request = request.AddQueryParameter("url", _link.Address);
@@ -291,19 +314,19 @@ namespace Rhit.Applications.Model.Services {
             }
 
             if(altNames != null) {
-                request = new RequestBuilder(BaseAddress).Admin(Connection.ServiceTokenGuid, "spDeleteAlts");
+                request = new RequestBuilder(BaseAddress).Admin.StoredProcedure(Connection.ServiceTokenGuid, "spDeleteAlts");
                 request = request.AddQueryParameter("location", oldId);
                 requests.Add(request);
 
                 foreach(string _name in altNames) {
-                    request = new RequestBuilder(BaseAddress).Admin(Connection.ServiceTokenGuid, "spAddAlt");
+                    request = new RequestBuilder(BaseAddress).Admin.StoredProcedure(Connection.ServiceTokenGuid, "spAddAlt");
                     request = request.AddQueryParameter("location", oldId);
                     request = request.AddQueryParameter("altname", _name);
                     requests.Add(request);
                 }
             }
 
-            request = new RequestBuilder(BaseAddress).Admin(Connection.ServiceTokenGuid, "spUpdateLocation");
+            request = new RequestBuilder(BaseAddress).Admin.StoredProcedure(Connection.ServiceTokenGuid, "spUpdateLocation");
             request = request.AddQueryParameter("id", oldId);
             request = request.AddQueryParameter("name", name);
             request = request.AddQueryParameter("newid", newId);
@@ -319,7 +342,7 @@ namespace Rhit.Applications.Model.Services {
         }
 
         public void IncreaseServerVersion() {
-            RequestPart request = new RequestBuilder(BaseAddress).Admin(Connection.ServiceTokenGuid, Version+0.001);
+            RequestPart request = new RequestBuilder(BaseAddress).Admin.UpdateVersion(Connection.ServiceTokenGuid, Version+0.001);
             Connection.MakeRequest(request, RequestType.IncrementVersion);
         }
         #endregion

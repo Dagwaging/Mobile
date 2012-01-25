@@ -57,7 +57,6 @@ namespace Rhit.Applications.Model {
 
         public LocationType Type { get; set; }
 
-        //TODO: Change to a custom link object (Name & Address properties)
         public IList<ILink> Links { get; set; }
 
         public IList<string> AltNames { get; set; }

@@ -78,6 +78,7 @@
     <Compile Include="Controllers\LocationPositionMapper.cs" />
     <Compile Include="Controllers\LocationsController.cs" />
     <Compile Include="Controllers\MapController.cs" />
+    <Compile Include="Controllers\PathsController.cs" />
     <Compile Include="DualLocation.cs" />
     <Compile Include="Link.cs" />
     <Compile Include="LocationNode.cs" />
@@ -86,6 +87,8 @@
     <Compile Include="Models\MapViewModel.cs" />
     <Compile Include="Models\SimpleViewModel.cs" />
     <Compile Include="ObservableRhitLocation.cs" />
+    <Compile Include="Path.cs" />
+    <Compile Include="PathNode.cs" />
     <Compile Include="Providers\IBitmapProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\DataViewModel.cs" />

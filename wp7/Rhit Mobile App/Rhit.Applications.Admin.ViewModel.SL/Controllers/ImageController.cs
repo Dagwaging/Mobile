@@ -1,15 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Windows;
-using System.Windows.Input;
+﻿using System.Windows;
 using System.Windows.Media.Imaging;
-using Rhit.Applications.Mvvm.Commands;
 using Rhit.Applications.ViewModel.Providers;
-using Microsoft.Maps.MapControl;
-using System.Collections.ObjectModel;
 
 namespace Rhit.Applications.ViewModel.Controllers {
     public class ImageController : DependencyObject {
-        //TODO: Utilize the horizontal and vertical checkbox group to switch the orientation of the image.
         private static ImageController _instance;
 
         private ImageController(IBitmapProvider imageProvider, IBuildingMappingProvider buildingMappingProvider) {

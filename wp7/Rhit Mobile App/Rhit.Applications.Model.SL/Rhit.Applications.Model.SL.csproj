@@ -106,6 +106,7 @@
     <Compile Include="Services\AsyncServiceResult.cs" />
     <Compile Include="Services\Requests\AdminRequestPart.cs" />
     <Compile Include="Services\Requests\AllRequestPart.cs" />
+    <Compile Include="Services\Requests\AuthenticateRequestPart.cs" />
     <Compile Include="Services\Requests\DataRequestPart.cs" />
     <Compile Include="Services\Requests\DepartableRequestPart.cs" />
     <Compile Include="Services\Requests\DescRequestPart.cs" />
@@ -118,14 +119,17 @@
     <Compile Include="Services\Requests\NamesRequestPart.cs" />
     <Compile Include="Services\Requests\NoDescRequestPart.cs" />
     <Compile Include="Services\Requests\NoTopRequestPart.cs" />
+    <Compile Include="Services\Requests\PathDataRequestPart.cs" />
     <Compile Include="Services\Requests\RequestBuilder.cs" />
     <Compile Include="Services\Requests\RequestPart.cs" />
     <Compile Include="Services\Requests\RequestQuery.cs" />
     <Compile Include="Services\Requests\StatusRequestPart.cs" />
+    <Compile Include="Services\Requests\StoredProcedureRequestPart.cs" />
     <Compile Include="Services\Requests\ToBathRequestPart.cs" />
     <Compile Include="Services\Requests\ToLocRequestPart.cs" />
     <Compile Include="Services\Requests\TopRequestPart.cs" />
     <Compile Include="Services\Requests\ToPrinterRequestPart.cs" />
+    <Compile Include="Services\Requests\UpdateVersionRequestPart.cs" />
     <Compile Include="Services\Requests\VersionRequestPart.cs" />
     <Compile Include="Services\Requests\WithinRequestPart.cs" />
     <Compile Include="Services\Requests\WomensRequestPart.cs" />

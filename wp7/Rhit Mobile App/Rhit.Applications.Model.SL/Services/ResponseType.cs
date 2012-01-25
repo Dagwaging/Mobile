@@ -13,6 +13,7 @@ namespace Rhit.Applications.Model.Services {
         LocationUpdate,
         Login,
         MoveLocation,
+        PathData,
         ServerError,
         TopLocations,
         Version,

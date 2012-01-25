@@ -47,6 +47,8 @@ namespace Rhit.Applications.Model.Services {
                     return ResponseType.TopLocations;
                 case RequestType.Version:
                     return ResponseType.Version;
+                case RequestType.PathData:
+                    return ResponseType.PathData;
             }
             return ResponseType.ServerError;
         }

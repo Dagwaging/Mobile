@@ -48,23 +48,13 @@ namespace Rhit.Applications.Model.Services.Requests {
             }
         }
 
-        public AdminRequestPart Admin(Guid token, string storedProcedure) {
-            return new AdminRequestPart(FullUrl, token, storedProcedure);
+        public AdminRequestPart Admin {
+            get { return new AdminRequestPart(FullUrl); }
         }
-
-        public AdminRequestPart Admin(string username, string password) {
-            return new AdminRequestPart(FullUrl, username, password);
-        }
-
-        public AdminRequestPart Admin(Guid token, double version) {
-            return new AdminRequestPart(FullUrl, token, version);
-        }
-
 
         public DirectionsRequestPart Directions {
             get { return new DirectionsRequestPart(FullUrl); }
         }
-
 
         public LocationRequestPart Locations {
             get { return new LocationRequestPart(FullUrl); }

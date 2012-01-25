@@ -1,124 +1,115 @@
-﻿<navigation:Page x:Class="Rhit.Applications.View.Views.MapPage" 
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+﻿<navigation:Page x:Class="Rhit.Applications.View.Views.MapPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:sdk="http://schemas.microsoft.com/winfx/2006/xaml/presentation/sdk"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:navigation="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Navigation"
-    xmlns:map="clr-namespace:Microsoft.Maps.MapControl;assembly=Microsoft.Maps.MapControl"
-    xmlns:navi="clr-namespace:Microsoft.Maps.MapControl.Navigation;assembly=Microsoft.Maps.MapControl"
-    xmlns:controls="clr-namespace:Rhit.Applications.View.Controls"
-    xmlns:toolkit="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit"
     xmlns:cmds="clr-namespace:Rhit.Applications.Mvvm.Commands;assembly=Rhit.Applications.Mvvm.SL"
-                 xmlns:my="clr-namespace:Rhit.Applications.View.Views"
-                 xmlns:util="clr-namespace:Rhit.Applications.View.Utility"
-                 xmlns:vm="clr-namespace:Rhit.Applications.ViewModel.Models;assembly=Rhit.Applications.Admin.ViewModel.SL"
-                 xmlns:i="http://schemas.microsoft.com/expression/2010/interactions"
-                 xmlns:converter="clr-namespace:Rhit.Applications.View.Converters"
-                 xmlns:it="http://schemas.microsoft.com/expression/2010/interactivity"
-                 xmlns:sys="clr-namespace:System;assembly=mscorlib"
-    mc:Ignorable="d" d:DesignWidth="640" d:DesignHeight="480"
-    Title="MapPage"
-    Style="{StaticResource PageStyle}">
-    
+    xmlns:controls="clr-namespace:Rhit.Applications.View.Controls"
+    xmlns:converter="clr-namespace:Rhit.Applications.View.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactions"
+    xmlns:it="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:map="clr-namespace:Microsoft.Maps.MapControl;assembly=Microsoft.Maps.MapControl"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:my="clr-namespace:Rhit.Applications.View.Views"
+    xmlns:navi="clr-namespace:Microsoft.Maps.MapControl.Navigation;assembly=Microsoft.Maps.MapControl"
+    xmlns:navigation="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Navigation"
+    xmlns:sdk="http://schemas.microsoft.com/winfx/2006/xaml/presentation/sdk"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    xmlns:toolkit="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit"
+    xmlns:util="clr-namespace:Rhit.Applications.View.Utility"
+    xmlns:vm="clr-namespace:Rhit.Applications.ViewModel.Models;assembly=Rhit.Applications.Admin.ViewModel.SL"
+    Title="MapPage" d:DesignHeight="480" d:DesignWidth="640"
+    Style="{StaticResource PageStyle}"
+    mc:Ignorable="d">
+
     <navigation:Page.Resources>
-        <converter:ObjectToBoolConverter x:Key="ObjectBoolConverter"/>
-        <converter:ObjectToBoolConverter x:Key="RObjectBoolConverter" Reverse="True"/>
+        <converter:ObjectToBoolConverter x:Key="ObjectBoolConverter" />
+        <converter:ObjectToBoolConverter x:Key="RObjectBoolConverter" Reverse="True" />
 
-        <util:CalibrationHandler x:Name="Calibrator"/>
-        <util:LocationsProvider x:Name="ViewLocations"/>
-        <controls:LocalImageLoader x:Name="ImageLoader"/>
-        <vm:MapViewModel x:Name="ViewModel"/>
+        <util:CalibrationHandler x:Name="Calibrator" />
+        <util:LocationsProvider x:Name="ViewLocations" />
+        <controls:LocalImageLoader x:Name="ImageLoader" />
+        <vm:MapViewModel x:Name="ViewModel" />
 
-        <vm:MapModelInitializer x:Name="Initializer" 
-            ViewModelInstance="{StaticResource ViewModel}"
-            LocationsProvider="{StaticResource ViewLocations}"
-            
-            BitmapProvider="{StaticResource ImageLoader}"
-            BuildingMappingProvider="{StaticResource Calibrator}"
-            />
+        <vm:MapModelInitializer x:Name="Initializer" BitmapProvider="{StaticResource ImageLoader}" BuildingMappingProvider="{StaticResource Calibrator}" LocationsProvider="{StaticResource ViewLocations}" ViewModelInstance="{StaticResource ViewModel}" />
 
         <DataTemplate x:Name="DualItemTemplate">
-            <controls:DraggablePushpin VirtualLocation="{Binding Location, Mode=TwoWay}" MouseLeftButtonDown="DraggablePushpin_MouseLeftButtonDown"  Tag="{Binding BaseLocation.Id}" Content="{Binding Label}"/>
+            <controls:DraggablePushpin Content="{Binding Label}" MouseLeftButtonDown="DraggablePushpin_MouseLeftButtonDown" Tag="{Binding BaseLocation.Id}" VirtualLocation="{Binding Location, Mode=TwoWay}" />
         </DataTemplate>
 
         <DataTemplate x:Name="PolygonItemTemplate">
-            <map:MapPolygon Tag="{Binding Id}" MouseLeftButtonUp="MapPolygon_Click" Locations="{Binding Corners}"
-                            Fill="{StaticResource PolygonFillColorBrush}" Stroke="White" StrokeThickness="1"/>
+            <map:MapPolygon Fill="{StaticResource PolygonFillColorBrush}" Locations="{Binding Corners}" MouseLeftButtonUp="MapPolygon_Click" Stroke="White" StrokeThickness="1" Tag="{Binding Id}" />
         </DataTemplate>
 
-        <Style TargetType="ListBox" x:Key="NavigationBarList">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderBrush" Value="Transparent"/>
+        <Style x:Key="NavigationBarList" TargetType="ListBox">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="Transparent" />
             <Setter Property="ItemTemplate">
                 <Setter.Value>
                     <DataTemplate>
-                        <TextBlock Text="{Binding Label}" Foreground="White" FontWeight="Bold" Margin="5,0"/>
+                        <TextBlock Margin="5,0" FontWeight="Bold" Foreground="White" Text="{Binding Label}" />
                     </DataTemplate>
                 </Setter.Value>
             </Setter>
             <Setter Property="ItemsPanel">
                 <Setter.Value>
                     <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal"/>
+                        <StackPanel Orientation="Horizontal" />
                     </ItemsPanelTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
 
-        
-        <Style TargetType="toolkit:Expander" x:Key="ExpanderStyle">
-            <Setter Property="BorderBrush" Value="Black"/>
-            <Setter Property="BorderThickness" Value="3"/>
-            <Setter Property="ExpandDirection" Value="Left"/>
-            <Setter Property="MinHeight" Value="100"/>
-            <Setter Property="VerticalAlignment" Value="Top"/>
+
+        <Style x:Key="ExpanderStyle" TargetType="toolkit:Expander">
+            <Setter Property="BorderBrush" Value="Black" />
+            <Setter Property="BorderThickness" Value="3" />
+            <Setter Property="ExpandDirection" Value="Left" />
+            <Setter Property="MinHeight" Value="100" />
+            <Setter Property="VerticalAlignment" Value="Top" />
             <Setter Property="Background">
                 <Setter.Value>
-                    <SolidColorBrush Color="Gray" Opacity="0.7"/>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        
-        <Style TargetType="TextBlock" x:Key="ExpanderHeaderStyle">
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="HorizontalAlignment" Value="Center"/>
-            <Setter Property="VerticalAlignment" Value="Top"/>
-            <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
-            <Setter Property="Margin" Value="-7,20,-7,0"/>
-            <Setter Property="RenderTransform">
-                <Setter.Value>
-                    <RotateTransform Angle="90"/>
+                    <SolidColorBrush Opacity="0.7" Color="Gray" />
                 </Setter.Value>
             </Setter>
         </Style>
 
-        <StackPanel Orientation="Horizontal" x:Name="NavigationBarItems">
-            <ListBox Style="{StaticResource NavigationBarList}" ItemsSource="{Binding Map.Modes}" 
-                     SelectedValue="{Binding Map.CurrentMode, Mode=TwoWay}" />
-            <navi:CommandSeparator/>
-            <ListBox Style="{StaticResource NavigationBarList}" ItemsSource="{Binding Map.Sources}"
-                     SelectedValue="{Binding Map.CurrentSource, Mode=TwoWay}" />
+        <Style x:Key="ExpanderHeaderStyle" TargetType="TextBlock">
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Top" />
+            <Setter Property="RenderTransformOrigin" Value="0.5,0.5" />
+            <Setter Property="Margin" Value="-7,20,-7,0" />
+            <Setter Property="RenderTransform">
+                <Setter.Value>
+                    <RotateTransform Angle="90" />
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <StackPanel x:Name="NavigationBarItems" Orientation="Horizontal">
+            <ListBox ItemsSource="{Binding Map.Modes}" SelectedValue="{Binding Map.CurrentMode, Mode=TwoWay}" Style="{StaticResource NavigationBarList}" />
+            <navi:CommandSeparator />
+            <ListBox ItemsSource="{Binding Map.Sources}" SelectedValue="{Binding Map.CurrentSource, Mode=TwoWay}" Style="{StaticResource NavigationBarList}" />
         </StackPanel>
 
         <DataTemplate x:Name="CalPushpinItemTemplate">
-            <map:Pushpin Location="{Binding}" MouseLeftButtonUp="Pushpin_Click"/>
+            <map:Pushpin Location="{Binding}" MouseLeftButtonUp="Pushpin_Click" />
         </DataTemplate>
 
         <DataTemplate x:Name="PushpinItemTemplate">
-            <map:Pushpin Location="{Binding Center}" Tag="{Binding Id}" MouseLeftButtonUp="Pushpin_Click"/>
+            <map:Pushpin Location="{Binding Center}" MouseLeftButtonUp="Pushpin_Click" Tag="{Binding Id}" />
         </DataTemplate>
 
         <DataTemplate x:Name="PushpinItemTemplate2">
-            <controls:DraggablePushpin Location="{Binding Location, Mode=TwoWay}"/>
+            <controls:DraggablePushpin Location="{Binding Location, Mode=TwoWay}" />
         </DataTemplate>
 
         <DataTemplate x:Name="CalImagePinTemplate">
             <controls:DraggableShape VirtualLocation="{Binding}">
                 <controls:DraggableShape.Shape>
-                    <Ellipse Fill="Orange" Width="10" Height="10" Stroke="Black" StrokeThickness="2">
+                    <Ellipse Width="10" Height="10" Fill="Orange" Stroke="Black" StrokeThickness="2">
                         <Ellipse.RenderTransform>
-                            <TranslateTransform X="-5" Y="-5"/>
+                            <TranslateTransform X="-5" Y="-5" />
                         </Ellipse.RenderTransform>
                     </Ellipse>
                 </controls:DraggableShape.Shape>
@@ -128,9 +119,9 @@
         <DataTemplate x:Name="CalImagePinTemplate2">
             <controls:DraggableShape VirtualLocation="{Binding}">
                 <controls:DraggableShape.Shape>
-                    <Ellipse Fill="Red" Width="10" Height="10" Stroke="Black" StrokeThickness="2">
+                    <Ellipse Width="10" Height="10" Fill="Red" Stroke="Black" StrokeThickness="2">
                         <Ellipse.RenderTransform>
-                            <TranslateTransform X="-5" Y="-5"/>
+                            <TranslateTransform X="-5" Y="-5" />
                         </Ellipse.RenderTransform>
                     </Ellipse>
                 </controls:DraggableShape.Shape>
@@ -138,185 +129,176 @@
         </DataTemplate>
 
         <DataTemplate x:Name="ImagePinTemplate">
-            <controls:DraggableShape VirtualLocation="{Binding Point, Mode=TwoWay}" MouseLeftButtonDown="DraggableShape_MouseLeftButtonDown" Tag="{Binding BaseLocation.Id}">
+            <controls:DraggableShape MouseLeftButtonDown="DraggableShape_MouseLeftButtonDown" Tag="{Binding BaseLocation.Id}" VirtualLocation="{Binding Point, Mode=TwoWay}">
                 <controls:DraggableShape.Shape>
-                    <Ellipse Fill="Orange" Width="10" Height="10" Stroke="Black" StrokeThickness="2">
+                    <Ellipse Width="10" Height="10" Fill="Orange" Stroke="Black" StrokeThickness="2">
                         <Ellipse.RenderTransform>
-                            <TranslateTransform X="-5" Y="-5"/>
+                            <TranslateTransform X="-5" Y="-5" />
                         </Ellipse.RenderTransform>
                     </Ellipse>
                 </controls:DraggableShape.Shape>
             </controls:DraggableShape>
         </DataTemplate>
-        
+
     </navigation:Page.Resources>
 
-    <Grid x:Name="LayoutRoot" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+    <Grid x:Name="LayoutRoot" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        
+
         <Grid.Resources>
-            <util:TaskContainer x:Name="TaskManager" CompletedCommand="{Binding SaveCommand, ElementName=ViewModel}" CanceledCommand="{Binding CancelCommand, ElementName=ViewModel}">
+            <util:TaskContainer x:Name="TaskManager" CanceledCommand="{Binding CancelCommand, ElementName=ViewModel}" CompletedCommand="{Binding SaveCommand, ElementName=ViewModel}">
                 <util:TaskContainer.Tasks>
-                    <util:Task Label="Add Location" ToolTip="Add a blank location" StartCommand="{Binding AddLocationCommand, ElementName=ViewModel}">
+                    <util:Task Label="Add Location" StartCommand="{Binding AddLocationCommand, ElementName=ViewModel}" ToolTip="Add a blank location">
                         <util:Task.InternalRequirements>
                             <sys:String>Load Floor</sys:String>
                         </util:Task.InternalRequirements>
                         <util:Task.Steps>
-                            <util:TaskStep Label="Place Pushpin" Number="1" Instructions="Click to place a pushpin. You can drag it to desired location. Other data can be entered via the data page."/>
-                            <util:TaskStep Label="Save" Number="2" Instructions="Click the 'Save' Button"/>
+                            <util:TaskStep Instructions="Click to place a pushpin. You can drag it to desired location. Other data can be entered via the data page." Label="Place Pushpin" Number="1" />
+                            <util:TaskStep Instructions="Click the 'Save' Button" Label="Save" Number="2" />
                         </util:Task.Steps>
                     </util:Task>
-                    <util:Task Label="Move Corners" ToolTip="Move the corners of the selected building" StartCommand="{Binding ChangeCornersCommand, ElementName=ViewModel}">
+                    <util:Task Label="Move Corners" StartCommand="{Binding ChangeCornersCommand, ElementName=ViewModel}" ToolTip="Move the corners of the selected building">
                         <util:Task.Requirements>
-                            <util:TaskRequirement Value="{Binding Locations.CurrentLocation, Converter={StaticResource ObjectBoolConverter}, Source={StaticResource ViewModel}}"/>
+                            <util:TaskRequirement Value="{Binding Locations.CurrentLocation, Converter={StaticResource ObjectBoolConverter}, Source={StaticResource ViewModel}}" />
                         </util:Task.Requirements>
                         <util:Task.Steps>
-                            <util:TaskStep Label="Move Corners" Number="1" Instructions="Click and drag the displayed pushpins to the correct locations. Make sure to keep the same order."/>
-                            <util:TaskStep Label="Save" Number="2" Instructions="Click the 'Save' Button"/>
+                            <util:TaskStep Instructions="Click and drag the displayed pushpins to the correct locations. Make sure to keep the same order." Label="Move Corners" Number="1" />
+                            <util:TaskStep Instructions="Click the 'Save' Button" Label="Save" Number="2" />
                         </util:Task.Steps>
                     </util:Task>
-                    <util:Task Label="Redo Corners" ToolTip="Remove/Add the corners of the selected building" StartCommand="{Binding AddCornersCommand, ElementName=ViewModel}">
+                    <util:Task Label="Redo Corners" StartCommand="{Binding AddCornersCommand, ElementName=ViewModel}" ToolTip="Remove/Add the corners of the selected building">
                         <util:Task.Requirements>
-                            <util:TaskRequirement Value="{Binding Locations.CurrentLocation, Converter={StaticResource ObjectBoolConverter}, Source={StaticResource ViewModel}}"/>
+                            <util:TaskRequirement Value="{Binding Locations.CurrentLocation, Converter={StaticResource ObjectBoolConverter}, Source={StaticResource ViewModel}}" />
                         </util:Task.Requirements>
                         <util:Task.Steps>
-                            <util:TaskStep Label="Place Corners" Number="1" Instructions="Click on the map to place a corner. Order matters. Skip this step to remove all corners."/>
-                            <util:TaskStep Label="Save" Number="2" Instructions="Click the 'Save' Button"/>
+                            <util:TaskStep Instructions="Click on the map to place a corner. Order matters. Skip this step to remove all corners." Label="Place Corners" Number="1" />
+                            <util:TaskStep Instructions="Click the 'Save' Button" Label="Save" Number="2" />
                         </util:Task.Steps>
                     </util:Task>
-                    <util:Task Label="Load Floor" ToolTip="Rearange locations on a floor of the selected building." StartCommand="{Binding LoadFloorCommand, ElementName=ViewModel}">
+                    <util:Task Label="Load Floor" StartCommand="{Binding LoadFloorCommand, ElementName=ViewModel}" ToolTip="Rearange locations on a floor of the selected building.">
                         <util:Task.Requirements>
-                            <util:TaskRequirement Value="{Binding Locations.CurrentLocation, Converter={StaticResource ObjectBoolConverter}, Source={StaticResource ViewModel}}"/>
+                            <util:TaskRequirement Value="{Binding Locations.CurrentLocation, Converter={StaticResource ObjectBoolConverter}, Source={StaticResource ViewModel}}" />
                         </util:Task.Requirements>
                         <util:Task.Steps>
-                            <util:TaskStep Label="Load Image" Number="1" Instructions="Select a floor plan to load to calibrate to the map."/>
-                            <util:TaskStep Label="Specify Floor" Number="2" Instructions="Enter the floor you wish to calibrate to the loaded image. Use negative values for lower levels. Zero is never used."/>
-                            <util:TaskStep Label="Rearrange" Number="3" Instructions="Drag either the map pushpins or the pins on the image to the desired location."/>
-                            <util:TaskStep Label="Save" Number="4" Instructions="Click the 'Save' Button"/>
+                            <util:TaskStep Instructions="Select a floor plan to load to calibrate to the map." Label="Load Image" Number="1" />
+                            <util:TaskStep Instructions="Enter the floor you wish to calibrate to the loaded image. Use negative values for lower levels. Zero is never used." Label="Specify Floor" Number="2" />
+                            <util:TaskStep Instructions="Drag either the map pushpins or the pins on the image to the desired location." Label="Rearrange" Number="3" />
+                            <util:TaskStep Instructions="Click the 'Save' Button" Label="Save" Number="4" />
                         </util:Task.Steps>
                     </util:Task>
                 </util:TaskContainer.Tasks>
             </util:TaskContainer>
         </Grid.Resources>
-              
+
         <Grid Grid.Row="0" Grid.ColumnSpan="3">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <StackPanel Orientation="Horizontal" Grid.Column="0">
-                <TextBlock VerticalAlignment="Center" FontWeight="Bold" Text="[" Margin="10,0,0,0"/>
-                <TextBlock VerticalAlignment="Center" Margin="0,5" FontWeight="Bold" Text="{Binding Locations.CurrentLocation.Label, Mode=TwoWay, FallbackValue='No Location Selected'}"/>
-                <TextBlock VerticalAlignment="Center" FontWeight="Bold" Text="]"/>
-                <Border Visibility="{Binding Locations.CurrentLocation, Converter={StaticResource RObjectVisibilityConverter}}" Margin="10,5">
+            <StackPanel Grid.Column="0" Orientation="Horizontal">
+                <TextBlock Margin="10,0,0,0" VerticalAlignment="Center" FontWeight="Bold" Text="[" />
+                <TextBlock Margin="0,5" VerticalAlignment="Center" FontWeight="Bold" Text="{Binding Locations.CurrentLocation.Label, Mode=TwoWay, FallbackValue='No Location Selected'}" />
+                <TextBlock VerticalAlignment="Center" FontWeight="Bold" Text="]" />
+                <Border Margin="10,5" Visibility="{Binding Locations.CurrentLocation, Converter={StaticResource RObjectVisibilityConverter}}">
                     <Border.Background>
-                        <SolidColorBrush Color="Red" Opacity="0.5"/>
+                        <SolidColorBrush Opacity="0.5" Color="Red" />
                     </Border.Background>
-                    <TextBlock Text="Select a building for more options" FontWeight="Bold"/>
+                    <TextBlock FontWeight="Bold" Text="Select a building for more options" />
                 </Border>
             </StackPanel>
         </Grid>
 
-        <Grid x:Name="LayoutMain" Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+        <Grid x:Name="LayoutMain" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="0"/>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="0" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="{Binding Image.Loaded, Converter={StaticResource GridLengthConverter}}"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="{Binding Image.Loaded, Converter={StaticResource GridLengthConverter}}" />
             </Grid.ColumnDefinitions>
 
-            <map:Map x:Name="MyMap" Grid.Row="0" Grid.Column="0" CredentialsProvider="AthZ1tu5ROM0PUWcIYFSxC1oQALFR-g0aoFIuL9tlbeGJ9Z6qKIRYoB_jGpct8Yu" ZoomLevel="{Binding Map.ZoomLevel, Mode=TwoWay}" CopyrightVisibility="Collapsed" Center="{Binding Map.Center, Mode=TwoWay}">
-                <!--<map:MapTileLayer Content="{Binding Map.Tiles}"/>-->
+            <map:Map x:Name="MyMap" Grid.Row="0" Grid.Column="0" Center="{Binding Map.Center, Mode=TwoWay}" CopyrightVisibility="Collapsed" CredentialsProvider="AthZ1tu5ROM0PUWcIYFSxC1oQALFR-g0aoFIuL9tlbeGJ9Z6qKIRYoB_jGpct8Yu" ZoomLevel="{Binding Map.ZoomLevel, Mode=TwoWay}">
+                <!--  <map:MapTileLayer Content="{Binding Map.Tiles}"/>  -->
                 <map:MapLayer>
-                    <map:MapItemsControl ItemsSource="{Binding Locations, ElementName=ViewLocations, Mode=TwoWay}" ItemTemplate="{StaticResource PushpinItemTemplate2}"/>
-                    <map:MapItemsControl ItemsSource="{Binding Locations.Buildings}" ItemTemplate="{StaticResource PolygonItemTemplate}" Visibility="{Binding ShowBuildings, Converter={StaticResource VisibilityConverter}}"/>
-                    <map:MapItemsControl ItemsSource="{Binding Locations.Corners}" ItemTemplate="{StaticResource CornerPushpinTemplate}"/>
-                    <map:MapItemsControl ItemsSource="{Binding Locations.All}" ItemTemplate="{StaticResource PushpinItemTemplate}" Visibility="{Binding ShowAllLocations, Converter={StaticResource VisibilityConverter}}"/>
-                    <map:MapItemsControl ItemsSource="{Binding Locations.Top}" ItemTemplate="{StaticResource PushpinItemTemplate}" Visibility="{Binding ShowTopLocations, Converter={StaticResource VisibilityConverter}}"/>
-                    <map:MapItemsControl ItemsSource="{Binding Locations.InnerLocations}" ItemTemplate="{StaticResource PushpinItemTemplate}" Visibility="{Binding ShowInnerLocations, Converter={StaticResource VisibilityConverter}}"/>
-                    <map:MapItemsControl ItemsSource="{Binding Mapper.Locations}" ItemTemplate="{StaticResource DualItemTemplate}"/>
-                    <map:MapItemsControl ItemsSource="{Binding Locations, Mode=TwoWay, ElementName=Calibrator}" ItemTemplate="{StaticResource CalPushpinItemTemplate}"/>
+                    <map:MapItemsControl ItemsSource="{Binding Locations, ElementName=ViewLocations, Mode=TwoWay}" ItemTemplate="{StaticResource PushpinItemTemplate2}" />
+                    <map:MapItemsControl ItemsSource="{Binding Locations.Buildings}" ItemTemplate="{StaticResource PolygonItemTemplate}" Visibility="{Binding ShowBuildings, Converter={StaticResource VisibilityConverter}}" />
+                    <map:MapItemsControl ItemsSource="{Binding Locations.Corners}" ItemTemplate="{StaticResource CornerPushpinTemplate}" />
+                    <map:MapItemsControl ItemsSource="{Binding Locations.All}" ItemTemplate="{StaticResource PushpinItemTemplate}" Visibility="{Binding ShowAllLocations, Converter={StaticResource VisibilityConverter}}" />
+                    <map:MapItemsControl ItemsSource="{Binding Locations.Top}" ItemTemplate="{StaticResource PushpinItemTemplate}" Visibility="{Binding ShowTopLocations, Converter={StaticResource VisibilityConverter}}" />
+                    <map:MapItemsControl ItemsSource="{Binding Locations.InnerLocations}" ItemTemplate="{StaticResource PushpinItemTemplate}" Visibility="{Binding ShowInnerLocations, Converter={StaticResource VisibilityConverter}}" />
+                    <map:MapItemsControl ItemsSource="{Binding Mapper.Locations}" ItemTemplate="{StaticResource DualItemTemplate}" />
+                    <map:MapItemsControl ItemsSource="{Binding Locations, Mode=TwoWay, ElementName=Calibrator}" ItemTemplate="{StaticResource CalPushpinItemTemplate}" />
                 </map:MapLayer>
-                <controls:DraggablePushpin
-                    Content="{Binding Locations.CurrentLocation.Label, Mode=TwoWay}"
-                    Location="{Binding Locations.CurrentLocation.Center, Mode=TwoWay}"
-                    Visibility="{Binding Locations.CurrentLocation, Converter={StaticResource ObjectVisibilityConverter}}"/>
+                <controls:DraggablePushpin Content="{Binding Locations.CurrentLocation.Label, Mode=TwoWay}" Location="{Binding Locations.CurrentLocation.Center, Mode=TwoWay}" Visibility="{Binding Locations.CurrentLocation, Converter={StaticResource ObjectVisibilityConverter}}" />
             </map:Map>
 
-            <sdk:GridSplitter Grid.Column="1" Width="8" HorizontalAlignment="Left" VerticalAlignment="Stretch" ShowsPreview="True"/>
+            <sdk:GridSplitter Grid.Column="1" Width="8" HorizontalAlignment="Left" VerticalAlignment="Stretch" ShowsPreview="True" />
 
-            <ScrollViewer Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Margin="5,0,0,0">
+            <ScrollViewer Grid.Column="1" Margin="5,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
                 <Canvas Name="MyCanvas">
-                    <Image Source="{Binding Image.Bitmap}"/>
-                    <ItemsControl ItemsSource="{Binding Points, Mode=TwoWay, ElementName=Calibrator}" ItemTemplate="{StaticResource CalImagePinTemplate}"/>
-                    <ItemsControl ItemsSource="{Binding Points, Mode=TwoWay, ElementName=ViewLocations}" ItemTemplate="{StaticResource CalImagePinTemplate2}"/>
-                    <ItemsControl ItemsSource="{Binding Mapper.Locations, Mode=TwoWay}" ItemTemplate="{StaticResource ImagePinTemplate}"/>
+                    <Image Source="{Binding Image.Bitmap}" />
+                    <ItemsControl ItemsSource="{Binding Points, Mode=TwoWay, ElementName=Calibrator}" ItemTemplate="{StaticResource CalImagePinTemplate}" />
+                    <ItemsControl ItemsSource="{Binding Points, Mode=TwoWay, ElementName=ViewLocations}" ItemTemplate="{StaticResource CalImagePinTemplate2}" />
+                    <ItemsControl ItemsSource="{Binding Mapper.Locations, Mode=TwoWay}" ItemTemplate="{StaticResource ImagePinTemplate}" />
                 </Canvas>
             </ScrollViewer>
 
-            <ScrollViewer Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                <StackPanel Name="VerticalViewer"/>
+            <ScrollViewer Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                <StackPanel Name="VerticalViewer" />
             </ScrollViewer>
         </Grid>
 
         <Grid Grid.Row="1" Grid.RowSpan="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <toolkit:Expander Grid.Column="1" Style="{StaticResource ExpanderStyle}" BorderThickness="0">
+            <toolkit:Expander Grid.Column="1" BorderThickness="0" Style="{StaticResource ExpanderStyle}">
                 <toolkit:Expander.Header>
-                    <TextBlock Text="Tools" Style="{StaticResource ExpanderHeaderStyle}"/>
+                    <TextBlock Style="{StaticResource ExpanderHeaderStyle}" Text="Tools" />
                 </toolkit:Expander.Header>
                 <StackPanel HorizontalAlignment="Right">
-                    <Border BorderThickness="2" BorderBrush="Black" Margin="1">
+                    <Border Margin="1" BorderBrush="Black" BorderThickness="2">
                         <StackPanel>
                             <StackPanel.Resources>
                                 <DataTemplate x:Name="TaskTemplate">
-                                    <Button Content="{Binding Label}" HorizontalAlignment="Center" Margin="5"
-                                            ToolTipService.ToolTip="{Binding ToolTip}" Visibility="{Binding Visibility}"
-                                            cmds:CommandManager.Command="{Binding ActivateCommand}"
-                                            cmds:CommandManager.CommandEventName="Click"/>
+                                    <Button Margin="5" HorizontalAlignment="Center" cmds:CommandManager.Command="{Binding ActivateCommand}" cmds:CommandManager.CommandEventName="Click" Content="{Binding Label}" ToolTipService.ToolTip="{Binding ToolTip}" Visibility="{Binding Visibility}" />
                                 </DataTemplate>
                             </StackPanel.Resources>
-                            <TextBlock Text="Tasks:" FontWeight="Bold" Margin="5,0,0,0"/>
-                            <ItemsControl 
-                                DataContext="{StaticResource TaskManager}"
-                                ItemsSource="{Binding Tasks}"
-                                ItemTemplate="{StaticResource TaskTemplate}"/>
+                            <TextBlock Margin="5,0,0,0" FontWeight="Bold" Text="Tasks:" />
+                            <ItemsControl DataContext="{StaticResource TaskManager}" ItemsSource="{Binding Tasks}" ItemTemplate="{StaticResource TaskTemplate}" />
                         </StackPanel>
                     </Border>
 
                     <StackPanel DataContext="{StaticResource TaskManager}" Visibility="{Binding CurrentTask, Converter={StaticResource ObjectVisibilityConverter}}">
 
-                        <Border BorderThickness="2" BorderBrush="Black" Margin="1" >
+                        <Border Margin="1" BorderBrush="Black" BorderThickness="2">
                             <StackPanel>
-                                <TextBlock HorizontalAlignment="Center" Text="Curent Task" FontWeight="Bold" Margin="5,0,0,0"/>
-                                <TextBlock Text="{Binding CurrentTask.Label}"/>
+                                <TextBlock Margin="5,0,0,0" HorizontalAlignment="Center" FontWeight="Bold" Text="Curent Task" />
+                                <TextBlock Text="{Binding CurrentTask.Label}" />
                             </StackPanel>
                         </Border>
-                        <Border BorderThickness="2" BorderBrush="Black" Margin="1">
+                        <Border Margin="1" BorderBrush="Black" BorderThickness="2">
                             <StackPanel>
-                                <ListBox x:Name="TaskSteps" ItemsSource="{Binding CurrentTask.Steps}" Background="Transparent" BorderThickness="0">
+                                <ListBox x:Name="TaskSteps" Background="Transparent" BorderThickness="0" ItemsSource="{Binding CurrentTask.Steps}">
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding Label}"/>
+                                            <TextBlock Text="{Binding Label}" />
                                         </DataTemplate>
                                     </ListBox.ItemTemplate>
                                 </ListBox>
-                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                    <Button Content="Save" Margin="5" HorizontalAlignment="Center" cmds:CommandManager.Command="{Binding CompleteCommand}" cmds:CommandManager.CommandEventName="Click" Visibility="{Binding ShowSave, Converter={StaticResource VisibilityConverter}}"/>
-                                    <Button Content="Cancel" Margin="5" HorizontalAlignment="Center" cmds:CommandManager.Command="{Binding CancelCommand}" cmds:CommandManager.CommandEventName="Click"/>
+                                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                    <Button Margin="5" HorizontalAlignment="Center" cmds:CommandManager.Command="{Binding CompleteCommand}" cmds:CommandManager.CommandEventName="Click" Content="Save" Visibility="{Binding ShowSave, Converter={StaticResource VisibilityConverter}}" />
+                                    <Button Margin="5" HorizontalAlignment="Center" cmds:CommandManager.Command="{Binding CancelCommand}" cmds:CommandManager.CommandEventName="Click" Content="Cancel" />
                                 </StackPanel>
                             </StackPanel>
                         </Border>
@@ -325,10 +307,10 @@
             </toolkit:Expander>
         </Grid>
 
-        <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.ColumnSpan="2">
+        <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Orientation="Horizontal">
             <Border>
                 <Border.Background>
-                    <SolidColorBrush Color="White" Opacity="0.3"/>
+                    <SolidColorBrush Opacity="0.3" Color="White" />
                 </Border.Background>
                 <TextBlock Margin="5,0" FontWeight="Bold" Text="{Binding SelectedValue.Instructions, ElementName=TaskSteps, FallbackValue='After selecting a task, click on a task step to display detailed instructions.'}" />
             </Border>

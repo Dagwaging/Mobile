@@ -10,8 +10,6 @@ using System.Collections.Specialized;
 
 namespace Rhit.Applications.ViewModel.Controllers {
     public class LocationsController : DependencyObject {
-        private static LocationsController _instance;
-
         private LocationsController() {
             LocationDictionary = new Dictionary<int, RhitLocation>();
             LocationTypes = new ObservableCollection<LocationType>() {
@@ -75,6 +73,7 @@ namespace Rhit.Applications.ViewModel.Controllers {
         }
 
         #region Singleton Instance
+        private static LocationsController _instance;
         public static LocationsController Instance {
             get {
                 if(_instance == null)

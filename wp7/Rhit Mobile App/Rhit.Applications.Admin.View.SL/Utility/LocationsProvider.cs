@@ -1,27 +1,18 @@
 ﻿using System;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Ink;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
-using Microsoft.Maps.MapControl;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Rhit.Applications.ViewModel.Providers;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+using Microsoft.Maps.MapControl;
 using Rhit.Applications.View.Views;
+using Rhit.Applications.ViewModel.Providers;
 
-namespace Rhit.Applications.View.Utility
-{
-    public class LocationsProvider : DependencyObject, ILocationsProvider
-    {
+namespace Rhit.Applications.View.Utility {
+    public class LocationsProvider : DependencyObject, ILocationsProvider {
         private enum BehaviorState { Default, CreatingCorners, MovingCorners, AddingLocation };
 
-        public LocationsProvider()
-        {
+        public LocationsProvider() {
             Locations = new ObservableCollection<LocationWrapper>();
             Points = new ObservableCollection<Point>();
             State = BehaviorState.Default;
@@ -31,13 +22,11 @@ namespace Rhit.Applications.View.Utility
 
         #region private BehaviorState State
         private BehaviorState _state;
-        private BehaviorState State
-        {
+        private BehaviorState State {
             get { return _state; }
-            set
-            {
+            set {
                 _state = value;
-                if (_state == BehaviorState.Default) Working = false;
+                if(_state == BehaviorState.Default) Working = false;
                 else Working = true;
             }
         }
@@ -47,52 +36,43 @@ namespace Rhit.Applications.View.Utility
 
         public ObservableCollection<Point> Points { get; set; }
 
-        public void DisplayCorners(ICollection<Location> corners)
-        {
+        public void DisplayCorners(ICollection<Location> corners) {
             Locations.Clear();
-            foreach (Location corner in corners)
+            foreach(Location corner in corners)
                 Locations.Add(new LocationWrapper(corner));
             State = BehaviorState.MovingCorners;
         }
 
-        public IList<Location> GetLocations()
-        {
+        public IList<Location> GetLocations() {
             IList<Location> locations = new List<Location>();
-            foreach (LocationWrapper location in Locations)
+            foreach(LocationWrapper location in Locations)
                 locations.Add(location.Location);
             return locations;
         }
 
-        public IList<Point> GetPoints()
-        {
+        public IList<Point> GetPoints() {
             return Points;
         }
 
-        public void Clear()
-        {
+        public void Clear() {
             Locations.Clear();
             Points.Clear();
             State = BehaviorState.Default;
         }
 
-        public void CreateNewCorners()
-        {
+        public void CreateNewCorners() {
             Locations.Clear();
             State = BehaviorState.CreatingCorners;
         }
 
-        public void Map_Click(object sender, MapMouseEventArgs e)
-        {
-            if (State == BehaviorState.CreatingCorners)
-            {
+        public void Map_Click(object sender, MapMouseEventArgs e) {
+            if(State == BehaviorState.CreatingCorners) {
                 Location corner = (sender as Map).ViewportPointToLocation(e.ViewportPoint);
                 Locations.Add(new LocationWrapper(corner));
                 e.Handled = true;
             }
-            if (State == BehaviorState.AddingLocation)
-            {
-                if (Locations.Count <= 0)
-                {
+            if(State == BehaviorState.AddingLocation) {
+                if(Locations.Count <= 0) {
                     Location newLocation = (sender as Map).ViewportPointToLocation(e.ViewportPoint);
                     Locations.Add(new LocationWrapper(newLocation));
                     Points.Clear();
@@ -101,12 +81,9 @@ namespace Rhit.Applications.View.Utility
             }
         }
 
-        public void ImageViewer_Click(object sender, MouseButtonEventArgs e)
-        {
-            if (State == BehaviorState.AddingLocation)
-            {
-                if (Points.Count <= 0)
-                {
+        public void ImageViewer_Click(object sender, MouseButtonEventArgs e) {
+            if(State == BehaviorState.AddingLocation) {
+                if(Points.Count <= 0) {
                     Point point = e.GetPosition(sender as Canvas);
                     Points.Add(point);
                     Locations.Clear();
@@ -115,8 +92,7 @@ namespace Rhit.Applications.View.Utility
             }
         }
 
-        public void QueryLocation()
-        {
+        public void QueryLocation() {
             State = BehaviorState.AddingLocation;
             LocationIdWindow window = new LocationIdWindow();
             window.Closed += new EventHandler(LocationId_Closed);
@@ -129,21 +105,18 @@ namespace Rhit.Applications.View.Utility
 
         public string Name { get; set; }
 
-        private void LocationId_Closed(object sender, EventArgs e)
-        {
+        private void LocationId_Closed(object sender, EventArgs e) {
             LocationIdWindow window = sender as LocationIdWindow;
             Id = window.GetIdNumber();
             ParentId = window.GetParentId();
             Name = window.NewName;
         }
 
-        public class LocationWrapper : DependencyObject
-        {
+        public class LocationWrapper : DependencyObject {
             public LocationWrapper(Location location) { Location = location; }
             #region Location
-            public Location Location
-            {
-                get { return (Location)GetValue(LocationProperty); }
+            public Location Location {
+                get { return (Location) GetValue(LocationProperty); }
                 set { SetValue(LocationProperty, value); }
             }
 

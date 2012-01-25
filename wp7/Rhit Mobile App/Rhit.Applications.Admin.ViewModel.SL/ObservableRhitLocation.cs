@@ -1,37 +1,24 @@
-﻿using System;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Ink;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
-using Rhit.Applications.Model;
-using Microsoft.Maps.MapControl;
-using System.Collections.Specialized;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Windows;
+using Microsoft.Maps.MapControl;
+using Rhit.Applications.Model;
 
-namespace Rhit.Applications.ViewModel
-{
-    public class ObservableRhitLocation : DependencyObject
-    {
-        public ObservableRhitLocation(RhitLocation location)
-        {
+namespace Rhit.Applications.ViewModel {
+    public class ObservableRhitLocation : DependencyObject {
+        public ObservableRhitLocation(RhitLocation location) {
             OriginalLocation = location;
             InitilizeData();
         }
 
-        private void InitilizeData()
-        {
+        private void InitilizeData() {
             AltNames = new ObservableCollection<AlternateName>();
-            foreach (string name in OriginalLocation.AltNames) AltNames.Add(new AlternateName(name));
+            foreach(string name in OriginalLocation.AltNames) AltNames.Add(new AlternateName(name));
             Corners = new ObservableCollection<Location>();
-            foreach (Location location in OriginalLocation.Corners) Corners.Add(location);
+            foreach(Location location in OriginalLocation.Corners) Corners.Add(location);
             Links = new ObservableCollection<Link>();
-            foreach (ILink link in OriginalLocation.Links)
+            foreach(ILink link in OriginalLocation.Links)
                 Links.Add(new Link() { Name = link.Name, Address = link.Address, });
 
             Center = OriginalLocation.Center;
@@ -49,43 +36,38 @@ namespace Rhit.Applications.ViewModel
             Links.CollectionChanged += new NotifyCollectionChangedEventHandler(CollectionChanged);
         }
 
-        public List<string> CheckChanges()
-        {
+        public List<string> CheckChanges() {
             RhitLocation location = OriginalLocation;
             List<string> changes = new List<string>();
-            if (Center != location.Center) changes.Add("Center");
-            if (Description != location.Description) changes.Add("Description");
-            if (Floor != location.Floor) changes.Add("Floor");
-            if (Id != location.Id) changes.Add("Id");
-            if (Label != location.Label) changes.Add("Label");
-            if (LabelOnHybrid != location.LabelOnHybrid) changes.Add("LabelOnHybrid");
-            if (MinZoom != location.MinZoomLevel) changes.Add("MinZoomLevel");
-            if (ParentId != location.ParentId) changes.Add("ParentId");
-            if (Type != location.Type) changes.Add("Type");
+            if(Center != location.Center) changes.Add("Center");
+            if(Description != location.Description) changes.Add("Description");
+            if(Floor != location.Floor) changes.Add("Floor");
+            if(Id != location.Id) changes.Add("Id");
+            if(Label != location.Label) changes.Add("Label");
+            if(LabelOnHybrid != location.LabelOnHybrid) changes.Add("LabelOnHybrid");
+            if(MinZoom != location.MinZoomLevel) changes.Add("MinZoomLevel");
+            if(ParentId != location.ParentId) changes.Add("ParentId");
+            if(Type != location.Type) changes.Add("Type");
 
-            if (Links.Count != location.Links.Count) changes.Add("Links");
-            else
-            {
-                foreach (Link link in Links)
-                {
-                    if (location.Links.Contains(link)) continue;
+            if(Links.Count != location.Links.Count) changes.Add("Links");
+            else {
+                foreach(Link link in Links) {
+                    if(location.Links.Contains(link)) continue;
                     changes.Add("Links");
                     break;
                 }
             }
 
-            if (AltNames.Count != location.AltNames.Count) changes.Add("AltNames");
-            else
-            {
-                foreach (AlternateName altName in AltNames)
-                {
-                    if (location.AltNames.Contains(altName.Name)) continue;
+            if(AltNames.Count != location.AltNames.Count) changes.Add("AltNames");
+            else {
+                foreach(AlternateName altName in AltNames) {
+                    if(location.AltNames.Contains(altName.Name)) continue;
                     changes.Add("AltNames");
                     break;
                 }
             }
 
-            if (changes.Count > 0) HasChanged = true;
+            if(changes.Count > 0) HasChanged = true;
             else HasChanged = false;
             return changes;
         }
@@ -98,20 +80,17 @@ namespace Rhit.Applications.ViewModel
 
         public ObservableCollection<Link> Links { get; private set; }
 
-        private void CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
+        private void CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
             CheckChanges();
         }
 
-        private static void OnPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
+        private static void OnPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
             (d as ObservableRhitLocation).CheckChanges();
         }
 
         #region Description
-        public string Description
-        {
-            get { return (string)GetValue(DescriptionProperty); }
+        public string Description {
+            get { return (string) GetValue(DescriptionProperty); }
             set { SetValue(DescriptionProperty, value); }
         }
 
@@ -120,9 +99,8 @@ namespace Rhit.Applications.ViewModel
         #endregion
 
         #region Floor
-        public int Floor
-        {
-            get { return (int)GetValue(FloorProperty); }
+        public int Floor {
+            get { return (int) GetValue(FloorProperty); }
             set { SetValue(FloorProperty, value); }
         }
 
@@ -131,9 +109,8 @@ namespace Rhit.Applications.ViewModel
         #endregion
 
         #region Center
-        public Location Center
-        {
-            get { return (Location)GetValue(CenterProperty); }
+        public Location Center {
+            get { return (Location) GetValue(CenterProperty); }
             set { SetValue(CenterProperty, value); }
         }
 
@@ -142,9 +119,8 @@ namespace Rhit.Applications.ViewModel
         #endregion
 
         #region HasChanged
-        public bool HasChanged
-        {
-            get { return (bool)GetValue(HasChangedProperty); }
+        public bool HasChanged {
+            get { return (bool) GetValue(HasChangedProperty); }
             set { SetValue(HasChangedProperty, value); }
         }
 
@@ -153,9 +129,8 @@ namespace Rhit.Applications.ViewModel
         #endregion
 
         #region Id
-        public int Id
-        {
-            get { return (int)GetValue(IdProperty); }
+        public int Id {
+            get { return (int) GetValue(IdProperty); }
             set { SetValue(IdProperty, value); }
         }
 
@@ -164,9 +139,8 @@ namespace Rhit.Applications.ViewModel
         #endregion
 
         #region Label
-        public string Label
-        {
-            get { return (string)GetValue(NameProperty); }
+        public string Label {
+            get { return (string) GetValue(NameProperty); }
             set { SetValue(NameProperty, value); }
         }
 
@@ -175,9 +149,8 @@ namespace Rhit.Applications.ViewModel
         #endregion
 
         #region LabelOnHybrid
-        public bool LabelOnHybrid
-        {
-            get { return (bool)GetValue(LabelOnHybridProperty); }
+        public bool LabelOnHybrid {
+            get { return (bool) GetValue(LabelOnHybridProperty); }
             set { SetValue(LabelOnHybridProperty, value); }
         }
 
@@ -186,9 +159,8 @@ namespace Rhit.Applications.ViewModel
         #endregion
 
         #region MinZoom
-        public int MinZoom
-        {
-            get { return (int)GetValue(MinZoomProperty); }
+        public int MinZoom {
+            get { return (int) GetValue(MinZoomProperty); }
             set { SetValue(MinZoomProperty, value); }
         }
 
@@ -197,9 +169,8 @@ namespace Rhit.Applications.ViewModel
         #endregion
 
         #region ParentId
-        public int ParentId
-        {
-            get { return (int)GetValue(ParentIdProperty); }
+        public int ParentId {
+            get { return (int) GetValue(ParentIdProperty); }
             set { SetValue(ParentIdProperty, value); }
         }
 
@@ -208,9 +179,8 @@ namespace Rhit.Applications.ViewModel
         #endregion
 
         #region Type
-        public LocationType Type
-        {
-            get { return (LocationType)GetValue(TypeProperty); }
+        public LocationType Type {
+            get { return (LocationType) GetValue(TypeProperty); }
             set { SetValue(TypeProperty, value); }
         }
 
