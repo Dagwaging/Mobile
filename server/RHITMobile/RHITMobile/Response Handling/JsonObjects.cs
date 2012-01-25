@@ -236,8 +236,8 @@ namespace RHITMobile {
     }
     #endregion
 
-    #region DirectionsResponse & PrinterResponse
-    [DataContract]
+    #region DirectionsResponse & PrinterResponse (old)
+    /*[DataContract]
     public class DirectionsResponse : JsonObject {
         public DirectionsResponse(int done, int requestId) {
             Done = done;
@@ -266,12 +266,12 @@ namespace RHITMobile {
 
     [DataContract]
     public class Directions : JsonObject {
-        public Directions(LatLong end, List<Path> paths) {
+        public Directions(LatLong start, List<Path> paths) {
             Dist = paths.Sum(path => path.HDist * path.HDist + path.VDist * path.VDist);
             Paths = paths;
             StairsDown = -paths.Sum(path => Math.Min(path.Stairs, 0));
             StairsUp = paths.Sum(path => Math.Max(path.Stairs, 0));
-            End = end;
+            Start = start;
         }
 
         [DataMember]
@@ -283,7 +283,7 @@ namespace RHITMobile {
         [DataMember]
         public int StairsUp { get; set; }
         [DataMember]
-        public LatLong End { get; set; }
+        public LatLong Start { get; set; }
     }
 
     [DataContract]
@@ -356,6 +356,85 @@ namespace RHITMobile {
             var y = (node.Pos.Lat - this.Pos.Lat) * Program.DegToRad;
             return Math.Sqrt(x * x + y * y) * Program.EarthRadius;
         }
+    }*/
+    #endregion
+
+    #region DirectionsResponse & PrinterResponse
+    [DataContract]
+    public class DirectionsResponse : JsonObject {
+        public DirectionsResponse(int done, int requestId) {
+            Done = done;
+            RequestId = requestId;
+            Result = null;
+        }
+
+        [DataMember]
+        public int Done { get; set; }
+        [DataMember]
+        public int RequestId { get; set; }
+        [DataMember]
+        public Directions Result { get; set; }
+    }
+
+    [DataContract]
+    public class PrinterResponse : DirectionsResponse {
+        public PrinterResponse(int done, int requestId, string printer)
+            : base(done, requestId) {
+            Printer = printer;
+        }
+
+        [DataMember]
+        public string Printer { get; set; }
+    }
+
+    [DataContract]
+    public class Directions : JsonObject {
+        public Directions(List<DirectionPath> paths) {
+            //Dist = paths.Sum(path => path.HDist * path.HDist + path.VDist * path.VDist);
+            Paths = paths;
+            //StairsDown = -paths.Sum(path => Math.Min(path.Stairs, 0));
+            //StairsUp = paths.Sum(path => Math.Max(path.Stairs, 0));
+        }
+
+        [DataMember]
+        public double Dist { get; set; }
+        [DataMember]
+        public List<DirectionPath> Paths { get; set; }
+        [DataMember]
+        public int StairsDown { get; set; }
+        [DataMember]
+        public int StairsUp { get; set; }
+    }
+
+    [DataContract]
+    public class DirectionPath : JsonObject {
+        public DirectionPath(double lat, double lon, string dir, bool flag, string action, double alt, int? loc, bool outside) {
+            Action = action;
+            Altitude = alt;
+            Dir = dir;
+            Flag = flag;
+            Lat = lat;
+            Lon = lon;
+            Location = loc;
+            Outside = outside;
+        }
+
+        [DataMember]
+        public string Action { get; set; }
+        [DataMember]
+        public double Altitude { get; set; }
+        [DataMember]
+        public string Dir { get; set; }
+        [DataMember]
+        public bool Flag { get; set; }
+        [DataMember]
+        public double Lat { get; set; }
+        [DataMember]
+        public int? Location { get; set; }
+        [DataMember]
+        public double Lon { get; set; }
+        [DataMember]
+        public bool Outside { get; set; }
     }
     #endregion
 
@@ -384,6 +463,140 @@ namespace RHITMobile {
         public List<string> Columns { get; set; }
         [DataMember]
         public List<List<string>> Table { get; set; }
+    }
+
+    [DataContract]
+    public class PathDataResponse : JsonObject {
+        public PathDataResponse(double version) {
+            Directions = new List<Direction>();
+            Messages = new List<DirectionMessage>();
+            Nodes = new List<Node>();
+            Partitions = new List<Partition>();
+            Paths = new List<Path>();
+            Version = version;
+        }
+
+        [DataMember]
+        public List<Direction> Directions { get; set; }
+        [DataMember]
+        public List<DirectionMessage> Messages { get; set; }
+        [DataMember]
+        public List<Node> Nodes { get; set; }
+        [DataMember]
+        public List<Partition> Partitions { get; set; }
+        [DataMember]
+        public List<Path> Paths { get; set; }
+        [DataMember]
+        public double Version { get; set; }
+    }
+
+    [DataContract]
+    public class Path : JsonObject {
+        public Path(DataRow row) : this(row, (int)row["node1"], (int)row["node2"], (int)row["partition"]) { }
+
+        public Path(DataRow row, int node1, int node2, int partition) {
+            Elevator = (bool)row["elevator"];
+            Id = (int)row["id"];
+            Stairs = (int)row["stairs"];
+            Node1 = node1;
+            Node2 = node2;
+            Partition = partition;
+        }
+
+        [DataMember]
+        public bool Elevator { get; set; }
+        [DataMember]
+        public int Id { get; set; }
+        [DataMember]
+        public int Node1 { get; set; }
+        [DataMember]
+        public int Node2 { get; set; }
+        [DataMember]
+        public int Partition { get; set; }
+        [DataMember]
+        public int Stairs { get; set; }
+    }
+
+    [DataContract]
+    public class Node : JsonObject {
+        public Node(DataRow row) {
+            Id = (int)row["id"];
+            Lat = (double)row["lat"];
+            Lon = (double)row["lon"];
+            Altitude = (double)row["altitude"];
+            Outside = (bool)row["outside"];
+            Location = row.IsNull("location") ? null : (int?)row["location"];
+            Partition = row.Table.Columns.Contains("partition") ? (int?)row["partition"] : null;
+        }
+
+        [DataMember]
+        public double Altitude { get; set; }
+        [DataMember]
+        public int Id { get; set; }
+        [DataMember]
+        public double Lat { get; set; }
+        [DataMember]
+        public int? Location { get; set; }
+        [DataMember]
+        public double Lon { get; set; }
+        [DataMember]
+        public bool Outside { get; set; }
+        [DataMember]
+        public int? Partition { get; set; }
+
+        public double HDistanceTo(Node node) {
+            var x = (node.Lon - this.Lon) * Program.DegToRad * Math.Cos((node.Lat + this.Lat) * Program.DegToRad / 2);
+            var y = (node.Lat - this.Lat) * Program.DegToRad;
+            return Math.Sqrt(x * x + y * y) * Program.EarthRadius;
+        }
+    }
+
+    [DataContract]
+    public class Direction : JsonObject {
+        public Direction(DataRow row) {
+            Id = (int)row["id"];
+            Message = (int)row["message"];
+            Paths = new List<int>() { (int)row["startpath"] };
+            Within = row.IsNull("within") ? null : (int?)row["within"];
+        }
+
+        [DataMember]
+        public int Id { get; set; }
+        [DataMember]
+        public int Message { get; set; }
+        [DataMember]
+        public List<int> Paths { get; set; }
+        [DataMember]
+        public int? Within { get; set; }
+    }
+
+    [DataContract]
+    public class Partition : JsonObject {
+        public Partition(DataRow row) {
+            Id = (int)row["id"];
+            Description = (string)row["description"];
+        }
+
+        [DataMember]
+        public int Id { get; set; }
+        [DataMember]
+        public string Description { get; set; }
+    }
+
+    [DataContract]
+    public class DirectionMessage : JsonObject {
+        public DirectionMessage(DataRow row) {
+            Id = (int)row["id"];
+            Message1 = (string)row["message1"];
+            Message2 = (string)row["message2"];
+        }
+
+        [DataMember]
+        public int Id { get; set; }
+        [DataMember]
+        public string Message1 { get; set; }
+        [DataMember]
+        public string Message2 { get; set; }
     }
     #endregion
 

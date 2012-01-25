@@ -309,7 +309,7 @@ namespace RHITMobile
                             continuation = _queues[ThreadPriority.Low].Dequeue();
                             break;
                         }
-                    Thread.Sleep(4);
+                    Thread.Sleep(3);
                 }
 
                 // Continue the next item in the queue
@@ -466,6 +466,14 @@ namespace RHITMobile
                     }
                 }).ContinueWith((task) =>
                     Enqueue(currentThread.WithResult(task.Result)));
+
+            return new ThreadInfo(currentThread.Priority);
+        }
+
+        public ThreadInfo StartNewThread(ThreadInfo currentThread, Func<object> thread) {
+            IncreaseExecutions(currentThread.Priority);
+            Task.Factory.StartNew<object>(thread).ContinueWith((task) =>
+                Enqueue(currentThread.WithResult(task.Result)));
 
             return new ThreadInfo(currentThread.Priority);
         }

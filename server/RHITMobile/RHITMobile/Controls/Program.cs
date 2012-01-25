@@ -15,6 +15,9 @@ namespace RHITMobile {
         /// Main entry for the application
         /// </summary>
         public static void Main() {
+            // Initialize the connection string
+            InitConnection();
+
             try {
                 // Get the server version from the external text file
                 UpdateServerVersion();
@@ -99,7 +102,7 @@ namespace RHITMobile {
             using (var fileReader = new StreamReader("version.txt")) {
                 ServerVersion = Double.Parse(fileReader.ReadLine());
             }
-            Console.WriteLine("Update successful.");
+            Console.WriteLine("Version update successful.");
         }
 
         public static void WriteServerVersion(double version) {
@@ -111,13 +114,48 @@ namespace RHITMobile {
         }
 
         public static string GetConnectionString(string username, string password) {
-            return String.Format(AdminConnectionString, username, password);
+            return String.Format(CustomConnectionString, username, password);
+        }
+
+        public static string ConnectionString = null;
+        public static void InitConnection() {
+            if (ConnectionString == null) {
+                ConnectionString = @"Data Source=mobilewin.csse.rose-hulman.edu\RHITMobile;Initial Catalog=MapData;Integrated Security=SSPI;Persist Security Info=true";
+                try {
+                    Console.WriteLine("Attempting to login to SQL Server using Windows credentials...");
+                    using (var connection = new SqlConnection(ConnectionString)) {
+                        connection.Open();
+                    }
+                } catch {
+                    Console.WriteLine("Could not connect using Windows credentials.");
+                    Console.WriteLine();
+                    bool success = false;
+                    while (!success) {
+                        try {
+                            Console.Write("Enter the user ID: ");
+                            string userId = Console.ReadLine();
+                            Console.Write("Enter the password: ");
+                            string password = Console.ReadLine();
+                            ConnectionString = GetConnectionString(userId, password);
+                            using (var connection = new SqlConnection(ConnectionString)) {
+                                connection.Open();
+                            }
+                            success = true;
+                        } catch {
+                            Console.WriteLine("Incorrect SQL credentials.");
+                            Console.WriteLine();
+                        }
+                    }
+                }
+
+                Console.WriteLine("Login successful.");
+                Console.WriteLine();
+            }
         }
 
         public static double ServerVersion;
         public static double ServicesVersion;
-        public const string ConnectionString = @"Data Source=mobilewin.csse.rose-hulman.edu\RHITMobile;Initial Catalog=MapData;User Id=server;Password=rhitMobile56";
-        private const string AdminConnectionString = @"Data Source=mobilewin.csse.rose-hulman.edu\RHITMobile;Initial Catalog=MapData;User Id={0};Password={1}";
+        private const string CustomConnectionString = @"Data Source=mobilewin.csse.rose-hulman.edu\RHITMobile;Initial Catalog=MapData;User Id={0};Password={1};Persist Security Info=true";
         public const double EarthRadius = 20925524.9; // feet
         public const double DegToRad = Math.PI / 180;
         public const double MaxSlopeAngle = 10 * DegToRad; // radians

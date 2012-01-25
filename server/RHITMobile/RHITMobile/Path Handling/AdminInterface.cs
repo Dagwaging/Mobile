@@ -98,6 +98,8 @@ namespace RHITMobile {
         public AdminTokenHandler() {
             Redirects.Add("storedproc", new AdminStoredProcHandler());
             Redirects.Add("updateversion", new AdminUpdateVersionHandler());
+            Redirects.Add("scriptdb", new DatabaseScripter());
+            Redirects.Add("pathdata", new AdminPathDataHandler());
         }
     }
 
@@ -184,6 +186,44 @@ namespace RHITMobile {
         public SqlStoredProcData(SqlLoginData loginData, string name) {
             LoginData = loginData;
             StoredProcName = name;
+        }
+    }
+
+    public class AdminPathDataHandler : PathHandler {
+        protected override IEnumerable<ThreadInfo> HandleNoPath(ThreadManager TM, Dictionary<string, string> query, object state) {
+            var currentThread = TM.CurrentThread;
+            var result = new PathDataResponse(Program.ServerVersion);
+            yield return TM.MakeDbCall(currentThread, Program.ConnectionString, "spGetPaths");
+            foreach (DataRow row in TM.GetResult<DataTable>(currentThread).Rows) {
+                result.Paths.Add(new Path(row));
+            }
+            yield return TM.MakeDbCall(currentThread, Program.ConnectionString, "spGetNodes");
+            foreach (DataRow row in TM.GetResult<DataTable>(currentThread).Rows) {
+                result.Nodes.Add(new Node(row));
+            }
+            yield return TM.MakeDbCall(currentThread, Program.ConnectionString, "spGetPartitions");
+            foreach (DataRow row in TM.GetResult<DataTable>(currentThread).Rows) {
+                result.Partitions.Add(new Partition(row));
+            }
+            yield return TM.MakeDbCall(currentThread, Program.ConnectionString, "spGetPartitions");
+            foreach (DataRow row in TM.GetResult<DataTable>(currentThread).Rows) {
+                result.Partitions.Add(new Partition(row));
+            }
+            yield return TM.MakeDbCall(currentThread, Program.ConnectionString, "spGetDirectionMessages");
+            foreach (DataRow row in TM.GetResult<DataTable>(currentThread).Rows) {
+                result.Messages.Add(new DirectionMessage(row));
+            }
+            yield return TM.MakeDbCall(currentThread, Program.ConnectionString, "spGetDirections");
+            foreach (DataRow row in TM.GetResult<DataTable>(currentThread).Rows) {
+                var direction = new Direction(row);
+                yield return TM.MakeDbCall(currentThread, Program.ConnectionString, "spGetDirectionPaths", new SqlParameter("direction", direction.Id));
+                foreach (DataRow pathRow in TM.GetResult<DataTable>(currentThread).Rows) {
+                    direction.Paths.Add((int)pathRow["path"]);
+                }
+                result.Directions.Add(direction);
+            }
+
+            yield return TM.Return(currentThread, new JsonResponse(result));
         }
     }
 }
