@@ -19,6 +19,8 @@
 
 #import "PersonDetailViewController.h"
 
+#import "WebViewController.h"
+
 #define kCellReuseIdentifier @"PersonDetailCell"
 #define kScheduleCellReuseIdentifier @"ScheduleCell"
 #define kScheduleTitle @"Schedule"
@@ -114,9 +116,32 @@
     return nil;
 }
 
-- (void)tableView:(UITableView *)tableView
-didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    UIApplication *app = [UIApplication sharedApplication];
+    NSString *section = [self.sections objectAtIndex:indexPath.section];
+    
+    if ([section isEqualToString:kPhoneTitle]) {
+        NSString *phoneNumber = [self.displayValues objectForKey:section];
+        NSString *normalizedNumber = [[[[phoneNumber
+                                         stringByReplacingOccurrencesOfString:@" " withString:@""] 
+                                        stringByReplacingOccurrencesOfString:@"(" withString:@""] 
+                                       stringByReplacingOccurrencesOfString:@")" withString:@""] 
+                                      stringByReplacingOccurrencesOfString:@"-" withString:@""];
+        NSString *stringURL = [@"tel://+1" stringByAppendingString:normalizedNumber];
+        [app openURL:[NSURL URLWithString:stringURL]];
+    } else if ([section isEqualToString:kEmailTitle]) {
+        NSString *email = [self.displayValues objectForKey:section];
+        NSString *stringURL = [@"mailto://" stringByAppendingString:email];
+        [app openURL:[NSURL URLWithString:stringURL]];
+    } else if ([section isEqualToString:kWebPageTitle]) {
+        NSString *url = [self.displayValues objectForKey:section];
+        WebViewController *webViewController = [[WebViewController alloc] initWithNibName:@"WebView" bundle:nil];
+        webViewController.url = [NSURL URLWithString:url];
+        webViewController.title = self.title;
+        [self.navigationController pushViewController:webViewController animated:YES];
+    }
 }
 
 #pragma mark - UITableViewDataSource Methods
@@ -137,7 +162,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
         
-        cell.textLabel.text = @"Go to Schedule";
+        cell.textLabel.text = @"Schedule";
         
         return cell;
     }
