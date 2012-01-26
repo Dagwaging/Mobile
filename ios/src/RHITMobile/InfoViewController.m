@@ -156,6 +156,7 @@
         
         WebViewController *webViewController = [[WebViewController alloc] initWithNibName:@"WebView" bundle:nil];
         webViewController.url = [NSURL URLWithString:link.url];
+        webViewController.title = link.name;
         [self.navigationController pushViewController:webViewController animated:YES];
     }
 }
