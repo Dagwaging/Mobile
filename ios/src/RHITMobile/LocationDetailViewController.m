@@ -192,7 +192,7 @@ viewForFooterInSection:(NSInteger)section {
         UIButton *directionsButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
         directionsButton.frame = CGRectMake(165.0, 10.0, 145.0, 44.0);
         [directionsButton addTarget:self
-                         action:@selector(getDirectionsToCurrentLocation:)
+                         action:nil //@selector(getDirectionsToCurrentLocation:)
                forControlEvents:UIControlEventTouchUpInside];
         
         [directionsButton setTitle:@"Get Directions" forState:UIControlStateNormal];
