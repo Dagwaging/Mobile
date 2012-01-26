@@ -20,6 +20,8 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
+#define kRHServiceItemEntityName @"ServiceItem"
+
 @class RHServiceCategory;
 
 @interface RHServiceItem : NSManagedObject

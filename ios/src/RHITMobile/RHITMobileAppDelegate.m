@@ -27,6 +27,7 @@
 #import "InfoViewController.h"
 #import "RHLocation.h"
 #import "ToursViewController.h"
+#import "RHCampusServicesRequester.h"
 
 
 #pragma mark Private Category Declaration
@@ -204,7 +205,7 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
      application was inactive. If the application was previously in the 
      background, optionally refresh the user interface.
      */
-    [self setupDefaults];
+    //[self setupDefaults];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
@@ -381,6 +382,10 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     // Kick off a network update
     [self.mapViewController.remoteHandler checkForLocationUpdates];
+    
+    // Kick off campus services update
+    RHCampusServicesRequester *campusServicesRequester = [[RHCampusServicesRequester alloc] initWithPersistantStoreCoordinator:self.persistentStoreCoordinator];
+    [campusServicesRequester updateCampusServices];
 }
 
 @end
