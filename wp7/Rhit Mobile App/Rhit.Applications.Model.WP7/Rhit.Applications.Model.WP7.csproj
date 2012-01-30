@@ -150,6 +150,9 @@
     <Compile Include="..\Rhit.Applications.Model.SL\Services\Requests\AllRequestPart.cs">
       <Link>Services\Requests\AllRequestPart.cs</Link>
     </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Services\Requests\AuthenticateRequestPart.cs">
+      <Link>Services\Requests\AuthenticateRequestPart.cs</Link>
+    </Compile>
     <Compile Include="..\Rhit.Applications.Model.SL\Services\Requests\DataRequestPart.cs">
       <Link>Services\Requests\DataRequestPart.cs</Link>
     </Compile>
@@ -186,6 +189,9 @@
     <Compile Include="..\Rhit.Applications.Model.SL\Services\Requests\NoTopRequestPart.cs">
       <Link>Services\Requests\NoTopRequestPart.cs</Link>
     </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Services\Requests\PathDataRequestPart.cs">
+      <Link>Services\Requests\PathDataRequestPart.cs</Link>
+    </Compile>
     <Compile Include="..\Rhit.Applications.Model.SL\Services\Requests\RequestBuilder.cs">
       <Link>Services\Requests\RequestBuilder.cs</Link>
     </Compile>
@@ -198,6 +204,9 @@
     <Compile Include="..\Rhit.Applications.Model.SL\Services\Requests\StatusRequestPart.cs">
       <Link>Services\Requests\StatusRequestPart.cs</Link>
     </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Services\Requests\StoredProcedureRequestPart.cs">
+      <Link>Services\Requests\StoredProcedureRequestPart.cs</Link>
+    </Compile>
     <Compile Include="..\Rhit.Applications.Model.SL\Services\Requests\ToBathRequestPart.cs">
       <Link>Services\Requests\ToBathRequestPart.cs</Link>
     </Compile>
@@ -209,6 +218,9 @@
     </Compile>
     <Compile Include="..\Rhit.Applications.Model.SL\Services\Requests\ToPrinterRequestPart.cs">
       <Link>Services\Requests\ToPrinterRequestPart.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Services\Requests\UpdateVersionRequestPart.cs">
+      <Link>Services\Requests\UpdateVersionRequestPart.cs</Link>
     </Compile>
     <Compile Include="..\Rhit.Applications.Model.SL\Services\Requests\VersionRequestPart.cs">
       <Link>Services\Requests\VersionRequestPart.cs</Link>

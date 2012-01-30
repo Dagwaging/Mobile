@@ -9,10 +9,8 @@
     xmlns:maps="clr-namespace:Microsoft.Phone.Controls.Maps;assembly=Microsoft.Phone.Controls.Maps"
     xmlns:cmds="clr-namespace:Rhit.Applications.Mvvm.Commands;assembly=Rhit.Applications.Mvvm.WP7"
     xmlns:vm="clr-namespace:Rhit.Applications.ViewModel.Models;assembly=Rhit.Applications.Mobile.ViewModel.WP7"
-    xmlns:appbar="clr-namespace:ApplicationBarExtentions;assembly=ApplicationBarExtentions"
-    FontFamily="{StaticResource PhoneFontFamilyNormal}"
-    FontSize="{StaticResource PhoneFontSizeNormal}"
-    Foreground="{StaticResource PhoneForegroundBrush}"
+    xmlns:appbar="clr-namespace:Rhit.Applications.Extentions.BindableApplicationBar;assembly=Rhit.Applications.Extentions.WP7"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}" FontSize="{StaticResource PhoneFontSizeNormal}" Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="Portrait" Orientation="Portrait"
     mc:Ignorable="d" d:DesignHeight="768" d:DesignWidth="480"
     shell:SystemTray.IsVisible="True">
@@ -21,8 +19,7 @@
         <vm:MapViewModel x:Name="ViewModel"/>
         <SolidColorBrush x:Name="PolygonFillColorBrush" Color="DarkBlue" Opacity="0.5"/>
         <DataTemplate x:Name="PolygonItemTemplate">
-            <maps:MapPolygon Tag="{Binding Id}" Tap="MapPolygon_Tap" Locations="{Binding Corners}"
-                            Fill="{StaticResource PolygonFillColorBrush}" Stroke="White" StrokeThickness="1"/>
+            <maps:MapPolygon Tag="{Binding Id}" Tap="MapPolygon_Tap" Locations="{Binding Corners}" Fill="{StaticResource PolygonFillColorBrush}" Stroke="White" StrokeThickness="1"/>
         </DataTemplate>
     </phone:PhoneApplicationPage.Resources>
 
@@ -43,7 +40,7 @@
         <TextBlock Grid.Row="1"  DataContext="{StaticResource ViewModel}"
             Text="{Binding Settings.Status, FallbackValue='Debug Status'}" 
             Visibility="{Binding Settings.DebugMode, Converter={StaticResource VisibilityConverter}}"/>
-
+        
         <appbar:AppBar x:Name="AppBar" BarOpacity="0.5" Grid.RowSpan="3" VerticalAlignment="Bottom">
             <appbar:AppBar.Buttons>
                 <appbar:AppBarButton Text="me" IconUri="/Assets/Icons/position.png" Command="{Binding GotoUserCommand, Source={StaticResource ViewModel}}"/>

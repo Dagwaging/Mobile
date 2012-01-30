@@ -12,7 +12,7 @@
     <Application.Resources>
         <convert:BoolToVisibilityConverter x:Key="VisibilityConverter"/>
         <convert:ObjectToVisibilityConverter x:Key="ObjectConverter"/>
-        <convert:ListToVisibilityConverter x:Key="ListVisibilityConverter"/>
+        <!--<convert:ListToVisibilityConverter x:Key="ListVisibilityConverter"/>-->
 
         <ControlTemplate TargetType="maps:Pushpin" x:Key="myct">
             <StackPanel Background="{TemplateBinding Background}">

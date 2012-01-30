@@ -55,7 +55,7 @@ namespace Rhit.Applications.View.Views {
 
         private void MapPolygon_Tap(object sender, System.Windows.Input.GestureEventArgs e) {
             LastEventCoordinate = e.GetPosition(MyMap);
-            ViewModel.SelectLocation((int) (sender as MapPolygon).Tag);
+            //ViewModel.SelectLocation((int) (sender as MapPolygon).Tag);
         }
 
         private void Pushpin_Tap(object sender, System.Windows.Input.GestureEventArgs e) {
