@@ -23,8 +23,10 @@
 #import "RHServiceCategory.h"
 #import "RHServiceLink.h"
 #import "RHWebRequestMaker.h"
+#import "RHPListStore.h"
 
 #define kCampusServicesPath @"/services"
+#define kVersionKey @"Version"
 #define kCategoriesKey @"Categories"
 #define kChildrenKey @"Children"
 #define kLinksKey @"Links"
@@ -66,6 +68,17 @@
         [self performSelectorInBackground:@selector(updateCampusServices) withObject:nil];
         return;
     }
+    // Perform initial web request
+    NSDictionary *response = [RHWebRequestMaker JSONGetRequestWithPath:kCampusServicesPath
+                                                               URLargs:@""];
+    
+    // Check version before continuing
+    RHPListStore *pListStore = [[RHPListStore alloc] init];
+    NSString *responseVersion = [[response objectForKey:kVersionKey] description];
+    
+    if ([pListStore.currentServicesDataVersion isEqualToString:responseVersion]) {
+        return;
+    }
 
     // Load all old categories and links (to be deleted)
     NSManagedObjectContext *localContext = [[NSManagedObjectContext alloc] init];
@@ -95,8 +108,6 @@
     }
     
     // Retrieve new categories and links
-    NSDictionary *response = [RHWebRequestMaker JSONGetRequestWithPath:kCampusServicesPath
-                                                               URLargs:@""];
     NSArray *categories = [response objectForKey:kCategoriesKey];
     [self createManagedObjectsFromCategories:categories
                               parentCategory:nil
@@ -131,6 +142,9 @@
     [self.delegate performSelectorOnMainThread:@selector(didFinishUpdatingCampusServices)
                                     withObject:nil
                                  waitUntilDone:NO];
+    
+    // Update local version
+    pListStore.currentServicesDataVersion = responseVersion;
 }
 
 - (void)createManagedObjectsFromCategories:(NSArray *)categories
