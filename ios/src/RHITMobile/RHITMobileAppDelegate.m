@@ -49,6 +49,7 @@
 @synthesize mapNavigationViewController;
 @synthesize directoryNavigationViewController;
 @synthesize infoNavigationViewController;
+@synthesize infoViewController;
 @synthesize mapViewController;
 @synthesize managedObjectModel;
 @synthesize managedObjectContext;
@@ -98,14 +99,13 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     self.mapViewController.navigationItem.rightBarButtonItem = mapRightItem;
     
     // Create and initialize the root info view controller
-    InfoViewController *infoController = [InfoViewController alloc];
-    infoController = [infoController initWithNibName:@"InfoView"
-                                               bundle:nil];
+    self.infoViewController = [[InfoViewController alloc] initWithNibName:@"InfoView"
+                                                               bundle:nil];
     
-    [self.infoNavigationViewController pushViewController:infoController
+    [self.infoNavigationViewController pushViewController:self.infoViewController
                                                  animated:NO];
     
-    infoController.navigationItem.title = @"Campus Info";
+    self.infoViewController.navigationItem.title = @"Campus Info";
     
     // Create and initialize the root directory view controller
     DirectoryViewController *directoryController = [DirectoryViewController
@@ -384,7 +384,9 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [self.mapViewController.remoteHandler checkForLocationUpdates];
     
     // Kick off campus services update
-    RHCampusServicesRequester *campusServicesRequester = [[RHCampusServicesRequester alloc] initWithPersistantStoreCoordinator:self.persistentStoreCoordinator];
+    RHCampusServicesRequester *campusServicesRequester = [[RHCampusServicesRequester alloc] 
+                                                          initWithPersistantStoreCoordinator:self.persistentStoreCoordinator
+                                                          delegate:self.infoViewController];
     [campusServicesRequester updateCampusServices];
 }
 
