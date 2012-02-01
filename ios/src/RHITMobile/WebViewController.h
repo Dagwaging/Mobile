@@ -27,4 +27,6 @@
 
 @property (nonatomic, strong) NSURL *url;
 
+- (IBAction)openInSafari;
+
 @end

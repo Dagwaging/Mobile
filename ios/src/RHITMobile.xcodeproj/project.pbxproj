@@ -46,6 +46,7 @@
 		925465AA1495C69C00C12B81 /* RHWrappedCoordinate.m in Sources */ = {isa = PBXBuildFile; fileRef = 925465A91495C69C00C12B81 /* RHWrappedCoordinate.m */; };
 		925465AE1495EB7F00C12B81 /* ToursViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 925465AC1495EB7E00C12B81 /* ToursViewController.m */; };
 		925465AF1495EB7F00C12B81 /* ToursView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 925465AD1495EB7F00C12B81 /* ToursView.xib */; };
+		9258F02A14D0D5EE00B61545 /* RHCampusServicesRequester.m in Sources */ = {isa = PBXBuildFile; fileRef = 9258F02914D0D5EE00B61545 /* RHCampusServicesRequester.m */; };
 		926088A8144D2ADB0002D50E /* RHITMobileValues.plist in Resources */ = {isa = PBXBuildFile; fileRef = 926088A7144D2ADB0002D50E /* RHITMobileValues.plist */; };
 		9265FEA91409AB5D00AE406E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9265FEA81409AB5D00AE406E /* UIKit.framework */; };
 		9265FEAB1409AB5D00AE406E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9265FEAA1409AB5D00AE406E /* Foundation.framework */; };
@@ -158,6 +159,8 @@
 		925465AB1495EB7E00C12B81 /* ToursViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ToursViewController.h; sourceTree = "<group>"; };
 		925465AC1495EB7E00C12B81 /* ToursViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ToursViewController.m; sourceTree = "<group>"; };
 		925465AD1495EB7F00C12B81 /* ToursView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ToursView.xib; sourceTree = "<group>"; };
+		9258F02814D0D5EE00B61545 /* RHCampusServicesRequester.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHCampusServicesRequester.h; sourceTree = "<group>"; };
+		9258F02914D0D5EE00B61545 /* RHCampusServicesRequester.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHCampusServicesRequester.m; sourceTree = "<group>"; };
 		926088A7144D2ADB0002D50E /* RHITMobileValues.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = RHITMobileValues.plist; sourceTree = "<group>"; };
 		9265FEA41409AB5D00AE406E /* RHITMobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RHITMobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9265FEA81409AB5D00AE406E /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -180,6 +183,7 @@
 		926D397E143D2CE400223121 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		927866FE1432F35C00749C2E /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		927867011432F36500749C2E /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		927A0CA114D8E6F300FAD2B2 /* RHCampusServicesRequesterDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHCampusServicesRequesterDelegate.h; sourceTree = "<group>"; };
 		9281A34514C68C8D001D9837 /* CDataScanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDataScanner.h; sourceTree = "<group>"; };
 		9281A34614C68C8D001D9837 /* CDataScanner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDataScanner.m; sourceTree = "<group>"; };
 		9281A34814C68C8D001D9837 /* CFilteringJSONSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFilteringJSONSerializer.h; sourceTree = "<group>"; };
@@ -199,7 +203,6 @@
 		9281A35814C68C8D001D9837 /* CJSONSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJSONSerializer.h; sourceTree = "<group>"; };
 		9281A35914C68C8D001D9837 /* CJSONSerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJSONSerializer.m; sourceTree = "<group>"; };
 		9281A35A14C68C8D001D9837 /* JSONRepresentation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONRepresentation.h; sourceTree = "<group>"; };
-		928A643D144954EC00521EB1 /* RHValueStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHValueStore.h; sourceTree = "<group>"; };
 		928A643E144955EB00521EB1 /* RHPListStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHPListStore.h; sourceTree = "<group>"; };
 		928A643F144955EB00521EB1 /* RHPListStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHPListStore.m; sourceTree = "<group>"; };
 		928B76E7144CBADA00D2F98D /* tab-bar-map-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab-bar-map-icon@2x.png"; sourceTree = "<group>"; };
@@ -276,6 +279,9 @@
 				92F1B8BA1497BBE600F7FFD8 /* RHTourRequester.h */,
 				92F1B8BB1497BBE600F7FFD8 /* RHTourRequester.m */,
 				92F1B8BD1497BC0800F7FFD8 /* RHTourRequesterDelegate.h */,
+				9258F02814D0D5EE00B61545 /* RHCampusServicesRequester.h */,
+				9258F02914D0D5EE00B61545 /* RHCampusServicesRequester.m */,
+				927A0CA114D8E6F300FAD2B2 /* RHCampusServicesRequesterDelegate.h */,
 			);
 			name = Web;
 			sourceTree = "<group>";
@@ -453,7 +459,6 @@
 		928A643C144954A900521EB1 /* Storage */ = {
 			isa = PBXGroup;
 			children = (
-				928A643D144954EC00521EB1 /* RHValueStore.h */,
 				928A643E144955EB00521EB1 /* RHPListStore.h */,
 				928A643F144955EB00521EB1 /* RHPListStore.m */,
 			);
@@ -667,6 +672,7 @@
 				9281A36114C68C8D001D9837 /* CJSONDeserializer.m in Sources */,
 				9281A36214C68C8D001D9837 /* CJSONScanner.m in Sources */,
 				9281A36314C68C8D001D9837 /* CJSONSerializer.m in Sources */,
+				9258F02A14D0D5EE00B61545 /* RHCampusServicesRequester.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

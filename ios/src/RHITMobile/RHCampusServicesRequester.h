@@ -1,5 +1,5 @@
 //
-//  RHValueStore.h
+//  RHCampusServicesRequester.h
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -19,12 +19,20 @@
 
 #import <Foundation/Foundation.h>
 
-@protocol RHValueStore <NSObject>
+#import "RHCampusServicesRequesterDelegate.h"
 
-/// Server-provided string identifying this round of data's version code.
-@property (nonatomic, retain) NSString *currentDataVersion;
+@class RHServiceCategory;
 
-/// Initialize this object.
-- (id)init;
+
+@interface RHCampusServicesRequester : NSObject
+
+@property (nonatomic, strong) NSPersistentStoreCoordinator *persistantStoreCoordinator;
+
+@property (nonatomic, strong) NSObject<RHCampusServicesRequesterDelegate> *delegate;
+
+- (id)initWithPersistantStoreCoordinator:(NSPersistentStoreCoordinator *)persistantStoreCoordinator
+                                delegate:(NSObject<RHCampusServicesRequesterDelegate> *)delegate;
+
+- (void)updateCampusServices;
 
 @end

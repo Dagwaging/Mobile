@@ -41,7 +41,11 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Safari" style:UIBarButtonItemStylePlain target:self action:@selector(openInSafari)];
+    
     self.webView.scalesPageToFit = YES;
+    
     if (self.url != nil) {
         NSURLRequest *request = [NSURLRequest requestWithURL:self.url];
         [self.webView loadRequest:request];
@@ -57,6 +61,10 @@
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)io {
     // Return YES for supported orientations
     return (io == UIInterfaceOrientationPortrait);
+}
+
+- (void)openInSafari {
+    [[UIApplication sharedApplication] openURL:self.url];
 }
 
 @end

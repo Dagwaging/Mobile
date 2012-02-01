@@ -23,6 +23,7 @@
 
 @class MapViewController;
 @class SearchViewController;
+@class InfoViewController;
 
 // Conditionally care about beta classes.
 #ifdef RHITMobile_RHBeta
@@ -54,6 +55,8 @@
 /// first view controller pushed to this navigation controller upon
 /// initialization is an InfoViewController.
 @property (nonatomic, strong) IBOutlet UINavigationController *infoNavigationViewController;
+
+@property (nonatomic, strong) InfoViewController *infoViewController;
 
 @property (nonatomic, strong) IBOutlet UINavigationController *toursNavigationViewController;
 

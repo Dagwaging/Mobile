@@ -1,5 +1,5 @@
 //
-//  InfoViewController.h
+//  RHCampusServicesRequesterDelegate.h
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -17,21 +17,10 @@
 //  limitations under the License.
 //
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 
-#import "RHCampusServicesRequesterDelegate.h"
+@protocol RHCampusServicesRequesterDelegate <NSObject>
 
-@class RHServiceCategory;
-
-/// \ingroup views
-@interface InfoViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, RHCampusServicesRequesterDelegate>
-
-@property (nonatomic, strong) IBOutlet UITableView *tableView;
-
-@property (nonatomic, readonly) NSManagedObjectContext *managedObjectContext;
-
-@property (atomic, strong) NSArray *serviceItems;
-
-- (void)loadRootServiceCategories;
+- (void)didFinishUpdatingCampusServices;
 
 @end

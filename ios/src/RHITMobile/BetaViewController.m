@@ -407,7 +407,9 @@ didDismissWithButtonIndex:(NSInteger)buttonIndex {
 
 - (IBAction)clearAndReloadData:(id)sender {
     [RHITMobileAppDelegate.instance clearDatabase];
-    [[[RHPListStore alloc] init] setCurrentDataVersion:@"-1"];
+    RHPListStore *listStore = [[RHPListStore alloc] init];
+    listStore.currentMapDataVersion = @"-1";
+    listStore.currentServicesDataVersion = @"-1";
     [RHITMobileAppDelegate.instance.mapViewController.remoteHandler checkForLocationUpdates];
 }
 
@@ -535,10 +537,6 @@ didDismissWithButtonIndex:(NSInteger)buttonIndex {
     
     NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
     
-    NSString* body = [[NSString alloc] initWithData:data
-                                           encoding:NSUTF8StringEncoding];
-    NSLog(@"%@", body);
-    
     NSDictionary *response = [NSDictionary dictionaryWithJSONData:data error:nil];
     
     self.authToken = [response valueForKey:@"authToken"];
@@ -550,7 +548,6 @@ didDismissWithButtonIndex:(NSInteger)buttonIndex {
 }
 
 - (void)performNotificationOfUpdate {
-    NSLog(@"Attempting to notify of update");
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
     NSString *token = [defaults stringForKey:kBetaAuthTokenDefault];
@@ -558,8 +555,6 @@ didDismissWithButtonIndex:(NSInteger)buttonIndex {
     
     NSString *parameters = [NSString stringWithFormat:@"authToken=%@&build=%d",
                           token, kRHBetaBuildNumber];
-    
-    NSLog(@"Using parameters: %@", parameters);
     
     NSURL *url = [NSURL URLWithString:[kBetaServer stringByAppendingString:kBetaNotifyPath]];
     
@@ -572,14 +567,9 @@ didDismissWithButtonIndex:(NSInteger)buttonIndex {
                                          returningResponse:nil
                                                      error:nil];
     
-    NSString* body = [[NSString alloc] initWithData:data
-                                            encoding:NSUTF8StringEncoding];
-    NSLog(@"%@", body);
-    
     NSDictionary *response = [NSDictionary dictionaryWithJSONData:data error:nil];
     
     if ([[response objectForKey:@"success"] boolValue]) {
-        NSLog(@"Updating build number");
         [defaults setInteger:self.knownCurrentBuild forKey:kBetaCurrentBuildDefault];
     }
 }

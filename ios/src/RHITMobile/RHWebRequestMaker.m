@@ -35,8 +35,6 @@
                                           host:kURLHost
                                           path:[path stringByAppendingString:args]];
     
-    NSLog(@"Making web request: %@", url.description);
-    
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     
     NSURLResponse *response = nil;
