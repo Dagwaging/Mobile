@@ -134,7 +134,6 @@
         WebViewController *webViewController = [[WebViewController alloc]
                                                 initWithNibName:@"WebView"
                                                 bundle:nil];
-        NSLog(@"URL: [%@]", link.url);
         webViewController.url = [NSURL URLWithString:link.url];
         webViewController.title = link.name;
         
