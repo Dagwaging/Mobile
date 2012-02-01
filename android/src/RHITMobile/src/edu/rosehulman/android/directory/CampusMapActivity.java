@@ -1,18 +1,16 @@
 package edu.rosehulman.android.directory;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -23,7 +21,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.Window;
+import android.widget.Button;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
@@ -32,20 +35,28 @@ import com.google.android.maps.MapView;
 import com.google.android.maps.MyLocationOverlay;
 import com.google.android.maps.Overlay;
 
+import edu.rosehulman.android.directory.IDataUpdateService.AsyncRequest;
+import edu.rosehulman.android.directory.ServiceManager.ServiceRunnable;
 import edu.rosehulman.android.directory.db.DbIterator;
 import edu.rosehulman.android.directory.db.LocationAdapter;
 import edu.rosehulman.android.directory.db.VersionsAdapter;
 import edu.rosehulman.android.directory.maps.BuildingOverlayLayer;
 import edu.rosehulman.android.directory.maps.BuildingOverlayLayer.OnBuildingSelectedListener;
+import edu.rosehulman.android.directory.maps.DirectionsLayer;
+import edu.rosehulman.android.directory.maps.DirectionsLayer.UIListener;
 import edu.rosehulman.android.directory.maps.LocationSearchLayer;
 import edu.rosehulman.android.directory.maps.OverlayManager;
 import edu.rosehulman.android.directory.maps.POILayer;
 import edu.rosehulman.android.directory.maps.TextOverlayLayer;
+import edu.rosehulman.android.directory.maps.ViewController;
+import edu.rosehulman.android.directory.model.Directions;
+import edu.rosehulman.android.directory.model.DirectionsResponse;
 import edu.rosehulman.android.directory.model.Location;
-import edu.rosehulman.android.directory.model.LocationCollection;
 import edu.rosehulman.android.directory.model.LocationNamesCollection;
 import edu.rosehulman.android.directory.model.VersionType;
 import edu.rosehulman.android.directory.service.MobileDirectoryService;
+import edu.rosehulman.android.directory.util.BoundingBox;
+import edu.rosehulman.android.directory.util.Point;
 
 /**
  * Main entry point into MobileDirectory
@@ -53,8 +64,15 @@ import edu.rosehulman.android.directory.service.MobileDirectoryService;
 public class CampusMapActivity extends MapActivity {
 	
     private static final String SELECTED_ID = "SelectedId";
+    
+    public static final String ACTION_DIRECTIONS = "edu.rosehulman.android.directory.intent.action.DIRECTIONS";
 
 	public static final String EXTRA_BUILDING_ID = "BUILDING_ID";
+	public static final String EXTRA_WAYPOINTS = "WAYPOINTS";
+	public static final String EXTRA_DIRECTIONS_FOCUS_INDEX = "DIRECTIONS_FOCUS_INDEX";
+	
+	private static final int MIN_ZOOM_LEVEL = 16;
+	private static final int MAX_ZOOM_LEVEL = 22;
 
 	public static Intent createIntent(Context context) {
 		return new Intent(context, CampusMapActivity.class);
@@ -72,7 +90,21 @@ public class CampusMapActivity extends MapActivity {
 		intent.putExtra(SearchManager.QUERY, query);
 		return intent;
 	}
+	
+	public static Intent createDirectionsIntent(Context context, long... ids) {
+		Intent intent = createIntent(context);
+		intent.setAction(ACTION_DIRECTIONS);
+		intent.putExtra(EXTRA_WAYPOINTS, ids);
+		return intent;
+	}
+	
+	public static Intent createResultIntent(int directionsFocusIndex) {
+		Intent intent = new Intent();
+		intent.putExtra(EXTRA_DIRECTIONS_FOCUS_INDEX, directionsFocusIndex);
+		return intent;
+	}
 
+	private Intent intent;
     private MapView mapView;
     
     private String searchQuery;
@@ -81,6 +113,7 @@ public class CampusMapActivity extends MapActivity {
     private LocationListener locationListener;
 
     private OverlayManager overlayManager;
+    private DirectionsLayer directionsLayer;
     private LocationSearchLayer searchOverlay;
     private POILayer poiLayer;
     private BuildingOverlayLayer buildingLayer;
@@ -88,37 +121,65 @@ public class CampusMapActivity extends MapActivity {
     private EventOverlay eventLayer;
     private MyLocationOverlay myLocation;
     
+    private Button btnZoomIn;
+    private Button btnZoomOut;
+    private Button btnPrev;
+    private Button btnNext;
+    private Button btnListDirections;
+    
     private TaskManager taskManager;
-    private LoadInnerLocations taskLoadInnerLocations;
+    
+    private ServiceManager<IDataUpdateService> updateService;
     
     private Bundle savedInstanceState;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-		requestWindowFeature(Window.FEATURE_PROGRESS);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.campus_map);
+        
+        intent = getIntent();
         
         taskManager = new TaskManager();
         
         mapView = (MapView)findViewById(R.id.mapview);
+        btnZoomIn = (Button)findViewById(R.id.btnZoomIn);
+        btnZoomOut = (Button)findViewById(R.id.btnZoomOut);
+        btnPrev = (Button)findViewById(R.id.btnPrev);
+        btnNext = (Button)findViewById(R.id.btnNext);
+        btnListDirections = (Button)findViewById(R.id.btnListDirections);
         
         overlayManager = new OverlayManager();
         myLocation = new MyLocationOverlay(this, mapView);
         eventLayer = new EventOverlay();
+
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+			searchQuery = intent.getStringExtra(SearchManager.QUERY);
+			SearchLocations task = new SearchLocations();
+			taskManager.addTask(task);
+			task.execute(searchQuery);
+			setTitle("Search: " + searchQuery);
+		
+    	}
         
         if (savedInstanceState == null) {
         	
-        	Intent intent = getIntent();
-        	
-        	if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-    			searchQuery = intent.getStringExtra(SearchManager.QUERY);
-    			SearchLocations task = new SearchLocations();
+        	 if (ACTION_DIRECTIONS.equals(intent.getAction())) {
+        		if (!intent.hasExtra(EXTRA_WAYPOINTS) || intent.getLongArrayExtra(EXTRA_WAYPOINTS) == null) {
+            		//TODO remove
+        			intent.putExtra(EXTRA_WAYPOINTS, new long[] {1300000, 1111570});
+        		}
+        		
+        		long[] ids = intent.getLongArrayExtra(EXTRA_WAYPOINTS);
+
+    			LoadDirections task = new LoadDirections(ids);
     			taskManager.addTask(task);
-    			task.execute(searchQuery);
-    			setTitle("Search: " + searchQuery);
+    			task.execute();
     			
+    			btnListDirections.setVisibility(View.VISIBLE);
+    			btnPrev.setVisibility(View.VISIBLE);
+    			btnNext.setVisibility(View.VISIBLE);
     		}
 
 	        mapView.setSatellite(true);
@@ -127,35 +188,117 @@ public class CampusMapActivity extends MapActivity {
 	        MapController controller = mapView.getController();
 	        GeoPoint center = new GeoPoint(39483760, -87325929);
 	        controller.setCenter(center);
-	        controller.zoomToSpan(6241, 13894);
+	        controller.zoomToSpan(5000, 10000);
 	        
 	    } else {
 	    	this.savedInstanceState = savedInstanceState;
 	    	
 	    	//restore state
+			if (ACTION_DIRECTIONS.equals(intent.getAction())) {
+				Directions directions = savedInstanceState.getParcelable("Directions");
+				Location[] locations = (Location[])savedInstanceState.getParcelableArray("Locations");
+				
+				generateDirectionsLayer(directions, locations);
+				
+				btnListDirections.setVisibility(View.VISIBLE);
+				btnPrev.setVisibility(View.VISIBLE);
+				btnNext.setVisibility(View.VISIBLE);
+			}
 	    }
 
         mapView.setBuiltInZoomControls(true);
         
+		btnZoomIn.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				btnZoomIn_clicked();
+			}
+		});
+		btnZoomOut.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				btnZoomOut_clicked();
+			}
+		});
+		btnPrev.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				btnPrev_clicked();
+			}
+		});
+		btnNext.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				btnNext_clicked();
+			}
+		});
+		btnListDirections.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				btnListDirections_clicked();
+			}
+		});
+		
+    	mapView.setBuiltInZoomControls(false);
+    	
         rebuildOverlays();
+        
+        mapView.setOnTouchListener(new OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				if (event.getAction() == MotionEvent.ACTION_UP) {
+					updateZoomControls();
+				}
+				return false;
+			}
+		});
+        
+		updateService = new ServiceManager<IDataUpdateService>(getApplicationContext(),
+				DataUpdateService.createIntent(getApplicationContext()));
     }
     
     @Override
     protected void onStart() {
     	super.onStart();
     	
-		LoadLocations loadLocations = new LoadLocations();
-        taskManager.addTask(loadLocations);
-        loadLocations.execute();
+    	updateService.run(new ServiceRunnable<IDataUpdateService>() {
+
+			@Override
+			public void run(IDataUpdateService service) {
+				final ProgressDialog dialog = new ProgressDialog(CampusMapActivity.this);
+				service.requestTopLocations(new AsyncRequest() {
+					
+					@Override
+					public void onQueued(Runnable cancelCallback) {
+						dialog.setTitle("");
+						dialog.setMessage("Loading...");
+						dialog.setIndeterminate(true);
+						dialog.show();
+					}
+					
+					@Override
+					public void onCompleted() {
+						LoadOverlays task = new LoadOverlays(dialog);
+						taskManager.addTask(task);
+						task.execute();
+					}
+				});
+			}
+		});
     }
     
     @Override
     protected void onSaveInstanceState(Bundle bundle) {
     	super.onSaveInstanceState(bundle);
-    	//TODO save our state
+    	
     	if (buildingLayer != null) {
     		bundle.putLong(SELECTED_ID, getFocusedLocation());
     	}
+    	
+    	if (directionsLayer != null) {
+    		bundle.putParcelable("Directions", directionsLayer.directions);
+    		bundle.putParcelableArray("Locations", directionsLayer.locations);
+		}
     }
     
     @Override
@@ -225,17 +368,87 @@ public class CampusMapActivity extends MapActivity {
         return true;
     }
     
+    @Override
+    public boolean onSearchRequested() {
+    	if (updateService.get().isUpdating())
+    		return false;
+    	
+    	return super.onSearchRequested();
+    }
+    
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    	if (requestCode != DirectionsLayer.REQUEST_DIRECTIONS_LIST)
+    		return;
+    	
+    	switch (resultCode) {
+    		case Activity.RESULT_OK:
+    			//focus the requested step
+    			int step = data.getIntExtra(EXTRA_DIRECTIONS_FOCUS_INDEX, -1);
+    			directionsLayer.focus(step, false);
+    			break;	
+    	}
+    }
+    
+    private void updateZoomControls() {
+    	int zoomLevel = mapView.getZoomLevel();
+    	
+    	if (zoomLevel == MIN_ZOOM_LEVEL) {
+    		btnZoomOut.setEnabled(false);
+    	} else if (zoomLevel == MAX_ZOOM_LEVEL) {
+    		btnZoomIn.setEnabled(false);
+    	} else {
+    		btnZoomIn.setEnabled(true);
+    		btnZoomOut.setEnabled(true);
+    	}
+    }
+    
+    private void btnZoomIn_clicked() {
+    	mapView.getController().zoomIn();
+    	updateZoomControls();
+    }
+
+    private void btnZoomOut_clicked() {
+    	mapView.getController().zoomOut();
+    	updateZoomControls();
+    }
+
+    private void btnPrev_clicked() {
+    	if (directionsLayer == null)
+    		return;
+    	
+    	directionsLayer.stepPrevious();
+    }
+
+    private void btnNext_clicked() {
+    	if (directionsLayer == null)
+    		return;
+    	
+    	directionsLayer.stepNext();
+    }
+
+    private void btnListDirections_clicked() {
+    	if (directionsLayer == null)
+    		return;
+    	
+    	directionsLayer.showDirectionsList(-1);
+    }
+
+    
     private void showTopLocations() {
     	TopLocations task = new TopLocations();
     	taskManager.addTask(task);
     	task.execute();
     }
     
-    private void focusLocation(long id, boolean animate) {
+    private void focusLocation(final long id, boolean animate) {
     	if (buildingLayer.focus(id, animate)) {
-    		if (taskLoadInnerLocations != null) {
-    			taskLoadInnerLocations.requestLocation(id);
-    		}
+    		updateService.run(new ServiceRunnable<IDataUpdateService>() {
+				@Override
+				public void run(IDataUpdateService service) {
+					service.requestInnerLocation(id, null);
+				}
+			});
     	} else {
     		poiLayer.focus(id, animate);
     	}
@@ -244,7 +457,7 @@ public class CampusMapActivity extends MapActivity {
     private long getFocusedLocation() {
     	long id = buildingLayer.getSelectedBuilding();
     	
-    	if (id >= 0)
+    	if (id >= 0 || poiLayer == null)
     		return id;
     	
     	return poiLayer.getFocusId();
@@ -270,8 +483,12 @@ public class CampusMapActivity extends MapActivity {
 
 	@Override
 	protected boolean isRouteDisplayed() {
-		//FIXME update when we start displaying route information
-		return false;
+		return ACTION_DIRECTIONS.equals(getIntent().getAction());
+	}
+	
+	@Override
+	protected boolean isLocationDisplayed() {
+		return true;
 	}
 	
     private void rebuildOverlays() {
@@ -300,6 +517,11 @@ public class CampusMapActivity extends MapActivity {
     		overlayManager.addOverlay(searchOverlay);
     	}
     	
+    	if (directionsLayer != null) {
+    		overlays.add(directionsLayer);
+    		overlayManager.addOverlay(directionsLayer);
+    	}
+    	
     	//Remove any old overlays
     	overlayManager.prune(overlays);
     	
@@ -310,40 +532,63 @@ public class CampusMapActivity extends MapActivity {
 
 		@Override
 		public void onSelect(Location location) {
-			long id = location.id;
-			if (taskLoadInnerLocations != null) {
-    			//request this location to be loaded ASAP
-    			taskLoadInnerLocations.requestLocation(id);
-    		}	
+			final long id = location.id;
+			
+			//request this location to be loaded ASAP
+    		updateService.run(new ServiceRunnable<IDataUpdateService>() {
+				@Override
+				public void run(IDataUpdateService service) {
+					service.requestInnerLocation(id, null);
+				}
+			});
 		}
 		
 		@Override
 		public void onTap(final Location location) {
 			
-			Runnable listener = new Runnable() {
-
+			updateService.run(new ServiceRunnable<IDataUpdateService>() {
 				@Override
-				public void run() {
-					//populate the location
-					PopulateLocation task = new PopulateLocation(new Runnable() {
+				public void run(IDataUpdateService service) {
+					final ProgressDialog dialog = new ProgressDialog(CampusMapActivity.this);
+					
+					service.requestInnerLocation(location.id, new AsyncRequest() {
 						
 						@Override
-						public void run() {
-							//run the activity
-							Context context = mapView.getContext();
-							context.startActivity(LocationActivity.createIntent(context, location));
+						public void onQueued(final Runnable cancelCallback) {
+							dialog.setTitle("");
+							dialog.setMessage("Loading...");
+							dialog.setIndeterminate(true);
+							dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+								@Override
+								public void onCancel(DialogInterface dialog) {
+									cancelCallback.run();
+								}
+							});
+							dialog.show();
+						}
+						
+						@Override
+						public void onCompleted() {
+							if (dialog.isShowing()) {
+								dialog.cancel();
+							}
+							
+							//populate the location
+							PopulateLocation task = new PopulateLocation(new Runnable() {
+								
+								@Override
+								public void run() {
+									//run the activity
+									Context context = mapView.getContext();
+									context.startActivity(LocationActivity.createIntent(context, location));
+								}
+							});
+							taskManager.addTask(task);
+							task.execute(location);
 						}
 					});
-					taskManager.addTask(task);
-					task.execute(location);
 				}
-				
-			};
-			
-			if (taskLoadInnerLocations == null || !taskLoadInnerLocations.setLocationListener(location.id, listener)) {
-				//if the load inner task is not running or it does not have our id, run the load event now
-				listener.run();
-			}
+			});
 		}
     };
     
@@ -353,10 +598,132 @@ public class CampusMapActivity extends MapActivity {
     	public boolean onTap(GeoPoint p, MapView mapView) {
     		//tap not handled by any other overlay
     		overlayManager.clearSelection();
-    		
     		return true;
     	}
+    	
+    	@Override
+    	public void draw(Canvas canvas, MapView mapView, boolean shadow) {
+    		if (mapView.getZoomLevel() < MIN_ZOOM_LEVEL) {
+    			mapView.getController().zoomIn();
+    		}
+    		super.draw(canvas, mapView, shadow);
+    	}
     }
+
+    private void generateBuildingsLayer() {
+    	BuildingOverlayLayer buildings = new BuildingOverlayLayer(mapView, buildingSelectedListener);
+    	buildingLayer = buildings;
+    }
+    
+    private void generatePOILayer() {
+    	Drawable marker = getResources().getDrawable(R.drawable.map_marker);
+    	POILayer poi = new POILayer(marker, mapView, taskManager);
+
+    	LocationAdapter buildingAdapter = new LocationAdapter();
+    	buildingAdapter.open();
+    	
+    	DbIterator<Location> iterator = buildingAdapter.getPOIIterator();
+    	while (iterator.hasNext()) {
+    		Location location = iterator.getNext();
+    		poi.add(location);
+    	}
+    	
+    	buildingAdapter.close();
+    	
+    	poiLayer = poi;
+    }
+
+	private void generateTextLayer() {
+        textLayer = new TextOverlayLayer();
+	}
+	
+	private void generateDirectionsLayer(Directions directions, Location[] locations) {
+
+		directionsLayer = new DirectionsLayer(mapView, taskManager, directions, locations, new UIListener() {
+			@Override
+			public void setPrevButtonEnabled(boolean enabled) {
+				btnPrev.setEnabled(enabled);
+			}
+			@Override
+			public void setNextButtonEnabled(boolean enabled) {
+				btnNext.setEnabled(enabled);
+			}
+			@Override
+			public void startActivityForResult(Intent intent, int requestCode) {
+				CampusMapActivity.this.startActivityForResult(intent, requestCode);
+			}
+		});
+		
+		BoundingBox bounds = directionsLayer.bounds;
+		Point center = bounds.getCenter();
+		GeoPoint pt = new GeoPoint(center.y, center.x);
+		new ViewController(mapView).animateTo(pt, bounds.getHeight(), bounds.getWidth(), false);
+	}
+	
+	private class LoadOverlays extends AsyncTask<Void, Void, Void> {
+		
+		private ProgressDialog dialog;
+		
+		public LoadOverlays(ProgressDialog dialog) {
+			this.dialog = dialog;
+		}
+
+		@Override
+		protected Void doInBackground(Void... params) {
+			
+			BuildingOverlayLayer.initializeCache();
+	    	
+			TextOverlayLayer.initializeCache();
+
+			//don't generate POI if we are searching or showing directions
+			if (ACTION_DIRECTIONS.equals(intent.getAction()) ||
+					Intent.ACTION_SEARCH.equals(intent.getAction())) {
+				return null;
+			}
+			
+			generatePOILayer();
+			
+	    	return null;
+		}
+		
+		@Override
+		protected void onCancelled() {
+			if (dialog.isShowing()) {
+				dialog.cancel();
+			}
+		}
+		
+		@Override
+		protected void onPostExecute(Void res) {
+			if (dialog.isShowing()) {
+				dialog.cancel();
+			}
+
+			generateTextLayer();
+			
+			//don't generate buildings if we are searching
+			if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+				return;
+			}
+			
+			generateBuildingsLayer();
+			rebuildOverlays();
+
+			//don't focus anything if we are showing directions
+			if (ACTION_DIRECTIONS.equals(intent.getAction())) {
+				return;
+			}
+			
+			//set a selected location
+	    	if (savedInstanceState != null) {
+	    		focusLocation(savedInstanceState.getLong(SELECTED_ID), false);
+	    	} else if (intent.hasExtra(EXTRA_BUILDING_ID)) {
+	    		long id = intent.getLongExtra(EXTRA_BUILDING_ID, -1);
+	    		focusLocation(id, false);
+	    	}
+		}
+		
+	}
     
     private class TopLocations extends AsyncTask<Void, Void, Void> {
     	private int[] ids;
@@ -388,7 +755,7 @@ public class CampusMapActivity extends MapActivity {
 		protected void onPostExecute(Void res) {
 	    	AlertDialog dialog = new AlertDialog.Builder(CampusMapActivity.this)
 	    		.setTitle("Top Locations")
-	    		.setItems(names, new OnClickListener() {
+	    		.setItems(names, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						focusLocation(ids[which], true);
@@ -400,348 +767,9 @@ public class CampusMapActivity extends MapActivity {
     	
     }
     
-    private static boolean topLocationsRefreshed = false;
-    private static boolean innerLocationsRefreshed = false;
-	private class LoadLocations extends AsyncTask<Void, Void, Void> {
-		
-	    private POILayer poiLayer;
-	    private BuildingOverlayLayer buildingLayer;
-	    private TextOverlayLayer textLayer;
-	    
-	    private String newVersion;
-
-		public LoadLocations() {
-		}
-		
-	    private void generateBuildings() {
-	    	BuildingOverlayLayer.initializeCache();
-	    	
-	    	BuildingOverlayLayer buildings = new BuildingOverlayLayer(mapView, buildingSelectedListener);
-	    	this.buildingLayer = buildings;
-	    }
-	    
-	    private void generatePOI() {
-	    	Drawable marker = getResources().getDrawable(R.drawable.map_marker);
-	    	POILayer poi = new POILayer(marker, mapView, taskManager);
-
-	    	LocationAdapter buildingAdapter = new LocationAdapter();
-	    	buildingAdapter.open();
-	    	
-	    	DbIterator<Location> iterator = buildingAdapter.getPOIIterator();
-	    	while (iterator.hasNext()) {
-	    		Location location = iterator.getNext();
-	    		poi.add(location);
-	    	}
-	    	
-	    	buildingAdapter.close();
-	    	
-	    	this.poiLayer = poi;
-	    }
-
-		private void generateText() {
-			TextOverlayLayer.initializeCache();
-			
-	        textLayer = new TextOverlayLayer();
-		}
-		
-		private void buildLayers() {
-			generateText();
-			publishProgress();
-			
-			//don't generate buildings or POI if we are searching
-			if (searchQuery != null) {
-				return;
-			}
-			
-			generateBuildings();
-			publishProgress();
-			generatePOI();	
-		}
-		
-		@Override
-		protected Void doInBackground(Void... args) {
-			if (isCancelled()) {
-				return null;
-			}
-			
-			if (topLocationsRefreshed) {
-				//skip update
-				buildLayers();
-				return null;
-			}
-
-			//check for updated map areas
-			VersionsAdapter versionsAdapter = new VersionsAdapter();
-			versionsAdapter.open();
-	        
-			MobileDirectoryService service = new MobileDirectoryService();
-	    	String version = versionsAdapter.getVersion(VersionType.MAP_AREAS);
-	    	versionsAdapter.close();
-			
-	        LocationCollection collection = null;
-	        try {
-	        	collection = service.getTopLocationData(version);
-			} catch (Exception e) {
-				Log.e(C.TAG, "Failed to download new map areas", e);
-				//just use our old data, it is likely up to date
-				buildLayers();
-				return null;
-			}
-			if (isCancelled()) {
-				return null;
-			}
-			
-			if (collection == null) {
-				//data was up to date
-				buildLayers();
-				return null;
-			}
-			
-			//remember our top level ids
-			newVersion = collection.version;
-
-			//replace the building data with the new data
-	        LocationAdapter buildingAdapter = new LocationAdapter();
-	        buildingAdapter.open();
-	        buildingAdapter.replaceLocations(collection.mapAreas);
-	        buildingAdapter.close();
-	        
-	        versionsAdapter.open();
-	        versionsAdapter.setVersion(VersionType.MAP_AREAS, collection.version);
-	        versionsAdapter.close();
-	        if (isCancelled()) {
-				return null;
-			}
-	        
-	        buildLayers();
-	        return null;
-		}
-		
-		@Override
-		protected void onPreExecute() {
-			CampusMapActivity.this.setProgressBarIndeterminateVisibility(true);
-			CampusMapActivity.this.setProgressBarVisibility(true);
-		}
-		
-		private void updateOverlays() {
-			CampusMapActivity.this.poiLayer = poiLayer;
-			CampusMapActivity.this.buildingLayer = buildingLayer;
-			CampusMapActivity.this.textLayer = textLayer;
-			rebuildOverlays();
-		}
-		
-		@Override
-		protected void onProgressUpdate(Void... values) {
-	    	updateOverlays();
-		}
-		
-		@Override
-		protected void onPostExecute(Void res) {
-			//add the overlay to the map;
-			updateOverlays();
-			
-			topLocationsRefreshed = true;
-			
-			Intent intent = getIntent();
-			
-	    	if (savedInstanceState != null) {
-	    		focusLocation(savedInstanceState.getLong(SELECTED_ID), false);
-	    	} else if (intent.hasExtra(EXTRA_BUILDING_ID)) {
-	    		long id = intent.getLongExtra(EXTRA_BUILDING_ID, -1);
-	    		focusLocation(id, false);
-	    	}
-
-			setProgressBarIndeterminateVisibility(false);
-			if (!innerLocationsRefreshed) {
-	    		taskLoadInnerLocations = new LoadInnerLocations(newVersion);
-	    		taskManager.addTask(taskLoadInnerLocations);
-	    		taskLoadInnerLocations.execute();
-	    	} else {
-	    		setProgressBarVisibility(false);
-	    	}
-		}
-		
-		@Override
-		protected void onCancelled() {
-    		setProgressBarIndeterminateVisibility(false);
-    		setProgressBarVisibility(false);
-		}
-		
-	}
-	
-	private class LoadInnerLocations extends AsyncTask<Void, Integer, Void> {
-		
-		private Set<Long> topIds;
-		
-		private int totalItems;
-		private List<Long> ids;
-		private String newVersion;
-		
-		private long currentId = -1;
-		private long waitId;
-		private Runnable listener;
-		
-		public LoadInnerLocations(String version) {
-			newVersion = version;
-	        ids = new ArrayList<Long>();
-	        
-			if (taskLoadInnerLocations != null)
-				throw new RuntimeException("Running two LoadInnerLocations");
-		}
-		
-		public void requestLocation(long id) {
-			synchronized (ids) {
-				if (ids.remove(id)) {
-					ids.add(id);
-				}
-			}
-		}
-		
-		public boolean setLocationListener(long id, Runnable listener) {
-			synchronized (ids) {
-				if (id == currentId || ids.contains(id)) {
-					this.waitId = id;
-					this.listener = listener;
-					return true;
-				} else {
-					return false;
-				}
-			}
-		}
-		
-		private long getNextId() {
-			synchronized(ids) {
-				if (ids.isEmpty())
-					currentId = -1;
-				else
-					currentId = ids.remove(ids.size() - 1);
-				return currentId;
-			}
-		}
-		
-		@Override
-		protected void onPreExecute() {
-			setProgress(0);
-		}
-
-		@Override
-		protected Void doInBackground(Void... params) {
-	        
-			MobileDirectoryService service = new MobileDirectoryService();
-	        LocationAdapter buildingAdapter = new LocationAdapter();
-	        buildingAdapter.open();
-	        
-	        //Get the ids to load
-			topIds = new HashSet<Long>();
-	        long[] ids = buildingAdapter.getUnloadedTopLocations();
-	        for (long id : ids) {
-	        	this.ids.add(id);
-	        }
-	        ids = buildingAdapter.getAllTopLocations();
-	        for (long id : ids) {
-	        	this.topIds.add(id);
-	        }
-			totalItems = ids.length;
-			publishProgress(0);
-			
-			if (this.ids.size() == 0) {
-				return null;
-			}
-	        
-	        int processed = 0;
-			
-	        try {
-				for (long id = getNextId(); id >= 0; id = getNextId()) {
-					if (isCancelled()) {
-						return null;
-					}
-					
-					LocationCollection collection = null;
-			        try {
-			        	collection = service.getLocationData(id, null);
-					} catch (Exception e) {
-						Log.e(C.TAG, "Failed to download locations within a parent", e);
-						synchronized(this.ids) {
-							this.ids.add(0, id);
-							totalItems++;
-						}
-						continue;
-					}
-					if (isCancelled()) {
-						return null;
-					}
-
-			        buildingAdapter.startTransaction();
-			        for (Location location : collection.mapAreas) {
-			        	if (topIds.contains(location.id))
-			        		continue;
-			        	
-			        	buildingAdapter.addLocation(location);
-			        }
-			        newVersion = collection.version;
-			        buildingAdapter.setChildrenLoaded(id, true);
-			        
-					buildingAdapter.commitTransaction();
-		        	buildingAdapter.finishTransaction();
-		        	
-		        	synchronized (ids) {
-		        		currentId = -1;
-		        	}
-		        	
-		        	synchronized (ids) {
-			        	if (id == waitId) {
-			        		if (listener != null) {
-			        			runOnUiThread(listener);
-			        		}
-				        	waitId = -1;
-			        	}
-		        	}
-			        
-			        processed++;
-			        publishProgress(processed);
-		        }
-				
-	        } finally {
-		        buildingAdapter.close();
-	        }
-			
-			//mark our data set as up to date
-			VersionsAdapter versionsAdapter = new VersionsAdapter();
-	        versionsAdapter.open();
-	        versionsAdapter.setVersion(VersionType.MAP_AREAS, newVersion);
-	        versionsAdapter.close();
-			
-			return null;
-		}
-		
-		@Override
-		protected void onProgressUpdate(Integer... values) {
-			if (totalItems == 0) {
-				setProgress(0);
-			} else {
-				int progress = values[0] * 10000 / totalItems;
-				setProgress(progress);
-			}
-		}
-		
-		@Override
-		protected void onPostExecute(Void res) {
-			setProgressBarVisibility(false);
-			innerLocationsRefreshed = true;
-			taskLoadInnerLocations = null;
-		}
-		
-		@Override
-		protected void onCancelled() {
-			setProgressBarVisibility(false);
-			taskLoadInnerLocations = null;
-		}
-		
-	}
-	
 	private class SearchLocations extends AsyncTask<String, Void, LocationSearchLayer> {
 		
-		ProgressDialog dialog;
+		private ProgressDialog dialog;
 
 		@Override
 		protected void onPreExecute() {
@@ -807,4 +835,110 @@ public class CampusMapActivity extends MapActivity {
 		}
 		
 	}
+
+	private class LoadDirections extends AsyncTask<Void, Integer, Directions> {
+		
+		private long[] ids;
+		private ProgressDialog dialog;
+		
+		private Location[] nodes;
+		
+		public LoadDirections(long[] ids) {
+			this.ids = ids;
+		}
+
+		@Override
+		protected void onPreExecute() {
+			dialog = new ProgressDialog(CampusMapActivity.this);
+			dialog.setTitle(null);
+			dialog.setMessage("Getting Directions...");
+			dialog.setIndeterminate(true);
+			dialog.setCancelable(true);
+			dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+				@Override
+				public void onCancel(DialogInterface dialog) {
+					cancel(true);
+				}
+			});
+			dialog.show();
+		}
+		
+		@Override
+		protected Directions doInBackground(Void... params) {
+			
+			assert(ids.length == 2);
+			long from = ids[0];
+			long to = ids[1];
+			
+			MobileDirectoryService service = new MobileDirectoryService();
+			
+			DirectionsResponse response = null;
+			
+			do {
+				try {
+					response = service.getDirections(from, to);
+				} catch (Exception e) {
+					Log.e(C.TAG, "Failed to download initial directions");
+					if (isCancelled()) {
+						return null;
+					}
+					try {
+						Thread.sleep(2000);
+					} catch (InterruptedException ex) {
+						return null;
+					}
+				}
+			} while (response == null);
+			int requestID = response.requestID;
+			
+			while (response.done != 100) {
+				publishProgress(response.done);
+				try {
+					response = service.getDirectionsStatus(requestID);
+				} catch (Exception e) {
+					Log.e(C.TAG, "Failed to download directions");
+					if (isCancelled()) {
+						return null;
+					}
+					try {
+						Thread.sleep(2000);
+					} catch (InterruptedException ex) {
+						return null;
+					}
+				}
+			}
+			
+			//load the relevant locations
+			nodes = new Location[ids.length];
+			LocationAdapter locationAdapter = new LocationAdapter();
+			locationAdapter.open();
+			for (int i = 0; i < ids.length; i++) {
+				nodes[i] = locationAdapter.getLocation(ids[i]);
+			}
+			locationAdapter.close();
+			
+			publishProgress(100);
+
+			return response.result;
+		}
+
+		@Override
+		protected void onPostExecute(Directions directions) {
+			dialog.dismiss();
+			
+			if (directions != null) {
+				generateDirectionsLayer(directions, nodes);
+				rebuildOverlays();
+			}
+		}
+		
+		@Override
+		protected void onCancelled() {
+			dialog.dismiss();
+			finish();
+		}
+		
+	}
+	
+	
 }

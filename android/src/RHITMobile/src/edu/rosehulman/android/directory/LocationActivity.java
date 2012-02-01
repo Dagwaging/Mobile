@@ -6,11 +6,14 @@ import java.util.List;
 import java.util.Map;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,9 +21,11 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 import edu.rosehulman.android.directory.db.DbIterator;
 import edu.rosehulman.android.directory.db.LocationAdapter;
 import edu.rosehulman.android.directory.model.Hyperlink;
@@ -69,6 +74,7 @@ public class LocationActivity extends Activity {
         childrenGroup = findViewById(R.id.childrenGroup);
         
         View btnShowOnMap = findViewById(R.id.btnShowOnMap);
+        View btnDirections = findViewById(R.id.btnDirections);
         
         linksList.setOnItemClickListener(linkClickListener);
         childrenList.setOnItemClickListener(childClickListener);
@@ -78,6 +84,13 @@ public class LocationActivity extends Activity {
 				btnShowOnMap_clicked();
 			}
 		});
+        btnDirections.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				btnDirections_clicked();
+			}
+		});
+        
         
         location = getIntent().getParcelableExtra(EXTRA_LOCATION);
         
@@ -144,6 +157,78 @@ public class LocationActivity extends Activity {
     private void btnShowOnMap_clicked() {
     	Intent intent = CampusMapActivity.createIntent(this, location.id);
     	startActivity(intent);
+    }
+    
+    private void btnDirections_clicked() {
+    	final CharSequence[] locations = {"Inside", "Outside"};
+
+    	new AlertDialog.Builder(this)
+    		.setTitle("Where are you? ")
+    		.setItems(locations, new DialogInterface.OnClickListener() {
+	    	    public void onClick(DialogInterface dialog, int item) {
+	    	    	switch (item) {
+	    	    	case 0: //inside
+	    	    		new UITask<String, Long>() {
+
+							@Override
+							public void getInput(int attempt) {
+								if (attempt > 0) {
+									Toast.makeText(LocationActivity.this, "Location not found. Try again.", Toast.LENGTH_SHORT).show();
+								}
+								
+								LayoutInflater inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
+								View root = inflater.inflate(R.layout.text_entry_dialog, null);
+								final EditText roomView = (EditText)root.findViewById(R.id.edit);
+			    	    		new AlertDialog.Builder(LocationActivity.this)
+			    	    			.setTitle("What room are you near?")
+			    	    			.setView(root)
+			    	    			.setPositiveButton("Get Directions", new DialogInterface.OnClickListener() {
+										@Override
+										public void onClick(DialogInterface dialog, int which) {
+											String room = roomView.getText().toString();
+											setInput(room);
+										}
+									})
+									.setOnCancelListener(new DialogInterface.OnCancelListener() {
+										@Override
+										public void onCancel(DialogInterface dialog) {
+											cancel();
+										}
+									})
+									.setCancelable(true)
+			    	    			.show();
+							}
+
+							@Override
+							public void processInput(String name) {
+								LocationAdapter locationAdapter = new LocationAdapter();
+								locationAdapter.open();
+								
+								long id = locationAdapter.findBuilding(name);
+								
+								locationAdapter.close();
+								
+								if (id >= 0)
+									setResult(id);
+							}
+
+							@Override
+							public void taskCompleted(Long res) {
+								Intent intent = CampusMapActivity.createDirectionsIntent(LocationActivity.this, location.id, res);
+								startActivity(intent);
+							}
+
+	    	    		}.start();
+	    	    		
+	    	    		break;
+	    	    	case 1: //outside
+	    	    		//TODO get location
+	    	    		Toast.makeText(getApplicationContext(), "Outside directions are not yet implemented", Toast.LENGTH_SHORT).show();
+	    	    		break;
+	    	    	}
+	    	    }
+	    	})
+	    	.show();
     }
     
     private void updateLinks() {

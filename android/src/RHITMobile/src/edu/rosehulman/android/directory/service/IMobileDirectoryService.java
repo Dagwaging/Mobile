@@ -1,7 +1,10 @@
 package edu.rosehulman.android.directory.service;
 
+import edu.rosehulman.android.directory.model.CampusServicesResponse;
+import edu.rosehulman.android.directory.model.DirectionsResponse;
 import edu.rosehulman.android.directory.model.LocationCollection;
 import edu.rosehulman.android.directory.model.LocationNamesCollection;
+import edu.rosehulman.android.directory.model.VersionResponse;
 
 /**
  * Interface for communicating with the mobile directory web service
@@ -9,14 +12,21 @@ import edu.rosehulman.android.directory.model.LocationNamesCollection;
 public interface IMobileDirectoryService {
 	
 	/**
-	 * Retrieve all location data contained on the server
+	 * Retrieve the current versions of all server data
 	 * 
-	 * @param currentVersion The current version data, or null if not known
-	 * @return A collection of locations
+	 * @return The current version of server data
 	 * @throws Exception On error
 	 */
-	@Deprecated
-	public LocationCollection getAllLocationData(String currentVersion) throws Exception;
+	public VersionResponse getVersions() throws Exception;
+	
+	/**
+	 * Retrieve campus services links
+	 * 
+	 * @param currentVersion The current version data, or null if not known
+	 * @return A collection of categories
+	 * @throws Exception On error
+	 */
+	public CampusServicesResponse getCampusServicesData(String currentVersion) throws Exception;
 
 	/**
 	 * Retrieve top-level location data contained on the server
@@ -45,5 +55,32 @@ public interface IMobileDirectoryService {
 	 * @throws Exception On error
 	 */
 	public LocationNamesCollection searchLocations(String query) throws Exception;
+	
+	/**
+	 * Start a directions request from a location to another
+	 * 
+	 * @param from The id of the departing location
+	 * @param to The id of the destination location
+	 * @return A DirectionsResponse with the id of the request and possibly results
+	 * @throws Exception On error
+	 */
+	public DirectionsResponse getDirections(long from, long to) throws Exception;
+	
+	/**
+	 * Start a tour generation request
+	 * 
+	 * @return A DirectionsResponse with the id of the request and possibly results
+	 * @throws Exception On error
+	 */
+	@Deprecated
+	public DirectionsResponse getTour() throws Exception;
+	
+	/**
+	 * Checks the status of a directions request
+	 * @param requestId
+	 * @return
+	 * @throws Exception
+	 */
+	public DirectionsResponse getDirectionsStatus(int requestId) throws Exception;
 
 }

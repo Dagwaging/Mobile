@@ -2,8 +2,11 @@ package edu.rosehulman.android.directory.service;
 
 import org.json.JSONObject;
 
+import edu.rosehulman.android.directory.model.CampusServicesResponse;
+import edu.rosehulman.android.directory.model.DirectionsResponse;
 import edu.rosehulman.android.directory.model.LocationCollection;
 import edu.rosehulman.android.directory.model.LocationNamesCollection;
+import edu.rosehulman.android.directory.model.VersionResponse;
 
 /**
  * Wraps logic of communicating with the mobile directory web service into
@@ -29,8 +32,31 @@ public class MobileDirectoryService implements IMobileDirectoryService {
 	}
 	
 	@Override
-	public LocationCollection getAllLocationData(String currentVersion) throws Exception {
-		return getLocationCollection("locations/data/all", currentVersion);
+	public VersionResponse getVersions() throws Exception {
+		JsonClient client = factory.makeJsonClient(HOST, PORT, "");
+		
+		JSONObject root = client.execute();
+		if (root == null) {
+			return null;
+		}
+		
+		return VersionResponse.deserialize(root);
+	}
+	
+	@Override
+	public CampusServicesResponse getCampusServicesData(String currentVersion) throws Exception {
+		//FIXME: use real URL when it exists
+		JsonClient client = factory.makeJsonClient(HOST, PORT, "services/data");
+		if (currentVersion != null) {
+			client.addParameter("version", currentVersion);
+		}
+		
+		JSONObject root = client.execute();
+		if (root == null) {
+			return null;
+		}
+		
+		return CampusServicesResponse.deserialize(root);
 	}
 	
 	@Override
@@ -69,5 +95,46 @@ public class MobileDirectoryService implements IMobileDirectoryService {
 		}
 		
 		return LocationNamesCollection.deserialize(root);
+	}
+	
+	@Override
+	public DirectionsResponse getDirections(long from, long to) throws Exception {
+		//FIXME temporary directions URL
+		String url = String.format("directions/testing/directions", from, to);
+		//String url = String.format("directions/fromloc/%d/toloc/%d", from, to);
+		JsonClient client = factory.makeJsonClient(HOST, PORT, url);
+		
+		JSONObject root = client.execute();
+		if (root == null) {
+			return null;
+		}
+		
+		return DirectionsResponse.deserialize(root);
+	}
+	
+	@Override
+	public DirectionsResponse getTour() throws Exception {
+		String url = String.format("directions/testing/tour");
+		JsonClient client = factory.makeJsonClient(HOST, PORT, url);
+		
+		JSONObject root = client.execute();
+		if (root == null) {
+			return null;
+		}
+		
+		return DirectionsResponse.deserialize(root);
+	}
+	
+	@Override
+	public DirectionsResponse getDirectionsStatus(int requestId) throws Exception {
+		String url = String.format("directions/status/%d", requestId);
+		JsonClient client = factory.makeJsonClient(HOST, PORT, url);
+		
+		JSONObject root = client.execute();
+		if (root == null) {
+			return null;
+		}
+		
+		return DirectionsResponse.deserialize(root);
 	}
 }

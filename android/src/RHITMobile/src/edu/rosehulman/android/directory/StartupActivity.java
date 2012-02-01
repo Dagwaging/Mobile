@@ -14,8 +14,14 @@ import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import edu.rosehulman.android.directory.ServiceManager.ServiceRunnable;
 
 public class StartupActivity extends Activity {
+	
+	public static Intent createIntent(Context context) {
+		Intent intent = new Intent(context, StartupActivity.class);
+		return intent;
+	}
 	
 	private BetaManagerManager betaManager;
 	
@@ -24,6 +30,9 @@ public class StartupActivity extends Activity {
 	private GridView tasksView;
 	
 	private static final int REQUEST_STARTUP_CODE = 4;
+
+	private ServiceManager<IDataUpdateService> updateService;
+	private boolean updateData = true;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -82,6 +91,7 @@ public class StartupActivity extends Activity {
 		
 		if (savedInstanceState == null) {
 			if (betaManager.hasBetaManager() && betaManager.isBetaEnabled()) {
+				updateData = false;
 				if (betaManager.isBetaRegistered()) {
 					Intent betaIntent = betaManager.getBetaIntent(BetaManagerManager.ACTION_SHOW_STARTUP);
 					startActivityForResult(betaIntent, REQUEST_STARTUP_CODE);
@@ -90,8 +100,43 @@ public class StartupActivity extends Activity {
 				}
 			}
 		}
+		
+		updateService = new ServiceManager<IDataUpdateService>(getApplicationContext(),
+				DataUpdateService.createIntent(getApplicationContext()));
 	}
 	
+	@Override
+	protected void onStart() {
+		super.onStart();
+
+		updateService.run(new ServiceRunnable<IDataUpdateService>() {
+			@Override
+			public void run(IDataUpdateService service) {
+				if (updateData) {
+					service.startUpdate();
+				}
+			}
+		});
+	}
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		
+		updateService.cancel();
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+
+		updateService.run(new ServiceRunnable<IDataUpdateService>() {
+			@Override
+			public void run(IDataUpdateService service) {
+				service.abort();
+			}
+		});
+	}
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -105,6 +150,12 @@ public class StartupActivity extends Activity {
     			break;
     		case Activity.RESULT_OK:
     			//We were up to date, continue on happily
+    			updateService.run(new ServiceRunnable<IDataUpdateService>() {
+    				@Override
+    				public void run(IDataUpdateService service) {
+    					service.startUpdate();
+    				}
+    			});
     			break;	
     	}
     }
