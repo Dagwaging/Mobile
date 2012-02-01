@@ -19,8 +19,9 @@
 
 #import <Foundation/Foundation.h>
 
-#import "RHValueStore.h"
+@interface RHPListStore : NSObject
 
-@interface RHPListStore : NSObject <RHValueStore>
+@property (nonatomic, strong) NSString *currentMapDataVersion;
+@property (nonatomic, strong) NSString *currentServicesDataVersion;
 
 @end

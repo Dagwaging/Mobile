@@ -21,13 +21,14 @@
 
 
 #define kRHPListStoreFile @"RHITMobileValues"
-#define kRHCurrentDataVersionKey @"CurrentDataVersion"
+#define kCurrentMapDataVersionKey @"CurrentMapDataVersion"
+#define kCurrentServiceDataVersionKey @"CurrentServiceDataVersion"
 
 
 @interface RHPListStore ()
 
 @property (nonatomic, strong) NSString *path;
-@property (nonatomic, strong) NSDictionary *data;
+@property (nonatomic, strong) NSMutableDictionary *data;
 
 @end
 
@@ -60,22 +61,33 @@
     return self;
 }
 
-- (NSString *)currentDataVersion {
-    return [[self.data valueForKey:kRHCurrentDataVersionKey] description];
+#pragma mark - Property Methods
+
+- (NSString *)currentMapDataVersion {
+    return [[self.data valueForKey:kCurrentMapDataVersionKey] description];
 }
 
-- (void)setCurrentDataVersion:(NSString *)inCurrentDataVersion {
-    NSDictionary *newDict = [NSMutableDictionary
-                             dictionaryWithDictionary:self.data];
-    [newDict setValue:inCurrentDataVersion forKey:kRHCurrentDataVersionKey];
-    self.data = newDict;
+- (void)setCurrentMapDataVersion:(NSString *)inCurrentDataVersion {
+    NSMutableDictionary *data = self.data;
+    [data setValue:inCurrentDataVersion forKey:kCurrentMapDataVersionKey];
+    self.data = data;
 }
 
-#pragma mark -
-#pragma mark Private Methods
+- (NSString *)currentServicesDataVersion {
+    return [[self.data valueForKey:kCurrentServiceDataVersionKey] description];
+}
 
-- (NSDictionary *)data {
-    return [NSDictionary dictionaryWithContentsOfFile:self.path];
+- (void)setCurrentServicesDataVersion:(NSString *)currentServicesDataVersion {
+    NSMutableDictionary *data = self.data;
+    [data setValue:currentServicesDataVersion forKey:kCurrentServiceDataVersionKey];
+    self.data = data;
+}
+
+#pragma mark - Private Property Methods
+
+- (NSMutableDictionary *)data {
+    return [NSMutableDictionary
+            dictionaryWithDictionary:[NSDictionary dictionaryWithContentsOfFile:self.path]];
 }
 
 - (void)setData:(NSDictionary *)inData {
