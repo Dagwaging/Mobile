@@ -19,18 +19,18 @@
 
 #import <UIKit/UIKit.h>
 
+#import "RHCampusServicesRequesterDelegate.h"
+
 @class RHServiceCategory;
 
 /// \ingroup views
-@interface InfoViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
+@interface InfoViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, RHCampusServicesRequesterDelegate>
 
 @property (nonatomic, strong) IBOutlet UITableView *tableView;
 
 @property (nonatomic, readonly) NSManagedObjectContext *managedObjectContext;
 
-@property (atomic, strong) NSArray *serviceItems; 
-
-@property (atomic, assign) BOOL fetchingData;
+@property (atomic, strong) NSArray *serviceItems;
 
 - (void)loadRootServiceCategories;
 
