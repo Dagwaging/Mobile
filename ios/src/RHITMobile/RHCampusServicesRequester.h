@@ -19,11 +19,19 @@
 
 #import <Foundation/Foundation.h>
 
+#import "RHCampusServicesRequesterDelegate.h"
+
+@class RHServiceCategory;
+
+
 @interface RHCampusServicesRequester : NSObject
 
 @property (nonatomic, strong) NSPersistentStoreCoordinator *persistantStoreCoordinator;
 
-- (id)initWithPersistantStoreCoordinator:(NSPersistentStoreCoordinator *)persistantStoreCoordinator;
+@property (nonatomic, strong) NSObject<RHCampusServicesRequesterDelegate> *delegate;
+
+- (id)initWithPersistantStoreCoordinator:(NSPersistentStoreCoordinator *)persistantStoreCoordinator
+                                delegate:(NSObject<RHCampusServicesRequesterDelegate> *)delegate;
 
 - (void)updateCampusServices;
 

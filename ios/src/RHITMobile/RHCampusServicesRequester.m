@@ -22,28 +22,52 @@
 #import <CoreData/CoreData.h>
 #import "RHServiceCategory.h"
 #import "RHServiceLink.h"
+#import "RHWebRequestMaker.h"
+
+#define kCampusServicesPath @"/services"
+#define kCategoriesKey @"Categories"
+#define kChildrenKey @"Children"
+#define kLinksKey @"Links"
+#define kNameKey @"Name"
+#define kURLKey @"Url"
+
+@interface RHCampusServicesRequester ()
+
+- (void)createManagedObjectsFromCategories:(NSArray *)categories
+                            parentCategory:(RHServiceCategory *)parentCategory
+                      managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+
+- (void)createManagedObjectsFromLinks:(NSArray *)links
+                             category:(RHServiceCategory *)category
+                 managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+
+@end
 
 @implementation RHCampusServicesRequester
 
 @synthesize persistantStoreCoordinator = persistantStoreCoordinator_;
+@synthesize delegate = _delegate;
 
-- (id)initWithPersistantStoreCoordinator:(NSPersistentStoreCoordinator *)persistantStoreCoordinator {
+- (id)initWithPersistantStoreCoordinator:(NSPersistentStoreCoordinator *)persistantStoreCoordinator delegate:(NSObject<RHCampusServicesRequesterDelegate> *)delegate {
     
     self = [super init];
     
     if (self) {
         self.persistantStoreCoordinator = persistantStoreCoordinator;
+        self.delegate = delegate;
     }
     
     return self;
 }
 
 - (void)updateCampusServices {
+    // Only execute on a background thread
     if ([NSThread isMainThread]) {
         [self performSelectorInBackground:@selector(updateCampusServices) withObject:nil];
         return;
     }
 
+    // Load all old categories and links (to be deleted)
     NSManagedObjectContext *localContext = [[NSManagedObjectContext alloc] init];
     localContext.persistentStoreCoordinator = self.persistantStoreCoordinator;
     
@@ -59,6 +83,7 @@
     
     if (categoriesError) {
         NSLog(@"Problem loading old categories: %@", categoriesError);
+        return;
     }
     
     NSError *linksError;
@@ -66,25 +91,26 @@
     
     if (linksError) {
         NSLog(@"Problem loading old links: %@", linksError);
+        return;
     }
     
-    RHServiceCategory *studentServices = [NSEntityDescription
-                                          insertNewObjectForEntityForName:kRHServiceCategoryEntityName
-                                          inManagedObjectContext:localContext];
-    studentServices.name = @"Student Services";
+    // Retrieve new categories and links
+    NSDictionary *response = [RHWebRequestMaker JSONGetRequestWithPath:kCampusServicesPath
+                                                               URLargs:@""];
+    NSArray *categories = [response objectForKey:kCategoriesKey];
+    [self createManagedObjectsFromCategories:categories
+                              parentCategory:nil
+                        managedObjectContext:localContext];
     
-    RHServiceCategory *diningServices = [NSEntityDescription
-                                         insertNewObjectForEntityForName:kRHServiceCategoryEntityName 
-                                         inManagedObjectContext:localContext];
-    diningServices.name = @"Dining Services";
+    NSError *createError;
+    [localContext save:&createError];
     
-    RHServiceLink *courseCatalog = [NSEntityDescription
-                                    insertNewObjectForEntityForName:kRHServiceLinkEntityName 
-                                    inManagedObjectContext:localContext];
-    courseCatalog.name = @"Course Catalog";
-    courseCatalog.url = @"http://www.rose-hulman.edu/offices-services/registrar/course-catalog.aspx";
-    courseCatalog.parent = studentServices;
+    if (createError) {
+        NSLog(@"Problem saving new campus services: %@", createError);
+        return;
+    }
     
+    // Delete all old categories and links
     for (RHServiceCategory *category in oldCategories) {
         [localContext deleteObject:category];
     }
@@ -97,7 +123,51 @@
     [localContext save:&error];
     
     if (error) {
-        NSLog(@"Problem saving campus services: %@", error);
+        NSLog(@"Problem saving deletion of old campus services: %@", error);
+        return;
+    }
+    
+    // Notify the delegate that we've finished updating campus service entries
+    [self.delegate performSelectorOnMainThread:@selector(didFinishUpdatingCampusServices)
+                                    withObject:nil
+                                 waitUntilDone:NO];
+}
+
+- (void)createManagedObjectsFromCategories:(NSArray *)categories
+                            parentCategory:(RHServiceCategory *)parentCategory 
+                      managedObjectContext:(NSManagedObjectContext *)managedObjectContext{
+    for (NSDictionary *category in categories) {
+        // Create managed object from this category
+        RHServiceCategory *newCategory;
+        newCategory = [NSEntityDescription insertNewObjectForEntityForName:kRHServiceCategoryEntityName
+                                                    inManagedObjectContext:managedObjectContext];
+        newCategory.name = [category objectForKey:kNameKey];
+        newCategory.parent = parentCategory;
+        
+        // Create managed objects from any leaf hyperlinks
+        NSArray *links = [category objectForKey:kLinksKey];
+        [self createManagedObjectsFromLinks:links
+                                   category:newCategory
+                          managedObjectContext:managedObjectContext];
+        
+        // Recurse into child categories
+        NSArray *children = [category objectForKey:kChildrenKey];
+        [self createManagedObjectsFromCategories:children
+                                  parentCategory:newCategory
+                            managedObjectContext:managedObjectContext];
+    }
+}
+
+- (void)createManagedObjectsFromLinks:(NSArray *)links
+                             category:(RHServiceCategory *)category
+                 managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    for (NSDictionary *link in links) {
+        RHServiceLink *newLink = [NSEntityDescription
+                                  insertNewObjectForEntityForName:kRHServiceLinkEntityName 
+                                  inManagedObjectContext:managedObjectContext];
+        newLink.name = [link objectForKey:kNameKey];
+        newLink.url = [link objectForKey:kURLKey];
+        newLink.parent = category;
     }
 }
 
