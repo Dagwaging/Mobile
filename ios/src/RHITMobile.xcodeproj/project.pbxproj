@@ -183,6 +183,7 @@
 		926D397E143D2CE400223121 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		927866FE1432F35C00749C2E /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		927867011432F36500749C2E /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		927A0CA114D8E6F300FAD2B2 /* RHCampusServicesRequesterDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHCampusServicesRequesterDelegate.h; sourceTree = "<group>"; };
 		9281A34514C68C8D001D9837 /* CDataScanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDataScanner.h; sourceTree = "<group>"; };
 		9281A34614C68C8D001D9837 /* CDataScanner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDataScanner.m; sourceTree = "<group>"; };
 		9281A34814C68C8D001D9837 /* CFilteringJSONSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFilteringJSONSerializer.h; sourceTree = "<group>"; };
@@ -281,6 +282,7 @@
 				92F1B8BD1497BC0800F7FFD8 /* RHTourRequesterDelegate.h */,
 				9258F02814D0D5EE00B61545 /* RHCampusServicesRequester.h */,
 				9258F02914D0D5EE00B61545 /* RHCampusServicesRequester.m */,
+				927A0CA114D8E6F300FAD2B2 /* RHCampusServicesRequesterDelegate.h */,
 			);
 			name = Web;
 			sourceTree = "<group>";
