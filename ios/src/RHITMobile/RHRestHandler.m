@@ -417,7 +417,7 @@
                               self.host,
                               self.port];
         
-        NSString *currentVersion = self.valueStore.currentDataVersion;
+        NSString *currentVersion = self.valueStore.currentMapDataVersion;
         NSString *serverPath = nil;
         
         if (currentVersion == nil) {
@@ -513,7 +513,7 @@
         NSError *saveError = nil;
         [context save:&saveError];
         
-        self.valueStore.currentDataVersion = newVersion;
+        self.valueStore.currentMapDataVersion = newVersion;
         
         [delegate performSelectorOnMainThread:@selector(didFindMapLevelLocationUpdates)
                                    withObject:nil
