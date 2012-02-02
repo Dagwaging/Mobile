@@ -94,11 +94,18 @@
     return cell;
 }
 
-- (void)loadRootServiceCategories {    
+- (void)loadRootServiceCategories {
+    // Only execute on the main thread since we're using the main thread's MOC
+    if (![NSThread isMainThread]) {
+        [self performSelectorOnMainThread:@selector(loadRootServiceCategories)
+                               withObject:nil
+                            waitUntilDone:NO];
+        return;
+    }
+    
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:kRHServiceItemEntityName];
     
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"parent = NULL"];
-    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"parent == nil"];
     fetchRequest.predicate = predicate;
     
     NSError *error;
