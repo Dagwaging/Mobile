@@ -33,7 +33,7 @@
 /// Application delegate for the RHITMobile app. This class is responsible for
 /// application-level initialization, as well as being the main owner of most of
 /// the CoreData objects that propgate throughout the main thread.
-@interface RHITMobileAppDelegate : NSObject <UIApplicationDelegate, UITabBarControllerDelegate>
+@interface RHAppDelegate : NSObject <UIApplicationDelegate, UITabBarControllerDelegate>
 
 /// The application's window.
 @property (nonatomic, strong) IBOutlet UIWindow *window;
@@ -85,7 +85,7 @@
 
 @property (nonatomic, strong) NSDictionary *locationNames;
 
-+ (RHITMobileAppDelegate *)instance;
++ (RHAppDelegate *)instance;
 
 - (void)prefetchLocationNames;
 

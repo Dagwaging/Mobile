@@ -28,7 +28,7 @@
 #import "RHRemoteHandler.h"
 #import "RHRestHandler.h"
 #import "RHLocationOverlay.h"
-#import "RHITMobileAppDelegate.h"
+#import "RHAppDelegate.h"
 #import "RHQuickListViewController.h"
 #import "RHPinAnnotationView.h"
 #import "RHLocationDetailViewController.h"
@@ -80,7 +80,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.managedObjectContext = [(RHITMobileAppDelegate *)
+    self.managedObjectContext = [(RHAppDelegate *)
                                  [[UIApplication sharedApplication]
                                   delegate] managedObjectContext];
     
@@ -148,8 +148,8 @@
 
 - (RHRestHandler *)remoteHandler {
     if (remoteHandler_ == nil) {
-        RHITMobileAppDelegate *appDelegate;
-        appDelegate = (RHITMobileAppDelegate *)[[UIApplication
+        RHAppDelegate *appDelegate;
+        appDelegate = (RHAppDelegate *)[[UIApplication
                                                  sharedApplication] delegate];
         remoteHandler_ = [RHRestHandler alloc];
         remoteHandler_ = [remoteHandler_
@@ -512,7 +512,7 @@
                                   initWithCapacity:results.count];
     [self populateMapWithLocations:(NSSet *)results];
     
-    [[RHITMobileAppDelegate instance] prefetchLocationNames];
+    [[RHAppDelegate instance] prefetchLocationNames];
 }
 
 - (void)populateMapWithLocations:(NSSet *)locations {

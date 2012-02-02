@@ -20,7 +20,7 @@
 #import "RHCampusServicesViewController.h"
 #import "RHServiceCategory.h"
 #import "RHServiceLink.h"
-#import "RHITMobileAppDelegate.h"
+#import "RHAppDelegate.h"
 #import "RHWebViewController.h"
 
 #define kLoadingReuseIdentifier @"LoadingCell"
@@ -48,7 +48,7 @@
 }
 
 - (NSManagedObjectContext *)managedObjectContext {
-    RHITMobileAppDelegate *appDelegate = (RHITMobileAppDelegate *)[[UIApplication sharedApplication] delegate];
+    RHAppDelegate *appDelegate = (RHAppDelegate *)[[UIApplication sharedApplication] delegate];
     return appDelegate.managedObjectContext; 
 }
 

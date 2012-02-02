@@ -24,7 +24,7 @@
 #import "RHBeta.h"
 #import "CJSONDeserializer.h"
 #import "NSDictionary_JSONExtensions.h"
-#import "RHITMobileAppDelegate.h"
+#import "RHAppDelegate.h"
 #import "RHBetaRegistrationViewController.h"
 #import "RHMapViewController.h"
 #import "RHRestHandler.h"
@@ -385,7 +385,7 @@ didDismissWithButtonIndex:(NSInteger)buttonIndex {
 - (IBAction)switchInstallationType:(id)sender {
     UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"Are You Sure?" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:@"Switch Build Types" otherButtonTitles:nil];
     
-    RHITMobileAppDelegate *appDelegate = (RHITMobileAppDelegate *) [UIApplication sharedApplication].delegate;
+    RHAppDelegate *appDelegate = (RHAppDelegate *) [UIApplication sharedApplication].delegate;
     [actionSheet showFromTabBar:appDelegate.tabBarController.tabBar];
 }
 

@@ -53,7 +53,7 @@
 		9265FEAD1409AB5D00AE406E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9265FEAC1409AB5D00AE406E /* CoreGraphics.framework */; };
 		9265FEB31409AB5D00AE406E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9265FEB11409AB5D00AE406E /* InfoPlist.strings */; };
 		9265FEB51409AB5D00AE406E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9265FEB41409AB5D00AE406E /* main.m */; };
-		9265FEB91409AB5D00AE406E /* RHITMobileAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9265FEB81409AB5D00AE406E /* RHITMobileAppDelegate.m */; };
+		9265FEB91409AB5D00AE406E /* RHAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9265FEB81409AB5D00AE406E /* RHAppDelegate.m */; };
 		9265FEBC1409AB5D00AE406E /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9265FEBA1409AB5D00AE406E /* MainWindow.xib */; };
 		9265FEBF1409AB5D00AE406E /* RHMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9265FEBE1409AB5D00AE406E /* RHMapViewController.m */; };
 		9265FEC21409AB5D00AE406E /* RHSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9265FEC11409AB5D00AE406E /* RHSearchViewController.m */; };
@@ -170,8 +170,8 @@
 		9265FEB21409AB5D00AE406E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		9265FEB41409AB5D00AE406E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		9265FEB61409AB5D00AE406E /* RHITMobile-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RHITMobile-Prefix.pch"; sourceTree = "<group>"; };
-		9265FEB71409AB5D00AE406E /* RHITMobileAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RHITMobileAppDelegate.h; sourceTree = "<group>"; };
-		9265FEB81409AB5D00AE406E /* RHITMobileAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RHITMobileAppDelegate.m; sourceTree = "<group>"; };
+		9265FEB71409AB5D00AE406E /* RHAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RHAppDelegate.h; sourceTree = "<group>"; };
+		9265FEB81409AB5D00AE406E /* RHAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RHAppDelegate.m; sourceTree = "<group>"; };
 		9265FEBB1409AB5D00AE406E /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainWindow.xib; sourceTree = "<group>"; };
 		9265FEBD1409AB5D00AE406E /* RHMapViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RHMapViewController.h; sourceTree = "<group>"; };
 		9265FEBE1409AB5D00AE406E /* RHMapViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RHMapViewController.m; sourceTree = "<group>"; };
@@ -379,8 +379,8 @@
 			children = (
 				924DE4D7145E70CE00EEE8C6 /* RHBeta.h */,
 				92ECC4C4141434D30073C4C3 /* RHConstants.h */,
-				9265FEB71409AB5D00AE406E /* RHITMobileAppDelegate.h */,
-				9265FEB81409AB5D00AE406E /* RHITMobileAppDelegate.m */,
+				9265FEB71409AB5D00AE406E /* RHAppDelegate.h */,
+				9265FEB81409AB5D00AE406E /* RHAppDelegate.m */,
 				9265FEBA1409AB5D00AE406E /* MainWindow.xib */,
 				92948907142D3ED400820A9C /* Map */,
 				920656F314303CB200D50293 /* Web */,
@@ -625,7 +625,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9265FEB51409AB5D00AE406E /* main.m in Sources */,
-				9265FEB91409AB5D00AE406E /* RHITMobileAppDelegate.m in Sources */,
+				9265FEB91409AB5D00AE406E /* RHAppDelegate.m in Sources */,
 				9265FEBF1409AB5D00AE406E /* RHMapViewController.m in Sources */,
 				9265FEC21409AB5D00AE406E /* RHSearchViewController.m in Sources */,
 				9233DD0F141BAA3500B9A549 /* RHAnnotation.m in Sources */,

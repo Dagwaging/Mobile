@@ -27,7 +27,7 @@
 #import "RHLocation.h"
 #import "RHConstants.h"
 #import "RHPListStore.h"
-#import "RHITMobileAppDelegate.h"
+#import "RHAppDelegate.h"
 #import "RHLocationLink.h"
 #import "RHSearchViewController.h"
 #import "RHWebRequestMaker.h"

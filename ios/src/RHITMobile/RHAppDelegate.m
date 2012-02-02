@@ -17,7 +17,7 @@
 //  limitations under the License.
 //
 
-#import "RHITMobileAppDelegate.h"
+#import "RHAppDelegate.h"
 #import "RHMapViewController.h"
 #import "RHSearchViewController.h"
 #import "RHRestHandler.h"
@@ -31,7 +31,7 @@
 
 
 #pragma mark Private Category Declaration
-@interface RHITMobileAppDelegate ()
+@interface RHAppDelegate ()
 
 #pragma mark - Private Method Signatures
 - (void)setupDefaults;
@@ -40,7 +40,7 @@
 
 #pragma mark - Implementation
 
-@implementation RHITMobileAppDelegate
+@implementation RHAppDelegate
 
 #pragma mark - General Properties
 
@@ -58,9 +58,9 @@
 @synthesize toursNavigationViewController;
 
 #pragma mark - Static Methods
-static RHITMobileAppDelegate *instance_;
+static RHAppDelegate *instance_;
 
-+ (RHITMobileAppDelegate *)instance {
++ (RHAppDelegate *)instance {
     return instance_;
 }
 

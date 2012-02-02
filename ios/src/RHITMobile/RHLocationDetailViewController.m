@@ -21,7 +21,7 @@
 #import "RHLocationDetailViewController.h"
 #import "RHLocation.h"
 #import "RHLocationLink.h"
-#import "RHITMobileAppDelegate.h"
+#import "RHAppDelegate.h"
 #import "RHMapViewController.h"
 #import "RHWebViewController.h"
 #import "RHDirectionsRequester.h"
@@ -75,7 +75,7 @@
 
 - (IBAction)displayCurrentLocationOnMap:(id)sender {
     [self.navigationController popToRootViewControllerAnimated:YES];
-    RHITMobileAppDelegate *appDelegate = (RHITMobileAppDelegate *) [UIApplication sharedApplication].delegate;
+    RHAppDelegate *appDelegate = (RHAppDelegate *) [UIApplication sharedApplication].delegate;
     [appDelegate.mapViewController focusMapViewToLocation:self.location];
 }
 
