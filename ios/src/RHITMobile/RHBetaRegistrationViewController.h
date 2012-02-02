@@ -1,5 +1,5 @@
 //
-//  BetaRegistrationViewController.h
+//  RHBetaRegistrationViewController.h
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -22,9 +22,12 @@
 
 #ifdef RHITMobile_RHBeta
 
+#define kRHBetaRegistrationViewControllerNibName @"RHBetaRegistrationViewController"
+
+
 @class RHBetaViewController;
 
-@interface BetaRegistrationViewController : UIViewController <UITextFieldDelegate>
+@interface RHBetaRegistrationViewController : UIViewController <UITextFieldDelegate>
 
 @property (nonatomic, strong) IBOutlet UITextField *nameField;
 

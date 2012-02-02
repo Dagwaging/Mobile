@@ -1,5 +1,5 @@
 //
-//  BetaRegistrationViewController.m
+//  RHBetaRegistrationViewController.m
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -17,7 +17,7 @@
 //  limitations under the License.
 //
 
-#import "BetaRegistrationViewController.h"
+#import "RHBetaRegistrationViewController.h"
 #import "RHBetaViewController.h"
 #import "RHBeta.h"
 
@@ -25,7 +25,8 @@
 
 #define kOFFSET_FOR_KEYBOARD 215.0
 
-@implementation BetaRegistrationViewController
+
+@implementation RHBetaRegistrationViewController
 
 @synthesize nameField;
 @synthesize emailField;

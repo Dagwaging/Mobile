@@ -25,7 +25,7 @@
 #import "CJSONDeserializer.h"
 #import "NSDictionary_JSONExtensions.h"
 #import "RHITMobileAppDelegate.h"
-#import "BetaRegistrationViewController.h"
+#import "RHBetaRegistrationViewController.h"
 #import "RHMapViewController.h"
 #import "RHRestHandler.h"
 #import "RHPListStore.h"
@@ -120,7 +120,7 @@
     self.authToken = [defaults stringForKey:kBetaAuthTokenDefault];
     
     if (self.authToken == nil) {
-        BetaRegistrationViewController *registrationController = [[BetaRegistrationViewController alloc] initWithNibName:@"BetaRegistrationView" bundle:nil];
+        RHBetaRegistrationViewController *registrationController = [[RHBetaRegistrationViewController alloc] initWithNibName:kRHBetaRegistrationViewControllerNibName bundle:nil];
         registrationController.betaViewController = self;
         [self presentModalViewController:registrationController animated:YES];
     }
