@@ -26,6 +26,7 @@
 		9233414914DA4907004C1ACC /* RHInternalLocationsRequester.m in Sources */ = {isa = PBXBuildFile; fileRef = 9233414814DA4907004C1ACC /* RHInternalLocationsRequester.m */; };
 		9233414D14DA7668004C1ACC /* RHDataVersionRequester.m in Sources */ = {isa = PBXBuildFile; fileRef = 9233414C14DA7668004C1ACC /* RHDataVersionRequester.m */; };
 		9233415014DA7798004C1ACC /* RHDataVersionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9233414F14DA7798004C1ACC /* RHDataVersionManager.m */; };
+		9233415314DB10E9004C1ACC /* RHLocationsSearchRequester.m in Sources */ = {isa = PBXBuildFile; fileRef = 9233415214DB10E6004C1ACC /* RHLocationsSearchRequester.m */; };
 		9233DD0F141BAA3500B9A549 /* RHAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9233DD0E141BAA3500B9A549 /* RHAnnotation.m */; };
 		9236CE9F144E3CBC00D0FB59 /* RHQuickListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9236CE9D144E3CBC00D0FB59 /* RHQuickListViewController.m */; };
 		9236CEA1144E3CBC00D0FB59 /* RHQuickListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9236CE9E144E3CBC00D0FB59 /* RHQuickListViewController.xib */; };
@@ -134,6 +135,9 @@
 		9233414C14DA7668004C1ACC /* RHDataVersionRequester.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHDataVersionRequester.m; sourceTree = "<group>"; };
 		9233414E14DA7798004C1ACC /* RHDataVersionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHDataVersionManager.h; sourceTree = "<group>"; };
 		9233414F14DA7798004C1ACC /* RHDataVersionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHDataVersionManager.m; sourceTree = "<group>"; };
+		9233415114DB10E4004C1ACC /* RHLocationsSearchRequester.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHLocationsSearchRequester.h; sourceTree = "<group>"; };
+		9233415214DB10E6004C1ACC /* RHLocationsSearchRequester.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHLocationsSearchRequester.m; sourceTree = "<group>"; };
+		9233415414DB1113004C1ACC /* RHLocationsSearchRequesterDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHLocationsSearchRequesterDelegate.h; sourceTree = "<group>"; };
 		9233DD0D141BAA3500B9A549 /* RHAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHAnnotation.h; sourceTree = "<group>"; };
 		9233DD0E141BAA3500B9A549 /* RHAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHAnnotation.m; sourceTree = "<group>"; };
 		9236CE9C144E3CBC00D0FB59 /* RHQuickListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHQuickListViewController.h; sourceTree = "<group>"; };
@@ -303,6 +307,9 @@
 				927A0CA114D8E6F300FAD2B2 /* RHCampusServicesRequesterDelegate.h */,
 				9233414B14DA7667004C1ACC /* RHDataVersionRequester.h */,
 				9233414C14DA7668004C1ACC /* RHDataVersionRequester.m */,
+				9233415114DB10E4004C1ACC /* RHLocationsSearchRequester.h */,
+				9233415214DB10E6004C1ACC /* RHLocationsSearchRequester.m */,
+				9233415414DB1113004C1ACC /* RHLocationsSearchRequesterDelegate.h */,
 			);
 			name = "Server Communication";
 			sourceTree = "<group>";
@@ -698,6 +705,7 @@
 				9233414914DA4907004C1ACC /* RHInternalLocationsRequester.m in Sources */,
 				9233414D14DA7668004C1ACC /* RHDataVersionRequester.m in Sources */,
 				9233415014DA7798004C1ACC /* RHDataVersionManager.m in Sources */,
+				9233415314DB10E9004C1ACC /* RHLocationsSearchRequester.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
