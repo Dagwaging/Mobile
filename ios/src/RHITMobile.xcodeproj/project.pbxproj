@@ -44,8 +44,8 @@
 		9250133C1431A7C700CEBB35 /* RHRestHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 9250133B1431A7C700CEBB35 /* RHRestHandler.m */; };
 		925465A61495BC6600C12B81 /* RHDirectionsRequester.m in Sources */ = {isa = PBXBuildFile; fileRef = 925465A51495BC6600C12B81 /* RHDirectionsRequester.m */; };
 		925465AA1495C69C00C12B81 /* RHWrappedCoordinate.m in Sources */ = {isa = PBXBuildFile; fileRef = 925465A91495C69C00C12B81 /* RHWrappedCoordinate.m */; };
-		925465AE1495EB7F00C12B81 /* ToursViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 925465AC1495EB7E00C12B81 /* ToursViewController.m */; };
-		925465AF1495EB7F00C12B81 /* ToursView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 925465AD1495EB7F00C12B81 /* ToursView.xib */; };
+		925465AE1495EB7F00C12B81 /* RHToursViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 925465AC1495EB7E00C12B81 /* RHToursViewController.m */; };
+		925465AF1495EB7F00C12B81 /* RHToursViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 925465AD1495EB7F00C12B81 /* RHToursViewController.xib */; };
 		9258F02A14D0D5EE00B61545 /* RHCampusServicesRequester.m in Sources */ = {isa = PBXBuildFile; fileRef = 9258F02914D0D5EE00B61545 /* RHCampusServicesRequester.m */; };
 		926088A8144D2ADB0002D50E /* RHITMobileValues.plist in Resources */ = {isa = PBXBuildFile; fileRef = 926088A7144D2ADB0002D50E /* RHITMobileValues.plist */; };
 		9265FEA91409AB5D00AE406E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9265FEA81409AB5D00AE406E /* UIKit.framework */; };
@@ -156,9 +156,9 @@
 		925465A71495BD5F00C12B81 /* RHDirectionsRequesterDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHDirectionsRequesterDelegate.h; sourceTree = "<group>"; };
 		925465A81495C69B00C12B81 /* RHWrappedCoordinate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHWrappedCoordinate.h; sourceTree = "<group>"; };
 		925465A91495C69C00C12B81 /* RHWrappedCoordinate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHWrappedCoordinate.m; sourceTree = "<group>"; };
-		925465AB1495EB7E00C12B81 /* ToursViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ToursViewController.h; sourceTree = "<group>"; };
-		925465AC1495EB7E00C12B81 /* ToursViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ToursViewController.m; sourceTree = "<group>"; };
-		925465AD1495EB7F00C12B81 /* ToursView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ToursView.xib; sourceTree = "<group>"; };
+		925465AB1495EB7E00C12B81 /* RHToursViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHToursViewController.h; sourceTree = "<group>"; };
+		925465AC1495EB7E00C12B81 /* RHToursViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHToursViewController.m; sourceTree = "<group>"; };
+		925465AD1495EB7F00C12B81 /* RHToursViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RHToursViewController.xib; sourceTree = "<group>"; };
 		9258F02814D0D5EE00B61545 /* RHCampusServicesRequester.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHCampusServicesRequester.h; sourceTree = "<group>"; };
 		9258F02914D0D5EE00B61545 /* RHCampusServicesRequester.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHCampusServicesRequester.m; sourceTree = "<group>"; };
 		926088A7144D2ADB0002D50E /* RHITMobileValues.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = RHITMobileValues.plist; sourceTree = "<group>"; };
@@ -522,11 +522,11 @@
 				92F20F6A1464383200603500 /* RHWebViewController.h */,
 				92F20F6B1464383200603500 /* RHWebViewController.m */,
 				92F20F6C1464383200603500 /* RHWebViewController.xib */,
-				925465AB1495EB7E00C12B81 /* ToursViewController.h */,
-				925465AC1495EB7E00C12B81 /* ToursViewController.m */,
+				925465AB1495EB7E00C12B81 /* RHToursViewController.h */,
+				925465AC1495EB7E00C12B81 /* RHToursViewController.m */,
+				925465AD1495EB7F00C12B81 /* RHToursViewController.xib */,
 				92D3672514B60DE000EE0504 /* PersonDetailViewController.h */,
 				92D3672614B60DE000EE0504 /* PersonDetailViewController.m */,
-				925465AD1495EB7F00C12B81 /* ToursView.xib */,
 				92D3672714B60DE000EE0504 /* PersonDetailView.xib */,
 			);
 			name = "View Controllers";
@@ -610,7 +610,7 @@
 				924DE4E9145E79DF00EEE8C6 /* RHDirectoryViewController.xib in Resources */,
 				92A49DDD145F8BA400B6F34E /* RHBetaRegistrationViewController.xib in Resources */,
 				92F20F6E1464383200603500 /* RHWebViewController.xib in Resources */,
-				925465AF1495EB7F00C12B81 /* ToursView.xib in Resources */,
+				925465AF1495EB7F00C12B81 /* RHToursViewController.xib in Resources */,
 				922F44A514985AE800D5C2C3 /* tab-bar-tours-icon.png in Resources */,
 				922F44A614985AE800D5C2C3 /* tab-bar-tours-icon@2x.png in Resources */,
 				92D3672914B60DE000EE0504 /* PersonDetailView.xib in Resources */,
@@ -653,7 +653,7 @@
 				92E1AA7F1487115F0005BF34 /* RHWebRequestMaker.m in Sources */,
 				925465A61495BC6600C12B81 /* RHDirectionsRequester.m in Sources */,
 				925465AA1495C69C00C12B81 /* RHWrappedCoordinate.m in Sources */,
-				925465AE1495EB7F00C12B81 /* ToursViewController.m in Sources */,
+				925465AE1495EB7F00C12B81 /* RHToursViewController.m in Sources */,
 				92F1B8B51496F67900F7FFD8 /* RHDirectionLineItem.m in Sources */,
 				92F1B8B914972AE600F7FFD8 /* RHSimplePointAnnotation.m in Sources */,
 				92F1B8BC1497BBE600F7FFD8 /* RHTourRequester.m in Sources */,

@@ -26,7 +26,7 @@
 #import "RHDirectoryViewController.h"
 #import "RHCampusServicesViewController.h"
 #import "RHLocation.h"
-#import "ToursViewController.h"
+#import "RHToursViewController.h"
 #import "RHCampusServicesRequester.h"
 
 
@@ -120,9 +120,9 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     directoryController.navigationItem.title = @"Directory";
     
     // Create and initialize the root directory view controller
-    ToursViewController *toursController = [ToursViewController
+    RHToursViewController *toursController = [RHToursViewController
                                                     alloc];
-    toursController = [toursController initWithNibName:@"ToursView"
+    toursController = [toursController initWithNibName:kRHToursViewControllerNibName
                                                          bundle:nil];
     
     [self.toursNavigationViewController

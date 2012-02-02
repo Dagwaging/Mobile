@@ -1,5 +1,5 @@
 //
-//  ToursViewController.m
+//  RHToursViewController.m
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -19,13 +19,13 @@
 
 #import <CoreLocation/CoreLocation.h>
 #import "MKMapView+ZoomLevel.h"
-#import "ToursViewController.h"
+#import "RHToursViewController.h"
 #import "RHWrappedCoordinate.h"
 #import "RHITMobileAppDelegate.h"
 #import "RHMapViewController.h"
 #import "RHTourRequester.h"
 
-@implementation ToursViewController
+@implementation RHToursViewController
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {

@@ -1,5 +1,5 @@
 //
-//  ToursViewController.h
+//  RHToursViewController.h
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -20,9 +20,12 @@
 #import <UIKit/UIKit.h>
 #import "RHTourRequesterDelegate.h"
 
+#define kRHToursViewControllerNibName @"RHToursViewController"
+
+
 @class RHTourRequester;
 
-@interface ToursViewController : UIViewController <RHTourRequesterDelegate> {
+@interface RHToursViewController : UIViewController <RHTourRequesterDelegate> {
     @private
     RHTourRequester *currentDirectionsRequest_;
 }
