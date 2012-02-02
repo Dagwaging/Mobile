@@ -1,5 +1,5 @@
 //
-//  InfoViewController.m
+//  RHCampusServicesViewController.m
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -17,7 +17,7 @@
 //  limitations under the License.
 //
 
-#import "InfoViewController.h"
+#import "RHCampusServicesViewController.h"
 #import "RHServiceCategory.h"
 #import "RHServiceLink.h"
 #import "RHITMobileAppDelegate.h"
@@ -26,7 +26,7 @@
 #define kLoadingReuseIdentifier @"LoadingCell"
 #define kReuseIdentifier @"ServiceItemCell"
 
-@implementation InfoViewController
+@implementation RHCampusServicesViewController
 
 @synthesize serviceItems = serviceItems_;
 @synthesize tableView = tableView_;
@@ -128,8 +128,8 @@
     if ([serviceItem isKindOfClass:[RHServiceCategory class]]) {
         RHServiceCategory *category = (RHServiceCategory *) serviceItem;
         
-        InfoViewController *nextViewController = [[InfoViewController alloc]
-                                                  initWithNibName:@"InfoView"
+        RHCampusServicesViewController *nextViewController = [[RHCampusServicesViewController alloc]
+                                                  initWithNibName:kRHCampusServicesViewControllerNibName
                                                   bundle:nil];
         nextViewController.serviceItems = category.contents.allObjects;
         nextViewController.title = category.name;

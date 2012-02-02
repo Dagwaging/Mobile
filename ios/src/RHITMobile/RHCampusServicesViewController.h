@@ -1,5 +1,5 @@
 //
-//  InfoViewController.h
+//  RHCampusServicesViewController.h
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -21,10 +21,12 @@
 
 #import "RHCampusServicesRequesterDelegate.h"
 
+#define kRHCampusServicesViewControllerNibName @"RHCampusServicesViewController"
+
 @class RHServiceCategory;
 
 /// \ingroup views
-@interface InfoViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, RHCampusServicesRequesterDelegate>
+@interface RHCampusServicesViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, RHCampusServicesRequesterDelegate>
 
 @property (nonatomic, strong) IBOutlet UITableView *tableView;
 

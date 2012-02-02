@@ -24,7 +24,7 @@
 #import "RHBetaViewController.h"
 #import "RHBeta.h"
 #import "DirectoryViewController.h"
-#import "InfoViewController.h"
+#import "RHCampusServicesViewController.h"
 #import "RHLocation.h"
 #import "ToursViewController.h"
 #import "RHCampusServicesRequester.h"
@@ -99,7 +99,7 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     self.mapViewController.navigationItem.rightBarButtonItem = mapRightItem;
     
     // Create and initialize the root info view controller
-    self.infoViewController = [[InfoViewController alloc] initWithNibName:@"InfoView"
+    self.infoViewController = [[RHCampusServicesViewController alloc] initWithNibName:kRHCampusServicesViewControllerNibName
                                                                bundle:nil];
     
     [self.infoNavigationViewController pushViewController:self.infoViewController
