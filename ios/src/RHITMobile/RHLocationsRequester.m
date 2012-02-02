@@ -67,10 +67,23 @@
 
 - (RHLocation *)locationFromJSONResponse:(NSDictionary *)jsonResponse
                   inManagedObjectContext:(NSManagedObjectContext *)localContext {
+    NSNumber *serverIdentifier = [jsonResponse objectForKey:kIDKey];
+    
+    NSFetchRequest *duplicateRequest = [NSFetchRequest fetchRequestWithEntityName:kRHLocationEntityName];
+    
+    duplicateRequest.predicate = [NSPredicate predicateWithFormat:@"serverIdentifier == %d",serverIdentifier.intValue];
+    
+    NSArray *possibleDuplicates = [localContext executeFetchRequest:duplicateRequest error:nil];
+    
+    if (possibleDuplicates.count > 0) {
+        return [possibleDuplicates objectAtIndex:0];
+    }
+    
     RHLocation *location = [NSEntityDescription insertNewObjectForEntityForName:kRHLocationEntityName 
                                                          inManagedObjectContext:localContext];
     
     location.serverIdentifier = [jsonResponse objectForKey:kIDKey];
+    
     location.name = [jsonResponse objectForKey:kNameKey];
     location.alternateNames = [jsonResponse objectForKey:kAltNamesKey];
     
