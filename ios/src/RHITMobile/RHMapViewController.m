@@ -156,7 +156,8 @@
                           delegate:self];
     }
     
-    return remoteHandler_;
+    //return remoteHandler_;
+    return nil;
 }
 
 #pragma mark -
@@ -291,7 +292,6 @@
         
         return view;
     } else if ([overlay isKindOfClass:[MKPolyline class]]) {
-        NSLog(@"Polyline view");
         MKPolylineView *view = [[MKPolylineView alloc] initWithPolyline:overlay];
         view.strokeColor = [UIColor blueColor];
         view.fillColor = [UIColor blueColor];
@@ -339,6 +339,16 @@
            [annotation mapView:self.mapView didChangeZoomLevel:newZoomLevel];
         }
     }
+}
+
+#pragma mark - RHLocationsRequesterDelegate Methods
+
+- (void)didFinishUpdatingTopLevelLocations {
+    [self loadStoredLocations];
+}
+
+- (void)didFinishUpdatingInternalLocations {
+    // We don't care about this right now
 }
 
 #pragma mark -
@@ -507,6 +517,7 @@
     NSError *error = nil;
     NSArray *results = [managedObjectContext executeFetchRequest:request
                                                            error:&error];
+    
     self.quickListAnnotations = [[NSMutableArray alloc]
                                   initWithCapacity:results.count];
     [self populateMapWithLocations:(NSSet *)results];

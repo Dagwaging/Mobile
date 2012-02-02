@@ -1,5 +1,5 @@
 //
-//  RHLocationLink.h
+//  RHTopLocationsRequester.h
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -17,20 +17,11 @@
 //  limitations under the License.
 //
 
-#import <Foundation/Foundation.h>
-#import <CoreData/CoreData.h>
+#import "RHLocationsRequester.h"
+#import "RHLocationsRequesterDelegate.h"
 
-#define kRHLocationLinkEntityName @"RHLocationLink"
+@interface RHTopLocationsRequester : RHLocationsRequester
 
-
-@class RHLocation;
-
-@interface RHLocationLink : NSManagedObject
-
-@property (nonatomic, strong) NSString *name;
-@property (nonatomic, strong) NSString *url;
-@property (nonatomic, strong) RHLocation *owner;
-
-+ (RHLocationLink *)linkFromContext:(NSManagedObjectContext *)context;
+- (void)updateTopLevelLocations;
 
 @end

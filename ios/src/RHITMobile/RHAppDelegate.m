@@ -28,6 +28,7 @@
 #import "RHLocation.h"
 #import "RHToursViewController.h"
 #import "RHCampusServicesRequester.h"
+#import "RHTopLocationsRequester.h"
 
 
 #pragma mark Private Category Declaration
@@ -161,6 +162,17 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Finish setup and kick off defaults syncing
     [self.window makeKeyAndVisible];
     [self setupDefaults];
+    
+    // Kick off a locations update
+    RHTopLocationsRequester *locationsRequester = [[RHTopLocationsRequester alloc] initWithDelegate:self.mapViewController persistantStoreCoordinator:self.persistentStoreCoordinator];
+    
+    [locationsRequester updateTopLevelLocations];
+    
+    // Kick off a campus services update
+    RHCampusServicesRequester *campusServicesRequester = [[RHCampusServicesRequester alloc] 
+                                                          initWithPersistantStoreCoordinator:self.persistentStoreCoordinator
+                                                          delegate:self.infoViewController];
+    [campusServicesRequester updateCampusServices];
     
     // If this is a beta build, kick off initial beta setup
 #ifdef RHITMobile_RHBeta
@@ -379,15 +391,6 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     // Write the changes to disk
     [defaults synchronize];
-    
-    // Kick off a network update
-    [self.mapViewController.remoteHandler checkForLocationUpdates];
-    
-    // Kick off campus services update
-    RHCampusServicesRequester *campusServicesRequester = [[RHCampusServicesRequester alloc] 
-                                                          initWithPersistantStoreCoordinator:self.persistentStoreCoordinator
-                                                          delegate:self.infoViewController];
-    [campusServicesRequester updateCampusServices];
 }
 
 @end

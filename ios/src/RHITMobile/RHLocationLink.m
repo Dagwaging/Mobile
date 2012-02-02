@@ -28,7 +28,7 @@
 @dynamic owner;
 
 + (RHLocationLink *)linkFromContext:(NSManagedObjectContext *)context {
-    RHLocationLink *link = [NSEntityDescription insertNewObjectForEntityForName:kRHLocationLinkCoreDataModelIdentifier inManagedObjectContext:context];
+    RHLocationLink *link = [NSEntityDescription insertNewObjectForEntityForName:kRHLocationLinkEntityName inManagedObjectContext:context];
     return link;
 }
 
