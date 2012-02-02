@@ -21,4 +21,6 @@
 
 @protocol RHLocationsSearchRequesterDelegate <NSObject>
 
+- (void)didFindLocationSearchResults:(NSArray *)searchResults;
+
 @end

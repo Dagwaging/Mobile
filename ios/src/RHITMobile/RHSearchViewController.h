@@ -19,6 +19,8 @@
 
 #import <UIKit/UIKit.h>
 
+#import "RHLocationsSearchRequesterDelegate.h"
+
 #define kRHSearchViewControllerNibName @"RHSearchViewController"
 
 @class RHRestHandler;
@@ -30,7 +32,7 @@ typedef enum RHSearchViewControllerType_ {
 
 /// \ingroup views
 /// View controller for the search portion of the application.
-@interface RHSearchViewController : UIViewController <UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource> {
+@interface RHSearchViewController : UIViewController <UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource, RHLocationsSearchRequesterDelegate> {
 }
 
 @property (nonatomic, assign) RHSearchViewControllerType searchType;
@@ -50,6 +52,8 @@ typedef enum RHSearchViewControllerType_ {
 @property (nonatomic, strong) RHRestHandler *remoteHandler;
 
 @property (nonatomic, strong) NSManagedObjectContext *context;
+
+@property (nonatomic, readonly) NSPersistentStoreCoordinator *persistantStoreCoordinator;
 
 - (void)tryAutocomplete:(NSString *)searchTerm;
 

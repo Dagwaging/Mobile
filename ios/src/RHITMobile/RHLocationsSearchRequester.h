@@ -19,6 +19,17 @@
 
 #import <Foundation/Foundation.h>
 
+#import "RHLocationsSearchRequesterDelegate.h"
+
 @interface RHLocationsSearchRequester : NSObject
+
+@property (nonatomic, strong) NSObject<RHLocationsSearchRequesterDelegate> *delegate;
+
+@property (nonatomic, strong) NSPersistentStoreCoordinator *persistantStoreCoordinator;
+
+- (id)initWithDelegate:(NSObject<RHLocationsSearchRequesterDelegate> *)delegate
+persistantStoreCoordinator:(NSPersistentStoreCoordinator *)persistantStoreCoordinator;
+
+- (void)searchForLocations:(NSString *)searchTerm;
 
 @end

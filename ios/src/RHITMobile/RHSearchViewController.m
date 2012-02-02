@@ -21,6 +21,7 @@
 #import "RHRestHandler.h"
 #import "RHLocation.h"
 #import "RHLocationDetailViewController.h"
+#import "RHLocationsSearchRequester.h"
 #import "RHAppDelegate.h"
 
 
@@ -105,6 +106,10 @@
     }
 }
 
+- (NSPersistentStoreCoordinator *)persistantStoreCoordinator {
+    return [((RHAppDelegate *)[[UIApplication sharedApplication] delegate]) persistentStoreCoordinator];
+}
+
 #pragma mark - UISearchBarDelegate Methods
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)inSearchBar {
@@ -122,7 +127,9 @@
     UIBarButtonItem *activityButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicatorView];
     self.navigationItem.rightBarButtonItem = activityButtonItem;
     
-    [self.remoteHandler searchForLocations:self.searchBar.text searchViewController:self];
+    //[self.remoteHandler searchForLocations:self.searchBar.text searchViewController:self];
+    RHLocationsSearchRequester *searchRequester = [[RHLocationsSearchRequester alloc] initWithDelegate:self persistantStoreCoordinator:self.persistantStoreCoordinator];
+    [searchRequester searchForLocations:self.searchBar.text];
 }
 
 - (void)searchBar:(UISearchBar *)searchBar
@@ -261,6 +268,22 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         }
     }
     return result;
+}
+
+#pragma mark - RHLocationsSearchRequesterDelegate Methods
+
+- (void)didFindLocationSearchResults:(NSArray *)searchResults {
+    self.navigationItem.rightBarButtonItem = nil;
+    self.navigationItem.title = [NSString stringWithFormat:@"\"%@\"", self.searchBar.text];
+    
+    self.searchResults = [NSMutableArray arrayWithCapacity:searchResults.count];
+    
+    for (NSManagedObjectID *objectID in searchResults) {
+        RHLocation *location = (RHLocation *)[context objectWithID:objectID];
+        [self.searchResults addObject:location];
+    }
+    
+    [self.tableView reloadData];
 }
 
 @end
