@@ -20,7 +20,7 @@
 #import "RHSearchViewController.h"
 #import "RHRestHandler.h"
 #import "RHLocation.h"
-#import "LocationDetailViewController.h"
+#import "RHLocationDetailViewController.h"
 #import "RHITMobileAppDelegate.h"
 
 
@@ -237,7 +237,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     id resultObject = [self objectFromResult:result];
     
     if (self.searchType == RHSearchViewControllerTypeLocation) {
-        LocationDetailViewController *details = [[LocationDetailViewController alloc] initWithNibName:@"LocationDetailView" bundle:nil];
+        RHLocationDetailViewController *details = [[RHLocationDetailViewController alloc] initWithNibName:kRHLocationDetailViewControllerNibName bundle:nil];
         details.location = (RHLocation *) resultObject;
         
         [self.navigationController pushViewController:details animated:YES];

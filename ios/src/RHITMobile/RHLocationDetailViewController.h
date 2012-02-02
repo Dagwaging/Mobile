@@ -1,5 +1,5 @@
 //
-//  LocationDetailViewController.h
+//  RHLocationDetailViewController.h
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -21,11 +21,13 @@
 #import <UIKit/UIKit.h>
 #import "RHDirectionsRequesterDelegate.h"
 
+#define kRHLocationDetailViewControllerNibName @"RHLocationDetailViewController"
+
 @class RHLocation;
 @class RHDirectionsRequester;
 
 /// \ingroup views
-@interface LocationDetailViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, RHDirectionsRequesterDelegate> {
+@interface RHLocationDetailViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, RHDirectionsRequesterDelegate> {
     @private
     RHDirectionsRequester *currentDirectionsRequest_;
 }

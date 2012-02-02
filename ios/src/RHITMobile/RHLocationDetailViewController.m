@@ -1,5 +1,5 @@
 //
-//  LocationDetailViewController.m
+//  RHLocationDetailViewController.m
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -18,7 +18,7 @@
 //
 
 
-#import "LocationDetailViewController.h"
+#import "RHLocationDetailViewController.h"
 #import "RHLocation.h"
 #import "RHLocationLink.h"
 #import "RHITMobileAppDelegate.h"
@@ -41,14 +41,14 @@
 #define kEnclosedCellKey @"EnclosedCell"
 
 
-@interface LocationDetailViewController ()
+@interface RHLocationDetailViewController ()
 
 @property (nonatomic, strong) NSMutableArray *sections;
 
 @end
 
 
-@implementation LocationDetailViewController
+@implementation RHLocationDetailViewController
 
 @synthesize location = location_;
 @synthesize links = links_;
@@ -381,13 +381,13 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         
         [inTableView deselectRowAtIndexPath:indexPath animated:YES];
         
-        LocationDetailViewController *detailViewController = [[LocationDetailViewController alloc] initWithNibName:@"LocationDetailView" bundle:nil];
+        RHLocationDetailViewController *detailViewController = [[RHLocationDetailViewController alloc] initWithNibName:kRHLocationDetailViewControllerNibName bundle:nil];
         detailViewController.location = child;
         [self.navigationController pushViewController:detailViewController animated:YES];
     } else if (sectionLabel == kParentLabel) {
         [inTableView deselectRowAtIndexPath:indexPath animated:YES];
         
-        LocationDetailViewController *detailViewController = [[LocationDetailViewController alloc] initWithNibName:@"LocationDetailView" bundle:nil];
+        RHLocationDetailViewController *detailViewController = [[RHLocationDetailViewController alloc] initWithNibName:kRHLocationDetailViewControllerNibName bundle:nil];
         detailViewController.location = self.location.parent;
         [self.navigationController pushViewController:detailViewController animated:YES];
     } else if (sectionLabel == kLinksLabel) {

@@ -31,7 +31,7 @@
 #import "RHITMobileAppDelegate.h"
 #import "RHQuickListViewController.h"
 #import "RHPinAnnotationView.h"
-#import "LocationDetailViewController.h"
+#import "RHLocationDetailViewController.h"
 #import "RHSearchViewController.h"
 #import "RHDirectionLineItem.h"
 #import "RHSimplePointAnnotation.h"
@@ -194,7 +194,7 @@
 - (IBAction)discloseLocationDetails:(id)sender {
     MKAnnotationView *view = (MKAnnotationView *) ((UIView *) sender).superview.superview;
     RHAnnotation *annotation = (RHAnnotation *) view.annotation;
-    LocationDetailViewController *detailViewController = [[LocationDetailViewController alloc] initWithNibName:@"LocationDetailView" bundle:nil];
+    RHLocationDetailViewController *detailViewController = [[RHLocationDetailViewController alloc] initWithNibName:kRHLocationDetailViewControllerNibName bundle:nil];
     detailViewController.location = annotation.location;
     [self.navigationController pushViewController:detailViewController animated:YES];
 }
