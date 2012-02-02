@@ -1,5 +1,5 @@
 //
-//  SearchViewController.h
+//  RHSearchViewController.h
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -19,6 +19,8 @@
 
 #import <UIKit/UIKit.h>
 
+#define kRHSearchViewControllerNibName @"RHSearchViewController"
+
 @class RHRestHandler;
 
 typedef enum RHSearchViewControllerType_ {
@@ -28,7 +30,7 @@ typedef enum RHSearchViewControllerType_ {
 
 /// \ingroup views
 /// View controller for the search portion of the application.
-@interface SearchViewController : UIViewController <UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource> {
+@interface RHSearchViewController : UIViewController <UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource> {
 }
 
 @property (nonatomic, assign) RHSearchViewControllerType searchType;

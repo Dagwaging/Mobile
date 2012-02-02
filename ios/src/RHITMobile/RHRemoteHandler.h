@@ -22,7 +22,7 @@
 
 
 @class RHMapViewController;
-@class SearchViewController;
+@class RHSearchViewController;
 
 /// \ingroup web
 /// Wrapper for remote data fetching and posting.
@@ -46,6 +46,6 @@
 - (void)rushPopulateLocationsUnderLocationWithID:(NSManagedObjectID *)objectID;
 
 - (void)searchForLocations:(NSString *)searchTerms
-      searchViewController:(SearchViewController *)searchViewController;
+      searchViewController:(RHSearchViewController *)searchViewController;
 
 @end

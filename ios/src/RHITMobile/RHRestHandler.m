@@ -29,7 +29,7 @@
 #import "RHPListStore.h"
 #import "RHITMobileAppDelegate.h"
 #import "RHLocationLink.h"
-#import "SearchViewController.h"
+#import "RHSearchViewController.h"
 #import "RHWebRequestMaker.h"
 #import "RHMapViewController.h"
 
@@ -69,7 +69,7 @@
 @property (nonatomic, strong) NSString *host;
 @property (nonatomic, strong) NSString *port;
 @property (nonatomic, strong) RHPListStore *valueStore;
-@property (nonatomic, strong) SearchViewController *searchViewController;
+@property (nonatomic, strong) RHSearchViewController *searchViewController;
 
 - (RHLocation *)locationFromDictionary:(NSDictionary *)dictionary
                            withContext:(NSManagedObjectContext *)context
@@ -677,7 +677,7 @@
     [context save:nil];
 }
 
-- (void)searchForLocations:(NSString *)searchTerm searchViewController:(SearchViewController *)inSearchViewController {
+- (void)searchForLocations:(NSString *)searchTerm searchViewController:(RHSearchViewController *)inSearchViewController {
     if (self.delegate == nil) {
         return;
     }

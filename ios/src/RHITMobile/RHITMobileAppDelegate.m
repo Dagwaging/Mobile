@@ -19,7 +19,7 @@
 
 #import "RHITMobileAppDelegate.h"
 #import "RHMapViewController.h"
-#import "SearchViewController.h"
+#import "RHSearchViewController.h"
 #import "RHRestHandler.h"
 #import "BetaViewController.h"
 #import "RHBeta.h"

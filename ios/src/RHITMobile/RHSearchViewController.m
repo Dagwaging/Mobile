@@ -1,5 +1,5 @@
 //
-//  SearchViewController.m
+//  RHSearchViewController.m
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -17,14 +17,14 @@
 //  limitations under the License.
 //
 
-#import "SearchViewController.h"
+#import "RHSearchViewController.h"
 #import "RHRestHandler.h"
 #import "RHLocation.h"
 #import "LocationDetailViewController.h"
 #import "RHITMobileAppDelegate.h"
 
 
-@implementation SearchViewController
+@implementation RHSearchViewController
 
 @synthesize searchBar;
 @synthesize searchInitiated;

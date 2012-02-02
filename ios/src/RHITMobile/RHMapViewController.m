@@ -177,7 +177,7 @@
 
 - (IBAction)displaySearch:(id)sender {
     RHSearchViewController *search = [RHSearchViewController alloc];
-    search = [search initWithNibName:@"SearchView" bundle:nil];
+    search = [search initWithNibName:kRHSearchViewControllerNibName bundle:nil];
     search.searchType = RHSearchViewControllerTypeLocation;
     search.remoteHandler = self.remoteHandler;
     search.context = self.managedObjectContext;

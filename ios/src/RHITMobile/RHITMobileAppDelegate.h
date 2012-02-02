@@ -22,7 +22,7 @@
 
 
 @class RHMapViewController;
-@class SearchViewController;
+@class RHSearchViewController;
 @class InfoViewController;
 
 // Conditionally care about beta classes.
