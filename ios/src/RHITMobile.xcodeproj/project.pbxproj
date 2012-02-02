@@ -264,7 +264,7 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		920656F314303CB200D50293 /* Web */ = {
+		920656F314303CB200D50293 /* Server Communication */ = {
 			isa = PBXGroup;
 			children = (
 				920656F414303D1400D50293 /* RHRemoteHandler.h */,
@@ -283,7 +283,7 @@
 				9258F02914D0D5EE00B61545 /* RHCampusServicesRequester.m */,
 				927A0CA114D8E6F300FAD2B2 /* RHCampusServicesRequesterDelegate.h */,
 			);
-			name = Web;
+			name = "Server Communication";
 			sourceTree = "<group>";
 		};
 		9226030B1409AC820065F705 /* Images */ = {
@@ -305,7 +305,7 @@
 			name = Images;
 			sourceTree = "<group>";
 		};
-		9226030C1409AE640065F705 /* Model */ = {
+		9226030C1409AE640065F705 /* Model (CoreData) */ = {
 			isa = PBXGroup;
 			children = (
 				923C841A14298DD500DFE415 /* Model.xcdatamodeld */,
@@ -332,7 +332,7 @@
 				9246368A142BAAC700A5E399 /* RHLocation.h */,
 				9246368B142BAAC700A5E399 /* RHLocation.m */,
 			);
-			name = Model;
+			name = "Model (CoreData)";
 			sourceTree = "<group>";
 		};
 		9265FE991409AB5C00AE406E = {
@@ -382,11 +382,11 @@
 				9265FEB71409AB5D00AE406E /* RHAppDelegate.h */,
 				9265FEB81409AB5D00AE406E /* RHAppDelegate.m */,
 				9265FEBA1409AB5D00AE406E /* MainWindow.xib */,
-				92948907142D3ED400820A9C /* Map */,
-				920656F314303CB200D50293 /* Web */,
+				92948907142D3ED400820A9C /* Map Customization */,
+				920656F314303CB200D50293 /* Server Communication */,
 				928A643C144954A900521EB1 /* Non-CoreData Storage */,
 				92ECC4C3141430510073C4C3 /* View Controllers */,
-				9226030C1409AE640065F705 /* Model */,
+				9226030C1409AE640065F705 /* Model (CoreData) */,
 				9265FEAF1409AB5D00AE406E /* Supporting Files */,
 			);
 			path = RHITMobile;
@@ -466,7 +466,7 @@
 			name = "Non-CoreData Storage";
 			sourceTree = "<group>";
 		};
-		92948907142D3ED400820A9C /* Map */ = {
+		92948907142D3ED400820A9C /* Map Customization */ = {
 			isa = PBXGroup;
 			children = (
 				92DFEAC8141FD4E500889314 /* MKMapView+ZoomLevel.h */,
@@ -489,7 +489,7 @@
 				92F1B8B714972AE600F7FFD8 /* RHSimplePointAnnotation.h */,
 				92F1B8B814972AE600F7FFD8 /* RHSimplePointAnnotation.m */,
 			);
-			name = Map;
+			name = "Map Customization";
 			sourceTree = "<group>";
 		};
 		92ECC4C3141430510073C4C3 /* View Controllers */ = {

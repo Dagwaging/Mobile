@@ -21,7 +21,7 @@
 #import "MKMapView+ZoomLevel.h"
 #import "RHToursViewController.h"
 #import "RHWrappedCoordinate.h"
-#import "RHITMobileAppDelegate.h"
+#import "RHAppDelegate.h"
 #import "RHMapViewController.h"
 #import "RHTourRequester.h"
 
@@ -71,10 +71,10 @@
 
 - (IBAction)didFinishLoadingTour:(NSArray *)directions {
     
-    [RHITMobileAppDelegate.instance.mapViewController displayDirections:directions];
+    [RHAppDelegate.instance.mapViewController displayDirections:directions];
     
     // Transition to view
-    UITabBarController *tabBarController = RHITMobileAppDelegate.instance.tabBarController;
+    UITabBarController *tabBarController = RHAppDelegate.instance.tabBarController;
     
     UIView *fromView = tabBarController.selectedViewController.view;
     UIView *toView = [[tabBarController.viewControllers objectAtIndex:0] view];

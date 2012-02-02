@@ -475,8 +475,8 @@
             return;
         }
         
-        RHITMobileAppDelegate *appDelegate;
-        appDelegate = (RHITMobileAppDelegate *)[[UIApplication
+        RHAppDelegate *appDelegate;
+        appDelegate = (RHAppDelegate *)[[UIApplication
                                                  sharedApplication] delegate];
         
         [appDelegate performSelectorOnMainThread:@selector(clearDatabase)
@@ -609,7 +609,7 @@
         }
     }
     
-    [RHITMobileAppDelegate.instance prefetchLocationNames];
+    [RHAppDelegate.instance prefetchLocationNames];
 }
 
 - (void)performRushPopulateLocationsUnderLocationWithID:(NSManagedObjectID *)objectID {

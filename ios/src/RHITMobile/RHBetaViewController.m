@@ -406,11 +406,11 @@ didDismissWithButtonIndex:(NSInteger)buttonIndex {
 }
 
 - (IBAction)clearAndReloadData:(id)sender {
-    [RHITMobileAppDelegate.instance clearDatabase];
+    [RHAppDelegate.instance clearDatabase];
     RHPListStore *listStore = [[RHPListStore alloc] init];
     listStore.currentMapDataVersion = @"-1";
     listStore.currentServicesDataVersion = @"-1";
-    [RHITMobileAppDelegate.instance.mapViewController.remoteHandler checkForLocationUpdates];
+    [RHAppDelegate.instance.mapViewController.remoteHandler checkForLocationUpdates];
 }
 
 - (void)performCheckForUpdates:(NSNumber *)officialNumber {

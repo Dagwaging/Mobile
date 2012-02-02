@@ -21,7 +21,7 @@
 #import "RHRestHandler.h"
 #import "RHLocation.h"
 #import "RHLocationDetailViewController.h"
-#import "RHITMobileAppDelegate.h"
+#import "RHAppDelegate.h"
 
 
 @implementation RHSearchViewController
@@ -75,7 +75,7 @@
 
 - (NSDictionary *)autocompleteData {
     if (self.searchType == RHSearchViewControllerTypeLocation) {
-        return RHITMobileAppDelegate.instance.locationNames;
+        return RHAppDelegate.instance.locationNames;
     }
     
     return nil;

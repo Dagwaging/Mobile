@@ -440,7 +440,7 @@ titleForHeaderInSection:(NSInteger)section {
 - (void)didFinishLoadingDirections:(NSArray *)directions {
 
     [self.navigationController popToRootViewControllerAnimated:YES];
-    [RHITMobileAppDelegate.instance.mapViewController displayDirections:directions];
+    [RHAppDelegate.instance.mapViewController displayDirections:directions];
 }
 
 @end
