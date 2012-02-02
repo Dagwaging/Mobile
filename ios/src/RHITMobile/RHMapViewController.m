@@ -25,7 +25,6 @@
 #import "RHLocation.h"
 #import "RHNode.h"
 #import "RHLabelNode.h"
-#import "RHRestHandler.h"
 #import "RHLocationOverlay.h"
 #import "RHAppDelegate.h"
 #import "RHQuickListViewController.h"
@@ -62,7 +61,6 @@
 @synthesize mapView;
 @synthesize fetchedResultsController;
 @synthesize managedObjectContext;
-@synthesize remoteHandler = remoteHandler_;
 @synthesize quickListAnnotations;
 @synthesize temporaryAnnotations;
 @synthesize backgroundView;
@@ -143,24 +141,6 @@
 }
 
 #pragma mark -
-#pragma mark Property Methods
-
-- (RHRestHandler *)remoteHandler {
-    if (remoteHandler_ == nil) {
-        RHAppDelegate *appDelegate;
-        appDelegate = (RHAppDelegate *)[[UIApplication
-                                                 sharedApplication] delegate];
-        remoteHandler_ = [RHRestHandler alloc];
-        remoteHandler_ = [remoteHandler_
-                          initWithPersistantStoreCoordinator:appDelegate.persistentStoreCoordinator
-                          delegate:self];
-    }
-    
-    //return remoteHandler_;
-    return nil;
-}
-
-#pragma mark -
 #pragma mark IBActions
 
 - (IBAction)debugZoomIn:(id)sender {
@@ -179,7 +159,6 @@
     RHSearchViewController *search = [RHSearchViewController alloc];
     search = [search initWithNibName:kRHSearchViewControllerNibName bundle:nil];
     search.searchType = RHSearchViewControllerTypeLocation;
-    search.remoteHandler = self.remoteHandler;
     search.context = self.managedObjectContext;
     [self.navigationController pushViewController:search animated:YES];
 }
@@ -351,39 +330,7 @@
     // We don't care about this right now
 }
 
-#pragma mark -
-#pragma mark RHRemoteHandlerDelegate Methods
-
-- (void)didFindMapLevelLocationUpdates {
-    [self loadStoredLocations];
-}
-
-- (void)didFailCheckingForLocationUpdatesWithError:(NSError *)error {
-    NSString *title = @"Error Updating Map";
-    NSString *message = error.localizedDescription;
-    
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
-                                                    message:message
-                                                   delegate:self
-                                          cancelButtonTitle:@"OK"
-                                          otherButtonTitles:nil, nil];
-    [alert show];
-}
-
-- (void)didFailPopulatingLocationsWithError:(NSError *)error {
-    NSString *title = @"Error Populating Locations";
-    NSString *message = error.localizedDescription;
-    
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
-                                                    message:message
-                                                   delegate:self
-                                          cancelButtonTitle:@"OK"
-                                          otherButtonTitles:nil, nil];
-    [alert show];
-}
-
-#pragma mark -
-#pragma mark RHAnnotationView Delegate Methods
+#pragma mark - RHAnnotationView Delegate Methods
 
 - (void)focusMapViewToAnnotation:(RHAnnotation *)annotation {
     if (annotation.area) {
@@ -395,8 +342,6 @@
 
 - (void)focusMapViewToAreaAnnotation:(RHAnnotation *)annotation
                             selected:(BOOL)selected {
-    
-    [self.remoteHandler rushPopulateLocationsUnderLocationWithID:(NSManagedObjectID *)annotation.location.objectID];
 
     if (!selected) {
         [self clearAllDynamicMapArtifacts];

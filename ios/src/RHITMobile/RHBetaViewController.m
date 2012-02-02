@@ -27,7 +27,6 @@
 #import "RHAppDelegate.h"
 #import "RHBetaRegistrationViewController.h"
 #import "RHMapViewController.h"
-#import "RHRestHandler.h"
 #import "RHPListStore.h"
 
 #ifdef RHITMobile_RHBeta
@@ -410,7 +409,6 @@ didDismissWithButtonIndex:(NSInteger)buttonIndex {
     RHPListStore *listStore = [[RHPListStore alloc] init];
     listStore.currentMapDataVersion = [NSNumber numberWithInt:-1];
     listStore.currentServicesDataVersion = [NSNumber numberWithInt:-1];
-    [RHAppDelegate.instance.mapViewController.remoteHandler checkForLocationUpdates];
 }
 
 - (void)performCheckForUpdates:(NSNumber *)officialNumber {

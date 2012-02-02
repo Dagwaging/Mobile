@@ -18,7 +18,6 @@
 //
 
 #import "RHSearchViewController.h"
-#import "RHRestHandler.h"
 #import "RHLocation.h"
 #import "RHLocationDetailViewController.h"
 #import "RHLocationsSearchRequester.h"
@@ -32,7 +31,6 @@
 @synthesize currentAutocompleteTerm;
 @synthesize searchType;
 @synthesize tableView;
-@synthesize remoteHandler;
 @synthesize context;
 @synthesize searchResults = searchResults_;
 
@@ -126,8 +124,7 @@
     
     UIBarButtonItem *activityButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicatorView];
     self.navigationItem.rightBarButtonItem = activityButtonItem;
-    
-    //[self.remoteHandler searchForLocations:self.searchBar.text searchViewController:self];
+
     RHLocationsSearchRequester *searchRequester = [[RHLocationsSearchRequester alloc] initWithDelegate:self persistantStoreCoordinator:self.persistantStoreCoordinator];
     [searchRequester searchForLocations:self.searchBar.text];
 }

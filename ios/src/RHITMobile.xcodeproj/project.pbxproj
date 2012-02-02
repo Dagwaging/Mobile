@@ -47,7 +47,6 @@
 		924DE4E8145E79DF00EEE8C6 /* RHDirectoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 924DE4E6145E79DF00EEE8C6 /* RHDirectoryViewController.m */; };
 		924DE4E9145E79DF00EEE8C6 /* RHDirectoryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 924DE4E7145E79DF00EEE8C6 /* RHDirectoryViewController.xib */; };
 		924E754D140ACC9A001DFC4C /* tab-bar-map-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 924E754C140ACC9A001DFC4C /* tab-bar-map-icon.png */; };
-		9250133C1431A7C700CEBB35 /* RHRestHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 9250133B1431A7C700CEBB35 /* RHRestHandler.m */; };
 		925465A61495BC6600C12B81 /* RHDirectionsRequester.m in Sources */ = {isa = PBXBuildFile; fileRef = 925465A51495BC6600C12B81 /* RHDirectionsRequester.m */; };
 		925465AA1495C69C00C12B81 /* RHWrappedCoordinate.m in Sources */ = {isa = PBXBuildFile; fileRef = 925465A91495C69C00C12B81 /* RHWrappedCoordinate.m */; };
 		925465AE1495EB7F00C12B81 /* RHToursViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 925465AC1495EB7E00C12B81 /* RHToursViewController.m */; };
@@ -104,7 +103,6 @@
 		9201A4611432CA2600069863 /* RHAnnotationViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHAnnotationViewDelegate.h; sourceTree = "<group>"; };
 		9201A4631432E96000069863 /* RHLocationOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHLocationOverlay.h; sourceTree = "<group>"; };
 		9201A4641432E96000069863 /* RHLocationOverlay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHLocationOverlay.m; sourceTree = "<group>"; };
-		920656F514303D4F00D50293 /* RHRemoteHandlerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHRemoteHandlerDelegate.h; sourceTree = "<group>"; };
 		9208547D142BA28100BE55B8 /* RHNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHNode.h; sourceTree = "<group>"; };
 		9208547E142BA28100BE55B8 /* RHNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHNode.m; sourceTree = "<group>"; };
 		92085491142BA3C300BE55B8 /* RHLabelNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHLabelNode.h; sourceTree = "<group>"; };
@@ -168,8 +166,6 @@
 		924DE4E6145E79DF00EEE8C6 /* RHDirectoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHDirectoryViewController.m; sourceTree = "<group>"; };
 		924DE4E7145E79DF00EEE8C6 /* RHDirectoryViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RHDirectoryViewController.xib; sourceTree = "<group>"; };
 		924E754C140ACC9A001DFC4C /* tab-bar-map-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab-bar-map-icon.png"; sourceTree = "<group>"; };
-		9250133A1431A7C700CEBB35 /* RHRestHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHRestHandler.h; sourceTree = "<group>"; };
-		9250133B1431A7C700CEBB35 /* RHRestHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHRestHandler.m; sourceTree = "<group>"; };
 		925465A41495BC6600C12B81 /* RHDirectionsRequester.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHDirectionsRequester.h; sourceTree = "<group>"; };
 		925465A51495BC6600C12B81 /* RHDirectionsRequester.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHDirectionsRequester.m; sourceTree = "<group>"; };
 		925465A71495BD5F00C12B81 /* RHDirectionsRequesterDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHDirectionsRequesterDelegate.h; sourceTree = "<group>"; };
@@ -284,9 +280,6 @@
 		920656F314303CB200D50293 /* Server Communication */ = {
 			isa = PBXGroup;
 			children = (
-				920656F514303D4F00D50293 /* RHRemoteHandlerDelegate.h */,
-				9250133A1431A7C700CEBB35 /* RHRestHandler.h */,
-				9250133B1431A7C700CEBB35 /* RHRestHandler.m */,
 				9233414114DA48CB004C1ACC /* RHLocationsRequester.h */,
 				9233414214DA48CB004C1ACC /* RHLocationsRequester.m */,
 				9233414414DA48E6004C1ACC /* RHTopLocationsRequester.h */,
@@ -666,7 +659,6 @@
 				9246368C142BAAC700A5E399 /* RHLocation.m in Sources */,
 				92463690142BAB5300A5E399 /* RHBoundaryNode.m in Sources */,
 				92463698142BAE0A00A5E399 /* RHNavigationNode.m in Sources */,
-				9250133C1431A7C700CEBB35 /* RHRestHandler.m in Sources */,
 				9201A4651432E96000069863 /* RHLocationOverlay.m in Sources */,
 				928A6440144955EB00521EB1 /* RHPListStore.m in Sources */,
 				9236CE9F144E3CBC00D0FB59 /* RHQuickListViewController.m in Sources */,

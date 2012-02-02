@@ -22,7 +22,6 @@
 
 #import "MKMapView+ZoomLevel.h"
 #import "RHAnnotationViewDelegate.h"
-#import "RHRemoteHandlerDelegate.h"
 #import "RHLocationsRequesterDelegate.h"
 
 #define kRHMapViewControllerNibName @"RHMapViewController"
@@ -36,7 +35,7 @@
 /// \ingroup views
 /// View controller for the map portion of the application.
 @interface RHMapViewController : UIViewController
-<MKMapViewDelegate, RHRemoteHandlerDelegate, RHAnnotationViewDelegate, RHLocationsRequesterDelegate> {
+<MKMapViewDelegate, RHAnnotationViewDelegate, RHLocationsRequesterDelegate> {
     @private
     NSArray *currentDirections_;
     NSUInteger currentDirectionIndex_;
@@ -55,9 +54,6 @@
 
 /// Core Data managed object context. 
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
-
-/// Remote data handler.
-@property (nonatomic, strong) RHRestHandler *remoteHandler;
 
 @property (nonatomic, strong) NSMutableArray *quickListAnnotations;
 

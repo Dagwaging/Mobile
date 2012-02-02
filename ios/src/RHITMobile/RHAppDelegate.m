@@ -20,7 +20,6 @@
 #import "RHAppDelegate.h"
 #import "RHMapViewController.h"
 #import "RHSearchViewController.h"
-#import "RHRestHandler.h"
 #import "RHBetaViewController.h"
 #import "RHBeta.h"
 #import "RHDirectoryViewController.h"

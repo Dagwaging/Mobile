@@ -49,8 +49,6 @@ typedef enum RHSearchViewControllerType_ {
 
 @property (nonatomic, strong) IBOutlet UITableView *tableView;
 
-@property (nonatomic, strong) RHRestHandler *remoteHandler;
-
 @property (nonatomic, strong) NSManagedObjectContext *context;
 
 @property (nonatomic, readonly) NSPersistentStoreCoordinator *persistantStoreCoordinator;
