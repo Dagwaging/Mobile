@@ -18,7 +18,7 @@
 //
 
 #import "BetaRegistrationViewController.h"
-#import "BetaViewController.h"
+#import "RHBetaViewController.h"
 #import "RHBeta.h"
 
 #ifdef RHITMobile_RHBeta

@@ -21,7 +21,7 @@
 #import "RHMapViewController.h"
 #import "RHSearchViewController.h"
 #import "RHRestHandler.h"
-#import "BetaViewController.h"
+#import "RHBetaViewController.h"
 #import "RHBeta.h"
 #import "DirectoryViewController.h"
 #import "InfoViewController.h"
@@ -133,8 +133,8 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     // If this is a beta build, create and initizliaze the beta controller
 #ifdef RHITMobile_RHBeta
-    BetaViewController *beta = [[BetaViewController alloc]
-                                 initWithNibName:@"BetaView"
+    RHBetaViewController *beta = [[RHBetaViewController alloc]
+                                 initWithNibName:kRHBetaViewControllerNibName
                                  bundle:nil];
     UINavigationController *nav = [[UINavigationController alloc]
                                     initWithRootViewController:beta];

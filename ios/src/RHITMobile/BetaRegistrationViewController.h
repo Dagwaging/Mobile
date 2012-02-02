@@ -22,7 +22,7 @@
 
 #ifdef RHITMobile_RHBeta
 
-@class BetaViewController;
+@class RHBetaViewController;
 
 @interface BetaRegistrationViewController : UIViewController <UITextFieldDelegate>
 
@@ -30,7 +30,7 @@
 
 @property (nonatomic, strong) IBOutlet UITextField *emailField;
 
-@property (nonatomic, strong) BetaViewController *betaViewController;
+@property (nonatomic, strong) RHBetaViewController *betaViewController;
 
 @property (nonatomic, strong) NSOperationQueue *operations;
 

@@ -1,5 +1,5 @@
 //
-//  BetaViewController.m
+//  RHBetaViewController.m
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -20,7 +20,7 @@
 #include <sys/types.h>
 #include <sys/sysctl.h>
 
-#import "BetaViewController.h"
+#import "RHBetaViewController.h"
 #import "RHBeta.h"
 #import "CJSONDeserializer.h"
 #import "NSDictionary_JSONExtensions.h"
@@ -55,7 +55,7 @@
 #define kBetaMapDebugCell @"MapDebugCell"
 #define kBetaDatabaseToolsLabel @"Database Tools"
 
-@interface BetaViewController ()
+@interface RHBetaViewController ()
 
 @property (nonatomic, strong) NSArray *sections;
 @property (nonatomic, assign) BOOL checkingForUpdates;
@@ -79,7 +79,7 @@
 @end
 
 
-@implementation BetaViewController
+@implementation RHBetaViewController
 
 @synthesize registrationName;
 @synthesize registrationEmail;

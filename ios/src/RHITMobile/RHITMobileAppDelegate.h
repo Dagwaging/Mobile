@@ -27,7 +27,7 @@
 
 // Conditionally care about beta classes.
 #ifdef RHITMobile_RHBeta
-@class BetaViewController;
+@class RHBetaViewController;
 #endif
 
 /// Application delegate for the RHITMobile app. This class is responsible for

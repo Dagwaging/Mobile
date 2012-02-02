@@ -30,8 +30,8 @@
 		9246368C142BAAC700A5E399 /* RHLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9246368B142BAAC700A5E399 /* RHLocation.m */; };
 		92463690142BAB5300A5E399 /* RHBoundaryNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 9246368F142BAB5300A5E399 /* RHBoundaryNode.m */; };
 		92463698142BAE0A00A5E399 /* RHNavigationNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 92463697142BAE0A00A5E399 /* RHNavigationNode.m */; };
-		924DE4D4145E6EC700EEE8C6 /* BetaViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 924DE4D2145E6EC700EEE8C6 /* BetaViewController.m */; };
-		924DE4D5145E6EC700EEE8C6 /* BetaView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 924DE4D3145E6EC700EEE8C6 /* BetaView.xib */; };
+		924DE4D4145E6EC700EEE8C6 /* RHBetaViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 924DE4D2145E6EC700EEE8C6 /* RHBetaViewController.m */; };
+		924DE4D5145E6EC700EEE8C6 /* RHBetaViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 924DE4D3145E6EC700EEE8C6 /* RHBetaViewController.xib */; };
 		924DE4DA145E773800EEE8C6 /* tab-bar-info-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 924DE4D8145E773800EEE8C6 /* tab-bar-info-icon.png */; };
 		924DE4DB145E773800EEE8C6 /* tab-bar-info-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 924DE4D9145E773800EEE8C6 /* tab-bar-info-icon@2x.png */; };
 		924DE4DE145E787D00EEE8C6 /* tab-bar-beta-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 924DE4DC145E787D00EEE8C6 /* tab-bar-beta-icon.png */; };
@@ -134,9 +134,9 @@
 		9246368F142BAB5300A5E399 /* RHBoundaryNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHBoundaryNode.m; sourceTree = "<group>"; };
 		92463696142BAE0900A5E399 /* RHNavigationNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHNavigationNode.h; sourceTree = "<group>"; };
 		92463697142BAE0A00A5E399 /* RHNavigationNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHNavigationNode.m; sourceTree = "<group>"; };
-		924DE4D1145E6EC700EEE8C6 /* BetaViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BetaViewController.h; sourceTree = "<group>"; };
-		924DE4D2145E6EC700EEE8C6 /* BetaViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BetaViewController.m; sourceTree = "<group>"; };
-		924DE4D3145E6EC700EEE8C6 /* BetaView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BetaView.xib; sourceTree = "<group>"; };
+		924DE4D1145E6EC700EEE8C6 /* RHBetaViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHBetaViewController.h; sourceTree = "<group>"; };
+		924DE4D2145E6EC700EEE8C6 /* RHBetaViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHBetaViewController.m; sourceTree = "<group>"; };
+		924DE4D3145E6EC700EEE8C6 /* RHBetaViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RHBetaViewController.xib; sourceTree = "<group>"; };
 		924DE4D7145E70CE00EEE8C6 /* RHBeta.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHBeta.h; sourceTree = "<group>"; };
 		924DE4D8145E773800EEE8C6 /* tab-bar-info-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab-bar-info-icon.png"; sourceTree = "<group>"; };
 		924DE4D9145E773800EEE8C6 /* tab-bar-info-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab-bar-info-icon@2x.png"; sourceTree = "<group>"; };
@@ -507,8 +507,9 @@
 				92312435144FB8470074791E /* RHLocationDetailViewController.h */,
 				92312436144FB8470074791E /* RHLocationDetailViewController.m */,
 				92312437144FB8470074791E /* RHLocationDetailViewController.xib */,
-				924DE4D1145E6EC700EEE8C6 /* BetaViewController.h */,
-				924DE4D2145E6EC700EEE8C6 /* BetaViewController.m */,
+				924DE4D1145E6EC700EEE8C6 /* RHBetaViewController.h */,
+				924DE4D2145E6EC700EEE8C6 /* RHBetaViewController.m */,
+				924DE4D3145E6EC700EEE8C6 /* RHBetaViewController.xib */,
 				92A49DD9145F8BA400B6F34E /* BetaRegistrationViewController.h */,
 				92A49DDA145F8BA400B6F34E /* BetaRegistrationViewController.m */,
 				924DE4E0145E79A800EEE8C6 /* InfoViewController.h */,
@@ -521,7 +522,6 @@
 				925465AC1495EB7E00C12B81 /* ToursViewController.m */,
 				92D3672514B60DE000EE0504 /* PersonDetailViewController.h */,
 				92D3672614B60DE000EE0504 /* PersonDetailViewController.m */,
-				924DE4D3145E6EC700EEE8C6 /* BetaView.xib */,
 				924DE4E2145E79A800EEE8C6 /* InfoView.xib */,
 				924DE4E7145E79DF00EEE8C6 /* DirectoryView.xib */,
 				92A49DDB145F8BA400B6F34E /* BetaRegistrationView.xib */,
@@ -601,7 +601,7 @@
 				92ADEE2F14599D9500060A3F /* quicklist-toolbar-icon@2x.png in Resources */,
 				92ADEE321459BC5E00060A3F /* tab-bar-directory-icon.png in Resources */,
 				92ADEE331459BC5E00060A3F /* tab-bar-directory-icon@2x.png in Resources */,
-				924DE4D5145E6EC700EEE8C6 /* BetaView.xib in Resources */,
+				924DE4D5145E6EC700EEE8C6 /* RHBetaViewController.xib in Resources */,
 				924DE4DA145E773800EEE8C6 /* tab-bar-info-icon.png in Resources */,
 				924DE4DB145E773800EEE8C6 /* tab-bar-info-icon@2x.png in Resources */,
 				924DE4DE145E787D00EEE8C6 /* tab-bar-beta-icon.png in Resources */,
@@ -645,7 +645,7 @@
 				9236CEA6144F33C400D0FB59 /* RHPinAnnotationView.m in Sources */,
 				92312438144FB8470074791E /* RHLocationDetailViewController.m in Sources */,
 				92ADEE291459026600060A3F /* RHLocationLink.m in Sources */,
-				924DE4D4145E6EC700EEE8C6 /* BetaViewController.m in Sources */,
+				924DE4D4145E6EC700EEE8C6 /* RHBetaViewController.m in Sources */,
 				924DE4E3145E79A800EEE8C6 /* InfoViewController.m in Sources */,
 				924DE4E8145E79DF00EEE8C6 /* DirectoryViewController.m in Sources */,
 				92A49DDC145F8BA400B6F34E /* BetaRegistrationViewController.m in Sources */,

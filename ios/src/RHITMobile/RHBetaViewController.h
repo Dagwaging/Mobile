@@ -1,5 +1,5 @@
 //
-//  BetaViewController.h
+//  RHBetaViewController.h
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -22,7 +22,10 @@
 
 #ifdef RHITMobile_RHBeta
 
-@interface BetaViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, UIAlertViewDelegate>
+#define kRHBetaViewControllerNibName @"RHBetaViewController"
+
+
+@interface RHBetaViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, UIAlertViewDelegate>
 
 @property (nonatomic, strong) NSString *registrationName;
 
