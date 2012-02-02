@@ -23,7 +23,7 @@
 #import "RHLocationLink.h"
 #import "RHITMobileAppDelegate.h"
 #import "RHMapViewController.h"
-#import "WebViewController.h"
+#import "RHWebViewController.h"
 #import "RHDirectionsRequester.h"
 #import "RHWrappedCoordinate.h"
 
@@ -397,7 +397,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         
         NSURL *url = [NSURL URLWithString:link.url];
         
-        WebViewController *webViewController = [[WebViewController alloc] initWithNibName:@"WebView" bundle:nil];
+        RHWebViewController *webViewController = [[RHWebViewController alloc] initWithNibName:kRHWebViewControllerNibName bundle:nil];
         
         
         webViewController.url = url;
@@ -416,7 +416,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         
         NSURL *url = [NSURL URLWithString:link.url];
         
-        WebViewController *webViewController = [[WebViewController alloc] initWithNibName:@"WebView" bundle:nil];
+        RHWebViewController *webViewController = [[RHWebViewController alloc] initWithNibName:kRHWebViewControllerNibName bundle:nil];
         
         webViewController.url = url;
         webViewController.title = link.name;

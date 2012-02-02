@@ -1,5 +1,5 @@
 //
-//  WebViewController.m
+//  RHWebViewController.m
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -17,9 +17,9 @@
 //  limitations under the License.
 //
 
-#import "WebViewController.h"
+#import "RHWebViewController.h"
 
-@implementation WebViewController
+@implementation RHWebViewController
 
 @synthesize webView;
 @synthesize url = url_;

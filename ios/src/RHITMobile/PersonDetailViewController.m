@@ -19,7 +19,7 @@
 
 #import "PersonDetailViewController.h"
 
-#import "WebViewController.h"
+#import "RHWebViewController.h"
 
 #define kCellReuseIdentifier @"PersonDetailCell"
 #define kScheduleCellReuseIdentifier @"ScheduleCell"
@@ -137,7 +137,7 @@
         [app openURL:[NSURL URLWithString:stringURL]];
     } else if ([section isEqualToString:kWebPageTitle]) {
         NSString *url = [self.displayValues objectForKey:section];
-        WebViewController *webViewController = [[WebViewController alloc] initWithNibName:@"WebView" bundle:nil];
+        RHWebViewController *webViewController = [[RHWebViewController alloc] initWithNibName:kRHWebViewControllerNibName bundle:nil];
         webViewController.url = [NSURL URLWithString:url];
         webViewController.title = self.title;
         [self.navigationController pushViewController:webViewController animated:YES];

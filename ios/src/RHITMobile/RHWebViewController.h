@@ -1,5 +1,5 @@
 //
-//  WebViewController.h
+//  RHWebViewController.h
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -19,9 +19,11 @@
 
 #import <UIKit/UIKit.h>
 
+#define kRHWebViewControllerNibName @"RHWebViewController"
+
 
 /// \ingroup views
-@interface WebViewController : UIViewController
+@interface RHWebViewController : UIViewController
 
 @property (nonatomic, strong) IBOutlet UIWebView *webView;
 

@@ -21,7 +21,7 @@
 #import "RHServiceCategory.h"
 #import "RHServiceLink.h"
 #import "RHITMobileAppDelegate.h"
-#import "WebViewController.h"
+#import "RHWebViewController.h"
 
 #define kLoadingReuseIdentifier @"LoadingCell"
 #define kReuseIdentifier @"ServiceItemCell"
@@ -138,8 +138,8 @@
     } else if ([serviceItem isKindOfClass:[RHServiceLink class]]) {
         RHServiceLink *link = (RHServiceLink *) serviceItem;
         
-        WebViewController *webViewController = [[WebViewController alloc]
-                                                initWithNibName:@"WebView"
+        RHWebViewController *webViewController = [[RHWebViewController alloc]
+                                                initWithNibName:kRHWebViewControllerNibName
                                                 bundle:nil];
         webViewController.url = [NSURL URLWithString:link.url];
         webViewController.title = link.name;

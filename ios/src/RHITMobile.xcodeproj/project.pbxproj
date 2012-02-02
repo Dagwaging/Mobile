@@ -91,8 +91,8 @@
 		92F1B8B51496F67900F7FFD8 /* RHDirectionLineItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F1B8B41496F67900F7FFD8 /* RHDirectionLineItem.m */; };
 		92F1B8B914972AE600F7FFD8 /* RHSimplePointAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F1B8B814972AE600F7FFD8 /* RHSimplePointAnnotation.m */; };
 		92F1B8BC1497BBE600F7FFD8 /* RHTourRequester.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F1B8BB1497BBE600F7FFD8 /* RHTourRequester.m */; };
-		92F20F6D1464383200603500 /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F20F6B1464383200603500 /* WebViewController.m */; };
-		92F20F6E1464383200603500 /* WebView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92F20F6C1464383200603500 /* WebView.xib */; };
+		92F20F6D1464383200603500 /* RHWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F20F6B1464383200603500 /* RHWebViewController.m */; };
+		92F20F6E1464383200603500 /* RHWebViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92F20F6C1464383200603500 /* RHWebViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -242,9 +242,9 @@
 		92F1B8BA1497BBE600F7FFD8 /* RHTourRequester.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHTourRequester.h; sourceTree = "<group>"; };
 		92F1B8BB1497BBE600F7FFD8 /* RHTourRequester.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHTourRequester.m; sourceTree = "<group>"; };
 		92F1B8BD1497BC0800F7FFD8 /* RHTourRequesterDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHTourRequesterDelegate.h; sourceTree = "<group>"; };
-		92F20F6A1464383200603500 /* WebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewController.h; sourceTree = "<group>"; };
-		92F20F6B1464383200603500 /* WebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewController.m; sourceTree = "<group>"; };
-		92F20F6C1464383200603500 /* WebView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WebView.xib; sourceTree = "<group>"; };
+		92F20F6A1464383200603500 /* RHWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHWebViewController.h; sourceTree = "<group>"; };
+		92F20F6B1464383200603500 /* RHWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHWebViewController.m; sourceTree = "<group>"; };
+		92F20F6C1464383200603500 /* RHWebViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RHWebViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -519,13 +519,13 @@
 				924DE4E5145E79DF00EEE8C6 /* RHDirectoryViewController.h */,
 				924DE4E6145E79DF00EEE8C6 /* RHDirectoryViewController.m */,
 				924DE4E7145E79DF00EEE8C6 /* RHDirectoryViewController.xib */,
-				92F20F6A1464383200603500 /* WebViewController.h */,
-				92F20F6B1464383200603500 /* WebViewController.m */,
+				92F20F6A1464383200603500 /* RHWebViewController.h */,
+				92F20F6B1464383200603500 /* RHWebViewController.m */,
+				92F20F6C1464383200603500 /* RHWebViewController.xib */,
 				925465AB1495EB7E00C12B81 /* ToursViewController.h */,
 				925465AC1495EB7E00C12B81 /* ToursViewController.m */,
 				92D3672514B60DE000EE0504 /* PersonDetailViewController.h */,
 				92D3672614B60DE000EE0504 /* PersonDetailViewController.m */,
-				92F20F6C1464383200603500 /* WebView.xib */,
 				925465AD1495EB7F00C12B81 /* ToursView.xib */,
 				92D3672714B60DE000EE0504 /* PersonDetailView.xib */,
 			);
@@ -609,7 +609,7 @@
 				924DE4E4145E79A800EEE8C6 /* RHCampusServicesViewController.xib in Resources */,
 				924DE4E9145E79DF00EEE8C6 /* RHDirectoryViewController.xib in Resources */,
 				92A49DDD145F8BA400B6F34E /* RHBetaRegistrationViewController.xib in Resources */,
-				92F20F6E1464383200603500 /* WebView.xib in Resources */,
+				92F20F6E1464383200603500 /* RHWebViewController.xib in Resources */,
 				925465AF1495EB7F00C12B81 /* ToursView.xib in Resources */,
 				922F44A514985AE800D5C2C3 /* tab-bar-tours-icon.png in Resources */,
 				922F44A614985AE800D5C2C3 /* tab-bar-tours-icon@2x.png in Resources */,
@@ -649,7 +649,7 @@
 				924DE4E3145E79A800EEE8C6 /* RHCampusServicesViewController.m in Sources */,
 				924DE4E8145E79DF00EEE8C6 /* RHDirectoryViewController.m in Sources */,
 				92A49DDC145F8BA400B6F34E /* RHBetaRegistrationViewController.m in Sources */,
-				92F20F6D1464383200603500 /* WebViewController.m in Sources */,
+				92F20F6D1464383200603500 /* RHWebViewController.m in Sources */,
 				92E1AA7F1487115F0005BF34 /* RHWebRequestMaker.m in Sources */,
 				925465A61495BC6600C12B81 /* RHDirectionsRequester.m in Sources */,
 				925465AA1495C69C00C12B81 /* RHWrappedCoordinate.m in Sources */,
