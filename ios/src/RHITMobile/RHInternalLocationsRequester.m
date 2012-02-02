@@ -35,6 +35,8 @@
         return;
     }
     
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    
     NSManagedObjectContext *localContext = self.threadSafeManagedObjectContext;
     
     NSFetchRequest *parentsFetchRequest = [NSFetchRequest fetchRequestWithEntityName:kRHLocationEntityName];
@@ -78,6 +80,8 @@
     
     RHDataVersionManager *dataVersionManager = [RHDataVersionManager instance];
     [dataVersionManager upgradeLocationsVersion];
+    
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
     
     [self.delegate performSelectorOnMainThread:@selector(didFinishUpdatingInternalLocations)
                                     withObject:nil
