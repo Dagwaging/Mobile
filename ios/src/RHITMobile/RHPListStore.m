@@ -63,21 +63,21 @@
 
 #pragma mark - Property Methods
 
-- (NSString *)currentMapDataVersion {
-    return [[self.data valueForKey:kCurrentMapDataVersionKey] description];
+- (NSNumber *)currentMapDataVersion {
+    return [self.data valueForKey:kCurrentMapDataVersionKey];
 }
 
-- (void)setCurrentMapDataVersion:(NSString *)inCurrentDataVersion {
+- (void)setCurrentMapDataVersion:(NSNumber *)inCurrentDataVersion {
     NSMutableDictionary *data = self.data;
     [data setValue:inCurrentDataVersion forKey:kCurrentMapDataVersionKey];
     self.data = data;
 }
 
-- (NSString *)currentServicesDataVersion {
-    return [[self.data valueForKey:kCurrentServiceDataVersionKey] description];
+- (NSNumber *)currentServicesDataVersion {
+    return [self.data valueForKey:kCurrentServiceDataVersionKey];
 }
 
-- (void)setCurrentServicesDataVersion:(NSString *)currentServicesDataVersion {
+- (void)setCurrentServicesDataVersion:(NSNumber *)currentServicesDataVersion {
     NSMutableDictionary *data = self.data;
     [data setValue:currentServicesDataVersion forKey:kCurrentServiceDataVersionKey];
     self.data = data;

@@ -1,5 +1,5 @@
 //
-//  RHPListStore.h
+//  RHDataVersionRequester.h
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -17,11 +17,10 @@
 //  limitations under the License.
 //
 
-#import <Foundation/Foundation.h>
+#import "RHLocationsRequester.h"
 
-@interface RHPListStore : NSObject
+@interface RHDataVersionRequester : NSObject
 
-@property (nonatomic, strong) NSNumber *currentMapDataVersion;
-@property (nonatomic, strong) NSNumber *currentServicesDataVersion;
+@property (nonatomic, readonly) NSDictionary *currentDataVersions;
 
 @end

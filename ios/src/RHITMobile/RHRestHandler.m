@@ -416,7 +416,7 @@
                               self.host,
                               self.port];
         
-        NSString *currentVersion = self.valueStore.currentMapDataVersion;
+        NSString *currentVersion = nil;//self.valueStore.currentMapDataVersion;
         NSString *serverPath = nil;
         
         if (currentVersion == nil) {
@@ -482,11 +482,11 @@
                                       withObject:nil
                                    waitUntilDone:YES];
         
-        NSString *newVersion = [self stringFromDictionary:parsedData
-                                                   forKey:@"Version"
-                                        withErrorSelector:failureSelector
-                                          withErrorString:@"Problem with server "
-                                "response:\nNo data version number specified"];
+//        NSString *newVersion = [self stringFromDictionary:parsedData
+//                                                   forKey:@"Version"
+//                                        withErrorSelector:failureSelector
+//                                          withErrorString:@"Problem with server "
+//                                "response:\nNo data version number specified"];
         
         NSArray *areas = [self arrayFromDictionary:parsedData
                                             forKey:kLocationListKey
@@ -512,7 +512,7 @@
         NSError *saveError = nil;
         [context save:&saveError];
         
-        self.valueStore.currentMapDataVersion = newVersion;
+        self.valueStore.currentMapDataVersion = nil;//newVersion;
         
         [delegate performSelectorOnMainThread:@selector(didFindMapLevelLocationUpdates)
                                    withObject:nil

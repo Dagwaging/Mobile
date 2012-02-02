@@ -1,5 +1,5 @@
 //
-//  RHPListStore.h
+//  RHDataVersionRequester.m
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -17,11 +17,19 @@
 //  limitations under the License.
 //
 
-#import <Foundation/Foundation.h>
+#import "RHDataVersionRequester.h"
+#import "RHWebRequestMaker.h"
 
-@interface RHPListStore : NSObject
+#define kRootServerPath @"/"
 
-@property (nonatomic, strong) NSNumber *currentMapDataVersion;
-@property (nonatomic, strong) NSNumber *currentServicesDataVersion;
+@implementation RHDataVersionRequester
+
+- (NSDictionary *)currentDataVersions {
+    if ([NSThread isMainThread]) {
+        NSLog(@"Warning: RHDataVersionRequester running on main thread");
+    }
+    
+    return [RHWebRequestMaker JSONGetRequestWithPath:kRootServerPath URLargs:@""];
+}
 
 @end

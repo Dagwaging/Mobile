@@ -18,6 +18,7 @@
 //
 
 #import "RHTopLocationsRequester.h"
+#import "RHDataVersionManager.h"
 #import "RHInternalLocationsRequester.h"
 #import "RHLocation.h"
 #import "RHWebRequestMaker.h"
@@ -32,6 +33,12 @@
     // Only run on a background thread
     if ([NSThread isMainThread]) {
         [self performSelectorInBackground:@selector(updateTopLevelLocations) withObject:nil];
+        return;
+    }
+    
+    RHDataVersionManager *dataVersionManager = [RHDataVersionManager instance];
+    
+    if (!dataVersionManager.needsLocationsUpdate) {
         return;
     }
     

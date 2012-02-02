@@ -18,6 +18,7 @@
 //
 
 #import "RHInternalLocationsRequester.h"
+#import "RHDataVersionManager.h"
 #import "RHLocation.h"
 #import "RHWebRequestMaker.h"
 
@@ -74,6 +75,9 @@
         NSLog(@"Problem saving internal locations: %@", saveError);
         return;
     }
+    
+    RHDataVersionManager *dataVersionManager = [RHDataVersionManager instance];
+    [dataVersionManager upgradeLocationsVersion];
     
     [self.delegate performSelectorOnMainThread:@selector(didFinishUpdatingInternalLocations)
                                     withObject:nil
