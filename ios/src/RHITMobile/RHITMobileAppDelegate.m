@@ -23,7 +23,7 @@
 #import "RHRestHandler.h"
 #import "RHBetaViewController.h"
 #import "RHBeta.h"
-#import "DirectoryViewController.h"
+#import "RHDirectoryViewController.h"
 #import "RHCampusServicesViewController.h"
 #import "RHLocation.h"
 #import "ToursViewController.h"
@@ -108,9 +108,9 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     self.infoViewController.navigationItem.title = @"Campus Info";
     
     // Create and initialize the root directory view controller
-    DirectoryViewController *directoryController = [DirectoryViewController
+    RHDirectoryViewController *directoryController = [RHDirectoryViewController
                                                     alloc];
-    directoryController = [directoryController initWithNibName:@"DirectoryView"
+    directoryController = [directoryController initWithNibName:kRHDirectoryViewControllerNibName
                                                          bundle:nil];
     
     [self.directoryNavigationViewController

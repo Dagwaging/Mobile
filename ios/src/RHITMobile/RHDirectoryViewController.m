@@ -1,5 +1,5 @@
 //
-//  DirectoryViewController.m
+//  RHDirectoryViewController.m
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -17,12 +17,12 @@
 //  limitations under the License.
 //
 
-#import "DirectoryViewController.h"
+#import "RHDirectoryViewController.h"
 #import "PersonDetailViewController.h"
 
 #define kCellReuseIdentifier @"DirectoryViewCell"
 
-@implementation DirectoryViewController
+@implementation RHDirectoryViewController
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {

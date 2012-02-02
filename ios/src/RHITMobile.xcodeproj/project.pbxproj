@@ -38,8 +38,8 @@
 		924DE4DF145E787D00EEE8C6 /* tab-bar-beta-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 924DE4DD145E787D00EEE8C6 /* tab-bar-beta-icon@2x.png */; };
 		924DE4E3145E79A800EEE8C6 /* RHCampusServicesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 924DE4E1145E79A800EEE8C6 /* RHCampusServicesViewController.m */; };
 		924DE4E4145E79A800EEE8C6 /* RHCampusServicesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 924DE4E2145E79A800EEE8C6 /* RHCampusServicesViewController.xib */; };
-		924DE4E8145E79DF00EEE8C6 /* DirectoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 924DE4E6145E79DF00EEE8C6 /* DirectoryViewController.m */; };
-		924DE4E9145E79DF00EEE8C6 /* DirectoryView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 924DE4E7145E79DF00EEE8C6 /* DirectoryView.xib */; };
+		924DE4E8145E79DF00EEE8C6 /* RHDirectoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 924DE4E6145E79DF00EEE8C6 /* RHDirectoryViewController.m */; };
+		924DE4E9145E79DF00EEE8C6 /* RHDirectoryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 924DE4E7145E79DF00EEE8C6 /* RHDirectoryViewController.xib */; };
 		924E754D140ACC9A001DFC4C /* tab-bar-map-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 924E754C140ACC9A001DFC4C /* tab-bar-map-icon.png */; };
 		9250133C1431A7C700CEBB35 /* RHRestHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 9250133B1431A7C700CEBB35 /* RHRestHandler.m */; };
 		925465A61495BC6600C12B81 /* RHDirectionsRequester.m in Sources */ = {isa = PBXBuildFile; fileRef = 925465A51495BC6600C12B81 /* RHDirectionsRequester.m */; };
@@ -145,9 +145,9 @@
 		924DE4E0145E79A800EEE8C6 /* RHCampusServicesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHCampusServicesViewController.h; sourceTree = "<group>"; };
 		924DE4E1145E79A800EEE8C6 /* RHCampusServicesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHCampusServicesViewController.m; sourceTree = "<group>"; };
 		924DE4E2145E79A800EEE8C6 /* RHCampusServicesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RHCampusServicesViewController.xib; sourceTree = "<group>"; };
-		924DE4E5145E79DF00EEE8C6 /* DirectoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DirectoryViewController.h; sourceTree = "<group>"; };
-		924DE4E6145E79DF00EEE8C6 /* DirectoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DirectoryViewController.m; sourceTree = "<group>"; };
-		924DE4E7145E79DF00EEE8C6 /* DirectoryView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DirectoryView.xib; sourceTree = "<group>"; };
+		924DE4E5145E79DF00EEE8C6 /* RHDirectoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHDirectoryViewController.h; sourceTree = "<group>"; };
+		924DE4E6145E79DF00EEE8C6 /* RHDirectoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHDirectoryViewController.m; sourceTree = "<group>"; };
+		924DE4E7145E79DF00EEE8C6 /* RHDirectoryViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RHDirectoryViewController.xib; sourceTree = "<group>"; };
 		924E754C140ACC9A001DFC4C /* tab-bar-map-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab-bar-map-icon.png"; sourceTree = "<group>"; };
 		9250133A1431A7C700CEBB35 /* RHRestHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHRestHandler.h; sourceTree = "<group>"; };
 		9250133B1431A7C700CEBB35 /* RHRestHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHRestHandler.m; sourceTree = "<group>"; };
@@ -516,15 +516,15 @@
 				924DE4E0145E79A800EEE8C6 /* RHCampusServicesViewController.h */,
 				924DE4E1145E79A800EEE8C6 /* RHCampusServicesViewController.m */,
 				924DE4E2145E79A800EEE8C6 /* RHCampusServicesViewController.xib */,
-				924DE4E5145E79DF00EEE8C6 /* DirectoryViewController.h */,
-				924DE4E6145E79DF00EEE8C6 /* DirectoryViewController.m */,
+				924DE4E5145E79DF00EEE8C6 /* RHDirectoryViewController.h */,
+				924DE4E6145E79DF00EEE8C6 /* RHDirectoryViewController.m */,
+				924DE4E7145E79DF00EEE8C6 /* RHDirectoryViewController.xib */,
 				92F20F6A1464383200603500 /* WebViewController.h */,
 				92F20F6B1464383200603500 /* WebViewController.m */,
 				925465AB1495EB7E00C12B81 /* ToursViewController.h */,
 				925465AC1495EB7E00C12B81 /* ToursViewController.m */,
 				92D3672514B60DE000EE0504 /* PersonDetailViewController.h */,
 				92D3672614B60DE000EE0504 /* PersonDetailViewController.m */,
-				924DE4E7145E79DF00EEE8C6 /* DirectoryView.xib */,
 				92F20F6C1464383200603500 /* WebView.xib */,
 				925465AD1495EB7F00C12B81 /* ToursView.xib */,
 				92D3672714B60DE000EE0504 /* PersonDetailView.xib */,
@@ -607,7 +607,7 @@
 				924DE4DE145E787D00EEE8C6 /* tab-bar-beta-icon.png in Resources */,
 				924DE4DF145E787D00EEE8C6 /* tab-bar-beta-icon@2x.png in Resources */,
 				924DE4E4145E79A800EEE8C6 /* RHCampusServicesViewController.xib in Resources */,
-				924DE4E9145E79DF00EEE8C6 /* DirectoryView.xib in Resources */,
+				924DE4E9145E79DF00EEE8C6 /* RHDirectoryViewController.xib in Resources */,
 				92A49DDD145F8BA400B6F34E /* RHBetaRegistrationViewController.xib in Resources */,
 				92F20F6E1464383200603500 /* WebView.xib in Resources */,
 				925465AF1495EB7F00C12B81 /* ToursView.xib in Resources */,
@@ -647,7 +647,7 @@
 				92ADEE291459026600060A3F /* RHLocationLink.m in Sources */,
 				924DE4D4145E6EC700EEE8C6 /* RHBetaViewController.m in Sources */,
 				924DE4E3145E79A800EEE8C6 /* RHCampusServicesViewController.m in Sources */,
-				924DE4E8145E79DF00EEE8C6 /* DirectoryViewController.m in Sources */,
+				924DE4E8145E79DF00EEE8C6 /* RHDirectoryViewController.m in Sources */,
 				92A49DDC145F8BA400B6F34E /* RHBetaRegistrationViewController.m in Sources */,
 				92F20F6D1464383200603500 /* WebViewController.m in Sources */,
 				92E1AA7F1487115F0005BF34 /* RHWebRequestMaker.m in Sources */,

@@ -1,5 +1,5 @@
 //
-//  DirectoryViewController.h
+//  RHDirectoryViewController.h
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -19,7 +19,9 @@
 
 #import <UIKit/UIKit.h>
 
+#define kRHDirectoryViewControllerNibName @"RHDirectoryViewController"
+
 /// \ingroup views
-@interface DirectoryViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
+@interface RHDirectoryViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 
 @end
