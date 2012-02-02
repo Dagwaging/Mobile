@@ -1,5 +1,5 @@
 //
-//  PersonDetailViewController.h
+//  RHPersonDetailViewController.h
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -19,7 +19,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PersonDetailViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
+#define kRHPersonDetailViewControllerNibName @"RHPersonDetailViewController"
+
+
+@interface RHPersonDetailViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, strong) NSArray *sections;
 

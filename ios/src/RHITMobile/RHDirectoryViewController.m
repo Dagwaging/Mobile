@@ -18,7 +18,7 @@
 //
 
 #import "RHDirectoryViewController.h"
-#import "PersonDetailViewController.h"
+#import "RHPersonDetailViewController.h"
 
 #define kCellReuseIdentifier @"DirectoryViewCell"
 
@@ -68,7 +68,7 @@
 didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    PersonDetailViewController *personController = [[PersonDetailViewController alloc] initWithNibName:@"PersonDetailView" bundle:nil];
+    RHPersonDetailViewController *personController = [[RHPersonDetailViewController alloc] initWithNibName:kRHPersonDetailViewControllerNibName bundle:nil];
     
     [self.navigationController pushViewController:personController animated:YES];
 }

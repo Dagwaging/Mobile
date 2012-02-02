@@ -1,5 +1,5 @@
 //
-//  PersonDetailViewController.m
+//  RHPersonDetailViewController.m
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -17,7 +17,7 @@
 //  limitations under the License.
 //
 
-#import "PersonDetailViewController.h"
+#import "RHPersonDetailViewController.h"
 
 #import "RHWebViewController.h"
 
@@ -30,7 +30,7 @@
 #define kLocationTitle @"Location"
 #define kWebPageTitle @"Web Page"
 
-@implementation PersonDetailViewController
+@implementation RHPersonDetailViewController
 
 @synthesize sections;
 @synthesize displayValues;
