@@ -559,8 +559,6 @@
                 continue;
             }
             
-            NSLog(@"Fetching data for location %@", location.name);
-            
             NSString *serverPath = [[NSString alloc] initWithFormat:kUnderlyingLocationServerPath, location.serverIdentifier.intValue];
             
             
@@ -612,12 +610,9 @@
     }
     
     [RHITMobileAppDelegate.instance prefetchLocationNames];
-    
-    NSLog(@"Done fetching locations");
 }
 
 - (void)performRushPopulateLocationsUnderLocationWithID:(NSManagedObjectID *)objectID {
-    NSLog(@"Rushing location");
     SEL failureSelector = @selector(didFailPopulatingLocationsWithError:);
     
     NSManagedObjectContext *context = [[NSManagedObjectContext alloc] init];
@@ -668,7 +663,6 @@
                          "attribute found"];
     
     for (NSDictionary *dictionary in children) {
-        NSLog(@"Adding child");
         RHLocation *childLocation = [self
                                      locationFromDictionary:dictionary
                                      withContext:context
@@ -698,7 +692,6 @@
 }
 
 - (void)performSearchForLocations:(NSString *)searchTerm {
-    NSLog(@"Beginning search");
     
     NSManagedObjectContext *context = [[NSManagedObjectContext alloc] init];
     context.persistentStoreCoordinator = self.coordinator;
@@ -707,12 +700,11 @@
     NSString *sanitizedSearchTerm = [tokenizedTerm stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     NSString *urlArgs = [NSString stringWithFormat:@"?s=%@", sanitizedSearchTerm];
     
-    NSLog(@"Using URL args: %@", urlArgs);
-    
     NSDictionary *jsonData = [RHWebRequestMaker JSONGetRequestWithPath:kSearchLocationsServerPath URLargs:urlArgs];
     
     if (jsonData == nil) {
         NSLog(@"No search data returned. Bailing out...");
+        return;
     }
     
     NSArray *locations = [jsonData objectForKey:kNamesKey];
@@ -735,7 +727,6 @@
         
         if (results.count > 0) {
             RHLocation *matchingLocation = [results objectAtIndex:0];
-            NSLog(@"Found location %@", matchingLocation.name);
             [result addObject:matchingLocation.objectID];
         }
     }
