@@ -23,6 +23,7 @@
 #define kRHPListStoreFile @"RHITMobileValues"
 #define kCurrentMapDataVersionKey @"CurrentMapDataVersion"
 #define kCurrentServiceDataVersionKey @"CurrentServiceDataVersion"
+#define kCurrentTagsDataVersionKey @"CurrentTagsDataVersion"
 
 
 @interface RHPListStore ()
@@ -80,6 +81,16 @@
 - (void)setCurrentServicesDataVersion:(NSNumber *)currentServicesDataVersion {
     NSMutableDictionary *data = self.data;
     [data setValue:currentServicesDataVersion forKey:kCurrentServiceDataVersionKey];
+    self.data = data;
+}
+
+- (NSNumber *)currentTagsDataVersion {
+    return [self.data valueForKey:kCurrentTagsDataVersionKey];
+}
+
+- (void)setCurrentTagsDataVersion:(NSNumber *)currentTagsDataVersion {
+    NSMutableDictionary *data = self.data;
+    [data setValue:currentTagsDataVersion forKey:kCurrentTagsDataVersionKey];
     self.data = data;
 }
 

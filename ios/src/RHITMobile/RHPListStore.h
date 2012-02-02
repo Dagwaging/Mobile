@@ -23,5 +23,6 @@
 
 @property (nonatomic, strong) NSNumber *currentMapDataVersion;
 @property (nonatomic, strong) NSNumber *currentServicesDataVersion;
+@property (nonatomic, strong) NSNumber *currentTagsDataVersion;
 
 @end

@@ -23,6 +23,7 @@
 
 #define kServerLocationsVersionKey @"LocationsVersion"
 #define kServerServicesVersionKey @"ServicesVersion"
+#define kServerTagsVersionKey @"TagsVersion"
 
 
 @interface RHDataVersionManager ()
@@ -79,6 +80,14 @@ static RHDataVersionManager *instance_;
     return [self.serverVersions objectForKey:kServerServicesVersionKey];
 }
 
+- (NSNumber *)serverTagsVersion {
+    if (self.serverVersions == nil) {
+        self.serverVersions = [[[RHDataVersionRequester alloc] init] currentDataVersions];
+    }
+    
+    return [self.serverVersions objectForKey:kServerTagsVersionKey];
+}
+
 - (NSNumber *)localLocationsVersion {
     return self.pListStore.currentMapDataVersion;
 }
@@ -95,6 +104,14 @@ static RHDataVersionManager *instance_;
     self.pListStore.currentServicesDataVersion = localServicesVersion;
 }
 
+- (NSNumber *)localTagsVersion {
+    return self.pListStore.currentTagsDataVersion;
+}
+
+- (void)setLocalTagsVersion:(NSNumber *)localTagsVersion {
+    self.pListStore.currentTagsDataVersion = localTagsVersion;
+}
+
 - (BOOL)needsLocationsUpdate {
     return self.serverLocationsVersion.doubleValue > self.localLocationsVersion.doubleValue;
 }
@@ -103,12 +120,20 @@ static RHDataVersionManager *instance_;
     return self.serverServicesVersion.doubleValue > self.localServicesVersion.doubleValue;
 }
 
+- (BOOL)needsTagsUpdate {
+    return self.serverTagsVersion.doubleValue > self.localTagsVersion.doubleValue;
+}
+
 - (void)upgradeLocationsVersion {
     self.localLocationsVersion = self.serverLocationsVersion;
 }
 
 - (void)upgradeServicesVersion {
     self.localServicesVersion = self.serverServicesVersion;
+}
+
+- (void)upgradeTagsVersion {
+    self.localTagsVersion = self.serverTagsVersion;
 }
 
 @end

@@ -28,16 +28,24 @@
 
 @property (nonatomic, readonly) NSNumber *serverServicesVersion;
 
+@property (nonatomic, readonly) NSNumber *serverTagsVersion;
+
 @property (nonatomic, strong) NSNumber *localLocationsVersion;
 
 @property (nonatomic, strong) NSNumber *localServicesVersion;
+
+@property (nonatomic, strong) NSNumber *localTagsVersion;
 
 @property (nonatomic, readonly) BOOL needsLocationsUpdate;
 
 @property (nonatomic, readonly) BOOL needsServicesUpdate;
 
+@property (nonatomic, readonly) BOOL needsTagsUpdate;
+
 - (void)upgradeLocationsVersion;
 
 - (void)upgradeServicesVersion;
+
+- (void)upgradeTagsVersion;
 
 @end
