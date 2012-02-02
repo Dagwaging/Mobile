@@ -18,12 +18,35 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
 
-#import "RHRemoteHandler.h"
+@class RHMapViewController;
+@class RHSearchViewController;
 
 
 /// \ingroup web
 /// RHRemoteHandler that completely synthesizes its output.
-@interface RHRestHandler : NSObject <RHRemoteHandler>
+@interface RHRestHandler : NSObject
+
+
+/// RHRemoteHandlerDelgate to interact with.
+@property (nonatomic, retain) RHMapViewController *delegate;
+
+/// Init with a managed object context for object creation;
+- (id)initWithPersistantStoreCoordinator:(NSPersistentStoreCoordinator *)coordinator
+                                delegate:(RHMapViewController *)delegate;
+
+/// Asynchronously check for new data from the server. If there is new data,
+/// appropriate callbacks will be called on the RHRemoteHandlerDelegate.
+- (void)checkForLocationUpdates;
+
+/// Asynchronously pull down information for all incomplete locations, as well
+/// as all locations enclosed in these locations.
+- (void)populateUnderlyingLocations;
+
+- (void)rushPopulateLocationsUnderLocationWithID:(NSManagedObjectID *)objectID;
+
+- (void)searchForLocations:(NSString *)searchTerms
+      searchViewController:(RHSearchViewController *)searchViewController;
 
 @end

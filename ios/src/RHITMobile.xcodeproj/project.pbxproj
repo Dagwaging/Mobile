@@ -99,7 +99,6 @@
 		9201A4611432CA2600069863 /* RHAnnotationViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHAnnotationViewDelegate.h; sourceTree = "<group>"; };
 		9201A4631432E96000069863 /* RHLocationOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHLocationOverlay.h; sourceTree = "<group>"; };
 		9201A4641432E96000069863 /* RHLocationOverlay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHLocationOverlay.m; sourceTree = "<group>"; };
-		920656F414303D1400D50293 /* RHRemoteHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHRemoteHandler.h; sourceTree = "<group>"; };
 		920656F514303D4F00D50293 /* RHRemoteHandlerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHRemoteHandlerDelegate.h; sourceTree = "<group>"; };
 		9208547D142BA28100BE55B8 /* RHNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHNode.h; sourceTree = "<group>"; };
 		9208547E142BA28100BE55B8 /* RHNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHNode.m; sourceTree = "<group>"; };
@@ -267,7 +266,6 @@
 		920656F314303CB200D50293 /* Server Communication */ = {
 			isa = PBXGroup;
 			children = (
-				920656F414303D1400D50293 /* RHRemoteHandler.h */,
 				920656F514303D4F00D50293 /* RHRemoteHandlerDelegate.h */,
 				9250133A1431A7C700CEBB35 /* RHRestHandler.h */,
 				9250133B1431A7C700CEBB35 /* RHRestHandler.m */,

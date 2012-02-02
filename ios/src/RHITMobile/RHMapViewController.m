@@ -25,7 +25,6 @@
 #import "RHLocation.h"
 #import "RHNode.h"
 #import "RHLabelNode.h"
-#import "RHRemoteHandler.h"
 #import "RHRestHandler.h"
 #import "RHLocationOverlay.h"
 #import "RHAppDelegate.h"
