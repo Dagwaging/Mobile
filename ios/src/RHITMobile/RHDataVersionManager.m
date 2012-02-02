@@ -21,7 +21,7 @@
 #import "RHDataVersionRequester.h"
 #import "RHPListStore.h"
 
-#define kServerLocationsVersionKey @"ServerVersion"
+#define kServerLocationsVersionKey @"LocationsVersion"
 #define kServerServicesVersionKey @"ServicesVersion"
 
 
