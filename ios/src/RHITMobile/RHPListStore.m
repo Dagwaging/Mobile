@@ -1,14 +1,14 @@
 //
 //  RHPListStore.m
-//  RHIT Mobile Campus Directory
+//  Rose-Hulman Mobile
 //
-//  Copyright 2011 Rose-Hulman Institute of Technology
+//  Copyright 2012 Rose-Hulman Institute of Technology
 // 
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
 //  You may obtain a copy of the License at
 //
-//  http://www.apache.org/licenses/LICENSE-2.0
+//      http://www.apache.org/licenses/LICENSE-2.0
 //
 //  Unless required by applicable law or agreed to in writing, software
 //  distributed under the License is distributed on an "AS IS" BASIS,
@@ -23,6 +23,7 @@
 #define kRHPListStoreFile @"RHITMobileValues"
 #define kCurrentMapDataVersionKey @"CurrentMapDataVersion"
 #define kCurrentServiceDataVersionKey @"CurrentServiceDataVersion"
+#define kCurrentTagsDataVersionKey @"CurrentTagsDataVersion"
 
 
 @interface RHPListStore ()
@@ -63,23 +64,33 @@
 
 #pragma mark - Property Methods
 
-- (NSString *)currentMapDataVersion {
-    return [[self.data valueForKey:kCurrentMapDataVersionKey] description];
+- (NSNumber *)currentMapDataVersion {
+    return [self.data valueForKey:kCurrentMapDataVersionKey];
 }
 
-- (void)setCurrentMapDataVersion:(NSString *)inCurrentDataVersion {
+- (void)setCurrentMapDataVersion:(NSNumber *)inCurrentDataVersion {
     NSMutableDictionary *data = self.data;
     [data setValue:inCurrentDataVersion forKey:kCurrentMapDataVersionKey];
     self.data = data;
 }
 
-- (NSString *)currentServicesDataVersion {
-    return [[self.data valueForKey:kCurrentServiceDataVersionKey] description];
+- (NSNumber *)currentServicesDataVersion {
+    return [self.data valueForKey:kCurrentServiceDataVersionKey];
 }
 
-- (void)setCurrentServicesDataVersion:(NSString *)currentServicesDataVersion {
+- (void)setCurrentServicesDataVersion:(NSNumber *)currentServicesDataVersion {
     NSMutableDictionary *data = self.data;
     [data setValue:currentServicesDataVersion forKey:kCurrentServiceDataVersionKey];
+    self.data = data;
+}
+
+- (NSNumber *)currentTagsDataVersion {
+    return [self.data valueForKey:kCurrentTagsDataVersionKey];
+}
+
+- (void)setCurrentTagsDataVersion:(NSNumber *)currentTagsDataVersion {
+    NSMutableDictionary *data = self.data;
+    [data setValue:currentTagsDataVersion forKey:kCurrentTagsDataVersionKey];
     self.data = data;
 }
 

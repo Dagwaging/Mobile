@@ -1,14 +1,14 @@
 //
 //  RHCampusServicesRequester.m
-//  RHIT Mobile Campus Directory
+//  Rose-Hulman Mobile
 //
-//  Copyright 2011 Rose-Hulman Institute of Technology
+//  Copyright 2012 Rose-Hulman Institute of Technology
 // 
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
 //  You may obtain a copy of the License at
 //
-//  http://www.apache.org/licenses/LICENSE-2.0
+//      http://www.apache.org/licenses/LICENSE-2.0
 //
 //  Unless required by applicable law or agreed to in writing, software
 //  distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,13 +17,13 @@
 //  limitations under the License.
 //
 
-#import "RHCampusServicesRequester.h"
-
 #import <CoreData/CoreData.h>
+
+#import "RHCampusServicesRequester.h"
+#import "RHDataVersionManager.h"
 #import "RHServiceCategory.h"
 #import "RHServiceLink.h"
 #import "RHWebRequestMaker.h"
-#import "RHPListStore.h"
 
 #define kCampusServicesPath @"/services"
 #define kVersionKey @"Version"
@@ -73,13 +73,12 @@
                                                                URLargs:@""];
     
     // Check version before continuing
-    RHPListStore *pListStore = [[RHPListStore alloc] init];
-    NSString *responseVersion = [[response objectForKey:kVersionKey] description];
+    RHDataVersionManager *dataVersionManager = [RHDataVersionManager instance];
     
-    if ([pListStore.currentServicesDataVersion isEqualToString:responseVersion]) {
+    if (!dataVersionManager.needsServicesUpdate) {
         return;
     }
-
+    
     // Load all old categories and links (to be deleted)
     NSManagedObjectContext *localContext = [[NSManagedObjectContext alloc] init];
     localContext.persistentStoreCoordinator = self.persistantStoreCoordinator;
@@ -107,20 +106,6 @@
         return;
     }
     
-    // Retrieve new categories and links
-    NSArray *categories = [response objectForKey:kCategoriesKey];
-    [self createManagedObjectsFromCategories:categories
-                              parentCategory:nil
-                        managedObjectContext:localContext];
-    
-    NSError *createError;
-    [localContext save:&createError];
-    
-    if (createError) {
-        NSLog(@"Problem saving new campus services: %@", createError);
-        return;
-    }
-    
     // Delete all old categories and links
     for (RHServiceCategory *category in oldCategories) {
         [localContext deleteObject:category];
@@ -138,13 +123,28 @@
         return;
     }
     
+    // Retrieve new categories and links
+    NSArray *categories = [response objectForKey:kCategoriesKey];
+    [self createManagedObjectsFromCategories:categories
+                              parentCategory:nil
+                        managedObjectContext:localContext];
+    
+    NSError *createError;
+    [localContext save:&createError];
+    
+    if (createError) {
+        NSLog(@"Problem saving new campus services: %@", createError);
+        return;
+    }
+
+    
     // Notify the delegate that we've finished updating campus service entries
     [self.delegate performSelectorOnMainThread:@selector(didFinishUpdatingCampusServices)
                                     withObject:nil
                                  waitUntilDone:NO];
     
     // Update local version
-    pListStore.currentServicesDataVersion = responseVersion;
+    [dataVersionManager upgradeServicesVersion];
 }
 
 - (void)createManagedObjectsFromCategories:(NSArray *)categories

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="872" systemVersion="11C74" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="RHBoundaryNode" representedClassName="RHBoundaryNode" parentEntity="RHNode">
+        <attribute name="position" optional="YES" attributeType="Integer 16" defaultValueString="0"/>
+        <relationship name="boundedLocation" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RHLocation" inverseName="boundaryNodes" inverseEntity="RHLocation"/>
+    </entity>
+    <entity name="RHLabelNode" representedClassName="RHLabelNode" parentEntity="RHNode">
+        <relationship name="labeledLocation" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RHLocation" inverseName="labelLocation" inverseEntity="RHLocation"/>
+    </entity>
+    <entity name="RHLocation" representedClassName="RHLocation">
+        <attribute name="altNames" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="displayTypeNumber" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="quickDescription" optional="YES" attributeType="String"/>
+        <attribute name="retrievalStatusNumber" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="serverIdentifier" optional="YES" attributeType="Integer 32" defaultValueString="0"/>
+        <attribute name="visibleZoomLevel" optional="YES" attributeType="Integer 16" defaultValueString="0"/>
+        <relationship name="boundaryNodes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RHBoundaryNode" inverseName="boundedLocation" inverseEntity="RHBoundaryNode"/>
+        <relationship name="enclosedLocations" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RHLocation" inverseName="parent" inverseEntity="RHLocation" syncable="YES"/>
+        <relationship name="labelLocation" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RHLabelNode" inverseName="labeledLocation" inverseEntity="RHLabelNode"/>
+        <relationship name="links" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RHLocationLink" inverseName="owner" inverseEntity="RHLocationLink" syncable="YES"/>
+        <relationship name="navigationNodes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RHNavigationNode" inverseName="enclosingLocation" inverseEntity="RHNavigationNode"/>
+        <relationship name="parent" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RHLocation" inverseName="enclosedLocations" inverseEntity="RHLocation" syncable="YES"/>
+        <relationship name="resident" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RHPerson" inverseName="location" inverseEntity="RHPerson" syncable="YES"/>
+    </entity>
+    <entity name="RHLocationLink" representedClassName="RHLocationLink" syncable="YES">
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="url" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="owner" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RHLocation" inverseName="links" inverseEntity="RHLocation" syncable="YES"/>
+    </entity>
+    <entity name="RHNavigationNode" representedClassName="RHNavigationNode" parentEntity="RHNode">
+        <attribute name="floor" optional="YES" attributeType="Integer 16" defaultValueString="0"/>
+        <attribute name="indoors" optional="YES" attributeType="Integer 16" defaultValueString="0"/>
+        <relationship name="enclosingLocation" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RHLocation" inverseName="navigationNodes" inverseEntity="RHLocation"/>
+    </entity>
+    <entity name="RHNode" representedClassName="RHNode" isAbstract="YES">
+        <attribute name="latitude" optional="YES" attributeType="Double" defaultValueString="0.0"/>
+        <attribute name="longitude" optional="YES" attributeType="Double" defaultValueString="0.0"/>
+    </entity>
+    <entity name="RHPerson" representedClassName="RHPerson" syncable="YES">
+        <attribute name="campusMailbox" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="emailAddress" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="firstName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="lastName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="middleName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="phoneNumber" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="position" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="role" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <relationship name="location" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RHLocation" inverseName="resident" inverseEntity="RHLocation" syncable="YES"/>
+    </entity>
+    <entity name="RHServiceCategory" representedClassName="RHServiceCategory" parentEntity="RHServiceItem" syncable="YES">
+        <relationship name="contents" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RHServiceItem" inverseName="parent" inverseEntity="RHServiceItem" syncable="YES"/>
+    </entity>
+    <entity name="RHServiceItem" representedClassName="RHServiceItem" isAbstract="YES" syncable="YES">
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="parent" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RHServiceCategory" inverseName="contents" inverseEntity="RHServiceCategory" syncable="YES"/>
+    </entity>
+    <entity name="RHServiceLink" representedClassName="RHServiceLink" parentEntity="RHServiceItem" syncable="YES">
+        <attribute name="url" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="RHBoundaryNode" positionX="-2450" positionY="-1440" width="128" height="75"/>
+        <element name="RHLabelNode" positionX="-2657" positionY="-1455" width="128" height="60"/>
+        <element name="RHLocation" positionX="-2556" positionY="-1302" width="128" height="255"/>
+        <element name="RHLocationLink" positionX="160" positionY="192" width="128" height="90"/>
+        <element name="RHNavigationNode" positionX="-2250" positionY="-1449" width="128" height="90"/>
+        <element name="RHNode" positionX="-2333" positionY="-1620" width="128" height="75"/>
+        <element name="RHPerson" positionX="160" positionY="192" width="128" height="180"/>
+        <element name="RHServiceCategory" positionX="36" positionY="-9" width="128" height="60"/>
+        <element name="RHServiceItem" positionX="-101" positionY="9" width="128" height="75"/>
+        <element name="RHServiceLink" positionX="-36" positionY="99" width="128" height="60"/>
+    </elements>
+</model>
