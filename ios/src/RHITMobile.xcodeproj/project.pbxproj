@@ -54,7 +54,7 @@
 		9265FEB31409AB5D00AE406E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9265FEB11409AB5D00AE406E /* InfoPlist.strings */; };
 		9265FEB51409AB5D00AE406E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9265FEB41409AB5D00AE406E /* main.m */; };
 		9265FEB91409AB5D00AE406E /* RHAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9265FEB81409AB5D00AE406E /* RHAppDelegate.m */; };
-		9265FEBC1409AB5D00AE406E /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9265FEBA1409AB5D00AE406E /* MainWindow.xib */; };
+		9265FEBC1409AB5D00AE406E /* RHMainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9265FEBA1409AB5D00AE406E /* RHMainWindow.xib */; };
 		9265FEBF1409AB5D00AE406E /* RHMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9265FEBE1409AB5D00AE406E /* RHMapViewController.m */; };
 		9265FEC21409AB5D00AE406E /* RHSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9265FEC11409AB5D00AE406E /* RHSearchViewController.m */; };
 		9265FEC51409AB5D00AE406E /* RHMapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9265FEC31409AB5D00AE406E /* RHMapViewController.xib */; };
@@ -117,7 +117,7 @@
 		92312435144FB8470074791E /* RHLocationDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHLocationDetailViewController.h; sourceTree = "<group>"; };
 		92312436144FB8470074791E /* RHLocationDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHLocationDetailViewController.m; sourceTree = "<group>"; };
 		92312437144FB8470074791E /* RHLocationDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RHLocationDetailViewController.xib; sourceTree = "<group>"; };
-		9233413614DA2C6E004C1ACC /* RHDataModel 2.xcdatamodel */ = {isa = PBXFileReference; path = "RHDataModel 2.xcdatamodel"; sourceTree = "<group>"; };
+		9233413614DA2C6E004C1ACC /* RHDataModel 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "RHDataModel 2.xcdatamodel"; sourceTree = "<group>"; };
 		9233DD0D141BAA3500B9A549 /* RHAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHAnnotation.h; sourceTree = "<group>"; };
 		9233DD0E141BAA3500B9A549 /* RHAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHAnnotation.m; sourceTree = "<group>"; };
 		9236CE9C144E3CBC00D0FB59 /* RHQuickListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHQuickListViewController.h; sourceTree = "<group>"; };
@@ -126,7 +126,7 @@
 		9236CEA4144F33C300D0FB59 /* RHPinAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHPinAnnotationView.h; sourceTree = "<group>"; };
 		9236CEA5144F33C400D0FB59 /* RHPinAnnotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHPinAnnotationView.m; sourceTree = "<group>"; };
 		923C841314298C5800DFE415 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
-		923C841B14298DD500DFE415 /* RHDataModel.xcdatamodel */ = {isa = PBXFileReference; path = RHDataModel.xcdatamodel; sourceTree = "<group>"; };
+		923C841B14298DD500DFE415 /* RHDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = RHDataModel.xcdatamodel; sourceTree = "<group>"; };
 		9246368A142BAAC700A5E399 /* RHLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHLocation.h; sourceTree = "<group>"; };
 		9246368B142BAAC700A5E399 /* RHLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHLocation.m; sourceTree = "<group>"; };
 		9246368E142BAB5300A5E399 /* RHBoundaryNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHBoundaryNode.h; sourceTree = "<group>"; };
@@ -171,7 +171,7 @@
 		9265FEB61409AB5D00AE406E /* RHITMobile-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RHITMobile-Prefix.pch"; sourceTree = "<group>"; };
 		9265FEB71409AB5D00AE406E /* RHAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RHAppDelegate.h; sourceTree = "<group>"; };
 		9265FEB81409AB5D00AE406E /* RHAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RHAppDelegate.m; sourceTree = "<group>"; };
-		9265FEBB1409AB5D00AE406E /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainWindow.xib; sourceTree = "<group>"; };
+		9265FEBB1409AB5D00AE406E /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/RHMainWindow.xib; sourceTree = "<group>"; };
 		9265FEBD1409AB5D00AE406E /* RHMapViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RHMapViewController.h; sourceTree = "<group>"; };
 		9265FEBE1409AB5D00AE406E /* RHMapViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RHMapViewController.m; sourceTree = "<group>"; };
 		9265FEC01409AB5D00AE406E /* RHSearchViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RHSearchViewController.h; sourceTree = "<group>"; };
@@ -375,7 +375,7 @@
 				92ECC4C4141434D30073C4C3 /* RHConstants.h */,
 				9265FEB71409AB5D00AE406E /* RHAppDelegate.h */,
 				9265FEB81409AB5D00AE406E /* RHAppDelegate.m */,
-				9265FEBA1409AB5D00AE406E /* MainWindow.xib */,
+				9265FEBA1409AB5D00AE406E /* RHMainWindow.xib */,
 				92948907142D3ED400820A9C /* Map Customization */,
 				920656F314303CB200D50293 /* Server Communication */,
 				928A643C144954A900521EB1 /* Non-CoreData Storage */,
@@ -578,7 +578,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9265FEB31409AB5D00AE406E /* InfoPlist.strings in Resources */,
-				9265FEBC1409AB5D00AE406E /* MainWindow.xib in Resources */,
+				9265FEBC1409AB5D00AE406E /* RHMainWindow.xib in Resources */,
 				9265FEC51409AB5D00AE406E /* RHMapViewController.xib in Resources */,
 				9265FEC81409AB5D00AE406E /* RHSearchViewController.xib in Resources */,
 				922603581409C9480065F705 /* launch-icon-large.png in Resources */,
@@ -680,12 +680,12 @@
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
-		9265FEBA1409AB5D00AE406E /* MainWindow.xib */ = {
+		9265FEBA1409AB5D00AE406E /* RHMainWindow.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
 				9265FEBB1409AB5D00AE406E /* en */,
 			);
-			name = MainWindow.xib;
+			name = RHMainWindow.xib;
 			sourceTree = "<group>";
 		};
 		9265FEC31409AB5D00AE406E /* RHMapViewController.xib */ = {
