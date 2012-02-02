@@ -21,7 +21,8 @@
 #import <CoreData/CoreData.h>
 #import "RHServiceItem.h"
 
-#define kRHServiceLinkEntityName @"ServiceLink"
+#define kRHServiceLinkEntityName @"RHServiceLink"
+
 
 @interface RHServiceLink : RHServiceItem
 

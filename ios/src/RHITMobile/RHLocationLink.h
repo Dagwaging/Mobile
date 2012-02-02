@@ -20,7 +20,8 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-#define kRHLocationLinkCoreDataModelIdentifier @"LocationLink"
+#define kRHLocationLinkCoreDataModelIdentifier @"RHLocationLink"
+
 
 @class RHLocation;
 

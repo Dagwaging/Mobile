@@ -484,7 +484,7 @@
     // Describe the type of entity we'd like to retrieve
     NSEntityDescription *entityDescription;
     entityDescription = [NSEntityDescription
-                         entityForName:@"Location"
+                         entityForName:kRHLocationEntityName
                          inManagedObjectContext:managedObjectContext];
     
     NSFetchRequest *request = [[NSFetchRequest alloc] init];

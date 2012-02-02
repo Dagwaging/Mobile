@@ -225,7 +225,7 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
                                withObject:nil];
     } else {
         NSFetchRequest *request = [NSFetchRequest
-                                   fetchRequestWithEntityName:@"Location"];
+                                   fetchRequestWithEntityName:kRHLocationEntityName];
         NSArray *fetchResults = [managedObjectContext
                                  executeFetchRequest:request
                                  error:nil];

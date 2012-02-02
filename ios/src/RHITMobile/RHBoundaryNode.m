@@ -28,7 +28,7 @@
 
 + (RHNode *)fromContext:(NSManagedObjectContext *)context {
     RHBoundaryNode *node = [NSEntityDescription
-                            insertNewObjectForEntityForName:@"BoundaryNode"
+                            insertNewObjectForEntityForName:kRHBoundaryNodeEntityName
                             inManagedObjectContext:context];
     return node;
 }

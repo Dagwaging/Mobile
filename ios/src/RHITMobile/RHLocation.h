@@ -20,7 +20,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-#define kRHLocationCoreDataModelIdentifier @"Location"
+#define kRHLocationEntityName @"RHLocation"
 
 
 @class RHBoundaryNode;

@@ -214,8 +214,7 @@
     
     // Check to see if this location already exists
     NSEntityDescription *entityDescription = [NSEntityDescription
-                                              entityForName:@"Location"
-                                              inManagedObjectContext:context];
+                                              entityForName:kRHLocationEntityName                                              inManagedObjectContext:context];
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     [fetchRequest setEntity:entityDescription];
     
@@ -537,7 +536,7 @@
         
         // Get all locations that we may need to populate
         NSEntityDescription *entityDescription = [NSEntityDescription
-                                                  entityForName:@"Location"
+                                                  entityForName:kRHLocationEntityName
                                                   inManagedObjectContext:context];
         NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
         [fetchRequest setEntity:entityDescription];
@@ -713,7 +712,7 @@
     
     for (NSDictionary *location in locations) {
         NSEntityDescription *entityDescription = [NSEntityDescription
-                                                  entityForName:@"Location"
+                                                  entityForName:kRHLocationEntityName
                                                   inManagedObjectContext:context];
         
         NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];

@@ -20,7 +20,8 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-#define kRHServiceItemEntityName @"ServiceItem"
+#define kRHServiceItemEntityName @"RHServiceItem"
+
 
 @class RHServiceCategory;
 

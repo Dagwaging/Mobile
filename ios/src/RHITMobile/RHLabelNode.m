@@ -27,7 +27,7 @@
 
 + (RHNode *)fromContext:(NSManagedObjectContext *)context {
     RHLabelNode *node = [NSEntityDescription
-                         insertNewObjectForEntityForName:@"LabelNode"
+                         insertNewObjectForEntityForName:kRHLabelNodeEntityname
                          inManagedObjectContext:context];
     return node;
 }

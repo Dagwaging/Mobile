@@ -21,6 +21,8 @@
 #import <CoreData/CoreData.h>
 #import <CoreLocation/CoreLocation.h>
 
+#define kRHNodeEntityName @"RHNode"
+
 
 /// \ingroup model
 /// Abstract implementation of a single point in space. RHNode should be

@@ -45,7 +45,7 @@
 
 + (RHLocation *)fromContext:(NSManagedObjectContext *)context {
     RHLocation *location = [NSEntityDescription
-                            insertNewObjectForEntityForName:kRHLocationCoreDataModelIdentifier
+                            insertNewObjectForEntityForName:kRHLocationEntityName
                             inManagedObjectContext:context];
     return location;
 }

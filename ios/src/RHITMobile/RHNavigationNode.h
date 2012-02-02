@@ -22,6 +22,8 @@
 
 #import "RHNode.h"
 
+#define kRHNavigatioNodeEntityName @"RHNavigationNode"
+
 
 @class RHLocation;
 

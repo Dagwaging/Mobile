@@ -20,6 +20,9 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
+#define kRHPersonEntityName @"RHPerson"
+
+
 @class RHLocation;
 
 @interface RHPerson : NSManagedObject
@@ -32,7 +35,6 @@
 @property (nonatomic, strong) NSString * campusMailbox;
 @property (nonatomic, strong) NSString * position;
 @property (nonatomic, strong) NSString * phoneNumber;
-@property (nonatomic, strong) NSManagedObject *department;
 @property (nonatomic, strong) RHLocation *location;
 
 @end

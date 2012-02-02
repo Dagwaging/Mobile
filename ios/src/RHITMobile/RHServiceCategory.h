@@ -21,7 +21,7 @@
 #import <CoreData/CoreData.h>
 #import "RHServiceItem.h"
 
-#define kRHServiceCategoryEntityName @"ServiceCategory"
+#define kRHServiceCategoryEntityName @"RHServiceCategory"
 
 
 @class RHServiceItem;

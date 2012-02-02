@@ -31,7 +31,6 @@
 @dynamic campusMailbox;
 @dynamic position;
 @dynamic phoneNumber;
-@dynamic department;
 @dynamic location;
 
 @end

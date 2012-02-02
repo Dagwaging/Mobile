@@ -26,7 +26,7 @@
 @dynamic longitude;
 
 + (RHNode *)fromContext:(NSManagedObjectContext *)context {
-    RHNode *node = [NSEntityDescription insertNewObjectForEntityForName:@"Node"
+    RHNode *node = [NSEntityDescription insertNewObjectForEntityForName:kRHNodeEntityName
                                                  inManagedObjectContext:context];
     return node;
 }

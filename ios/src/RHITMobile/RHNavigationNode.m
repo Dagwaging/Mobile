@@ -29,7 +29,7 @@
 
 + (RHNode *)fromContext:(NSManagedObjectContext *)context {
     RHNavigationNode *node = [NSEntityDescription
-                              insertNewObjectForEntityForName:@"NavigationNode"
+                              insertNewObjectForEntityForName:kRHNavigatioNodeEntityName
                               inManagedObjectContext:context];
     return node;
 }

@@ -22,6 +22,8 @@
 
 #import "RHNode.h"
 
+#define kRHLabelNodeEntityname @"RHLabelNode"
+
 
 @class RHLocation;
 

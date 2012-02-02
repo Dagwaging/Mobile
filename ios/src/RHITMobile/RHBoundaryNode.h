@@ -22,6 +22,8 @@
 
 #import "RHNode.h"
 
+#define kRHBoundaryNodeEntityName @"RHBoundaryNode"
+
 
 @class RHLocation;
 
