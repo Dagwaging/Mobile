@@ -383,8 +383,8 @@
 				9265FEB81409AB5D00AE406E /* RHITMobileAppDelegate.m */,
 				92948907142D3ED400820A9C /* Map */,
 				920656F314303CB200D50293 /* Web */,
-				928A643C144954A900521EB1 /* Storage */,
-				92ECC4C3141430510073C4C3 /* ViewControllers */,
+				928A643C144954A900521EB1 /* Non-CoreData Storage */,
+				92ECC4C3141430510073C4C3 /* View Controllers */,
 				9226030C1409AE640065F705 /* Model */,
 				9265FEAF1409AB5D00AE406E /* Supporting Files */,
 			);
@@ -456,13 +456,13 @@
 			path = JSON;
 			sourceTree = "<group>";
 		};
-		928A643C144954A900521EB1 /* Storage */ = {
+		928A643C144954A900521EB1 /* Non-CoreData Storage */ = {
 			isa = PBXGroup;
 			children = (
 				928A643E144955EB00521EB1 /* RHPListStore.h */,
 				928A643F144955EB00521EB1 /* RHPListStore.m */,
 			);
-			name = Storage;
+			name = "Non-CoreData Storage";
 			sourceTree = "<group>";
 		};
 		92948907142D3ED400820A9C /* Map */ = {
@@ -491,7 +491,7 @@
 			name = Map;
 			sourceTree = "<group>";
 		};
-		92ECC4C3141430510073C4C3 /* ViewControllers */ = {
+		92ECC4C3141430510073C4C3 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
 				9265FEBD1409AB5D00AE406E /* RHMapViewController.h */,
@@ -529,7 +529,7 @@
 				925465AD1495EB7F00C12B81 /* ToursView.xib */,
 				92D3672714B60DE000EE0504 /* PersonDetailView.xib */,
 			);
-			name = ViewControllers;
+			name = "View Controllers";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
