@@ -107,20 +107,6 @@
         return;
     }
     
-    // Retrieve new categories and links
-    NSArray *categories = [response objectForKey:kCategoriesKey];
-    [self createManagedObjectsFromCategories:categories
-                              parentCategory:nil
-                        managedObjectContext:localContext];
-    
-    NSError *createError;
-    [localContext save:&createError];
-    
-    if (createError) {
-        NSLog(@"Problem saving new campus services: %@", createError);
-        return;
-    }
-    
     // Delete all old categories and links
     for (RHServiceCategory *category in oldCategories) {
         [localContext deleteObject:category];
@@ -137,6 +123,21 @@
         NSLog(@"Problem saving deletion of old campus services: %@", error);
         return;
     }
+    
+    // Retrieve new categories and links
+    NSArray *categories = [response objectForKey:kCategoriesKey];
+    [self createManagedObjectsFromCategories:categories
+                              parentCategory:nil
+                        managedObjectContext:localContext];
+    
+    NSError *createError;
+    [localContext save:&createError];
+    
+    if (createError) {
+        NSLog(@"Problem saving new campus services: %@", createError);
+        return;
+    }
+
     
     // Notify the delegate that we've finished updating campus service entries
     [self.delegate performSelectorOnMainThread:@selector(didFinishUpdatingCampusServices)
