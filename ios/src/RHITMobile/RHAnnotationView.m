@@ -22,7 +22,7 @@
 #import "RHAnnotation.h"
 #import "RHMapLabel.h"
 #import "RHLocation.h"
-#import "MapViewController.h"
+#import "RHMapViewController.h"
 
 
 #pragma mark Private Method Declarations

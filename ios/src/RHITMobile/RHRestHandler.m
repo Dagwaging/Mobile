@@ -31,7 +31,7 @@
 #import "RHLocationLink.h"
 #import "SearchViewController.h"
 #import "RHWebRequestMaker.h"
-#import "MapViewController.h"
+#import "RHMapViewController.h"
 
 
 #define kTopLevelServerPath @"/locations/data/top"
@@ -136,7 +136,7 @@
 #pragma mark - General Methods
 
 - (RHRestHandler *)initWithPersistantStoreCoordinator:(NSPersistentStoreCoordinator *)inCoordinator
-                                             delegate:(MapViewController *)inDelegate {
+                                             delegate:(RHMapViewController *)inDelegate {
     self = [super init];
     
     if (self) {

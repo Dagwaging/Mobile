@@ -1,5 +1,5 @@
 //
-//  MapViewController.m
+//  RHMapViewController.m
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -17,7 +17,7 @@
 //  limitations under the License.
 //
 
-#import "MapViewController.h"
+#import "RHMapViewController.h"
 #import "MKMapView+ZoomLevel.h"
 #import "RHConstants.h"
 #import "RHAnnotation.h"
@@ -32,14 +32,14 @@
 #import "QuickListViewController.h"
 #import "RHPinAnnotationView.h"
 #import "LocationDetailViewController.h"
-#import "SearchViewController.h"
+#import "RHSearchViewController.h"
 #import "RHDirectionLineItem.h"
 #import "RHSimplePointAnnotation.h"
 
 
 #pragma mark Private Method Declarations
 
-@interface MapViewController()
+@interface RHMapViewController()
 
 @property (nonatomic, strong) RHLocationOverlay *currentOverlay;
 
@@ -55,7 +55,7 @@
 #pragma mark -
 #pragma mark Implementation
 
-@implementation MapViewController
+@implementation RHMapViewController
 
 #pragma mark -
 #pragma mark Generic Properties
@@ -176,7 +176,7 @@
 }
 
 - (IBAction)displaySearch:(id)sender {
-    SearchViewController *search = [SearchViewController alloc];
+    RHSearchViewController *search = [RHSearchViewController alloc];
     search = [search initWithNibName:@"SearchView" bundle:nil];
     search.searchType = RHSearchViewControllerTypeLocation;
     search.remoteHandler = self.remoteHandler;

@@ -18,7 +18,7 @@
 //
 
 #import "QuickListViewController.h"
-#import "MapViewController.h"
+#import "RHMapViewController.h"
 #import "RHAnnotation.h"
 #import "RHLocation.h"
 

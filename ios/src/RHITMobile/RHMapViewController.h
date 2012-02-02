@@ -1,5 +1,5 @@
 //
-//  MapViewController.h
+//  RHMapViewController.h
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -21,8 +21,10 @@
 #import <CoreData/CoreData.h>
 
 #import "MKMapView+ZoomLevel.h"
-#import "RHRemoteHandlerDelegate.h"
 #import "RHAnnotationViewDelegate.h"
+#import "RHRemoteHandlerDelegate.h"
+
+#define kRHMapViewControllerNibName @"RHMapViewController"
 
 
 @class RHRestHandler;
@@ -32,7 +34,7 @@
 
 /// \ingroup views
 /// View controller for the map portion of the application.
-@interface MapViewController : UIViewController
+@interface RHMapViewController : UIViewController
 <MKMapViewDelegate, RHRemoteHandlerDelegate, RHAnnotationViewDelegate> {
     @private
     NSArray *currentDirections_;

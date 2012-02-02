@@ -22,7 +22,7 @@
 #import "ToursViewController.h"
 #import "RHWrappedCoordinate.h"
 #import "RHITMobileAppDelegate.h"
-#import "MapViewController.h"
+#import "RHMapViewController.h"
 #import "RHTourRequester.h"
 
 @implementation ToursViewController

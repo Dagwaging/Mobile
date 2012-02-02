@@ -20,7 +20,7 @@
 #import <MapKit/MapKit.h>
 
 
-@class MapViewController;
+@class RHMapViewController;
 
 
 /// \ingroup map
@@ -32,6 +32,6 @@
 
 /// The MapViewController responsible for this RHPinAnnotationView. This object
 /// will be the one receiving updates about the pin's selected status.
-@property (nonatomic, strong) MapViewController *mapViewController;
+@property (nonatomic, strong) RHMapViewController *mapViewController;
 
 @end

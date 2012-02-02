@@ -18,7 +18,7 @@
 //
 
 #import "RHPinAnnotationView.h"
-#import "MapViewController.h"
+#import "RHMapViewController.h"
 
 @implementation RHPinAnnotationView
 

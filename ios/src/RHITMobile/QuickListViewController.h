@@ -19,14 +19,14 @@
 
 #import <UIKit/UIKit.h>
 
-@class MapViewController;
+@class RHMapViewController;
 @class RHAnnotation;
 
 /// \ingroup views
 @interface QuickListViewController : UIViewController
 <UIPickerViewDelegate, UIPickerViewDataSource, UITableViewDataSource, UITableViewDelegate>
 
-@property (nonatomic, strong) MapViewController *mapViewController;
+@property (nonatomic, strong) RHMapViewController *mapViewController;
 
 @property (nonatomic, strong) IBOutlet UIPickerView *pickerView;
 

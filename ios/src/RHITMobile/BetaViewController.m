@@ -26,7 +26,7 @@
 #import "NSDictionary_JSONExtensions.h"
 #import "RHITMobileAppDelegate.h"
 #import "BetaRegistrationViewController.h"
-#import "MapViewController.h"
+#import "RHMapViewController.h"
 #import "RHRestHandler.h"
 #import "RHPListStore.h"
 

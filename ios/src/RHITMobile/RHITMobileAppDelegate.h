@@ -21,7 +21,7 @@
 #import <CoreData/CoreData.h>
 
 
-@class MapViewController;
+@class RHMapViewController;
 @class SearchViewController;
 @class InfoViewController;
 
@@ -64,7 +64,7 @@
 /// view controller of that tab's view controller. There is only ever one
 /// MapViewController, and all map interactions and modifications are done
 /// through interactions with it.
-@property (nonatomic, strong) MapViewController *mapViewController;
+@property (nonatomic, strong) RHMapViewController *mapViewController;
 
 /// The filepath to this application's documents directory. This value is used
 /// to interact directly with the CoreData object store.

@@ -55,9 +55,9 @@
 		9265FEB51409AB5D00AE406E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9265FEB41409AB5D00AE406E /* main.m */; };
 		9265FEB91409AB5D00AE406E /* RHITMobileAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9265FEB81409AB5D00AE406E /* RHITMobileAppDelegate.m */; };
 		9265FEBC1409AB5D00AE406E /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9265FEBA1409AB5D00AE406E /* MainWindow.xib */; };
-		9265FEBF1409AB5D00AE406E /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9265FEBE1409AB5D00AE406E /* MapViewController.m */; };
+		9265FEBF1409AB5D00AE406E /* RHMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9265FEBE1409AB5D00AE406E /* RHMapViewController.m */; };
 		9265FEC21409AB5D00AE406E /* SearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9265FEC11409AB5D00AE406E /* SearchViewController.m */; };
-		9265FEC51409AB5D00AE406E /* MapView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9265FEC31409AB5D00AE406E /* MapView.xib */; };
+		9265FEC51409AB5D00AE406E /* RHMapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9265FEC31409AB5D00AE406E /* RHMapViewController.xib */; };
 		9265FEC81409AB5D00AE406E /* SearchView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9265FEC61409AB5D00AE406E /* SearchView.xib */; };
 		926D397F143D2CE400223121 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 926D397E143D2CE400223121 /* Settings.bundle */; };
 		927866FF1432F35C00749C2E /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 927866FE1432F35C00749C2E /* CoreLocation.framework */; };
@@ -173,11 +173,11 @@
 		9265FEB71409AB5D00AE406E /* RHITMobileAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RHITMobileAppDelegate.h; sourceTree = "<group>"; };
 		9265FEB81409AB5D00AE406E /* RHITMobileAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RHITMobileAppDelegate.m; sourceTree = "<group>"; };
 		9265FEBB1409AB5D00AE406E /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainWindow.xib; sourceTree = "<group>"; };
-		9265FEBD1409AB5D00AE406E /* MapViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MapViewController.h; sourceTree = "<group>"; };
-		9265FEBE1409AB5D00AE406E /* MapViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MapViewController.m; sourceTree = "<group>"; };
+		9265FEBD1409AB5D00AE406E /* RHMapViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RHMapViewController.h; sourceTree = "<group>"; };
+		9265FEBE1409AB5D00AE406E /* RHMapViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RHMapViewController.m; sourceTree = "<group>"; };
 		9265FEC01409AB5D00AE406E /* SearchViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SearchViewController.h; sourceTree = "<group>"; };
 		9265FEC11409AB5D00AE406E /* SearchViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SearchViewController.m; sourceTree = "<group>"; };
-		9265FEC41409AB5D00AE406E /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MapView.xib; sourceTree = "<group>"; };
+		9265FEC41409AB5D00AE406E /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/RHMapViewController.xib; sourceTree = "<group>"; };
 		9265FEC71409AB5D00AE406E /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/SearchView.xib; sourceTree = "<group>"; };
 		9265FECF1409AB5D00AE406E /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		926D397E143D2CE400223121 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
@@ -494,8 +494,9 @@
 		92ECC4C3141430510073C4C3 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				9265FEBD1409AB5D00AE406E /* MapViewController.h */,
-				9265FEBE1409AB5D00AE406E /* MapViewController.m */,
+				9265FEBD1409AB5D00AE406E /* RHMapViewController.h */,
+				9265FEBE1409AB5D00AE406E /* RHMapViewController.m */,
+				9265FEC31409AB5D00AE406E /* RHMapViewController.xib */,
 				9265FEC01409AB5D00AE406E /* SearchViewController.h */,
 				9265FEC11409AB5D00AE406E /* SearchViewController.m */,
 				9236CE9C144E3CBC00D0FB59 /* QuickListViewController.h */,
@@ -517,7 +518,6 @@
 				92D3672514B60DE000EE0504 /* PersonDetailViewController.h */,
 				92D3672614B60DE000EE0504 /* PersonDetailViewController.m */,
 				9265FEBA1409AB5D00AE406E /* MainWindow.xib */,
-				9265FEC31409AB5D00AE406E /* MapView.xib */,
 				9265FEC61409AB5D00AE406E /* SearchView.xib */,
 				9236CE9E144E3CBC00D0FB59 /* QuickListView.xib */,
 				92312437144FB8470074791E /* LocationDetailView.xib */,
@@ -585,7 +585,7 @@
 			files = (
 				9265FEB31409AB5D00AE406E /* InfoPlist.strings in Resources */,
 				9265FEBC1409AB5D00AE406E /* MainWindow.xib in Resources */,
-				9265FEC51409AB5D00AE406E /* MapView.xib in Resources */,
+				9265FEC51409AB5D00AE406E /* RHMapViewController.xib in Resources */,
 				9265FEC81409AB5D00AE406E /* SearchView.xib in Resources */,
 				922603581409C9480065F705 /* launch-icon-large.png in Resources */,
 				9226035A1409C9680065F705 /* launch-icon-small.png in Resources */,
@@ -626,7 +626,7 @@
 			files = (
 				9265FEB51409AB5D00AE406E /* main.m in Sources */,
 				9265FEB91409AB5D00AE406E /* RHITMobileAppDelegate.m in Sources */,
-				9265FEBF1409AB5D00AE406E /* MapViewController.m in Sources */,
+				9265FEBF1409AB5D00AE406E /* RHMapViewController.m in Sources */,
 				9265FEC21409AB5D00AE406E /* SearchViewController.m in Sources */,
 				9233DD0F141BAA3500B9A549 /* RHAnnotation.m in Sources */,
 				92DFEACA141FD4E500889314 /* MKMapView+ZoomLevel.m in Sources */,
@@ -695,12 +695,12 @@
 			name = MainWindow.xib;
 			sourceTree = "<group>";
 		};
-		9265FEC31409AB5D00AE406E /* MapView.xib */ = {
+		9265FEC31409AB5D00AE406E /* RHMapViewController.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
 				9265FEC41409AB5D00AE406E /* en */,
 			);
-			name = MapView.xib;
+			name = RHMapViewController.xib;
 			sourceTree = "<group>";
 		};
 		9265FEC61409AB5D00AE406E /* SearchView.xib */ = {

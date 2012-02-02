@@ -22,7 +22,7 @@
 #import "RHLocation.h"
 #import "RHLocationLink.h"
 #import "RHITMobileAppDelegate.h"
-#import "MapViewController.h"
+#import "RHMapViewController.h"
 #import "WebViewController.h"
 #import "RHDirectionsRequester.h"
 #import "RHWrappedCoordinate.h"

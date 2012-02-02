@@ -18,7 +18,7 @@
 //
 
 #import "RHITMobileAppDelegate.h"
-#import "MapViewController.h"
+#import "RHMapViewController.h"
 #import "SearchViewController.h"
 #import "RHRestHandler.h"
 #import "BetaViewController.h"
@@ -77,8 +77,8 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     self.window.rootViewController = self.tabBarController;
     
     // Create and initialize the application's map view controller
-    self.mapViewController = [[MapViewController alloc]
-                               initWithNibName:@"MapView" bundle:nil];
+    self.mapViewController = [[RHMapViewController alloc]
+                               initWithNibName:kRHMapViewControllerNibName bundle:nil];
     [self.mapNavigationViewController pushViewController:mapViewController
                                                 animated:NO];
     self.mapViewController.navigationItem.title = @"Map";
