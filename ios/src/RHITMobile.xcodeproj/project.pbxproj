@@ -106,8 +106,8 @@
 		92085492142BA3C300BE55B8 /* RHLabelNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHLabelNode.m; sourceTree = "<group>"; };
 		920FAF8514BEAA1800BC4614 /* RHServiceItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHServiceItem.h; sourceTree = "<group>"; };
 		920FAF8614BEAA1800BC4614 /* RHServiceItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHServiceItem.m; sourceTree = "<group>"; };
-		920FAF8814BEAA2300BC4614 /* RHServiceCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RHServiceCategory.h; path = ../RHServiceCategory.h; sourceTree = "<group>"; };
-		920FAF8914BEAA2300BC4614 /* RHServiceCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RHServiceCategory.m; path = ../RHServiceCategory.m; sourceTree = "<group>"; };
+		920FAF8814BEAA2300BC4614 /* RHServiceCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHServiceCategory.h; sourceTree = "<group>"; };
+		920FAF8914BEAA2300BC4614 /* RHServiceCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHServiceCategory.m; sourceTree = "<group>"; };
 		9218208C144113A800A66923 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		9218208E144113B900A66923 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		9226030D1409AEF00065F705 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
