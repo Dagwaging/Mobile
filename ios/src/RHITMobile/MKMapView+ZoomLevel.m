@@ -1,8 +1,8 @@
 //
 //  MKMapView+ZoomLevel.m
-//  RHIT Mobile Campus Directory
+//  Rose-Hulman Mobile
 //
-//  Copyright 2011 Rose-Hulman Institute of Technology
+//  Copyright 2012 Rose-Hulman Institute of Technology
 //
 //  Based on code provided publicly by Troy Brant without licensing terms:
 //  http://troybrant.net/blog/2010/01/set-the-zoom-level-of-an-mkmapview/
@@ -11,7 +11,7 @@
 //  you may not use this file except in compliance with the License.
 //  You may obtain a copy of the License at
 //
-//  http://www.apache.org/licenses/LICENSE-2.0
+//      http://www.apache.org/licenses/LICENSE-2.0
 //
 //  Unless required by applicable law or agreed to in writing, software
 //  distributed under the License is distributed on an "AS IS" BASIS,
