@@ -1,5 +1,5 @@
 //
-//  QuickListViewController.h
+//  RHQuickListViewController.h
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -19,11 +19,13 @@
 
 #import <UIKit/UIKit.h>
 
+#define kRHQuickListViewControllerNibName @"RHQuickListViewController"
+
 @class RHMapViewController;
 @class RHAnnotation;
 
 /// \ingroup views
-@interface QuickListViewController : UIViewController
+@interface RHQuickListViewController : UIViewController
 <UIPickerViewDelegate, UIPickerViewDataSource, UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, strong) RHMapViewController *mapViewController;

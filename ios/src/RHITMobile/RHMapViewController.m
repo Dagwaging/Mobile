@@ -29,7 +29,7 @@
 #import "RHRestHandler.h"
 #import "RHLocationOverlay.h"
 #import "RHITMobileAppDelegate.h"
-#import "QuickListViewController.h"
+#import "RHQuickListViewController.h"
 #import "RHPinAnnotationView.h"
 #import "LocationDetailViewController.h"
 #import "RHSearchViewController.h"
@@ -185,8 +185,8 @@
 }
 
 - (IBAction)displayQuickList:(id)sender {
-    QuickListViewController *quickList = [QuickListViewController alloc];
-    quickList = [quickList initWithNibName:@"QuickListView" bundle:nil];
+    RHQuickListViewController *quickList = [RHQuickListViewController alloc];
+    quickList = [quickList initWithNibName:kRHQuickListViewControllerNibName bundle:nil];
     quickList.mapViewController = self;
     [self presentModalViewController:quickList animated:YES];
 }

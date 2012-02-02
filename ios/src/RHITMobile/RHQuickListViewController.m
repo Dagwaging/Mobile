@@ -1,5 +1,5 @@
 //
-//  QuickListViewController.m
+//  RHQuickListViewController.m
 //  RHIT Mobile Campus Directory
 //
 //  Copyright 2011 Rose-Hulman Institute of Technology
@@ -17,18 +17,18 @@
 //  limitations under the License.
 //
 
-#import "QuickListViewController.h"
+#import "RHQuickListViewController.h"
 #import "RHMapViewController.h"
 #import "RHAnnotation.h"
 #import "RHLocation.h"
 
-@interface QuickListViewController() {
+@interface RHQuickListViewController() {
 @private
     NSUInteger currentSelection_;
 }
 @end
 
-@implementation QuickListViewController
+@implementation RHQuickListViewController
 
 @synthesize mapViewController;
 @synthesize pickerView;
