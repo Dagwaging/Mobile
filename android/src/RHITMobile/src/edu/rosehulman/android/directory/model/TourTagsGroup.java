@@ -7,50 +7,55 @@ import org.json.JSONObject;
 /**
  * Represents a category of campus services hyperlinks
  */
-public class CampusServicesCategory {
+public class TourTagsGroup {
+	
+	/** The internal id of this group */
+	public long id;
 	
 	/** The name of the category */
 	public String name;
 	
 	/** The array of entries for this category */
-	public Hyperlink entries[];
+	public TourTag tags[];
 	
 	/** All categories contained under this parent */
-	public CampusServicesCategory children[];
+	public TourTagsGroup children[];
 
 	/**
 	 * Creates a new, empty CampusServicesCategory
 	 */
-	public CampusServicesCategory() {
-		
+	public TourTagsGroup() {
+		this.id = -1;
 	}
 	
 	/**
 	 * Creates a new instance initialized with the given data
 	 * 
 	 * @param name The name of the category
-	 * @param entries The array of entries
+	 * @param tags The array of entries
 	 */
-	public CampusServicesCategory(String name, Hyperlink[] entries) {
+	public TourTagsGroup(String name, TourTag[] tags, TourTagsGroup[] children) {
+		this.id = -1;
 		this.name = name;
-		this.entries = entries;
+		this.tags = tags;
+		this.children = children;
 	}
 
-	private static Hyperlink[] deserializeEntries(JSONArray array) throws JSONException {
-		Hyperlink res[] = new Hyperlink[array.length()];
+	private static TourTag[] deserializeTags(JSONArray array) throws JSONException {
+		TourTag res[] = new TourTag[array.length()];
 		
 		for (int i = 0; i < res.length; i++) {
-			res[i] = Hyperlink.deserialize(array.getJSONObject(i));
+			res[i] = TourTag.deserialize(array.getJSONObject(i));
 		}
 		
 		return res;
 	}
 	
-	private static CampusServicesCategory[] deserializeChildren(JSONArray root) throws JSONException {
-		CampusServicesCategory res[] = new CampusServicesCategory[root.length()];
+	private static TourTagsGroup[] deserializeChildren(JSONArray root) throws JSONException {
+		TourTagsGroup res[] = new TourTagsGroup[root.length()];
 
 		for (int i = 0; i < res.length; i++) {
-			res[i] = CampusServicesCategory.deserialize(root.getJSONObject(i));
+			res[i] = TourTagsGroup.deserialize(root.getJSONObject(i));
 		}
 		
 		return res;
@@ -63,11 +68,11 @@ public class CampusServicesCategory {
 	 * @return A new CampusServicesCategory initialized from the given JSONObject
 	 * @throws JSONException
 	 */
-	public static CampusServicesCategory deserialize(JSONObject root) throws JSONException {
-		CampusServicesCategory res = new CampusServicesCategory();
+	public static TourTagsGroup deserialize(JSONObject root) throws JSONException {
+		TourTagsGroup res = new TourTagsGroup();
 		
 		res.name = root.getString("Name");
-		res.entries = deserializeEntries(root.getJSONArray("Links"));
+		res.tags = deserializeTags(root.getJSONArray("Tags"));
 		res.children = deserializeChildren(root.getJSONArray("Children"));
 		
 		return res;
