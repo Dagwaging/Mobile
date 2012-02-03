@@ -8,7 +8,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:maps="clr-namespace:Microsoft.Phone.Controls.Maps;assembly=Microsoft.Phone.Controls.Maps"
     xmlns:cmds="clr-namespace:Rhit.Applications.Mvvm.Commands;assembly=Rhit.Applications.Mvvm.WP7"
-    xmlns:vm="clr-namespace:Rhit.Applications.ViewModel.Models;assembly=Rhit.Applications.Mobile.ViewModel.WP7"
+    xmlns:vm="clr-namespace:Rhit.Applications.ViewModel.Models;assembly=Rhit.Applications.ViewModel.WP7"
     xmlns:appbar="clr-namespace:Rhit.Applications.Extentions.BindableApplicationBar;assembly=Rhit.Applications.Extentions.WP7"
     FontFamily="{StaticResource PhoneFontFamilyNormal}" FontSize="{StaticResource PhoneFontSizeNormal}" Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="Portrait" Orientation="Portrait"
@@ -21,6 +21,16 @@
         <DataTemplate x:Name="PolygonItemTemplate">
             <maps:MapPolygon Tag="{Binding Id}" Tap="MapPolygon_Tap" Locations="{Binding Corners}" Fill="{StaticResource PolygonFillColorBrush}" Stroke="White" StrokeThickness="1"/>
         </DataTemplate>
+        <ControlTemplate x:Key="PushpinControlTemplate1" TargetType="maps:Pushpin">
+            <Grid x:Name="ContentGrid" Width="34" Height="34">
+                <StackPanel Orientation="Vertical">
+                    <Grid MinHeight="31" MinWidth="29" Margin="0">
+                        <Ellipse Fill="#FFFF7F00" Margin="1" HorizontalAlignment="Center" VerticalAlignment="Center" Width="30" Height="30" Stroke="White" StrokeThickness="3" />
+                        <ContentPresenter HorizontalAlignment="Center" Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" Margin="4" />
+                    </Grid>
+                </StackPanel>
+            </Grid>
+        </ControlTemplate>
     </phone:PhoneApplicationPage.Resources>
 
     <Grid Grid.Row="1" Margin="0,0,0,0">
@@ -30,16 +40,16 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <maps:Map Name="MyMap" DataContext="{StaticResource ViewModel}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ZoomLevel="{Binding Map.ZoomLevel, Mode=TwoWay}" Center="{Binding Map.Center, Mode=TwoWay}" CredentialsProvider="AthZ1tu5ROM0PUWcIYFSxC1oQALFR-g0aoFIuL9tlbeGJ9Z6qKIRYoB_jGpct8Yu">
+        <maps:Map Name="MyMap" DataContext="{StaticResource ViewModel}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"  
+                  ZoomLevel="{Binding Map.ZoomLevel, Mode=TwoWay}" Center="{Binding Map.Center, Mode=TwoWay}" CredentialsProvider="AthZ1tu5ROM0PUWcIYFSxC1oQALFR-g0aoFIuL9tlbeGJ9Z6qKIRYoB_jGpct8Yu">
             <maps:MapLayer>
                 <maps:MapItemsControl ItemsSource="{Binding Locations.Buildings}" ItemTemplate="{StaticResource PolygonItemTemplate}" Visibility="{Binding ShowBuildings, Converter={StaticResource VisibilityConverter}}"/>
             </maps:MapLayer>
-            <maps:Pushpin Content="{Binding Locations.CurrentLocation.Label}" Location="{Binding Locations.CurrentLocation.Center}" Tap="Pushpin_Tap"/>
-            <maps:Pushpin Location="{Binding User.Location}"/>
+            <maps:Pushpin Content="{Binding Locations.CurrentLocation.Label}" Location="{Binding Locations.CurrentLocation.Center}" Template="{StaticResource PushpinControlTemplate1}"
+                          Visibility="{Binding Locations.CurrentLocation, Converter={StaticResource ObjectConverter}}" Tap="Pushpin_Tap"/>
+            <!--<maps:Pushpin Location="{Binding User.Location}"/>-->
         </maps:Map>
-        <TextBlock Grid.Row="1"  DataContext="{StaticResource ViewModel}"
-            Text="{Binding Settings.Status, FallbackValue='Debug Status'}" 
-            Visibility="{Binding Settings.DebugMode, Converter={StaticResource VisibilityConverter}}"/>
+        <TextBlock Grid.Row="1"  DataContext="{StaticResource ViewModel}" Text="{Binding Map.Center, FallbackValue='Debug Status'}" Visibility="{Binding Settings.DebugMode, Converter={StaticResource VisibilityConverter}}"/>
         
         <appbar:AppBar x:Name="AppBar" BarOpacity="0.5" Grid.RowSpan="3" VerticalAlignment="Bottom">
             <appbar:AppBar.Buttons>

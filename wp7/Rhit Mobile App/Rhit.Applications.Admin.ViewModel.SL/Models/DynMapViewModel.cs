@@ -1,27 +1,25 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Input;
 using Microsoft.Maps.MapControl;
-using Rhit.Applications.Model;
-using Rhit.Applications.Model.Events;
 using Rhit.Applications.Model.Services;
 using Rhit.Applications.Mvvm.Commands;
 using Rhit.Applications.ViewModel.Controllers;
 using Rhit.Applications.ViewModel.Providers;
-using System;
 
 namespace Rhit.Applications.ViewModel.Models {
-    public class MapViewModel : DependencyObject {
+    public class DynMapViewModel : MapViewModel {
         private enum BehaviorState { Default, MovingCorners, CreatingCorners, Floor, AddingLocation, FloorAddingLocation };
 
         //NOTE: Requires a call to Initialize and SetMode before class is usable
         //Note: NoArg Constructor so ViewModel can be created in xaml
-        public MapViewModel() {}
+        public DynMapViewModel() : base(false) {}
 
-        public void Initialize(IBuildingMappingProvider buildingMappingProvider,
+        internal void Initialize(IBuildingMappingProvider buildingMappingProvider,
             ILocationsProvider locationsProvider, IBitmapProvider imageProvider) {
 
-            Locations = LocationsController.Instance;
+            Locations = DynLocationsController.Instance;
 
             Paths = PathsController.Instance;
 
@@ -46,28 +44,6 @@ namespace Rhit.Applications.ViewModel.Models {
             Mapper = LocationPositionMapper.Instance;
         }
 
-        public void SetMode(Map map) {
-            map.Mode = Map.CurrentMode;
-
-            List<UIElement> es = new List<UIElement>();
-            foreach(UIElement e in map.Children) es.Add(e);
-            map.Children.Clear();
-
-            map.Children.Add(Map.TileLayer);
-
-            //Re-add elements put onto the map in the view
-            foreach(UIElement e in es) map.Children.Add(e);
-            Map.ZoomLevel = 16;
-            if(Locations.CurrentLocation != null)
-                Map.Center = Locations.CurrentLocation.Center;
-        }
-
-        private void CurrentLocationChanged(object sender, EventArgs e) {
-            if(LocationsController.Instance.CurrentLocation != null)
-                Map.Center = LocationsController.Instance.CurrentLocation.Center;
-        }
-
-
         #region Commands
         public ICommand SaveCommand { get; private set; }
 
@@ -87,13 +63,7 @@ namespace Rhit.Applications.ViewModel.Models {
 
         private ILocationsProvider LocationsProvider { get; set; }
 
-        public MapController Map { get; private set; }
-
         public ImageController Image { get; private set; }
-
-        public LocationsController Locations { get; private set; }
-
-        public PathsController Paths { get; private set; }
 
         public LocationPositionMapper Mapper { get; set; }
 
@@ -106,17 +76,7 @@ namespace Rhit.Applications.ViewModel.Models {
         }
 
         public static readonly DependencyProperty ShowBuildingsProperty =
-           DependencyProperty.Register("ShowBuildings", typeof(bool), typeof(MapViewModel), new PropertyMetadata(false));
-        #endregion
-
-        #region ShowAllLocations
-        public bool ShowAllLocations {
-            get { return (bool) GetValue(ShowAllLocationsProperty); }
-            set { SetValue(ShowAllLocationsProperty, value); }
-        }
-
-        public static readonly DependencyProperty ShowAllLocationsProperty =
-           DependencyProperty.Register("ShowAllLocations", typeof(bool), typeof(MapViewModel), new PropertyMetadata(false));
+           DependencyProperty.Register("ShowBuildings", typeof(bool), typeof(DynMapViewModel), new PropertyMetadata(false));
         #endregion
 
         #region ShowInnerLocations
@@ -126,17 +86,7 @@ namespace Rhit.Applications.ViewModel.Models {
         }
 
         public static readonly DependencyProperty ShowInnerLocationsProperty =
-           DependencyProperty.Register("ShowInnerLocations", typeof(bool), typeof(MapViewModel), new PropertyMetadata(false));
-        #endregion
-
-        #region ShowTopLocations
-        public bool ShowTopLocations {
-            get { return (bool) GetValue(ShowTopLocationsProperty); }
-            set { SetValue(ShowTopLocationsProperty, value); }
-        }
-
-        public static readonly DependencyProperty ShowTopLocationsProperty =
-           DependencyProperty.Register("ShowTopLocations", typeof(bool), typeof(MapViewModel), new PropertyMetadata(false));
+           DependencyProperty.Register("ShowInnerLocations", typeof(bool), typeof(DynMapViewModel), new PropertyMetadata(false));
         #endregion
 
         #region ShowFloorLocations
@@ -146,7 +96,7 @@ namespace Rhit.Applications.ViewModel.Models {
         }
 
         public static readonly DependencyProperty ShowFloorLocationsProperty =
-           DependencyProperty.Register("ShowFloorLocations", typeof(bool), typeof(MapViewModel), new PropertyMetadata(false));
+           DependencyProperty.Register("ShowFloorLocations", typeof(bool), typeof(DynMapViewModel), new PropertyMetadata(false));
         #endregion
 
         #region ShowSave
@@ -156,7 +106,7 @@ namespace Rhit.Applications.ViewModel.Models {
         }
 
         public static readonly DependencyProperty ShowSaveProperty =
-           DependencyProperty.Register("ShowSave", typeof(bool), typeof(MapViewModel), new PropertyMetadata(false));
+           DependencyProperty.Register("ShowSave", typeof(bool), typeof(DynMapViewModel), new PropertyMetadata(false));
         #endregion
         #endregion
 
@@ -267,8 +217,8 @@ namespace Rhit.Applications.ViewModel.Models {
             Mapper.Locations.Clear();
         }
 
-        public void SelectLocation(int id) {
-            LocationsController.Instance.SelectLocation(id);
+        public override void SelectLocation(int id) {
+            DynLocationsController.Instance.SelectLocation(id);
         }
     }
 }

@@ -153,13 +153,13 @@
       <Project>{E3D06773-1344-40DE-B2E5-EF92D9401021}</Project>
       <Name>Rhit.Applications.Extentions.WP7</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Rhit.Applications.Mobile.ViewModel.WP7\Rhit.Applications.Mobile.ViewModel.WP7.csproj">
-      <Project>{115B1326-BD48-4BCE-ADAC-7EC12AAC2D46}</Project>
-      <Name>Rhit.Applications.Mobile.ViewModel.WP7</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Rhit.Applications.Mvvm.WP7\Rhit.Applications.Mvvm.WP7.csproj">
       <Project>{C4B93CFD-E240-433F-9C7D-3EA7A7786CBF}</Project>
       <Name>Rhit.Applications.Mvvm.WP7</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Rhit.Applications.ViewModel.WP7\Rhit.Applications.ViewModel.WP7.csproj">
+      <Project>{6295FFF7-5335-4F34-884D-D26F9D427CF8}</Project>
+      <Name>Rhit.Applications.ViewModel.WP7</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.$(TargetFrameworkProfile).Overrides.targets" />

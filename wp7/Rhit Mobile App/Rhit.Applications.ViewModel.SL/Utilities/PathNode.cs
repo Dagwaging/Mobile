@@ -1,7 +1,13 @@
 ﻿using System.Windows;
-using Microsoft.Maps.MapControl;
 
-namespace Rhit.Applications.ViewModel {
+#if WINDOWS_PHONE
+using Microsoft.Phone.Controls.Maps;
+using Microsoft.Phone.Controls.Maps.Platform;
+#else
+using Microsoft.Maps.MapControl;
+#endif
+
+namespace Rhit.Applications.ViewModel.Utilities {
     public class PathNode : DependencyObject {
         public PathNode() { }
 

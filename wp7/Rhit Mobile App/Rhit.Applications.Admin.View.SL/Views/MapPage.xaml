@@ -28,7 +28,7 @@
         <util:CalibrationHandler x:Name="Calibrator" />
         <util:LocationsProvider x:Name="ViewLocations" />
         <controls:LocalImageLoader x:Name="ImageLoader" />
-        <vm:MapViewModel x:Name="ViewModel" />
+        <vm:DynMapViewModel x:Name="ViewModel" />
 
         <vm:MapModelInitializer x:Name="Initializer" BitmapProvider="{StaticResource ImageLoader}" BuildingMappingProvider="{StaticResource Calibrator}" LocationsProvider="{StaticResource ViewLocations}" ViewModelInstance="{StaticResource ViewModel}" />
 

@@ -1,9 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
-using Microsoft.Maps.MapControl;
 using Rhit.Applications.Model.Maps.Modes;
 using Rhit.Applications.Model.Maps.Sources;
+
+#if WINDOWS_PHONE
+using Microsoft.Phone.Controls.Maps;
+using Microsoft.Phone.Controls.Maps.Platform;
+using System.Device.Location;
+#else
+using Microsoft.Maps.MapControl;
+#endif
 
 namespace Rhit.Applications.ViewModel.Controllers {
     public class MapController : DependencyObject {
@@ -98,6 +105,15 @@ namespace Rhit.Applications.ViewModel.Controllers {
         #endregion
 
         #region Center
+#if WINDOWS_PHONE
+        public GeoCoordinate Center {
+            get { return (GeoCoordinate) GetValue(CenterProperty); }
+            set { SetValue(CenterProperty, value); }
+        }
+
+        public static readonly DependencyProperty CenterProperty =
+           DependencyProperty.Register("Center", typeof(GeoCoordinate), typeof(MapController), new PropertyMetadata(new GeoCoordinate()));
+#else
         public Location Center {
             get { return (Location) GetValue(CenterProperty); }
             set { SetValue(CenterProperty, value); }
@@ -105,6 +121,7 @@ namespace Rhit.Applications.ViewModel.Controllers {
 
         public static readonly DependencyProperty CenterProperty =
            DependencyProperty.Register("Center", typeof(Location), typeof(MapController), new PropertyMetadata(new Location()));
+#endif
         #endregion
 
         #region CurrentSource

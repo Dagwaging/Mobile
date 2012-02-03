@@ -9,13 +9,14 @@ using Rhit.Applications.Model.Services;
 using Rhit.Applications.Mvvm.Commands;
 using Rhit.Applications.ViewModel.Controllers;
 using System;
+using Rhit.Applications.ViewModel.Utilities;
 
 namespace Rhit.Applications.ViewModel.Models {
     public class DataViewModel : DependencyObject {
         public DataViewModel() {
             InitializeProperties();
 
-            Locations = LocationsController.Instance;
+            Locations = DynLocationsController.Instance;
             Locations.LocationsChanged += new EventHandler(LocationsChanged);
             if(Locations.All.Count > 0 && Locations.CurrentLocation == null)
                 Locations.SelectLocation(Locations.All[2].Id);
@@ -45,7 +46,7 @@ namespace Rhit.Applications.ViewModel.Models {
 
         private void SaveLocation() {
             if(Locations.CurrentLocation == null) return;
-            ObservableRhitLocation newLocation = Locations.CurrentLocation;
+            DynRhitLocation newLocation = Locations.CurrentLocation as DynRhitLocation;
             if(!newLocation.HasChanged) return;
             RhitLocation oldLocation = newLocation.OriginalLocation;
 

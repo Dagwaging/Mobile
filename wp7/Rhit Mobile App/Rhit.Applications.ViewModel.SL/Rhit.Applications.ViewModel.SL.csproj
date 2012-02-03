@@ -5,19 +5,18 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{DA296C2B-A2D2-487F-B028-06289F1D3348}</ProjectGuid>
+    <ProjectGuid>{22202767-F92A-4712-BB54-11E748F7A5FB}</ProjectGuid>
     <ProjectTypeGuids>{A1591282-1198-4647-A2B1-27E5FF5F6F3B};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Rhit.Applications.ViewModel</RootNamespace>
-    <AssemblyName>Rhit.Applications.Admin.ViewModel.SL</AssemblyName>
+    <AssemblyName>Rhit.Applications.ViewModel.SL</AssemblyName>
     <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
     <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
     <SilverlightApplication>false</SilverlightApplication>
     <ValidateXaml>true</ValidateXaml>
     <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <!-- This property group is only here to support building this project using the 
        MSBuild 3.5 toolset. In order to work correctly with this older toolset, it needs 
@@ -46,21 +45,6 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'AdminApp|AnyCPU'">
-    <OutputPath>bin\AdminApp\</OutputPath>
-    <NoConfig>true</NoConfig>
-    <NoStdLib>true</NoStdLib>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MobileApp|AnyCPU'">
-    <OutputPath>bin\MobileApp\</OutputPath>
-    <NoConfig>true</NoConfig>
-    <NoStdLib>true</NoStdLib>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ServerTreeApp|AnyCPU'">
-    <OutputPath>bin\ServerTreeApp\</OutputPath>
-    <NoConfig>true</NoConfig>
-    <NoStdLib>true</NoStdLib>
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Maps.MapControl, Version=1.0.1.0, Culture=neutral, PublicKeyToken=498d0d22d7936b73, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Maps.MapControl.Common, Version=1.0.1.0, Culture=neutral, PublicKeyToken=498d0d22d7936b73, processorArchitecture=MSIL" />
@@ -73,23 +57,22 @@
     <Reference Include="System.Windows.Browser" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controllers\DynLocationsController.cs" />
-    <Compile Include="Controllers\ImageController.cs" />
-    <Compile Include="Controllers\LocationPositionMapper.cs" />
-    <Compile Include="Utilities\DualLocation.cs" />
-    <Compile Include="Models\HomeViewModel.cs" />
-    <Compile Include="Models\MapModelInitializer.cs" />
-    <Compile Include="Models\DynMapViewModel.cs" />
-    <Compile Include="Models\SimpleViewModel.cs" />
-    <Compile Include="Providers\IBitmapProvider.cs" />
+    <Compile Include="Controllers\LocationsController.cs" />
+    <Compile Include="Controllers\MapController.cs" />
+    <Compile Include="Controllers\PathsController.cs" />
+    <Compile Include="Models\MapViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Models\DataViewModel.cs" />
-    <Compile Include="Models\LoginViewModel.cs" />
-    <Compile Include="Providers\IBuildingMappingProvider.cs" />
-    <Compile Include="Providers\ILocationsProvider.cs" />
-    <Compile Include="Utilities\DynAlternateName.cs" />
-    <Compile Include="Utilities\DynLink.cs" />
-    <Compile Include="Utilities\DynRhitLocation.cs" />
+    <Compile Include="Services.cs" />
+    <Compile Include="Utilities\AlternateName.cs" />
+    <Compile Include="Utilities\Link.cs" />
+    <Compile Include="Utilities\LocationNode.cs" />
+    <Compile Include="Utilities\ObservableRhitLocation.cs" />
+    <Compile Include="Utilities\Path.cs" />
+    <Compile Include="Utilities\PathNode.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Binaries\Microsoft.Maps.MapControl.Common.dll" />
+    <Content Include="Binaries\Microsoft.Maps.MapControl.dll" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Rhit.Applications.Model.SL\Rhit.Applications.Model.SL.csproj">
@@ -100,14 +83,6 @@
       <Project>{216E83C2-839F-4BA7-A527-D92AB653437C}</Project>
       <Name>Rhit.Applications.Mvvm.SL</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Rhit.Applications.ViewModel.SL\Rhit.Applications.ViewModel.SL.csproj">
-      <Project>{22202767-F92A-4712-BB54-11E748F7A5FB}</Project>
-      <Name>Rhit.Applications.ViewModel.SL</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Binaries\Microsoft.Maps.MapControl.Common.dll" />
-    <Content Include="Binaries\Microsoft.Maps.MapControl.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <ProjectExtensions>

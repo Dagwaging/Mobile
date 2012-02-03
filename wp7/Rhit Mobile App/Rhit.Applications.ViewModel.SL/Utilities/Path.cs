@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace Rhit.Applications.ViewModel {
+namespace Rhit.Applications.ViewModel.Utilities {
     public class Path : DependencyObject {
         public Path() { }
 

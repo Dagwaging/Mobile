@@ -4,7 +4,7 @@ using Microsoft.Maps.MapControl;
 using Rhit.Applications.Model;
 using Rhit.Applications.ViewModel.Controllers;
 
-namespace Rhit.Applications.ViewModel.Utility {
+namespace Rhit.Applications.ViewModel.Utilities {
     public class DualLocation : DependencyObject {
         public DualLocation() {
             DualBinding = false;

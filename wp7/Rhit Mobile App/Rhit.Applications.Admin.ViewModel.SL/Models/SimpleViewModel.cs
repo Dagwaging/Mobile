@@ -2,6 +2,7 @@
 using Rhit.Applications.Model.Events;
 using Rhit.Applications.ViewModel.Controllers;
 using Rhit.Applications.Model;
+using Rhit.Applications.ViewModel.Utilities;
 
 namespace Rhit.Applications.ViewModel.Models {
     public class SimpleViewModel : DependencyObject {

@@ -4,8 +4,8 @@ namespace Rhit.Applications.ViewModel.Models {
     public class MapModelInitializer {
         public MapModelInitializer() { }
 
-        private MapViewModel _viewModelInstance;
-        public MapViewModel ViewModelInstance {
+        private DynMapViewModel _viewModelInstance;
+        public DynMapViewModel ViewModelInstance {
             get { return _viewModelInstance; }
             set {
                 _viewModelInstance = value;

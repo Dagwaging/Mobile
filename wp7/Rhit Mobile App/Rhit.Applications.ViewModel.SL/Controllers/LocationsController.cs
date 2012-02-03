@@ -1,26 +1,16 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows;
 using Rhit.Applications.Model;
-using System;
-using System.Collections.Generic;
 using Rhit.Applications.Model.Events;
 using Rhit.Applications.Model.Services;
-using Microsoft.Maps.MapControl;
-using System.Collections.Specialized;
+using Rhit.Applications.ViewModel.Utilities;
 
 namespace Rhit.Applications.ViewModel.Controllers {
     public class LocationsController : DependencyObject {
-        private LocationsController() {
+        protected LocationsController() {
             LocationDictionary = new Dictionary<int, RhitLocation>();
-            LocationTypes = new ObservableCollection<LocationType>() {
-                LocationType.NormalLocation,
-                LocationType.PointOfInterest,
-                LocationType.OnQuickList,
-                LocationType.Printer,
-                LocationType.MenRestroom,
-                LocationType.WomenRestroom,
-                LocationType.UnisexRestroom,
-            };
             All = new ObservableCollection<RhitLocation>();
             LocationTree = new ObservableCollection<LocationNode>();
             Top = new ObservableCollection<RhitLocation>();
@@ -33,37 +23,6 @@ namespace Rhit.Applications.ViewModel.Controllers {
 
             DataCollector.Instance.GetAllLocations();
             DataCollector.Instance.LocationsReturned += new LocationsEventHandler(LocationsReturned);
-            DataCollector.Instance.LocationUpdate += new LocationEventHandler(LocationUpdate);
-            DataCollector.Instance.LocationDeleted += new LocationEventHandler(LocationDeleted);
-        }
-
-        private void LocationDeleted(object sender, LocationEventArgs e) {
-            int currentId = -1;
-            if(CurrentLocation != null) currentId = CurrentLocation.Id;
-            UnSelect();
-
-            if(LocationDictionary.ContainsKey(e.Location.Id))
-                All.Remove(LocationDictionary[e.Location.Id]);
-
-            UpdateCollections();
-            if(currentId != -1 && LocationDictionary.ContainsKey(currentId))
-                SelectLocation(LocationDictionary[currentId]);
-            OnLocationsChanged(new EventArgs());
-        }
-
-        private void LocationUpdate(object sender, LocationEventArgs e) {
-            int currentId = -1;
-            if(CurrentLocation != null) currentId = CurrentLocation.Id;
-            UnSelect();
-
-            if(LocationDictionary.ContainsKey(e.Location.Id))
-                All.Remove(LocationDictionary[e.Location.Id]);
-            All.Add(e.Location);
-
-            UpdateCollections();
-            if(currentId != -1 && LocationDictionary.ContainsKey(currentId))
-                SelectLocation(LocationDictionary[currentId]);
-            OnLocationsChanged(new EventArgs());
         }
 
         private void LocationsReturned(object sender, LocationsEventArgs e) {
@@ -73,7 +32,7 @@ namespace Rhit.Applications.ViewModel.Controllers {
         }
 
         #region Singleton Instance
-        private static LocationsController _instance;
+        protected static LocationsController _instance;
         public static LocationsController Instance {
             get {
                 if(_instance == null)
@@ -99,7 +58,7 @@ namespace Rhit.Applications.ViewModel.Controllers {
         #endregion
         #endregion
 
-        private void UpdateCollections() {
+        protected void UpdateCollections() {
             PointsOfInterest.Clear();
             QuickList.Clear();
             Buildings.Clear();
@@ -150,7 +109,7 @@ namespace Rhit.Applications.ViewModel.Controllers {
         //Used for initializing the LocationTree
         private Dictionary<int, LocationNode> LocationNodeDict { get; set; }
 
-        private Dictionary<int, RhitLocation> LocationDictionary { get; set; }
+        protected Dictionary<int, RhitLocation> LocationDictionary { get; set; }
 
         #region Collections
         public ObservableCollection<RhitLocation> All { get; set; }
@@ -177,6 +136,10 @@ namespace Rhit.Applications.ViewModel.Controllers {
         }
 
         #region SelectLocation Methods
+        protected virtual void SetSelectedLocation(RhitLocation location) {
+            CurrentLocation = new ObservableRhitLocation(location);
+        }
+
         public void SelectLocation(int id) {
             if(LocationDictionary.ContainsKey(id))
                 SelectLocation(LocationDictionary[id]);
@@ -184,7 +147,7 @@ namespace Rhit.Applications.ViewModel.Controllers {
 
         public void SelectLocation(RhitLocation location) {
             if(!LocationDictionary.ContainsKey(location.Id)) return;
-            CurrentLocation = new ObservableRhitLocation(location);
+            SetSelectedLocation(location);
 
             InnerLocations.Clear();
             foreach(RhitLocation child in All)
@@ -204,8 +167,6 @@ namespace Rhit.Applications.ViewModel.Controllers {
             InnerLocations.Clear();
             OnCurrentLocationChanged(new EventArgs());
         }
-
-        public ObservableCollection<LocationType> LocationTypes { get; private set; }
 
         #region CurrentLocation
         public ObservableRhitLocation CurrentLocation {

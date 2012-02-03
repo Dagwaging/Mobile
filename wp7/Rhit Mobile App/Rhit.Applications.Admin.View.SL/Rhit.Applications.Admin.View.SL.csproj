@@ -168,6 +168,10 @@
       <Project>{216E83C2-839F-4BA7-A527-D92AB653437C}</Project>
       <Name>Rhit.Applications.Mvvm.SL</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Rhit.Applications.ViewModel.SL\Rhit.Applications.ViewModel.SL.csproj">
+      <Project>{22202767-F92A-4712-BB54-11E748F7A5FB}</Project>
+      <Name>Rhit.Applications.ViewModel.SL</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
