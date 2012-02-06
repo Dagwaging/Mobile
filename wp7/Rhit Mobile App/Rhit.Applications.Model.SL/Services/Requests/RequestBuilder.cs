@@ -56,10 +56,13 @@ namespace Rhit.Applications.Model.Services.Requests {
             get { return new DirectionsRequestPart(FullUrl); }
         }
 
-        public LocationRequestPart Locations {
-            get { return new LocationRequestPart(FullUrl); }
+        public LocationsRequestPart Locations {
+            get { return new LocationsRequestPart(FullUrl); }
         }
 
+        public ServicesRequestPart Services {
+            get { return new ServicesRequestPart(FullUrl); }
+        }
 
         public VersionRequestPart Version {
             get { return new VersionRequestPart(FullUrl); }

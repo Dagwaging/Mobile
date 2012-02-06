@@ -7,18 +7,17 @@ using Rhit.Applications.ViewModel.Controllers;
 namespace Rhit.Applications.ViewModel.Models {
     public class SearchViewModel : DependencyObject {
         public SearchViewModel() {
-            //DataCollector.Instance.SearchResultsAvailable += new SearchEventHandler(SearchResultsAvailable);
+            DataCollector.Instance.SearchResultsReturned += new Model.Events.LocationsEventHandler(LocationsReturned);
             Locations = LocationsController.Instance;
             People = new ObservableCollection<object>();
             Places = new ObservableCollection<RhitLocation>();
         }
 
-        //private void SearchResultsAvailable(object sender, SearchEventArgs e) {
-        //    People.Clear();
-        //    Places.Clear();
-        //    foreach(RhitLocation location in e.Places)
-        //        Places.Add(location);
-        //}
+        void LocationsReturned(object sender, Model.Events.LocationsEventArgs e) {
+            Places.Clear();
+            foreach(RhitLocation location in e.Locations)
+                Places.Add(location);
+        }
 
         public LocationsController Locations { get; set; }
 

@@ -60,6 +60,9 @@
     <Compile Include="..\Rhit.Applications.ViewModel.SL\Controllers\PathsController.cs">
       <Link>Controllers\PathsController.cs</Link>
     </Compile>
+    <Compile Include="..\Rhit.Applications.ViewModel.SL\Controllers\SettingsController.cs">
+      <Link>Controllers\SettingsController.cs</Link>
+    </Compile>
     <Compile Include="..\Rhit.Applications.ViewModel.SL\Models\MapViewModel.cs">
       <Link>Models\MapViewModel.cs</Link>
     </Compile>
@@ -84,10 +87,12 @@
     <Compile Include="..\Rhit.Applications.ViewModel.SL\Utilities\PathNode.cs">
       <Link>Utilities\PathNode.cs</Link>
     </Compile>
-    <Compile Include="Controllers\SettingsController.cs" />
+    <Compile Include="Controllers\ServicesController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Models\InfoViewModel.cs" />
     <Compile Include="Models\SearchViewModel.cs" />
+    <Compile Include="Models\ServicesViewModel.cs" />
+    <Compile Include="Models\SimpleViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -97,6 +102,10 @@
     <ProjectReference Include="..\Rhit.Applications.Model.WP7\Rhit.Applications.Model.WP7.csproj">
       <Project>{17BE6337-47BB-418E-9869-2E11A5824BE3}</Project>
       <Name>Rhit.Applications.Model.WP7</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Rhit.Applications.Mvvm.WP7\Rhit.Applications.Mvvm.WP7.csproj">
+      <Project>{C4B93CFD-E240-433F-9C7D-3EA7A7786CBF}</Project>
+      <Name>Rhit.Applications.Mvvm.WP7</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.$(TargetFrameworkProfile).Overrides.targets" />

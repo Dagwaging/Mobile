@@ -1,27 +1,32 @@
 ﻿using System.Collections.ObjectModel;
+using System.Windows.Input;
+using Rhit.Applications.Model;
+using Rhit.Applications.Model.Services;
+using Rhit.Applications.Mvvm.Commands;
 using Rhit.Applications.ViewModel.Utilities;
 
 #if WINDOWS_PHONE
 using Microsoft.Phone.Controls.Maps;
 using Microsoft.Phone.Controls.Maps.Platform;
+using System.Device.Location;
 #else
 using Microsoft.Maps.MapControl;
 #endif
 
 namespace Rhit.Applications.ViewModel.Controllers {
     public class PathsController {
+        
         private PathsController() {
             All = new ObservableCollection<Path>();
+            Nodes = new LocationCollection();
+            DirectionsCommand = new RelayCommand(p => GetDirections());
+            DataCollector.Instance.DirectionsReturned += new Model.Events.DirectionsEventHandler(DirectionsReturned);
+        }
 
-
-            //TODO: Bryan - Remove Fake Data
-            //PathNode node1 = new PathNode() { Location = new Location(39.4821800526708, -87.3222422754326), };
-            //PathNode node2 = new PathNode() { Location = new Location(39.4849499103115, -87.3218614017525), };
-            //Path path = new Path() { First = node1, Second = node2, };
-            //All.Add(path);
-
-
-            //TODO: Bryan - Hook to UI
+        private void DirectionsReturned(object sender, Model.Events.DirectionsEventArgs e) {
+            Nodes.Clear();
+            foreach(DirectionPath_DC path in e.Paths)
+                Nodes.Add(new GeoCoordinate(path.Latitude, path.Longitude));
         }
 
         #region Singleton Instance
@@ -32,6 +37,16 @@ namespace Rhit.Applications.ViewModel.Controllers {
                     _instance = new PathsController();
                 return _instance;
             }
+        }
+        #endregion
+
+        public LocationCollection Nodes { get; protected set; }
+
+        #region Directions Command
+        public ICommand DirectionsCommand { get; private set; }
+
+        private void GetDirections() {
+            DataCollector.Instance.GetTestDirections();
         }
         #endregion
 

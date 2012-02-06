@@ -13,13 +13,20 @@ using System.Runtime.Serialization;
 namespace Rhit.Applications.Model {
     [DataContract]
     public class ServerObject {
+        #region CampusServicesResponse
+        [DataMember(Name = "Root")]
+        public List<CampusServicesCategory_DC> CampusServicesRoot { get; set; }
+        #endregion
 
         #region VersionResponse
-        [DataMember(Name = "ServerVersion")]
-        public double ServerVersion { get; set; }
+        [DataMember(Name = "LocationsVersion")]
+        public double LocationsVersion { get; set; }
 
         [DataMember(Name = "ServicesVersion")]
         public double ServicesVersion { get; set; }
+
+        [DataMember(Name = "TagsVersion")]
+        public double TagsVersion { get; set; }
         #endregion
 
         #region MessageResponse
@@ -112,6 +119,22 @@ namespace Rhit.Applications.Model {
             return _locations;
         }
     }
+
+    #region CampusServicesCategory - Data Contract
+    [DataContract]
+    public class CampusServicesCategory_DC {
+        public CampusServicesCategory_DC() : base() { }
+
+        [DataMember(Name = "Name")]
+        public string Name { get; set; }
+
+        [DataMember(Name = "Children")]
+        public List<CampusServicesCategory_DC> Children { get; set; }
+
+        [DataMember(Name = "Links")]
+        public List<Link_DC> Links { get; set; }
+    }
+    #endregion
 
     #region Location - Data Contract
     [DataContract]
@@ -241,25 +264,48 @@ namespace Rhit.Applications.Model {
 
         [DataMember(Name = "StairsUp")]
         public int StairsUp { get; set; }
-
-        [DataMember(Name = "Start")]
-        public GeoCoordinate_DC Start { get; set; }
     }
     #endregion
 
     #region DirectionPath - Data Contract
     [DataContract]
     public class DirectionPath_DC {
-        public DirectionPath_DC() : base() { }
+        public static Dictionary<string, string> ActionCodeDict = new Dictionary<string, string>() {
+            {"GS", "Go Straight"}, {"CS", "Cross the Street"}, {"FP", "Follow the Path"},
+            {"L1", "Slight Left"}, {"R1", "Slight Right"}, {"L2", "Trun Left"},
+            {"R2", "Turn Right"}, {"L3", "Sharp Left"}, {"R3", "Sharp Right"},
+            {"EN", "Enter the Building"}, {"EX", "Exit the Building"},
+            {"US", "Go Up the Stairs"}, {"DS", "Go Down the Stairs"}, {"", ""},
+        };
+
+        public DirectionPath_DC() : base() {
+            Action = "";
+        }
+
+        [DataMember(Name = "Action")]
+        public string Action { get; set; }
 
         [DataMember(Name = "Dir")]
         public string Direction { get; set; }
 
-        [DataMember(Name = "To")]
-        public GeoCoordinate_DC To { get; set; }
-
         [DataMember(Name = "Flag")]
         public bool Flag { get; set; }
+
+        [DataMember(Name = "Outside")]
+        public bool Outside { get; set; }
+
+        [DataMember(Name = "Lat")]
+        public double Latitude { get; set; }
+
+        [DataMember(Name = "Lon")]
+        public double Longitude { get; set; }
+
+        [DataMember(Name = "Location")]
+        public int Location { get; set; }
+
+        public string ConvertAction() {
+            return ActionCodeDict[Action];
+        }
     }
     #endregion
 

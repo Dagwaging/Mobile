@@ -1,12 +1,12 @@
 ﻿using System;
+using System.Collections;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
-using System.Collections;
 
 namespace Rhit.Applications.View.Converters {
-    public class ObjectToVisibilityConverter : IValueConverter {
-        public ObjectToVisibilityConverter() {
+    public class ListToVisibilityConverter : IValueConverter {
+        public ListToVisibilityConverter() {
             NotNullValue = Visibility.Visible;
             NullValue = Visibility.Collapsed;
         }
@@ -15,8 +15,12 @@ namespace Rhit.Applications.View.Converters {
         public Visibility NullValue { get; set; }
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
-            if(value is String) return string.IsNullOrWhiteSpace((string) value) ? NullValue : NotNullValue;
-            return value != null ? NotNullValue : NullValue;
+            if(value == null) return NullValue;
+            if(value is IList) {
+                IList list = value as IList;
+                return list.Count <= 0 ? NullValue : NotNullValue;
+            } else return NullValue;
+            
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {

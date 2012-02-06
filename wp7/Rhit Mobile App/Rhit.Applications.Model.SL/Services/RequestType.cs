@@ -2,8 +2,10 @@
 namespace Rhit.Applications.Model.Services {
     public enum RequestType { 
         AllLocations,
+        CampusServices,
         ChangeCorners,
         DeleteLocation,
+        Directions,
         IncrementVersion,
         InternalLocations,
         Location,

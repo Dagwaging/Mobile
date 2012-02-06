@@ -6,6 +6,7 @@
     xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
     xmlns:controls="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls"
+    xmlns:vm="clr-namespace:Rhit.Applications.ViewModel.Models;assembly=Rhit.Applications.ViewModel.WP7"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="768"
@@ -14,6 +15,10 @@
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="Portrait"  Orientation="Portrait"
     shell:SystemTray.IsVisible="True">
+    
+    <phone:PhoneApplicationPage.Resources>
+        <vm:SimpleViewModel x:Name="ViewModel" />
+    </phone:PhoneApplicationPage.Resources>
 
     <Grid Background="Transparent">
 
@@ -24,27 +29,24 @@
                 </DataTemplate>
             </controls:Pivot.HeaderTemplate>
 
-            <controls:PivotItem Header="Tile Sources">
+            <controls:PivotItem Header=" Options">
                 <ScrollViewer>
                     <StackPanel>
-                        <toolkit:ListPicker Grid.Row="1" Header="Map Modes" ItemTemplate="{StaticResource PickerItemTemplate}" 
-                                            ItemsSource="{Binding Map.Modes, Mode=TwoWay}" SelectedItem="{Binding Map.CurrentMode, Mode=TwoWay}"/>
-                        <toolkit:ListPicker Grid.Row="3" Header="Map Source" ItemTemplate="{StaticResource PickerItemTemplate}" 
-                                            ItemsSource="{Binding Map.Sources, Mode=TwoWay}" SelectedItem="{Binding Map.CurrentSource, Mode=TwoWay}"
-                                            Visibility="{Binding Map.SourceChoices, Mode=TwoWay, Converter={StaticResource VisibilityConverter}}"/>
-                        <toolkit:ToggleSwitch Header="RHIT Floor Plans" Grid.Row="4" IsChecked="{Binding Map.FloorPlans, Mode=TwoWay}"/>
-                        <toolkit:ToggleSwitch Header="Google Street Overlays" Grid.Row="5" IsChecked="{Binding Map.GoogleStreet, Mode=TwoWay}"/>
-                        <toolkit:ToggleSwitch Header="Google Water Overlays" Grid.Row="6" IsChecked="{Binding Map.GoogleWater, Mode=TwoWay}"/>
+                        <toolkit:ToggleSwitch Header="Polygon Overlays" IsChecked="{Binding Settings.ShowBuildings, Mode=TwoWay}" />
+                        <!--<toolkit:ToggleSwitch Header="Text Overlays" IsChecked="{Binding Map.AreLabelsVisible, Mode=TwoWay}" />-->
+                        <toolkit:ToggleSwitch Header="Debug Mode" IsChecked="{Binding Settings.DebugMode, Mode=TwoWay}" />
                     </StackPanel>
                 </ScrollViewer>
             </controls:PivotItem>
 
-            <controls:PivotItem Header=" Options">
+            <controls:PivotItem Header="Tile Sources">
                 <ScrollViewer>
                     <StackPanel>
-                        <toolkit:ToggleSwitch Header="Polygon Overlays" IsChecked="{Binding Map.AreOutlinesVisible, Mode=TwoWay}" Grid.Row="3"/>
-                        <toolkit:ToggleSwitch Header="Text Overlays" IsChecked="{Binding Map.AreLabelsVisible, Mode=TwoWay}" Grid.Row="4"/>
-                        <toolkit:ToggleSwitch Header="Debug Mode" IsChecked="{Binding Settings.DebugMode, Mode=TwoWay}" Grid.Row="5"/>
+                        <toolkit:ListPicker Header="Map Modes" ItemTemplate="{StaticResource PickerItemTemplate}" 
+                                            ItemsSource="{Binding Map.Modes, Mode=TwoWay}" SelectedItem="{Binding Map.CurrentMode, Mode=TwoWay}"/>
+                        <toolkit:ListPicker Header="Map Source" ItemTemplate="{StaticResource PickerItemTemplate}" 
+                                            ItemsSource="{Binding Map.Sources, Mode=TwoWay}" SelectedItem="{Binding Map.CurrentSource, Mode=TwoWay}"
+                                            Visibility="{Binding Map.SourceChoices, Mode=TwoWay, Converter={StaticResource VisibilityConverter}}"/>
                     </StackPanel>
                 </ScrollViewer>
             </controls:PivotItem>

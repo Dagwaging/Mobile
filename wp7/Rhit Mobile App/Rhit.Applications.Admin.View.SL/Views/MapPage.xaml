@@ -230,7 +230,7 @@
                 <!--  <map:MapTileLayer Content="{Binding Map.Tiles}"/>  -->
                 <map:MapLayer>
                     <map:MapItemsControl ItemsSource="{Binding Locations, ElementName=ViewLocations}" ItemTemplate="{StaticResource PushpinItemTemplate2}" />
-                    <map:MapItemsControl ItemsSource="{Binding Locations.Buildings}" ItemTemplate="{StaticResource PolygonItemTemplate}" Visibility="{Binding ShowBuildings, Converter={StaticResource VisibilityConverter}}" />
+                    <map:MapItemsControl ItemsSource="{Binding Locations.Buildings}" ItemTemplate="{StaticResource PolygonItemTemplate}" Visibility="{Binding Settings.ShowBuildings, Converter={StaticResource VisibilityConverter}}" />
                     <map:MapItemsControl ItemsSource="{Binding Locations.Corners}" ItemTemplate="{StaticResource CornerPushpinTemplate}" />
                     <map:MapItemsControl ItemsSource="{Binding Locations.All}" ItemTemplate="{StaticResource PushpinItemTemplate}" Visibility="{Binding ShowAllLocations, Converter={StaticResource VisibilityConverter}}" />
                     <map:MapItemsControl ItemsSource="{Binding Locations.Top}" ItemTemplate="{StaticResource PushpinItemTemplate}" Visibility="{Binding ShowTopLocations, Converter={StaticResource VisibilityConverter}}" />

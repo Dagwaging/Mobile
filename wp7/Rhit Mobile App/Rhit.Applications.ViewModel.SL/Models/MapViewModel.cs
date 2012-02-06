@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Windows;
 using Rhit.Applications.ViewModel.Controllers;
+using System.ComponentModel;
 
 #if WINDOWS_PHONE
 using Microsoft.Phone.Controls.Maps;
 using System.Device.Location;
 #else
 using Microsoft.Maps.MapControl;
+using Rhit.Applications.Model;
 #endif
 
 namespace Rhit.Applications.ViewModel.Models {
@@ -21,11 +23,14 @@ namespace Rhit.Applications.ViewModel.Models {
         }
 
         private void Initialize() {
+            if(DesignerProperties.IsInDesignTool) return;
             Locations = LocationsController.Instance;
             Paths = PathsController.Instance;
             LocationsController.Instance.CurrentLocationChanged += new EventHandler(CurrentLocationChanged);
-            ShowBuildings = true;
             Map = MapController.Instance;
+            Settings = SettingsController.Instance;
+
+            Settings.ShowBuildings = true;
         }
 
         public void SetMode(Map map) {
@@ -57,27 +62,7 @@ namespace Rhit.Applications.ViewModel.Models {
 
         public PathsController Paths { get; protected set; }
 
-        #region Dependency Properties
-        #region ShowBuildings
-        public bool ShowBuildings {
-            get { return (bool) GetValue(ShowBuildingsProperty); }
-            set { SetValue(ShowBuildingsProperty, value); }
-        }
-
-        public static readonly DependencyProperty ShowBuildingsProperty =
-           DependencyProperty.Register("ShowBuildings", typeof(bool), typeof(MapViewModel), new PropertyMetadata(false));
-        #endregion
-
-        #region ShowTopLocations
-        public bool ShowTopLocations {
-            get { return (bool) GetValue(ShowTopLocationsProperty); }
-            set { SetValue(ShowTopLocationsProperty, value); }
-        }
-
-        public static readonly DependencyProperty ShowTopLocationsProperty =
-           DependencyProperty.Register("ShowTopLocations", typeof(bool), typeof(MapViewModel), new PropertyMetadata(false));
-        #endregion
-        #endregion
+        public SettingsController Settings { get; protected set; }
 
         public virtual void SelectLocation(int id) {
             LocationsController.Instance.SelectLocation(id);

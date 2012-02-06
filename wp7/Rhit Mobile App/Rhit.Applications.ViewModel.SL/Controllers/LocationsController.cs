@@ -16,10 +16,11 @@ namespace Rhit.Applications.ViewModel.Controllers {
             Top = new ObservableCollection<RhitLocation>();
             InnerLocations = new ObservableCollection<RhitLocation>();
             Buildings = new ObservableCollection<RhitLocation>();
+            HiddenBuildings = new ObservableCollection<RhitLocation>();
             QuickList = new ObservableCollection<RhitLocation>();
             PointsOfInterest = new ObservableCollection<RhitLocation>();
-            ShowAllBuildings = true;
-            ShowSelectedBuilding = true;
+
+            BuildingsHidden = false;
 
             DataCollector.Instance.GetAllLocations();
             DataCollector.Instance.LocationsReturned += new LocationsEventHandler(LocationsReturned);
@@ -79,6 +80,28 @@ namespace Rhit.Applications.ViewModel.Controllers {
             UpdateTree();
         }
 
+        internal void HideBuildings() {
+            Buildings.Clear();
+            HiddenBuildings.Clear();
+            foreach(RhitLocation location in All)
+                if(location.Corners != null && location.Corners.Count > 0)
+                    HiddenBuildings.Add(location);
+            if(CurrentLocation != null)
+                Buildings.Add(CurrentLocation.OriginalLocation);
+            BuildingsHidden = true;
+        }
+
+        internal void ShowBuildings() {
+            Buildings.Clear();
+            HiddenBuildings.Clear();
+            foreach(RhitLocation location in All)
+                if(location.Corners != null && location.Corners.Count > 0)
+                    Buildings.Add(location);
+            BuildingsHidden = false;
+        }
+
+        private bool BuildingsHidden { get; set; }
+
         private void UpdateTree() {
             LocationTree.Clear();
             LocationNodeDict = new Dictionary<int, LocationNode>();
@@ -115,6 +138,8 @@ namespace Rhit.Applications.ViewModel.Controllers {
         public ObservableCollection<RhitLocation> All { get; set; }
 
         public ObservableCollection<RhitLocation> Buildings { get; set; }
+
+        public ObservableCollection<RhitLocation> HiddenBuildings { get; set; }
 
         public ObservableCollection<RhitLocation> InnerLocations { get; set; }
 
@@ -154,6 +179,11 @@ namespace Rhit.Applications.ViewModel.Controllers {
                 if(child.ParentId == CurrentLocation.Id)
                     InnerLocations.Add(child);
 
+            if(BuildingsHidden) {
+                Buildings.Clear();
+                Buildings.Add(CurrentLocation.OriginalLocation);
+            }
+
             OnCurrentLocationChanged(new EventArgs());
         }
 
@@ -165,6 +195,7 @@ namespace Rhit.Applications.ViewModel.Controllers {
         public void UnSelect() {
             CurrentLocation = null;
             InnerLocations.Clear();
+            if(BuildingsHidden) Buildings.Clear();
             OnCurrentLocationChanged(new EventArgs());
         }
 
@@ -176,26 +207,6 @@ namespace Rhit.Applications.ViewModel.Controllers {
 
         public static readonly DependencyProperty CurrentLocationProperty =
            DependencyProperty.Register("CurrentLocation", typeof(ObservableRhitLocation), typeof(LocationsController), new PropertyMetadata(null));
-        #endregion
-
-        #region ShowAllBuildings
-        public bool ShowAllBuildings {
-            get { return (bool) GetValue(ShowAllBuildingsProperty); }
-            set { SetValue(ShowAllBuildingsProperty, value); }
-        }
-
-        public static readonly DependencyProperty ShowAllBuildingsProperty =
-           DependencyProperty.Register("ShowAllBuildings", typeof(bool), typeof(LocationsController), new PropertyMetadata(false));
-        #endregion
-
-        #region ShowSelectedBuilding
-        public bool ShowSelectedBuilding {
-            get { return (bool) GetValue(ShowSelectedBuildingProperty); }
-            set { SetValue(ShowSelectedBuildingProperty, value); }
-        }
-
-        public static readonly DependencyProperty ShowSelectedBuildingProperty =
-           DependencyProperty.Register("ShowSelectedBuilding", typeof(bool), typeof(LocationsController), new PropertyMetadata(false));
         #endregion
     }
 }

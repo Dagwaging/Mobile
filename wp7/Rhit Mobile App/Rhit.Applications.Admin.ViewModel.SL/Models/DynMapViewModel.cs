@@ -35,7 +35,8 @@ namespace Rhit.Applications.ViewModel.Models {
             LoadFloorCommand = new RelayCommand(p => LoadFloor());
             State = BehaviorState.Default;
 
-            ShowBuildings = true;
+            Settings = SettingsController.Instance;
+            Settings.ShowBuildings = true;
 
             ImageController.CreateImageController(imageProvider, buildingMappingProvider);
             Image = ImageController.Instance;
@@ -69,16 +70,6 @@ namespace Rhit.Applications.ViewModel.Models {
 
 
         #region Dependency Properties
-        #region ShowBuildings
-        public bool ShowBuildings {
-            get { return (bool) GetValue(ShowBuildingsProperty); }
-            set { SetValue(ShowBuildingsProperty, value); }
-        }
-
-        public static readonly DependencyProperty ShowBuildingsProperty =
-           DependencyProperty.Register("ShowBuildings", typeof(bool), typeof(DynMapViewModel), new PropertyMetadata(false));
-        #endregion
-
         #region ShowInnerLocations
         public bool ShowInnerLocations {
             get { return (bool) GetValue(ShowInnerLocationsProperty); }
@@ -116,7 +107,7 @@ namespace Rhit.Applications.ViewModel.Models {
                 State = BehaviorState.FloorAddingLocation;
                 LocationsProvider.QueryLocation();
             } else {
-                ShowBuildings = false;
+                Settings.ShowBuildings = false;
                 State = BehaviorState.AddingLocation;
                 LocationsProvider.QueryLocation();
             }
@@ -125,7 +116,7 @@ namespace Rhit.Applications.ViewModel.Models {
         private void CreateCorners() {
             if(LocationsController.Instance.CurrentLocation == null) return;
             State = BehaviorState.CreatingCorners;
-            ShowBuildings = false;
+            Settings.ShowBuildings = false;
             LocationsProvider.CreateNewCorners();
             ShowSave = true;
         }
@@ -133,7 +124,7 @@ namespace Rhit.Applications.ViewModel.Models {
         private void ShowCorners() {
             if(LocationsController.Instance.CurrentLocation == null) return;
             State = BehaviorState.MovingCorners;
-            ShowBuildings = false;
+            Settings.ShowBuildings = false;
             LocationsProvider.DisplayCorners(LocationsController.Instance.CurrentLocation.Corners as ICollection<Location>);
             ShowSave = true;
         }
@@ -147,7 +138,7 @@ namespace Rhit.Applications.ViewModel.Models {
             ShowSave = false;
             if(LocationsController.Instance.CurrentLocation == null) return;
             State = BehaviorState.Floor;
-            ShowBuildings = false;
+            Settings.ShowBuildings = false;
             ShowFloorLocations = true;
             ImageController.Instance.LoadImage();
         }
@@ -212,7 +203,7 @@ namespace Rhit.Applications.ViewModel.Models {
             }
             if(State == BehaviorState.Floor) ImageController.Instance.CloseImage();
             LocationsProvider.Clear();
-            ShowBuildings = true;
+            Settings.ShowBuildings = true;
             State = BehaviorState.Default;
             Mapper.Locations.Clear();
         }

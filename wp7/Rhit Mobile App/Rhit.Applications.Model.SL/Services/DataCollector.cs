@@ -14,6 +14,26 @@ using Microsoft.Maps.MapControl;
 namespace Rhit.Applications.Model.Services {
     public class DataCollector {
         #region Events
+        #region CampusServicesReturned
+        public event CampusServicesEventHandler CampusServicesReturned;
+        protected virtual void OnCampusServicesReturned(ServiceEventArgs e, IList<CampusServicesCategory_DC> categories) {
+            CampusServicesEventArgs args = new CampusServicesEventArgs(e) {
+                Categories = categories,
+            };
+            if(LocationsReturned != null) CampusServicesReturned(this, args);
+        }
+        #endregion
+
+        #region DirectionsReturned
+        public event DirectionsEventHandler DirectionsReturned;
+        protected virtual void OnDirectionsReturned(ServiceEventArgs e, IList<DirectionPath_DC> paths) {
+            DirectionsEventArgs args = new DirectionsEventArgs(e) {
+                Paths = paths,
+            };
+            if(LocationsReturned != null) DirectionsReturned(this, args);
+        }
+        #endregion
+
         #region VersionUpdate
         public event VersionEventHandler VersionUpdate;
         protected virtual void OnVersionUpdate(ServiceEventArgs e, double serverVersion, double servicesVersion) {
@@ -42,6 +62,16 @@ namespace Rhit.Applications.Model.Services {
                 Locations = locations,
             };
             if(LocationsReturned != null) LocationsReturned(this, args);
+        }
+        #endregion
+
+        #region SearchResultsReturned
+        public event LocationsEventHandler SearchResultsReturned;
+        protected virtual void OnSearchResultsReturned(ServiceEventArgs e, IList<RhitLocation> locations) {
+            LocationsEventArgs args = new LocationsEventArgs(e) {
+                Locations = locations,
+            };
+            if(LocationsReturned != null) SearchResultsReturned(this, args);
         }
         #endregion
 
@@ -105,8 +135,15 @@ namespace Rhit.Applications.Model.Services {
                 case ResponseType.AllLocations:
                 case ResponseType.TopLocations:
                 case ResponseType.InternalLocations:
-                case ResponseType.LocationsSearch:
                     HandleLocationsResponse(eventArgs);
+                    break;
+
+                case ResponseType.LocationsSearch:
+                    HandleSearchResponse(eventArgs);
+                    break;
+
+                case ResponseType.Directions:
+                    HandleDirectionsResponse(eventArgs);
                     break;
 
                 case ResponseType.Location:
@@ -126,7 +163,7 @@ namespace Rhit.Applications.Model.Services {
                     break;
 
                 case ResponseType.Version:
-                    SetVersion(eventArgs.ResponseObject.ServerVersion, eventArgs);
+                    SetVersion(eventArgs.ResponseObject.LocationsVersion, eventArgs);
                     break;
 
                 case ResponseType.Login:
@@ -135,6 +172,10 @@ namespace Rhit.Applications.Model.Services {
 
                 case ResponseType.PathData:
                     HandlePathDataResponse(eventArgs);
+                    break;
+
+                case ResponseType.CampusServices:
+                    HandleCampusServicesResponse(eventArgs);
                     break;
 
                 case ResponseType.ServerError:
@@ -146,6 +187,25 @@ namespace Rhit.Applications.Model.Services {
         }
 
         #region Response Handlers
+        private void HandleDirectionsResponse(ServiceEventArgs eventArgs) {
+            ServerObject response = eventArgs.ResponseObject;
+            if(response.Result.Paths == null || response.Result.Paths.Count <= 0) return;
+            OnDirectionsReturned(eventArgs, response.Result.Paths);
+        }
+
+        private void HandleCampusServicesResponse(ServiceEventArgs eventArgs) {
+            ServerObject response = eventArgs.ResponseObject;
+            if(response.CampusServicesRoot == null || response.CampusServicesRoot.Count <= 0) return;
+            OnCampusServicesReturned(eventArgs, response.CampusServicesRoot);
+        }
+
+        private void HandleSearchResponse(ServiceEventArgs eventArgs) {
+            ServerObject response = eventArgs.ResponseObject;
+            if(response.Locations == null || response.Locations.Count <= 0) return;
+            List<RhitLocation> locations = ServerObject.GetLocations(response.Locations);
+            OnSearchResultsReturned(eventArgs, locations);
+        }
+
         private void HandleLocationsResponse(ServiceEventArgs eventArgs) {
             ServerObject response = eventArgs.ResponseObject;
             if(response.Locations == null || response.Locations.Count <= 0) return;
@@ -202,6 +262,16 @@ namespace Rhit.Applications.Model.Services {
             Connection.MakeRequest(request, RequestType.Login);
         }
 
+        public void GetDirections(RhitLocation from, RhitLocation to) {
+            RequestPart request = new RequestBuilder(BaseAddress).Directions.FromLoc(from.Id).ToLoc(to.Id);
+            Connection.MakeRequest(request, RequestType.Directions);
+        }
+
+        public void GetTestDirections() {
+            RequestPart request = new RequestBuilder(BaseAddress).Directions.Test;
+            Connection.MakeRequest(request, RequestType.Directions);
+        }
+
         public void GetVersion() {
             RequestPart request = new RequestBuilder(BaseAddress).Version;
             Connection.MakeRequest(request, RequestType.Version);
@@ -229,6 +299,11 @@ namespace Rhit.Applications.Model.Services {
         public void GetLocation(int id) {
             RequestPart request = new RequestBuilder(BaseAddress).Locations.Data.Id(id);
             Connection.MakeRequest(request, RequestType.Location);
+        }
+
+        public void GetCampusServices() {
+            RequestPart request = new RequestBuilder(BaseAddress).Services;
+            Connection.MakeRequest(request, RequestType.CampusServices);
         }
 
         public void GetChildLocations(RhitLocation parent) { GetChildLocations(parent.Id); }

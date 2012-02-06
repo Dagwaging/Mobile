@@ -79,10 +79,14 @@
     </Compile>
     <Compile Include="Converters\BoolToGridSizeConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
+    <Compile Include="Converters\ListToVisibilityConverter.cs" />
     <Compile Include="Converters\ObjectToBoolConverter.cs" />
     <Compile Include="Converters\ObjectToVisibilityConverter.cs" />
     <Compile Include="Converters\RadioButtonConverter.cs" />
     <Compile Include="DocContent.cs" />
+    <Compile Include="Views\CampusServicesPage.xaml.cs">
+      <DependentUpon>CampusServicesPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\InfoPage.xaml.cs">
       <DependentUpon>InfoPage.xaml</DependentUpon>
     </Compile>
@@ -127,6 +131,22 @@
     <Content Include="SplashScreenImage.jpg" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Assets\Templates.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Assets\Styles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Assets\Pushpin.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CampusServicesPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\InfoPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
