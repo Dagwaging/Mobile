@@ -23,5 +23,6 @@
 @implementation RHTourTag
 
 @dynamic serverIdentifier;
+@dynamic isDefault;
 
 @end

@@ -63,6 +63,7 @@
         <relationship name="parent" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RHTourTagCategory" inverseName="children" inverseEntity="RHTourTagCategory" syncable="YES"/>
     </entity>
     <entity name="RHTourTag" representedClassName="RHTourTag" parentEntity="RHTourItem" syncable="YES">
+        <attribute name="isDefault" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="serverIdentifier" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
     </entity>
     <entity name="RHTourTagCategory" representedClassName="RHTourTagCategory" parentEntity="RHTourItem" syncable="YES">
@@ -79,7 +80,7 @@
         <element name="RHServiceCategory" positionX="36" positionY="-9" width="128" height="60"/>
         <element name="RHServiceItem" positionX="-101" positionY="9" width="128" height="75"/>
         <element name="RHServiceLink" positionX="-36" positionY="99" width="128" height="60"/>
-        <element name="RHTourTag" positionX="160" positionY="192" width="128" height="60"/>
+        <element name="RHTourTag" positionX="160" positionY="192" width="128" height="75"/>
         <element name="RHTourTagCategory" positionX="160" positionY="192" width="128" height="60"/>
         <element name="RHTourItem" positionX="160" positionY="192" width="128" height="75"/>
     </elements>

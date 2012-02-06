@@ -25,5 +25,6 @@
 @interface RHTourTag : RHTourItem
 
 @property (nonatomic, retain) NSNumber *serverIdentifier;
+@property (nonatomic, retain) NSNumber *isDefault;
 
 @end
