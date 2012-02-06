@@ -100,6 +100,7 @@
 		92F5F21614DFC3C000324ACE /* RHTourItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F5F21514DFC3C000324ACE /* RHTourItem.m */; };
 		92F5F21C14DFC3E400324ACE /* RHTourTag.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F5F21B14DFC3E400324ACE /* RHTourTag.m */; };
 		92F5F21F14DFC3F900324ACE /* RHTourTagCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F5F21E14DFC3F900324ACE /* RHTourTagCategory.m */; };
+		92F5F22214DFC4FF00324ACE /* RHTagsRequester.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F5F22114DFC4FF00324ACE /* RHTagsRequester.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -268,6 +269,9 @@
 		92F5F21B14DFC3E400324ACE /* RHTourTag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHTourTag.m; sourceTree = "<group>"; };
 		92F5F21D14DFC3F900324ACE /* RHTourTagCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHTourTagCategory.h; sourceTree = "<group>"; };
 		92F5F21E14DFC3F900324ACE /* RHTourTagCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHTourTagCategory.m; sourceTree = "<group>"; };
+		92F5F22014DFC4FF00324ACE /* RHTagsRequester.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHTagsRequester.h; sourceTree = "<group>"; };
+		92F5F22114DFC4FF00324ACE /* RHTagsRequester.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHTagsRequester.m; sourceTree = "<group>"; };
+		92F5F22314DFC54D00324ACE /* RHTagsRequesterDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHTagsRequesterDelegate.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -313,6 +317,9 @@
 				9233415114DB10E4004C1ACC /* RHLocationsSearchRequester.h */,
 				9233415214DB10E6004C1ACC /* RHLocationsSearchRequester.m */,
 				9233415414DB1113004C1ACC /* RHLocationsSearchRequesterDelegate.h */,
+				92F5F22014DFC4FF00324ACE /* RHTagsRequester.h */,
+				92F5F22114DFC4FF00324ACE /* RHTagsRequester.m */,
+				92F5F22314DFC54D00324ACE /* RHTagsRequesterDelegate.h */,
 			);
 			name = "Server Communication";
 			sourceTree = "<group>";
@@ -717,6 +724,7 @@
 				92F5F21614DFC3C000324ACE /* RHTourItem.m in Sources */,
 				92F5F21C14DFC3E400324ACE /* RHTourTag.m in Sources */,
 				92F5F21F14DFC3F900324ACE /* RHTourTagCategory.m in Sources */,
+				92F5F22214DFC4FF00324ACE /* RHTagsRequester.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
