@@ -24,10 +24,13 @@ namespace Rhit.Applications.ViewModel.Controllers {
         }
 
         private void CampusServicesReturned(object sender, Model.Events.CampusServicesEventArgs e) {
-            CampusServices.Clear();
+            Root = new CampusService() { Label = "Campus Services", };
             foreach(CampusServicesCategory_DC service in e.Categories)
-                CampusServices.Add(new CampusService(service));
+                Root.Children.Add(new CampusService(service));
+            CurrentService = Root;
         }
+
+        private CampusService Root { get; set; }
 
         #region Singleton Instance
         public static ServicesController Instance {
@@ -49,10 +52,25 @@ namespace Rhit.Applications.ViewModel.Controllers {
            DependencyProperty.Register("CurrentService", typeof(CampusService), typeof(ServicesController), new PropertyMetadata(null));
         #endregion
 
+        #region Parent
+        public CampusService Parent {
+            get { return (CampusService)GetValue(ParentProperty); }
+            set { SetValue(ParentProperty, value); }
+        }
+
+        public static readonly DependencyProperty ParentProperty =
+           DependencyProperty.Register("Parent", typeof(CampusService), typeof(ServicesController), new PropertyMetadata(null));
+        #endregion
+
         public ObservableCollection<CampusService> CampusServices { get; private set; }
     }
 
     public class CampusService : DependencyObject {
+        public CampusService() {
+            Links = new ObservableCollection<Link>();
+            Children = new ObservableCollection<CampusService>();
+        }
+
         public CampusService(CampusServicesCategory_DC model) {
             Links = new ObservableCollection<Link>();
             Children = new ObservableCollection<CampusService>();

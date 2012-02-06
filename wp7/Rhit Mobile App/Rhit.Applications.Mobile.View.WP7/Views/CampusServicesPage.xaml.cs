@@ -15,6 +15,7 @@ namespace Rhit.Applications.View.Views {
     public partial class CampusServicesPage : PhoneApplicationPage {
         public CampusServicesPage() {
             InitializeComponent();
+            DataContext = ViewModel;
         }
     }
 }
