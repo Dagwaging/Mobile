@@ -97,6 +97,9 @@
 		92F1B8BC1497BBE600F7FFD8 /* RHTourRequester.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F1B8BB1497BBE600F7FFD8 /* RHTourRequester.m */; };
 		92F20F6D1464383200603500 /* RHWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F20F6B1464383200603500 /* RHWebViewController.m */; };
 		92F20F6E1464383200603500 /* RHWebViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92F20F6C1464383200603500 /* RHWebViewController.xib */; };
+		92F5F21614DFC3C000324ACE /* RHTourItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F5F21514DFC3C000324ACE /* RHTourItem.m */; };
+		92F5F21C14DFC3E400324ACE /* RHTourTag.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F5F21B14DFC3E400324ACE /* RHTourTag.m */; };
+		92F5F21F14DFC3F900324ACE /* RHTourTagCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F5F21E14DFC3F900324ACE /* RHTourTagCategory.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -258,6 +261,13 @@
 		92F20F6A1464383200603500 /* RHWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHWebViewController.h; sourceTree = "<group>"; };
 		92F20F6B1464383200603500 /* RHWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHWebViewController.m; sourceTree = "<group>"; };
 		92F20F6C1464383200603500 /* RHWebViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RHWebViewController.xib; sourceTree = "<group>"; };
+		92F5F21214DFC2A500324ACE /* RHDataModel 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "RHDataModel 3.xcdatamodel"; sourceTree = "<group>"; };
+		92F5F21414DFC3C000324ACE /* RHTourItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHTourItem.h; sourceTree = "<group>"; };
+		92F5F21514DFC3C000324ACE /* RHTourItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHTourItem.m; sourceTree = "<group>"; };
+		92F5F21A14DFC3E400324ACE /* RHTourTag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHTourTag.h; sourceTree = "<group>"; };
+		92F5F21B14DFC3E400324ACE /* RHTourTag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHTourTag.m; sourceTree = "<group>"; };
+		92F5F21D14DFC3F900324ACE /* RHTourTagCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHTourTagCategory.h; sourceTree = "<group>"; };
+		92F5F21E14DFC3F900324ACE /* RHTourTagCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHTourTagCategory.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -330,6 +340,12 @@
 			isa = PBXGroup;
 			children = (
 				923C841A14298DD500DFE415 /* RHDataModel.xcdatamodeld */,
+				92F5F21414DFC3C000324ACE /* RHTourItem.h */,
+				92F5F21514DFC3C000324ACE /* RHTourItem.m */,
+				92F5F21D14DFC3F900324ACE /* RHTourTagCategory.h */,
+				92F5F21E14DFC3F900324ACE /* RHTourTagCategory.m */,
+				92F5F21A14DFC3E400324ACE /* RHTourTag.h */,
+				92F5F21B14DFC3E400324ACE /* RHTourTag.m */,
 				92CEFC2414BEAC6A0085CEDB /* RHPerson.h */,
 				92CEFC2514BEAC6A0085CEDB /* RHPerson.m */,
 				92CEFC2114BEAA830085CEDB /* RHServiceLink.h */,
@@ -698,6 +714,9 @@
 				9233414D14DA7668004C1ACC /* RHDataVersionRequester.m in Sources */,
 				9233415014DA7798004C1ACC /* RHDataVersionManager.m in Sources */,
 				9233415314DB10E9004C1ACC /* RHLocationsSearchRequester.m in Sources */,
+				92F5F21614DFC3C000324ACE /* RHTourItem.m in Sources */,
+				92F5F21C14DFC3E400324ACE /* RHTourTag.m in Sources */,
+				92F5F21F14DFC3F900324ACE /* RHTourTagCategory.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -846,10 +865,11 @@
 		923C841A14298DD500DFE415 /* RHDataModel.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				92F5F21214DFC2A500324ACE /* RHDataModel 3.xcdatamodel */,
 				9233413614DA2C6E004C1ACC /* RHDataModel 2.xcdatamodel */,
 				923C841B14298DD500DFE415 /* RHDataModel.xcdatamodel */,
 			);
-			currentVersion = 9233413614DA2C6E004C1ACC /* RHDataModel 2.xcdatamodel */;
+			currentVersion = 92F5F21214DFC2A500324ACE /* RHDataModel 3.xcdatamodel */;
 			path = RHDataModel.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
