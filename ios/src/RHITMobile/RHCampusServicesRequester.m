@@ -27,7 +27,7 @@
 
 #define kCampusServicesPath @"/services"
 #define kVersionKey @"Version"
-#define kCategoriesKey @"Categories"
+#define kRootKey @"Root"
 #define kChildrenKey @"Children"
 #define kLinksKey @"Links"
 #define kNameKey @"Name"
@@ -124,8 +124,11 @@
     }
     
     // Retrieve new categories and links
-    NSArray *categories = [response objectForKey:kCategoriesKey];
-    [self createManagedObjectsFromCategories:categories
+    NSDictionary *root = [response objectForKey:kRootKey];
+    [self createManagedObjectsFromLinks:[root objectForKey:kLinksKey]
+                               category:nil
+                   managedObjectContext:localContext];
+    [self createManagedObjectsFromCategories:[root objectForKey:kChildrenKey]
                               parentCategory:nil
                         managedObjectContext:localContext];
     
