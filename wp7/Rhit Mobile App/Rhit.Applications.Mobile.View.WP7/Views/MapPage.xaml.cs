@@ -13,18 +13,24 @@ namespace Rhit.Applications.View.Views {
             DataContext = this;
             InitializeComponent();
 
-            //MapPolyline a = new MapPolyline();
-            //a.Locations = new LocationCollection
-
             //TODO: Try not to have to do this
             ViewModel.SetMode(MyMap);
             MyMap.Tap += new EventHandler<System.Windows.Input.GestureEventArgs>(Map_Tap);
 
+            DirectionsCommand = new RelayCommand(p => GotoDirections());
             CampusServicesCommand = new RelayCommand(p => GotoCampusServices());
             QuickListCommand = new RelayCommand(p => GotoQuickList());
             SearchCommand = new RelayCommand(p => GotoSearch());
             SettingsCommand = new RelayCommand(p => GotoSettings());
         }
+
+        #region Directions Command
+        public ICommand DirectionsCommand { get; private set; }
+
+        private void GotoDirections() {
+            NavigationService.Navigate(new Uri("/Views/DirectionsPage.xaml", UriKind.Relative));
+        }
+        #endregion
 
         #region Campus Services Command
         public ICommand CampusServicesCommand { get; private set; }

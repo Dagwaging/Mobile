@@ -26,17 +26,18 @@
         
         <StackPanel Grid.Row="0" Margin="12,17,0,28">
             <TextBlock Text="RHIT - Campus Services" Style="{StaticResource PhoneTextNormalStyle}"/>
-            <TextBlock Text="{Binding Services.Parent.Label, FallbackValue='Node Label'}" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
+            <TextBlock Text="{Binding CurrentService.Label}" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
         </StackPanel>
 
         <Grid  Grid.Row="1" Margin="12,0,12,0">
-            <ItemsControl ItemsSource="{Binding Services.CurrentService.Children}">
+            <ItemsControl ItemsSource="{Binding CurrentService.Children}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Button Content="{Binding Label}"/>
+                        <Button Content="{Binding Label}" Tag="{Binding Id}" Click="Button_Click" />
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
+            <ItemsControl ItemsSource="{Binding CurrentService.Links}" ItemTemplate="{StaticResource LinkTemplate}" />
         </Grid>
     </Grid>
 

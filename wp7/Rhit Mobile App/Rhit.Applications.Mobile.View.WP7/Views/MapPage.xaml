@@ -21,7 +21,7 @@
         <vm:MapViewModel x:Name="ViewModel"/>
         
         <DataTemplate x:Name="BuildingTemplate">
-            <exts:StyledMapPolygon Tag="{Binding Id}" Locations="{Binding Corners}" Tap="MapPolygon_Tap" Style="{StaticResource BuildingStyle}"/>
+            <exts:StyledMapPolygon Tag="{Binding Id}" Locations="{Binding Corners}" Tap="MapPolygon_Tap" Style="{StaticResource BuildingStyle}" />
         </DataTemplate>
         <DataTemplate x:Name="HiddenBuildingTemplate">
             <exts:StyledMapPolygon Tag="{Binding Id}" Locations="{Binding Corners}" Tap="MapPolygon_Tap" Style="{StaticResource HiddenBuildingStyle}" />
@@ -43,8 +43,6 @@
                 <maps:MapItemsControl ItemsSource="{Binding Locations.Buildings}" ItemTemplate="{StaticResource BuildingTemplate}" />
             </maps:MapLayer>
             
-            <maps:MapPolyline Locations="{Binding Paths.Nodes}" Stroke="Red" StrokeThickness="5" />
-            
             <maps:Pushpin Content="{Binding Locations.CurrentLocation.Label}" Location="{Binding Locations.CurrentLocation.Center}"
                           PositionOrigin="BottomCenter" Style="{StaticResource CustomPushpinStyle}"
                           Visibility="{Binding Locations.CurrentLocation, Converter={StaticResource ObjectConverter}}" Tap="Pushpin_Tap"/>
@@ -62,7 +60,7 @@
             <appbar:AppBar.MenuItems>
                 <appbar:AppBarMenuItem Text="Quick List" Command="{Binding QuickListCommand}"/>
                 <appbar:AppBarMenuItem Text="Search" Command="{Binding SearchCommand}"/>
-                <appbar:AppBarMenuItem Text="Directions Sample" Command="{Binding Paths.DirectionsCommand, Source={StaticResource ViewModel}}" />
+                <appbar:AppBarMenuItem Text="Directions Sample" Command="{Binding DirectionsCommand}" />
                 <appbar:AppBarMenuItem Text="Campus Services" Command="{Binding CampusServicesCommand}" />
                 <appbar:AppBarMenuItem Text="Settings" Command="{Binding SettingsCommand}"/>
             </appbar:AppBar.MenuItems>

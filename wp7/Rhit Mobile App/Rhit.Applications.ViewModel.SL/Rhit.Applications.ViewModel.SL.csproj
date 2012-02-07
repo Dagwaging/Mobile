@@ -68,8 +68,6 @@
     <Compile Include="Utilities\Link.cs" />
     <Compile Include="Utilities\LocationNode.cs" />
     <Compile Include="Utilities\ObservableRhitLocation.cs" />
-    <Compile Include="Utilities\Path.cs" />
-    <Compile Include="Utilities\PathNode.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Binaries\Microsoft.Maps.MapControl.Common.dll" />

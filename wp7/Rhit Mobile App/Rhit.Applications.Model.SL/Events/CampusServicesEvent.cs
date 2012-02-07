@@ -9,6 +9,6 @@ namespace Rhit.Applications.Model.Events {
         public CampusServicesEventArgs(ServiceEventArgs baseArgs) : base() {
             Copy(baseArgs);
         }
-        public IList<CampusServicesCategory_DC> Categories { get; set; }
+        public CampusServicesCategory_DC Root { get; set; }
     }
 }

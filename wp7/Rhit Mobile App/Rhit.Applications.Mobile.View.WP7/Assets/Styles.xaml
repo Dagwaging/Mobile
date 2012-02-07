@@ -8,7 +8,9 @@
     mc:Ignorable="d">
 
     <SolidColorBrush x:Key="BuildingFillBrush" Color="DarkBlue" Opacity="0.5" />
-    
+
+    <SolidColorBrush x:Key="HiddenBuildingFillBrush" Color="Transparent" Opacity="0.3" />
+
     <SolidColorBrush x:Key="BuildingStrokeBrush" Color="White" Opacity="1.0" />
     
     <Style x:Key="BuildingStyle" TargetType="exts:StyledMapPolygon">
@@ -18,7 +20,7 @@
     </Style>
 
     <Style x:Key="HiddenBuildingStyle" TargetType="exts:StyledMapPolygon">
-        <Setter Property="Fill" Value="Transparent" />
+        <Setter Property="Fill" Value="{StaticResource HiddenBuildingFillBrush}" />
         <Setter Property="Stroke" Value="{StaticResource BuildingStrokeBrush}" />
         <Setter Property="StrokeThickness" Value="1" />
     </Style>

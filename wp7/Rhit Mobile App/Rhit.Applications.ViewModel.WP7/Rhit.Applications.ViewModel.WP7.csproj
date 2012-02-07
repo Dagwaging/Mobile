@@ -81,14 +81,9 @@
     <Compile Include="..\Rhit.Applications.ViewModel.SL\Utilities\ObservableRhitLocation.cs">
       <Link>Utilities\ObservableRhitLocation.cs</Link>
     </Compile>
-    <Compile Include="..\Rhit.Applications.ViewModel.SL\Utilities\Path.cs">
-      <Link>Utilities\Path.cs</Link>
-    </Compile>
-    <Compile Include="..\Rhit.Applications.ViewModel.SL\Utilities\PathNode.cs">
-      <Link>Utilities\PathNode.cs</Link>
-    </Compile>
     <Compile Include="Controllers\ServicesController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Models\DirectionsViewModel.cs" />
     <Compile Include="Models\InfoViewModel.cs" />
     <Compile Include="Models\SearchViewModel.cs" />
     <Compile Include="Models\ServicesViewModel.cs" />

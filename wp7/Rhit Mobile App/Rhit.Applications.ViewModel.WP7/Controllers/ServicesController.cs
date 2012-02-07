@@ -12,25 +12,21 @@ using Rhit.Applications.Model.Services;
 using Rhit.Applications.Model;
 using Rhit.Applications.ViewModel.Utilities;
 using System.Collections.ObjectModel;
+using System.Collections.Generic;
+using Rhit.Applications.Model.Events;
 
 namespace Rhit.Applications.ViewModel.Controllers {
     public class ServicesController : DependencyObject {
         private static ServicesController _instance;
 
         private ServicesController() {
-            CampusServices = new ObservableCollection<CampusService>();
-            DataCollector.Instance.CampusServicesReturned += new Model.Events.CampusServicesEventHandler(CampusServicesReturned);
+            All = new ObservableCollection<CampusService>();
+            CampusServiceDictionary = new Dictionary<int, CampusService>();
+            CampusServiceParentDictionary = new Dictionary<int, int>();
+
+            DataCollector.Instance.CampusServicesReturned += new CampusServicesEventHandler(CampusServicesReturned);
             DataCollector.Instance.GetCampusServices();
         }
-
-        private void CampusServicesReturned(object sender, Model.Events.CampusServicesEventArgs e) {
-            Root = new CampusService() { Label = "Campus Services", };
-            foreach(CampusServicesCategory_DC service in e.Categories)
-                Root.Children.Add(new CampusService(service));
-            CurrentService = Root;
-        }
-
-        private CampusService Root { get; set; }
 
         #region Singleton Instance
         public static ServicesController Instance {
@@ -42,39 +38,64 @@ namespace Rhit.Applications.ViewModel.Controllers {
         }
         #endregion
 
-        #region CurrentService
-        public CampusService CurrentService {
-            get { return (CampusService) GetValue(CurrentServiceProperty); }
-            set { SetValue(CurrentServiceProperty, value); }
+        #region internal event CampusServicesUpdated
+        internal event EventHandler CampusServicesUpdated;
+        protected virtual void OnCampusServicesUpdated() {
+            if(CampusServicesUpdated != null) CampusServicesUpdated(this, new EventArgs());
         }
-
-        public static readonly DependencyProperty CurrentServiceProperty =
-           DependencyProperty.Register("CurrentService", typeof(CampusService), typeof(ServicesController), new PropertyMetadata(null));
         #endregion
 
-        #region Parent
-        public CampusService Parent {
-            get { return (CampusService)GetValue(ParentProperty); }
-            set { SetValue(ParentProperty, value); }
+        private void CampusServicesReturned(object sender, CampusServicesEventArgs e) {
+            Root = new CampusService(e.Root);
+            Root.Label = "Campus Services";
+            AddCampusService(Root, -1);
+            OnCampusServicesUpdated();
         }
 
-        public static readonly DependencyProperty ParentProperty =
-           DependencyProperty.Register("Parent", typeof(CampusService), typeof(ServicesController), new PropertyMetadata(null));
-        #endregion
+        private void AddCampusService(CampusService campusService, int parentId) {
+            All.Add(campusService);
+            CampusServiceDictionary[campusService.Id] = campusService;
+            if(parentId >= 0)
+                CampusServiceParentDictionary[campusService.Id] = parentId;
+            foreach(CampusService child in campusService.Children)
+                AddCampusService(child, campusService.Id);
+        }
 
-        public ObservableCollection<CampusService> CampusServices { get; private set; }
+        private CampusService Root { get; set; }
+
+        private Dictionary<int, CampusService> CampusServiceDictionary { get; set; }
+
+        private Dictionary<int, int> CampusServiceParentDictionary { get; set; }
+
+        internal void Start() { }
+
+        internal CampusService GetCampusService(int id) {
+            CampusService campusService;
+            if(CampusServiceDictionary.TryGetValue(id, out campusService))
+                return campusService;
+            return Root;
+        }
+
+        internal CampusService GetParentCategory(int childId) {
+            int parentId;
+            if(!CampusServiceParentDictionary.TryGetValue(childId, out parentId))
+                return null;
+            return GetCampusService(parentId);
+        }
+
+        public ObservableCollection<CampusService> All { get; private set; }
     }
 
     public class CampusService : DependencyObject {
+        private static int _lastId = 0;
+
         public CampusService() {
+            Id = ++_lastId;
             Links = new ObservableCollection<Link>();
             Children = new ObservableCollection<CampusService>();
         }
 
-        public CampusService(CampusServicesCategory_DC model) {
-            Links = new ObservableCollection<Link>();
-            Children = new ObservableCollection<CampusService>();
-
+        public CampusService(CampusServicesCategory_DC model) : this() {
             Label = model.Name;
             foreach(CampusServicesCategory_DC service in model.Children)
                 Children.Add(new CampusService(service));
@@ -90,8 +111,10 @@ namespace Rhit.Applications.ViewModel.Controllers {
         }
 
         public static readonly DependencyProperty LabelProperty =
-           DependencyProperty.Register("Label", typeof(string), typeof(ServicesController), new PropertyMetadata(""));
+           DependencyProperty.Register("Label", typeof(string), typeof(CampusService), new PropertyMetadata(""));
         #endregion
+
+        public int Id { get; private set; }
 
         public ObservableCollection<Link> Links { get; private set; }
 

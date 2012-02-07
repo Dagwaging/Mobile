@@ -1,13 +1,13 @@
-﻿#if WINDOWS_PHONE
+﻿using System;
+using System.Collections.Generic;
+using System.Runtime.Serialization;
+
+#if WINDOWS_PHONE
 using System.Device.Location;
 using Microsoft.Phone.Controls.Maps;
 #else
 using Microsoft.Maps.MapControl;
 #endif
-
-using System;
-using System.Collections.Generic;
-using System.Runtime.Serialization;
 
 
 namespace Rhit.Applications.Model {
@@ -15,7 +15,7 @@ namespace Rhit.Applications.Model {
     public class ServerObject {
         #region CampusServicesResponse
         [DataMember(Name = "Root")]
-        public List<CampusServicesCategory_DC> CampusServicesRoot { get; set; }
+        public CampusServicesCategory_DC CampusServicesRoot { get; set; }
         #endregion
 
         #region VersionResponse
@@ -304,6 +304,7 @@ namespace Rhit.Applications.Model {
         public int Location { get; set; }
 
         public string ConvertAction() {
+            if(Action == null) return "";
             return ActionCodeDict[Action];
         }
     }

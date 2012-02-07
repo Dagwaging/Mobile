@@ -16,9 +16,9 @@ namespace Rhit.Applications.Model.Services {
         #region Events
         #region CampusServicesReturned
         public event CampusServicesEventHandler CampusServicesReturned;
-        protected virtual void OnCampusServicesReturned(ServiceEventArgs e, IList<CampusServicesCategory_DC> categories) {
+        protected virtual void OnCampusServicesReturned(ServiceEventArgs e, CampusServicesCategory_DC root) {
             CampusServicesEventArgs args = new CampusServicesEventArgs(e) {
-                Categories = categories,
+                Root = root,
             };
             if(LocationsReturned != null) CampusServicesReturned(this, args);
         }
@@ -195,7 +195,7 @@ namespace Rhit.Applications.Model.Services {
 
         private void HandleCampusServicesResponse(ServiceEventArgs eventArgs) {
             ServerObject response = eventArgs.ResponseObject;
-            if(response.CampusServicesRoot == null || response.CampusServicesRoot.Count <= 0) return;
+            if(response.CampusServicesRoot == null) return;
             OnCampusServicesReturned(eventArgs, response.CampusServicesRoot);
         }
 
