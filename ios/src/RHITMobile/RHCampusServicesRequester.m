@@ -68,9 +68,6 @@
         [self performSelectorInBackground:@selector(updateCampusServices) withObject:nil];
         return;
     }
-    // Perform initial web request
-    NSDictionary *response = [RHWebRequestMaker JSONGetRequestWithPath:kCampusServicesPath
-                                                               URLargs:@""];
     
     // Check version before continuing
     RHDataVersionManager *dataVersionManager = [RHDataVersionManager instance];
@@ -78,6 +75,10 @@
     if (!dataVersionManager.needsServicesUpdate) {
         return;
     }
+    
+    // Perform initial web request
+    NSDictionary *response = [RHWebRequestMaker JSONGetRequestWithPath:kCampusServicesPath
+                                                               URLargs:@""];
     
     // Load all old categories and links (to be deleted)
     NSManagedObjectContext *localContext = [[NSManagedObjectContext alloc] init];
