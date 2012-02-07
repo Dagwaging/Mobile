@@ -19,7 +19,11 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
+
 #import "RHTourItem.h"
+
+#define kRHTourTagCategoryEntityName @"RHTourTagCategory"
+
 
 @class RHTourItem;
 

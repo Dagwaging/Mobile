@@ -21,6 +21,8 @@
 #import <CoreData/CoreData.h>
 #import "RHTourItem.h"
 
+#define kRHTourTagEntityName @"RHTourTag"
+
 
 @interface RHTourTag : RHTourItem
 
