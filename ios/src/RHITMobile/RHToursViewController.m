@@ -18,12 +18,14 @@
 //
 
 #import <CoreLocation/CoreLocation.h>
+
 #import "MKMapView+ZoomLevel.h"
 #import "RHToursViewController.h"
 #import "RHWrappedCoordinate.h"
 #import "RHAppDelegate.h"
 #import "RHMapViewController.h"
 #import "RHTourRequester.h"
+#import "RHTagsBasketViewController.h"
 
 @implementation RHToursViewController
 
@@ -65,8 +67,9 @@
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
-- (void)selectTour:(id)sender {
-    currentDirectionsRequest_  = [[RHTourRequester alloc] initWithDelegate:self];
+- (void)customTour:(id)sender {
+    RHTagsBasketViewController *basketViewController = [[RHTagsBasketViewController alloc] initWithNibName:kRHTagsBasketViewControllerNibname bundle:nil];
+    [self.navigationController pushViewController:basketViewController animated:YES];
 }
 
 - (IBAction)didFinishLoadingTour:(NSArray *)directions {

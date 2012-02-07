@@ -1,5 +1,5 @@
 //
-//  RHToursViewController.h
+//  RHTagsBasketViewController.h
 //  Rose-Hulman Mobile
 //
 //  Copyright 2012 Rose-Hulman Institute of Technology
@@ -18,15 +18,13 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "RHTourRequesterDelegate.h"
 
-#define kRHToursViewControllerNibName @"RHToursViewController"
+#define kRHTagsBasketViewControllerNibname @"RHTagsBasketViewController"
 
+@interface RHTagsBasketViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 
-@class RHTourRequester;
+@property (nonatomic, readonly) NSManagedObjectContext *managedObjectContext;
 
-@interface RHToursViewController : UIViewController <RHTourRequesterDelegate>
-
-- (IBAction)customTour:(id)sender;
+@property (nonatomic, strong) NSMutableArray *tags;
 
 @end

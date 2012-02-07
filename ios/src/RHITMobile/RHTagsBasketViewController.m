@@ -1,0 +1,133 @@
+//
+//  RHTagsBasketViewController.m
+//  Rose-Hulman Mobile
+//
+//  Copyright 2012 Rose-Hulman Institute of Technology
+// 
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
+//
+
+#import "RHTagsBasketViewController.h"
+#import "RHAppDelegate.h"
+#import "RHTourTagCategory.h"
+#import "RHTourTag.h"
+
+#define kTagCellReuseIdentifier @"TagCell"
+#define kAddCellReuseIdentifier @"AddCell"
+
+
+@implementation RHTagsBasketViewController
+
+@synthesize tags;
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        self.tags = [NSMutableArray arrayWithCapacity:15];
+    }
+    return self;
+}
+
+- (NSManagedObjectContext *)managedObjectContext {
+    return [((RHAppDelegate *) [[UIApplication sharedApplication] delegate]) managedObjectContext];
+}
+
+- (void)didReceiveMemoryWarning {
+    // Releases the view if it doesn't have a superview.
+    [super didReceiveMemoryWarning];
+    
+    // Release any cached data, images, etc that aren't in use.
+}
+
+#pragma mark - View lifecycle
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    // Load default tags
+    NSFetchRequest *defaultRequest = [NSFetchRequest fetchRequestWithEntityName:kRHTourTagEntityName];
+    defaultRequest.predicate = [NSPredicate predicateWithFormat:@"isDefault == YES"];
+    self.tags = [NSMutableArray arrayWithArray:[self.managedObjectContext executeFetchRequest:defaultRequest error:nil]];
+}
+
+- (void)viewDidUnload {
+    [super viewDidUnload];
+    // Release any retained subviews of the main view.
+    // e.g. self.myOutlet = nil;
+}
+
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+    // Return YES for supported orientations
+    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+}
+
+- (NSString *)title {
+    return @"Interests";
+}
+
+#pragma mark - UITableViewDelegate Methods
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+
+#pragma mark - UITableViewDataSource Methods
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return tags.count + 1;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView
+         cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    UITableViewCell *cell;
+    if (indexPath.row == self.tags.count) {
+        cell = [tableView dequeueReusableCellWithIdentifier:kAddCellReuseIdentifier];
+        
+        if (cell == nil) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault 
+                                          reuseIdentifier:kAddCellReuseIdentifier];
+            cell.textLabel.textColor = [UIColor blueColor];
+            cell.textLabel.text = @"Add Interests...";
+            cell.textLabel.textAlignment = UITextAlignmentCenter;
+        }
+    } else {
+        cell = [tableView dequeueReusableCellWithIdentifier:kTagCellReuseIdentifier];
+        
+        if (cell == nil) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1
+                                          reuseIdentifier:kTagCellReuseIdentifier];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        }
+        
+        RHTourTag *tag = [self.tags objectAtIndex:indexPath.row];
+        
+        cell.textLabel.text = tag.name;
+    }
+    
+    return cell;
+}
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    return indexPath.row < self.tags.count;
+}
+
+- (void)tableView:(UITableView *)tableView
+commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
+forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [self.tags removeObjectAtIndex:indexPath.row];
+    [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+}
+
+@end

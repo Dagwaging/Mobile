@@ -101,6 +101,8 @@
 		92F5F21C14DFC3E400324ACE /* RHTourTag.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F5F21B14DFC3E400324ACE /* RHTourTag.m */; };
 		92F5F21F14DFC3F900324ACE /* RHTourTagCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F5F21E14DFC3F900324ACE /* RHTourTagCategory.m */; };
 		92F5F22214DFC4FF00324ACE /* RHTagsRequester.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F5F22114DFC4FF00324ACE /* RHTagsRequester.m */; };
+		92FFAC5714E0E5F700240458 /* RHTagsBasketViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92FFAC5514E0E5F700240458 /* RHTagsBasketViewController.m */; };
+		92FFAC5814E0E5F700240458 /* RHTagsBasketViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92FFAC5614E0E5F700240458 /* RHTagsBasketViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -272,6 +274,9 @@
 		92F5F22014DFC4FF00324ACE /* RHTagsRequester.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHTagsRequester.h; sourceTree = "<group>"; };
 		92F5F22114DFC4FF00324ACE /* RHTagsRequester.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHTagsRequester.m; sourceTree = "<group>"; };
 		92F5F22314DFC54D00324ACE /* RHTagsRequesterDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHTagsRequesterDelegate.h; sourceTree = "<group>"; };
+		92FFAC5414E0E5F700240458 /* RHTagsBasketViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHTagsBasketViewController.h; sourceTree = "<group>"; };
+		92FFAC5514E0E5F700240458 /* RHTagsBasketViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHTagsBasketViewController.m; sourceTree = "<group>"; };
+		92FFAC5614E0E5F700240458 /* RHTagsBasketViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RHTagsBasketViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -572,6 +577,9 @@
 				92D3672514B60DE000EE0504 /* RHPersonDetailViewController.h */,
 				92D3672614B60DE000EE0504 /* RHPersonDetailViewController.m */,
 				92D3672714B60DE000EE0504 /* RHPersonDetailViewController.xib */,
+				92FFAC5414E0E5F700240458 /* RHTagsBasketViewController.h */,
+				92FFAC5514E0E5F700240458 /* RHTagsBasketViewController.m */,
+				92FFAC5614E0E5F700240458 /* RHTagsBasketViewController.xib */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -658,6 +666,7 @@
 				922F44A514985AE800D5C2C3 /* tab-bar-tours-icon.png in Resources */,
 				922F44A614985AE800D5C2C3 /* tab-bar-tours-icon@2x.png in Resources */,
 				92D3672914B60DE000EE0504 /* RHPersonDetailViewController.xib in Resources */,
+				92FFAC5814E0E5F700240458 /* RHTagsBasketViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -725,6 +734,7 @@
 				92F5F21C14DFC3E400324ACE /* RHTourTag.m in Sources */,
 				92F5F21F14DFC3F900324ACE /* RHTourTagCategory.m in Sources */,
 				92F5F22214DFC4FF00324ACE /* RHTagsRequester.m in Sources */,
+				92FFAC5714E0E5F700240458 /* RHTagsBasketViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
