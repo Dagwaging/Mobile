@@ -18,6 +18,7 @@
 //
 
 #import "RHTagSelectionViewController.h"
+#import "RHTagsBasketViewController.h"
 #import "RHTourTag.h"
 #import "RHTourTagCategory.h"
 
@@ -28,6 +29,9 @@
 @implementation RHTagSelectionViewController
 
 @synthesize category = category_;
+@synthesize selectedTags = selectedTags_;
+@synthesize deselectedTags = deselectedTags_;
+@synthesize parentBasket = parentBasket_;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -73,6 +77,10 @@
 }
 
 - (void)cancelSelection:(id)sender {
+//    self.parentBasket.tags = self.selectedTags;
+//    self.parentBasket.unusedTags = self.deselectedTags;
+    [self.parentBasket.tableView reloadData];
+    
     [self dismissModalViewControllerAnimated:YES];
 }
 
@@ -105,10 +113,22 @@
     if ([item isKindOfClass:[RHTourTagCategory class]]) {
         RHTagSelectionViewController *nextViewController = [[RHTagSelectionViewController alloc] initWithNibName:kRHTagSelectionViewControllerNibName bundle:nil];
         nextViewController.category = (RHTourTagCategory *) item;
+        nextViewController.selectedTags = self.selectedTags;
+        nextViewController.deselectedTags = self.deselectedTags;
+        nextViewController.parentBasket = self.parentBasket;
         [self.navigationController pushViewController:nextViewController animated:YES];
     } else {
         UITableViewCell *currentCell = [tableView cellForRowAtIndexPath:indexPath];
-        currentCell.accessoryType = currentCell.accessoryType == UITableViewCellAccessoryNone ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+        RHTourTag *tag = (RHTourTag *) item;
+        if (currentCell.accessoryType == UITableViewCellAccessoryCheckmark) {
+            [self.selectedTags removeObject:tag];
+            [self.deselectedTags addObject:tag];
+            currentCell.accessoryType = UITableViewCellAccessoryNone;
+        } else {
+            [self.deselectedTags removeObject:tag];
+            [self.selectedTags addObject:tag];
+            currentCell.accessoryType = UITableViewCellAccessoryCheckmark;
+        }
     }
 }
 
@@ -145,7 +165,7 @@
         if (cell == nil) {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:kTagReuseIdentifier];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.accessoryType = UITableViewCellAccessoryCheckmark;
+            cell.accessoryType = [self.selectedTags containsObject:tag] ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
         }
         
         cell.textLabel.text = tag.name;

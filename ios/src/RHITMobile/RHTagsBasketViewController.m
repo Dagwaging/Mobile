@@ -29,7 +29,8 @@
 
 @implementation RHTagsBasketViewController
 
-@synthesize tags;
+@synthesize tags = tags_;
+@synthesize unusedTags = unusedTags_;
 @synthesize tableView = tableView_;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -59,9 +60,20 @@
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Build Tour" style:UIBarButtonItemStyleDone target:nil action:NULL];
     
     // Load default tags
-    NSFetchRequest *defaultRequest = [NSFetchRequest fetchRequestWithEntityName:kRHTourTagEntityName];
-    //defaultRequest.predicate = [NSPredicate predicateWithFormat:@"isDefault == YES"];
-    self.tags = [NSMutableArray arrayWithArray:[self.managedObjectContext executeFetchRequest:defaultRequest error:nil]];
+    NSFetchRequest *defaultRequest = [NSFetchRequest
+                                      fetchRequestWithEntityName:kRHTourTagEntityName];
+    NSArray *allTags = [self.managedObjectContext executeFetchRequest:defaultRequest error:nil];
+    
+    self.tags = [NSMutableArray arrayWithCapacity:allTags.count];
+    self.unusedTags = [NSMutableArray arrayWithCapacity:allTags.count];
+    
+    for (RHTourTag *tag in allTags) {
+        if (tag.isDefault.boolValue) {
+            [self.tags addObject:tag];
+        } else {
+            [self.unusedTags addObject:tag];
+        }
+    }
 }
 
 - (void)viewDidUnload {
@@ -92,25 +104,37 @@
         
         // Create and display a tag selector view controller
         RHTagSelectionViewController *tagSelector = [[RHTagSelectionViewController alloc] initWithNibName:kRHTagSelectionViewControllerNibName bundle:nil];
+        
         tagSelector.category = [results objectAtIndex:0];
+        tagSelector.selectedTags = self.tags;
+        tagSelector.deselectedTags = self.unusedTags;
+        tagSelector.parentBasket = self;
+        
         UINavigationController *navCon = [[UINavigationController alloc] initWithRootViewController:tagSelector];
         
         [self presentModalViewController:navCon animated:YES];
     } else {
         tableView.editing = YES;
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Done Editing" style:UIBarButtonItemStylePlain target:self action:@selector(doneEditing:)];
+        NSIndexPath *finalIndexPath = [NSIndexPath indexPathForRow:self.tags.count inSection:0];
+        [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:finalIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
 }
 
 - (void)doneEditing:(id)sender {
     self.tableView.editing = NO;
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Build Tour" style:UIBarButtonItemStyleDone target:nil action:NULL];
+    NSIndexPath *finalIndexPath = [NSIndexPath indexPathForRow:self.tags.count inSection:0];
+    [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:finalIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
 #pragma mark - UITableViewDataSource Methods
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return tags.count + 1;
+    if (self.tableView.editing) {
+        return self.tags.count;
+    }
+    return self.tags.count + 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView
