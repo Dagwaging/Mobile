@@ -28,6 +28,7 @@
 #import "RHToursViewController.h"
 #import "RHCampusServicesRequester.h"
 #import "RHTopLocationsRequester.h"
+#import "RHTagsRequester.h"
 
 
 #pragma mark Private Category Declaration
@@ -173,6 +174,11 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
                                                           delegate:self.infoViewController];
     [campusServicesRequester updateCampusServices];
     
+    // Kick off a tags update
+    RHTagsRequester *tagsRequester = [[RHTagsRequester alloc] initWithDelegate:nil persistantStoreCoordinator:self.persistentStoreCoordinator];
+    
+    [tagsRequester updateTags];
+    
     // If this is a beta build, kick off initial beta setup
 #ifdef RHITMobile_RHBeta
     [beta performInitialSetup];
@@ -294,13 +300,16 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     NSManagedObjectModel *model = [self managedObjectModel];
     
+    NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
+                             [NSNumber numberWithBool:YES], NSMigratePersistentStoresAutomaticallyOption,
+                             [NSNumber numberWithBool:YES], NSInferMappingModelAutomaticallyOption, nil];
     persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc]
                                   initWithManagedObjectModel:model];
     
     if(![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType
                                                  configuration:nil
                                                            URL:storeUrl
-                                                       options:nil
+                                                       options:options
                                                          error:&error]) {
         /* Error for store creation should be handled in here */
     }
