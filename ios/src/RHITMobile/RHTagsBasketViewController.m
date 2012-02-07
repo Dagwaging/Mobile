@@ -32,6 +32,7 @@
 @synthesize tags = tags_;
 @synthesize unusedTags = unusedTags_;
 @synthesize tableView = tableView_;
+@synthesize isEditing = isEditing_;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -56,6 +57,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.isEditing = NO;
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Build Tour" style:UIBarButtonItemStyleDone target:nil action:NULL];
     
@@ -115,6 +118,7 @@
         [self presentModalViewController:navCon animated:YES];
     } else {
         tableView.editing = YES;
+        self.isEditing = YES;
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Done Editing" style:UIBarButtonItemStylePlain target:self action:@selector(doneEditing:)];
         NSIndexPath *finalIndexPath = [NSIndexPath indexPathForRow:self.tags.count inSection:0];
         [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:finalIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
@@ -123,6 +127,7 @@
 
 - (void)doneEditing:(id)sender {
     self.tableView.editing = NO;
+    self.isEditing = NO;
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Build Tour" style:UIBarButtonItemStyleDone target:nil action:NULL];
     NSIndexPath *finalIndexPath = [NSIndexPath indexPathForRow:self.tags.count inSection:0];
     [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:finalIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
@@ -131,7 +136,7 @@
 #pragma mark - UITableViewDataSource Methods
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (self.tableView.editing) {
+    if (self.isEditing) {
         return self.tags.count;
     }
     return self.tags.count + 1;

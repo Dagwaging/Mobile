@@ -31,6 +31,8 @@
 
 @property (nonatomic, strong) IBOutlet UITableView *tableView;
 
+@property (nonatomic, assign) BOOL isEditing;
+
 - (IBAction)doneEditing:(id)sender;
 
 @end
