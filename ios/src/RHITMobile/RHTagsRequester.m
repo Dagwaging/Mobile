@@ -91,10 +91,7 @@
     NSDictionary *root = [response objectForKey:kRootKey];
     
     // Recursively save new tags and categories
-    [self createManagedObjectsFromTags:[root objectForKey:kTagsKey]
-                            inCategory:nil
-                inManagedObjectContext:localContext];
-    [self createManagedObjectsFromCategories:[root objectForKey:kChildrenKey]
+    [self createManagedObjectsFromCategories:[NSArray arrayWithObject:root]
                                   inCategory:nil
                       inManagedObjectContext:localContext];
     
@@ -125,6 +122,7 @@
         RHTourTagCategory *newCategory = [NSEntityDescription insertNewObjectForEntityForName:kRHTourTagCategoryEntityName inManagedObjectContext:managedObjectContext];
         
         newCategory.name = [categoryDict objectForKey:kNameKey];
+        newCategory.parent = category;
         
         [self createManagedObjectsFromTags:[categoryDict objectForKey:kTagsKey]
                                 inCategory:newCategory

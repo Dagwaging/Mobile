@@ -19,6 +19,7 @@
 
 #import "RHTagsBasketViewController.h"
 #import "RHAppDelegate.h"
+#import "RHTagSelectionViewController.h"
 #import "RHTourTagCategory.h"
 #import "RHTourTag.h"
 
@@ -79,6 +80,22 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    if (indexPath.row == self.tags.count) {
+        // Find the root tag category
+        NSFetchRequest *rootRequest = [NSFetchRequest fetchRequestWithEntityName:kRHTourTagCategoryEntityName];
+        rootRequest.predicate = [NSPredicate predicateWithFormat:@"parent == nil"];
+        NSArray *results = [self.managedObjectContext executeFetchRequest:rootRequest error:nil];
+        
+        NSLog(@"%@", results);
+        
+        // Create and display a tag selector view controller
+        RHTagSelectionViewController *tagSelector = [[RHTagSelectionViewController alloc] initWithNibName:kRHTagSelectionViewControllerNibName bundle:nil];
+        tagSelector.category = [results objectAtIndex:0];
+        UINavigationController *navCon = [[UINavigationController alloc] initWithRootViewController:tagSelector];
+        
+        [self presentModalViewController:navCon animated:YES];
+    }
 }
 
 
