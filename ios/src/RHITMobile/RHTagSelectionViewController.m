@@ -106,6 +106,9 @@
         RHTagSelectionViewController *nextViewController = [[RHTagSelectionViewController alloc] initWithNibName:kRHTagSelectionViewControllerNibName bundle:nil];
         nextViewController.category = (RHTourTagCategory *) item;
         [self.navigationController pushViewController:nextViewController animated:YES];
+    } else {
+        UITableViewCell *currentCell = [tableView cellForRowAtIndexPath:indexPath];
+        currentCell.accessoryType = currentCell.accessoryType == UITableViewCellAccessoryNone ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
     }
 }
 
@@ -128,7 +131,7 @@
         cell = [tableView dequeueReusableCellWithIdentifier:kCategoryReuseIdentifier];
         
         if (cell == nil) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:kCategoryReuseIdentifier];
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCategoryReuseIdentifier];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
         
@@ -141,7 +144,8 @@
         
         if (cell == nil) {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:kTagReuseIdentifier];
-            cell.textLabel.textColor = [UIColor blueColor];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.accessoryType = UITableViewCellAccessoryCheckmark;
         }
         
         cell.textLabel.text = tag.name;

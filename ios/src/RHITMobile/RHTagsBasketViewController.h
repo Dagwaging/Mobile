@@ -27,4 +27,8 @@
 
 @property (nonatomic, strong) NSMutableArray *tags;
 
+@property (nonatomic, strong) IBOutlet UITableView *tableView;
+
+- (IBAction)doneEditing:(id)sender;
+
 @end

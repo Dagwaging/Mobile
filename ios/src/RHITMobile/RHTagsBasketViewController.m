@@ -30,6 +30,7 @@
 @implementation RHTagsBasketViewController
 
 @synthesize tags;
+@synthesize tableView = tableView_;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -55,9 +56,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Build Tour" style:UIBarButtonItemStyleDone target:nil action:NULL];
+    
     // Load default tags
     NSFetchRequest *defaultRequest = [NSFetchRequest fetchRequestWithEntityName:kRHTourTagEntityName];
-    defaultRequest.predicate = [NSPredicate predicateWithFormat:@"isDefault == YES"];
+    //defaultRequest.predicate = [NSPredicate predicateWithFormat:@"isDefault == YES"];
     self.tags = [NSMutableArray arrayWithArray:[self.managedObjectContext executeFetchRequest:defaultRequest error:nil]];
 }
 
@@ -81,13 +84,11 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    if (indexPath.row == self.tags.count) {
+    if (indexPath.row == self.tags.count && !tableView.editing) {
         // Find the root tag category
         NSFetchRequest *rootRequest = [NSFetchRequest fetchRequestWithEntityName:kRHTourTagCategoryEntityName];
         rootRequest.predicate = [NSPredicate predicateWithFormat:@"parent == nil"];
         NSArray *results = [self.managedObjectContext executeFetchRequest:rootRequest error:nil];
-        
-        NSLog(@"%@", results);
         
         // Create and display a tag selector view controller
         RHTagSelectionViewController *tagSelector = [[RHTagSelectionViewController alloc] initWithNibName:kRHTagSelectionViewControllerNibName bundle:nil];
@@ -95,9 +96,16 @@
         UINavigationController *navCon = [[UINavigationController alloc] initWithRootViewController:tagSelector];
         
         [self presentModalViewController:navCon animated:YES];
+    } else {
+        tableView.editing = YES;
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Done Editing" style:UIBarButtonItemStylePlain target:self action:@selector(doneEditing:)];
     }
 }
 
+- (void)doneEditing:(id)sender {
+    self.tableView.editing = NO;
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Build Tour" style:UIBarButtonItemStyleDone target:nil action:NULL];
+}
 
 #pragma mark - UITableViewDataSource Methods
 
@@ -139,12 +147,19 @@
     return indexPath.row < self.tags.count;
 }
 
+- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
+    return indexPath.row < self.tags.count;
+}
+
 - (void)tableView:(UITableView *)tableView
 commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
-forRowAtIndexPath:(NSIndexPath *)indexPath
-{
+forRowAtIndexPath:(NSIndexPath *)indexPath {
     [self.tags removeObjectAtIndex:indexPath.row];
     [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+}
+
+- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath {
+    //TODO: Update data source to reflect the change
 }
 
 @end
