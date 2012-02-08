@@ -192,7 +192,7 @@ namespace RHITMobile {
     public class AdminPathDataHandler : PathHandler {
         protected override IEnumerable<ThreadInfo> HandleNoPath(ThreadManager TM, Dictionary<string, string> query, object state) {
             var currentThread = TM.CurrentThread;
-            var result = new PathDataResponse(Program.ServerVersion);
+            var result = new PathDataResponse(Program.LocationsVersion);
             yield return TM.MakeDbCall(currentThread, Program.ConnectionString, "spGetPaths");
             foreach (DataRow row in TM.GetResult<DataTable>(currentThread).Rows) {
                 result.Paths.Add(new Path(row));

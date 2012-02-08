@@ -54,7 +54,10 @@ namespace RHITMobile
                     try
                     {
                         context = TM.GetResult<HttpListenerContext>(currentThread);
-                        Console.WriteLine("[{0}]\nHandling request: {1}\n", DateTime.Now, context.Request.RawUrl);
+                        if (context.Request.RawUrl.StartsWith("/admin/authenticate/"))
+                            Console.WriteLine("[{0}]\nHandling request: {1}\n", DateTime.Now, "/admin/authenticate/...");
+                        else
+                            Console.WriteLine("[{0}]\nHandling request: {1}\n", DateTime.Now, context.Request.RawUrl);
                     }
                     catch (Exception ex)
                     {
@@ -139,7 +142,9 @@ namespace RHITMobile
         {
             Redirects.Add("locations", new LocationsHandler());
             Redirects.Add("directions", new DirectionsHandler());
+            Redirects.Add("tours", new ToursHandler());
             Redirects.Add("admin", new AdminHandler());
+            Redirects.Add("services", new ServicesHandler());
             Redirects.Add("clientaccesspolicy.xml", new ClientAccessPolicyHandler());
         }
 

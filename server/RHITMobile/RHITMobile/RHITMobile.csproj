@@ -69,6 +69,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Path Handling\CampusServices.cs" />
+    <Compile Include="Path Handling\Tours.cs" />
     <Compile Include="Response Handling\DatabaseScripter.cs" />
     <Compile Include="Path Handling\AdminInterface.cs" />
     <Compile Include="Path Handling\RootFiles.cs" />

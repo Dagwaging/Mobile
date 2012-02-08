@@ -74,24 +74,24 @@ namespace RHITMobile
         /// <returns>Index of the item</returns>
         public int Insert(T item)
         {
-            // If the number of items is within four of the limit, increase the size
-            if (_items >= _size - 4)
-            {
-                IncreaseSize();
-            }
+            lock (_array) {
+                // If the number of items is within four of the limit, increase the size
+                if (_items >= _size - 4) {
+                    IncreaseSize();
+                }
 
-            // Find the next empty slot
-            while (_array[_index] != null)
-            {
+                // Find the next empty slot
+                while (_array[_index] != null) {
+                    _index = (_index + 1) % _size;
+                }
+                int result = _index;
+
+                // Insert the item
+                _array[_index] = item;
+                _items++;
                 _index = (_index + 1) % _size;
+                return result;
             }
-            int result = _index;
-
-            // Insert the item
-            _array[_index] = item;
-            _items++;
-            _index = (_index + 1) % _size;
-            return result;
         }
 
         /// <summary>
@@ -99,13 +99,14 @@ namespace RHITMobile
         /// </summary>
         private void IncreaseSize()
         {
-            var newArray = new T[_size * 2];
-            for (int i = 0; i < _size; i++)
-            {
-                newArray[i] = _array[i];
+            lock (_array) {
+                var newArray = new T[_size * 2];
+                for (int i = 0; i < _size; i++) {
+                    newArray[i] = _array[i];
+                }
+                _array = newArray;
+                _size *= 2;
             }
-            _array = newArray;
-            _size *= 2;
         }
 
         /// <summary>
@@ -114,11 +115,12 @@ namespace RHITMobile
         /// <param name="index">Index of item to remove</param>
         public void Remove(int index)
         {
-            if (_array[index] != null)
-            {
-                _array[index] = null;
-                _items--;
-            }
+            lock (_array)
+                if (_array[index] != null)
+                {
+                    _array[index] = null;
+                    _items--;
+                }
         }
 
         /// <summary>

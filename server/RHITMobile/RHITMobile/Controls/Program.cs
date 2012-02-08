@@ -100,15 +100,30 @@ namespace RHITMobile {
         /// </summary>
         public static void UpdateServerVersion() {
             using (var fileReader = new StreamReader("version.txt")) {
-                ServerVersion = Double.Parse(fileReader.ReadLine());
+                string line;
+                while ((line = fileReader.ReadLine()) != null) {
+                    switch (line.Substring(0, line.IndexOf(':'))) {
+                        case "Locations":
+                            LocationsVersion = Double.Parse(line.Substring(line.IndexOf(':') + 1));
+                            break;
+                        case "Services":
+                            ServicesVersion = Double.Parse(line.Substring(line.IndexOf(':') + 1));
+                            break;
+                        case "Tags":
+                            TagsVersion = Double.Parse(line.Substring(line.IndexOf(':') + 1));
+                            break;
+                    }
+                }
             }
-            Console.WriteLine("Version update successful.");
+            Console.WriteLine("Version update from file successful.");
         }
 
         public static void WriteServerVersion(double version) {
-            ServerVersion = version;
+            LocationsVersion = version;
             using (var fileWriter = new StreamWriter("version.txt", false)) {
-                fileWriter.Write(version.ToString());
+                fileWriter.WriteLine("Locations:\t" + version);
+                fileWriter.WriteLine("Services:\t" + ServicesVersion);
+                fileWriter.WriteLine("Tags:\t\t" + TagsVersion);
             }
             Console.WriteLine("Version was updated.");
         }
@@ -120,7 +135,7 @@ namespace RHITMobile {
         public static string ConnectionString = null;
         public static void InitConnection() {
             if (ConnectionString == null) {
-                ConnectionString = @"Data Source=mobilewin.csse.rose-hulman.edu\RHITMobile;Initial Catalog=MapData;Integrated Security=SSPI;Persist Security Info=true";
+                ConnectionString = @"Data Source=localhost\RHITMobile;Initial Catalog=MapData;Integrated Security=SSPI;Persist Security Info=true";
                 try {
                     Console.WriteLine("Attempting to login to SQL Server using Windows credentials...");
                     using (var connection = new SqlConnection(ConnectionString)) {
@@ -153,8 +168,9 @@ namespace RHITMobile {
             }
         }
 
-        public static double ServerVersion;
+        public static double LocationsVersion;
         public static double ServicesVersion;
+        public static double TagsVersion;
         private const string CustomConnectionString = @"Data Source=mobilewin.csse.rose-hulman.edu\RHITMobile;Initial Catalog=MapData;User Id={0};Password={1};Persist Security Info=true";
         public const double EarthRadius = 20925524.9; // feet
         public const double DegToRad = Math.PI / 180;

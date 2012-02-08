@@ -273,13 +273,15 @@ namespace RHITMobile
         /// <param name="processes">Number of processes to execute in parallel</param>
         public void Start(int processes)
         {
-            _results = new ThreadInfo[processes];
+            /*_results = new ThreadInfo[processes];
             Task[] tasks = new Task[processes];
             for (int i = 0; i < processes; i++)
             {
                 tasks[i] = Task.Factory.StartNew(Run, i);
             }
-            Task.WaitAll(tasks);
+            Task.WaitAll(tasks);*/
+            _results = new ThreadInfo[1];
+            Run(0);
             Console.WriteLine("ThreadManager ran out of items to process.  Please restart the service.");
             Console.ReadLine();
         }
@@ -309,7 +311,7 @@ namespace RHITMobile
                             continuation = _queues[ThreadPriority.Low].Dequeue();
                             break;
                         }
-                    Thread.Sleep(3);
+                    Thread.Sleep(1);
                 }
 
                 // Continue the next item in the queue

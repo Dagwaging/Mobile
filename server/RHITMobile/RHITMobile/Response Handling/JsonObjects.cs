@@ -25,14 +25,17 @@ namespace RHITMobile {
     [DataContract]
     public class VersionResponse : JsonObject {
         public VersionResponse() {
+            LocationsVersion = Program.LocationsVersion;
             ServicesVersion = Program.ServicesVersion;
-            ServerVersion = Program.ServerVersion;
+            TagsVersion = Program.TagsVersion;
         }
 
         [DataMember]
+        public double LocationsVersion { get; set; }
+        [DataMember]
         public double ServicesVersion { get; set; }
         [DataMember]
-        public double ServerVersion { get; set; }
+        public double TagsVersion { get; set; }
     }
     #endregion
 
@@ -108,9 +111,6 @@ namespace RHITMobile {
             Parent = row.IsNull("parent") ? null : (int?)row["parent"];
             Type = (string)row["type"];
 
-            IsPOI = (bool)row["ispoi"];
-            OnQuickList = (bool)row["onquicklist"];
-
             HasAltNames = (bool)row["hasalts"];
             HasLinks = (bool)row["haslinks"];
         }
@@ -137,11 +137,6 @@ namespace RHITMobile {
         public int? Parent { get; set; }
         [DataMember]
         public string Type { get; set; }
-
-        [DataMember]
-        public bool IsPOI { get; set; }
-        [DataMember]
-        public bool OnQuickList { get; set; }
 
         public bool HasAltNames { get; set; }
         public bool HasLinks { get; set; }
@@ -408,6 +403,12 @@ namespace RHITMobile {
 
     [DataContract]
     public class DirectionPath : JsonObject {
+        public DirectionPath(double lat, double lon, string dir, bool flag, string action, double alt, int? loc, bool outside, int id, bool forward)
+        : this(lat, lon, dir, flag, action, alt, loc, outside) {
+            Id = id;
+            Forward = forward;
+        }
+
         public DirectionPath(double lat, double lon, string dir, bool flag, string action, double alt, int? loc, bool outside) {
             Action = action;
             Altitude = alt;
@@ -417,6 +418,7 @@ namespace RHITMobile {
             Lon = lon;
             Location = loc;
             Outside = outside;
+            Id = 0;
         }
 
         [DataMember]
@@ -435,6 +437,117 @@ namespace RHITMobile {
         public double Lon { get; set; }
         [DataMember]
         public bool Outside { get; set; }
+
+        public int Id { get; set; }
+        public bool Forward { get; set; }
+    }
+    #endregion
+
+    #region TagsResponse & LocationIdsResponse
+    [DataContract]
+    public class TagsResponse : JsonObject {
+        public TagsResponse(double version) {
+            Version = version;
+            Root = new TagCategory();
+        }
+
+        [DataMember]
+        public TagCategory Root { get; set; }
+        [DataMember]
+        public double Version { get; set; }
+    }
+
+    [DataContract]
+    public class TagCategory : JsonObject {
+        public TagCategory(DataRow row) : this() {
+            Name = (string)row["name"];
+
+            if (!row.IsNull("parent"))
+                Parent = (string)row["parent"];
+        }
+
+        public TagCategory() {
+            Children = new List<TagCategory>();
+            Tags = new List<Tag>();
+            Name = "";
+            Parent = null;
+        }
+
+        [DataMember]
+        public List<TagCategory> Children { get; set; }
+        [DataMember]
+        public string Name { get; set; }
+        [DataMember]
+        public List<Tag> Tags { get; set; }
+
+        public string Parent { get; set; }
+        public bool IsDefault { get; set; }
+    }
+
+    [DataContract]
+    public class Tag : JsonObject {
+        public Tag(DataRow row) {
+            Id = (int)row["id"];
+            Name = (string)row["name"];
+            IsDefault = (bool)row["isdefault"];
+        }
+
+        [DataMember]
+        public int Id { get; set; }
+        [DataMember]
+        public bool IsDefault { get; set; }
+        [DataMember]
+        public string Name { get; set; }
+    }
+
+    [DataContract]
+    public class LocationIdsResponse : JsonObject {
+        public LocationIdsResponse(List<int> locations) {
+            Locations = locations;
+        }
+
+        [DataMember]
+        public List<int> Locations { get; set; }
+    }
+    #endregion
+
+    #region CampusServicesResponse
+    [DataContract]
+    public class CampusServicesResponse : JsonObject {
+        public CampusServicesResponse(double version) {
+            Version = version;
+            Root = new CampusServicesCategory();
+        }
+
+        [DataMember]
+        public CampusServicesCategory Root { get; set; }
+        [DataMember]
+        public double Version { get; set; }
+    }
+
+    [DataContract]
+    public class CampusServicesCategory : JsonObject {
+        public CampusServicesCategory(DataRow row) : this() {
+            Name = (string)row["name"];
+            if (!row.IsNull("parent"))
+                Parent = (string)row["parent"];
+        }
+
+        public CampusServicesCategory() {
+            Children = new List<CampusServicesCategory>();
+            Links = new List<HyperLink>();
+            Name = "";
+            Parent = null;
+        }
+
+        [DataMember]
+        public List<CampusServicesCategory> Children { get; set; }
+        [DataMember]
+        public List<HyperLink> Links { get; set; }
+        [DataMember]
+        public string Name { get; set; }
+
+        public string Parent { get; set; }
     }
     #endregion
 
@@ -496,7 +609,10 @@ namespace RHITMobile {
 
         public Path(DataRow row, int node1, int node2, int partition) {
             Elevator = (bool)row["elevator"];
-            Id = (int)row["id"];
+            if (row.Table.Columns.Contains("pathid"))
+                Id = (int)row["pathid"];
+            else
+                Id = (int)row["id"];
             Stairs = (int)row["stairs"];
             Node1 = node1;
             Node2 = node2;
@@ -541,7 +657,7 @@ namespace RHITMobile {
         public double Lon { get; set; }
         [DataMember]
         public bool Outside { get; set; }
-        [DataMember]
+        
         public int? Partition { get; set; }
 
         public double HDistanceTo(Node node) {
@@ -589,6 +705,9 @@ namespace RHITMobile {
             Id = (int)row["id"];
             Message1 = (string)row["message1"];
             Message2 = (string)row["message2"];
+            Action1 = (string)row["action1"];
+            Action2 = (string)row["action2"];
+            NodeOffset = (int)row["nodeoffset"];
         }
 
         [DataMember]
@@ -597,6 +716,12 @@ namespace RHITMobile {
         public string Message1 { get; set; }
         [DataMember]
         public string Message2 { get; set; }
+        [DataMember]
+        public string Action1 { get; set; }
+        [DataMember]
+        public string Action2 { get; set; }
+        [DataMember]
+        public int NodeOffset { get; set; }
     }
     #endregion
 

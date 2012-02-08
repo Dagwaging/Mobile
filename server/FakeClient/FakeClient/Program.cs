@@ -8,17 +8,42 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace FakeClient
 {
+    public class Tracker {
+        public Tracker() {
+            Times = new List<TimeSpan>();
+        }
+
+        public List<TimeSpan> Times { get; set; }
+    }
+
     class Program
     {
         static void Main(string[] args)
         {
-            var client = new TcpClient();
-            client.Connect(IPAddress.Parse("127.0.0.1"), 4000);
+            var tracker = new Tracker();
+            var numExec = 1000;
 
-            var stream = client.GetStream();
+            var tasks = new List<Task>();
+            for (int i = 0; i < numExec; i++) {
+                tasks.Add(Task.Factory.StartNew(new Action<object>((t) => {
+                    var start = DateTime.Now;
+                    var request = HttpWebRequest.Create("http://localhost:5600/locations/data/all");
+                    request.GetResponse();
+                    ((Tracker)t).Times.Add(DateTime.Now - start);
+                }), tracker));
+            }
+
+            Task.WaitAll(tasks.ToArray());
+
+            Console.WriteLine("Average Time: " + tracker.Times.Sum(ts => ts.TotalSeconds) / numExec + " seconds");
+
+            Console.ReadLine();
+
+            /*var stream = client.GetStream();
             var encoding = new ASCIIEncoding();
             var message = new ClientRequest() { Request = 400, MyVersion = 0.0 };
             byte[] request = encoding.GetBytes(message.Serialize());
@@ -34,17 +59,8 @@ namespace FakeClient
                 Console.WriteLine(encoding.GetString(response, 0, bytesRead));
             }
 
-            client.Close();
+            client.Close();*/
         }
-    }
-
-    [DataContract]
-    public class ClientRequest
-    {
-        [DataMember(IsRequired = true)]
-        public int Request { get; set; }
-        [DataMember(IsRequired = false)]
-        public double MyVersion { get; set; }
     }
 
     public static class JsonUtility
