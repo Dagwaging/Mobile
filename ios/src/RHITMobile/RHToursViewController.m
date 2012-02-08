@@ -29,8 +29,12 @@
 
 @implementation RHToursViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
+@synthesize durationLabel = durationLabel_;
+@synthesize locationLabel = locationLabel_;
+@synthesize locationControl = locationControl_;
+@synthesize durationSlider = durationSlider_;
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
@@ -38,8 +42,7 @@
     return self;
 }
 
-- (void)didReceiveMemoryWarning
-{
+- (void)didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
     
@@ -48,28 +51,62 @@
 
 #pragma mark - View lifecycle
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
 }
 
-- (void)viewDidUnload
-{
+- (void)viewDidUnload {
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     // Return YES for supported orientations
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
+}
+
+- (void)defaultTour:(id)sender {
+    
 }
 
 - (void)customTour:(id)sender {
     RHTagsBasketViewController *basketViewController = [[RHTagsBasketViewController alloc] initWithNibName:kRHTagsBasketViewControllerNibname bundle:nil];
     [self.navigationController pushViewController:basketViewController animated:YES];
+}
+
+- (void)tourTypeChanged:(id)sender {
+    UISegmentedControl *tourControl = (UISegmentedControl *) sender;
+    
+    if (tourControl.selectedSegmentIndex == 0) {
+        // On campus
+        self.durationSlider.enabled = YES;
+        self.locationControl.enabled = YES;
+    } else {
+        // Virtual
+        self.durationSlider.enabled = NO;
+        self.locationControl.enabled = NO;
+    }
+}
+
+- (void)locationTypeChanged:(id)sender {
+    UISegmentedControl *locationControl = (UISegmentedControl *) sender;
+    
+    if (locationControl.selectedSegmentIndex == 0) {
+        // Use GPS
+        self.locationLabel.text = @"(Determined Automatically)";
+    } else {
+        // Choose location
+        self.locationLabel.text = @"TODO";
+    }
+}
+
+- (void)durationSliderMoved:(id)sender {
+    UISlider *slider = (UISlider *) sender;
+    
+    NSNumber *sliderValue = [NSNumber numberWithFloat:slider.value];
+    self.durationLabel.text = [NSString stringWithFormat:@"%d", sliderValue.intValue];
 }
 
 - (IBAction)didFinishLoadingTour:(NSArray *)directions {

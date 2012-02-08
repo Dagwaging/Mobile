@@ -27,6 +27,22 @@
 
 @interface RHToursViewController : UIViewController <RHTourRequesterDelegate>
 
+@property (nonatomic, strong) IBOutlet UILabel *durationLabel;
+
+@property (nonatomic, strong) IBOutlet UILabel *locationLabel;
+
+@property (nonatomic, strong) IBOutlet UISegmentedControl *locationControl;
+
+@property (nonatomic, strong) IBOutlet UISlider *durationSlider;
+
+- (IBAction)defaultTour:(id)sender;
+
 - (IBAction)customTour:(id)sender;
+
+- (IBAction)tourTypeChanged:(id)sender;
+
+- (IBAction)locationTypeChanged:(id)sender;
+
+- (IBAction)durationSliderMoved:(id)sender;
 
 @end
