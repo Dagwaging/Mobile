@@ -33,6 +33,7 @@
 @synthesize unusedTags = unusedTags_;
 @synthesize tableView = tableView_;
 @synthesize isEditing = isEditing_;
+@synthesize isBuilding = isBuilding_;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -60,7 +61,7 @@
     
     self.isEditing = NO;
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Build Tour" style:UIBarButtonItemStyleDone target:nil action:NULL];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Build Tour" style:UIBarButtonItemStyleDone target:self action:@selector(buildTour:)];
     
     // Load default tags
     NSFetchRequest *defaultRequest = [NSFetchRequest
@@ -94,10 +95,34 @@
     return @"Interests";
 }
 
+- (void)doneEditing:(id)sender {
+    self.tableView.editing = NO;
+    self.isEditing = NO;
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Build Tour" style:UIBarButtonItemStyleDone target:self action:@selector(buildTour:)];
+    NSIndexPath *finalIndexPath = [NSIndexPath indexPathForRow:self.tags.count inSection:0];
+    [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:finalIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+}
+
+- (void)buildTour:(id)sender {
+    self.navigationItem.title = @"Building Tour";
+    
+    UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
+    [activityIndicator startAnimating];
+    
+    self.isBuilding = YES;
+    NSIndexPath *finalIndexPath = [NSIndexPath indexPathForRow:self.tags.count inSection:0];
+    [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:finalIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+}
+
 #pragma mark - UITableViewDelegate Methods
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    if (self.isBuilding) {
+        return;
+    }
     
     if (indexPath.row == self.tags.count && !tableView.editing) {
         // Find the root tag category
@@ -125,18 +150,10 @@
     }
 }
 
-- (void)doneEditing:(id)sender {
-    self.tableView.editing = NO;
-    self.isEditing = NO;
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Build Tour" style:UIBarButtonItemStyleDone target:nil action:NULL];
-    NSIndexPath *finalIndexPath = [NSIndexPath indexPathForRow:self.tags.count inSection:0];
-    [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:finalIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-}
-
 #pragma mark - UITableViewDataSource Methods
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (self.isEditing) {
+    if (self.isEditing || self.isBuilding) {
         return self.tags.count;
     }
     return self.tags.count + 1;
@@ -173,11 +190,11 @@
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    return indexPath.row < self.tags.count;
+    return !self.isBuilding && indexPath.row < self.tags.count;
 }
 
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    return indexPath.row < self.tags.count;
+    return !self.isBuilding && indexPath.row < self.tags.count;
 }
 
 - (void)tableView:(UITableView *)tableView
@@ -187,8 +204,12 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath {
-    //TODO: Update data source to reflect the change
+- (void)tableView:(UITableView *)tableView
+moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath
+      toIndexPath:(NSIndexPath *)destinationIndexPath {
+    id movedObject = [self.tags objectAtIndex:sourceIndexPath.row];
+    [self.tags removeObjectAtIndex:sourceIndexPath.row];
+    [self.tags insertObject:movedObject atIndex:destinationIndexPath.row];
 }
 
 @end

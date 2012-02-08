@@ -33,6 +33,10 @@
 
 @property (nonatomic, assign) BOOL isEditing;
 
+@property (nonatomic, assign) BOOL isBuilding;
+
 - (IBAction)doneEditing:(id)sender;
+
+- (IBAction)buildTour:(id)sender;
 
 @end
