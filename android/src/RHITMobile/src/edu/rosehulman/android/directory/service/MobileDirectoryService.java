@@ -5,9 +5,8 @@ import org.json.JSONObject;
 import edu.rosehulman.android.directory.model.CampusServicesResponse;
 import edu.rosehulman.android.directory.model.DirectionsResponse;
 import edu.rosehulman.android.directory.model.LocationCollection;
+import edu.rosehulman.android.directory.model.LocationIdsResponse;
 import edu.rosehulman.android.directory.model.LocationNamesCollection;
-import edu.rosehulman.android.directory.model.TourTag;
-import edu.rosehulman.android.directory.model.TourTagsGroup;
 import edu.rosehulman.android.directory.model.TourTagsResponse;
 import edu.rosehulman.android.directory.model.VersionResponse;
 import edu.rosehulman.android.directory.util.ArrayUtil;
@@ -64,37 +63,6 @@ public class MobileDirectoryService implements IMobileDirectoryService {
 	
 	@Override
 	public TourTagsResponse getTourTagData(String currentVersion) throws Exception {
-		
-		if (true) {
-			//FIXME remove
-			TourTagsResponse res = new TourTagsResponse();
-			res.version = "0";
-			res.root = new TourTagsGroup(null, new TourTag[] {
-					new TourTag(0, "Best of Rose")
-			}, new TourTagsGroup[] {
-					new TourTagsGroup("Academic", new TourTag[] {
-							new TourTag(1, "General"),
-					}, new TourTagsGroup[] {
-							new TourTagsGroup("Majors", new TourTag[] {
-									new TourTag(2, "Computer Science"),
-									new TourTag(3, "Software Engineering"),
-									new TourTag(4, "Civil Engineering"),
-									new TourTag(5, "Mechanical Engineering")
-							}, new TourTagsGroup[] {})
-					}),
-					new TourTagsGroup("Athletics", new TourTag[] {
-							new TourTag(6, "General"),
-					}, new TourTagsGroup[] {
-							new TourTagsGroup("Sports", new TourTag[] {
-									new TourTag(7, "Soccer"),
-									new TourTag(8, "Football"),
-									new TourTag(9, "Tennis")
-							}, new TourTagsGroup[] {})
-					})
-			});
-			return res;
-		}
-		
 		JsonClient client = factory.makeJsonClient(HOST, PORT, "tours/tags");
 		if (currentVersion != null) {
 			client.addParameter("version", currentVersion);
@@ -148,17 +116,8 @@ public class MobileDirectoryService implements IMobileDirectoryService {
 	
 	@Override
 	public DirectionsResponse getDirections(long from, long to) throws Exception {
-		//FIXME temporary directions URL
-		String url = String.format("directions/testing/directions", from, to);
-		//String url = String.format("directions/fromloc/%d/toloc/%d", from, to);
-		JsonClient client = factory.makeJsonClient(HOST, PORT, url);
-		
-		JSONObject root = client.execute();
-		if (root == null) {
-			return null;
-		}
-		
-		return DirectionsResponse.deserialize(root);
+		String url = String.format("directions/fromloc/%d/toloc/%d", from, to);
+		return getDirectionsResponse(url);
 	}
 	
 	@Override
@@ -167,10 +126,24 @@ public class MobileDirectoryService implements IMobileDirectoryService {
 		return getDirectionsResponse(url);
 	}
 	
+	@Override
 	public DirectionsResponse getTour(long startId, long[] tagIds) throws Exception {
 		String url = String.format("tours/oncampus/fromloc/%d/%s", 
 				startId, ArrayUtil.join(tagIds, "/"));
 		return getDirectionsResponse(url);
+	}
+
+	@Override
+	public LocationIdsResponse getTour(long[] tagIds) throws Exception {
+		String url = String.format("tours/offcampus/%s", ArrayUtil.join(tagIds, "/"));
+		JsonClient client = factory.makeJsonClient(HOST, PORT, url);
+		
+		JSONObject root = client.execute();
+		if (root == null) {
+			return null;
+		}
+		
+		return LocationIdsResponse.deserialize(root);
 	}
 	
 	@Override

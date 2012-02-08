@@ -75,6 +75,7 @@ public class LocationActivity extends Activity {
         
         View btnShowOnMap = findViewById(R.id.btnShowOnMap);
         View btnDirections = findViewById(R.id.btnDirections);
+        View btnSchedule = findViewById(R.id.btnSchedule);
         
         linksList.setOnItemClickListener(linkClickListener);
         childrenList.setOnItemClickListener(childClickListener);
@@ -90,7 +91,17 @@ public class LocationActivity extends Activity {
 				btnDirections_clicked();
 			}
 		});
+        btnSchedule.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				btnSchedule_clicked();
+			}
+		});
         
+        //TODO check value in the location itself 
+        if (true) {
+        	btnSchedule.setVisibility(View.VISIBLE);
+        }
         
         location = getIntent().getParcelableExtra(EXTRA_LOCATION);
         
@@ -100,6 +111,9 @@ public class LocationActivity extends Activity {
 	    	//restore state
 	    }
 
+        if (!User.isLoggedIn()) {
+        	btnSchedule.setVisibility(View.GONE);
+        }
     }
     
     @Override
@@ -214,7 +228,7 @@ public class LocationActivity extends Activity {
 
 							@Override
 							public void taskCompleted(Long res) {
-								Intent intent = CampusMapActivity.createDirectionsIntent(LocationActivity.this, location.id, res);
+								Intent intent = CampusMapActivity.createDirectionsIntent(LocationActivity.this, res, location.id);
 								startActivity(intent);
 							}
 
@@ -229,6 +243,11 @@ public class LocationActivity extends Activity {
 	    	    }
 	    	})
 	    	.show();
+    }
+    
+    private void btnSchedule_clicked() {
+    	Intent intent = ScheduleRoomActivity.createIntent(this, location.name);
+    	startActivity(intent);
     }
     
     private void updateLinks() {

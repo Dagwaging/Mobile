@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import android.app.Activity;
 import android.content.ContentProviderOperation;
 import android.content.Context;
 import android.content.Intent;
@@ -32,13 +31,17 @@ import android.widget.TextView;
 import edu.rosehulman.android.directory.LoadLocation.OnLocationLoadedListener;
 import edu.rosehulman.android.directory.model.Location;
 
-public class PersonActivity extends Activity {
+public class PersonActivity extends AuthenticatedActivity {
 
 	public static final String EXTRA_PERSON = "PERSON"; 
 	
 	public static Intent createIntent(Context context) {
+		return createIntent(context, "");
+	}
+
+	public static Intent createIntent(Context context, String person) {
 		Intent intent = new Intent(context, PersonActivity.class);
-		intent.putExtra(EXTRA_PERSON, "");
+		intent.putExtra(EXTRA_PERSON, person);
 		return intent;
 	}
 	
@@ -199,7 +202,7 @@ public class PersonActivity extends Activity {
     	
     	@Override
     	public void onClick() {
-    		Intent intent = PersonScheduleActivity.createIntent(PersonActivity.this, person);
+    		Intent intent = SchedulePersonActivity.createIntent(PersonActivity.this, person);
     		startActivity(intent);
     	}
     }
@@ -240,13 +243,13 @@ public class PersonActivity extends Activity {
     	
     	@Override
     	public void onClick() {
-    		new LoadLocation(new OnLocationLoadedListener() {
+    		new LoadLocation((long)1362170, new OnLocationLoadedListener() {
 				@Override
 				public void onLocationLoaded(Location location) {
 					Intent intent = LocationActivity.createIntent(PersonActivity.this, location);
 					startActivity(intent);
 				}
-			}).execute((long)1362170);
+			}).execute();
     		//FIXME find the actual location ID
     	}
     }

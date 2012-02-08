@@ -44,8 +44,8 @@ import edu.rosehulman.android.directory.db.VersionsAdapter;
 import edu.rosehulman.android.directory.maps.BuildingOverlayLayer;
 import edu.rosehulman.android.directory.maps.BuildingOverlayLayer.OnBuildingSelectedListener;
 import edu.rosehulman.android.directory.maps.DirectionsLayer;
-import edu.rosehulman.android.directory.maps.DirectionsLayer.UIListener;
 import edu.rosehulman.android.directory.maps.LocationSearchLayer;
+import edu.rosehulman.android.directory.maps.OffsiteTourLayer;
 import edu.rosehulman.android.directory.maps.OverlayManager;
 import edu.rosehulman.android.directory.maps.POILayer;
 import edu.rosehulman.android.directory.maps.TextOverlayLayer;
@@ -54,6 +54,7 @@ import edu.rosehulman.android.directory.model.DirectionPath;
 import edu.rosehulman.android.directory.model.Directions;
 import edu.rosehulman.android.directory.model.DirectionsResponse;
 import edu.rosehulman.android.directory.model.Location;
+import edu.rosehulman.android.directory.model.LocationIdsResponse;
 import edu.rosehulman.android.directory.model.LocationNamesCollection;
 import edu.rosehulman.android.directory.model.VersionType;
 import edu.rosehulman.android.directory.service.MobileDirectoryService;
@@ -76,7 +77,7 @@ public class CampusMapActivity extends MapActivity {
 	public static final String EXTRA_TOUR_TAGS = "TOUR_TAGS";
 	public static final String EXTRA_DIRECTIONS_FOCUS_INDEX = "DIRECTIONS_FOCUS_INDEX";
 	
-	private static final int MIN_ZOOM_LEVEL = 16;
+	private static final int MIN_ZOOM_LEVEL = 17;
 	private static final int MAX_ZOOM_LEVEL = 22;
 
 	public static Intent createIntent(Context context) {
@@ -100,6 +101,13 @@ public class CampusMapActivity extends MapActivity {
 		Intent intent = createIntent(context);
 		intent.setAction(ACTION_DIRECTIONS);
 		intent.putExtra(EXTRA_WAYPOINTS, ids);
+		return intent;
+	}
+
+	public static Intent createTourIntent(Context context, long[] tags) {
+		Intent intent = createIntent(context);
+		intent.setAction(ACTION_TOUR);
+		intent.putExtra(EXTRA_TOUR_TAGS, tags);
 		return intent;
 	}
 	
@@ -127,6 +135,7 @@ public class CampusMapActivity extends MapActivity {
 
     private OverlayManager overlayManager;
     private DirectionsLayer directionsLayer;
+    private OffsiteTourLayer offsiteTourLayer;
     private LocationSearchLayer searchOverlay;
     private POILayer poiLayer;
     private BuildingOverlayLayer buildingLayer;
@@ -179,11 +188,6 @@ public class CampusMapActivity extends MapActivity {
         if (savedInstanceState == null) {
         	
         	 if (ACTION_DIRECTIONS.equals(intent.getAction())) {
-        		if (!intent.hasExtra(EXTRA_WAYPOINTS) || intent.getLongArrayExtra(EXTRA_WAYPOINTS) == null) {
-            		//TODO remove
-        			intent.putExtra(EXTRA_WAYPOINTS, new long[] {1300000, 1111570});
-        		}
-        		
         		long[] ids = intent.getLongArrayExtra(EXTRA_WAYPOINTS);
 
     			LoadDirections task = new LoadDirections(ids);
@@ -197,9 +201,15 @@ public class CampusMapActivity extends MapActivity {
     			long startId = intent.getLongExtra(EXTRA_TOUR_START_ID, -1);
     			long[] tagIds = intent.getLongArrayExtra(EXTRA_TOUR_TAGS);
     			
-    			LoadTour task = new LoadTour(startId, tagIds);
-    			taskManager.addTask(task);
-    			task.execute();
+    			if (startId == -1) {
+    				LoadOffsiteTour task = new LoadOffsiteTour(tagIds);
+	    			taskManager.addTask(task);
+	    			task.execute();
+    			} else {
+	    			LoadTour task = new LoadTour(startId, tagIds);
+	    			taskManager.addTask(task);
+	    			task.execute();
+    			}
     			
     			btnListDirections.setVisibility(View.VISIBLE);
     			btnPrev.setVisibility(View.VISIBLE);
@@ -212,7 +222,7 @@ public class CampusMapActivity extends MapActivity {
 	        MapController controller = mapView.getController();
 	        GeoPoint center = new GeoPoint(39483760, -87325929);
 	        controller.setCenter(center);
-	        controller.zoomToSpan(5000, 10000);
+	        controller.setZoom(MIN_ZOOM_LEVEL+1);
 	        
 	    } else {
 	    	this.savedInstanceState = savedInstanceState;
@@ -323,6 +333,10 @@ public class CampusMapActivity extends MapActivity {
     		bundle.putParcelable("Directions", directionsLayer.directions);
     		bundle.putParcelableArray("Locations", directionsLayer.locations);
 		}
+    	
+    	if (offsiteTourLayer != null) {
+    		bundle.putParcelableArray("Locations", offsiteTourLayer.locations);
+		}
     }
     
     @Override
@@ -401,18 +415,28 @@ public class CampusMapActivity extends MapActivity {
     }
     
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    	if (requestCode != DirectionsLayer.REQUEST_DIRECTIONS_LIST)
-    		return;
-    	
-    	switch (resultCode) {
-    		case Activity.RESULT_OK:
-    			//focus the requested step
-    			int step = data.getIntExtra(EXTRA_DIRECTIONS_FOCUS_INDEX, -1);
-    			directionsLayer.focus(step, false);
-    			break;	
-    	}
-    }
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		switch (requestCode) {
+		case DirectionsLayer.REQUEST_DIRECTIONS_LIST:
+			switch (resultCode) {
+			case Activity.RESULT_OK:
+				//focus the requested step
+				int step = data.getIntExtra(EXTRA_DIRECTIONS_FOCUS_INDEX, -1);
+				directionsLayer.focus(step, false);
+				break;
+			}
+			break;
+		case OffsiteTourLayer.REQUEST_DIRECTIONS_LIST:
+			switch (resultCode) {
+			case Activity.RESULT_OK:
+				//focus the requested step
+				int step = data.getIntExtra(EXTRA_DIRECTIONS_FOCUS_INDEX, -1);
+				offsiteTourLayer.focus(step, false);
+				break;
+			}
+			break;
+		}
+	}
     
     private void updateZoomControls() {
     	int zoomLevel = mapView.getZoomLevel();
@@ -438,24 +462,24 @@ public class CampusMapActivity extends MapActivity {
     }
 
     private void btnPrev_clicked() {
-    	if (directionsLayer == null)
-    		return;
-    	
-    	directionsLayer.stepPrevious();
+    	if (directionsLayer != null)
+    		directionsLayer.stepPrevious();
+    	else if (offsiteTourLayer != null)
+    		offsiteTourLayer.stepPrevious();
     }
 
     private void btnNext_clicked() {
-    	if (directionsLayer == null)
-    		return;
-    	
-    	directionsLayer.stepNext();
+    	if (directionsLayer != null)
+    		directionsLayer.stepNext();
+    	else if (offsiteTourLayer != null)
+    		offsiteTourLayer.stepNext();
     }
 
     private void btnListDirections_clicked() {
-    	if (directionsLayer == null)
-    		return;
-    	
-    	directionsLayer.showDirectionsList(-1);
+    	if (directionsLayer != null)
+    		directionsLayer.showDirectionsList(-1);
+    	else if (offsiteTourLayer != null)
+    		offsiteTourLayer.showDirectionsList(-1);
     }
 
     
@@ -544,6 +568,11 @@ public class CampusMapActivity extends MapActivity {
     	if (directionsLayer != null) {
     		overlays.add(directionsLayer);
     		overlayManager.addOverlay(directionsLayer);
+    	}
+    	
+    	if (offsiteTourLayer != null) {
+    		overlays.add(offsiteTourLayer);
+    		overlayManager.addOverlay(offsiteTourLayer);
     	}
     	
     	//Remove any old overlays
@@ -663,7 +692,7 @@ public class CampusMapActivity extends MapActivity {
 	
 	private void generateDirectionsLayer(Directions directions, Location[] locations) {
 
-		directionsLayer = new DirectionsLayer(mapView, taskManager, directions, locations, new UIListener() {
+		directionsLayer = new DirectionsLayer(mapView, taskManager, directions, locations, new DirectionsLayer.UIListener() {
 			@Override
 			public void setPrevButtonEnabled(boolean enabled) {
 				btnPrev.setEnabled(enabled);
@@ -680,7 +709,30 @@ public class CampusMapActivity extends MapActivity {
 		
 		BoundingBox bounds = directionsLayer.bounds;
 		Point center = bounds.getCenter();
-		GeoPoint pt = new GeoPoint(center.y, center.x);
+		GeoPoint pt = new GeoPoint(center.x, center.y);
+		new ViewController(mapView).animateTo(pt, bounds.getHeight(), bounds.getWidth(), false);
+	}
+	
+	private void generateOffsiteTourLayer(Location[] locations) {
+
+		offsiteTourLayer = new OffsiteTourLayer(mapView, taskManager, locations, new OffsiteTourLayer.UIListener() {
+			@Override
+			public void setPrevButtonEnabled(boolean enabled) {
+				btnPrev.setEnabled(enabled);
+			}
+			@Override
+			public void setNextButtonEnabled(boolean enabled) {
+				btnNext.setEnabled(enabled);
+			}
+			@Override
+			public void startActivityForResult(Intent intent, int requestCode) {
+				CampusMapActivity.this.startActivityForResult(intent, requestCode);
+			}
+		});
+		
+		BoundingBox bounds = offsiteTourLayer.bounds;
+		Point center = bounds.getCenter();
+		GeoPoint pt = new GeoPoint(center.x, center.y);
 		new ViewController(mapView).animateTo(pt, bounds.getHeight(), bounds.getWidth(), false);
 	}
 	
@@ -701,6 +753,7 @@ public class CampusMapActivity extends MapActivity {
 
 			//don't generate POI if we are searching or showing directions
 			if (ACTION_DIRECTIONS.equals(intent.getAction()) ||
+					ACTION_TOUR.equals(intent.getAction()) ||
 					Intent.ACTION_SEARCH.equals(intent.getAction())) {
 				return null;
 			}
@@ -937,6 +990,95 @@ private class LoadDirections extends ProcessDirections {
 		
 	}
 
+	private class LoadOffsiteTour extends AsyncTask<Void, Integer, Void> {
+		
+		private ProgressDialog dialog;
+
+		private long tagIds[];
+		
+		private Location[] nodes;
+		
+		public LoadOffsiteTour(long[] tagIds) {
+			this.tagIds = tagIds;
+		}
+
+		@Override
+		protected void onPreExecute() {
+			dialog = new ProgressDialog(CampusMapActivity.this);
+			dialog.setTitle(null);
+			dialog.setMessage("Building Tour...");
+			dialog.setIndeterminate(true);
+			dialog.setCancelable(true);
+			dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+				@Override
+				public void onCancel(DialogInterface dialog) {
+					cancel(true);
+				}
+			});
+			dialog.show();
+		}
+		
+		@Override
+		protected Void doInBackground(Void... params) {
+			
+			MobileDirectoryService service = new MobileDirectoryService();
+			
+			LocationIdsResponse response = null;
+			
+			do {
+				try {
+					response = service.getTour(tagIds);
+				} catch (Exception ex) {
+					Log.e(C.TAG, "Failed to download tour data");
+					if (isCancelled()) {
+						return null;
+					}
+					try {
+						Thread.sleep(2000);
+					} catch (InterruptedException ex1) {
+						return null;
+					}
+				}
+			} while (response == null);
+			
+			//load the relevant locations
+			LocationAdapter locationAdapter = new LocationAdapter();
+			locationAdapter.open();
+			List<Location> nodeList = new ArrayList<Location>();
+			for (long id : response.ids) {
+				Location loc = locationAdapter.getLocation(id);
+				locationAdapter.loadAlternateNames(loc);
+				locationAdapter.loadHyperlinks(loc);
+				locationAdapter.loadMapArea(loc, true);
+				nodeList.add(loc);
+			}
+			locationAdapter.close();
+			nodes = new Location[nodeList.size()];
+			nodeList.toArray(nodes);
+			
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Void res) {
+			dialog.dismiss();
+			
+			if (nodes != null) {
+				generateOffsiteTourLayer(nodes);
+				rebuildOverlays();
+			} else {
+				finish();
+			}
+		}
+		
+		@Override
+		protected void onCancelled() {
+			dialog.dismiss();
+			finish();
+		}
+		
+	}
+	
 	private abstract class ProcessDirections extends AsyncTask<Void, Integer, Directions> {
 		
 		private ProgressDialog dialog;
@@ -1002,6 +1144,9 @@ private class LoadDirections extends ProcessDirections {
 			for (DirectionPath path : response.result.paths) {
 				if (path.location >= 0) {
 					Location loc = locationAdapter.getLocation(path.location);
+					locationAdapter.loadAlternateNames(loc);
+					locationAdapter.loadHyperlinks(loc);
+					locationAdapter.loadMapArea(loc, true);
 					nodeList.add(loc);
 				}
 			}

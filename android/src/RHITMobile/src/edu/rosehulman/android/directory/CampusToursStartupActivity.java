@@ -1,10 +1,13 @@
 package edu.rosehulman.android.directory;
 
+import java.util.List;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +20,10 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 import edu.rosehulman.android.directory.db.LocationAdapter;
+import edu.rosehulman.android.directory.db.TourTagsAdapter;
 import edu.rosehulman.android.directory.model.Location;
+import edu.rosehulman.android.directory.model.TourTag;
+import edu.rosehulman.android.directory.model.TourTagItem;
 
 public class CampusToursStartupActivity extends Activity {
 	
@@ -37,6 +43,7 @@ public class CampusToursStartupActivity extends Activity {
 	private RadioButton rdoCustom;
 	
 	private TaskManager taskManager = new TaskManager();
+	private TourTagItem[] defaultTags;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -95,6 +102,10 @@ public class CampusToursStartupActivity extends Activity {
 				btnTour_clicked();
 			}
 		});
+		
+		LoadDefaultTags task = new LoadDefaultTags();
+		taskManager.addTask(task);
+		task.execute();
 	}
 	
 	public void onResume() {
@@ -188,26 +199,61 @@ public class CampusToursStartupActivity extends Activity {
     		Toast.makeText(this, "Outside tours not yet supported", Toast.LENGTH_SHORT).show();
     		groupLocation.clearCheck();
     		return;
-    	} else if (rdoOffCampus.isChecked()) {
-    		Toast.makeText(this, "Off Campus tours not yet supported", Toast.LENGTH_SHORT).show();
-    		groupLocation.clearCheck();
-    		return;
     	}
     	
     	if (rdoGeneral.isChecked()) {
-    		Toast.makeText(this, "General tours not yet supported", Toast.LENGTH_SHORT).show();
-    		groupType.clearCheck();
-    		return;
+    		//general tours
+       		if (rdoOffCampus.isChecked()) {
+    			Intent intent = CampusMapActivity.createTourIntent(this, TourTagItem.getIds(defaultTags));
+    			startActivity(intent);
+    		} else {
+	    		Intent intent = CampusMapActivity.createTourIntent(this, startLocation.id, TourTagItem.getIds(defaultTags));
+	    		startActivity(intent);
+    		}
     	} else {
     		//special interest tours
-    		Intent intent = CampusToursTagListActivity.createIntent(this, startLocation.id);
-    		startActivity(intent);
+    		if (rdoOffCampus.isChecked()) {
+    			Intent intent = CampusToursTagListActivity.createIntent(this, defaultTags);
+    			startActivity(intent);
+    		} else {
+	    		Intent intent = CampusToursTagListActivity.createIntent(this, startLocation.id, defaultTags);
+	    		startActivity(intent);
+    		}
     	}
     }
     
     private void enableButton() {
     	btnTour.setEnabled(((rdoOnCampusInside.isChecked() || rdoOnCampusOutside.isChecked() || rdoOffCampus.isChecked()) &&
-    			(rdoGeneral.isChecked() || rdoCustom.isChecked())));
+    			(rdoGeneral.isChecked() || rdoCustom.isChecked()) &&
+    			defaultTags != null));
     }
+    
+    private class LoadDefaultTags extends AsyncTask<Void, Void, TourTagItem[]> {
 
+		@Override
+		protected TourTagItem[] doInBackground(Void... args) {
+			TourTagsAdapter tagsAdapter = new TourTagsAdapter();
+			tagsAdapter.open();
+			List<TourTag> tagList = tagsAdapter.getDefaultTags().toList();
+			
+			TourTag[] tags = new TourTag[tagList.size()];
+			tagList.toArray(tags);
+
+			TourTagItem[] res = new TourTagItem[tags.length];
+			for (int i = 0; i < res.length; i++) {
+				String path = tagsAdapter.getPath(tags[i].id);
+				res[i] = new TourTagItem(tags[i], path);
+			}
+			tagsAdapter.close();
+			
+			return res;
+		}
+		
+		@Override
+		protected void onPostExecute(TourTagItem[] res) {
+			defaultTags = res;
+			enableButton();
+		}
+    	
+    }
 }

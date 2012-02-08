@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,26 +18,34 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
 import edu.rosehulman.android.directory.db.TourTagsAdapter;
 import edu.rosehulman.android.directory.model.TourTag;
+import edu.rosehulman.android.directory.model.TourTagItem;
 
 public class CampusToursTagListActivity extends Activity {
 	
     private static int REQUEST_TAG = 10;
     
     public static String EXTRA_START_LOCATION = "START_LOCATION";
+    public static String EXTRA_INITIAL_TAGS = "INITIAL_TAGS";
 	public static String EXTRA_TAG = "TAG";
 	public static String EXTRA_TAG_PATH = "TAG_PATH";
 	
-	public static Intent createIntent(Context context) {
-		return new Intent(context, CampusToursTagListActivity.class);
+	public static Intent createIntent(Context context, TourTagItem[] tags) {
+		Intent intent = new Intent(context, CampusToursTagListActivity.class);
+		if (tags != null) {
+			intent.putExtra(EXTRA_INITIAL_TAGS, tags);
+		}
+		return intent;
 	}
 	
-	public static Intent createIntent(Context context, long startLocation) {
+	public static Intent createIntent(Context context, long startLocation, TourTagItem[] tags) {
 		Intent intent = new Intent(context, CampusToursTagListActivity.class);
 		intent.putExtra(EXTRA_START_LOCATION, startLocation);
+		if (tags != null) {
+			intent.putExtra(EXTRA_INITIAL_TAGS, tags);
+		}
 		return intent;
 	}
 	
@@ -49,9 +58,9 @@ public class CampusToursTagListActivity extends Activity {
 	
 	private TaskManager taskManager = new TaskManager();
 	
-	private ListView tags;
+	private TouchListView tags;
 	
-	private List<TagItem> tagItems = new ArrayList<TagItem>();
+	private List<TourTagItem> tagItems = new ArrayList<TourTagItem>();
 	
 	private TagsAdapter adapter = new TagsAdapter();
 	
@@ -62,7 +71,7 @@ public class CampusToursTagListActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.tour_tag_list);
 		
-		tags = (ListView)findViewById(R.id.tags);
+		tags = (TouchListView)findViewById(R.id.tags);
 		
 		btnTour = (Button)findViewById(R.id.btnTour);
 		
@@ -79,8 +88,26 @@ public class CampusToursTagListActivity extends Activity {
 				btnTour_clicked();
 			}
 		});
+
+		Intent intent = getIntent();
+		if (savedInstanceState == null) {
+			if (intent.hasExtra(EXTRA_INITIAL_TAGS)) {
+				for (Parcelable p : intent.getParcelableArrayExtra(EXTRA_INITIAL_TAGS)) {
+					TourTagItem tag = (TourTagItem)p;
+					tagItems.add(tag);
+				}
+			}	
+		} else {
+			for (Parcelable p : savedInstanceState.getParcelableArray(EXTRA_INITIAL_TAGS)) {
+				TourTagItem tag = (TourTagItem)p;
+				tagItems.add(tag);
+			}
+		}
 		
 		tags.setAdapter(adapter);
+		tags.setDropListener(adapter);
+		tags.setRemoveListener(adapter);
+		
 		updateUI();
 	}
 	
@@ -92,6 +119,12 @@ public class CampusToursTagListActivity extends Activity {
 	public void onPause() {
 		super.onPause();
 		taskManager.abortTasks();
+	}
+	
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		TourTagItem[] items = tagItems.toArray(new TourTagItem[tagItems.size()]);
+		outState.putParcelableArray(EXTRA_INITIAL_TAGS, items);
 	}
 	
     @Override
@@ -127,7 +160,7 @@ public class CampusToursTagListActivity extends Activity {
 			return;
 		
 		TourTag tag = data.getParcelableExtra(EXTRA_TAG);
-		TagItem item = new TagItem(tag, data.getStringExtra(EXTRA_TAG_PATH));
+		TourTagItem item = new TourTagItem(tag, data.getStringExtra(EXTRA_TAG_PATH));
 		if (!tagItems.contains(item))
 			tagItems.add(item);
 		updateUI();
@@ -146,50 +179,31 @@ public class CampusToursTagListActivity extends Activity {
     
     private void btnTour_clicked() {
     	Intent intent = getIntent();
-    	
+
+		long[] tagIds = new long[tagItems.size()];
+		for (int i = 0; i < tagItems.size(); i++) {
+			tagIds[i] = tagItems.get(i).tag.id;
+		}
+		
     	if (intent.hasExtra(EXTRA_START_LOCATION)) {
+    		//on campus (inside) tour
     		long startId = intent.getLongExtra(EXTRA_START_LOCATION, -1);
     		if (startId < 0) {
     			finish();
     			return;
     		}
     		
-    		long[] tagIds = new long[tagItems.size()];
-    		for (int i = 0; i < tagItems.size(); i++) {
-				tagIds[i] = tagItems.get(i).tag.id;
-			}
-    		
     		Intent newIntent = CampusMapActivity.createTourIntent(this, startId, tagIds);
     		startActivity(newIntent);
+    	} else {
+    		//off campus tour
+    		Intent newIntent = CampusMapActivity.createTourIntent(this, tagIds);
+    		startActivity(newIntent);
     	}
-    	
-    	//TODO implement
     }
     
-    private class TagItem {
-    	
-    	public TourTag tag;
-    	public String path;
-    	
-		public TagItem(TourTag tag, String path) {
-			this.tag = tag;
-			this.path = path;
-		}
-		
-		public boolean equals(TagItem o) {
-			return o.tag.equals(tag) &&
-					o.path.equals(path);
-		}
-		
-		@Override
-		public boolean equals(Object o) {
-			if (o instanceof TagItem)
-				return equals((TagItem)o);
-			return false;
-		}
-    }
-
-    private class TagsAdapter extends BaseAdapter {
+    
+    private class TagsAdapter extends BaseAdapter implements TouchListView.DropListener, TouchListView.RemoveListener {
 
 		@Override
 		public int getCount() {
@@ -216,12 +230,23 @@ public class CampusToursTagListActivity extends Activity {
 			TextView name = (TextView)v.findViewById(R.id.name);
 			TextView path = (TextView)v.findViewById(R.id.path);
 			
-			TagItem item = tagItems.get(index);
+			TourTagItem item = tagItems.get(index);
 			
 			name.setText(item.tag.name);
 			path.setText(item.path);
 			
 			return v;
+		}
+
+		@Override
+		public void remove(int which) {
+			tagItems.remove(which);
+		}
+
+		@Override
+		public void drop(int from, int to) {
+			tagItems.add(to, tagItems.remove(from));
+			tags.invalidateViews();
 		}
     	
     }
@@ -244,5 +269,5 @@ public class CampusToursTagListActivity extends Activity {
 	    	startActivityForResult(intent, REQUEST_TAG);
 		}
     }
-
+    
 }

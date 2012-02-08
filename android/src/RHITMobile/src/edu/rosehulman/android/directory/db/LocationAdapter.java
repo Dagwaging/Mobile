@@ -23,6 +23,7 @@ public class LocationAdapter extends TableAdapter {
 	public static final String KEY_DESCRIPTION = "Description";
 	public static final String KEY_CENTER_LAT = "CenterLat";
 	public static final String KEY_CENTER_LON = "CenterLon";
+	public static final String KEY_IS_DEPARTABLE = "IsDepartable";
 	public static final String KEY_TYPE = "Type";
 	public static final String KEY_CHILDREN_LOADED = "ChildrenLoaded";
 	
@@ -167,6 +168,9 @@ public class LocationAdapter extends TableAdapter {
 	 * @param includeCorners True if corners should be loaded as well
 	 */
 	public void loadMapArea(Location area, boolean includeCorners) {
+		if (area.mapAreaId == -1)
+			return;
+		
 		area.mapData = areasAdapter.loadMapArea(area.mapAreaId, includeCorners);
 	}
 	
@@ -234,6 +238,7 @@ public class LocationAdapter extends TableAdapter {
 			values.put(KEY_DESCRIPTION, location.description);
 		values.put(KEY_CENTER_LAT, location.center.lat);
 		values.put(KEY_CENTER_LON, location.center.lon);
+		values.put(KEY_IS_DEPARTABLE, location.isDepartable);
 		values.put(KEY_TYPE, location.type.ordinal());
 		
 		db.insert(TABLE_NAME, null, values);
@@ -266,19 +271,44 @@ public class LocationAdapter extends TableAdapter {
 	}
 	
 	/**
-	 * Finds a building with the given name
+	 * Finds a building with the given name and is departable
 	 * 
 	 * @param name The name of the building
 	 * @return The id of the building, or -1 if 0 or multiple matches exist
 	 */
 	public long findBuilding(String name) {
-		String sql = "SELECT _Id FROM Locations WHERE UPPER(Name)=UPPER(?) " + 
-				"UNION " +
-				"SELECT LocationId AS _Id FROM AltNames WHERE UPPER(Name)=UPPER(?)";
+		//you have to at least try
+		if (name.length() < 2)
+			return -1;
 		
-		Cursor cursor = db.rawQuery(sql, new String[] {name, name});
+		Cursor cursor;
 		
-		if (cursor.getCount() != 1) {
+		String sql = "SELECT _Id FROM Locations WHERE UPPER(Name)=UPPER(?) AND IsDepartable" + 
+				" UNION " +
+				"SELECT AltNames.LocationId AS _Id " + 
+				"FROM AltNames INNER JOIN Locations " + 
+				"ON LocationId=Locations._Id " + 
+				"WHERE IsDepartable AND UPPER(AltNames.Name)=UPPER(?)";
+		
+		cursor = db.rawQuery(sql, new String[] {name, name});
+		if (cursor.getCount() == 1) {
+			cursor.moveToFirst();
+			long id = cursor.getLong(0); 
+			cursor.close();
+			return id;
+		}
+		cursor.close();
+		
+		sql = "SELECT _Id FROM " +
+				"(SELECT _Id, Name FROM Locations WHERE IsDepartable AND Name LIKE ?" + 
+				" UNION " +
+				"SELECT AltNames.LocationId AS _Id, AltNames.Name as Name " + 
+				"FROM AltNames INNER JOIN Locations " + 
+				"ON LocationId=Locations._Id " + 
+				"WHERE IsDepartable AND AltNames.Name LIKE ?)" +
+				"ORDER BY Name";
+		cursor = db.rawQuery(sql, new String[] {"%" + name + "%", "%" + name + "%"});
+		if (cursor.getCount() == 0) {
 			cursor.close();
 			return -1;
 		}
@@ -286,8 +316,7 @@ public class LocationAdapter extends TableAdapter {
 		cursor.moveToFirst();
 		long id = cursor.getLong(0); 
 		cursor.close();
-		
-		return id; 
+		return id;
 	}
 	
 	/**
@@ -366,6 +395,7 @@ public class LocationAdapter extends TableAdapter {
 		area.mapAreaId = getNullableId(cursor, cursor.getColumnIndex(KEY_MAP_AREA_ID));
 		area.name = cursor.getString(cursor.getColumnIndex(KEY_NAME));
 		area.description = cursor.getString(cursor.getColumnIndex(KEY_DESCRIPTION));
+		area.isDepartable = getBoolean(cursor, cursor.getColumnIndex(KEY_IS_DEPARTABLE));
 		area.type = LocationType.fromOrdinal(cursor.getInt(cursor.getColumnIndex(KEY_TYPE)));
 		int lat = cursor.getInt(cursor.getColumnIndex(KEY_CENTER_LAT));
 		int lon = cursor.getInt(cursor.getColumnIndex(KEY_CENTER_LON));

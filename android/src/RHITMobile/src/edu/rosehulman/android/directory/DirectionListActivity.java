@@ -60,23 +60,36 @@ public class DirectionListActivity extends Activity {
         directionList = (ListView)findViewById(R.id.directions);
         
         listItems = new ArrayList<ListItem>();
-        listItems.add(new GoalListItem(locations[0].name, locations[0]));
         
-        int iLoc = 1;
-        for (DirectionPath path : directions.paths) {
-			if (path.flag){
-				listItems.add(new GoalListItem(locations[iLoc].name, locations[iLoc]));
+        if (directions.paths[0].location == 0) {
+        	listItems.add(new NodeListItem(0, "Starting Location"));
+        }
+
+        int iLoc = 0;
+        int step = 0;
+        for (int i = 0; i < directions.paths.length; i++) {
+        	DirectionPath path = directions.paths[i];
+        	DirectionPath next = (i < directions.paths.length-1) ? directions.paths[i+1] : null;
+			if (path.flag) {
+				listItems.add(new GoalListItem(step, locations[iLoc].name, locations[iLoc]));
 				iLoc++;
+				if (path.hasDirection()) {
+					listItems.add(new StepListItem(step, path, next));
+					step++;
+				}
 			} else if (path.hasDirection()) {
-				listItems.add(new StepListItem(path));
+				listItems.add(new StepListItem(step, path, next));
+				step++;
 			}
 		}
+        //remove the last direction ("Arrive at destination")
+        listItems.remove(listItems.size()-1);
         
         directionList.setAdapter(listAdapter);
         directionList.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				((ListItem)listAdapter.getItem(position)).click(position);
+				((ListItem)listAdapter.getItem(position)).click();
 			}
 		});
     }
@@ -104,24 +117,32 @@ public class DirectionListActivity extends Activity {
 		}
 	};
 
-	private interface ListItem {
-		public void click(int position);
-		public View getView(View convert);
-	}
-	
-	private class StepListItem implements ListItem {
+	private abstract class ListItem {
 		
-		private DirectionPath path;
+		protected int step;
 		
-		public StepListItem(DirectionPath path) {
-			this.path = path;
+		public ListItem(int step) {
+			this.step = step;
 		}
-
-		@Override
-		public void click(int position) {
-			Intent intent = CampusMapActivity.createResultIntent(position);
+		
+		public void click() {
+			Intent intent = CampusMapActivity.createResultIntent(step);
 			setResult(RESULT_OK, intent);
 			finish();
+		}
+		
+		public abstract View getView(View convert);
+	}
+	
+	private class StepListItem extends ListItem {
+		
+		private DirectionPath path;
+		private DirectionPath next;
+		
+		public StepListItem(int step, DirectionPath path, DirectionPath next) {
+			super(step);
+			this.path = path;
+			this.next = next;
 		}
 
 		@Override
@@ -173,30 +194,31 @@ public class DirectionListActivity extends Activity {
 			default:
 				icon = R.drawable.turn_unknown;
 			}
+			
+			String distance;
+			if (next == null) {
+				distance = "";
+			} else {
+				double dist = path.distanceTo(next);
+				distance = String.format("%.0f ft", dist);
+			}
+			
 			((ImageView)v.findViewById(R.id.icon)).setImageDrawable(getResources().getDrawable(icon));
 			((TextView)v.findViewById(R.id.text)).setText(path.dir);
-			((TextView)v.findViewById(R.id.distance)).setText("100 ft");
+			((TextView)v.findViewById(R.id.distance)).setText(distance);
 			
 			return v;
 		}
 		
 	}
 	
-	private class GoalListItem implements ListItem {
-		
-		private String name;
-		private Location location;
-		
-		public GoalListItem(String name, Location location) {
-			this.name = name;
-			this.location = location;
-		}
+	private class NodeListItem extends ListItem {
 
-		@Override
-		public void click(int position) {
-			Intent intent = CampusMapActivity.createResultIntent(position);
-			setResult(RESULT_OK, intent);
-			finish();
+		protected String name;
+		
+		public NodeListItem(int step, String name) {
+			super(step);
+			this.name = name;
 		}
 
 		@Override
@@ -207,6 +229,23 @@ public class DirectionListActivity extends Activity {
 			((TextView)v.findViewById(R.id.name)).setText(name);
 			
 			return v;
+		}
+		
+	}
+	
+	private class GoalListItem extends NodeListItem {
+		
+		private Location location;
+		
+		public GoalListItem(int step, String name, Location location) {
+			super(step, name);
+			this.location = location;
+		}
+
+		@Override
+		public void click() {
+			Intent intent = LocationActivity.createIntent(DirectionListActivity.this, location);
+			startActivity(intent);
 		}
 		
 	}
