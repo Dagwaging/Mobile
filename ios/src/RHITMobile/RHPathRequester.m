@@ -107,8 +107,9 @@ persistantStoreCoordinator:(NSPersistentStoreCoordinator *)persistantStoreCoordi
         RHPathStep *newStep = [[RHPathStep alloc] init];
         
         NSString *action = [step objectForKey:kActionKey];
-        
-        if ([action isEqualToString:kDirectionGoStraightKey]) {
+        if ((id) action == [NSNull null]) {
+            newStep.action = RHPathStepActionNoAction;
+        } else if ([action isEqualToString:kDirectionGoStraightKey]) {
             newStep.action = RHPathStepActionStraight;
         } else if ([action isEqualToString:kDirectionCrossStreetKey]) {
             newStep.action = RHPathStepActionCrossStreet;
@@ -134,8 +135,6 @@ persistantStoreCoordinator:(NSPersistentStoreCoordinator *)persistantStoreCoordi
             newStep.action = RHPathStepActionUpStairs;
         } else if ([action isEqualToString:kDirectionDownStairsKey]) {
             newStep.action = RHPathStepActionDownStairs;
-        } else {
-            newStep.action = RHPathStepActionNoAction;
         }
         
         newStep.altitude = [step objectForKey:kAltitudeKey];

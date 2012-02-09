@@ -52,7 +52,7 @@
     self.startLocationID = startLocation.objectID;
     self.endLocationID = endLocation.objectID;
     
-    [self performSelectorInBackground:@selector(requestDirectionsByID) withObject:nil];
+    [self performSelectorInBackground:@selector(requestDirectionsBetweenLocationsByID) withObject:nil];
 }
 
 - (void)requestDirectionsBetweenLocationsByID {

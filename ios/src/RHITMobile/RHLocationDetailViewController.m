@@ -26,6 +26,7 @@
 #import "RHWebViewController.h"
 #import "RHDirectionsRequester.h"
 #import "RHWrappedCoordinate.h"
+#import "RHLocationSelectorViewController.h"
 
 #define kAltNamesLabel @"Also Known As"
 #define kAboutLabel @"About"
@@ -80,8 +81,12 @@
 }
 
 - (IBAction)getDirectionsToCurrentLocation:(id)sender {
-    NSLog(@"Getting Directions");
-    //currentDirectionsRequest_ = [[RHDirectionsRequester alloc] initWithDelegate:self];
+    RHLocationSelectorViewController *locationSelector = [[RHLocationSelectorViewController alloc] initWithNibName:kRHLocationSelectorViewControllerNibName bundle:nil];
+    locationSelector.searchType = RHSearchViewControllerTypeLocation;
+    locationSelector.context = [(RHAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+    locationSelector.toLocation = self.location;
+    
+    [self.navigationController pushViewController:locationSelector animated:YES];
 }
 
 #pragma mark - View lifecycle
@@ -192,7 +197,7 @@ viewForFooterInSection:(NSInteger)section {
         UIButton *directionsButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
         directionsButton.frame = CGRectMake(165.0, 10.0, 145.0, 44.0);
         [directionsButton addTarget:self
-                         action:nil //@selector(getDirectionsToCurrentLocation:)
+                         action:@selector(getDirectionsToCurrentLocation:)
                forControlEvents:UIControlEventTouchUpInside];
         
         [directionsButton setTitle:@"Get Directions" forState:UIControlStateNormal];
