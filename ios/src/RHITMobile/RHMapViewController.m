@@ -31,7 +31,7 @@
 #import "RHPinAnnotationView.h"
 #import "RHLocationDetailViewController.h"
 #import "RHSearchViewController.h"
-#import "RHDirectionLineItem.h"
+#import "RHPathStep.h"
 #import "RHSimplePointAnnotation.h"
 
 
@@ -512,7 +512,7 @@
         [self.mapView deselectAnnotation:[self.mapView.selectedAnnotations objectAtIndex:0] animated:NO];
         [self clearAllDynamicMapArtifacts];
     }
-    RHDirectionLineItem *start = [directions objectAtIndex:0];
+    RHPathStep *start = [directions objectAtIndex:0];
     [self.mapView setCenterCoordinate:start.coordinate zoomLevel:17 animated:YES];
     
     directionsStatusBar_ = [[UIView alloc] initWithFrame:CGRectMake(0, -50, 320, 50)];
@@ -566,7 +566,7 @@
     [self.mapView addAnnotation:currentDirectionAnnotation_];
 
     
-    for (RHDirectionLineItem *lineItem in directions) {
+    for (RHPathStep *lineItem in directions) {
         coords[[directions indexOfObject:lineItem]] = lineItem.coordinate;
         
         if (lineItem.flagged) {
@@ -619,7 +619,7 @@
 - (void)nextDirection:(id)sender {
     if (currentDirectionIndex_ < currentDirections_.count - 1) {
         currentDirectionIndex_ ++;
-        RHDirectionLineItem *direction = [currentDirections_ objectAtIndex:currentDirectionIndex_];
+        RHPathStep *direction = [currentDirections_ objectAtIndex:currentDirectionIndex_];
         if (![direction.name isKindOfClass:[NSNull class]]) {
             directionsStatus_.text = direction.name;
         }
@@ -631,7 +631,7 @@
 - (void)prevDirection:(id)sender {
     if (currentDirectionIndex_ > 0) {
         currentDirectionIndex_ --;
-        RHDirectionLineItem *direction = [currentDirections_ objectAtIndex:currentDirectionIndex_];
+        RHPathStep *direction = [currentDirections_ objectAtIndex:currentDirectionIndex_];
         if (![direction.name isKindOfClass:[NSNull class]]) {
             directionsStatus_.text = direction.name;
         }

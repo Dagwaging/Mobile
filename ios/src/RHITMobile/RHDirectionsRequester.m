@@ -20,7 +20,7 @@
 #import "RHDirectionsRequester.h"
 #import "RHWrappedCoordinate.h"
 #import "RHWebRequestMaker.h"
-#import "RHDirectionLineItem.h"
+#import "RHPathStep.h"
 
 #define kDirectionsPath @"/directions/testing/directions"
 #define kResultsKey @"Result"
@@ -59,7 +59,7 @@
     NSMutableArray *result = [NSMutableArray arrayWithCapacity:paths.count];
     
     for (NSDictionary *lineItem in paths) {
-        RHDirectionLineItem *item = [[RHDirectionLineItem alloc] init];
+        RHPathStep *item = [[RHPathStep alloc] init];
         item.name = [lineItem objectForKey:kDirectionsNameKey];
         item.flagged = [[lineItem objectForKey:kFlaggedKey] intValue] == 1;
         

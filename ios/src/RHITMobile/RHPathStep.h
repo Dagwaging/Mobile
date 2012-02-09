@@ -20,11 +20,40 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 
-@interface RHDirectionLineItem : NSObject
+@class RHLocation;
 
-@property (nonatomic, strong) NSString *name;
+
+typedef enum {
+    RHPathStepActionStraight,
+    RHPathStepActionCrossStreet,
+    RHPathStepActionFollowPath,
+    RHPathStepActionSlightLeft,
+    RHPathStepActionSlightRight,
+    RHPathStepActionLeft,
+    RHPathStepActionRight,
+    RHPathStepActionSharpLeft,
+    RHPathStepActionSharpRight,
+    RHPathStepActionEnterBuilding,
+    RHPathStepActionExitBuilding,
+    RHPathStepActionUpStairs,
+    RHPathStepActionDownStairs,
+    RHPathStepActionNoAction
+} RHPathStepAction;
+
+
+@interface RHPathStep : NSObject
+
+@property (nonatomic, assign) RHPathStepAction action;
+
+@property (nonatomic, strong) NSString *detail;
+
+@property (nonatomic, strong) NSNumber *altitude;
 
 @property (nonatomic, assign) BOOL flagged;
+
+@property (nonatomic, assign) BOOL outside;
+
+@property (nonatomic, strong) RHLocation *location;
 
 @property (nonatomic, assign) CLLocationCoordinate2D coordinate;
 

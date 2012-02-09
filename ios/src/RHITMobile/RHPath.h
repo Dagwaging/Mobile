@@ -1,5 +1,5 @@
 //
-//  RHDirectionLineItem.m
+//  RHPath.h
 //  Rose-Hulman Mobile
 //
 //  Copyright 2012 Rose-Hulman Institute of Technology
@@ -17,12 +17,17 @@
 //  limitations under the License.
 //
 
-#import "RHDirectionLineItem.h"
+#import <Foundation/Foundation.h>
 
-@implementation RHDirectionLineItem
 
-@synthesize name;
-@synthesize flagged;
-@synthesize coordinate;
+@interface RHPath : NSObject
+
+@property (nonatomic, strong) NSNumber *distance;
+
+@property (nonatomic, strong) NSNumber *stairsUp;
+
+@property (nonatomic, strong) NSNumber *stairsDown;
+
+@property (nonatomic, strong) NSArray *steps;
 
 @end
