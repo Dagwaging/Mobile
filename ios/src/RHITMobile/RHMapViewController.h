@@ -31,6 +31,7 @@
 @class RHAnnotation;
 @class RHLocation;
 @class RHSimplePointAnnotation;
+@class RHPath;
 
 /// \ingroup views
 /// View controller for the map portion of the application.
@@ -65,6 +66,8 @@
 
 @property (nonatomic, strong) IBOutlet UIPickerView *directionsPicker;
 
+@property (nonatomic, assign) BOOL displayingDirections;
+
 - (void)focusMapViewToTemporaryAnnotation:(RHAnnotation *)annotation;
 
 - (void)focusMapViewToLocation:(RHLocation *)location;
@@ -87,7 +90,7 @@
 
 - (void)displayPath:(MKPolyline *)path;
 
-- (void)displayDirections:(NSArray *)directions;
+- (void)displayDirections:(RHPath *)directions;
 
 - (void)slideInDirectionsTitle:(UIView *)titleView;
 

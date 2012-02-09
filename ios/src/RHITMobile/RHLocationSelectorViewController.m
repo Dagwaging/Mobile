@@ -21,6 +21,7 @@
 #import "RHAppDelegate.h"
 #import "RHDirectionsRequester.h"
 #import "RHLocation.h"
+#import "RHMapViewController.h"
 
 @implementation RHLocationSelectorViewController
 
@@ -97,7 +98,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 }
 
 - (void)didLoadPath:(RHPath *)path {
+    RHMapViewController *mapViewController = [(RHAppDelegate *)[[UIApplication sharedApplication] delegate] mapViewController];
     [self.navigationController popToRootViewControllerAnimated:YES];
+    [mapViewController displayDirections:path];
 }
 
 @end

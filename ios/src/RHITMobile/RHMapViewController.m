@@ -31,6 +31,7 @@
 #import "RHPinAnnotationView.h"
 #import "RHLocationDetailViewController.h"
 #import "RHSearchViewController.h"
+#import "RHPath.h"
 #import "RHPathStep.h"
 #import "RHSimplePointAnnotation.h"
 
@@ -66,6 +67,7 @@
 @synthesize backgroundView;
 @synthesize directionsLabel;
 @synthesize directionsPicker;
+@synthesize displayingDirections = displayingDirections_;
 
 // Private properties
 @synthesize currentOverlay;
@@ -507,12 +509,16 @@
     [self.mapView setCenterCoordinate:self.mapView.centerCoordinate zoomLevel:15 animated:YES];
 }
 
-- (void)displayDirections:(NSArray *)directions {
+- (void)displayDirections:(RHPath *)directions {
+    if (self.displayingDirections) {
+        [self exitDirections:nil];
+    }
+    
     if (self.mapView.selectedAnnotations.count > 0) {
         [self.mapView deselectAnnotation:[self.mapView.selectedAnnotations objectAtIndex:0] animated:NO];
         [self clearAllDynamicMapArtifacts];
     }
-    RHPathStep *start = [directions objectAtIndex:0];
+    RHPathStep *start = [directions.steps objectAtIndex:0];
     [self.mapView setCenterCoordinate:start.coordinate zoomLevel:17 animated:YES];
     
     directionsStatusBar_ = [[UIView alloc] initWithFrame:CGRectMake(0, -50, 320, 50)];
@@ -521,7 +527,14 @@
     directionsStatus_ = [[UILabel alloc] initWithFrame:CGRectMake(5, 5, 310, 40)];
     directionsStatus_.backgroundColor = [UIColor clearColor];
     directionsStatus_.textColor = [UIColor whiteColor];
-    directionsStatus_.text = [[directions objectAtIndex:0] name];
+    
+    RHPathStep *firstStep = [directions.steps objectAtIndex:0];
+    if ((id) firstStep.detail == [NSNull null]) {
+        directionsStatus_.text = @"";
+    } else  {
+        directionsStatus_.text = firstStep.detail;
+    }
+    
     directionsStatus_.numberOfLines = 2;
     directionsStatus_.textAlignment = UITextAlignmentCenter;
     
@@ -547,18 +560,18 @@
     [self slideInDirectionsTitle:directionsStatusBar_];
     [self slideInDirectionsControls:directionsControls_];
     
-    CLLocationCoordinate2D coords[directions.count];
+    CLLocationCoordinate2D coords[directions.steps.count];
     
-    directionsPins_ = [NSMutableArray arrayWithCapacity:directions.count];
+    directionsPins_ = [NSMutableArray arrayWithCapacity:directions.steps.count];
     
-//    RHDirectionLineItem *last = [directions objectAtIndex:(directions.count - 1)];
-//    
-//    RHSimplePointAnnotation *lastAnnotation = [[[RHSimplePointAnnotation alloc] init] autorelease];
-//    lastAnnotation.coordinate = last.coordinate;
-//    lastAnnotation.color = RHSimplePointAnnotationColorRed;
-//    [self.mapView addAnnotation:lastAnnotation];
+    RHPathStep *last = [directions.steps objectAtIndex:(directions.steps.count - 1)];
     
-//    [directionsPins_ addObject:lastAnnotation];
+    RHSimplePointAnnotation *lastAnnotation = [[RHSimplePointAnnotation alloc] init];
+    lastAnnotation.coordinate = last.coordinate;
+    lastAnnotation.color = RHSimplePointAnnotationColorRed;
+    [self.mapView addAnnotation:lastAnnotation];
+    
+    [directionsPins_ addObject:lastAnnotation];
     
     currentDirectionAnnotation_ = [[RHSimplePointAnnotation alloc] init];
     currentDirectionAnnotation_.coordinate = start.coordinate;
@@ -566,8 +579,8 @@
     [self.mapView addAnnotation:currentDirectionAnnotation_];
 
     
-    for (RHPathStep *lineItem in directions) {
-        coords[[directions indexOfObject:lineItem]] = lineItem.coordinate;
+    for (RHPathStep *lineItem in directions.steps) {
+        coords[[directions.steps indexOfObject:lineItem]] = lineItem.coordinate;
         
         if (lineItem.flagged) {
             RHSimplePointAnnotation *annotation = [[RHSimplePointAnnotation alloc] init];
@@ -579,11 +592,11 @@
     }
     
     MKPolyline *line = [MKPolyline polylineWithCoordinates:coords
-                                                     count:directions.count];
+                                                     count:directions.steps.count];
     
     [self.mapView addOverlay:line];
     
-    currentDirections_ = directions;
+    currentDirections_ = directions.steps;
     
     currentDirectionIndex_ = 0;
 }
@@ -614,30 +627,32 @@
     controls.frame = toolbarFrame;
     
     [UIView commitAnimations];
+    
+    self.displayingDirections = YES;
 }
 
 - (void)nextDirection:(id)sender {
-//    if (currentDirectionIndex_ < currentDirections_.count - 1) {
-//        currentDirectionIndex_ ++;
-//        RHPathStep *direction = [currentDirections_ objectAtIndex:currentDirectionIndex_];
-//        if (![direction.name isKindOfClass:[NSNull class]]) {
-//            directionsStatus_.text = direction.name;
-//        }
-//        currentDirectionAnnotation_.coordinate = direction.coordinate;
-//        [self.mapView setCenterCoordinate:direction.coordinate animated:YES];
-//    }
+    if (currentDirectionIndex_ < currentDirections_.count - 1) {
+        currentDirectionIndex_ ++;
+        RHPathStep *direction = [currentDirections_ objectAtIndex:currentDirectionIndex_];
+        if (![direction.detail isKindOfClass:[NSNull class]]) {
+            directionsStatus_.text = direction.detail;
+        }
+        currentDirectionAnnotation_.coordinate = direction.coordinate;
+        [self.mapView setCenterCoordinate:direction.coordinate animated:YES];
+    }
 }
 
 - (void)prevDirection:(id)sender {
-//    if (currentDirectionIndex_ > 0) {
-//        currentDirectionIndex_ --;
-//        RHPathStep *direction = [currentDirections_ objectAtIndex:currentDirectionIndex_];
-//        if (![direction.name isKindOfClass:[NSNull class]]) {
-//            directionsStatus_.text = direction.name;
-//        }
-//        currentDirectionAnnotation_.coordinate = direction.coordinate;
-//        [self.mapView setCenterCoordinate:direction.coordinate animated:YES];
-//    }
+    if (currentDirectionIndex_ > 0) {
+        currentDirectionIndex_ --;
+        RHPathStep *direction = [currentDirections_ objectAtIndex:currentDirectionIndex_];
+        if (![direction.detail isKindOfClass:[NSNull class]]) {
+            directionsStatus_.text = direction.detail;
+        }
+        currentDirectionAnnotation_.coordinate = direction.coordinate;
+        [self.mapView setCenterCoordinate:direction.coordinate animated:YES];
+    }
 }
 
 - (void)exitDirections:(id)sender {
@@ -661,6 +676,8 @@
     directionsControls_.frame = toolbarFrame;
     
     [UIView commitAnimations];
+    
+    self.displayingDirections = NO;
 }
 
 @end

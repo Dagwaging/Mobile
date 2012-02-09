@@ -111,7 +111,7 @@
 
 - (IBAction)didFinishLoadingTour:(NSArray *)directions {
     
-    [RHAppDelegate.instance.mapViewController displayDirections:directions];
+    //[RHAppDelegate.instance.mapViewController displayDirections:directions];
     
     // Transition to view
     UITabBarController *tabBarController = RHAppDelegate.instance.tabBarController;

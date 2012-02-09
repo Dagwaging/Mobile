@@ -164,6 +164,7 @@ persistantStoreCoordinator:(NSPersistentStoreCoordinator *)persistantStoreCoordi
 
     path.steps = newSteps;
     
+    NSLog(@"%@", self.delegate);
     [self.delegate performSelectorOnMainThread:@selector(didLoadPath:)
                                     withObject:path
                                  waitUntilDone:NO];

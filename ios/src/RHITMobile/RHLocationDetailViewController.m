@@ -443,13 +443,8 @@ titleForHeaderInSection:(NSInteger)section {
 # pragma mark - RHDirectionsRequestDelegate Methods
 
 - (void)didFinishLoadingDirections:(NSArray *)directions {
-
     [self.navigationController popToRootViewControllerAnimated:YES];
-    [RHAppDelegate.instance.mapViewController displayDirections:directions];
-}
-
-- (void)didLoadPath:(RHPath *)path {
-    
+    //[RHAppDelegate.instance.mapViewController displayDirections:directions]; 
 }
 
 @end

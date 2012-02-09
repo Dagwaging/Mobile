@@ -27,7 +27,7 @@
 @class RHDirectionsRequester;
 
 /// \ingroup views
-@interface RHLocationDetailViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, RHPathRequesterDelegate>
+@interface RHLocationDetailViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, strong) RHLocation *location;
 @property (nonatomic, strong) NSArray *enclosedLocations;
