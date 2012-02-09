@@ -18,11 +18,12 @@
 //
 
 #import "RHDirectionsRequester.h"
+#import "RHLocation.h"
+#import "RHPathStep.h"
 #import "RHWrappedCoordinate.h"
 #import "RHWebRequestMaker.h"
-#import "RHPathStep.h"
 
-#define kDirectionsPath @"/directions/testing/directions"
+#define kDirectionsPath @"/directions/fromloc/%d/toloc/%d"
 #define kResultsKey @"Result"
 #define kPathsKey @"Paths"
 #define kDirectionsNameKey @"Dir"
@@ -33,64 +34,38 @@
 
 @interface RHDirectionsRequester ()
 
-- (void)requestDirectionsFromLocationID:(NSManagedObjectID *)startLocationID
-                             toLocation:(NSManagedObjectID *)endLocationID;
+@property (atomic, strong) NSManagedObjectID *startLocationID;
+
+@property (atomic, strong) NSManagedObjectID *endLocationID;
+
+- (void)requestDirectionsBetweenLocationsByID;
 
 @end
 
 @implementation RHDirectionsRequester
-//
-//@synthesize delegate;
-//
-//- (id)initWithDelegate:(id<RHDirectionsRequesterDelegate>)inDelegate {
-//    self = [super init];
-//    if (self) {
-//        self.delegate = inDelegate;
-//        [self requestLocations];
-//    }
-//    return self;
-//}
-//
-//- (void)requestLocations {
-//    if ([NSThread isMainThread]) {
-//        [self performSelectorInBackground:@selector(requestLocations) withObject:nil];
-//        return;
-//    }
-//    
-//    NSDictionary *response = [RHWebRequestMaker JSONGetRequestWithPath:kDirectionsPath URLargs:@""];
-//    
-//    NSDictionary *results = [response objectForKey:kResultsKey];
-//    
-//    NSArray *paths = [results objectForKey:kPathsKey];
-//    
-//    NSMutableArray *result = [NSMutableArray arrayWithCapacity:paths.count];
-//    
-//    for (NSDictionary *lineItem in paths) {
-//        RHPathStep *item = [[RHPathStep alloc] init];
-//        item.name = [lineItem objectForKey:kDirectionsNameKey];
-//        item.flagged = [[lineItem objectForKey:kFlaggedKey] intValue] == 1;
-//        
-//        NSDictionary *coordinateDict = [lineItem objectForKey:kCoordinateKey];
-//        
-//        NSNumber *lat = [coordinateDict objectForKey:kLatKey];
-//        NSNumber *lng = [coordinateDict objectForKey:kLngKey];
-//        
-//        item.coordinate = CLLocationCoordinate2DMake(lat.doubleValue, lng.doubleValue);
-//        
-//        [result addObject:item];
-//    }
-//    
-//    [self.delegate didFinishLoadingDirections:result];
-//}
+
+@synthesize startLocationID = startLocationID_;
+@synthesize endLocationID = endLocationID_;
 
 - (void)requestDirectionsFromLocation:(RHLocation *)startLocation
                            toLocation:(RHLocation *)endLocation {
+    self.startLocationID = startLocation.objectID;
+    self.endLocationID = endLocation.objectID;
     
+    [self performSelectorInBackground:@selector(requestDirectionsByID) withObject:nil];
 }
 
-- (void)requestDirectionsFromLocationID:(NSManagedObjectID *)startLocationID
-                             toLocation:(NSManagedObjectID *)endLocationID {
+- (void)requestDirectionsBetweenLocationsByID {
+    NSManagedObjectContext *localContext = [[NSManagedObjectContext alloc] init];
+    localContext.persistentStoreCoordinator = self.persistantStoreCoordinator;
     
+    RHLocation *startLocation = (RHLocation *)[localContext objectWithID:self.startLocationID];
+    RHLocation *endLocation = (RHLocation *)[localContext objectWithID:self.endLocationID];
+    
+    NSString *requestPath = [NSString stringWithFormat:kDirectionsPath, startLocation.serverIdentifier.intValue, endLocation.serverIdentifier.intValue];
+    NSDictionary *response = [RHWebRequestMaker JSONGetRequestWithPath:requestPath URLargs:@""];
+    
+    [self sendDelegatePathFromJSONResponse:response];
 }
 
 @end

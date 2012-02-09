@@ -23,6 +23,7 @@
 #import "RHLocation.h"
 #import "RHPath.h"
 #import "RHPathStep.h"
+#import "RHWebRequestMaker.h"
 
 #define kDoneKey @"Done"
 #define kRequestIDKey @"RequestId"
@@ -54,6 +55,13 @@
 #define kDirectionDownStairsKey @"DS"
 
 
+@interface RHPathRequester()
+
+- (void)checkRequestStatus;
+
+@end
+
+
 @implementation RHPathRequester
 
 @synthesize delegate = _delegate;
@@ -72,13 +80,15 @@ persistantStoreCoordinator:(NSPersistentStoreCoordinator *)persistantStoreCoordi
     return self;
 }
 
-- (RHPath *)pathFromJSONResponse:(NSDictionary *)response {
+- (void)sendDelegatePathFromJSONResponse:(NSDictionary *)response {
     NSNumber *done = [response objectForKey:kDoneKey];
     
     if (done.intValue < 100) {
         self.requestID = [response objectForKey:kRequestIDKey];
-        NSLog(@"Directions not done yet");
-        return nil;
+        [self performSelector:@selector(checkRequestStatus)
+                   withObject:nil
+                   afterDelay:5];
+        return;
     }
     
     NSDictionary *result = [response objectForKey:kResultKey];
@@ -137,7 +147,7 @@ persistantStoreCoordinator:(NSPersistentStoreCoordinator *)persistantStoreCoordi
         NSNumber *locationID = [step objectForKey:kLocationIDKey];
         
         if ((id)locationID != [NSNull null]) {
-            NSManagedObjectContext *localContext = [NSManagedObjectContext alloc];
+            NSManagedObjectContext *localContext = [[NSManagedObjectContext alloc] init];
             localContext.persistentStoreCoordinator = self.persistantStoreCoordinator;
             
             NSFetchRequest *locationFetchRequest = [NSFetchRequest fetchRequestWithEntityName:kRHLocationEntityName];
@@ -155,7 +165,16 @@ persistantStoreCoordinator:(NSPersistentStoreCoordinator *)persistantStoreCoordi
 
     path.steps = newSteps;
     
-    return path;
+    [self.delegate performSelectorOnMainThread:@selector(didLoadPath:)
+                                    withObject:path
+                                 waitUntilDone:NO];
+}
+ 
+- (void)checkRequestStatus {
+    NSString *statusPath = [NSString stringWithFormat:kStatusPath, self.requestID.intValue];
+    NSDictionary *response = [RHWebRequestMaker JSONGetRequestWithPath:statusPath URLargs:@""];
+    
+    [self sendDelegatePathFromJSONResponse:response];
 }
 
 @end

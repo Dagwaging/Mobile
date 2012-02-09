@@ -21,6 +21,8 @@
 
 #import "RHPathRequesterDelegate.h"
 
+#define kStatusPath @"/directions/status/%d"
+
 @class RHPath;
 
 
@@ -35,6 +37,6 @@
 - (id)initWithDelegate:(NSObject<RHPathRequesterDelegate> *)delegate
 persistantStoreCoordinator:(NSPersistentStoreCoordinator *)persistantStoreCoordinator;
 
-- (RHPath *)pathFromJSONResponse:(NSDictionary *)response;
+- (void)sendDelegatePathFromJSONResponse:(NSDictionary *)response;
 
 @end
