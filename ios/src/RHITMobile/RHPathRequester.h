@@ -30,6 +30,8 @@
 
 @property (nonatomic, strong) NSPersistentStoreCoordinator *persistantStoreCoordinator;
 
+@property (nonatomic, strong) NSNumber *requestID;
+
 - (id)initWithDelegate:(NSObject<RHPathRequesterDelegate> *)delegate
 persistantStoreCoordinator:(NSPersistentStoreCoordinator *)persistantStoreCoordinator;
 
