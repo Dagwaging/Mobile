@@ -26,7 +26,7 @@
 @synthesize altitude = altitude_;
 @synthesize flagged = flagged_;
 @synthesize outside = outside_;
-@synthesize location = location_;
+@synthesize locationID = locationID_;
 @synthesize coordinate = coordinate_;
 
 @end

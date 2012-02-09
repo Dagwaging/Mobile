@@ -19,6 +19,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
+#import <CoreData/CoreData.h>
 
 @class RHLocation;
 
@@ -53,7 +54,7 @@ typedef enum {
 
 @property (nonatomic, assign) BOOL outside;
 
-@property (nonatomic, strong) RHLocation *location;
+@property (nonatomic, strong) NSManagedObjectID *locationID;
 
 @property (nonatomic, assign) CLLocationCoordinate2D coordinate;
 
