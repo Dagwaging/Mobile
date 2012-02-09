@@ -18,82 +18,82 @@
 //
 
 #import "RHTourRequester.h"
+#import "RHLocation.h"
+#import "RHPathStep.h"
+#import "RHTourTag.h"
 #import "RHWrappedCoordinate.h"
 #import "RHWebRequestMaker.h"
-#import "RHPathStep.h"
 
-#define kDirectionsPath @"/directions/testing/tour"
-#define kResultsKey @"Result"
-#define kPathsKey @"Paths"
-#define kDirectionsNameKey @"Dir"
-#define kFlaggedKey @"Flag"
-#define kCoordinateKey @"To"
-#define kLatKey @"Lat"
-#define kLngKey @"Lon"
+#define kTourPath @"/tours"
+#define kOnCampusPath @"/oncampus"
+#define kOffCampusPath @"/offcampus"
+#define kFromLocationPath @"/fromloc/%d"
+#define kTagPath @"/%d"
+#define kDurationArgs @"length=%d"
+
 
 @interface RHTourRequester ()
 
-- (void)requestTourWithTagIDs:(NSArray *)tagIDs
-                         type:(RHTourRequestType)requestType
-                     duration:(NSNumber *)duration;
+@property (atomic, assign) RHTourRequestType requestType;
+@property (atomic, strong) NSArray *tagIDs;
+@property (atomic, strong) NSNumber *duration;
+@property (atomic, strong) NSManagedObjectID *locationID;
+
+- (void)requestTourWithTagIDs;
 
 @end
 
+
 @implementation RHTourRequester
 
-//@synthesize delegate;
-//
-//- (id)initWithDelegate:(id<RHTourRequesterDelegate>)inDelegate {
-//    self = [super init];
-//    if (self) {
-//        self.delegate = inDelegate;
-//        [self requestLocations];
-//    }
-//    return self;
-//}
-//
-//- (void)requestLocations {
-//    if ([NSThread isMainThread]) {
-//        [self performSelectorInBackground:@selector(requestLocations) withObject:nil];
-//        return;
-//    }
-//    
-//    NSDictionary *response = [RHWebRequestMaker JSONGetRequestWithPath:kDirectionsPath URLargs:@""];
-//    
-//    NSDictionary *results = [response objectForKey:kResultsKey];
-//    
-//    NSArray *paths = [results objectForKey:kPathsKey];
-//    
-//    NSMutableArray *result = [NSMutableArray arrayWithCapacity:paths.count];
-//    
-//    for (NSDictionary *lineItem in paths) {
-//        RHPathStep *item = [[RHPathStep alloc] init];
-//        item.name = [lineItem objectForKey:kDirectionsNameKey];
-//        item.flagged = [[lineItem objectForKey:kFlaggedKey] intValue] == 1;
-//        
-//        NSDictionary *coordinateDict = [lineItem objectForKey:kCoordinateKey];
-//        
-//        NSNumber *lat = [coordinateDict objectForKey:kLatKey];
-//        NSNumber *lng = [coordinateDict objectForKey:kLngKey];
-//        
-//        item.coordinate = CLLocationCoordinate2DMake(lat.doubleValue, lng.doubleValue);
-//        
-//        [result addObject:item];
-//    }
-//    
-//    [self.delegate didFinishLoadingTour:result];
-//}
+@synthesize requestType = requestType_;
+@synthesize tagIDs = tagIDs_;
+@synthesize duration = duration_;
+@synthesize locationID = locationID_;
 
 - (void)requestTourWithTags:(NSArray *)tags
+              startLocation:(RHLocation *)location
                        type:(RHTourRequestType)requestType
                    duration:(NSNumber *)duration {
+    NSMutableArray *ids = [NSMutableArray arrayWithCapacity:tags.count];
     
+    for (RHTourTag *tag in tags) {
+        [ids addObject:tag.objectID];
+    }
+    
+    self.tagIDs = ids;
+    self.requestType = requestType;
+    self.duration = duration;
+    
+    [self performSelectorInBackground:@selector(requestTourWithTagIDs) withObject:nil];
 }
 
-- (void)requestTourWithTagIDs:(NSArray *)tagIDs
-                         type:(RHTourRequestType)requestType
-                     duration:(NSNumber *)duration {
+- (void)requestTourWithTagIDs {
+    NSManagedObjectContext *localContext = [[NSManagedObjectContext alloc] init];
+    localContext.persistentStoreCoordinator = self.persistantStoreCoordinator;
     
+    NSString *path = kTourPath;
+    
+    if (self.requestType == RHTourRequestTypeOnCampus) {
+        path = [path stringByAppendingString:kOnCampusPath];
+        
+        RHLocation *startLocation = (RHLocation *) [localContext objectWithID:self.locationID];
+        path = [path stringByAppendingFormat:kFromLocationPath, startLocation.serverIdentifier.intValue];
+    } else {
+        path = [path stringByAppendingString:kOffCampusPath];
+    }
+    
+    for (NSManagedObjectID *tagID in self.tagIDs) {
+        RHTourTag *tag = (RHTourTag *)[localContext objectWithID:tagID];
+        path = [path stringByAppendingFormat:kTagPath, tag.serverIdentifier.intValue];
+    }
+    
+    NSString *urlArgs = [NSString stringWithFormat:kDurationArgs, self.duration.intValue];
+    
+    NSLog(@"%@", path);
+    NSLog(@"%@", urlArgs);
+    
+    [self sendDelegatePathFromJSONResponse:[RHWebRequestMaker JSONGetRequestWithPath:path URLargs:urlArgs]];
 }
 
 @end

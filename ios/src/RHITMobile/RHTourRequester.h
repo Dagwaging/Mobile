@@ -19,6 +19,10 @@
 
 #import <Foundation/Foundation.h>
 
+#import "RHPathRequester.h"
+
+@class RHLocation;
+
 
 typedef enum {
     RHTourRequestTypeOnCampus,
@@ -26,9 +30,10 @@ typedef enum {
 } RHTourRequestType;
 
 
-@interface RHTourRequester : NSObject
+@interface RHTourRequester : RHPathRequester
 
 - (void)requestTourWithTags:(NSArray *)tags
+              startLocation:(RHLocation *)location
                        type:(RHTourRequestType)requestType
                    duration:(NSNumber *)duration;
 
