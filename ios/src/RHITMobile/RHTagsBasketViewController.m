@@ -188,7 +188,7 @@
         
         RHTourTag *tag = [self.tags objectAtIndex:indexPath.row];
         
-        cell.textLabel.text = [NSString stringWithFormat:@"%@ %d", tag.name, tag.serverIdentifier.intValue];
+        cell.textLabel.text = tag.name;
     }
     
     return cell;
