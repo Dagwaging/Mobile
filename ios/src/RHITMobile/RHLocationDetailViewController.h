@@ -19,7 +19,7 @@
 
 
 #import <UIKit/UIKit.h>
-#import "RHDirectionsRequesterDelegate.h"
+#import "RHPathRequesterDelegate.h"
 
 #define kRHLocationDetailViewControllerNibName @"RHLocationDetailViewController"
 
@@ -27,10 +27,7 @@
 @class RHDirectionsRequester;
 
 /// \ingroup views
-@interface RHLocationDetailViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, RHDirectionsRequesterDelegate> {
-    @private
-    RHDirectionsRequester *currentDirectionsRequest_;
-}
+@interface RHLocationDetailViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, RHPathRequesterDelegate>
 
 @property (nonatomic, strong) RHLocation *location;
 @property (nonatomic, strong) NSArray *enclosedLocations;

@@ -18,14 +18,18 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "RHTourRequesterDelegate.h"
+
+
+typedef enum {
+    RHTourRequestTypeOnCampus,
+    RHTourRequestTypeVirtual
+} RHTourRequestType;
+
 
 @interface RHTourRequester : NSObject
 
-@property (nonatomic, strong) id<RHTourRequesterDelegate> delegate;
-
-- (id)initWithDelegate:(id<RHTourRequesterDelegate>)delegate;
-
-- (void)requestLocations;
+- (void)requestTourWithTags:(NSArray *)tags
+                       type:(RHTourRequestType)requestType
+                   duration:(NSNumber *)duration;
 
 @end

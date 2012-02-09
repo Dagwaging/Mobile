@@ -18,14 +18,15 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "RHTourRequesterDelegate.h"
+
+#import "RHPathRequesterDelegate.h"
 
 #define kRHToursViewControllerNibName @"RHToursViewController"
 
 
 @class RHTourRequester;
 
-@interface RHToursViewController : UIViewController <RHTourRequesterDelegate>
+@interface RHToursViewController : UIViewController <RHPathRequesterDelegate>
 
 @property (nonatomic, strong) IBOutlet UILabel *durationLabel;
 

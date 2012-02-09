@@ -19,6 +19,20 @@
 
 #import <Foundation/Foundation.h>
 
+#import "RHPathRequesterDelegate.h"
+
+@class RHPath;
+
+
 @interface RHPathRequester : NSObject
+
+@property (nonatomic, strong) NSObject<RHPathRequesterDelegate> *delegate;
+
+@property (nonatomic, strong) NSPersistentStoreCoordinator *persistantStoreCoordinator;
+
+- (id)initWithDelegate:(NSObject<RHPathRequesterDelegate> *)delegate
+persistantStoreCoordinator:(NSPersistentStoreCoordinator *)persistantStoreCoordinator;
+
+- (RHPath *)pathFromJSONResponse:(NSDictionary *)response;
 
 @end

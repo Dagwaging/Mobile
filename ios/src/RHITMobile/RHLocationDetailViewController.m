@@ -81,7 +81,7 @@
 
 - (IBAction)getDirectionsToCurrentLocation:(id)sender {
     NSLog(@"Getting Directions");
-    currentDirectionsRequest_ = [[RHDirectionsRequester alloc] initWithDelegate:self];
+    //currentDirectionsRequest_ = [[RHDirectionsRequester alloc] initWithDelegate:self];
 }
 
 #pragma mark - View lifecycle
@@ -441,6 +441,10 @@ titleForHeaderInSection:(NSInteger)section {
 
     [self.navigationController popToRootViewControllerAnimated:YES];
     [RHAppDelegate.instance.mapViewController displayDirections:directions];
+}
+
+- (void)didLoadPath:(RHPath *)path {
+    
 }
 
 @end

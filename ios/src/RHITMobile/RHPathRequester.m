@@ -21,4 +21,23 @@
 
 @implementation RHPathRequester
 
+@synthesize delegate = _delegate;
+@synthesize persistantStoreCoordinator = _persistantStoreCoordinator;
+
+- (id)initWithDelegate:(NSObject<RHPathRequesterDelegate> *)delegate
+persistantStoreCoordinator:(NSPersistentStoreCoordinator *)persistantStoreCoordinator {
+    self = [super init];
+    
+    if (self) {
+        self.delegate = delegate;
+        self.persistantStoreCoordinator = persistantStoreCoordinator;
+    }
+    
+    return self;
+}
+
+- (RHPath *)pathFromJSONResponse:(NSDictionary *)response {
+    return nil;
+}
+
 @end

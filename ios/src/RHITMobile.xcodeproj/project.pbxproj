@@ -178,7 +178,6 @@
 		924E754C140ACC9A001DFC4C /* tab-bar-map-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab-bar-map-icon.png"; sourceTree = "<group>"; };
 		925465A41495BC6600C12B81 /* RHDirectionsRequester.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHDirectionsRequester.h; sourceTree = "<group>"; };
 		925465A51495BC6600C12B81 /* RHDirectionsRequester.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHDirectionsRequester.m; sourceTree = "<group>"; };
-		925465A71495BD5F00C12B81 /* RHDirectionsRequesterDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHDirectionsRequesterDelegate.h; sourceTree = "<group>"; };
 		925465A81495C69B00C12B81 /* RHWrappedCoordinate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHWrappedCoordinate.h; sourceTree = "<group>"; };
 		925465A91495C69C00C12B81 /* RHWrappedCoordinate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHWrappedCoordinate.m; sourceTree = "<group>"; };
 		925465AB1495EB7E00C12B81 /* RHToursViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHToursViewController.h; sourceTree = "<group>"; };
@@ -263,13 +262,12 @@
 		92E1AA7D1487115F0005BF34 /* RHWebRequestMaker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHWebRequestMaker.h; sourceTree = "<group>"; };
 		92E1AA7E1487115F0005BF34 /* RHWebRequestMaker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHWebRequestMaker.m; sourceTree = "<group>"; };
 		92ECC4C4141434D30073C4C3 /* RHConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHConstants.h; sourceTree = "<group>"; };
-		92F1B8B31496F67900F7FFD8 /* RHPathStep.h */ = {isa = PBXFileReference; fileEncoding = 4; path = RHPathStep.h; sourceTree = "<group>"; };
+		92F1B8B31496F67900F7FFD8 /* RHPathStep.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHPathStep.h; sourceTree = "<group>"; };
 		92F1B8B41496F67900F7FFD8 /* RHPathStep.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHPathStep.m; sourceTree = "<group>"; };
 		92F1B8B714972AE600F7FFD8 /* RHSimplePointAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHSimplePointAnnotation.h; sourceTree = "<group>"; };
 		92F1B8B814972AE600F7FFD8 /* RHSimplePointAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHSimplePointAnnotation.m; sourceTree = "<group>"; };
 		92F1B8BA1497BBE600F7FFD8 /* RHTourRequester.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHTourRequester.h; sourceTree = "<group>"; };
 		92F1B8BB1497BBE600F7FFD8 /* RHTourRequester.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHTourRequester.m; sourceTree = "<group>"; };
-		92F1B8BD1497BC0800F7FFD8 /* RHTourRequesterDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHTourRequesterDelegate.h; sourceTree = "<group>"; };
 		92F20F6A1464383200603500 /* RHWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHWebViewController.h; sourceTree = "<group>"; };
 		92F20F6B1464383200603500 /* RHWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHWebViewController.m; sourceTree = "<group>"; };
 		92F20F6C1464383200603500 /* RHWebViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RHWebViewController.xib; sourceTree = "<group>"; };
@@ -320,12 +318,6 @@
 				9233414A14DA491F004C1ACC /* RHLocationsRequesterDelegate.h */,
 				92E1AA7D1487115F0005BF34 /* RHWebRequestMaker.h */,
 				92E1AA7E1487115F0005BF34 /* RHWebRequestMaker.m */,
-				925465A41495BC6600C12B81 /* RHDirectionsRequester.h */,
-				925465A51495BC6600C12B81 /* RHDirectionsRequester.m */,
-				925465A71495BD5F00C12B81 /* RHDirectionsRequesterDelegate.h */,
-				92F1B8BA1497BBE600F7FFD8 /* RHTourRequester.h */,
-				92F1B8BB1497BBE600F7FFD8 /* RHTourRequester.m */,
-				92F1B8BD1497BC0800F7FFD8 /* RHTourRequesterDelegate.h */,
 				9258F02814D0D5EE00B61545 /* RHCampusServicesRequester.h */,
 				9258F02914D0D5EE00B61545 /* RHCampusServicesRequester.m */,
 				927A0CA114D8E6F300FAD2B2 /* RHCampusServicesRequesterDelegate.h */,
@@ -340,6 +332,10 @@
 				92ADDE0014E339C900655869 /* RHPathRequester.h */,
 				92ADDE0114E339C900655869 /* RHPathRequester.m */,
 				92ADDE0514E3402400655869 /* RHPathRequesterDelegate.h */,
+				925465A41495BC6600C12B81 /* RHDirectionsRequester.h */,
+				925465A51495BC6600C12B81 /* RHDirectionsRequester.m */,
+				92F1B8BA1497BBE600F7FFD8 /* RHTourRequester.h */,
+				92F1B8BB1497BBE600F7FFD8 /* RHTourRequester.m */,
 			);
 			name = "Server Communication";
 			sourceTree = "<group>";

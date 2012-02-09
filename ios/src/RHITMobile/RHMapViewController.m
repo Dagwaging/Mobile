@@ -617,27 +617,27 @@
 }
 
 - (void)nextDirection:(id)sender {
-    if (currentDirectionIndex_ < currentDirections_.count - 1) {
-        currentDirectionIndex_ ++;
-        RHPathStep *direction = [currentDirections_ objectAtIndex:currentDirectionIndex_];
-        if (![direction.name isKindOfClass:[NSNull class]]) {
-            directionsStatus_.text = direction.name;
-        }
-        currentDirectionAnnotation_.coordinate = direction.coordinate;
-        [self.mapView setCenterCoordinate:direction.coordinate animated:YES];
-    }
+//    if (currentDirectionIndex_ < currentDirections_.count - 1) {
+//        currentDirectionIndex_ ++;
+//        RHPathStep *direction = [currentDirections_ objectAtIndex:currentDirectionIndex_];
+//        if (![direction.name isKindOfClass:[NSNull class]]) {
+//            directionsStatus_.text = direction.name;
+//        }
+//        currentDirectionAnnotation_.coordinate = direction.coordinate;
+//        [self.mapView setCenterCoordinate:direction.coordinate animated:YES];
+//    }
 }
 
 - (void)prevDirection:(id)sender {
-    if (currentDirectionIndex_ > 0) {
-        currentDirectionIndex_ --;
-        RHPathStep *direction = [currentDirections_ objectAtIndex:currentDirectionIndex_];
-        if (![direction.name isKindOfClass:[NSNull class]]) {
-            directionsStatus_.text = direction.name;
-        }
-        currentDirectionAnnotation_.coordinate = direction.coordinate;
-        [self.mapView setCenterCoordinate:direction.coordinate animated:YES];
-    }
+//    if (currentDirectionIndex_ > 0) {
+//        currentDirectionIndex_ --;
+//        RHPathStep *direction = [currentDirections_ objectAtIndex:currentDirectionIndex_];
+//        if (![direction.name isKindOfClass:[NSNull class]]) {
+//            directionsStatus_.text = direction.name;
+//        }
+//        currentDirectionAnnotation_.coordinate = direction.coordinate;
+//        [self.mapView setCenterCoordinate:direction.coordinate animated:YES];
+//    }
 }
 
 - (void)exitDirections:(id)sender {

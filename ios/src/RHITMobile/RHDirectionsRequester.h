@@ -18,14 +18,16 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "RHDirectionsRequesterDelegate.h"
+#import <CoreData/CoreData.h>
 
-@interface RHDirectionsRequester : NSObject
+#import "RHPathRequester.h"
 
-@property (nonatomic, strong) id<RHDirectionsRequesterDelegate> delegate;
+@class RHLocation;
 
-- (id)initWithDelegate:(id<RHDirectionsRequesterDelegate>)delegate;
 
-- (void)requestLocations;
+@interface RHDirectionsRequester : RHPathRequester
+
+- (void)requestDirectionsFromLocation:(RHLocation *)startLocation
+                           toLocation:(RHLocation *)endLocation;
 
 @end

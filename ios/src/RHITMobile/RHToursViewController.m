@@ -131,4 +131,8 @@
                     }];
 }
 
+- (void)didLoadPath:(RHPath *)path {
+    
+}
+
 @end
