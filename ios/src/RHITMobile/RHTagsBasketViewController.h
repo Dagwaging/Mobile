@@ -19,9 +19,12 @@
 
 #import <UIKit/UIKit.h>
 
+#import "RHPathRequesterDelegate.h"
+
 #define kRHTagsBasketViewControllerNibname @"RHTagsBasketViewController"
 
-@interface RHTagsBasketViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
+
+@interface RHTagsBasketViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, RHPathRequesterDelegate>
 
 @property (nonatomic, readonly) NSManagedObjectContext *managedObjectContext;
 

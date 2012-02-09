@@ -20,6 +20,7 @@
 #import "RHTagsBasketViewController.h"
 #import "RHAppDelegate.h"
 #import "RHTagSelectionViewController.h"
+#import "RHTourRequester.h"
 #import "RHTourTagCategory.h"
 #import "RHTourTag.h"
 
@@ -113,6 +114,10 @@
     self.isBuilding = YES;
     NSIndexPath *finalIndexPath = [NSIndexPath indexPathForRow:self.tags.count inSection:0];
     [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:finalIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    
+    NSPersistentStoreCoordinator *persistantStoreCoordinator = [(RHAppDelegate *) [[UIApplication sharedApplication] delegate] persistentStoreCoordinator];
+    RHTourRequester *tourRequester = [[RHTourRequester alloc] initWithDelegate:self persistantStoreCoordinator:persistantStoreCoordinator];
+    [tourRequester requestTourWithTags:self.tags startLocation:nil type:RHTourRequestTypeOnCampus duration:[NSNumber numberWithInt:20]];
 }
 
 #pragma mark - UITableViewDelegate Methods
@@ -183,7 +188,7 @@
         
         RHTourTag *tag = [self.tags objectAtIndex:indexPath.row];
         
-        cell.textLabel.text = tag.name;
+        cell.textLabel.text = [NSString stringWithFormat:@"%@ %d", tag.name, tag.serverIdentifier.intValue];
     }
     
     return cell;
@@ -210,6 +215,11 @@ moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath
     id movedObject = [self.tags objectAtIndex:sourceIndexPath.row];
     [self.tags removeObjectAtIndex:sourceIndexPath.row];
     [self.tags insertObject:movedObject atIndex:destinationIndexPath.row];
+}
+
+- (void)didLoadPath:(RHPath *)path {
+    NSLog(@"Loaded tour");
+    // TODO
 }
 
 @end

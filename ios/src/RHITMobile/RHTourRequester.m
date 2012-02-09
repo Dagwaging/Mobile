@@ -77,8 +77,9 @@
     if (self.requestType == RHTourRequestTypeOnCampus) {
         path = [path stringByAppendingString:kOnCampusPath];
         
-        RHLocation *startLocation = (RHLocation *) [localContext objectWithID:self.locationID];
-        path = [path stringByAppendingFormat:kFromLocationPath, startLocation.serverIdentifier.intValue];
+        //RHLocation *startLocation = (RHLocation *) [localContext objectWithID:self.locationID];
+        //path = [path stringByAppendingFormat:kFromLocationPath, startLocation.serverIdentifier.intValue];
+        path = [path stringByAppendingFormat:kFromLocationPath, 25];
     } else {
         path = [path stringByAppendingString:kOffCampusPath];
     }
