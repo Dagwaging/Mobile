@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
-using Rhit.Applications.Model.Maps.Sources;
+using Rhit.Applications.Extentions.Maps.Sources;
 
 namespace Rhit.Applications.Extentions.Maps.Modes {
-    public class OsmaMode : RhitMode {
+    public class OsmaMode : BaseMode {
         public OsmaMode() {
             Label = "OsmaRender";
             Sources = new List<BaseTileSource>() {
                 new OsmaSource(),
             };
-            CurrentSource = Sources[0];
         }
     }
 }

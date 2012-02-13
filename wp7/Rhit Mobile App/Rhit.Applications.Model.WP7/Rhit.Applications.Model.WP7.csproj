@@ -93,48 +93,6 @@
     <Compile Include="..\Rhit.Applications.Model.SL\LocationType.cs">
       <Link>LocationType.cs</Link>
     </Compile>
-    <Compile Include="..\Rhit.Applications.Model.SL\Maps\Modes\BingMode.cs">
-      <Link>Maps\Modes\BingMode.cs</Link>
-    </Compile>
-    <Compile Include="..\Rhit.Applications.Model.SL\Maps\Modes\EmptyMode.cs">
-      <Link>Maps\Modes\EmptyMode.cs</Link>
-    </Compile>
-    <Compile Include="..\Rhit.Applications.Model.SL\Maps\Modes\GoogleMode.cs">
-      <Link>Maps\Modes\GoogleMode.cs</Link>
-    </Compile>
-    <Compile Include="..\Rhit.Applications.Model.SL\Maps\Modes\MapnikMode.cs">
-      <Link>Maps\Modes\MapnikMode.cs</Link>
-    </Compile>
-    <Compile Include="..\Rhit.Applications.Model.SL\Maps\Modes\OsmaMode.cs">
-      <Link>Maps\Modes\OsmaMode.cs</Link>
-    </Compile>
-    <Compile Include="..\Rhit.Applications.Model.SL\Maps\Modes\RhitMode.cs">
-      <Link>Maps\Modes\RhitMode.cs</Link>
-    </Compile>
-    <Compile Include="..\Rhit.Applications.Model.SL\Maps\Sources\BaseTileSource.cs">
-      <Link>Maps\Sources\BaseTileSource.cs</Link>
-    </Compile>
-    <Compile Include="..\Rhit.Applications.Model.SL\Maps\Sources\BingSource.cs">
-      <Link>Maps\Sources\BingSource.cs</Link>
-    </Compile>
-    <Compile Include="..\Rhit.Applications.Model.SL\Maps\Sources\BingType.cs">
-      <Link>Maps\Sources\BingType.cs</Link>
-    </Compile>
-    <Compile Include="..\Rhit.Applications.Model.SL\Maps\Sources\GoogleSource.cs">
-      <Link>Maps\Sources\GoogleSource.cs</Link>
-    </Compile>
-    <Compile Include="..\Rhit.Applications.Model.SL\Maps\Sources\GoogleType.cs">
-      <Link>Maps\Sources\GoogleType.cs</Link>
-    </Compile>
-    <Compile Include="..\Rhit.Applications.Model.SL\Maps\Sources\MapnikSource.cs">
-      <Link>Maps\Sources\MapnikSource.cs</Link>
-    </Compile>
-    <Compile Include="..\Rhit.Applications.Model.SL\Maps\Sources\OsmaSource.cs">
-      <Link>Maps\Sources\OsmaSource.cs</Link>
-    </Compile>
-    <Compile Include="..\Rhit.Applications.Model.SL\Maps\Sources\RoseOverlay.cs">
-      <Link>Maps\Sources\RoseOverlay.cs</Link>
-    </Compile>
     <Compile Include="..\Rhit.Applications.Model.SL\RhitLocation.cs">
       <Link>RhitLocation.cs</Link>
     </Compile>

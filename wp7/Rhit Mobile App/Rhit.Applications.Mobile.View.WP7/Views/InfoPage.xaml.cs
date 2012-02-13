@@ -1,8 +1,10 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
+using Rhit.Applications.ViewModel.Controllers;
 using Rhit.Applications.ViewModel.Models;
 
 namespace Rhit.Applications.View.Views {
@@ -10,12 +12,10 @@ namespace Rhit.Applications.View.Views {
     public partial class InfoPage : PhoneApplicationPage {
         public InfoPage() {
             InitializeComponent();
-
-            ViewModel = new InfoViewModel();
             DataContext = ViewModel;
         }
 
-        public InfoViewModel ViewModel { get; set; }
+        public InfoViewModel ViewModel = new InfoViewModel();
 
         private void InnerLocationSelected(object sender, SelectionChangedEventArgs e) {
             if((sender as ListBox).SelectedItem == null) return;
@@ -35,6 +35,15 @@ namespace Rhit.Applications.View.Views {
 
         protected override void OnBackKeyPress(CancelEventArgs e) {
             if(Index == 0) ViewModel.ClearStack();
+        }
+
+        private void GetDirections_Click(object sender, RoutedEventArgs e) {
+            int id = LocationsController.Instance.CurrentLocation.Id;
+            if(id == 25 || id == 101 || id == 102 || id == 1700000)
+                NavigationService.Navigate(new Uri("/Views/DirectionsPage.xaml?Id=" + id.ToString(), UriKind.Relative));
+            else {
+                MessageBox.Show("Currently, you can only get directions to the SRC, Logan Library, Tennis Courts, and IM Fields.", "Sorry...", MessageBoxButton.OK);
+            }
         }
     }
 }

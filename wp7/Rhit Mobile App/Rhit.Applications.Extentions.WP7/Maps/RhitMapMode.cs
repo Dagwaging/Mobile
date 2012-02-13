@@ -1,4 +1,7 @@
-﻿#if WINDOWS_PHONE
+﻿using System.Collections.Generic;
+using Rhit.Applications.Extentions.Maps.Sources;
+
+#if WINDOWS_PHONE
 using System.Device.Location;
 using Microsoft.Phone.Controls.Maps.Core;
 using Microsoft.Phone.Controls.Maps;
@@ -7,24 +10,16 @@ using Microsoft.Maps.MapControl.Core;
 using Microsoft.Maps.MapControl;
 #endif
 
-using System.Collections.Generic;
-using Rhit.Applications.Model.Maps.Sources;
 
-namespace Rhit.Applications.Extentions.Maps.Modes {
-    public abstract class RhitMode : MercatorMode {
+namespace Rhit.Applications.Extentions.Maps {
+    public class RhitMapMode : MercatorMode {
 
         // The latitude value range (From = bottom most latitude, To = top most latitude)
         protected static Range<double> validLatitudeRange = new Range<double>(39.479665, 39.486985);
         // The longitude value range (From = left most longitude, To = right most longitude)
         protected static Range<double> validLongitudeRange = new Range<double>(-87.333154, -87.314100);
-
-        public BaseTileSource CurrentSource { get; protected set; }
-
-        public string Label { get; protected set; }
-
-        public List<BaseTileSource> Sources { get; protected set; }
-
         // Restricts the map view.
+
 #if WINDOWS_PHONE
         protected override Range<double> GetZoomRange(GeoCoordinate center) {
 #else
@@ -80,21 +75,6 @@ namespace Rhit.Applications.Extentions.Maps.Modes {
             }
 
             return isChanged;
-        }
-
-        public BaseTileSource ChangeSource(string name) {
-            foreach(BaseTileSource source in Sources)
-                if(source.Label == name && CurrentSource != source)
-                    return source;
-            return null;
-        }
-
-        public BaseTileSource ChangeSource(BaseTileSource newSource) {
-            if(newSource == null) return null;
-            foreach(BaseTileSource source in Sources)
-                if(source.Label == newSource.Label && CurrentSource != source)
-                    return source;
-            return null;
         }
     }
 }

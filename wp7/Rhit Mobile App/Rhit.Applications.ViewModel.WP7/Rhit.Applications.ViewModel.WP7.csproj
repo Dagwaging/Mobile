@@ -54,9 +54,6 @@
     <Compile Include="..\Rhit.Applications.ViewModel.SL\Controllers\LocationsController.cs">
       <Link>Controllers\LocationsController.cs</Link>
     </Compile>
-    <Compile Include="..\Rhit.Applications.ViewModel.SL\Controllers\MapController.cs">
-      <Link>Controllers\MapController.cs</Link>
-    </Compile>
     <Compile Include="..\Rhit.Applications.ViewModel.SL\Controllers\PathsController.cs">
       <Link>Controllers\PathsController.cs</Link>
     </Compile>
@@ -83,6 +80,7 @@
     </Compile>
     <Compile Include="Controllers\ServicesController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Models\BaseMapViewModel.cs" />
     <Compile Include="Models\DirectionsViewModel.cs" />
     <Compile Include="Models\InfoViewModel.cs" />
     <Compile Include="Models\SearchViewModel.cs" />

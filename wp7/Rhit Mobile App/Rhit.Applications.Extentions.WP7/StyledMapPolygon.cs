@@ -4,9 +4,14 @@ using Microsoft.Phone.Controls.Maps;
 
 namespace Rhit.Applications.Extentions {
     public class StyledMapPolygon : MapPolygon {
-        #region Fill
-        public static readonly DependencyProperty FillProperty =
-           DependencyProperty.Register("Fill", typeof(Brush), typeof(StyledMapPolygon),
+        #region DependencyFill
+        public Brush DependencyFill {
+            get { return Fill; }
+            set { SetValue(DependencyFillProperty, value); }
+        }
+
+        public static readonly DependencyProperty DependencyFillProperty =
+           DependencyProperty.Register("DependencyFill", typeof(Brush), typeof(StyledMapPolygon),
            new PropertyMetadata(new SolidColorBrush(), new PropertyChangedCallback(OnFillChanged)));
 
         private static void OnFillChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
@@ -15,9 +20,14 @@ namespace Rhit.Applications.Extentions {
         }
         #endregion
 
-        #region Stroke
-        public static readonly DependencyProperty StrokeProperty =
-           DependencyProperty.Register("Stroke", typeof(Brush), typeof(StyledMapPolygon),
+        #region DependencyStroke
+        public Brush DependencyStroke {
+            get { return Stroke; }
+            set { SetValue(DependencyStrokeProperty, value); }
+        }
+
+        public static readonly DependencyProperty DependencyStrokeProperty =
+           DependencyProperty.Register("DependencyStroke", typeof(Brush), typeof(StyledMapPolygon),
            new PropertyMetadata(new SolidColorBrush(), new PropertyChangedCallback(OnStrokeChanged)));
 
         private static void OnStrokeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
@@ -26,10 +36,15 @@ namespace Rhit.Applications.Extentions {
         }
         #endregion
 
-        #region StrokeThickness
-        public static readonly DependencyProperty StrokeThicknessProperty =
-           DependencyProperty.Register("StrokeThickness", typeof(int), typeof(StyledMapPolygon),
-           new PropertyMetadata(1, new PropertyChangedCallback(OnStrokeThicknessChanged)));
+        #region DependencyStrokeThickness
+        public double DependencyStrokeThickness {
+            get { return StrokeThickness; }
+            set { SetValue(DependencyStrokeThicknessProperty, value); }
+        }
+
+        public static readonly DependencyProperty DependencyStrokeThicknessProperty =
+           DependencyProperty.Register("DependencyStrokeThickness", typeof(double), typeof(StyledMapPolygon),
+           new PropertyMetadata(1.0, new PropertyChangedCallback(OnStrokeThicknessChanged)));
 
         private static void OnStrokeThicknessChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
             StyledMapPolygon instance = (StyledMapPolygon) d;

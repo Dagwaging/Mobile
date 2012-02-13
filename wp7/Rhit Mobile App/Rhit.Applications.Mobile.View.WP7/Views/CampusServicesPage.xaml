@@ -26,7 +26,7 @@
         
         <StackPanel Grid.Row="0" Margin="12,17,0,28">
             <TextBlock Text="RHIT - Campus Services" Style="{StaticResource PhoneTextNormalStyle}"/>
-            <TextBlock Text="{Binding CurrentService.Label}" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
+            <TextBlock Text="{Binding CurrentService.Label}" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}" FontSize="62"/>
         </StackPanel>
 
         <Grid  Grid.Row="1" Margin="12,0,12,0">
@@ -37,7 +37,13 @@
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
-            <ItemsControl ItemsSource="{Binding CurrentService.Links}" ItemTemplate="{StaticResource LinkTemplate}" />
+            <ItemsControl ItemsSource="{Binding CurrentService.Links}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <HyperlinkButton Content="{Binding Name}" Foreground="LightBlue" NavigateUri="{Binding Address}" TargetName="_blank" FontSize="40" Margin="5,10" HorizontalAlignment="Left"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
         </Grid>
     </Grid>
 

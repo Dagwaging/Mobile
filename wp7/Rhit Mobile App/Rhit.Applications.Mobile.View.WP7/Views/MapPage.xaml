@@ -36,7 +36,7 @@
         </Grid.RowDefinitions>
 
         <maps:Map Name="MyMap" DataContext="{StaticResource ViewModel}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"  
-                  ZoomLevel="{Binding Map.ZoomLevel, Mode=TwoWay}" Center="{Binding Map.Center, Mode=TwoWay}"
+                  ZoomLevel="{Binding ZoomLevel, Mode=TwoWay}" Center="{Binding Center, Mode=TwoWay}"
                   CredentialsProvider="AthZ1tu5ROM0PUWcIYFSxC1oQALFR-g0aoFIuL9tlbeGJ9Z6qKIRYoB_jGpct8Yu">
             <maps:MapLayer>
                 <maps:MapItemsControl ItemsSource="{Binding Locations.HiddenBuildings}" ItemTemplate="{StaticResource HiddenBuildingTemplate}" />
@@ -49,7 +49,8 @@
             
             <!--<maps:Pushpin Location="{Binding User.Location}"/>-->
         </maps:Map>
-        <TextBlock Grid.Row="1"  DataContext="{StaticResource ViewModel}" Text="{Binding Map.Center, FallbackValue='Debug Status'}" Visibility="{Binding Settings.DebugMode, Converter={StaticResource VisibilityConverter}}"/>
+        
+        <TextBlock Grid.Row="1"  DataContext="{StaticResource ViewModel}" Text="{Binding Center, FallbackValue='Debug Status'}" Visibility="{Binding Settings.DebugMode, Converter={StaticResource VisibilityConverter}}"/>
         
         <appbar:AppBar x:Name="AppBar" BarOpacity="0.5" Grid.RowSpan="3" VerticalAlignment="Bottom">
             <appbar:AppBar.Buttons>

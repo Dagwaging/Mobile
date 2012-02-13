@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Input;
+using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Controls.Maps;
-using System.Windows.Input;
 using Rhit.Applications.Mvvm.Commands;
+using Rhit.Applications.Extentions.Maps;
 
 namespace Rhit.Applications.View.Views {
     /// \ingroup pages
@@ -13,8 +15,6 @@ namespace Rhit.Applications.View.Views {
             DataContext = this;
             InitializeComponent();
 
-            //TODO: Try not to have to do this
-            ViewModel.SetMode(MyMap);
             MyMap.Tap += new EventHandler<System.Windows.Input.GestureEventArgs>(Map_Tap);
 
             DirectionsCommand = new RelayCommand(p => GotoDirections());
@@ -24,12 +24,17 @@ namespace Rhit.Applications.View.Views {
             SettingsCommand = new RelayCommand(p => GotoSettings());
         }
 
+        protected override void OnNavigatedTo(NavigationEventArgs e) {
+            RhitMapExtender.Attach(MyMap);
+        }
+
         #region Directions Command
         public ICommand DirectionsCommand { get; private set; }
 
         private void GotoDirections() {
             NavigationService.Navigate(new Uri("/Views/DirectionsPage.xaml", UriKind.Relative));
         }
+
         #endregion
 
         #region Campus Services Command

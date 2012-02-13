@@ -21,8 +21,7 @@ namespace Rhit.Applications.View.Views {
         private void SelectionChanged(object sender, SelectionChangedEventArgs e) {
             if((sender as ListBox).SelectedItem == null) return;
             ViewModel.SelectLocation((sender as ListBox).SelectedItem);
-            if(NavigationService.CanGoBack) NavigationService.GoBack();
-            else NavigationService.Navigate(new Uri("/Views/MapPage.xaml", UriKind.Relative));
+            NavigationService.Navigate(new Uri("/Views/MapPage.xaml", UriKind.Relative));
         }
     }
 }

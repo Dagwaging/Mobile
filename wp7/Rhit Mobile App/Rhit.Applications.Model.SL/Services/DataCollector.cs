@@ -263,7 +263,11 @@ namespace Rhit.Applications.Model.Services {
         }
 
         public void GetDirections(RhitLocation from, RhitLocation to) {
-            RequestPart request = new RequestBuilder(BaseAddress).Directions.FromLoc(from.Id).ToLoc(to.Id);
+            GetDirections(from.Id, to.Id);
+        }
+
+        public void GetDirections(int fromId, int toId) {
+            RequestPart request = new RequestBuilder(BaseAddress).Directions.FromLoc(fromId).ToLoc(toId);
             Connection.MakeRequest(request, RequestType.Directions);
         }
 

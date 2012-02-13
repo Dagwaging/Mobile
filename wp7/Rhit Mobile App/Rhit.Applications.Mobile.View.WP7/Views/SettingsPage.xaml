@@ -6,6 +6,7 @@
     xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
     xmlns:controls="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls"
+    xmlns:extmaps="clr-namespace:Rhit.Applications.Extentions.Maps;assembly=Rhit.Applications.Extentions.WP7"
     xmlns:vm="clr-namespace:Rhit.Applications.ViewModel.Models;assembly=Rhit.Applications.ViewModel.WP7"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -16,8 +17,11 @@
     SupportedOrientations="Portrait"  Orientation="Portrait"
     shell:SystemTray.IsVisible="True">
     
+    <phone:PhoneApplicationPage.DataContext>
+        <vm:SimpleViewModel />
+    </phone:PhoneApplicationPage.DataContext>
     <phone:PhoneApplicationPage.Resources>
-        <vm:SimpleViewModel x:Name="ViewModel" />
+        <extmaps:RhitMapExtender x:Key="RhitMap" />
     </phone:PhoneApplicationPage.Resources>
 
     <Grid Background="Transparent">
@@ -39,14 +43,16 @@
                 </ScrollViewer>
             </controls:PivotItem>
 
-            <controls:PivotItem Header="Tile Sources">
+            <controls:PivotItem Header="Tile Sources" DataContext="{StaticResource RhitMap}">
                 <ScrollViewer>
                     <StackPanel>
-                        <toolkit:ListPicker Header="Map Modes" ItemTemplate="{StaticResource PickerItemTemplate}" 
-                                            ItemsSource="{Binding Map.Modes, Mode=TwoWay}" SelectedItem="{Binding Map.CurrentMode, Mode=TwoWay}"/>
-                        <toolkit:ListPicker Header="Map Source" ItemTemplate="{StaticResource PickerItemTemplate}" 
-                                            ItemsSource="{Binding Map.Sources, Mode=TwoWay}" SelectedItem="{Binding Map.CurrentSource, Mode=TwoWay}"
-                                            Visibility="{Binding Map.SourceChoices, Mode=TwoWay, Converter={StaticResource VisibilityConverter}}"/>
+                        <toolkit:ListPicker Header="Map Modes" ItemTemplate="{StaticResource PickerItemTemplate}"
+                                            ItemsSource="{Binding Settings.Modes, Mode=TwoWay}"
+                                            SelectedItem="{Binding Settings.CurrentMode, Mode=TwoWay}"/>
+                        <toolkit:ListPicker Header="Map Source" ItemTemplate="{StaticResource PickerItemTemplate}"
+                                            ItemsSource="{Binding Settings.Sources, Mode=TwoWay}"
+                                            SelectedItem="{Binding Settings.CurrentSource, Mode=TwoWay}"
+                                            Visibility="{Binding Settings.SourceChoices, Mode=TwoWay, Converter={StaticResource VisibilityConverter}}"/>
                     </StackPanel>
                 </ScrollViewer>
             </controls:PivotItem>

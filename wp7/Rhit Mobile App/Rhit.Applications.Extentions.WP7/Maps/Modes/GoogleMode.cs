@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using Rhit.Applications.Model.Maps.Sources;
+using Rhit.Applications.Extentions.Maps.Sources;
 
 namespace Rhit.Applications.Extentions.Maps.Modes {
-    public class GoogleMode : RhitMode {
+    public class GoogleMode : BaseMode {
         public GoogleMode() {
             Label = "Google";
             Sources = new List<BaseTileSource>() {
@@ -12,7 +12,6 @@ namespace Rhit.Applications.Extentions.Maps.Modes {
                 //new GoogleSource(GoogleType.Physical),
                 //new GoogleSource(GoogleType.PhysicalHybrid),
             };
-            CurrentSource = Sources[1];
         }
     }
 }

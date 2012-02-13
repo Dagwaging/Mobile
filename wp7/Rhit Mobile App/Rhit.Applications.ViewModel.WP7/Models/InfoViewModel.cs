@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using Rhit.Applications.Model;
 using Rhit.Applications.ViewModel.Controllers;
 
 namespace Rhit.Applications.ViewModel.Models {
     public class InfoViewModel {
         public InfoViewModel() {
+            if(DesignerProperties.IsInDesignTool) return;
             Locations = LocationsController.Instance;
             if(LocationStack == null)
                 LocationStack = new Dictionary<int, RhitLocation>();

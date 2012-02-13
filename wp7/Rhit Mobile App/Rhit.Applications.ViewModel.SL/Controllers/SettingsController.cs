@@ -6,6 +6,7 @@ namespace Rhit.Applications.ViewModel.Controllers {
 
         private SettingsController() {
             Status = "Debug Status";
+            LocationsController.Instance.HideBuildings();
         }
 
         #region Singleton Instance

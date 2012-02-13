@@ -3,6 +3,7 @@ using System.Windows;
 using Rhit.Applications.ViewModel;
 using Rhit.Applications.View.Views;
 using Rhit.Applications.ViewModel.Controllers;
+using System.Windows.Shapes;
 
 namespace Rhit.Applications.View {
     public partial class App : Application {

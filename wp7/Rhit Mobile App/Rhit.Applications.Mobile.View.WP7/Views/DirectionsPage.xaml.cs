@@ -1,25 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
+using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
+using Rhit.Applications.Extentions.Maps;
+using Rhit.Applications.ViewModel.Models;
 
 namespace Rhit.Applications.View.Views {
     public partial class DirectionsPage : PhoneApplicationPage {
         public DirectionsPage() {
             InitializeComponent();
-
             DataContext = ViewModel;
+        }
 
-            //TODO: Try not to have to do this
-            ViewModel.SetMode(MyMap);
+        public DirectionsViewModel ViewModel = new DirectionsViewModel();
+
+        protected override void OnNavigatedTo(NavigationEventArgs e) {
+            RhitMapExtender.Attach(MyMap);
+
+            string idString;
+            int id;
+            if(NavigationContext.QueryString.TryGetValue("Id", out idString))
+                id = Convert.ToInt32(idString);
+            else id = -1;
+            ViewModel.SetLocation(id);
         }
     }
 }

@@ -74,8 +74,11 @@ namespace Rhit.Applications.ViewModel.Controllers {
                 } else if(location.Type == LocationType.PointOfInterest)
                     PointsOfInterest.Add(location);
                 if(location.ParentId == 0) Top.Add(location);
-                if(location.Corners != null && location.Corners.Count > 0)
-                    Buildings.Add(location);
+                if(location.Corners != null && location.Corners.Count > 0) {
+                    if(BuildingsHidden) HiddenBuildings.Add(location);
+                    else Buildings.Add(location);
+                }
+                    
             }
             UpdateTree();
         }

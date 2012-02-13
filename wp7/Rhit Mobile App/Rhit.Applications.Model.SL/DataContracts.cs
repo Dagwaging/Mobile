@@ -272,7 +272,7 @@ namespace Rhit.Applications.Model {
     public class DirectionPath_DC {
         public static Dictionary<string, string> ActionCodeDict = new Dictionary<string, string>() {
             {"GS", "Go Straight"}, {"CS", "Cross the Street"}, {"FP", "Follow the Path"},
-            {"L1", "Slight Left"}, {"R1", "Slight Right"}, {"L2", "Trun Left"},
+            {"L1", "Slight Left"}, {"R1", "Slight Right"}, {"L2", "Turn Left"},
             {"R2", "Turn Right"}, {"L3", "Sharp Left"}, {"R3", "Sharp Right"},
             {"EN", "Enter the Building"}, {"EX", "Exit the Building"},
             {"US", "Go Up the Stairs"}, {"DS", "Go Down the Stairs"}, {"", ""},
