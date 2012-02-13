@@ -4,6 +4,8 @@ using System.Windows;
 using Rhit.Applications.Model;
 using Rhit.Applications.Model.Events;
 using Rhit.Applications.Model.Services;
+using Rhit.Applications.ViewModel.Utilities;
+using System.Collections.Generic;
 
 #if WINDOWS_PHONE
 using Microsoft.Phone.Controls.Maps;
@@ -18,8 +20,9 @@ namespace Rhit.Applications.ViewModel.Controllers {
         
         private PathsController() {
             Coordinates = new LocationCollection();
-            Nodes = new ObservableCollection<Node>();
-            DataCollector.Instance.DirectionsReturned += new Model.Events.DirectionsEventHandler(DirectionsReturned);
+            Nodes = new ObservableCollection<PathNode>();
+            DataCollector.Instance.DirectionsReturned += new DirectionsEventHandler(DirectionsReturned);
+            DataCollector.Instance.ToursReturned += new DirectionsEventHandler(DirectionsReturned);
         }
 
         internal void GetTestDirections() {
@@ -30,6 +33,14 @@ namespace Rhit.Applications.ViewModel.Controllers {
             DataCollector.Instance.GetDirections(18, to);
         }
 
+        internal void GetTestTour() {
+            DataCollector.Instance.GetTestTour();
+        }
+
+        internal void GetDirections(int from, IList<int> tagIds) {
+            DataCollector.Instance.GetTour(from, tagIds);
+        }
+
         #region internal event NodesUpdated
         internal event EventHandler NodesUpdated;
         protected virtual void OnNodesUpdated() {
@@ -38,17 +49,17 @@ namespace Rhit.Applications.ViewModel.Controllers {
         #endregion
 
         private void DirectionsReturned(object sender, DirectionsEventArgs e) {
-            Node.Restart();
+            PathNode.Restart();
             Coordinates.Clear();
             Nodes.Clear();
             Start = null;
-            Node lastNode = null;
+            PathNode lastNode = null;
             foreach(DirectionPath_DC path in e.Paths) {
                 string action = path.ConvertAction();
                 if(string.IsNullOrWhiteSpace(action))
                     Coordinates.Add(new GeoCoordinate(path.Latitude, path.Longitude));
                 else {
-                    Node node = new Node(path.Latitude, path.Longitude) {
+                    PathNode node = new PathNode(path.Latitude, path.Longitude) {
                         Action = action,
                     };
                     Coordinates.Add(node.Center);
@@ -66,23 +77,23 @@ namespace Rhit.Applications.ViewModel.Controllers {
         }
 
         #region Start
-        public Node Start {
-            get { return (Node) GetValue(StartProperty); }
+        public PathNode Start {
+            get { return (PathNode) GetValue(StartProperty); }
             set { SetValue(StartProperty, value); }
         }
 
         public static readonly DependencyProperty StartProperty =
-           DependencyProperty.Register("Start", typeof(Node), typeof(PathsController), new PropertyMetadata(null));
+           DependencyProperty.Register("Start", typeof(PathNode), typeof(PathsController), new PropertyMetadata(null));
         #endregion
 
         #region End
-        public Node End {
-            get { return (Node) GetValue(EndProperty); }
+        public PathNode End {
+            get { return (PathNode) GetValue(EndProperty); }
             set { SetValue(EndProperty, value); }
         }
 
         public static readonly DependencyProperty EndProperty =
-           DependencyProperty.Register("End", typeof(Node), typeof(PathsController), new PropertyMetadata(null));
+           DependencyProperty.Register("End", typeof(PathNode), typeof(PathsController), new PropertyMetadata(null));
         #endregion
 
         #region Singleton Instance
@@ -98,38 +109,6 @@ namespace Rhit.Applications.ViewModel.Controllers {
 
         public LocationCollection Coordinates { get; protected set; }
 
-        public ObservableCollection<Node> Nodes { get; protected set; }
-    }
-
-    public class Node : DependencyObject {
-        private static int LastNumber = 0;
-        public Node(double latitude, double longitude) {
-            Number = ++LastNumber;
-            Center = new GeoCoordinate(latitude, longitude);
-        }
-
-        internal static void Restart() {
-            LastNumber = 0;
-        }
-
-        public int Number { get; set; }
-
-        public string Action { get; set; }
-
-        internal Node Next { get; set; }
-
-        internal Node Previous { get; set; }
-
-        public GeoCoordinate Center { get; private set; }
-
-        #region IsSelected
-        public bool IsSelected {
-            get { return (bool) GetValue(IsSelectedProperty); }
-            set { SetValue(IsSelectedProperty, value); }
-        }
-
-        public static readonly DependencyProperty IsSelectedProperty =
-           DependencyProperty.Register("IsSelected", typeof(bool), typeof(Node), new PropertyMetadata(false));
-        #endregion
+        public ObservableCollection<PathNode> Nodes { get; protected set; }
     }
 }

@@ -20,7 +20,17 @@ namespace Rhit.Applications.Model.Services {
             CampusServicesEventArgs args = new CampusServicesEventArgs(e) {
                 Root = root,
             };
-            if(LocationsReturned != null) CampusServicesReturned(this, args);
+            if(CampusServicesReturned != null) CampusServicesReturned(this, args);
+        }
+        #endregion
+
+        #region ToursReturned
+        public event DirectionsEventHandler ToursReturned;
+        protected virtual void OnToursReturned(ServiceEventArgs e, IList<DirectionPath_DC> paths) {
+            DirectionsEventArgs args = new DirectionsEventArgs(e) {
+                Paths = paths,
+            };
+            if(ToursReturned != null) ToursReturned(this, args);
         }
         #endregion
 
@@ -30,7 +40,17 @@ namespace Rhit.Applications.Model.Services {
             DirectionsEventArgs args = new DirectionsEventArgs(e) {
                 Paths = paths,
             };
-            if(LocationsReturned != null) DirectionsReturned(this, args);
+            if(DirectionsReturned != null) DirectionsReturned(this, args);
+        }
+        #endregion
+
+        #region TagsReturned
+        public event TagsEventHandler TagsReturned;
+        protected virtual void OnTagsReturned(ServiceEventArgs e, TagsCategory_DC tagRoot) {
+            TagsEventArgs args = new TagsEventArgs(e) {
+                TagRoot = tagRoot,
+            };
+            if(TagsReturned != null) TagsReturned(this, args);
         }
         #endregion
 
@@ -71,7 +91,7 @@ namespace Rhit.Applications.Model.Services {
             LocationsEventArgs args = new LocationsEventArgs(e) {
                 Locations = locations,
             };
-            if(LocationsReturned != null) SearchResultsReturned(this, args);
+            if(SearchResultsReturned != null) SearchResultsReturned(this, args);
         }
         #endregion
 
@@ -142,6 +162,14 @@ namespace Rhit.Applications.Model.Services {
                     HandleSearchResponse(eventArgs);
                     break;
 
+                case ResponseType.Tours:
+                    HandleToursResponse(eventArgs);
+                    break;
+
+                case ResponseType.Tags:
+                    HandleTagsResponse(eventArgs);
+                    break;
+
                 case ResponseType.Directions:
                     HandleDirectionsResponse(eventArgs);
                     break;
@@ -187,6 +215,18 @@ namespace Rhit.Applications.Model.Services {
         }
 
         #region Response Handlers
+        private void HandleToursResponse(ServiceEventArgs eventArgs) {
+            ServerObject response = eventArgs.ResponseObject;
+            if(response.Result.Paths == null || response.Result.Paths.Count <= 0) return;
+            OnToursReturned(eventArgs, response.Result.Paths);
+        }
+        
+        private void HandleTagsResponse(ServiceEventArgs eventArgs) {
+            ServerObject response = eventArgs.ResponseObject;
+            if(response.TagsRoot == null) return;
+            OnTagsReturned(eventArgs, response.TagsRoot);
+        }
+
         private void HandleDirectionsResponse(ServiceEventArgs eventArgs) {
             ServerObject response = eventArgs.ResponseObject;
             if(response.Result.Paths == null || response.Result.Paths.Count <= 0) return;
@@ -257,6 +297,21 @@ namespace Rhit.Applications.Model.Services {
         #endregion
 
         #region Request Methods
+        public void GetTags() {
+            RequestPart request = new RequestBuilder(BaseAddress).Tours.Tags;
+            Connection.MakeRequest(request, RequestType.Tags);
+        }
+
+        public void GetTour(int fromId, IList<int> tagIds) {
+            RequestPart request = new RequestBuilder(BaseAddress).Tours.OnCampus.FromLoc(fromId).Tag(tagIds);
+            Connection.MakeRequest(request, RequestType.Tours);
+        }
+
+        public void GetTestTour() {
+            RequestPart request = new RequestBuilder(BaseAddress).Tours.Test;
+            Connection.MakeRequest(request, RequestType.Tours);
+        }
+
         public void Login(string username, string password) {
             RequestPart request = new RequestBuilder(BaseAddress).Admin.Authenticate(username, password);
             Connection.MakeRequest(request, RequestType.Login);

@@ -18,6 +18,8 @@ namespace Rhit.Applications.Model.Services {
         PathData,
         ServerError,
         TopLocations,
+        Tags,
+        Tours,
         Version,
     }
 }

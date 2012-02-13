@@ -16,6 +16,8 @@ namespace Rhit.Applications.Model.Services {
         MoveLocation,
         PathData,
         TopLocations,
+        Tags,
+        Tours,
         Version,
     }
 }

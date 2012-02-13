@@ -53,6 +53,10 @@ namespace Rhit.Applications.Model.Services {
                     return ResponseType.Version;
                 case RequestType.PathData:
                     return ResponseType.PathData;
+                case RequestType.Tours:
+                    return ResponseType.Tours;
+                case RequestType.Tags:
+                    return ResponseType.Tags;
             }
             return ResponseType.ServerError;
         }

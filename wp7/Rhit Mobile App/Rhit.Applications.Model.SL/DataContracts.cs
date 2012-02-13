@@ -13,6 +13,16 @@ using Microsoft.Maps.MapControl;
 namespace Rhit.Applications.Model {
     [DataContract]
     public class ServerObject {
+        #region OffCampusResponse
+        [DataMember(Name = "LoicationIds")]
+        public List<int> LoicationIds { get; set; }
+        #endregion
+
+        #region TagsResponse
+        [DataMember(Name = "TagsRoot")]
+        public TagsCategory_DC TagsRoot { get; set; }
+        #endregion
+
         #region CampusServicesResponse
         [DataMember(Name = "Root")]
         public CampusServicesCategory_DC CampusServicesRoot { get; set; }
@@ -119,6 +129,38 @@ namespace Rhit.Applications.Model {
             return _locations;
         }
     }
+
+    #region TagsCategory - Data Contract
+    [DataContract]
+    public class TagsCategory_DC {
+        public TagsCategory_DC() : base() { }
+
+        [DataMember(Name = "Name")]
+        public string Name { get; set; }
+
+        [DataMember(Name = "Children")]
+        public List<TagsCategory_DC> Children { get; set; }
+
+        [DataMember(Name = "Tags")]
+        public List<Tag_DC> Tags { get; set; }
+    }
+    #endregion
+
+    #region Tag - Data Contract
+    [DataContract]
+    public class Tag_DC {
+        public Tag_DC() : base() { }
+
+        [DataMember(Name = "Name")]
+        public string Name { get; set; }
+
+        [DataMember(Name = "Id")]
+        public int Id { get; set; }
+
+        [DataMember(Name = "IsDefault")]
+        public bool IsDefault { get; set; }
+    }
+    #endregion
 
     #region CampusServicesCategory - Data Contract
     [DataContract]

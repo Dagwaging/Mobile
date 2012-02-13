@@ -87,6 +87,9 @@
     <Compile Include="..\Rhit.Applications.Model.SL\Events\ServiceEvent.cs">
       <Link>Events\ServiceEvent.cs</Link>
     </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Events\TagsEvent.cs">
+      <Link>Events\TagsEvent.cs</Link>
+    </Compile>
     <Compile Include="..\Rhit.Applications.Model.SL\Events\VersionEvent.cs">
       <Link>Events\VersionEvent.cs</Link>
     </Compile>

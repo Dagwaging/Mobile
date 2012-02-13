@@ -36,7 +36,7 @@ namespace Rhit.Applications.ViewModel.Models {
 
         }
 
-        private void ChangeNode(Node oldNode, Node newNode) {
+        private void ChangeNode(PathNode oldNode, PathNode newNode) {
             if(oldNode != null) {
                 oldNode.IsSelected = false;
             }
@@ -92,18 +92,18 @@ namespace Rhit.Applications.ViewModel.Models {
         #endregion
 
         #region CurrentNode
-        public Node CurrentNode {
-            get { return (Node) GetValue(CurrentNodeProperty); }
+        public PathNode CurrentNode {
+            get { return (PathNode) GetValue(CurrentNodeProperty); }
             set { SetValue(CurrentNodeProperty, value); }
         }
 
         public static readonly DependencyProperty CurrentNodeProperty =
-           DependencyProperty.Register("CurrentNode", typeof(Node), typeof(DirectionsViewModel),
+           DependencyProperty.Register("CurrentNode", typeof(PathNode), typeof(DirectionsViewModel),
            new PropertyMetadata(null, new PropertyChangedCallback(OnSurrentNodeChanged)));
 
         private static void OnSurrentNodeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
             DirectionsViewModel instance = d as DirectionsViewModel;
-            instance.ChangeNode(e.OldValue as Node, e.NewValue as Node);
+            instance.ChangeNode(e.OldValue as PathNode, e.NewValue as PathNode);
             
         }
         #endregion

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Rhit.Applications.Model.Services.Requests {
     public class ToursRequestPart : RequestPart {
@@ -84,6 +85,13 @@ namespace Rhit.Applications.Model.Services.Requests {
             return new TagRequestPart(FullUrl, id);
         }
 
+        public TagRequestPart Tag(IList<int> ids) {
+            int first = ids[0];
+            ids.Remove(first);
+            if(ids.Count <= 0) new TagRequestPart(FullUrl, first);
+            return (new TagRequestPart(FullUrl, first)).AddTags(ids);
+        }
+
         [Obsolete("Not a valid request end point")]
         public override string ToString() {
             return base.ToString();
@@ -97,6 +105,13 @@ namespace Rhit.Applications.Model.Services.Requests {
 
         public TagRequestPart Tag(int id) {
             return new TagRequestPart(FullUrl, id);
+        }
+
+        public TagRequestPart AddTags(IList<int> ids) {
+            int first = ids[0];
+            ids.Remove(first);
+            if(ids.Count <= 0) new TagRequestPart(FullUrl, first);
+            return (new TagRequestPart(FullUrl, first)).AddTags(ids);
         }
     }
 
