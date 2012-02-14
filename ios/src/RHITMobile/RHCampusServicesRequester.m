@@ -27,7 +27,7 @@
 
 #define kCampusServicesPath @"/services"
 #define kVersionKey @"Version"
-#define kRootKey @"Root"
+#define kRootKey @"ServicesRoot"
 #define kChildrenKey @"Children"
 #define kLinksKey @"Links"
 #define kNameKey @"Name"

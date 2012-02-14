@@ -25,7 +25,7 @@
 
 #define kTagsPath @"/tours/tags"
 
-#define kRootKey @"Root"
+#define kRootKey @"TagsRoot"
 #define kChildrenKey @"Children"
 #define kTagsKey @"Tags"
 #define kNameKey @"Name"
