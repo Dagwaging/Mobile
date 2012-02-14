@@ -14,6 +14,7 @@ using Microsoft.Phone.Controls.Maps;
 using System.ComponentModel;
 using Rhit.Applications.Model.Services;
 using Rhit.Applications.Mvvm.Commands;
+using Rhit.Applications.ViewModel.Utilities;
 
 namespace Rhit.Applications.ViewModel.Models {
     public class DirectionsViewModel : BaseMapViewModel {
@@ -33,7 +34,6 @@ namespace Rhit.Applications.ViewModel.Models {
 
         private void NodesUpdated(object sender, EventArgs e) {
             CurrentNode = Directions.Start;
-
         }
 
         private void ChangeNode(PathNode oldNode, PathNode newNode) {
@@ -50,9 +50,14 @@ namespace Rhit.Applications.ViewModel.Models {
             }
         }
 
-        public void SetLocation(int id) {
-            if(id < 0) Directions.GetTestDirections();
-            else Directions.GetDirections(id);
+        public void SetLocation(int id, bool isTour) {
+            if(isTour) {
+                Directions.GetTestTour();
+                
+            } else {
+                if(id < 0) Directions.GetTestDirections();
+                else Directions.GetDirections(id);
+            }
         }
 
         #region Next Command

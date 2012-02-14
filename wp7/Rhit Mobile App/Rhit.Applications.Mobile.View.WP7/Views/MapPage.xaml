@@ -35,6 +35,12 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
+        <StackPanel>
+            <StackPanel.Background>
+                <SolidColorBrush Color="Black" Opacity="0.4" />
+            </StackPanel.Background>
+        </StackPanel>
+
         <maps:Map Name="MyMap" DataContext="{StaticResource ViewModel}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"  
                   ZoomLevel="{Binding ZoomLevel, Mode=TwoWay}" Center="{Binding Center, Mode=TwoWay}"
                   CredentialsProvider="AthZ1tu5ROM0PUWcIYFSxC1oQALFR-g0aoFIuL9tlbeGJ9Z6qKIRYoB_jGpct8Yu">
@@ -61,8 +67,9 @@
             <appbar:AppBar.MenuItems>
                 <appbar:AppBarMenuItem Text="Quick List" Command="{Binding QuickListCommand}"/>
                 <appbar:AppBarMenuItem Text="Search" Command="{Binding SearchCommand}"/>
-                <appbar:AppBarMenuItem Text="Directions Sample" Command="{Binding DirectionsCommand}" />
                 <appbar:AppBarMenuItem Text="Campus Services" Command="{Binding CampusServicesCommand}" />
+                <appbar:AppBarMenuItem Text="Directions Sample" Command="{Binding DirectionsCommand}" />
+                <appbar:AppBarMenuItem Text="Tours Sample" Command="{Binding ToursCommand}" />
                 <appbar:AppBarMenuItem Text="Settings" Command="{Binding SettingsCommand}"/>
             </appbar:AppBar.MenuItems>
         </appbar:AppBar>

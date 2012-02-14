@@ -64,7 +64,7 @@ namespace Rhit.Applications.ViewModel.Controllers {
                 Tags.Add(new Tag(tag));
         }
 
-        internal int Id { get; protected set; }
+        internal int Id { get; set; }
 
         public string Label { get; internal set; }
 
@@ -79,7 +79,7 @@ namespace Rhit.Applications.ViewModel.Controllers {
             Label = model.Name;
         }
 
-        internal int Id { get; protected set; }
+        internal int Id { get; set; }
 
         public string Label { get; protected set; }
     }

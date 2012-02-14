@@ -14,10 +14,11 @@ namespace Rhit.Applications.View.Views {
         public MapPage() {
             DataContext = this;
             InitializeComponent();
-
+        
             MyMap.Tap += new EventHandler<System.Windows.Input.GestureEventArgs>(Map_Tap);
-
+        
             DirectionsCommand = new RelayCommand(p => GotoDirections());
+            ToursCommand = new RelayCommand(p => GotoTours());
             CampusServicesCommand = new RelayCommand(p => GotoCampusServices());
             QuickListCommand = new RelayCommand(p => GotoQuickList());
             SearchCommand = new RelayCommand(p => GotoSearch());
@@ -27,6 +28,15 @@ namespace Rhit.Applications.View.Views {
         protected override void OnNavigatedTo(NavigationEventArgs e) {
             RhitMapExtender.Attach(MyMap);
         }
+
+        #region Tours Command
+        public ICommand ToursCommand { get; private set; }
+
+        private void GotoTours() {
+            NavigationService.Navigate(new Uri("/Views/DirectionsPage.xaml?Tours=true", UriKind.Relative));
+        }
+
+        #endregion
 
         #region Directions Command
         public ICommand DirectionsCommand { get; private set; }

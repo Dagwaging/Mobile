@@ -20,19 +20,9 @@ namespace Rhit.Applications.Model.Services.Requests {
             get { return new OnCampusRequestPart(FullUrl); }
         }
 
-        public ToursTestRequestPart Test {
-            get { return new ToursTestRequestPart(FullUrl); }
-        }
-
         [Obsolete("Not a valid request end point")]
         public override string ToString() {
             return base.ToString();
-        }
-    }
-
-    public class ToursTestRequestPart : RequestPart {
-        public ToursTestRequestPart(string baseUrl) : base(baseUrl) {
-            PartUrl = "/testing/tours{0}";
         }
     }
 

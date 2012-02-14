@@ -4,6 +4,7 @@ using Rhit.Applications.ViewModel.Controllers;
 using System.ComponentModel;
 using System.Windows;
 using System;
+using Rhit.Applications.ViewModel.Utilities;
 
 namespace Rhit.Applications.ViewModel.Models {
     public class ServicesViewModel : DependencyObject {

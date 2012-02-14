@@ -79,6 +79,7 @@
     </Compile>
     <Compile Include="Converters\BoolToGridSizeConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
+    <Compile Include="Converters\StringToImageConverter.cs" />
     <Compile Include="Converters\ListToVisibilityConverter.cs" />
     <Compile Include="Converters\ObjectToBoolConverter.cs" />
     <Compile Include="Converters\ObjectToVisibilityConverter.cs" />
@@ -123,6 +124,14 @@
     </Content>
     <Content Include="Assets\Icons\bigsearch.png" />
     <Content Include="Assets\Icons\directions.png" />
+    <Content Include="Assets\Icons\Directions\TurnDownStairs.png" />
+    <Content Include="Assets\Icons\Directions\TurnEnterBuilding.png" />
+    <Content Include="Assets\Icons\Directions\TurnExitBuilding.png" />
+    <Content Include="Assets\Icons\Directions\TurnLeft.png" />
+    <Content Include="Assets\Icons\Directions\TurnSharpLeft.png" />
+    <Content Include="Assets\Icons\Directions\TurnSlightLeft.png" />
+    <Content Include="Assets\Icons\Directions\TurnStraight.png" />
+    <Content Include="Assets\Icons\Directions\TurnUpStairs.png" />
     <Content Include="Assets\Icons\position.png" />
     <Content Include="Assets\Icons\rose-hulman.png" />
     <Content Include="Assets\Icons\search.png" />

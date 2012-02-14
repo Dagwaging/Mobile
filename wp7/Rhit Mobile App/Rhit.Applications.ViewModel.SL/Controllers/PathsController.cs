@@ -48,28 +48,32 @@ namespace Rhit.Applications.ViewModel.Controllers {
         }
         #endregion
 
-        private void DirectionsReturned(object sender, DirectionsEventArgs e) {
-            PathNode.Restart();
+        private void Reset() {
+            PathNode.Reset();
             Coordinates.Clear();
             Nodes.Clear();
             Start = null;
+            End = null;
+        }
+
+        private void DirectionsReturned(object sender, DirectionsEventArgs e) {
+            Reset();
+            ProccessNewNodes(e.Paths);
+        }
+
+        private void ProccessNewNodes(IList<DirectionPath_DC> models) {
             PathNode lastNode = null;
-            foreach(DirectionPath_DC path in e.Paths) {
-                string action = path.ConvertAction();
-                if(string.IsNullOrWhiteSpace(action))
-                    Coordinates.Add(new GeoCoordinate(path.Latitude, path.Longitude));
-                else {
-                    PathNode node = new PathNode(path.Latitude, path.Longitude) {
-                        Action = action,
-                    };
-                    Coordinates.Add(node.Center);
+            foreach(DirectionPath_DC pathModel in models) {
+                PathNode node = new PathNode(pathModel);
+                if(Start == null) Start = node;
+                Coordinates.Add(node.Center);
+                if(node.Action != DirectionActionType.None) {
                     Nodes.Add(node);
                     if(lastNode != null) {
                         lastNode.Next = node;
                         node.Previous = lastNode;
                     }
                     lastNode = node;
-                    if(Start == null) Start = node;
                 }
             }
             End = lastNode;

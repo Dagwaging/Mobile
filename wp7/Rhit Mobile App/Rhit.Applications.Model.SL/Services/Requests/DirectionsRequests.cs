@@ -19,9 +19,20 @@ namespace Rhit.Applications.Model.Services.Requests {
             get { return new DirectionsTestRequestPart(FullUrl); }
         }
 
+        public ToursTestRequestPart ToursTest {
+            get { return new ToursTestRequestPart(FullUrl); }
+        }
+
         [Obsolete("Not a valid request end point")]
         public override string ToString() {
             return base.ToString();
+        }
+    }
+
+    public class ToursTestRequestPart : RequestPart {
+        public ToursTestRequestPart(string baseUrl)
+            : base(baseUrl) {
+            PartUrl = "/testing/tour{0}";
         }
     }
 
@@ -103,7 +114,7 @@ namespace Rhit.Applications.Model.Services.Requests {
     public class ToLocRequestPart : IdRequestPart {
         public ToLocRequestPart(string baseUrl, int id)
             : base(baseUrl, id) {
-            PartUrl = "/toloc/{1}{0}";
+            PartUrl = "/toloc/{1}{0}?wait=true";
         }
     }
 

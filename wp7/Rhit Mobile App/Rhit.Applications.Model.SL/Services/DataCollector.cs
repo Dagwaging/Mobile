@@ -308,7 +308,7 @@ namespace Rhit.Applications.Model.Services {
         }
 
         public void GetTestTour() {
-            RequestPart request = new RequestBuilder(BaseAddress).Tours.Test;
+            RequestPart request = new RequestBuilder(BaseAddress).Directions.ToursTest;
             Connection.MakeRequest(request, RequestType.Tours);
         }
 
@@ -322,7 +322,7 @@ namespace Rhit.Applications.Model.Services {
         }
 
         public void GetDirections(int fromId, int toId) {
-            RequestPart request = new RequestBuilder(BaseAddress).Directions.FromLoc(fromId).ToLoc(toId);
+            RequestPart request = new RequestBuilder(BaseAddress).Directions.FromLoc(1700000).ToLoc(25);
             Connection.MakeRequest(request, RequestType.Directions);
         }
 

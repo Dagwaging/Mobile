@@ -14,8 +14,8 @@ namespace Rhit.Applications.Model {
     [DataContract]
     public class ServerObject {
         #region OffCampusResponse
-        [DataMember(Name = "LoicationIds")]
-        public List<int> LoicationIds { get; set; }
+        [DataMember(Name = "LocationIds")]
+        public List<int> LocationIds { get; set; }
         #endregion
 
         #region TagsResponse
@@ -24,7 +24,7 @@ namespace Rhit.Applications.Model {
         #endregion
 
         #region CampusServicesResponse
-        [DataMember(Name = "Root")]
+        [DataMember(Name = "ServicesRoot")]
         public CampusServicesCategory_DC CampusServicesRoot { get; set; }
         #endregion
 
@@ -312,14 +312,6 @@ namespace Rhit.Applications.Model {
     #region DirectionPath - Data Contract
     [DataContract]
     public class DirectionPath_DC {
-        public static Dictionary<string, string> ActionCodeDict = new Dictionary<string, string>() {
-            {"GS", "Go Straight"}, {"CS", "Cross the Street"}, {"FP", "Follow the Path"},
-            {"L1", "Slight Left"}, {"R1", "Slight Right"}, {"L2", "Turn Left"},
-            {"R2", "Turn Right"}, {"L3", "Sharp Left"}, {"R3", "Sharp Right"},
-            {"EN", "Enter the Building"}, {"EX", "Exit the Building"},
-            {"US", "Go Up the Stairs"}, {"DS", "Go Down the Stairs"}, {"", ""},
-        };
-
         public DirectionPath_DC() : base() {
             Action = "";
         }
@@ -344,11 +336,6 @@ namespace Rhit.Applications.Model {
 
         [DataMember(Name = "Location")]
         public int Location { get; set; }
-
-        public string ConvertAction() {
-            if(Action == null) return "";
-            return ActionCodeDict[Action];
-        }
     }
     #endregion
 

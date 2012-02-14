@@ -42,7 +42,7 @@
             <RowDefinition Height="4*"/>
         </Grid.RowDefinitions>
         
-        <maps:Map Name="MyMap" Grid.RowSpan="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ZoomLevel="{Binding ZoomLevel, Mode=TwoWay}" Center="{Binding Center, Mode=TwoWay}" CredentialsProvider="AthZ1tu5ROM0PUWcIYFSxC1oQALFR-g0aoFIuL9tlbeGJ9Z6qKIRYoB_jGpct8Yu" AnimationLevel="Full">
+        <maps:Map Name="MyMap" Grid.RowSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ZoomLevel="{Binding ZoomLevel, Mode=TwoWay}" Center="{Binding Center, Mode=TwoWay}" CredentialsProvider="AthZ1tu5ROM0PUWcIYFSxC1oQALFR-g0aoFIuL9tlbeGJ9Z6qKIRYoB_jGpct8Yu" AnimationLevel="Full" LogoVisibility="Collapsed">
 
             <maps:MapPolyline Locations="{Binding Directions.Coordinates}" Stroke="Blue" StrokeThickness="5" />
             
@@ -64,7 +64,7 @@
 
         <Grid Grid.Row="1">
             <Grid.Background>
-                <SolidColorBrush Color="Black" Opacity="1" />
+                <SolidColorBrush Color="Black" Opacity="0.5" />
             </Grid.Background>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
@@ -82,15 +82,21 @@
             <ListBox ItemsSource="{Binding Directions.Nodes}" SelectedValue="{Binding CurrentNode, Mode=TwoWay}"  >
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Grid Margin="10, 20">
+                        <Grid Margin="0, 20">
                             <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="10*" />
                             </Grid.ColumnDefinitions>
                             <Grid Grid.Column="0" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="5">
-                                <Ellipse Fill="White" Width="20" Height="20" />
-                                <Ellipse Fill="{StaticResource PhoneAccentBrush}" Width="20" Height="20" Visibility="{Binding IsSelected, Converter={StaticResource VisibilityConverter}}" />
-                                <TextBlock Text="{Binding Number}" FontSize="13" FontWeight="Bold" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="{Binding Action, Converter={StaticResource ImageConverter}}" />
+                                    <Grid VerticalAlignment="Top" Margin="5,0,0,0">
+                                        <Ellipse Fill="White" Width="18" Height="18" />
+                                        <Ellipse Fill="{StaticResource PhoneAccentBrush}" Width="20" Height="20" Visibility="{Binding IsSelected, Converter={StaticResource VisibilityConverter}}" />
+                                        <TextBlock Text="{Binding Number}" FontSize="13" FontWeight="Bold" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    </Grid>
+                                    
+                                </StackPanel>
                             </Grid>
                             <TextBlock Grid.Column="1" Text="{Binding Action}" FontSize="40" VerticalAlignment="Center" />
                         </Grid>
