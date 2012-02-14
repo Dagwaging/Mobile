@@ -10,15 +10,15 @@ namespace RHITMobileUtil
     public class Program
     {
         private static int exec = 0;
-        public static string upfile = @"C:\Users\glowskst\Desktop\Locations\a.txt";
-        public static string trifile = @"C:\Users\glowskst\Desktop\Locations\Moench2.bmp";
+        //public static string upfile = @"C:\Users\glowskst\Desktop\Locations\a.txt";
+        public static string trifile = @"C:\Users\glowskst\Desktop\Locations\Union2.png";
 
         [STAThreadAttribute]
         public static void Main(string[] args)
         {
             new List<Action>()
             {
-                UpdateLocations,
+                //UpdateLocations,
                 Triangulate,
             }[exec]();
         }
@@ -31,7 +31,7 @@ namespace RHITMobileUtil
             }
         }
 
-        public static void UpdateLocations()
+        /*public static void UpdateLocations()
         {
             string connectionStr = @"Data Source=mobilewin.csse.rose-hulman.edu\RHITMobile;Initial Catalog=MapData;User Id=admin;Password=rhitMobile56";
 
@@ -227,6 +227,6 @@ namespace RHITMobileUtil
 
             Console.WriteLine("COMPLETED");
             Console.ReadKey();
-        }
+        }*/
     }
 }

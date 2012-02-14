@@ -29,8 +29,11 @@ namespace RHITMobile {
 
             var TM = new ThreadManager();
 
-            // Start the monitors for the Directions Handler
+            // Start the monitors for the Directions and Tours Handlers
             DirectionsFinder.EnqueueMonitors(TM);
+            TourFinder.EnqueueMonitors(TM);
+
+            TM.Enqueue(WebController.WriteLines(TM), ThreadPriority.Low);
 
             // Start the expiration checker for admin logins
             TM.Enqueue(AdminHandler.DeleteExpiredLogins(TM), ThreadPriority.Low);
@@ -58,7 +61,7 @@ namespace RHITMobile {
                 try {
                     switch (request) {
                         case "help":
-                            Console.WriteLine("update\nstatus\nexecutions\nqueues\nthreads\ndirections\nexit");
+                            Console.WriteLine("update\nstatus\nexecutions\nqueues\nthreads\ndirections\ntours\nexit");
                             break;
                         case "update":
                             UpdateServerVersion();
@@ -68,6 +71,7 @@ namespace RHITMobile {
                             TM.WriteQueueStatus();
                             TM.WriteThreadStatus();
                             DirectionsFinder.WriteStatus();
+                            TourFinder.WriteStatus();
                             break;
                         case "executions":
                             TM.WriteExecutionStatus();
@@ -80,6 +84,9 @@ namespace RHITMobile {
                             break;
                         case "directions":
                             DirectionsFinder.WriteStatus();
+                            break;
+                        case "tours":
+                            TourFinder.WriteStatus();
                             break;
                         case "exit":
                             System.Environment.Exit(0);

@@ -15,9 +15,12 @@ namespace FakeClient
     public class Tracker {
         public Tracker() {
             Times = new List<TimeSpan>();
+            BadResponses = new List<HttpWebResponse>();
         }
 
         public List<TimeSpan> Times { get; set; }
+
+        public List<HttpWebResponse> BadResponses { get; set; }
     }
 
     class Program
@@ -25,14 +28,17 @@ namespace FakeClient
         static void Main(string[] args)
         {
             var tracker = new Tracker();
-            var numExec = 1000;
+            var numExec = 30;
 
             var tasks = new List<Task>();
             for (int i = 0; i < numExec; i++) {
                 tasks.Add(Task.Factory.StartNew(new Action<object>((t) => {
                     var start = DateTime.Now;
-                    var request = HttpWebRequest.Create("http://localhost:5600/locations/data/all");
-                    request.GetResponse();
+                    var request = HttpWebRequest.Create("http://localhost:5600/tours/oncampus/fromloc/111/1/201");
+                    var response = (HttpWebResponse)request.GetResponse();
+                    if (response.StatusCode != HttpStatusCode.OK) {
+                        ((Tracker)t).BadResponses.Add(response);
+                    }
                     ((Tracker)t).Times.Add(DateTime.Now - start);
                 }), tracker));
             }
@@ -42,24 +48,6 @@ namespace FakeClient
             Console.WriteLine("Average Time: " + tracker.Times.Sum(ts => ts.TotalSeconds) / numExec + " seconds");
 
             Console.ReadLine();
-
-            /*var stream = client.GetStream();
-            var encoding = new ASCIIEncoding();
-            var message = new ClientRequest() { Request = 400, MyVersion = 0.0 };
-            byte[] request = encoding.GetBytes(message.Serialize());
-            stream.Write(request, 0, request.Length);
-            stream.WriteByte(0);
-
-            byte[] response = new byte[1000];
-            while (true)
-            {
-                int bytesRead = stream.Read(response, 0, 1000);
-                if (bytesRead == 0)
-                    break;
-                Console.WriteLine(encoding.GetString(response, 0, bytesRead));
-            }
-
-            client.Close();*/
         }
     }
 

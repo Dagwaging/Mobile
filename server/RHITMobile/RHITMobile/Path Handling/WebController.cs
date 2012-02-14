@@ -11,6 +11,9 @@ namespace RHITMobile
 {
     public static class WebController
     {
+        public static bool[] RequestsBeingHandled = new bool[10];
+        public static int RequestCounter = 0;
+
         public static IEnumerable<ThreadInfo> HandleClients(ThreadManager TM)
         {
             var currentThread = TM.CurrentThread;
@@ -54,10 +57,6 @@ namespace RHITMobile
                     try
                     {
                         context = TM.GetResult<HttpListenerContext>(currentThread);
-                        if (context.Request.RawUrl.StartsWith("/admin/authenticate/"))
-                            Console.WriteLine("[{0}]\nHandling request: {1}\n", DateTime.Now, "/admin/authenticate/...");
-                        else
-                            Console.WriteLine("[{0}]\nHandling request: {1}\n", DateTime.Now, context.Request.RawUrl);
                     }
                     catch (Exception ex)
                     {
@@ -75,6 +74,52 @@ namespace RHITMobile
         private static IEnumerable<ThreadInfo> HandleRequest(ThreadManager TM, HttpListenerContext context)
         {
             var currentThread = TM.CurrentThread;
+
+            int requestNum = 0;
+            string line = "+------------------------------------------------------------------------------+";
+            Console.Write(line);
+            string url;
+            if (context.Request.RawUrl.StartsWith("/admin/authenticate/"))
+                url = String.Format("[{0}] {1}", DateTime.Now, "/admin/authenticate/...");
+            else
+                url = String.Format("[{0}] {1}", DateTime.Now, context.Request.RawUrl);
+            if (url.Length > 76)
+                url = url.Substring(0, 73) + "...";
+            Console.Write("| " + url.PadRight(76, ' ') + " |");
+
+            requestNum = RequestCounter;
+            int i = 0;
+            while (i < 10 && RequestsBeingHandled[requestNum]) {
+                i++;
+                RequestCounter = (RequestCounter + 1) % 10;
+                requestNum = RequestCounter;
+            }
+            if (i == 10)
+                requestNum = 10;
+
+            RequestCounter = (RequestCounter + 1) % 10;
+
+            if (requestNum < 10)
+                line = line.Remove(requestNum * 8 + 1, 6).Insert(requestNum * 8 + 1, "+    +");
+            Console.Write(line);
+
+            if (requestNum < 10)
+                RequestsBeingHandled[requestNum] = true;
+
+            if (requestNum < 10)
+                for (int j = 0; j < 10; j++)
+                    if (requestNum == j)
+                        Console.Write("  \\  /  ");
+                    else if (RequestsBeingHandled[j])
+                        Console.Write("   ||   ");
+                    else
+                        Console.Write("        ");
+
+            for (int j = 0; j < 10; j++)
+                if (RequestsBeingHandled[j])
+                    Console.Write("   ||   ");
+                else
+                    Console.Write("        ");
 
             JsonResponse result = null;
 
@@ -118,9 +163,44 @@ namespace RHITMobile
             {
                 b = encoding.GetBytes(result.Message);
             }
-            context.Response.OutputStream.Write(b, 0, b.Length);
-            context.Response.StatusCode = (int)result.StatusCode;
-            context.Response.Close();
+
+            if (requestNum < 10)
+                RequestsBeingHandled[requestNum] = false;
+
+            try {
+                context.Response.OutputStream.Write(b, 0, b.Length);
+                context.Response.StatusCode = (int)result.StatusCode;
+                context.Response.Close();
+
+                if (requestNum < 10) {
+                    for (int j = 0; j < 10; j++)
+                        if (requestNum == j)
+                            Console.Write("  DONE  ");
+                        else if (RequestsBeingHandled[j])
+                            Console.Write("   ||   ");
+                        else
+                            Console.Write("        ");
+                }
+            } catch {
+                if (requestNum < 10) {
+                    for (int j = 0; j < 10; j++)
+                        if (requestNum == j)
+                            Console.Write(" CANCEL ");
+                        else if (RequestsBeingHandled[j])
+                            Console.Write("   ||   ");
+                        else
+                            Console.Write("        ");
+                }
+            }
+
+            if (requestNum < 10) {
+                for (int j = 0; j < 10; j++)
+                    if (RequestsBeingHandled[j])
+                        Console.Write("   ||   ");
+                    else
+                        Console.Write("        ");
+            }
+
             yield return TM.Return(currentThread, null);
         }
 
@@ -133,6 +213,19 @@ namespace RHITMobile
                 builder.Append(path);
             }
             return builder.ToString();
+        }
+
+        public static IEnumerable<ThreadInfo> WriteLines(ThreadManager TM) {
+            var currentThread = TM.CurrentThread;
+
+            while (true) {
+                yield return TM.Sleep(currentThread, 1000);
+                for (int j = 0; j < 10; j++)
+                    if (RequestsBeingHandled[j])
+                        Console.Write("   ||   ");
+                    else
+                        Console.Write("        ");
+            }
         }
     }
 

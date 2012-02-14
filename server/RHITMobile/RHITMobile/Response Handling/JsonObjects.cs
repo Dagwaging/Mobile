@@ -448,11 +448,11 @@ namespace RHITMobile {
     public class TagsResponse : JsonObject {
         public TagsResponse(double version) {
             Version = version;
-            Root = new TagCategory();
+            TagsRoot = new TagCategory();
         }
 
         [DataMember]
-        public TagCategory Root { get; set; }
+        public TagCategory TagsRoot { get; set; }
         [DataMember]
         public double Version { get; set; }
     }
@@ -503,11 +503,11 @@ namespace RHITMobile {
     [DataContract]
     public class LocationIdsResponse : JsonObject {
         public LocationIdsResponse(List<int> locations) {
-            Locations = locations;
+            LocationIds = locations;
         }
 
         [DataMember]
-        public List<int> Locations { get; set; }
+        public List<int> LocationIds { get; set; }
     }
     #endregion
 
@@ -516,11 +516,11 @@ namespace RHITMobile {
     public class CampusServicesResponse : JsonObject {
         public CampusServicesResponse(double version) {
             Version = version;
-            Root = new CampusServicesCategory();
+            ServicesRoot = new CampusServicesCategory();
         }
 
         [DataMember]
-        public CampusServicesCategory Root { get; set; }
+        public CampusServicesCategory ServicesRoot { get; set; }
         [DataMember]
         public double Version { get; set; }
     }
@@ -645,6 +645,16 @@ namespace RHITMobile {
             Partition = row.Table.Columns.Contains("partition") ? (int?)row["partition"] : null;
         }
 
+        public Node(DirectionPath path) {
+            Id = path.Id;
+            Lat = path.Lat;
+            Lon = path.Lon;
+            Altitude = path.Altitude;
+            Outside = path.Outside;
+            Location = path.Location;
+            Partition = null;
+        }
+
         [DataMember]
         public double Altitude { get; set; }
         [DataMember]
@@ -661,8 +671,12 @@ namespace RHITMobile {
         public int? Partition { get; set; }
 
         public double HDistanceTo(Node node) {
-            var x = (node.Lon - this.Lon) * Program.DegToRad * Math.Cos((node.Lat + this.Lat) * Program.DegToRad / 2);
-            var y = (node.Lat - this.Lat) * Program.DegToRad;
+            return HDistanceTo(node.Lat, node.Lon);
+        }
+
+        public double HDistanceTo(double lat, double lon) {
+            var x = (lon - this.Lon) * Program.DegToRad * Math.Cos((lat + this.Lat) * Program.DegToRad / 2);
+            var y = (lat - this.Lat) * Program.DegToRad;
             return Math.Sqrt(x * x + y * y) * Program.EarthRadius;
         }
     }

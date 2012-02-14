@@ -27,14 +27,39 @@ namespace RHITMobile {
         private double _messageFindingDone = 0;
         private int _done { get { return (int)(_pathFindingDone * 80 + _messageFindingDone * 20); } }
         private int _id;
-
-        private Node _start;
         private DirectionsSettings _settings;
-        private List<DirectionPath> _paths = new List<DirectionPath>();
+        private double _maxDist;
+
+        public List<DirectionPath> Paths { get; set; }
+        public Node Start { get; set; }
+        public bool Valid { get; set; }
+        public double TotalDist { get; set; }
+
+        private Node _end = null;
+        public Node End {
+            get {
+                return _end ?? Start;
+            }
+            set {
+                _end = value;
+            }
+        }
 
         public DirectionsFinder(DataRow row) {
             _id = _directions.Insert(this);
-            _start = new Node(row);
+            Start = new Node(row);
+            Paths = new List<DirectionPath>();
+            _maxDist = Double.MaxValue;
+            Valid = false;
+        }
+
+        public DirectionsFinder(Node start, DirectionsSettings settings, double maxDist) {
+            _id = -1;
+            Start = start;
+            Paths = new List<DirectionPath>();
+            _settings = settings;
+            _maxDist = maxDist;
+            Valid = false;
         }
 
         protected override IEnumerable<ThreadInfo> HandleNoPath(ThreadManager TM, Dictionary<string, string> query, object state) {
@@ -61,7 +86,7 @@ namespace RHITMobile {
                 yield return TM.Return(currentThread, new JsonResponse(new DirectionsResponse(done, _id)));
             } else {
                 var directions = new DirectionsResponse(100, _id);
-                directions.Result = new Directions(_paths);
+                directions.Result = new Directions(Paths);
                 yield return TM.Return(currentThread, new JsonResponse(directions));
             }
         }
@@ -71,11 +96,18 @@ namespace RHITMobile {
 
             _settings = new DirectionsSettings(query);
 
-            yield return TM.Await(currentThread, GetShortestPath(TM, to));
+            yield return TM.Await(currentThread, GetShortestPathToLocation(TM, to));
+            try {
+                TM.GetResult(currentThread);
+            } catch {
+                _messageFindingDone = 1;
+            }
 
             _pathFindingDone = 1;
 
-            yield return TM.Await(currentThread, GetDirectionMessages(TM));
+            if (Valid) {
+                yield return TM.Await(currentThread, GetDirectionMessages(TM, Paths, d => _messageFindingDone = d));
+            }
 
             _messageFindingDone = 1;
             yield return TM.Sleep(currentThread, 60000);
@@ -85,32 +117,64 @@ namespace RHITMobile {
         }
 
         #region Shortest Path
-        private IEnumerable<ThreadInfo> GetShortestPath(ThreadManager TM, int to) {
+        public IEnumerable<ThreadInfo> GetShortestPathToNode(ThreadManager TM, int toNode) {
+            var currentThread = TM.CurrentThread;
+
+            if (Start.Id == toNode) {
+                // Already at goal
+                Valid = true;
+                _pathFindingDone = 1;
+                yield return TM.Return(currentThread, new object());
+            }
+
+            var goalNodes = new Dictionary<int, SortedSet<Node>>();
+            yield return TM.MakeDbCall(currentThread, Program.ConnectionString, "spGetNode", new SqlParameter("@node", toNode));
+            var nodeData = TM.GetResult<DataTable>(currentThread).Rows[0];
+
+            yield return TM.MakeDbCall(currentThread, Program.ConnectionString, "spGetNodePartitions", new SqlParameter("@node", toNode));
+            using (var table = TM.GetResult<DataTable>(currentThread)) {
+                foreach (DataRow row in table.Rows) {
+                    var node = new Node(nodeData);
+                    node.Partition = (int)row["partition"];
+                    goalNodes[node.Partition.Value] = new SortedSet<Node>(new NodeComparer());
+                    goalNodes[node.Partition.Value].Add(node);
+                }
+            }
+
+            yield return TM.Await(currentThread, GetShortestPath(TM, goalNodes));
+            yield return TM.Return(currentThread);
+        }
+
+        public IEnumerable<ThreadInfo> GetShortestPathToLocation(ThreadManager TM, int toLoc) {
             var currentThread = TM.CurrentThread;
 
             // See if the start node is already in the goal location
-            yield return TM.MakeDbCall(currentThread, Program.ConnectionString, "spGetLocationNodes", new SqlParameter("@location", to));
+            yield return TM.MakeDbCall(currentThread, Program.ConnectionString, "spGetLocationNodes", new SqlParameter("@location", toLoc));
             using (var table = TM.GetResult<DataTable>(currentThread)) {
                 if (table.Rows.Count == 0) {
                     // Error - no nodes in goal location
-                    yield return TM.Return(currentThread);
+                    Valid = false;
+                    _pathFindingDone = 1;
+                    yield return TM.Return(currentThread, new object());
                 }
 
                 foreach (DataRow row in table.Rows) {
-                    if (new Node(row).Id == _start.Id) {
+                    if (new Node(row).Id == Start.Id) {
                         // Already at goal
-                        yield return TM.Return(currentThread);
+                        Valid = true;
+                        _pathFindingDone = 1;
+                        yield return TM.Return(currentThread, new object());
                     }
                 }
             }
 
             // Get the nodes on the boundary of the goal location
             var goalNodes = new Dictionary<int, SortedSet<Node>>();
-            yield return TM.MakeDbCall(currentThread, Program.ConnectionString, "spGetLocationBoundaryNodes", new SqlParameter("@location", to));
+            yield return TM.MakeDbCall(currentThread, Program.ConnectionString, "spGetLocationBoundaryNodes", new SqlParameter("@location", toLoc));
             using (var table = TM.GetResult<DataTable>(currentThread)) {
                 if (table.Rows.Count == 0) {
                     // Error - no nodes on goal location's boundary
-                    yield return TM.Return(currentThread);
+                    yield return TM.Return(currentThread, new object());
                 }
 
                 foreach (DataRow row in table.Rows) {
@@ -122,36 +186,55 @@ namespace RHITMobile {
                 }
             }
 
+            yield return TM.Await(currentThread, GetShortestPath(TM, goalNodes));
+            yield return TM.Return(currentThread);
+        }
+
+        private IEnumerable<ThreadInfo> GetShortestPath(ThreadManager TM, Dictionary<int, SortedSet<Node>> goalNodes) {
+            var currentThread = TM.CurrentThread;
+
             // Get the possible partition paths
             Stack<PartitionPass> partitions = new Stack<PartitionPass>();
-            partitions.Push(new PartitionPass(-1, _start, 0));
+            partitions.Push(new PartitionPass(-1, Start, 0));
             yield return TM.Await(currentThread, GetPartitionPaths(TM, partitions, goalNodes));
             var passes = TM.GetResult<List<List<PartitionPass>>>(currentThread);
 
             SortedSet<TargetPath> queue = new SortedSet<TargetPath>(new TargetPathComparer());
             Dictionary<int, ShortestPath> shortestPaths = new Dictionary<int, ShortestPath>();
 
-            shortestPaths[_start.Id] = new ShortestPath();
+            shortestPaths[Start.Id] = new ShortestPath();
             foreach (var pass in passes) {
-                queue.Add(new TargetPath(_start, 0, pass, queue, _settings));
+                var targetPath = new TargetPath(Start, 0, pass, queue, _settings);
+                if (targetPath.BestDist <= _maxDist)
+                    queue.Add(targetPath);
             }
 
             while (true) {
+                if (!queue.Any()) {
+                    Valid = false;
+                    _pathFindingDone = 1;
+                    yield return TM.Return(currentThread, new object());
+                }
                 var currentPath = queue.First();
 
                 _pathFindingDone = Math.Max(_pathFindingDone, currentPath.DistSoFar * currentPath.DistSoFar / (currentPath.BestDist * currentPath.BestDist));
 
                 if (goalNodes.Any(kvp => kvp.Value.Contains(currentPath.CurrentNode))) {
+                    End = currentPath.CurrentNode;
+                    TotalDist = 0;
                     var currentNode = currentPath.CurrentNode;
                     var prevNode = shortestPaths[currentNode.Id].PrevNode;
-                    _paths.Add(new DirectionPath(currentNode.Lat, currentNode.Lon, null, true, null, currentNode.Altitude, currentNode.Location, currentNode.Outside, shortestPaths[currentNode.Id].Id, shortestPaths[currentNode.Id].Forward));
-                    while (currentNode.Id != _start.Id) {
-                        _paths.Insert(0, new DirectionPath(prevNode.Lat, prevNode.Lon, null, false, null, prevNode.Altitude, prevNode.Location, prevNode.Outside, shortestPaths[currentNode.Id].Id, shortestPaths[currentNode.Id].Forward));
+                    Paths.Add(new DirectionPath(currentNode.Lat, currentNode.Lon, null, true, null, currentNode.Altitude, currentNode.Location, currentNode.Outside, shortestPaths[currentNode.Id].Id, shortestPaths[currentNode.Id].Forward));
+                    while (currentNode.Id != Start.Id) {
+                        Paths.Insert(0, new DirectionPath(prevNode.Lat, prevNode.Lon, null, false, null, prevNode.Altitude, prevNode.Location, prevNode.Outside, shortestPaths[currentNode.Id].Id, shortestPaths[currentNode.Id].Forward));
+                        TotalDist += shortestPaths[currentNode.Id].MyDist;
                         currentNode = prevNode;
                         prevNode = shortestPaths[currentNode.Id].PrevNode;
                     }
-                    _paths.First().Flag = true;
-                    yield return TM.Return(currentThread);
+                    Paths.First().Flag = true;
+                    Valid = true;
+                    _pathFindingDone = 1;
+                    yield return TM.Return(currentThread, new object());
                 }
 
                 yield return TM.MakeDbCall(currentThread, Program.ConnectionString, "spGetPathsFromNode",
@@ -160,25 +243,29 @@ namespace RHITMobile {
                 using (var table = TM.GetResult<DataTable>(currentThread)) {
                     foreach (DataRow row in table.Rows) {
                         var path = new PathToNode(row, currentPath.CurrentNode.Id, currentPath.PartitionsLeft.First().Partition);
-                        double pathDist = _settings.WeightedDist(currentPath.CurrentNode, path.Node);
+                        double hDist;
+                        double pathDist = _settings.WeightedDist(currentPath.CurrentNode, path.Node, out hDist);
 
                         if (shortestPaths.ContainsKey(path.Node.Id)) {
                             if (shortestPaths[path.Node.Id].TotalDist > currentPath.DistSoFar + pathDist) {
-                                shortestPaths[path.Node.Id].SetPrevNode(currentPath.CurrentNode, pathDist, path.Path.Id, path.Forward, shortestPaths);
+                                shortestPaths[path.Node.Id].SetPrevNode(currentPath.CurrentNode, pathDist, hDist, path.Path.Id, path.Forward, shortestPaths);
                             } else if (shortestPaths[path.Node.Id].TotalDist < currentPath.DistSoFar + pathDist) {
                                 continue;
                             }
                             // TODO
                         } else {
-                            shortestPaths[path.Node.Id] = new ShortestPath(currentPath.CurrentNode, pathDist, path.Path.Id, path.Forward, shortestPaths);
+                            shortestPaths[path.Node.Id] = new ShortestPath(currentPath.CurrentNode, pathDist, hDist, path.Path.Id, path.Forward, shortestPaths);
                             // TODO
                         }
 
+                        TargetPath targetPath;
                         if (path.Node.Id == currentPath.PartitionsLeft.First().Target.Id) {
-                            queue.Add(new TargetPath(path.Node, shortestPaths[path.Node.Id].TotalDist, currentPath.PartitionsLeft.Skip(1).ToList(), queue, _settings));
+                            targetPath = new TargetPath(path.Node, shortestPaths[path.Node.Id].TotalDist, currentPath.PartitionsLeft.Skip(1).ToList(), queue, _settings);
                         } else {
-                            queue.Add(new TargetPath(path.Node, shortestPaths[path.Node.Id].TotalDist, currentPath.PartitionsLeft, queue, _settings));
+                            targetPath = new TargetPath(path.Node, shortestPaths[path.Node.Id].TotalDist, currentPath.PartitionsLeft, queue, _settings);
                         }
+                        if (targetPath.BestDist <= _maxDist)
+                            queue.Add(targetPath);
                     }
                 }
 
@@ -258,13 +345,15 @@ namespace RHITMobile {
                 PrevNode = null;
                 MyDist = 0;
                 TotalDist = 0;
+                HDist = 0;
                 Id = 0;
                 Forward = true;
             }
 
-            public ShortestPath(Node prevNode, double mydist, int id, bool forward, Dictionary<int, ShortestPath> shortestPaths) {
+            public ShortestPath(Node prevNode, double mydist, double hdist, int id, bool forward, Dictionary<int, ShortestPath> shortestPaths) {
                 PrevNode = prevNode;
                 MyDist = mydist;
+                HDist = hdist;
                 Id = id;
                 Forward = forward;
 
@@ -275,16 +364,18 @@ namespace RHITMobile {
             public Node PrevNode { get; private set; }
             public double MyDist { get; set; }
             public double TotalDist { get; set; }
+            public double HDist { get; set; }
             public int Id { get; set; }
             public bool Forward { get; set; }
             public event ChangedPathHandler Changed;
 
-            public void SetPrevNode(Node newPrevNode, double newDist, int newId, bool newForward, Dictionary<int, ShortestPath> shortestPaths) {
+            public void SetPrevNode(Node newPrevNode, double newDist, double newHDist, int newId, bool newForward, Dictionary<int, ShortestPath> shortestPaths) {
                 shortestPaths[PrevNode.Id].Changed -= DistChanged;
                 shortestPaths[newPrevNode.Id].Changed += DistChanged;
 
                 PrevNode = newPrevNode;
                 MyDist = newDist;
+                HDist = newHDist;
                 Id = newId;
                 Forward = newForward;
                 TotalDist = shortestPaths[PrevNode.Id].TotalDist + newDist;
@@ -365,13 +456,13 @@ namespace RHITMobile {
         #endregion
 
         #region Direction Messages
-        private IEnumerable<ThreadInfo> GetDirectionMessages(ThreadManager TM) {
+        public static IEnumerable<ThreadInfo> GetDirectionMessages(ThreadManager TM, List<DirectionPath> paths, Action<double> setDone) {
             var currentThread = TM.CurrentThread;
 
-            for (int i = 0; i < _paths.Count; i++) {
-                _messageFindingDone = (double)(i * i) / (double)(_paths.Count * _paths.Count);
+            for (int i = 0; i < paths.Count; i++) {
+                setDone((double)(i * i) / (double)(paths.Count * paths.Count));
                 yield return TM.MakeDbCall(currentThread, Program.ConnectionString, "spGetDirection",
-                    new SqlParameter("@startpath", _paths[i].Id));
+                    new SqlParameter("@startpath", paths[i].Id));
                 using (var directionTable = TM.GetResult<DataTable>(currentThread)) {
                     foreach (DataRow directionRow in directionTable.Rows) {
                         yield return TM.MakeDbCall(currentThread, Program.ConnectionString, "spGetDirectionPaths",
@@ -382,16 +473,16 @@ namespace RHITMobile {
                             int j = i;
                             foreach (DataRow pathRow in pathTable.Rows) {
                                 if (dir != 0) {
-                                    if (j < 0 || j >= _paths.Count || (int)pathRow["path"] != _paths[j].Id) {
+                                    if (j < 0 || j >= paths.Count || (int)pathRow["path"] != paths[j].Id) {
                                         match = false;
                                         break;
                                     }
                                     j += dir;
                                 } else {
-                                    if (i > 0 && (int)pathRow["path"] == _paths[i - 1].Id) {
+                                    if (i > 0 && (int)pathRow["path"] == paths[i - 1].Id) {
                                         dir = -1;
                                         j = i - 2;
-                                    } else if (i < _paths.Count - 1 && (int)pathRow["path"] == _paths[i + 1].Id) {
+                                    } else if (i < paths.Count - 1 && (int)pathRow["path"] == paths[i + 1].Id) {
                                         dir = 1;
                                         j = i + 2;
                                     } else {
@@ -402,17 +493,17 @@ namespace RHITMobile {
                             }
                             if (match) {
                                 // TODO: Deal with within's
-                                bool forward = dir == 0 ? _paths[i].Forward : dir > 0;
+                                bool forward = dir == 0 ? paths[i].Forward : dir > 0;
                                 int index = Math.Min(j - dir, i) + (int)directionRow["nodeoffset"];
                                 if (forward) {
                                     if (!directionRow.IsNull("message1")) {
-                                        _paths[index].Dir = (string)directionRow["message1"];
-                                        _paths[index].Action = (string)directionRow["action1"];
+                                        paths[index].Dir = (string)directionRow["message1"];
+                                        paths[index].Action = (string)directionRow["action1"];
                                     }
                                 } else {
                                     if (!directionRow.IsNull("message1")) {
-                                        _paths[index].Dir = (string)directionRow["message2"];
-                                        _paths[index].Action = (string)directionRow["action2"];
+                                        paths[index].Dir = (string)directionRow["message2"];
+                                        paths[index].Action = (string)directionRow["action2"];
                                     }
                                 }
                             }
@@ -421,7 +512,7 @@ namespace RHITMobile {
                 }
             }
 
-            yield return TM.Return(currentThread);
+            yield return TM.Return(currentThread, new object());
 
         }
         #endregion
@@ -444,7 +535,12 @@ namespace RHITMobile {
         }
 
         public double WeightedDist(Node node1, Node node2) {
-            double hDist = node1.HDistanceTo(node2);
+            double hDist;
+            return WeightedDist(node1, node2, out hDist);
+        }
+
+        public double WeightedDist(Node node1, Node node2, out double hDist) {
+            hDist = node1.HDistanceTo(node2);
             double vDist = node2.Altitude - node1.Altitude;
             double angle = hDist != 0 ? Math.Asin(vDist / hDist) : vDist > 0 ? Math.PI / 2 : vDist < 0 ? -Math.PI / 2 : 0;
 

@@ -21,7 +21,7 @@ namespace RHITMobile {
 
             var response = new CampusServicesResponse(Program.ServicesVersion);
             var categories = new Dictionary<string, CampusServicesCategory>();
-            categories.Add("", response.Root);
+            categories.Add("", response.ServicesRoot);
 
             yield return TM.MakeDbCall(currentThread, Program.ConnectionString, "spGetCampusServiceCategories");
             using (var table = TM.GetResult<DataTable>(currentThread)) {

@@ -42,9 +42,10 @@ namespace RHITMobile
             while (true)
             {
                 yield return TM.Sleep(currentThread, 1000);
-                if (_array[_index] != null)
-                {
-                    _index = (_index + 1) % _size;
+                lock (_array) {
+                    if (_array[_index] != null) {
+                        _index = (_index + 1) % _size;
+                    }
                 }
             }
         }
@@ -60,9 +61,10 @@ namespace RHITMobile
             while (true)
             {
                 yield return TM.Sleep(currentThread, 60000);
-                if (_items > _size / 2)
-                {
-                    IncreaseSize();
+                lock (_array) {
+                    if (_items > _size / 2) {
+                        IncreaseSize();
+                    }
                 }
             }
         }
@@ -99,14 +101,12 @@ namespace RHITMobile
         /// </summary>
         private void IncreaseSize()
         {
-            lock (_array) {
-                var newArray = new T[_size * 2];
-                for (int i = 0; i < _size; i++) {
-                    newArray[i] = _array[i];
-                }
-                _array = newArray;
-                _size *= 2;
+            var newArray = new T[_size * 2];
+            for (int i = 0; i < _size; i++) {
+                newArray[i] = _array[i];
             }
+            _array = newArray;
+            _size *= 2;
         }
 
         /// <summary>
@@ -115,12 +115,12 @@ namespace RHITMobile
         /// <param name="index">Index of item to remove</param>
         public void Remove(int index)
         {
-            lock (_array)
-                if (_array[index] != null)
-                {
+            lock (_array) {
+                if (_array[index] != null) {
                     _array[index] = null;
                     _items--;
                 }
+            }
         }
 
         /// <summary>
@@ -132,7 +132,9 @@ namespace RHITMobile
         {
             get
             {
-                return _array[id];
+                lock (_array) {
+                    return _array[id];
+                }
             }
         }
     }
