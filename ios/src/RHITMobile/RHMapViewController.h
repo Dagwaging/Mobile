@@ -95,8 +95,4 @@
 
 - (void)displayDirections:(RHPath *)directions;
 
-- (void)slideInDirectionsTitle:(UIView *)titleView;
-
-- (void)slideInDirectionsControls:(UIToolbar *)controls;
-
 @end

@@ -68,6 +68,7 @@
 @synthesize directionsLabel;
 @synthesize directionsPicker;
 @synthesize displayingDirections = displayingDirections_;
+@synthesize directionsManager = directionsManager_;
 
 // Private properties
 @synthesize currentOverlay;
@@ -521,44 +522,12 @@
     RHPathStep *start = [directions.steps objectAtIndex:0];
     [self.mapView setCenterCoordinate:start.coordinate zoomLevel:17 animated:YES];
     
-    directionsStatusBar_ = [[UIView alloc] initWithFrame:CGRectMake(0, -50, 320, 50)];
-    directionsStatusBar_.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.7];
-    
-    directionsStatus_ = [[UILabel alloc] initWithFrame:CGRectMake(5, 5, 310, 40)];
-    directionsStatus_.backgroundColor = [UIColor clearColor];
-    directionsStatus_.textColor = [UIColor whiteColor];
-    
     RHPathStep *firstStep = [directions.steps objectAtIndex:0];
     if ((id) firstStep.detail == [NSNull null]) {
         directionsStatus_.text = @"";
     } else  {
         directionsStatus_.text = firstStep.detail;
     }
-    
-    directionsStatus_.numberOfLines = 2;
-    directionsStatus_.textAlignment = UITextAlignmentCenter;
-    
-    [directionsStatusBar_ addSubview:directionsStatus_];
-    
-    directionsControls_ = [[UIToolbar alloc] initWithFrame:CGRectMake(0, self.mapView.frame.size.height, 320, 44)];
-    
-    directionsControls_.tintColor = [UIColor blackColor];
-    
-    UIBarButtonItem *prevItem = [[UIBarButtonItem alloc] initWithTitle:@"Prev" style:UIBarButtonItemStyleBordered target:self action:@selector(prevDirection:)];
-    
-    UIBarButtonItem *nextItem = [[UIBarButtonItem alloc] initWithTitle:@"Next" style:UIBarButtonItemStyleBordered target:self action:@selector(nextDirection:)];
-    
-    UIBarButtonItem *spaceItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-    
-    UIBarButtonItem *cancelItem = [[UIBarButtonItem alloc] initWithTitle:@"Exit Directions" style:UIBarButtonItemStyleBordered target:self action:@selector(exitDirections:)];
-    
-    directionsControls_.items = [NSArray arrayWithObjects:prevItem, nextItem, spaceItem, cancelItem, nil];
-    
-    [self.view addSubview:directionsStatusBar_];
-    [self.view addSubview:directionsControls_];
-    
-    [self slideInDirectionsTitle:directionsStatusBar_];
-    [self slideInDirectionsControls:directionsControls_];
     
     CLLocationCoordinate2D coords[directions.steps.count];
     
@@ -599,36 +568,6 @@
     currentDirections_ = directions.steps;
     
     currentDirectionIndex_ = 0;
-}
-
-- (void)slideInDirectionsTitle:(UIView *)titleView {
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationDelay:0.75];
-    [UIView setAnimationDuration:.25];
-    
-    CGRect frame = titleView.frame;
-    frame.origin.y = 0;
-    titleView.frame = frame;
-    
-    [UIView commitAnimations];
-}
-
-- (void)slideInDirectionsControls:(UIToolbar *)controls {
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationDelay:0.75];
-    [UIView setAnimationDuration:0.25];
-    
-    CGRect mapFrame = self.mapView.frame;
-    mapFrame.size.height = mapFrame.size.height - 40;
-    self.mapView.frame = mapFrame;
-    
-    CGRect toolbarFrame = controls.frame;
-    toolbarFrame.origin.y = self.mapView.frame.size.height;
-    controls.frame = toolbarFrame;
-    
-    [UIView commitAnimations];
-    
-    self.displayingDirections = YES;
 }
 
 - (void)nextDirection:(id)sender {

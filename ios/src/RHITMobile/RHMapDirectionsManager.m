@@ -19,11 +19,17 @@
 
 #import "RHMapDirectionsManager.h"
 #import "RHConstants.h"
+#import "RHMapViewController.h"
 #import "RHPath.h"
 #import "RHPathStep.h"
 
 
-@interface RHMapDirectionsManager () 
+@interface RHMapDirectionsManager () {
+    @private
+    UIView *directionsStatusBar_;
+    UILabel *directionsStatus_;
+    UIToolbar *directionsControls_;
+}
 
 - (void)showControls;
 
@@ -89,7 +95,64 @@
 #pragma mark - Private Methods
 
 - (void)showControls {
+    // Create status bar view
+    directionsStatusBar_ = [[UIView alloc] initWithFrame:CGRectMake(0, -50, 320, 50)];
+    directionsStatusBar_.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.7];
     
+    directionsStatus_ = [[UILabel alloc] initWithFrame:CGRectMake(5, 5, 310, 40)];
+    directionsStatus_.backgroundColor = [UIColor clearColor];
+    directionsStatus_.textColor = [UIColor whiteColor];
+    
+    directionsStatus_.numberOfLines = 2;
+    directionsStatus_.textAlignment = UITextAlignmentCenter;
+    
+    [directionsStatusBar_ addSubview:directionsStatus_];
+    
+    // Create control views
+    directionsControls_ = [[UIToolbar alloc]
+                           initWithFrame:CGRectMake(0, self.mapView.frame.size.height, 320, 44)];
+    
+    directionsControls_.tintColor = [UIColor blackColor];
+    
+    UIBarButtonItem *prevItem = [[UIBarButtonItem alloc] initWithTitle:@"Prev"
+                                                                 style:UIBarButtonItemStyleBordered 
+                                                                target:self
+                                                                action:@selector(prevDirection:)];
+    
+    UIBarButtonItem *nextItem = [[UIBarButtonItem alloc] initWithTitle:@"Next"
+                                                                 style:UIBarButtonItemStyleBordered 
+                                                                target:self
+                                                                action:@selector(nextStep:)];
+    
+    UIBarButtonItem *spaceItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+    
+    UIBarButtonItem *cancelItem = [[UIBarButtonItem alloc] initWithTitle:@"Exit Directions" style:UIBarButtonItemStyleBordered target:self action:@selector(previousStep:)];
+    
+    directionsControls_.items = [NSArray arrayWithObjects:prevItem, nextItem,
+                                 spaceItem, cancelItem, nil];
+    
+    // Add new views as subviews
+    [self.mapViewController.view addSubview:directionsStatusBar_];
+    [self.mapViewController.view addSubview:directionsControls_];
+    
+    // Animate the entrance of the new views onto the screen
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationDelay:0.75];
+    [UIView setAnimationDuration:.25];
+    
+    CGRect frame = directionsStatus_.frame;
+    frame.origin.y = 0;
+    directionsStatus_.frame = frame;
+    
+    CGRect mapFrame = self.mapView.frame;
+    mapFrame.size.height = mapFrame.size.height - 40;
+    self.mapView.frame = mapFrame;
+    
+    CGRect toolbarFrame = directionsControls_.frame;
+    toolbarFrame.origin.y = self.mapView.frame.size.height;
+    directionsControls_.frame = toolbarFrame;
+    
+    [UIView commitAnimations];
 }
 
 - (void)hideControls:(BOOL)animated {
