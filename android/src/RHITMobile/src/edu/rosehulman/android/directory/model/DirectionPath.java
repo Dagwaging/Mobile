@@ -31,7 +31,7 @@ public class DirectionPath implements Parcelable {
 	 * @return True if the user should care about this node
 	 */
 	public boolean hasDirection() {
-		return dir != null;
+		return dir != null || flag;
 	}
 
 	/**
@@ -53,6 +53,21 @@ public class DirectionPath implements Parcelable {
 		double d = R * c;
 		
 		return d;
+	}
+	
+	@Override
+	public DirectionPath clone() {
+		DirectionPath res = new DirectionPath();
+		
+		res.action = action;
+		res.dir = dir;
+		res.coord = coord.clone();
+		res.altitude = altitude;
+		res.flag = flag;
+		res.outside = outside;
+		res.location = location;
+		
+		return res;
 	}
 	
 	private double toRad(int degrees) {

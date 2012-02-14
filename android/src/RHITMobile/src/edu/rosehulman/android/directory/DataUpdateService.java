@@ -116,6 +116,20 @@ public class DataUpdateService extends Service {
 		}
 		
 		@Override
+		public void requestCampusServices(AsyncRequest listener) {
+			startUpdate();
+
+			performTask(updateTask.new CampusServicesTask(), listener);
+		}
+		
+		@Override
+		public void requestTourTags(AsyncRequest listener) {
+			startUpdate();
+
+			performTask(updateTask.new TourTagsTask(), listener);
+		}
+		
+		@Override
 		public void requestTopLocations(AsyncRequest listener) {
 			startUpdate();
 
@@ -297,15 +311,16 @@ public class DataUpdateService extends Service {
 				MobileDirectoryService service = new MobileDirectoryService();
 		    	
 				VersionResponse versions = null;
-				do {
-					
-					try {
-						versions = service.getVersions();
-					} catch (Exception e) {
-						Log.e(C.TAG, "Failed to downlaod version information", e);
-						sleep(2000);
-					}
-				} while (versions == null);
+			
+				try {
+					versions = service.getVersions();
+				} catch (Exception e) {
+					Log.e(C.TAG, "Failed to download version information");
+					//wait a bit and try again
+					queue.addTask(this);
+					sleep(5000);
+					return;
+				}
 				
 				if (locationsVersion == null || !locationsVersion.equals(versions.locations)) {
 					queue.addTask(new TopLocationsTask());

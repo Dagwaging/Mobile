@@ -5,9 +5,9 @@ import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,7 +20,9 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.TextView;
+import edu.rosehulman.android.directory.IDataUpdateService.AsyncRequest;
 import edu.rosehulman.android.directory.LoadCampusServiceHyperlink.OnHyperlinkLoadedListener;
+import edu.rosehulman.android.directory.ServiceManager.ServiceRunnable;
 import edu.rosehulman.android.directory.db.CampusServicesAdapter;
 import edu.rosehulman.android.directory.model.CampusServicesCategory;
 import edu.rosehulman.android.directory.model.Hyperlink;
@@ -36,6 +38,8 @@ public class CampusServicesActivity extends Activity {
 	private ExpandableListView tree;
 	
 	private CampusServicesCategory[] categories;
+
+	private ServiceManager<IDataUpdateService> updateService;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -56,7 +60,43 @@ public class CampusServicesActivity extends Activity {
 			}
 		});
 		
-    	handleIntent(getIntent());
+		updateService = new ServiceManager<IDataUpdateService>(getApplicationContext(),
+				DataUpdateService.createIntent(getApplicationContext()));
+		
+    	updateService.run(new ServiceRunnable<IDataUpdateService>() {
+			@Override
+			public void run(IDataUpdateService service) {
+				
+				final ProgressDialog dialog = new ProgressDialog(CampusServicesActivity.this);
+				service.requestCampusServices(new AsyncRequest() {
+					boolean isCancelled = false;	
+					@Override
+					public void onQueued(Runnable cancelCallback) {
+						dialog.setTitle("");
+						dialog.setMessage("Loading...");
+						dialog.setIndeterminate(true);
+						dialog.setCancelable(true);
+						dialog.setOnCancelListener(new OnCancelListener() {
+							@Override
+							public void onCancel(DialogInterface dialog) {
+								isCancelled = true;
+								finish();
+							}
+						});
+						dialog.show();
+					}
+					
+					@Override
+					public void onCompleted() {
+						dialog.dismiss();
+						if (isCancelled)
+							return;
+
+				    	handleIntent(getIntent());
+					}
+				});
+			}
+		});
 	}
 	
 	@Override
@@ -220,7 +260,7 @@ public class CampusServicesActivity extends Activity {
 		
 	}
 	
-	private class LoadServices extends AsyncTask<Void, Void, CampusServicesCategory[]> {
+	private class LoadServices extends BackgroundTask<Void, Void, CampusServicesCategory[]> {
 		
 		private ProgressDialog dialog;
 		private String query;
@@ -247,14 +287,17 @@ public class CampusServicesActivity extends Activity {
 
 		@Override
 		protected CampusServicesCategory[] doInBackground(Void... args) {
-			//TODO query service
-			
 			CampusServicesAdapter adapter = new CampusServicesAdapter();
 			adapter.open();
 			CampusServicesCategory categories[] = adapter.getCategories(query);
 			adapter.close();
 			
 			return categories;
+		}
+
+		@Override
+		protected void onAbort() {
+			dialog.dismiss();
 		}
 		
 		@Override
