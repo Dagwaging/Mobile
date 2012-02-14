@@ -216,6 +216,8 @@
 
 #define kRHLocationFocusZoomLevel 16
 
+#define kRHDirectionsFocusZoomLevel 17
+
 #define kRHMinimumZoomLevel 14
 #define kRHMinimumLatitude 39.477678
 #define kRHMaximumLatitude 39.487300

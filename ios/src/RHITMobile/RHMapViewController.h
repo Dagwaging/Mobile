@@ -32,6 +32,7 @@
 @class RHLocation;
 @class RHSimplePointAnnotation;
 @class RHPath;
+@class RHMapDirectionsManager;
 
 /// \ingroup views
 /// View controller for the map portion of the application.
@@ -55,6 +56,8 @@
 
 /// Core Data managed object context. 
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
+
+@property (nonatomic, strong) IBOutlet RHMapDirectionsManager *directionsManager;
 
 @property (nonatomic, strong) NSMutableArray *quickListAnnotations;
 
