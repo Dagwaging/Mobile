@@ -35,6 +35,8 @@
 
 @property (nonatomic, readonly) BOOL currentlyDisiplaying;
 
+@property (nonatomic, readonly) NSManagedObjectContext *managedObjectContext;
+
 - (void)displayPath:(RHPath *)path;
 
 - (IBAction)exitDirections:(id)sender;

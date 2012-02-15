@@ -18,7 +18,9 @@
 //
 
 #import "RHMapDirectionsManager.h"
+#import "RHAppDelegate.h"
 #import "RHConstants.h"
+#import "RHLocation.h"
 #import "RHMapViewController.h"
 #import "RHPath.h"
 #import "RHPathStep.h"
@@ -55,8 +57,9 @@
     }
     
     // Quick check for a bad path
-    if (path.steps.count > 1) {
+    if (path.steps.count < 1) {
         NSLog(@"Path is empty. Skipping display.");
+        return;
     }
     
     self.currentPath = path;
@@ -72,11 +75,6 @@
     [self showDirections];
 }
 
-#pragma mark - Property Methods
-
-- (BOOL)currentlyDisiplaying {
-    return self.currentPath != nil;
-}
 
 - (void)exitDirections:(id)sender {
     self.currentPath = nil;
@@ -92,6 +90,16 @@
     
 }
 
+#pragma mark - Property Methods
+
+- (BOOL)currentlyDisiplaying {
+    return self.currentPath != nil;
+}
+
+- (NSManagedObjectContext *)managedObjectContext {
+    return [(RHAppDelegate *) [[UIApplication sharedApplication] delegate] managedObjectContext];
+}
+
 #pragma mark - Private Methods
 
 - (void)showControls {
@@ -105,6 +113,15 @@
     
     directionsStatus_.numberOfLines = 2;
     directionsStatus_.textAlignment = UITextAlignmentCenter;
+    
+    RHPathStep *firstStep = [self.currentPath.steps objectAtIndex:0];
+    if ((id)firstStep.detail == [NSNull null] || firstStep.detail.length < 1) {
+        RHLocation *firstLocation = (RHLocation *) [self.managedObjectContext
+                                                    objectWithID:firstStep.locationID];
+        directionsStatus_.text = [NSString stringWithFormat:@"Depart %@", firstLocation.name];
+    } else {
+        directionsStatus_.text = firstStep.detail;
+    }
     
     [directionsStatusBar_ addSubview:directionsStatus_];
     
@@ -126,12 +143,12 @@
     
     UIBarButtonItem *spaceItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
     
-    UIBarButtonItem *cancelItem = [[UIBarButtonItem alloc] initWithTitle:@"Exit Directions" style:UIBarButtonItemStyleBordered target:self action:@selector(previousStep:)];
+    UIBarButtonItem *cancelItem = [[UIBarButtonItem alloc] initWithTitle:@"Exit Directions" style:UIBarButtonItemStyleBordered target:self action:@selector(exitDirections:)];
     
     directionsControls_.items = [NSArray arrayWithObjects:prevItem, nextItem,
                                  spaceItem, cancelItem, nil];
     
-    // Add new views as subviews
+    // Add new views as subviews of map view controller
     [self.mapViewController.view addSubview:directionsStatusBar_];
     [self.mapViewController.view addSubview:directionsControls_];
     
@@ -140,9 +157,9 @@
     [UIView setAnimationDelay:0.75];
     [UIView setAnimationDuration:.25];
     
-    CGRect frame = directionsStatus_.frame;
+    CGRect frame = directionsStatusBar_.frame;
     frame.origin.y = 0;
-    directionsStatus_.frame = frame;
+    directionsStatusBar_.frame = frame;
     
     CGRect mapFrame = self.mapView.frame;
     mapFrame.size.height = mapFrame.size.height - 40;
@@ -156,7 +173,28 @@
 }
 
 - (void)hideControls:(BOOL)animated {
+    if (animated) {
+        [UIView beginAnimations:nil context:NULL];
+        [UIView setAnimationDuration:0.25];
+    }
+
+    CGRect mapFrame = self.mapView.frame;
+    mapFrame.size.height = mapFrame.size.height + 40;
+    self.mapView.frame = mapFrame;
     
+    CGRect frame = directionsStatusBar_.frame;
+    frame.origin.y = -50;
+    directionsStatusBar_.frame = frame;
+    
+    CGRect toolbarFrame = directionsControls_.frame;
+    toolbarFrame.origin.y = self.mapView.frame.size.height;
+    directionsControls_.frame = toolbarFrame;
+    
+    if (animated) {
+        [UIView commitAnimations];
+    }
+    
+    self.currentPath = nil;
 }
 
 - (void)showDirections {

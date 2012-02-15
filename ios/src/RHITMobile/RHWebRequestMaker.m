@@ -35,6 +35,8 @@
                                           host:kURLHost
                                           path:[path stringByAppendingString:args]];
     
+    NSLog(@"Web request: %@", url.absoluteString);
+    
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     
     NSURLResponse *response = nil;
@@ -50,7 +52,7 @@
     
     if (statusCode != 200) {
         NSLog(@"Non-okay status code: %d", statusCode);
-        return nil;
+        return [NSDictionary dictionary];
     }
 
     return [NSDictionary dictionaryWithJSONData:data error:nil];
