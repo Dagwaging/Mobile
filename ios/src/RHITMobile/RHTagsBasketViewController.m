@@ -210,7 +210,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
     [self.tags removeObjectAtIndex:indexPath.row];
     [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     
-    if (self.tags.count == 0) {
+    if (self.tags.count == 0 && self.isEditing) {
         [self doneEditing:nil];
     }
 }
