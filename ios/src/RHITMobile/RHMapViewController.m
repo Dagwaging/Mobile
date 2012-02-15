@@ -435,8 +435,7 @@
     self.locationsDisplayed = [[NSMutableDictionary alloc] initWithCapacity:20];
 }
 
-#pragma mark -
-#pragma mark Private Methods
+#pragma mark - Private Methods
 
 - (void)loadStoredLocations {
     // Describe the type of entity we'd like to retrieve

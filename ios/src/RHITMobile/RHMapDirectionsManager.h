@@ -31,7 +31,7 @@
 
 @property (nonatomic, strong) IBOutlet MKMapView *mapView;
 
-@property (nonatomic, assign) RHPath *currentPath;
+@property (nonatomic, strong) RHPath *currentPath;
 
 @property (nonatomic, readonly) BOOL currentlyDisiplaying;
 

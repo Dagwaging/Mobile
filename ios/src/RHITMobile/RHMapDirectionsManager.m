@@ -24,6 +24,7 @@
 #import "RHMapViewController.h"
 #import "RHPath.h"
 #import "RHPathStep.h"
+#import "RHSimplePointAnnotation.h"
 
 
 @interface RHMapDirectionsManager () {
@@ -31,6 +32,9 @@
     UIView *directionsStatusBar_;
     UILabel *directionsStatus_;
     UIToolbar *directionsControls_;
+    NSInteger currentStepIndex_;
+    RHSimplePointAnnotation *currentStepAnnotation_;
+    NSMutableArray *stepPins_;
 }
 
 - (void)showControls;
@@ -62,6 +66,11 @@
         return;
     }
     
+    if (self.mapView.selectedAnnotations.count > 0) {
+        [self.mapView deselectAnnotation:[self.mapView.selectedAnnotations objectAtIndex:0] animated:NO];
+        [self.mapViewController clearAllDynamicMapArtifacts];
+    }
+    
     self.currentPath = path;
     
     RHPathStep *firstStep = [path.steps objectAtIndex:0];
@@ -83,11 +92,61 @@
 }
 
 - (void)nextStep:(id)sender {
-    
+    if (currentStepIndex_ < self.currentPath.steps.count - 1) {
+        currentStepIndex_ ++;
+        RHPathStep *step = [self.currentPath.steps objectAtIndex:currentStepIndex_];
+        
+        while ((id)step.detail == [NSNull null] && currentStepIndex_ < self.currentPath.steps.count - 1) {
+            currentStepIndex_ ++;
+            step = [self.currentPath.steps objectAtIndex:currentStepIndex_];
+        }
+        
+        if (currentStepIndex_ == self.currentPath.steps.count - 1) {
+            RHLocation *firstLocation = (RHLocation *) [self.managedObjectContext
+                                                        objectWithID:step.locationID];
+            directionsStatus_.text = [NSString stringWithFormat:@"Arrive at %@", firstLocation.name];
+        } else {
+            directionsStatus_.text = step.detail;
+        }
+
+        currentStepAnnotation_.coordinate = step.coordinate;
+        
+        if (step.flagged && (id) step.locationID != [NSNull null]) {
+            RHLocation *thisLocation = (RHLocation *) [self.managedObjectContext objectWithID:step.locationID];
+            [self.mapViewController focusMapViewToLocation:thisLocation];
+        } else {
+            [self.mapView setCenterCoordinate:step.coordinate animated:YES];
+        }
+    }
 }
 
 - (void)previousStep:(id)sender {
-    
+    if (currentStepIndex_ > 0) {
+        currentStepIndex_ --;
+        RHPathStep *step = [self.currentPath.steps objectAtIndex:currentStepIndex_];
+        
+        while ((id)step.detail == [NSNull null] && currentStepIndex_ > 0) {
+            currentStepIndex_ --;
+            step = [self.currentPath.steps objectAtIndex:currentStepIndex_];
+        }
+        
+        if (currentStepIndex_ == 0) {
+            RHLocation *firstLocation = (RHLocation *) [self.managedObjectContext
+                                                        objectWithID:step.locationID];
+            directionsStatus_.text = [NSString stringWithFormat:@"Depart %@", firstLocation.name];
+        } else {
+            directionsStatus_.text = step.detail;
+        }
+
+        currentStepAnnotation_.coordinate = step.coordinate;
+        
+        if (step.flagged && (id) step.locationID != [NSNull null] && currentStepIndex_ > 0) {
+            RHLocation *thisLocation = (RHLocation *) [self.managedObjectContext objectWithID:step.locationID];
+            [self.mapViewController focusMapViewToLocation:thisLocation];
+        } else {
+            [self.mapView setCenterCoordinate:step.coordinate animated:YES];
+        }
+    }
 }
 
 #pragma mark - Property Methods
@@ -134,7 +193,7 @@
     UIBarButtonItem *prevItem = [[UIBarButtonItem alloc] initWithTitle:@"Prev"
                                                                  style:UIBarButtonItemStyleBordered 
                                                                 target:self
-                                                                action:@selector(prevDirection:)];
+                                                                action:@selector(previousStep:)];
     
     UIBarButtonItem *nextItem = [[UIBarButtonItem alloc] initWithTitle:@"Next"
                                                                  style:UIBarButtonItemStyleBordered 
@@ -198,11 +257,50 @@
 }
 
 - (void)showDirections {
+    RHPathStep *firstStep = [self.currentPath.steps objectAtIndex:0];
+    CLLocationCoordinate2D coords[self.currentPath.steps.count];
     
+    stepPins_ = [NSMutableArray arrayWithCapacity:self.currentPath.steps.count];
+    
+    RHPathStep *last = [self.currentPath.steps objectAtIndex:(self.currentPath.steps.count - 1)];
+    
+    RHSimplePointAnnotation *lastAnnotation = [[RHSimplePointAnnotation alloc] init];
+    lastAnnotation.coordinate = last.coordinate;
+    lastAnnotation.color = RHSimplePointAnnotationColorRed;
+    [self.mapView addAnnotation:lastAnnotation];
+    
+    [stepPins_ addObject:lastAnnotation];
+    
+    currentStepAnnotation_ = [[RHSimplePointAnnotation alloc] init];
+    currentStepAnnotation_.coordinate = firstStep.coordinate;
+    currentStepAnnotation_.color = RHSimplePointAnnotationColorGreen;
+    [self.mapView addAnnotation:currentStepAnnotation_];
+    
+    
+    for (RHPathStep *lineItem in self.currentPath.steps) {
+        coords[[self.currentPath.steps indexOfObject:lineItem]] = lineItem.coordinate;
+        
+        if (lineItem.flagged) {
+            RHSimplePointAnnotation *annotation = [[RHSimplePointAnnotation alloc] init];
+            annotation.coordinate = lineItem.coordinate;
+            [self.mapView addAnnotation:annotation];
+            
+            [stepPins_ addObject:annotation];
+        }
+    }
+    
+    MKPolyline *line = [MKPolyline polylineWithCoordinates:coords
+                                                     count:self.currentPath.steps.count];
+    
+    [self.mapView addOverlay:line];
+    
+    currentStepIndex_ = 0;
 }
 
 - (void)hideDirections:(BOOL)animated {
-    
+    [self.mapView removeOverlays:self.mapView.overlays];
+    [self.mapView removeAnnotation:currentStepAnnotation_];
+    [self.mapView removeAnnotations:stepPins_];
 }
 
 @end
