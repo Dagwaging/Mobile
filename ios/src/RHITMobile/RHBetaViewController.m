@@ -27,7 +27,11 @@
 #import "RHAppDelegate.h"
 #import "RHBetaRegistrationViewController.h"
 #import "RHMapViewController.h"
-#import "RHPListStore.h"
+#import "RHTopLocationsRequester.h"
+#import "RHTagsRequester.h"
+#import "RHCampusServicesRequester.h"
+#import "RHCampusServicesViewController.h"
+#import "RHDataVersionManager.h"
 
 #ifdef RHITMobile_RHBeta
 
@@ -405,10 +409,29 @@ didDismissWithButtonIndex:(NSInteger)buttonIndex {
 }
 
 - (IBAction)clearAndReloadData:(id)sender {
-    [RHAppDelegate.instance clearDatabase];
-    RHPListStore *listStore = [[RHPListStore alloc] init];
-    listStore.currentMapDataVersion = [NSNumber numberWithInt:-1];
-    listStore.currentServicesDataVersion = [NSNumber numberWithInt:-1];
+    RHAppDelegate *appDelegate = [RHAppDelegate instance];
+    
+    RHDataVersionManager *dataVersionManager = [RHDataVersionManager instance];
+    
+    dataVersionManager.localTagsVersion = [NSNumber numberWithInt:-1];
+    dataVersionManager.localServicesVersion = [NSNumber numberWithInt:-1];
+    dataVersionManager.localLocationsVersion = [NSNumber numberWithInt:-1];
+    
+    // Kick off a locations update
+    RHTopLocationsRequester *locationsRequester = [[RHTopLocationsRequester alloc] initWithDelegate:appDelegate.mapViewController persistantStoreCoordinator:appDelegate.persistentStoreCoordinator];
+    
+    [locationsRequester updateTopLevelLocations];
+    
+    // Kick off a campus services update
+    RHCampusServicesRequester *campusServicesRequester = [[RHCampusServicesRequester alloc] 
+                                                          initWithPersistantStoreCoordinator:appDelegate.persistentStoreCoordinator
+                                                          delegate:appDelegate.infoViewController];
+    [campusServicesRequester updateCampusServices];
+    
+    // Kick off a tags update
+    RHTagsRequester *tagsRequester = [[RHTagsRequester alloc] initWithDelegate:nil persistantStoreCoordinator:appDelegate.persistentStoreCoordinator];
+    
+    [tagsRequester updateTags];
 }
 
 - (void)performCheckForUpdates:(NSNumber *)officialNumber {
