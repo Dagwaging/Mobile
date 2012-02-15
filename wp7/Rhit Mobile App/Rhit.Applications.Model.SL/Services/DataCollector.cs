@@ -322,7 +322,7 @@ namespace Rhit.Applications.Model.Services {
         }
 
         public void GetDirections(int fromId, int toId) {
-            RequestPart request = new RequestBuilder(BaseAddress).Directions.FromLoc(1700000).ToLoc(25);
+            RequestPart request = new RequestBuilder(BaseAddress).Directions.FromLoc(fromId).ToLoc(toId);
             Connection.MakeRequest(request, RequestType.Directions);
         }
 

@@ -5,6 +5,7 @@
     xmlns:maps="clr-namespace:Microsoft.Phone.Controls.Maps;assembly=Microsoft.Phone.Controls.Maps"
     xmlns:cmds="clr-namespace:Rhit.Applications.Mvvm.Commands;assembly=Rhit.Applications.Mvvm.WP7"
     xmlns:vm="clr-namespace:Rhit.Applications.ViewModel.Models;assembly=Rhit.Applications.ViewModel.WP7"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
     xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -14,12 +15,16 @@
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="Portrait" Orientation="Portrait"
     mc:Ignorable="d" d:DesignHeight="768" d:DesignWidth="480"
-    shell:SystemTray.IsVisible="True">
+    shell:SystemTray.Opacity="0.0" shell:SystemTray.IsVisible="True">
+
+    <shell:SystemTray.ProgressIndicator>
+        <shell:ProgressIndicator Text="Waiting for directions from server ..." IsIndeterminate="{Binding IsBusy, FallbackValue='True'}" IsVisible="{Binding IsBusy, FallbackValue='True'}" />
+    </shell:SystemTray.ProgressIndicator>
 
     <!--<phone:PhoneApplicationPage.DataContext>
         <vm:DirectionsViewModel x:Name="ViewModel"/>
     </phone:PhoneApplicationPage.DataContext>-->
-    
+
     <phone:PhoneApplicationPage.Resources>        
         <ControlTemplate x:Key="DirectionsPushpinTemplate" TargetType="maps:Pushpin">
             <Grid>
@@ -79,54 +84,34 @@
         </Grid>
         
         <Grid Grid.Row="2" Margin="12,0,12,0">
-            <ListBox ItemsSource="{Binding Directions.Nodes}" SelectedValue="{Binding CurrentNode, Mode=TwoWay}"  >
+            <ListBox ItemsSource="{Binding Directions.Nodes}" SelectedValue="{Binding CurrentNode, Mode=TwoWay}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Grid Margin="0, 20">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <Grid Grid.Column="0" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="5">
-                                <StackPanel Orientation="Horizontal">
-                                    <Image Source="{Binding Action, Converter={StaticResource ImageConverter}}" />
-                                    <Grid VerticalAlignment="Top" Margin="5,0,0,0">
-                                        <Ellipse Fill="White" Width="18" Height="18" />
-                                        <Ellipse Fill="{StaticResource PhoneAccentBrush}" Width="20" Height="20" Visibility="{Binding IsSelected, Converter={StaticResource VisibilityConverter}}" />
-                                        <TextBlock Text="{Binding Number}" FontSize="13" FontWeight="Bold" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            
+                                <Grid Margin="0, 20">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="100" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid Grid.Column="0" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="5">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <Image Source="{Binding Action, Converter={StaticResource ActionImageConverter}}" />
+                                        <Grid Grid.Column="1" VerticalAlignment="Top" Margin="5,0,0,0">
+                                            <Ellipse Fill="White" Width="18" Height="18" />
+                                            <Ellipse Fill="{StaticResource PhoneAccentBrush}" Width="20" Height="20" Visibility="{Binding IsSelected, Converter={StaticResource VisibilityConverter}}" />
+                                            <TextBlock Text="{Binding Number}" FontSize="13" FontWeight="Bold" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                        </Grid>
                                     </Grid>
-                                    
-                                </StackPanel>
-                            </Grid>
-                            <TextBlock Grid.Column="1" Text="{Binding Action}" FontSize="40" VerticalAlignment="Center" />
-                        </Grid>
+                                    <TextBlock Grid.Column="1" Text="{Binding Action, Converter={StaticResource ActionStringConverter}}" FontSize="40" VerticalAlignment="Center" />
+                                </Grid>
+                            
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
             
-            <!--<ScrollViewer>
-                <ItemsControl ItemsSource="{Binding Directions.Nodes}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Grid Margin="10, 20">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="10*" />
-                                </Grid.ColumnDefinitions>
-                                <Grid Grid.Column="0" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="5">
-                                    <Ellipse Fill="White" Width="20" Height="20" />
-                                    <TextBlock Text="{Binding Number}" FontSize="13" FontWeight="Bold" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                </Grid>
-                                <Grid Grid.Column="0" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="5" Visibility="{Binding IsSelected, Converter={StaticResource VisibilityConverter}}">
-                                    <Ellipse Fill="Green" Width="20" Height="20" />
-                                    <TextBlock Text="{Binding Number}" FontSize="13" FontWeight="Bold" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                </Grid>
-                                <TextBlock Grid.Column="1" Text="{Binding Action}" FontSize="40" VerticalAlignment="Center" />
-                            </Grid>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </ScrollViewer>-->
         </Grid>
     </Grid>
 

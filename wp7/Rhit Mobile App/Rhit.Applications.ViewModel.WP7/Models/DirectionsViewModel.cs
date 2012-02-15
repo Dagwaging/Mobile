@@ -34,6 +34,7 @@ namespace Rhit.Applications.ViewModel.Models {
 
         private void NodesUpdated(object sender, EventArgs e) {
             CurrentNode = Directions.Start;
+            IsBusy = false;
         }
 
         private void ChangeNode(PathNode oldNode, PathNode newNode) {
@@ -59,6 +60,16 @@ namespace Rhit.Applications.ViewModel.Models {
                 else Directions.GetDirections(id);
             }
         }
+
+        #region IsBusy
+        public bool IsBusy {
+            get { return (bool) GetValue(IsBusyProperty); }
+            set { SetValue(IsBusyProperty, value); }
+        }
+
+        public static readonly DependencyProperty IsBusyProperty =
+           DependencyProperty.Register("IsBusy", typeof(bool), typeof(DirectionsViewModel), new PropertyMetadata(true));
+        #endregion
 
         #region Next Command
         public ICommand NextCommand { get; private set; }

@@ -30,7 +30,7 @@ namespace Rhit.Applications.ViewModel.Controllers {
         }
 
         internal void GetDirections(int to) {
-            DataCollector.Instance.GetDirections(18, to);
+            DataCollector.Instance.GetDirections(112, to);
         }
 
         internal void GetTestTour() {
@@ -63,9 +63,13 @@ namespace Rhit.Applications.ViewModel.Controllers {
 
         private void ProccessNewNodes(IList<DirectionPath_DC> models) {
             PathNode lastNode = null;
+            PathNode node = null;
             foreach(DirectionPath_DC pathModel in models) {
-                PathNode node = new PathNode(pathModel);
-                if(Start == null) Start = node;
+                node = new PathNode(pathModel);
+                if(Start == null) {
+                    node.MarkAsStart();
+                    Start = node;
+                }
                 Coordinates.Add(node.Center);
                 if(node.Action != DirectionActionType.None) {
                     Nodes.Add(node);
@@ -76,7 +80,13 @@ namespace Rhit.Applications.ViewModel.Controllers {
                     lastNode = node;
                 }
             }
-            End = lastNode;
+            node.MarkAsEnd();
+            End = node;
+            if(lastNode != node) {
+                lastNode.Next = node;
+                node.Previous = lastNode;
+                Nodes.Add(node);
+            }
             OnNodesUpdated();
         }
 

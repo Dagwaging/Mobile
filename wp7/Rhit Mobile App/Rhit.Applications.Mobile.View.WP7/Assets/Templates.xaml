@@ -8,7 +8,8 @@
     mc:Ignorable="d">
 
 
-    <convert:StringToImageConverter x:Key="ImageConverter" />
+    <convert:ActionToImageConverter x:Key="ActionImageConverter" />
+    <convert:ActionToStringConverter x:Key="ActionStringConverter" />
     <convert:BoolToVisibilityConverter x:Key="VisibilityConverter" />
     <convert:ObjectToVisibilityConverter x:Key="ObjectConverter" />
     <convert:ListToVisibilityConverter x:Key="ListVisibilityConverter"/>
@@ -22,7 +23,7 @@
 
     <DataTemplate x:Key="PickerItemTemplate">
         <StackPanel Orientation="Horizontal">
-            <TextBlock Text="{Binding Label}" Margin="12 0 0 0" />
+            <TextBlock Text="{Binding Label}" Margin="12,0,0,0" />
         </StackPanel>
     </DataTemplate>
 

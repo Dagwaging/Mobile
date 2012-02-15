@@ -1,6 +1,8 @@
 ﻿
 namespace Rhit.Applications.ViewModel.Utilities {
     public enum DirectionActionType {
+        Depart,
+        Arrive,
         Straight,
         CrossStreet,
         FollowPath,

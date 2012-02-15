@@ -29,9 +29,11 @@ namespace Rhit.Applications.ViewModel.Utilities {
         }
 
         public PathNode(DirectionPath_DC model) {
-            Number = ++LastNumber;
+            Number = 0;
             Center = new GeoCoordinate(model.Latitude, model.Longitude);
             Action = GetActionType(model.Action);
+            if(Action != DirectionActionType.None)
+                Number = ++LastNumber;
         }
 
         internal PathNode Next { get; set; }
@@ -43,9 +45,23 @@ namespace Rhit.Applications.ViewModel.Utilities {
         }
 
         internal static DirectionActionType GetActionType(string actionCode) {
-            if(!ActionCodeDictionary.ContainsKey(actionCode))
+            if(actionCode == null || !ActionCodeDictionary.ContainsKey(actionCode))
                 return DirectionActionType.None;
             return ActionCodeDictionary[actionCode];
+        }
+
+        internal void MarkAsStart() {
+            if(Action == DirectionActionType.None)
+                Action = DirectionActionType.Depart;
+            if(Number <= 0)
+                Number = ++LastNumber;
+        }
+
+        internal void MarkAsEnd() {
+            if(Action == DirectionActionType.None)
+                Action = DirectionActionType.Arrive;
+            if(Number <= 0)
+                Number = ++LastNumber;
         }
 
         public int Number { get; protected set; }
