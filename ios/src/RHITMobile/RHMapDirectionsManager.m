@@ -96,7 +96,7 @@
         currentStepIndex_ ++;
         RHPathStep *step = [self.currentPath.steps objectAtIndex:currentStepIndex_];
         
-        while ((id)step.detail == [NSNull null] && currentStepIndex_ < self.currentPath.steps.count - 1) {
+        while ((id)step.detail == [NSNull null] && currentStepIndex_ < self.currentPath.steps.count - 1 && !step.flagged) {
             currentStepIndex_ ++;
             step = [self.currentPath.steps objectAtIndex:currentStepIndex_];
         }
@@ -105,6 +105,10 @@
             RHLocation *firstLocation = (RHLocation *) [self.managedObjectContext
                                                         objectWithID:step.locationID];
             directionsStatus_.text = [NSString stringWithFormat:@"Arrive at %@", firstLocation.name];
+        } else if ((id) step.detail == [NSNull null] && step.flagged) {
+            RHLocation *thisLocation = (RHLocation *) [self.managedObjectContext
+                                                        objectWithID:step.locationID];
+            directionsStatus_.text = [NSString stringWithFormat:@"Visit %@", thisLocation.name];
         } else {
             directionsStatus_.text = step.detail;
         }
@@ -125,7 +129,7 @@
         currentStepIndex_ --;
         RHPathStep *step = [self.currentPath.steps objectAtIndex:currentStepIndex_];
         
-        while ((id)step.detail == [NSNull null] && currentStepIndex_ > 0) {
+        while ((id)step.detail == [NSNull null] && currentStepIndex_ > 0 && !step.flagged) {
             currentStepIndex_ --;
             step = [self.currentPath.steps objectAtIndex:currentStepIndex_];
         }
@@ -134,6 +138,10 @@
             RHLocation *firstLocation = (RHLocation *) [self.managedObjectContext
                                                         objectWithID:step.locationID];
             directionsStatus_.text = [NSString stringWithFormat:@"Depart %@", firstLocation.name];
+        } else if ((id) step.detail == [NSNull null] && step.flagged) {
+            RHLocation *thisLocation = (RHLocation *) [self.managedObjectContext
+                                                       objectWithID:step.locationID];
+            directionsStatus_.text = [NSString stringWithFormat:@"Visit %@", thisLocation.name];
         } else {
             directionsStatus_.text = step.detail;
         }
@@ -283,6 +291,7 @@
         if (lineItem.flagged) {
             RHSimplePointAnnotation *annotation = [[RHSimplePointAnnotation alloc] init];
             annotation.coordinate = lineItem.coordinate;
+            annotation.color = RHSimplePointAnnotationColorBlue;
             [self.mapView addAnnotation:annotation];
             
             [stepPins_ addObject:annotation];

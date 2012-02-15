@@ -209,6 +209,10 @@ commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
 forRowAtIndexPath:(NSIndexPath *)indexPath {
     [self.tags removeObjectAtIndex:indexPath.row];
     [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    
+    if (self.tags.count == 0) {
+        [self doneEditing:nil];
+    }
 }
 
 - (void)tableView:(UITableView *)tableView
