@@ -29,7 +29,7 @@
 #define kOffCampusPath @"/offcampus"
 #define kFromLocationPath @"/fromloc/%d"
 #define kTagPath @"/%d"
-#define kDurationArgs @"length=%d"
+#define kDurationArgs @"&length=%d"
 
 
 @interface RHTourRequester ()
@@ -79,22 +79,20 @@
         
         //RHLocation *startLocation = (RHLocation *) [localContext objectWithID:self.locationID];
         //path = [path stringByAppendingFormat:kFromLocationPath, startLocation.serverIdentifier.intValue];
-        path = [path stringByAppendingFormat:kFromLocationPath, 25];
+        path = [path stringByAppendingFormat:kFromLocationPath, 112];
     } else {
         path = [path stringByAppendingString:kOffCampusPath];
     }
     
     for (NSManagedObjectID *tagID in self.tagIDs) {
+        NSLog(@"%@", tagID);
         RHTourTag *tag = (RHTourTag *)[localContext objectWithID:tagID];
         path = [path stringByAppendingFormat:kTagPath, tag.serverIdentifier.intValue];
     }
     
-    NSString *urlArgs = [NSString stringWithFormat:kDurationArgs, self.duration.intValue];
+    //NSString *urlArgs = [NSString stringWithFormat:kDurationArgs, self.duration.intValue];
     
-    NSLog(@"%@", path);
-    NSLog(@"%@", urlArgs);
-    
-    [self sendDelegatePathFromJSONResponse:[RHWebRequestMaker JSONGetRequestWithPath:path URLargs:urlArgs]];
+    [self sendDelegatePathFromJSONResponse:[RHWebRequestMaker JSONGetRequestWithPath:path URLargs:@"?wait=true"]];
 }
 
 @end

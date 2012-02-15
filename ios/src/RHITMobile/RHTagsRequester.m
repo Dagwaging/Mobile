@@ -28,6 +28,7 @@
 #define kRootKey @"TagsRoot"
 #define kChildrenKey @"Children"
 #define kTagsKey @"Tags"
+#define kServerIDKey @"Id"
 #define kNameKey @"Name"
 #define kIsDefaultKey @"IsDefault"
 
@@ -142,6 +143,7 @@
                                                           inManagedObjectContext:managedObjectContext];
         newTag.name = [tagDict objectForKey:kNameKey];
         newTag.isDefault = [tagDict objectForKey:kIsDefaultKey];
+        newTag.serverIdentifier = [tagDict objectForKey:kServerIDKey];
         newTag.parent = category;
     }
 }

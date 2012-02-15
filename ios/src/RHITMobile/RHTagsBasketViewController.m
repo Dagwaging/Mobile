@@ -19,6 +19,8 @@
 
 #import "RHTagsBasketViewController.h"
 #import "RHAppDelegate.h"
+#import "RHMapViewController.h"
+#import "RHMapDirectionsManager.h"
 #import "RHTagSelectionViewController.h"
 #import "RHTourRequester.h"
 #import "RHTourTagCategory.h"
@@ -218,8 +220,26 @@ moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath
 }
 
 - (void)didLoadPath:(RHPath *)path {
-    NSLog(@"Loaded tour");
-    // TODO
+    [RHAppDelegate.instance.mapViewController.directionsManager displayPath:path];
+    
+    // Transition to view
+    UITabBarController *tabBarController = RHAppDelegate.instance.tabBarController;
+    
+    UIView *fromView = tabBarController.selectedViewController.view;
+    UIView *toView = [[tabBarController.viewControllers objectAtIndex:0] view];
+    
+    // Transition using a page curl.
+    [UIView transitionFromView:fromView 
+                        toView:toView 
+                      duration:0.5 
+                       options:UIViewAnimationOptionTransitionCurlDown
+                    completion:^(BOOL finished) {
+                        if (finished) {
+                            tabBarController.selectedIndex = 0;
+                        }
+                    }];
+    
+    [self.navigationController popToRootViewControllerAnimated:NO];
 }
 
 @end
