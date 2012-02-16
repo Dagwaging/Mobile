@@ -61,7 +61,8 @@ class Student < Person
     def initialize
         super
 
-        majors = ['ME', 'CS', 'SE', 'OE', 'PH', 'BE', 'CE', 'EE', 'CPE', 'CHE', 'CHEM', 'AB']
+        majors = ['ME', 'CS', 'SE', 'OE', 'PH', 'BE', 
+            'CE', 'EE', 'CPE', 'CHE', 'CHEM', 'AB']
         if rand(6) < 1
             majors.shuffle!
             @major = "#{majors[0]}/#{majors.shuffle[1]}"
@@ -76,7 +77,8 @@ class Student < Person
         if rand(10) < 1
             @location = Faker::Address.street_address
         else
-            halls = ['Blumberg Hall', 'Mees Hall', 'Speed Hall', 'Apartments Hall EAST', 'Apartments Hall WEST', 'Deming Hall']
+            halls = ['Blumberg Hall', 'Mees Hall', 'Speed Hall', 'Percopo Hall ', 
+                'Apartments Hall EAST', 'Apartments Hall WEST', 'Deming Hall']
             @location = "#{halls.sample} #{rand(200) + 100}"
         end
 
@@ -106,9 +108,11 @@ class Faculty < Person
         super
 
         @department = ['Computer Science & Software Engineering', 'Mathematics',
-            'Humanities & Social Sciences', 'Physics & Optical Engineering', 'Mechanical Engineering'].sample
+            'Humanities & Social Sciences', 'Physics & Optical Engineering',
+            'Mechanical Engineering'].sample
 
-        halls = ['Moench Hall A', 'Moench Hall B', 'Moench Hall C', 'Moench Hall D', 'Moench Hall F', 'Crapo Hall G', 'Olin Hall O', 'HMU']
+        halls = ['Moench Hall A', 'Moench Hall B', 'Moench Hall C', 
+            'Moench Hall D', 'Moench Hall F', 'Crapo Hall G', 'Olin Hall O', 'HMU']
         @location = "#{halls.sample}#{rand(200) + 100}"
 
         $all_people << self
