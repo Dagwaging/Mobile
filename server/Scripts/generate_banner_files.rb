@@ -1,9 +1,12 @@
 #!/usr/bin/env ruby
 
+
+require 'optparse'
 require 'set'
 
 require 'rubygems'
 require 'faker'
+
 
 $all_banner_ids = Set.new
 $all_usernames = Set.new
@@ -11,6 +14,30 @@ $all_usernames = Set.new
 $all_people = []
 $all_faculty = []
 $all_students = []
+
+$all_crns = Set.new
+$all_course_numbers = Set.new
+
+$all_courses = []
+
+# Command line options
+options = {}
+
+opt_parser = OptionParser.new do |opts|
+    opts.banner = 'Usage: generate_banner_data.rb [options]'
+
+    options[:sample] = false
+
+    opts.on('-s', '--sample', 'Only create a small number of entries') do
+        options[:sample] = true
+    end
+end
+
+opt_parser.parse!
+
+def chance_one_in x
+    return rand(x) < 1
+end
 
 class Person
     attr_accessor :fname, :lname, :mname, :username,
@@ -31,7 +58,7 @@ class Person
 
         @phone_number = Faker::PhoneNumber.phone_number
 
-        if rand(5) > 1
+        if chance_one_in 5
             @mname = (rand(122 - 97) + 97).chr.upcase
         else
             @mname = Faker::Name.first_name
@@ -74,7 +101,7 @@ class Student < Person
         @class_year = ['FR', 'SO', 'JR', 'SR', 'GR'].sample
         @advisor = $all_faculty.sample
 
-        if rand(10) < 1
+        if chance_one_in 10
             @location = Faker::Address.street_address
         else
             halls = ['Blumberg Hall', 'Mees Hall', 'Speed Hall', 'Percopo Hall ', 
@@ -112,7 +139,7 @@ class Faculty < Person
             'Mechanical Engineering'].sample
 
         halls = ['Moench Hall A', 'Moench Hall B', 'Moench Hall C', 
-            'Moench Hall D', 'Moench Hall F', 'Crapo Hall G', 'Olin Hall O', 'HMU']
+            'Moench Hall D', 'Moench Hall F', 'Crapo Hall G', 'Olin Hall O', 'HMU ']
         @location = "#{halls.sample}#{rand(200) + 100}"
 
         $all_people << self
@@ -132,40 +159,139 @@ class Faculty < Person
     end
 end
 
-# Create 3 faculty
-3.times do
-    Faculty.new
-end
+class Course
+    attr_accessor :crn, :course_number, :title, :instructor, 
+        :credit_hours, :location, :final, :cap, :comments, :students
 
-# Create 30 students
-30.times do
-    Student.new
-end
+    def initialize
+        @crn = rand(2000) + 2000
 
-# Shuffle and write to file
-$all_people.shuffle!
+        while $all_crns.include? @crn
+            @crn = rand(2000) + 2000
+        end
 
-File.open 'small.usr', 'w' do |user_file|
-    $all_people.each do |person|
-        user_file.puts person.to_csv
+        $all_crns << @crn
+
+        @course_number = ['MA', 'PH', 'CSSE', 'BIO', 'GS', 'IA', 'RH'].sample +
+            (rand(300) + 100).to_s + '-01'
+
+        while $all_course_numbers.include? @course_number
+            @course_number = ['MA', 'PH', 'CSSE', 'BIO', 'GS', 'IA', 'RH'].sample +
+                (rand(300) + 100).to_s + '-01'
+        end
+
+        $all_course_numbers << @course_number
+
+        @title = Faker::Company.catch_phrase
+        @title = @title.split
+        @title.each {|w| w.capitalize!}
+        @title = @title.join ' '
+
+        if chance_one_in 10
+            @comments = 'Permission of instructor required'
+        else
+            @comments = '&nbsp'
+        end
+
+        @instructor = $all_faculty.sample
+        @credit_hours = rand(5) + 1
+        @location = "#{self.rand_days}/#{self.rand_hour}/#{self.rand_room}"
+        @final = "#{self.rand_day}/#{rand(3) + 1}/#{self.rand_room}"
+
+        @students = []
+        @cap = rand(30)
+
+        $all_courses << self
+    end
+
+    def enrolled
+        return 20
+    end
+
+    def instructor_info
+        return "#{@instructor.lname}, #{@instructor.fname} #{@instructor.mname}"
+    end
+
+    def rand_days
+        if chance_one_in 5
+            return 'MWT'
+        elsif chance_one_in 5
+            return 'W'
+        elsif chance_one_in 5
+            return 'TWF'
+        else
+            return 'MTRF'
+        end
+    end
+
+    def rand_day
+        return ['M', 'T', 'W', 'R', 'F'].sample
+    end
+
+    def rand_room
+        return ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'O', 'M'].sample + (rand(300) + 100).to_s
+    end
+
+    def rand_hour
+        if chance_one_in 5
+            start = rand(9) + 1
+            finish = start + rand(10 - start) + 1
+            return "#{start}-#{finish}"
+        else
+            return rand(10) + 1
+        end
+    end
+
+    def to_csv
+        return "#{@crn}|#{@course_number}|#{@title}|" +
+               "#{@instructor.username}|#{@credit_hours}|#{@location}" +
+               "#{@final}|#{self.enrolled}|#{@cap}|" +
+               "#{@comments}|#{self.instructor_info}"
     end
 end
 
-# Create 197 faculty
-197.times do
+scales = {}
+
+if options[:sample]
+    scales[:students] = 30
+    scales[:courses] = 5
+    scales[:faculty] = 3
+else
+    scales[:students] = 2000
+    scales[:courses] = 500
+    scales[:faculty] = 200
+end
+
+scales[:faculty].times do
     Faculty.new
 end
 
-# Create 2970 students
-2970.times do
+scales[:courses].times do
+    Course.new
+end
+
+scales[:students].times do
     Student.new
 end
 
-# Shuffle and write to second file
-$all_people.shuffle!
+dir = DateTime.now.strftime("banner-data#{'-sample' if options[:sample]}-%Y-%m-%d-%H-%M-%S")
+Dir::mkdir dir
 
-File.open 'full.usr', 'w' do |user_file|
-    $all_people.each do |person|
-        user_file.puts person.to_csv
+['201110', '201120', '201130', '201210', '201220', '201230'].each do |term|
+    $all_people.shuffle!
+    
+    File.open File.join(dir, "#{term}.usr"), 'w' do |user_file|
+        $all_people.each do |person|
+            user_file.puts person.to_csv
+        end
+    end
+    
+    $all_courses.shuffle!
+    
+    File.open File.join(dir, "#{term}.cls"), 'w' do |cls_file|
+        $all_courses.each do |course|
+            cls_file.puts course.to_csv
+        end
     end
 end
+
