@@ -83,7 +83,7 @@ class Person
 end
 
 class Student < Person
-    attr_accessor :major, :year, :class_year, :advisor
+    attr_accessor :major, :year, :class_year, :advisor, :courses
 
     def initialize
         super
@@ -117,6 +117,31 @@ class Student < Person
         return "#{@lname[0..5].gsub(/[^A-Za-z]/i, '').upcase}" +
                "#{@fname[0..0].gsub(/[^A-Za-z]/i, '').upcase}" + 
                "#{@mname[0..0].gsub(/[^A-Za-z]/i, '').upcase}"
+    end
+
+    def pick_courses
+        if chance_one_in 50
+            num_courses = 0
+        else
+            num_courses = rand(5) + 1
+        end
+
+        @courses = $all_courses.shuffle.slice 0, num_courses
+
+        @courses.each do |course|
+            course.students << self
+        end
+    end
+
+    def refresh_advisor
+        if not $all_faculty.include? @advisor
+            @advisor = $all_faculty.sample
+        end
+    end
+
+    def to_ssf_csv
+        courses = @courses.map { |course| course.to_ssf_value }
+        return "xxxxxx|#{@banner_id}#{'|' + courses.join('|') if not courses.empty?}"
     end
 
     def to_csv
@@ -242,6 +267,10 @@ class Course
         end
     end
 
+    def to_ssf_value
+        return "#{@crn}.#{@course_number}.#{@credit_hours}"
+    end
+
     def to_csv
         return "#{@crn}|#{@course_number}|#{@title}|" +
                "#{@instructor.username}|#{@credit_hours}|#{@location}" +
@@ -250,47 +279,72 @@ class Course
     end
 end
 
-scales = {}
-
+# Set up numbers for each type of entry
 if options[:sample]
-    scales[:students] = 30
-    scales[:courses] = 5
-    scales[:faculty] = 3
+    scales = {:students => 30,
+              :courses => 5,
+              :faculty => 3,
+              :replace_students => 8,
+              :replace_faculty => 2
+    }
 else
-    scales[:students] = 2000
-    scales[:courses] = 500
-    scales[:faculty] = 200
+    scales = {:students => 2000,
+              :courses => 500,
+              :faculty => 200,
+              :replace_students => 500,
+              :replace_faculty => 20
+    }
 end
 
-scales[:faculty].times do
-    Faculty.new
-end
+# Create initial set of faculty and students
+scales[:faculty].times { Faculty.new }
+scales[:students].times { Student.new }
 
-scales[:courses].times do
-    Course.new
-end
-
-scales[:students].times do
-    Student.new
-end
-
+# Create output directory
 dir = DateTime.now.strftime("banner-data#{'-sample' if options[:sample]}-%Y-%m-%d-%H-%M-%S")
 Dir::mkdir dir
 
 ['201110', '201120', '201130', '201210', '201220', '201230'].each do |term|
+    # Replace faculty members
+    $all_faculty.drop rand(20)
+    scales[:replace_faculty].times { Faculty.new }
+
+    # Create all new courses
+    $all_courses = []
+    $all_crns = []
+    $all_course_numbers = []
+    scales[:courses].times { Course.new }
+
+    # Replace students
+    $all_students.drop rand(500)
+    scales[:replace_students].times { Student.new }
+
+    # Check for missing advisor and register for courses
+    $all_students.each do |student|
+        student.refresh_advisor
+        student.pick_courses
+    end
+
+    # Write .usr file
     $all_people.shuffle!
-    
     File.open File.join(dir, "#{term}.usr"), 'w' do |user_file|
         $all_people.each do |person|
             user_file.puts person.to_csv
         end
     end
     
+    # Write .cls file
     $all_courses.shuffle!
-    
     File.open File.join(dir, "#{term}.cls"), 'w' do |cls_file|
         $all_courses.each do |course|
             cls_file.puts course.to_csv
+        end
+    end
+
+    # Write .ssf file
+    File.open File.join(dir, "#{term}.ssf"), 'w' do |ssf_file|
+        $all_students.each do |student|
+            ssf_file.puts student.to_ssf_csv
         end
     end
 end
