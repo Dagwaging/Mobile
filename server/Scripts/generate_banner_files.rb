@@ -17,6 +17,7 @@ $all_students = []
 
 $all_crns = Set.new
 $all_course_numbers = Set.new
+$course_numbers_to_sections = {}
 
 $all_courses = []
 
@@ -88,11 +89,12 @@ class Student < Person
     def initialize
         super
 
-        majors = ['ME', 'CS', 'SE', 'OE', 'PH', 'BE', 
-            'CE', 'EE', 'CPE', 'CHE', 'CHEM', 'AB']
+        majors = ['AB', 'BE', 'CE', 'CHE', 'CHEM', 'CPE',
+            'CS', 'EE', 'EMGT', 'EP', 'MA', 'ME', 'OE', 'PH', 'SE']
+
         if rand(6) < 1
             majors.shuffle!
-            @major = "#{majors[0]}/#{majors.shuffle[1]}"
+            @major = "#{majors[0]}/#{majors[1]}"
         else
             @major = majors.sample
         end
@@ -104,8 +106,9 @@ class Student < Person
         if chance_one_in 10
             @location = Faker::Address.street_address
         else
-            halls = ['Blumberg Hall', 'Mees Hall', 'Speed Hall', 'Percopo Hall ', 
-                'Apartments Hall EAST', 'Apartments Hall WEST', 'Deming Hall']
+            halls = ['Blumberg Hall', 'Mees Hall', 'Scharpenburg Hall',
+                'Speed Hall', 'Percopo Hall ', 'Apartments Hall EAST',
+                'Apartments Hall WEST', 'Deming Hall']
             @location = "#{halls.sample} #{rand(200) + 100}"
         end
 
@@ -159,9 +162,15 @@ class Faculty < Person
     def initialize
         super
 
-        @department = ['Computer Science & Software Engineering', 'Mathematics',
-            'Humanities & Social Sciences', 'Physics & Optical Engineering',
-            'Mechanical Engineering'].sample
+        @department = ['Applied Biology/Bio Engineering',
+            'Auxiliary Enterprises', 'Chemical Engineering',
+            'Chemistry & Life Sciences', 'Civil Engineering',
+            'Computer Science & Software Engineering',
+            'Dept of Army/Military Science',
+            'Electrical and Computer Engineering',
+            'Humanities & Social Sciences', 'MS-Engineering Management',
+            'Mathematics', 'Mechanical Engineering',
+            'Physics & Optical Engineering'].sample
 
         halls = ['Moench Hall A', 'Moench Hall B', 'Moench Hall C', 
             'Moench Hall D', 'Moench Hall F', 'Crapo Hall G', 'Olin Hall O', 'HMU ']
@@ -185,7 +194,7 @@ class Faculty < Person
 end
 
 class Course
-    attr_accessor :crn, :course_number, :title, :instructor, 
+    attr_accessor :crn, :course_number, :section_number, :title, :instructor, 
         :credit_hours, :location, :final, :cap, :comments, :students
 
     def initialize
@@ -197,40 +206,75 @@ class Course
 
         $all_crns << @crn
 
-        @course_number = ['MA', 'PH', 'CSSE', 'BIO', 'GS', 'IA', 'RH'].sample +
-            (rand(300) + 100).to_s + '-01'
+        @instructor = $all_faculty.sample
+        if chance_one_in 10
+            @location = "#{self.rand_days}/#{self.rand_hour}/#{self.rand_room}:#{self.rand_day}/#{self.rand_hour}/#{self.rand_room}"
+        elsif chance_one_in 20
+            @location = 'TBA/TBA/TBA'
+        else
+            @location = "#{self.rand_days}/#{self.rand_hour}/#{self.rand_room}"
+        end
+
+        # Sometimes just copy another course and make this another section
+        if chance_one_in 5 and not $all_courses.empty?
+            copied = $all_courses.sample
+
+            $course_numbers_to_sections[copied.course_number] += 1
+
+            @course_number = copied.course_number
+            @section_number = $course_numbers_to_sections[copied.course_number]
+            @title = copied.title
+            @comments = copied.comments
+            @credit_hours = copied.credit_hours
+            @final = copied.final
+            @cap = copied.cap
+
+            @students = []
+
+            $all_courses << self
+
+            return
+        end
+
+        @course_number = ['AB', 'BE', 'BIO', 'CE', 'CHE',
+            'CHEM', 'CSSE', 'ECE', 'EGMT', 'ES', 'GE',
+            'GRAD', 'GS', 'IA', 'JP', 'MA', 'ME', 'MS', 'OE',
+            'PH', 'RH', 'ROBO', 'SP', 'SV'].sample + (rand(300) + 100).to_s 
 
         while $all_course_numbers.include? @course_number
             @course_number = ['MA', 'PH', 'CSSE', 'BIO', 'GS', 'IA', 'RH'].sample +
-                (rand(300) + 100).to_s + '-01'
+                (rand(300) + 100).to_s
         end
 
         $all_course_numbers << @course_number
 
+        @section_number = 1
+        $course_numbers_to_sections[@course_number] = @section_number
+
         @title = Faker::Company.catch_phrase
-        @title = @title.split
-        @title.each {|w| w.capitalize!}
-        @title = @title.join ' '
+        @title = @title.capitalize.gsub(/[^a-zA-Z][a-z]/i) {|s| s.upcase }
 
         if chance_one_in 10
-            @comments = 'Permission of instructor required'
+            @comments = ['Permission of instructor required',
+                'Junior status required', 'Second year students only'].sample
         else
             @comments = '&nbsp'
         end
 
-        @instructor = $all_faculty.sample
-        @credit_hours = rand(5) + 1
-        @location = "#{self.rand_days}/#{self.rand_hour}/#{self.rand_room}"
         @final = "#{self.rand_day}/#{rand(3) + 1}/#{self.rand_room}"
-
+        @credit_hours = rand(5) + 1
         @students = []
         @cap = rand(30)
 
         $all_courses << self
     end
 
+    def full_course_number
+        return "#{@course_number}-%02d" % @section_number
+    end
+
     def enrolled
-        return 20
+        return @students.count
     end
 
     def instructor_info
@@ -268,12 +312,12 @@ class Course
     end
 
     def to_ssf_value
-        return "#{@crn}.#{@course_number}.#{@credit_hours}"
+        return "#{@crn}.#{self.full_course_number}.#{@credit_hours}"
     end
 
     def to_csv
-        return "#{@crn}|#{@course_number}|#{@title}|" +
-               "#{@instructor.username}|#{@credit_hours}|#{@location}" +
+        return "#{@crn}|#{self.full_course_number}|#{@title}|" +
+               "#{@instructor.username}|#{@credit_hours}|#{@location}|" +
                "#{@final}|#{self.enrolled}|#{@cap}|" +
                "#{@comments}|#{self.instructor_info}"
     end
