@@ -372,6 +372,7 @@ Dir::mkdir dir
     # Write .usr file
     $all_people.shuffle!
     File.open File.join(dir, "#{term}.usr"), 'w' do |user_file|
+        user_file.puts term
         $all_people.each do |person|
             user_file.puts person.to_csv
         end
@@ -380,6 +381,7 @@ Dir::mkdir dir
     # Write .cls file
     $all_courses.shuffle!
     File.open File.join(dir, "#{term}.cls"), 'w' do |cls_file|
+        cls_file.puts term
         $all_courses.each do |course|
             cls_file.puts course.to_csv
         end
@@ -387,6 +389,7 @@ Dir::mkdir dir
 
     # Write .ssf file
     File.open File.join(dir, "#{term}.ssf"), 'w' do |ssf_file|
+        ssf_file.puts term
         $all_students.each do |student|
             ssf_file.puts student.to_ssf_csv
         end
