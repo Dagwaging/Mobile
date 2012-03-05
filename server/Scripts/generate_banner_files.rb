@@ -144,11 +144,11 @@ class Student < Person
 
     def to_ssf_csv
         courses = @courses.map { |course| course.to_ssf_value }
-        return "xxxxxx|#{@banner_id}#{'|' + courses.join('|') if not courses.empty?}"
+        return "#{@banner_id}#{'|' + courses.join('|') if not courses.empty?}"
     end
 
     def to_csv
-        return "xxxxx|#{@banner_id}|#{@username}|" +
+        return "#{@banner_id}|#{@username}|" +
                "#{self.email_address}|#{@mailbox}|#{@major}|" + 
                "#{@class_year}|#{year}|#{@advisor.username}|" + 
                "#{@lname}|#{@fname}|#{@mname}|" +
@@ -185,7 +185,7 @@ class Faculty < Person
     end
 
     def to_csv
-        return "xxxxx|#{@banner_id}|#{@username}|" +
+        return "#{@banner_id}|#{@username}|" +
                "#{self.email_address}|#{@mailbox}|&nbsp|" +
                "&nbsp|&nbsp|&nbsp|" +
                "#{@lname}|#{@fname}|#{@mname}|" +
