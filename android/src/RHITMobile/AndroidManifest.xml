@@ -4,7 +4,7 @@
     android:versionCode="0"
     android:versionName="0.1" >
 
-    <uses-sdk android:minSdkVersion="7" />
+    <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="14" />
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -20,7 +20,7 @@
         <activity
             android:label="@string/app_name"
             android:name=".StartupActivity"
-            android:theme="@android:style/Theme.Light"
+            android:theme="@style/Theme.Sherlock.Light.DarkActionBar"
             android:configChanges="keyboardHidden|orientation" 
             android:launchMode="singleTop" 
             android:allowTaskReparenting="true" >
@@ -36,8 +36,10 @@
         </activity>
         
         <activity
+            android:label="Preferences"
             android:name=".PreferencesActivity"  
-            android:exported="true" >
+            android:exported="true" 
+            android:theme="@style/Theme.Sherlock" >
         </activity>
         
         <activity
@@ -45,13 +47,16 @@
             android:name=".LoginActivity"  
             android:exported="true" 
             android:configChanges="keyboardHidden|orientation" 
-            android:windowSoftInputMode="stateUnchanged" >
+            android:windowSoftInputMode="stateUnchanged" 
+            android:theme="@style/Theme.Sherlock" >
         </activity>
         
         <activity
-            android:label="@string/app_name"
+            android:label="Campus Map"
             android:name=".CampusMapActivity" 
-            android:exported="true" >
+            android:exported="true" 
+            android:theme="@style/Theme.Sherlock" >
+            
             <intent-filter >
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
@@ -62,15 +67,27 @@
         </activity>
         
         <activity
-            android:label="@string/app_name"
+            android:label="Directions"
             android:name=".DirectionListActivity"
-            android:theme="@android:style/Theme.Light" >
+            android:theme="@style/Theme.Sherlock.Dialog" >
         </activity>
         
         <activity
-            android:label="@string/app_name"
+            android:label="Campus Services"
             android:name=".CampusServicesActivity"
             android:exported="true" 
+            android:theme="@style/Theme.Sherlock" >
+
+            <meta-data
+            	android:name="android.app.default_searchable"
+                android:value=".CampusServicesSearchActivity" />
+        </activity>
+        
+        <activity
+            android:label="Campus Services"
+            android:name=".CampusServicesSearchActivity"
+            android:exported="true" 
+            android:theme="@style/Theme.Sherlock"
             android:launchMode="singleTop" >
                         
             <intent-filter >
@@ -86,65 +103,93 @@
         </activity>
         
         <activity
-            android:label="Tour of Campus"
+            android:label="Campus Tours"
             android:name=".CampusToursStartupActivity" 
             android:configChanges="keyboardHidden|orientation" 
+            android:theme="@style/Theme.Sherlock"
             android:exported="true" >
         </activity>
                 
         <activity
             android:label="Tour Interest Selection"
-            android:name=".CampusToursTagListActivity" 
+            android:name=".CampusToursTagListActivity"  
+            android:theme="@style/Theme.Sherlock"
             android:configChanges="keyboardHidden|orientation" >
         </activity>
         
         <activity
             android:label="Tour Interests"
-            android:name=".CampusToursTagSelectActivity" 
+            android:name=".CampusToursTagSelectActivity"  
+            android:theme="@style/Theme.Sherlock"
             android:configChanges="keyboardHidden|orientation" >
+            
+            <meta-data
+            	android:name="android.app.default_searchable"
+                android:value=".CampusToursTagSelectSearchActivity" />
+        </activity>
+        
+        <activity
+            android:label="Tour Interests"
+            android:name=".CampusToursTagSelectSearchActivity"  
+            android:theme="@style/Theme.Sherlock"
+            android:configChanges="keyboardHidden|orientation"
+            android:launchMode="singleTop" >
+                        
+            <intent-filter >
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+            <intent-filter >
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable_tour_tag" />
         </activity>
         
         <activity
             android:label="Off Campus Tour"
-            android:name=".CampusToursOffCampusActivity" 
+            android:name=".CampusToursOffCampusActivity"  
+            android:theme="@style/Theme.Sherlock"
             android:configChanges="keyboardHidden|orientation" >
         </activity>
 
         <activity
-            android:label="@string/app_name"
+            android:label="Location"
             android:name=".LocationActivity"
-            android:theme="@android:style/Theme.Light" >
+            android:theme="@style/Theme.Sherlock.Light" >
         </activity>
         
         <activity
-            android:label="@string/app_name"
-            android:name=".PersonActivity" >
+            android:label="Person"
+            android:name=".PersonActivity" 
+            android:theme="@style/Theme.Sherlock" >
         </activity>
         
         <activity
-            android:label="Schedule: "
+            android:label="Schedule"
             android:name=".SchedulePersonActivity" 
-            android:theme="@android:style/Theme.Light" >
+            android:theme="@style/Theme.Sherlock.Light.DarkActionBar" >
         </activity>
         
         <activity
-            android:label="Room Schedule: "
+            android:label="Room Schedule"
             android:name=".ScheduleRoomActivity" 
-            android:theme="@android:style/Theme.Light" >
+            android:theme="@style/Theme.Sherlock.Light.DarkActionBar">
         </activity>
         
         <activity
             android:label="@string/app_name"
             android:name=".ScheduleCourseActivity" 
-            android:theme="@android:style/Theme.Light" >
+            android:theme="@style/Theme.Sherlock.Light.DarkActionBar" >
         </activity>
         
         <activity
-            android:label="@string/app_name"
+            android:label="Location Search"
             android:name=".LocationSearchActivity"
             android:launchMode="singleTop"
             android:configChanges="keyboardHidden|orientation"
-            android:theme="@android:style/Theme.Light" >
+            android:theme="@style/Theme.Sherlock" >
             
             <intent-filter >
                 <action android:name="android.intent.action.SEARCH" />
@@ -159,11 +204,11 @@
         </activity>
         
         <activity
-            android:label="@string/app_name"
+            android:label="Directory"
             android:name=".PersonSearchActivity"
             android:launchMode="singleTop"
             android:configChanges="keyboardHidden|orientation"
-            android:theme="@android:style/Theme.Light" >
+            android:theme="@style/Theme.Sherlock" >
             
             <intent-filter >
                 <action android:name="android.intent.action.SEARCH" />
@@ -190,6 +235,10 @@
         <provider
             android:name=".providers.CampusServicesSearchSuggestions" 
             android:authorities="edu.rosehulman.android.directory.providers.CampusServicesSearchSuggestions"/>
+        
+        <provider
+            android:name=".providers.TourTagsSearchSuggestions" 
+            android:authorities="edu.rosehulman.android.directory.providers.TourTagsSearchSuggestions"/>
         
 		<service android:enabled="true" android:name=".DataUpdateService" />        
         

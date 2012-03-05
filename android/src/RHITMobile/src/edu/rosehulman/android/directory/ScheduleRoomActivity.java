@@ -1,112 +1,180 @@
 package edu.rosehulman.android.directory;
 
-import java.util.Arrays;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.BaseAdapter;
-import android.widget.ListView;
-import android.widget.TabHost;
-import android.widget.TextView;
+import android.support.v4.app.FragmentActivity;
 
-public class ScheduleRoomActivity extends AuthenticatedActivity {
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.ActionBar.Tab;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.view.Window;
+
+import edu.rosehulman.android.directory.TermCodeProvider.OnTermSetListener;
+import edu.rosehulman.android.directory.model.RoomScheduleDay;
+import edu.rosehulman.android.directory.model.RoomScheduleItem;
+import edu.rosehulman.android.directory.model.RoomScheduleWeek;
+import edu.rosehulman.android.directory.model.TermCode;
+
+public class ScheduleRoomActivity extends FragmentActivity implements OnTermSetListener {
 	
 	public static final String EXTRA_ROOM = "ROOM";
+	public static final String EXTRA_TERM_CODE = "TermCode";
 	
 	public static Intent createIntent(Context context, String room) {
 		Intent intent = new Intent(context, ScheduleRoomActivity.class);
 		intent.putExtra(EXTRA_ROOM, room);
 		return intent;
 	}
-	
-	private static final String[] HOURS = new String[] {"",
-			"8:05am", "9:00am", "9:55am",
-			"10:50am", "11:45am", "12:40pm",
-			"1:35pm", "2:30pm", "3:25pm",
-			"4:20pm"};
+
+	public static Intent createIntent(Context context, String room, TermCode term) {
+		Intent intent = new Intent(context, ScheduleRoomActivity.class);
+		intent.putExtra(EXTRA_ROOM, room);
+		intent.putExtra(EXTRA_TERM_CODE, term);
+		intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+		return intent;
+	}
 
 	private String room;
+	private TermCode term;
 	
 	private TaskManager taskManager = new TaskManager();
 	
-	private TabHost tabHost;
-	
 	private RoomScheduleWeek schedule;
+
+	private Bundle savedInstanceState;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		setContentView(R.layout.schedule_room);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        
+		getSupportFragmentManager().beginTransaction().add(new AuthenticatedFragment(), "auth").commit();
+
+		this.savedInstanceState = savedInstanceState;
+        
+		handleIntent(getIntent());
+	}
+	
+	@Override
+	protected void onNewIntent(Intent newIntent) {
+		super.onNewIntent(newIntent);
+		setIntent(newIntent);
+		this.savedInstanceState = null;
+		handleIntent(newIntent);
+	}
+	
+	private void handleIntent(Intent intent) {
 		
-		tabHost = (TabHost)findViewById(android.R.id.tabhost);
-		tabHost.setup();
-		
-		Intent intent = getIntent();
 		if (!intent.hasExtra(EXTRA_ROOM)) {
 			finish();
 			return;
 		}
 		room = intent.getStringExtra(EXTRA_ROOM);
 		
-		LoadSchedule task = new LoadSchedule();
-		taskManager.addTask(task);
-		task.execute();
+		term = (TermCode)intent.getParcelableExtra(EXTRA_TERM_CODE);
+		if (term == null) {
+			term = User.getTerm();
+		}
+		
+		ActionBar actionBar = getSupportActionBar();
+		actionBar.removeAllTabs();
+		
+		if (savedInstanceState != null &&
+				savedInstanceState.containsKey("Schedule")) {
+			processSchedule((RoomScheduleWeek)savedInstanceState.getParcelable("Schedule"));
+			getSupportActionBar().setSelectedNavigationItem(savedInstanceState.getInt("Selected"));
+			setSupportProgressBarIndeterminateVisibility(false);
+		} else {
+			LoadSchedule task = new LoadSchedule();
+			taskManager.addTask(task);
+			task.execute();
+		}
+	}
+	
+	@Override
+	public void onSaveInstanceState(Bundle state) {
+		super.onSaveInstanceState(state);
+		
+		if (schedule != null) {
+			state.putParcelable("Schedule", schedule);
+		}
+		
+		state.putInt("Selected", getSupportActionBar().getSelectedNavigationIndex());
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		taskManager.abortTasks();
+	}
+    
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getSupportMenuInflater();
+		inflater.inflate(R.menu.schedule_room, menu);
+		menu.findItem(R.id.term).setActionProvider(new TermCodeProvider(this, term));
+        return true;
+	}
+	
+	@Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case android.R.id.home:
+				finish();
+				break;
+			default:
+				return super.onOptionsItemSelected(item); 
+		}
+		return true;
+	}
+	
+	@Override
+	public void onTermSet(TermCode newTerm) {
+		if (newTerm.equals(term))
+			return;
+		
+		term = newTerm;
+		User.setTerm(term);
+
+		Intent intent = createIntent(this, room, term);
+		startActivity(intent);
 	}
 	
 	private void createTab(String tag, String label) {
-		String header = createTabHeader(tabHost.getContext(), label);
-		tabHost.addTab(tabHost.newTabSpec(tag).setIndicator(header).setContent(tabFactory));
+		ActionBar actionBar = getSupportActionBar();
+		Bundle args = ScheduleRoomFragment.buildArguments(tag, schedule.getDay(tag));
+		TabListener<ScheduleRoomFragment> l = new TabListener<ScheduleRoomFragment>(this, tag, ScheduleRoomFragment.class, args);
+		Tab tab = actionBar.newTab()
+				.setText(label)
+				.setTabListener(l);
+		actionBar.addTab(tab);
+		//TODO set selected day to today
 	}
 	
-	private static String createTabHeader(Context context, String label) {
-		return label;
-	}
-	
-//	private static View createTabHeader(Context context, String label) {
-//		View v = LayoutInflater.from(context).inflate(R.layout.schedule_tab, null);
-//		TextView name = (TextView)v.findViewById(R.id.name);
-//		name.setText(label);
-//		return v;
-//	}
-
-	TabHost.TabContentFactory tabFactory = new TabHost.TabContentFactory() {
-		
-		@Override
-		public View createTabContent(final String tag) {
-			LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			View root = inflater.inflate(R.layout.schedule_list, null);
-			ListView list = (ListView)root.findViewById(R.id.list);
-			
-			RoomScheduleDay day = schedule.getDay(tag);
-			list.setAdapter(new ScheduleAdapter(day.items));
-			
-			list.setOnItemClickListener(new OnItemClickListener() {
-
-				@Override
-				public void onItemClick(AdapterView<?> adapter, View v, int position, long id) {
-					if (adapter == null)
-						return;
-					
-					RoomScheduleItem item = schedule.getDay(tag).items[position];
-					
-					Intent intent = ScheduleCourseActivity.createIntent(ScheduleRoomActivity.this, item.course, item.section);
-					startActivity(intent);
-				}
-				
-			});
-			
-			return root;
+	private void processSchedule(RoomScheduleWeek res) {
+		schedule = res;
+		for (String day : res.tags) {
+			createTab(day, day);
 		}
-	};
+		getSupportActionBar().setSubtitle(room);
+	}
 	
 	private class LoadSchedule extends AsyncTask<Void, Void, RoomScheduleWeek> {
+		
+		@Override
+		protected void onPreExecute() {
+			setSupportProgressBarIndeterminateVisibility(true);
+		}
 
 		@Override
 		protected RoomScheduleWeek doInBackground(Void... params) {
@@ -147,95 +215,10 @@ public class ScheduleRoomActivity extends AuthenticatedActivity {
 		
 		@Override
 		protected void onPostExecute(RoomScheduleWeek res) {
-			schedule = res;
-			for (String day : res.tags) {
-				createTab(day, day);
-			}
-			setTitle(String.format("Room Schedule: %s", room));
+			setSupportProgressBarIndeterminateVisibility(false);
+			processSchedule(res);
 		}
 		
 	}
 	
-	private class ScheduleAdapter extends BaseAdapter {
-		
-		private RoomScheduleItem[] items;
-		
-		public ScheduleAdapter(RoomScheduleItem[] items) {
-			this.items = items;
-		}
-
-		@Override
-		public int getCount() {
-			return items.length;
-		}
-
-		@Override
-		public Object getItem(int position) {
-			return items[position];
-		}
-
-		@Override
-		public long getItemId(int position) {
-			return position;
-		}
-
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			LayoutInflater inflater = LayoutInflater.from(ScheduleRoomActivity.this);
-			View v = convertView;
-			if (v == null) {
-				v = inflater.inflate(R.layout.schedule_room_list_item, null);
-			}
-			
-			RoomScheduleItem item = items[position];
-			
-			TextView course = (TextView)v.findViewById(R.id.course);
-			TextView time = (TextView)v.findViewById(R.id.time);
-			
-			course.setText(String.format("%s-%02d %s", item.course, item.section, item.courseName));
-			time.setText(String.format("%s - %s", HOURS[item.hourStart], HOURS[item.hourEnd]));
-			
-			return v;
-		}
-	}
-	
-	private class RoomScheduleItem {
-		public String course;
-		public String courseName;
-		public int section;
-		public int hourStart;
-		public int hourEnd;
-		
-		public RoomScheduleItem(String course, String courseName, int section, int hourStart, int hourEnd) {
-			this.course = course;
-			this.courseName = courseName;
-			this.section = section;
-			this.hourStart = hourStart;
-			this.hourEnd = hourEnd;
-		}
-	}
-	
-	private class RoomScheduleDay {
-		
-		public RoomScheduleItem[] items;
-
-		public RoomScheduleDay(RoomScheduleItem[] items) {
-			this.items = items;
-		}
-	}
-	
-	private class RoomScheduleWeek {
-		
-		private String[] tags;
-		private RoomScheduleDay[] days;
-		
-		public RoomScheduleWeek(String[] tags, RoomScheduleDay[] days) {
-			this.tags = tags;
-			this.days = days;
-		}
-		
-		public RoomScheduleDay getDay(String tag) {
-			return days[Arrays.asList(tags).indexOf(tag)];
-		}
-	}
 }

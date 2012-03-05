@@ -1,40 +1,35 @@
 package edu.rosehulman.android.directory;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import android.content.ContentProviderOperation;
 import android.content.Context;
 import android.content.Intent;
-import android.content.OperationApplicationException;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.RemoteException;
-import android.provider.ContactsContract;
-import android.provider.ContactsContract.CommonDataKinds.StructuredName;
-import android.provider.ContactsContract.Data;
-import android.provider.ContactsContract.RawContacts;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
+
 import edu.rosehulman.android.directory.LoadLocation.OnLocationLoadedListener;
 import edu.rosehulman.android.directory.model.Location;
 
-public class PersonActivity extends AuthenticatedActivity {
+public class PersonActivity extends FragmentActivity {
 
 	public static final String EXTRA_PERSON = "PERSON"; 
 	
@@ -48,8 +43,6 @@ public class PersonActivity extends AuthenticatedActivity {
 		return intent;
 	}
 	
-	private ImageView image;
-	private TextView name;
 	private ListView detailsView;
 	
 	private ListItem listItems[];
@@ -57,11 +50,11 @@ public class PersonActivity extends AuthenticatedActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.person);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
         
-        name = (TextView)findViewById(R.id.name);
-        image = (ImageView)findViewById(R.id.image);
         detailsView = (ListView)findViewById(R.id.details);
         
         Intent intent = getIntent();
@@ -73,6 +66,8 @@ public class PersonActivity extends AuthenticatedActivity {
         } else {
         	person = defaultPerson;
         }
+        
+        getSupportFragmentManager().beginTransaction().add(new AuthenticatedFragment(), "auth").commit();
         
         updateUI(person);
         
@@ -87,7 +82,7 @@ public class PersonActivity extends AuthenticatedActivity {
     
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
+        MenuInflater inflater = getSupportMenuInflater();
         inflater.inflate(R.menu.person, menu);
         return true;
     }
@@ -105,11 +100,14 @@ public class PersonActivity extends AuthenticatedActivity {
         	//TODO finish implementing createContact
         	//createContact();
         	return true;
+        case android.R.id.home:
+        	finish();
+        	return true;
         default:
             return super.onOptionsItemSelected(item);
         }
     }
-    
+    /*
 	private void createContact() {
 		ArrayList<ContentProviderOperation> ops =
 				new ArrayList<ContentProviderOperation>();
@@ -136,10 +134,10 @@ public class PersonActivity extends AuthenticatedActivity {
 		}
 
 	}
+	*/
     
     private void updateUI(PersonInfo person) {
-    	name.setText(person.name);
-        image.setImageResource(R.drawable.ic_contact_picture);
+    	setTitle(person.name);
     	
     	List<ListItem> items = new LinkedList<ListItem>();
     	items.add(new ScheduleItem(person.username));
@@ -244,7 +242,7 @@ public class PersonActivity extends AuthenticatedActivity {
     	private String person;
     	
     	public ScheduleItem(String person) {
-    		super("Schedule", null, android.R.drawable.sym_action_chat);
+    		super("Schedule", null, R.drawable.action_schedule);
     		this.person = person;
 		}
     	
@@ -258,7 +256,7 @@ public class PersonActivity extends AuthenticatedActivity {
     private class EmailItem extends ClickableListItem {
     	
     	public EmailItem(String value) {
-    		super("Email", value, android.R.drawable.sym_action_email);
+    		super("Email", value, R.drawable.action_email);
 		}
     	
     	@Override
@@ -272,7 +270,7 @@ public class PersonActivity extends AuthenticatedActivity {
     private class CallItem extends ClickableListItem {
     	
     	public CallItem(String value) {
-    		super("Call", value, android.R.drawable.sym_action_call);
+    		super("Call", value, R.drawable.action_call);
 		}
     	
     	@Override
@@ -286,7 +284,7 @@ public class PersonActivity extends AuthenticatedActivity {
     private class LocationItem extends ClickableListItem {
     	
     	public LocationItem(String value) {
-    		super("Room #", value, android.R.drawable.sym_action_chat);
+    		super("Room #", value, R.drawable.action_location);
 		}
     	
     	@Override

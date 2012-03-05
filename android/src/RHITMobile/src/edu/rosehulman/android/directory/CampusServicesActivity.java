@@ -1,8 +1,6 @@
 package edu.rosehulman.android.directory;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
-import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
@@ -10,55 +8,50 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.BaseExpandableListAdapter;
-import android.widget.ExpandableListView;
-import android.widget.ExpandableListView.OnChildClickListener;
+import android.widget.BaseAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
+
+import com.actionbarsherlock.app.SherlockListActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.view.Window;
+
 import edu.rosehulman.android.directory.IDataUpdateService.AsyncRequest;
-import edu.rosehulman.android.directory.LoadCampusServiceHyperlink.OnHyperlinkLoadedListener;
 import edu.rosehulman.android.directory.ServiceManager.ServiceRunnable;
 import edu.rosehulman.android.directory.db.CampusServicesAdapter;
 import edu.rosehulman.android.directory.model.CampusServicesCategory;
 import edu.rosehulman.android.directory.model.Hyperlink;
 
-public class CampusServicesActivity extends Activity {
+public class CampusServicesActivity extends SherlockListActivity {
+
+	public static final String EXTRA_ROOT_ID = "ROOT_ID";
 	
 	public static Intent createIntent(Context context) {
 		return new Intent(context, CampusServicesActivity.class);
 	}
 	
+	private static Intent createIntent(Context context, long rootId) {
+		Intent intent = new Intent(context, CampusServicesActivity.class);
+		intent.putExtra(EXTRA_ROOT_ID, rootId);
+		return intent;
+	}
+	
 	private TaskManager taskManager = new TaskManager();
 	
-	private ExpandableListView tree;
-	
-	private CampusServicesCategory[] categories;
+	private CampusServicesCategory category;
 
 	private ServiceManager<IDataUpdateService> updateService;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);  
 		setContentView(R.layout.campus_services);
-		
-		tree = (ExpandableListView)findViewById(R.id.tree);
-		
-		tree.setOnChildClickListener(new OnChildClickListener() {
-			@Override
-			public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-				if (categories == null)
-					return false;
-				
-				tree_childClicked(categories[groupPosition].entries[childPosition]);
-				return true;
-			}
-		});
+		getSupportActionBar().setHomeButtonEnabled(true);
 		
 		updateService = new ServiceManager<IDataUpdateService>(getApplicationContext(),
 				DataUpdateService.createIntent(getApplicationContext()));
@@ -99,49 +92,29 @@ public class CampusServicesActivity extends Activity {
 		});
 	}
 	
-	@Override
-	protected void onNewIntent(Intent intent) {
-		handleIntent(intent);
-	}
-	
-	private void handleIntent(Intent intent) {
-		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-    		runSearch(intent.getStringExtra(SearchManager.QUERY));
-    		
-    	} else if (Intent.ACTION_VIEW.equals(intent.getAction())) {
-		    Uri data = intent.getData();
-		    
-		    long id = Long.parseLong(data.getPath());
-		    LoadCampusServiceHyperlink task = new LoadCampusServiceHyperlink(new OnHyperlinkLoadedListener() {
-				
-				@Override
-				public void onLinkLoaded(Hyperlink link) {
-					finish();
-					Intent newIntent = new Intent(Intent.ACTION_VIEW);
-					newIntent.setData(Uri.parse(link.url));
-					startActivity(newIntent);
-				}
-			}); 
-		    taskManager.addTask(task);
-		    task.execute(id);
-    	} else {
-    		runSearch("");	
-    	}
-	}
-
-	private void runSearch(String query) {
-		LoadServices loadServices = new LoadServices(query);
-		taskManager.addTask(loadServices);
-		loadServices.execute();
+    @Override
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+    	if (category == null)
+			return;
 		
-		if (!"".equals(query)) {
-			setTitle("Search: " + query);
+		if (position < category.children.length) {
+			CampusServicesCategory child = category.children[position];
+			Intent intent = createIntent(CampusServicesActivity.this, child.id);
+			startActivity(intent);
+		} else {
+			Hyperlink link = category.entries[position-category.children.length];
+			String earl = link.url;
+			Intent intent = new Intent(Intent.ACTION_VIEW);
+			intent.setData(Uri.parse(earl));
+			startActivity(intent);
 		}
 	}
 	
-	@Override
-	public void onResume() {
-		super.onResume();
+	private void handleIntent(Intent intent) {
+		long rootId = intent.getLongExtra(EXTRA_ROOT_ID, -1);
+		LoadServices loadServices = new LoadServices(rootId);
+		taskManager.addTask(loadServices);
+		loadServices.execute();
 	}
 	
 	@Override
@@ -152,7 +125,7 @@ public class CampusServicesActivity extends Activity {
 	
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
+        MenuInflater inflater = getSupportMenuInflater();
         inflater.inflate(R.menu.campus_services, menu);
         return true;
     }
@@ -168,154 +141,139 @@ public class CampusServicesActivity extends Activity {
         switch (item.getItemId()) {
         case R.id.search:
         	onSearchRequested();
-        	return true;
+        	break;
+        case android.R.id.home:
+        	startActivity(StartupActivity.createIntent(this, true));
+        	break;
         default:
             return super.onOptionsItemSelected(item);
         }
+        return true;
     }
 	
-	private void tree_childClicked(Hyperlink child) {
-		String earl = child.url;
-		Intent intent = new Intent(Intent.ACTION_VIEW);
-		intent.setData(Uri.parse(earl));
-		startActivity(intent);
-	}
+    private class ResultsAdapter extends BaseAdapter {
+    	
+		public CampusServicesCategory category;
+		
+		public ResultsAdapter(CampusServicesCategory category) {
+			this.category = category;
+		}
+
+		@Override
+		public int getCount() {
+			return category.children.length + category.entries.length;
+		}
+
+		@Override
+		public Object getItem(int position) {
+			if (position < category.children.length){
+				return category.children[position];
+			} else {
+				return category.entries[position-category.children.length];
+			}
+		}
+
+		@Override
+		public long getItemId(int position) {
+			return position;
+		}
+		
+		@Override
+		public int getViewTypeCount() {
+			return 2;
+		}
+		
+		@Override
+		public int getItemViewType(int position) {
+			if (position < category.children.length){
+				return 0;
+			} else {
+				return 1;
+			}
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			View root = convertView;
+			
+			if (position < category.children.length){
+				if (root == null) {
+					LayoutInflater inflater = LayoutInflater.from(CampusServicesActivity.this);
+					root = inflater.inflate(R.layout.service_group, null);
+				}
+				TextView name = (TextView)root.findViewById(R.id.name);
+				
+				CampusServicesCategory child = category.children[position];
+				
+				name.setText(child.name);
+				
+			} else {
+				
+				if (root == null) {
+					LayoutInflater inflater = LayoutInflater.from(CampusServicesActivity.this);
+					root = inflater.inflate(R.layout.service_child, null);
+				}
+				TextView name = (TextView)root.findViewById(R.id.name);
+				
+				Hyperlink link = category.entries[position-category.children.length];
+				
+				name.setText(link.name);
+			}
+			
+			return root;
+		}
+    	
+    }
 	
-	
-	private class TreeAdapter extends BaseExpandableListAdapter {
+	private class LoadServices extends BackgroundTask<Void, Void, CampusServicesCategory> {
 		
-		public CampusServicesCategory[] groups;
+		private long rootId;
+		private String path;
 		
-		public TreeAdapter(CampusServicesCategory[] groups) {
-			this.groups = groups;
-		}
-
-		@Override
-		public boolean isChildSelectable(int groupPosition, int childPosition) {
-			return true;
-		}
-
-		@Override
-		public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-			CampusServicesCategory group = groups[groupPosition];
-			
-			LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			View v = inflater.inflate(R.layout.service_group, null);
-			
-			TextView name = (TextView)v.findViewById(R.id.name);
-			
-			name.setText(group.name);
-			
-			return v;
-		}
-
-		@Override
-		public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-			Hyperlink child = groups[groupPosition].entries[childPosition];
-			
-			LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			View v = inflater.inflate(R.layout.service_child, null);
-			
-			TextView name = (TextView)v.findViewById(R.id.name);
-			
-			name.setText(child.name);
-			
-			return v;
-		}
-
-		@Override
-		public Object getGroup(int groupPosition) {
-			return groups[groupPosition];
-		}
-		
-		@Override
-		public Object getChild(int groupPosition, int childPosition) {
-			return groups[groupPosition].entries[childPosition];
-		}
-
-		@Override
-		public int getGroupCount() {
-			return groups.length;
-		}
-		
-		@Override
-		public int getChildrenCount(int groupPosition) {
-			return groups[groupPosition].entries.length;
-		}
-
-		@Override
-		public long getGroupId(int groupPosition) {
-			return groupPosition;
-		}
-
-		@Override
-		public long getChildId(int groupPosition, int childPosition) {
-			return childPosition;
-		}
-
-		@Override
-		public boolean hasStableIds() {
-			return true;
-		}
-		
-	}
-	
-	private class LoadServices extends BackgroundTask<Void, Void, CampusServicesCategory[]> {
-		
-		private ProgressDialog dialog;
-		private String query;
-		
-		public LoadServices(String query) {
-			this.query = query;
+		public LoadServices(long rootId) {
+			this.rootId = rootId;
 		}
 
 		@Override
 		protected void onPreExecute() {
-			dialog = new ProgressDialog(CampusServicesActivity.this);
-			dialog.setTitle(null);
-			dialog.setMessage("Loading...");
-			dialog.setIndeterminate(true);
-			dialog.setCancelable(true);
-			dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-				@Override
-				public void onCancel(DialogInterface dialog) {
-					cancel(true);
-				}
-			});
-			dialog.show();
+			setSupportProgressBarIndeterminateVisibility(true);
 		}
 
 		@Override
-		protected CampusServicesCategory[] doInBackground(Void... args) {
+		protected CampusServicesCategory doInBackground(Void... args) {
 			CampusServicesAdapter adapter = new CampusServicesAdapter();
 			adapter.open();
-			CampusServicesCategory categories[] = adapter.getCategories(query);
+			CampusServicesCategory category = adapter.getCategory(rootId);
+			path = adapter.getPath(rootId, true);
 			adapter.close();
 			
-			return categories;
+			return category;
 		}
 
 		@Override
 		protected void onAbort() {
-			dialog.dismiss();
+			setSupportProgressBarIndeterminateVisibility(false);
 		}
 		
 		@Override
 		protected void onCancelled() {
-			dialog.dismiss();
+			setSupportProgressBarIndeterminateVisibility(false);
 		}
 		
 		@Override
-		protected void onPostExecute(CampusServicesCategory res[]) {
-			dialog.dismiss();
+		protected void onPostExecute(CampusServicesCategory res) {
+			setSupportProgressBarIndeterminateVisibility(false);
 			
-			categories = res;
-			tree.setAdapter(new TreeAdapter(categories));
+			if (res == null) {
+				finish();
+				return;
+			}
 			
-			if (query.length() > 0) {
-				for (int i = 0; i < res.length; i++) {
-					tree.expandGroup(i);
-				}
+			category = res;
+			setListAdapter(new ResultsAdapter(category));
+			
+			if (!"".equals(path)) {
+				getSupportActionBar().setSubtitle(path);
 			}
 		}
 		

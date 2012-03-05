@@ -8,8 +8,6 @@ public class ArrayUtil {
 	/**
 	 * Converts an array to a different type
 	 * 
-	 * @param <T> The goal type
-	 * @param <V> The source type
 	 * @param arr The array to convert
 	 * @param out An array of the proper type with the same size
 	 * 
@@ -27,7 +25,6 @@ public class ArrayUtil {
     /**
      * Joins an array with a separator
      * 
-     * @param <T> The type of the arrray
      * @param arr The array
      * @param sep The separator between elements in the array
      * @return The string representation of the joined array
@@ -57,5 +54,21 @@ public class ArrayUtil {
     	}
     	res.delete(res.length()-sep.length(), res.length());
     	return res.toString();
+    }
+    
+    /**
+     * Finds the given object in the given array
+     * 
+     * @param arr The array to search linearly
+     * @param o The object to find
+     * @return The index of the object, or -1 if not found
+     */
+    public static <T> int indexOf(T[] arr, T o) {
+    	for (int i = 0; i < arr.length; i++) {
+			if (o.equals(arr[i])) {
+				return i;
+			}
+		}
+    	return -1;
     }
 }

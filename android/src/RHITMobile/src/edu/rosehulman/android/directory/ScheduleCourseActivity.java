@@ -6,6 +6,7 @@ import java.util.List;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +16,12 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class ScheduleCourseActivity extends AuthenticatedActivity {
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.view.MenuItem;
+
+import edu.rosehulman.android.directory.model.TermCode;
+
+public class ScheduleCourseActivity extends FragmentActivity {
 
 	public static final String EXTRA_COURSE = "PERSON";
 	public static final String EXTRA_SECTION = "SECTION";
@@ -29,6 +35,7 @@ public class ScheduleCourseActivity extends AuthenticatedActivity {
 	
 	private String course;
 	private int section;
+	private TermCode term;
 	
 	private ListView detailsView;
 	
@@ -38,6 +45,10 @@ public class ScheduleCourseActivity extends AuthenticatedActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.schedule_course);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
         
         detailsView = (ListView)findViewById(R.id.details);
         
@@ -48,10 +59,15 @@ public class ScheduleCourseActivity extends AuthenticatedActivity {
 		}
 		course = intent.getStringExtra(EXTRA_COURSE);
 		section = intent.getIntExtra(EXTRA_SECTION, 0);
+		
+		//FIXME from intent?
+		term = User.getTerm();
+		
+		getSupportFragmentManager().beginTransaction().add(new AuthenticatedFragment(), "auth").commit();
         
         createListItems();
         
-        setTitle(String.format("Course: %s-%02d", course, section));
+        setTitle(String.format("%s-%02d", course, section));
         
         detailsView.setAdapter(new DetailsAdapter());
         detailsView.setOnItemClickListener(new OnItemClickListener() {
@@ -60,14 +76,25 @@ public class ScheduleCourseActivity extends AuthenticatedActivity {
 				detailsView_itemClicked(position);
 			}
 		});
-        
-        
     }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case android.R.id.home:
+				finish();
+				break;
+			default:
+				return super.onOptionsItemSelected(item); 
+		}
+		return true;
+	}
     
     private void createListItems() {
     	List<ListItem> items = new LinkedList<ListItem>();
     	items.add(new ListHeader("General Info"));
     	items.add(new LabelItem("Name", "Senior Project"));
+    	items.add(new LabelItem("Term", term.name));
     	items.add(new InstructorItem("Shawn Bohner"));
     	items.add(new LabelItem("Enrollment", "24/25"));
     	

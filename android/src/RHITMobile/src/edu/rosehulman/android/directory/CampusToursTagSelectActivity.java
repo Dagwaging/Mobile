@@ -1,26 +1,27 @@
 package edu.rosehulman.android.directory;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockListActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
+
 import edu.rosehulman.android.directory.db.TourTagsAdapter;
 import edu.rosehulman.android.directory.model.TourTag;
 import edu.rosehulman.android.directory.model.TourTagsGroup;
 
-public class CampusToursTagSelectActivity extends Activity {
+public class CampusToursTagSelectActivity extends SherlockListActivity {
 	
 	public static final String EXTRA_PATH = "PATH";
 	public static final String EXTRA_ROOT_ID = "ROOT_ID";
@@ -38,98 +39,38 @@ public class CampusToursTagSelectActivity extends Activity {
 	
 	private TaskManager taskManager = new TaskManager();
 	
-	private ListView tags;
-	
 	private TourTagsGroup root;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.tour_tag_select_list);
-		
-		tags = (ListView)findViewById(R.id.tags);
-		
-		tags.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> adapter, View v, int position, long id) {
-				if (adapter == null)
-					return;
-				
-				Intent intent = getIntent();
-				String path = intent.getStringExtra(EXTRA_PATH);
-				if (position < root.children.length){
-					TourTagsGroup child = root.children[position];
-					if ("".equals(path))
-						path = child.name;
-					else
-						path += "/" + child.name;
-					startActivityForResult(createIntent(CampusToursTagSelectActivity.this, child.id, path), 1);
-				} else {
-					TourTag tag = root.tags[position-root.children.length];
-					Intent data = CampusToursTagListActivity.createResultIntent(tag, path);
-					setResult(RESULT_OK, data);
-					finish();
-				}
-			}
-		});
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
 		
     	handleIntent(getIntent());
 	}
 	
 	@Override
 	protected void onNewIntent(Intent intent) {
-		tags.setAdapter(null);
+		setIntent(intent);
+		setListAdapter(null);
 		handleIntent(intent);
 	}
 	
 	private void handleIntent(Intent intent) {
-		/* TODO search
-		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-    		runSearch(intent.getStringExtra(SearchManager.QUERY));
-    		
-    	} else if (Intent.ACTION_VIEW.equals(intent.getAction())) {
-		    Uri data = intent.getData();
-		    
-		    long id = Long.parseLong(data.getPath());
-		    LoadCampusServiceHyperlink task = new LoadCampusServiceHyperlink(new OnHyperlinkLoadedListener() {
-				
-				@Override
-				public void onLinkLoaded(Hyperlink link) {
-					finish();
-					Intent newIntent = new Intent(Intent.ACTION_VIEW);
-					newIntent.setData(Uri.parse(link.url));
-					startActivity(newIntent);
-				}
-			}); 
-		    taskManager.addTask(task);
-		    task.execute(id);
-    	} else {
-    		runSearch("");	
-    	}
-    	*/
 		
-		if (!intent.hasExtra(EXTRA_ROOT_ID))
-			return;
-		
-		long id = intent.getLongExtra(EXTRA_ROOT_ID, -1);
-		if (id == -1)
-			return;
-		
-		runSearch(id, "");
-	}
+		long parentId = intent.getLongExtra(EXTRA_ROOT_ID, -1);
 
-	private void runSearch(long parent, String query) {
-		LoadServices loadServices = new LoadServices(parent, query);
+		if (parentId == -1)
+			return;
+		
+		LoadServices loadServices = new LoadServices(parentId);
 		taskManager.addTask(loadServices);
 		loadServices.execute();
-		
-		//TODO set to something more useful
-		if (!"".equals(query)) {
-			setTitle("Search: " + query);
-		}
 	}
-	
+
 	@Override
 	public void onResume() {
 		super.onResume();
@@ -143,8 +84,8 @@ public class CampusToursTagSelectActivity extends Activity {
 	
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.campus_services, menu);
+        MenuInflater inflater = getSupportMenuInflater();
+        inflater.inflate(R.menu.tour_tag_select, menu);
         return true;
     }
     
@@ -160,28 +101,44 @@ public class CampusToursTagSelectActivity extends Activity {
         case R.id.search:
         	onSearchRequested();
         	return true;
+        case android.R.id.home:
+        	finish();
+        	return true;
         default:
             return super.onOptionsItemSelected(item);
         }
     }
-	
+    
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (resultCode != RESULT_OK)
-			return;
-		
-		setResult(resultCode, data);
-		finish();
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+    	if (root == null)
+    		return;
+    	
+		Intent intent = getIntent();
+		String path = intent.getStringExtra(EXTRA_PATH);
+		if (position < root.children.length){
+			TourTagsGroup child = root.children[position];
+			if (path == null || "".equals(path))
+				path = child.name;
+			else
+				path += "/" + child.name;
+			Intent newIntent = createIntent(this, child.id, path);
+			startActivity(newIntent);
+		} else {
+			TourTag tag = root.tags[position-root.children.length];
+			Intent newIntent = CampusToursTagListActivity.createIntent(this, tag, path);
+			startActivity(newIntent);
+			finish();
+		}
 	}
     
 	private class LoadServices extends AsyncTask<Void, Void, TourTagsGroup> {
 		
 		private long rootId;
-		private String query;
+		private String path;
 		
-		public LoadServices(long rootId, String query) {
+		public LoadServices(long rootId) {
 			this.rootId = rootId;
-			this.query = query;
 		}
 
 		@Override
@@ -189,7 +146,8 @@ public class CampusToursTagSelectActivity extends Activity {
 			
 			TourTagsAdapter tagsAdapter = new TourTagsAdapter();
 			tagsAdapter.open();
-			TourTagsGroup res = tagsAdapter.getGroup(rootId, query);
+			TourTagsGroup res = tagsAdapter.getGroup(rootId);
+			path = tagsAdapter.getPath(rootId, true);
 			tagsAdapter.close();
 			
 			return res;
@@ -198,9 +156,11 @@ public class CampusToursTagSelectActivity extends Activity {
 		@Override
 		protected void onPostExecute(TourTagsGroup res) {
 			root = res;
-			tags.setAdapter(new TagGroupAdapter(res));
+			setListAdapter(new TagGroupAdapter(res));
 			
-			//TODO expand groups (if only one category and no tags match, dive into it)
+			if (!"".equals(path)) {
+				getSupportActionBar().setSubtitle(path);
+			}
 		}
 		
 	}
@@ -233,17 +193,36 @@ public class CampusToursTagSelectActivity extends Activity {
 		}
 
 		@Override
+		public int getViewTypeCount() {
+			return 2;
+		}
+		
+		@Override
+		public int getItemViewType(int position) {
+			if (position < offset) {
+				return 0;
+			} else {
+				return 1;
+			}
+		}
+
+		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			LayoutInflater inflater = LayoutInflater.from(CampusToursTagSelectActivity.this);
-			View v;
+			View v = convertView;
 			if (position < offset) {
 				TourTagsGroup child = root.children[position];
-				v = inflater.inflate(R.layout.tour_tag_select_group, null);
+				if (v == null) {
+					LayoutInflater inflater = LayoutInflater.from(CampusToursTagSelectActivity.this);
+					v = inflater.inflate(R.layout.tour_tag_select_group, null);
+				}
 				TextView name = (TextView)v.findViewById(R.id.name);
 				name.setText(child.name);
 			} else {
 				TourTag tag = root.tags[position-offset];
-				v = inflater.inflate(R.layout.tour_tag_select_item, null);
+				if (v == null) {
+					LayoutInflater inflater = LayoutInflater.from(CampusToursTagSelectActivity.this);
+					v = inflater.inflate(R.layout.tour_tag_select_item, null);
+				}
 				TextView name = (TextView)v.findViewById(R.id.name);
 				name.setText(tag.name);
 			}

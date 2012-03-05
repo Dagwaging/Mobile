@@ -7,6 +7,7 @@ import android.app.SearchManager;
 import android.content.ContentValues;
 import android.database.Cursor;
 import edu.rosehulman.android.directory.model.TourTag;
+import edu.rosehulman.android.directory.model.TourTagItem;
 import edu.rosehulman.android.directory.model.TourTagsGroup;
 
 /**
@@ -26,7 +27,7 @@ public class TourTagsAdapter extends TableAdapter {
 	/**
 	 * Replace all data with the given categories
 	 * 
-	 * @param categories The new category data to use
+	 * @param root The new category data to use
 	 */
 	public void replaceData(TourTagsGroup root) {
 		db.beginTransaction();
@@ -48,6 +49,7 @@ public class TourTagsAdapter extends TableAdapter {
 	 * Adds a category, and all of its links, to the database
 	 * 
 	 * @param category The category to add
+	 * @param pre The DFS pre number to start with
 	 * @return the post number for the parent
 	 */
 	private int addCategory(TourTagsGroup category, int pre) {
@@ -57,7 +59,7 @@ public class TourTagsAdapter extends TableAdapter {
 		for (TourTag link : category.tags) {
 			ContentValues values = new ContentValues();
 			values.put(KEY_NAME, link.name);
-			values.put(KEY_TAG_ID, link.id);
+			values.put(KEY_TAG_ID, link.tagId);
 			values.put(KEY_IS_DEFAULT, link.isDefault);
 			values.put(KEY_PRE, i);
 			values.put(KEY_POST, i+1);
@@ -111,7 +113,7 @@ public class TourTagsAdapter extends TableAdapter {
 			protected TourTag convertRow(Cursor cursor) {
 				TourTag res = new TourTag();
 				
-				res.id = cursor.getLong(iTagId);
+				res.tagId = cursor.getLong(iTagId);
 				res.name = cursor.getString(iName);
 				res.isDefault = true;
 				
@@ -150,10 +152,25 @@ public class TourTagsAdapter extends TableAdapter {
 	/**
 	 * Computes the path to the given tag node
 	 * 
-	 * @param id The id of a tag
+	 * @param tagId The tag id of a tag
 	 * @return The path to get to that tag
 	 */
-	public String getPath(long id) {
+	public String getTagPath(long tagId) {
+		long id = getRowId(tagId);
+		return getPath(id, false);
+	}
+	
+	/**
+	 * Computes the path to the given tag node
+	 * 
+	 * @param id The id of a tag
+	 * @param includeNode Should the given node be included
+	 * @return The path to get to that tag
+	 */
+	public String getPath(long id, boolean includeNode) {
+		if (id < 0)
+			return "";
+		
 		Cursor cursor;
 		long pre;
 		long post;
@@ -172,10 +189,20 @@ public class TourTagsAdapter extends TableAdapter {
 			cursor.close();
 		}
 		
-		String projection[] = {"group_concat(Name, '/')"};
+		String where;
+		if (includeNode) {
+			where = "Pre<=? AND Post>=? AND Pre>1 ";
+		} else {
+			where = "Pre<? AND Post>? AND Pre>1 ";
+		}
+		String query = 
+		"SELECT group_concat(Name, '/') AS Path " +
+		"FROM (SELECT Name " + 
+		"  FROM TourTags " +
+		"  WHERE " + where +
+		"  ORDER BY Pre)";
 		String args[] = {String.valueOf(pre), String.valueOf(post)};
-		String where = "Pre<? AND Post>? AND Pre>1";
-		cursor = db.query(TABLE_NAME, projection, where, args, null, null, null);
+		cursor = db.rawQuery(query, args);
 		
 		if (cursor.getCount() != 1)
 			return null;
@@ -207,15 +234,40 @@ public class TourTagsAdapter extends TableAdapter {
 	}
 	
 	/**
-	 * Retrieves a filtered subset of a single tag group.
+	 * Retrieves the id of given tag node
+	 * 
+	 * @param tagId the tag id of the tag node
+	 * @return the id of the tag node
+	 */
+	public long getRowId(long tagId) {
+		String projection[] = {KEY_ID};
+		Cursor cursor;
+		String where = KEY_TAG_ID + "=?";
+		String[] args = new String[] {String.valueOf(tagId)};
+		cursor = db.query(TABLE_NAME, projection, where, args, null, null, null);
+		
+		if (cursor.getCount() != 1)
+			return -1;
+		cursor.moveToFirst();
+		long id = cursor.getLong(cursor.getColumnIndex(KEY_ID));
+		cursor.close();
+		
+		return id;
+	}
+	
+	/**
+	 * Retrieves a single tag group.
 	 * 
 	 * isDefault attribute is not loaded.
 	 * 
 	 * @param id The id of the group
-	 * @param query The search terms to use
 	 * @return The tag group and all matching children
 	 */
-	public TourTagsGroup getGroup(Long id, String query) {
+	public TourTagsGroup getGroup(Long id) {
+		if (id < 0) {
+			id = getRootId();
+		}
+		
 		Cursor cursor;
 		long pre;
 		long post;
@@ -235,12 +287,10 @@ public class TourTagsAdapter extends TableAdapter {
 		}
 		
 		String projection[] = {KEY_ID, KEY_NAME, KEY_TAG_ID, KEY_PRE, KEY_POST};
-		String args[] = {String.valueOf(pre), String.valueOf(post), "%" + query + "%"};
+		String args[] = {String.valueOf(pre), String.valueOf(post)};
 		String where = 
 			KEY_PRE  + ">=? AND " +
-			KEY_POST + "<=? AND " +
-			"((Pre+1=Post AND Name LIKE ?) OR (Pre+1!=Post))"
-			;
+			KEY_POST + "<=?";
 		cursor = db.query(TABLE_NAME, projection, where, args, null, null, KEY_PRE);
 		cursor.moveToFirst();
 		
@@ -261,16 +311,16 @@ public class TourTagsAdapter extends TableAdapter {
 		}
 		
 		String query = "SELECT " + columns(
-				columnAlias(KEY_ID, "_id"),
-				columnAlias(KEY_ID, SearchManager.SUGGEST_COLUMN_INTENT_DATA),
+				columnAlias(KEY_TAG_ID, "_id"),
+				columnAlias(KEY_TAG_ID, SearchManager.SUGGEST_COLUMN_INTENT_DATA),
 				columnAlias(KEY_NAME, SearchManager.SUGGEST_COLUMN_TEXT_1),
 				columnAlias("group_concat(Path, '/')", SearchManager.SUGGEST_COLUMN_TEXT_2)
 				) + 
-				"FROM (SELECT c1.TagId as _Id, c1.Name AS Name, c2.Name AS Path FROM TourTags c1 " +
+				"FROM (SELECT c1.TagId as TagId, c1.Name AS Name, c2.Name AS Path FROM TourTags c1 " +
 				"INNER JOIN TourTags c2 " +
 				"ON c2.Pre < c1.Pre AND c2.Post > c1.Post " +
-				"WHERE c1.TagId IS NOT NULL AND c1.Pre + 1 = c1.Post AND c1.Name LIKE ? " +
-				"ORDER BY c1.Name, c2.Name) " +
+				"WHERE c1.TagId IS NOT NULL AND c1.Pre + 1 = c1.Post AND c1.Name LIKE ? AND c2.Pre > 1 " +
+				"ORDER BY c1.Name, c2.Pre) " +
 				"GROUP BY Name " +
 				"LIMIT 10 ";
 
@@ -279,22 +329,51 @@ public class TourTagsAdapter extends TableAdapter {
 	}
 	
 	/**
-	 * Retrieves a group for a given filter
+	 * Searches for the given string
 	 * 
-	 * isDefault attribute is not loaded.
-	 * 
-	 * @param filter The string used to filter the category or name
-	 * @return A group matching either criteria
+	 * @param filter The search filter
+	 * @return An iterator over the search results
 	 */
-	public TourTagsGroup getGroup(String filter) {
-		String query = "SELECT _Id, Pre, Post, Name, Url FROM TourTags " +
-			"WHERE (TagId IS NOT NULL AND Pre + 1 = Post AND Name LIKE ?) OR (TagId IS NULL) " +
-			"ORDER BY Pre";
-		String args[] = {"%" + filter + "%"};
-		Cursor cursor = db.rawQuery(query, args);
-		cursor.moveToFirst();
+	public DbIterator<TourTagItem> search(String filter) {
+		if (filter.length() == 0) {
+			return null;
+		}
 		
-		return new SearchParser(cursor).convert();
+		String query = 
+				"SELECT Name, TagId, group_concat(Node, '/') AS Path " + 
+				"FROM (SELECT c1.Name AS Name, c2.Name AS Node, c1.TagId as TagId " + 
+				"  FROM TourTags c1 " + 
+				"  INNER JOIN TourTags c2 " + 
+				"  ON c2.Pre < c1.Pre AND c2.Post > c1.Post " + 
+				"  WHERE c1.Pre + 1 = c1.Post AND c1.Name LIKE ? AND c2.Pre > 1 " + 
+				"  ORDER BY c1.Name, c2.Pre) " + 
+				"GROUP BY Name " ;
+		String[] args = new String[] {"%" + filter + "%"};
+		return new SearchIterator(db.rawQuery(query, args));
+	}
+	
+	private class SearchIterator extends DbIterator<TourTagItem> {
+		
+		private int iTagId;
+		private int iName;
+		private int iPath;
+
+		public SearchIterator(Cursor cursor) {
+			super(cursor);
+			iTagId = cursor.getColumnIndex(KEY_TAG_ID);
+			iName = cursor.getColumnIndex(KEY_NAME);
+			iPath = cursor.getColumnIndex("Path");
+		}
+
+		@Override
+		protected TourTagItem convertRow(Cursor cursor) {
+			long tagId = cursor.getLong(iTagId);
+			String name = cursor.getString(iName);
+			String path = cursor.getString(iPath);
+			
+			return new TourTagItem(new TourTag(tagId, name), path);
+		}
+		
 	}
 	
 	private class SearchParser {
