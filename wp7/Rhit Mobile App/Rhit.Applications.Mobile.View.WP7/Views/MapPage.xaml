@@ -1,5 +1,5 @@
 ﻿<phone:PhoneApplicationPage 
-    x:Class="Rhit.Applications.View.Views.MapPage"
+    x:Class="Rhit.Applications.Views.MapPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
@@ -8,9 +8,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:maps="clr-namespace:Microsoft.Phone.Controls.Maps;assembly=Microsoft.Phone.Controls.Maps"
     xmlns:cmds="clr-namespace:Rhit.Applications.Mvvm.Commands;assembly=Rhit.Applications.Mvvm.WP7"
-    xmlns:vm="clr-namespace:Rhit.Applications.ViewModel.Models;assembly=Rhit.Applications.ViewModel.WP7"
-    xmlns:appbar="clr-namespace:Rhit.Applications.Extentions.BindableApplicationBar;assembly=Rhit.Applications.Extentions.WP7"
-    xmlns:exts="clr-namespace:Rhit.Applications.Extentions;assembly=Rhit.Applications.Extentions.WP7"
+    xmlns:vm="clr-namespace:Rhit.Applications.ViewModels;assembly=Rhit.Applications.ViewModels.WP7"
+    xmlns:exts="clr-namespace:Rhit.Applications.Extentions.Controls;assembly=Rhit.Applications.Extentions.WP7"
     FontFamily="{StaticResource PhoneFontFamilyNormal}" FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="Portrait" Orientation="Portrait"
@@ -49,7 +48,7 @@
                 <maps:MapItemsControl ItemsSource="{Binding Locations.Buildings}" ItemTemplate="{StaticResource BuildingTemplate}" />
             </maps:MapLayer>
             
-            <maps:Pushpin Content="{Binding Locations.CurrentLocation.Label}" Location="{Binding Locations.CurrentLocation.Center}"
+            <maps:Pushpin Content="{Binding Locations.CurrentLocation.Label}" Location="{Binding Locations.CurrentLocation.Center}" FontSize="30" 
                           PositionOrigin="BottomCenter" Style="{StaticResource CustomPushpinStyle}"
                           Visibility="{Binding Locations.CurrentLocation, Converter={StaticResource ObjectConverter}}" Tap="Pushpin_Tap"/>
             
@@ -57,21 +56,21 @@
         </maps:Map>
         
         <TextBlock Grid.Row="1"  DataContext="{StaticResource ViewModel}" Text="{Binding Center, FallbackValue='Debug Status'}" Visibility="{Binding Settings.DebugMode, Converter={StaticResource VisibilityConverter}}"/>
-        
-        <appbar:AppBar x:Name="AppBar" BarOpacity="0.5" Grid.RowSpan="3" VerticalAlignment="Bottom">
-            <appbar:AppBar.Buttons>
-                <appbar:AppBarButton Text="me" IconUri="/Assets/Icons/position.png" Command="{Binding GotoUserCommand, Source={StaticResource ViewModel}}"/>
-                <appbar:AppBarButton Text="rhit" IconUri="/Assets/Icons/rose-hulman.png" Command="{Binding GotoRhitCommand, Source={StaticResource ViewModel}}"/>
-                <appbar:AppBarButton Text="search" IconUri="/Assets/Icons/search.png" Command="{Binding SearchCommand}"/>
-            </appbar:AppBar.Buttons>
-            <appbar:AppBar.MenuItems>
-                <appbar:AppBarMenuItem Text="Quick List" Command="{Binding QuickListCommand}"/>
-                <appbar:AppBarMenuItem Text="Search" Command="{Binding SearchCommand}"/>
-                <appbar:AppBarMenuItem Text="Campus Services" Command="{Binding CampusServicesCommand}" />
-                <appbar:AppBarMenuItem Text="Directions Sample" Command="{Binding DirectionsCommand}" />
-                <appbar:AppBarMenuItem Text="Tours Sample" Command="{Binding ToursCommand}" />
-                <appbar:AppBarMenuItem Text="Settings" Command="{Binding SettingsCommand}"/>
-            </appbar:AppBar.MenuItems>
-        </appbar:AppBar>
+
+        <exts:AppBar x:Name="AppBar" BarOpacity="0.5" Grid.RowSpan="3" VerticalAlignment="Bottom">
+            <exts:AppBar.Buttons>
+                <exts:AppBarButton Text="me" IconUri="/Assets/Icons/position.png" Command="{Binding GotoUserCommand, Source={StaticResource ViewModel}}"/>
+                <exts:AppBarButton Text="rhit" IconUri="/Assets/Icons/rose-hulman.png" Command="{Binding RhitCommand}"/>
+                <exts:AppBarButton Text="search" IconUri="/Assets/Icons/search.png" Command="{Binding SearchCommand}"/>
+            </exts:AppBar.Buttons>
+            <exts:AppBar.MenuItems>
+                <exts:AppBarMenuItem Text="Quick List" Command="{Binding QuickListCommand}"/>
+                <exts:AppBarMenuItem Text="Search" Command="{Binding SearchCommand}"/>
+                <exts:AppBarMenuItem Text="Campus Services" Command="{Binding CampusServicesCommand}" />
+                <!--<exts:AppBarMenuItem Text="Directions Sample" Command="{Binding DirectionsCommand}" />
+                <exts:AppBarMenuItem Text="Tours Sample" Command="{Binding ToursCommand}" />-->
+                <exts:AppBarMenuItem Text="Settings" Command="{Binding SettingsCommand}"/>
+            </exts:AppBar.MenuItems>
+        </exts:AppBar>
     </Grid>
 </phone:PhoneApplicationPage>

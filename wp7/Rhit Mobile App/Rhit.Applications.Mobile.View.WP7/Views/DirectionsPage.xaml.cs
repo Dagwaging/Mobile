@@ -2,9 +2,9 @@
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Rhit.Applications.Extentions.Maps;
-using Rhit.Applications.ViewModel.Models;
+using Rhit.Applications.ViewModels;
 
-namespace Rhit.Applications.View.Views {
+namespace Rhit.Applications.Views {
     public partial class DirectionsPage : PhoneApplicationPage {
         public DirectionsPage() {
             InitializeComponent();

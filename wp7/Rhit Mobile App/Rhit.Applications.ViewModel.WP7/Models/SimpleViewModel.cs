@@ -1,7 +1,7 @@
 ﻿using System.Windows;
-using Rhit.Applications.ViewModel.Controllers;
+using Rhit.Applications.ViewModels.Controllers;
 
-namespace Rhit.Applications.ViewModel.Models {
+namespace Rhit.Applications.ViewModels {
     public class SimpleViewModel : DependencyObject {
         public SimpleViewModel() {
             Settings = SettingsController.Instance;

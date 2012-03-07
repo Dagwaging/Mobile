@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Rhit.Applications.Model.Services.Requests {
+namespace Rhit.Applications.Models.Services.Requests {
     /// \ingroup services
     /// <summary>
     /// 

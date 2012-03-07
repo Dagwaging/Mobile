@@ -4,10 +4,10 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
-using Rhit.Applications.ViewModel.Controllers;
-using Rhit.Applications.ViewModel.Models;
+using Rhit.Applications.ViewModels;
+using Rhit.Applications.ViewModels.Controllers;
 
-namespace Rhit.Applications.View.Views {
+namespace Rhit.Applications.Views {
     /// \ingroup pages
     public partial class InfoPage : PhoneApplicationPage {
         public InfoPage() {

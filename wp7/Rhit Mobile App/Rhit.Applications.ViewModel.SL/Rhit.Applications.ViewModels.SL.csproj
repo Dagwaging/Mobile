@@ -1,0 +1,121 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{22202767-F92A-4712-BB54-11E748F7A5FB}</ProjectGuid>
+    <ProjectTypeGuids>{A1591282-1198-4647-A2B1-27E5FF5F6F3B};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Rhit.Applications.ViewModels</RootNamespace>
+    <AssemblyName>Rhit.Applications.ViewModels.SL</AssemblyName>
+    <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
+    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
+    <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
+    <SilverlightApplication>false</SilverlightApplication>
+    <ValidateXaml>true</ValidateXaml>
+    <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
+  </PropertyGroup>
+  <!-- This property group is only here to support building this project using the 
+       MSBuild 3.5 toolset. In order to work correctly with this older toolset, it needs 
+       to set the TargetFrameworkVersion to v3.5 -->
+  <PropertyGroup Condition="'$(MSBuildToolsVersion)' == '3.5'">
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>Bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;TRACE;SILVERLIGHT</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>Bin\Release</OutputPath>
+    <DefineConstants>TRACE;SILVERLIGHT</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Maps.MapControl, Version=1.0.1.0, Culture=neutral, PublicKeyToken=498d0d22d7936b73, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Maps.MapControl.Common, Version=1.0.1.0, Culture=neutral, PublicKeyToken=498d0d22d7936b73, processorArchitecture=MSIL" />
+    <Reference Include="mscorlib" />
+    <Reference Include="System.Windows" />
+    <Reference Include="system" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Windows.Browser" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Controllers\ImageController.cs" />
+    <Compile Include="Controllers\LocationsController.cs" />
+    <Compile Include="Controllers\PathsController.cs" />
+    <Compile Include="Controllers\SettingsController.cs" />
+    <Compile Include="ViewModels\BaseMapViewModel.cs" />
+    <Compile Include="ViewModels\DataViewModel.cs" />
+    <Compile Include="ViewModels\TaskedViewModel.cs" />
+    <Compile Include="ViewModels\HomeViewModel.cs" />
+    <Compile Include="ViewModels\LoginViewModel.cs" />
+    <Compile Include="MapModelInitializer.cs" />
+    <Compile Include="ViewModels\MapViewModel.cs" />
+    <Compile Include="ViewModels\SimpleViewModel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Providers\IBitmapProvider.cs" />
+    <Compile Include="Providers\IBuildingMappingProvider.cs" />
+    <Compile Include="Providers\ILocationsProvider.cs" />
+    <Compile Include="Services.cs" />
+    <Compile Include="Utilities\AlternateName.cs" />
+    <Compile Include="Utilities\CampusService.cs" />
+    <Compile Include="Utilities\DirectionActionType.cs" />
+    <Compile Include="Utilities\DualLocation.cs" />
+    <Compile Include="Utilities\Link.cs" />
+    <Compile Include="Utilities\LocationNode.cs" />
+    <Compile Include="Utilities\LocationPositionMapper.cs" />
+    <Compile Include="Utilities\RhitLocation.cs" />
+    <Compile Include="Utilities\SimpleRhitLocation.cs" />
+    <Compile Include="Utilities\PathNode.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Binaries\Microsoft.Maps.MapControl.Common.dll" />
+    <Content Include="Binaries\Microsoft.Maps.MapControl.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Rhit.Applications.Extentions.SL\Rhit.Applications.Extentions.SL.csproj">
+      <Project>{C79D34D8-16BF-448A-83B3-898AC1FFFAFA}</Project>
+      <Name>Rhit.Applications.Extentions.SL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Rhit.Applications.Model.SL\Rhit.Applications.Models.SL.csproj">
+      <Project>{8539E822-5EF8-49C0-B7D8-C250F48D7B9B}</Project>
+      <Name>Rhit.Applications.Models.SL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Rhit.Applications.Mvvm.SL\Rhit.Applications.Mvvm.SL.csproj">
+      <Project>{216E83C2-839F-4BA7-A527-D92AB653437C}</Project>
+      <Name>Rhit.Applications.Mvvm.SL</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{A1591282-1198-4647-A2B1-27E5FF5F6F3B}">
+        <SilverlightProjectProperties />
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

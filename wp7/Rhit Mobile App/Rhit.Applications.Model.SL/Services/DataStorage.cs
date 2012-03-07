@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO.IsolatedStorage;
 
-namespace Rhit.Applications.Model.Services {
+namespace Rhit.Applications.Models.Services {
     public class DataStorage {
 
         #region Private Fields
@@ -10,8 +10,8 @@ namespace Rhit.Applications.Model.Services {
         #endregion
 
         private DataStorage() {
-            AllLocations = DataStorage.LoadState<Dictionary<int, RhitLocation>>(StorageKey.All, new Dictionary<int, RhitLocation>());
-            TopLocations = DataStorage.LoadState<Dictionary<int, RhitLocation>>(StorageKey.Top, new Dictionary<int, RhitLocation>());
+            AllLocations = DataStorage.LoadState<Dictionary<int, LocationData>>(StorageKey.All, new Dictionary<int, LocationData>());
+            TopLocations = DataStorage.LoadState<Dictionary<int, LocationData>>(StorageKey.Top, new Dictionary<int, LocationData>());
         }
 
         public static DataStorage Instance {
@@ -40,11 +40,11 @@ namespace Rhit.Applications.Model.Services {
             }
         }
 
-        public Dictionary<int, RhitLocation> AllLocations { get; private set; }
+        public Dictionary<int, LocationData> AllLocations { get; private set; }
 
-        public Dictionary<int, RhitLocation> TopLocations { get; private set; }
+        public Dictionary<int, LocationData> TopLocations { get; private set; }
 
-        public void OverwriteData(List<RhitLocation> locations, StorageKey key) {
+        public void OverwriteData(List<LocationData> locations, StorageKey key) {
             if(key == StorageKey.Top) {
                 TopLocations = MakeDict(locations);
                 MergeData(locations, StorageKey.All);
@@ -58,13 +58,13 @@ namespace Rhit.Applications.Model.Services {
             }
         }
 
-        public void MergeData(List<RhitLocation> locations, StorageKey key) {
+        public void MergeData(List<LocationData> locations, StorageKey key) {
             if(locations == null) return;
             if(key == StorageKey.Top) {
                 TopLocations = MakeDict(locations);
                 DataStorage.SaveState(StorageKey.Top, TopLocations);
             }
-            foreach(RhitLocation location in locations) {
+            foreach(LocationData location in locations) {
                 if(AllLocations.ContainsKey(location.Id))
                     AllLocations[location.Id].Overwrite(location);
                 else AllLocations[location.Id] = location;
@@ -72,10 +72,10 @@ namespace Rhit.Applications.Model.Services {
             DataStorage.SaveState(StorageKey.All, AllLocations);
         }
 
-        private static Dictionary<int, RhitLocation> MakeDict(List<RhitLocation> locations) {
-            Dictionary<int, RhitLocation> dict = new Dictionary<int, RhitLocation>();
+        private static Dictionary<int, LocationData> MakeDict(List<LocationData> locations) {
+            Dictionary<int, LocationData> dict = new Dictionary<int, LocationData>();
             if(locations == null) return dict;
-            foreach(RhitLocation location in locations)
+            foreach(LocationData location in locations)
                 dict[location.Id] = location;
             return dict;
         }

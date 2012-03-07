@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Net;
-using Rhit.Applications.Model.Services;
+using Rhit.Applications.Models.Services;
 
-namespace Rhit.Applications.Model.Events {
+namespace Rhit.Applications.Models.Events {
     public delegate void ServiceEventHandler(Object sender, ServiceEventArgs e);
 
     public class ServiceEventArgs : EventArgs {

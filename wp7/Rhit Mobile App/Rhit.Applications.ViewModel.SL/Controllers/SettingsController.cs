@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace Rhit.Applications.ViewModel.Controllers {
+namespace Rhit.Applications.ViewModels.Controllers {
     public class SettingsController : DependencyObject {
         private static SettingsController _instance;
 

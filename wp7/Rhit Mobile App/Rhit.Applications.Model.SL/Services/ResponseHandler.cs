@@ -4,9 +4,9 @@ using System.Net;
 using System.Runtime.Serialization.Json;
 using System.Security;
 using System.Text;
-using Rhit.Applications.Model.Events;
+using Rhit.Applications.Models.Events;
 
-namespace Rhit.Applications.Model.Services {
+namespace Rhit.Applications.Models.Services {
     public static class ResponseHandler {
 
         public static event ServiceEventHandler ResponseReceived;

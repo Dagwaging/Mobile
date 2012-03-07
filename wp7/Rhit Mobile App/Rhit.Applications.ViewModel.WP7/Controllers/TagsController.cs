@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Rhit.Applications.Model;
-using Rhit.Applications.Model.Events;
-using Rhit.Applications.Model.Services;
+using Rhit.Applications.Models;
+using Rhit.Applications.Models.Events;
+using Rhit.Applications.Models.Services;
 
-namespace Rhit.Applications.ViewModel.Controllers {
+namespace Rhit.Applications.ViewModels.Controllers {
     public class TagsController {
         private TagsController() {
             All = new ObservableCollection<Tag>();

@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows.Data;
 using System.Collections;
 
-namespace Rhit.Applications.View.Converters {
+namespace Rhit.Applications.Views.Converters {
     public class ObjectToBoolConverter : IValueConverter {
         public ObjectToBoolConverter() {
             Reverse = false;

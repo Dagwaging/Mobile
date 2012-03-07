@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Rhit.Applications.Model.Services.Requests {
+namespace Rhit.Applications.Models.Services.Requests {
     public class DirectionsRequestPart : RequestPart {
         public DirectionsRequestPart(string baseUrl)
             : base(baseUrl) {

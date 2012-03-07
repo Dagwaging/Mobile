@@ -12,7 +12,7 @@ using System.Windows.Shapes;
 using Microsoft.Phone.Controls;
 using System.Windows.Navigation;
 
-namespace Rhit.Applications.View.Views {
+namespace Rhit.Applications.Views {
     public partial class CampusServicesPage : PhoneApplicationPage {
         public const string NavigationArg_Index = "Index";
 

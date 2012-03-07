@@ -1,22 +1,12 @@
 ﻿using System;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Ink;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
-using Rhit.Applications.ViewModel.Controllers;
-using System.Collections.Generic;
-using Microsoft.Phone.Controls.Maps;
 using System.ComponentModel;
-using Rhit.Applications.Model.Services;
+using System.Windows;
+using System.Windows.Input;
 using Rhit.Applications.Mvvm.Commands;
-using Rhit.Applications.ViewModel.Utilities;
+using Rhit.Applications.ViewModels.Controllers;
+using Rhit.Applications.ViewModels.Utilities;
 
-namespace Rhit.Applications.ViewModel.Models {
+namespace Rhit.Applications.ViewModels {
     public class DirectionsViewModel : BaseMapViewModel {
         protected override void Initialize() {
             base.Initialize();

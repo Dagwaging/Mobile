@@ -2,12 +2,12 @@
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Windows.Threading;
-using Rhit.Applications.Model.Services.Requests;
+using Rhit.Applications.Models.Services.Requests;
 using System.Windows;
 using System.Threading;
 using System.Collections.Generic;
 
-namespace Rhit.Applications.Model.Services {
+namespace Rhit.Applications.Models.Services {
     public static class Connection {
         public static bool TestConnection() {
             if(!NetworkInterface.GetIsNetworkAvailable())

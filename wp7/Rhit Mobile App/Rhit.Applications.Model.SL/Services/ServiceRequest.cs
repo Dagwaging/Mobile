@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Net;
-using Rhit.Applications.Model.Services.Requests;
+using Rhit.Applications.Models.Services.Requests;
 using System.Collections.Generic;
 
-namespace Rhit.Applications.Model.Services {
+namespace Rhit.Applications.Models.Services {
     public class ServiceRequest {
         public ServiceRequest() {
             Sent = false;

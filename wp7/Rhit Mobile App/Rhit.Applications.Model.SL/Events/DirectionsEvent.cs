@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Rhit.Applications.Model.Events {
+namespace Rhit.Applications.Models.Events {
     public delegate void DirectionsEventHandler(Object sender, DirectionsEventArgs e);
 
     public class DirectionsEventArgs : ServiceEventArgs {

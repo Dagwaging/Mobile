@@ -53,30 +53,66 @@
     <Reference Include="mscorlib.extensions" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BindableApplicationBar\BindableApplicationBar.cs" />
-    <Compile Include="BindableApplicationBar\BindableApplicationBarIconButton.cs" />
-    <Compile Include="BindableApplicationBar\BindableApplicationBarMenuItem.cs" />
-    <Compile Include="BindableApplicationBar\Cache.cs" />
-    <Compile Include="BindableApplicationBar\VisualTreeHelperExtensions.cs" />
-    <Compile Include="Maps\MapSettings.cs" />
-    <Compile Include="Maps\Modes\BaseMode.cs" />
-    <Compile Include="Maps\Modes\BingMode.cs" />
-    <Compile Include="Maps\Modes\EmptyMode.cs" />
-    <Compile Include="Maps\Modes\GoogleMode.cs" />
-    <Compile Include="Maps\Modes\MapnikMode.cs" />
-    <Compile Include="Maps\Modes\OsmaMode.cs" />
-    <Compile Include="Maps\RhitMapMode.cs" />
-    <Compile Include="Maps\RhitMapExtender.cs" />
-    <Compile Include="Maps\Sources\BaseTileSource.cs" />
-    <Compile Include="Maps\Sources\BingSource.cs" />
-    <Compile Include="Maps\Sources\BingType.cs" />
-    <Compile Include="Maps\Sources\GoogleSource.cs" />
-    <Compile Include="Maps\Sources\GoogleType.cs" />
-    <Compile Include="Maps\Sources\MapnikSource.cs" />
-    <Compile Include="Maps\Sources\OsmaSource.cs" />
-    <Compile Include="Maps\Sources\RoseOverlay.cs" />
+    <Compile Include="..\Rhit.Applications.Extentions.SL\Controls\StyledMapPolygon.cs">
+      <Link>Controls\StyledMapPolygon.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Extentions.SL\Maps\MapSettings.cs">
+      <Link>Maps\MapSettings.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Extentions.SL\Maps\Modes\BaseMode.cs">
+      <Link>Maps\Modes\BaseMode.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Extentions.SL\Maps\Modes\BingMode.cs">
+      <Link>Maps\Modes\BingMode.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Extentions.SL\Maps\Modes\EmptyMode.cs">
+      <Link>Maps\Modes\EmptyMode.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Extentions.SL\Maps\Modes\GoogleMode.cs">
+      <Link>Maps\Modes\GoogleMode.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Extentions.SL\Maps\Modes\MapnikMode.cs">
+      <Link>Maps\Modes\MapnikMode.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Extentions.SL\Maps\Modes\OsmaMode.cs">
+      <Link>Maps\Modes\OsmaMode.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Extentions.SL\Maps\RhitMapExtender.cs">
+      <Link>Maps\RhitMapExtender.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Extentions.SL\Maps\RhitMapMode.cs">
+      <Link>Maps\RhitMapMode.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Extentions.SL\Maps\Sources\BaseTileSource.cs">
+      <Link>Maps\Sources\BaseTileSource.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Extentions.SL\Maps\Sources\BingSource.cs">
+      <Link>Maps\Sources\BingSource.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Extentions.SL\Maps\Sources\BingType.cs">
+      <Link>Maps\Sources\BingType.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Extentions.SL\Maps\Sources\GoogleSource.cs">
+      <Link>Maps\Sources\GoogleSource.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Extentions.SL\Maps\Sources\GoogleType.cs">
+      <Link>Maps\Sources\GoogleType.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Extentions.SL\Maps\Sources\MapnikSource.cs">
+      <Link>Maps\Sources\MapnikSource.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Extentions.SL\Maps\Sources\OsmaSource.cs">
+      <Link>Maps\Sources\OsmaSource.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Extentions.SL\Maps\Sources\RoseOverlay.cs">
+      <Link>Maps\Sources\RoseOverlay.cs</Link>
+    </Compile>
+    <Compile Include="Controls\ApplicationBar\AppBar.cs" />
+    <Compile Include="Controls\ApplicationBar\AppBarButton.cs" />
+    <Compile Include="Controls\ApplicationBar\AppBarMenuItem.cs" />
+    <Compile Include="Controls\ApplicationBar\Cache.cs" />
+    <Compile Include="Controls\ApplicationBar\VisualTreeHelperExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StyledMapPolygon.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Binaries\Microsoft.Phone.Controls.Maps.dll" />

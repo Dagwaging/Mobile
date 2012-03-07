@@ -1,19 +1,20 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows;
-using Rhit.Applications.Model;
-using Rhit.Applications.Model.Services;
-using Rhit.Applications.ViewModel.Controllers;
+using Rhit.Applications.Models;
+using Rhit.Applications.Models.Events;
+using Rhit.Applications.Models.Services;
+using Rhit.Applications.ViewModels.Controllers;
 
-namespace Rhit.Applications.ViewModel.Models {
+namespace Rhit.Applications.ViewModels {
     public class SearchViewModel : DependencyObject {
         public SearchViewModel() {
-            DataCollector.Instance.SearchResultsReturned += new Model.Events.LocationsEventHandler(LocationsReturned);
+            DataCollector.Instance.SearchResultsReturned += new LocationsEventHandler(LocationsReturned);
             Locations = LocationsController.Instance;
             People = new ObservableCollection<object>();
             Places = new ObservableCollection<RhitLocation>();
         }
 
-        void LocationsReturned(object sender, Model.Events.LocationsEventArgs e) {
+        void LocationsReturned(object sender, LocationsEventArgs e) {
             Places.Clear();
             foreach(RhitLocation location in e.Locations)
                 Places.Add(location);

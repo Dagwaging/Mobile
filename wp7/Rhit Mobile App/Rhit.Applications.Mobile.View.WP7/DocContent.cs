@@ -44,47 +44,47 @@
 /// \ref tile_sources contains all of the available map tile sources and overlays.
 /// 
 /// - The views handle page navigation and user events.
-/// - Anytime one of the views need the map, manipulate it, or get information from it they will use the \link Rhit.Applications.View.Views.ObjectModel.RhitMap RhitMap \endlink singleton class.
+/// - Anytime one of the views need the map, manipulate it, or get information from it they will use the \link Rhit.Applications.Views.ObjectModel.RhitMap RhitMap \endlink singleton class.
 /// This way the map stays up-to-date at all times.
-///  - \link Rhit.Applications.View.Views.ObjectModel.RhitMap RhitMap \endlink keeps track of the current properties of the map as well as the possible tile sources avaible.
-/// - If any of the views need any other information, like location data for instance, they will use the \link Rhit.Applications.View.Views.Services.DataCollector DataCollector \endlink singleton class.
-///  - The \link Rhit.Applications.View.Views.Services.DataCollector DataCollector \endlink will try to get the requested data from the \link Rhit.Applications.View.Views.Services.DataStorage DataStorage \endlink singleton class (i.e. local storage) first.
-///  If \link Rhit.Applications.View.Views.Services.DataStorage DataStorage \endlink has the data, then it is returned. Otherwise, it uses \link Rhit.Applications.View.Views.Services.Requests.RequestBuilder RequestBuilder \endlink and \link Rhit.Applications.View.Views.Services.GeoService GeoService \endlink to make a request to the server.
-///  - \link Rhit.Applications.View.Views.Services.DataCollector DataCollector \endlink will also check for updates from the server on the app's initialization.
-/// - All views listen to at least one \link Rhit.Applications.View.Views.Events.ServiceEvent ServiceEvent \endlink handler to handle updated data.
-///  - All server responses are handled by \link Rhit.Applications.View.Views.Services.ResponseHandler ResponseHandler \endlink, parsed, and made into a \link Rhit.Applications.View.Views.Events.ServiceEvent ServiceEvent \endlink.
-///  - Data from the server responses are parsed uses the classes in \link Rhit.Applications.View.Views.ObjectModel.DataContracts DataContracts \endlink, which are then usually converted into \link Rhit.Applications.View.Views.ObjectModel.RhitLocation RhitLocation \endlink objects.
+///  - \link Rhit.Applications.Views.ObjectModel.RhitMap RhitMap \endlink keeps track of the current properties of the map as well as the possible tile sources avaible.
+/// - If any of the views need any other information, like location data for instance, they will use the \link Rhit.Applications.Views.Services.DataCollector DataCollector \endlink singleton class.
+///  - The \link Rhit.Applications.Views.Services.DataCollector DataCollector \endlink will try to get the requested data from the \link Rhit.Applications.Views.Services.DataStorage DataStorage \endlink singleton class (i.e. local storage) first.
+///  If \link Rhit.Applications.Views.Services.DataStorage DataStorage \endlink has the data, then it is returned. Otherwise, it uses \link Rhit.Applications.Views.Services.Requests.RequestBuilder RequestBuilder \endlink and \link Rhit.Applications.Views.Services.GeoService GeoService \endlink to make a request to the server.
+///  - \link Rhit.Applications.Views.Services.DataCollector DataCollector \endlink will also check for updates from the server on the app's initialization.
+/// - All views listen to at least one \link Rhit.Applications.Views.Events.ServiceEvent ServiceEvent \endlink handler to handle updated data.
+///  - All server responses are handled by \link Rhit.Applications.Views.Services.ResponseHandler ResponseHandler \endlink, parsed, and made into a \link Rhit.Applications.Views.Events.ServiceEvent ServiceEvent \endlink.
+///  - Data from the server responses are parsed uses the classes in \link Rhit.Applications.Views.ObjectModel.DataContracts DataContracts \endlink, which are then usually converted into \link Rhit.Applications.Views.ObjectModel.RhitLocation RhitLocation \endlink objects.
 ///  
 /// \section features Feature Mapping
 /// 
 /// \subsection main_page Main Page (MapPage)
 /// 
-/// The app starts out in the \link Rhit.Applications.View.Views.MapPage MapPage \endlink and uses it as the main page for the app.
-/// The \link Rhit.Applications.View.Views.MapPage MapPage \endlink contains an app bar with buttons: 'me', 'rhit', and 'search'.
-/// The 'me' and 'rhit' buttons both indirectly link to methods in \link Rhit.Applications.View.Views.ObjectModel.RhitMap RhitMap \endlink that change the map's viewport.
-/// The 'search' button switches to the \link Rhit.Applications.View.Views.SearchPage SearchPage \endlink.
-/// The app bar also contains two menu options: 'quicklist' and 'settings' which open the \link Rhit.Applications.View.Views.QuickListPage QuickListPage \endlink and \link Rhit.Applications.View.Views.SettingsPage SettingsPage \endlink respectively.
-/// Apart from the app bar, the \link Rhit.Applications.View.Views.MapPage MapPage \endlink also always the user to click on buildings.
+/// The app starts out in the \link Rhit.Applications.Views.MapPage MapPage \endlink and uses it as the main page for the app.
+/// The \link Rhit.Applications.Views.MapPage MapPage \endlink contains an app bar with buttons: 'me', 'rhit', and 'search'.
+/// The 'me' and 'rhit' buttons both indirectly link to methods in \link Rhit.Applications.Views.ObjectModel.RhitMap RhitMap \endlink that change the map's viewport.
+/// The 'search' button switches to the \link Rhit.Applications.Views.SearchPage SearchPage \endlink.
+/// The app bar also contains two menu options: 'quicklist' and 'settings' which open the \link Rhit.Applications.Views.QuickListPage QuickListPage \endlink and \link Rhit.Applications.Views.SettingsPage SettingsPage \endlink respectively.
+/// Apart from the app bar, the \link Rhit.Applications.Views.MapPage MapPage \endlink also always the user to click on buildings.
 /// When a user clicks (taps) on a building, the building is highlighted and a PushPin appears with the name of the building.
-/// If the user then clicks (taps) on the PushPin, the app navigates to the \link Rhit.Applications.View.Views.InfoPage InfoPage \endlink for that building.
+/// If the user then clicks (taps) on the PushPin, the app navigates to the \link Rhit.Applications.Views.InfoPage InfoPage \endlink for that building.
 /// Once the user navigates away from this page, they only need to use the device's 'back' hardware button to return to this page.
 /// 
 /// \subsection info_page Location Information Page (InfoPage)
 /// 
-/// The \link Rhit.Applications.View.Views.InfoPage InfoPage \endlink contains all of the information pertinent to the given location.
+/// The \link Rhit.Applications.Views.InfoPage InfoPage \endlink contains all of the information pertinent to the given location.
 /// This includes the location's name, alternate names, description, links to relevant websites, and other locations contained within this location (child locations).
 /// The child locations are displayed as links to their information page.
-/// All of this information is conatined within the corresponding \link Rhit.Applications.View.Views.ObjectModel.RhitLocation RhitLocation\endlink.
+/// All of this information is conatined within the corresponding \link Rhit.Applications.Views.ObjectModel.RhitLocation RhitLocation\endlink.
 /// This page also provides links back to map with it's location selected on the map.
 /// 
 /// \subsection quicklist_page Top Locations Page (QuickListPage)
-/// \link Rhit.Applications.View.Views.QuickListPage QuickListPage \endlink is just a simple list of \link Rhit.Applications.View.Views.ObjectModel.RhitLocation RhitLocations \endlink that link back to the map with the selected location PushPin shown.
+/// \link Rhit.Applications.Views.QuickListPage QuickListPage \endlink is just a simple list of \link Rhit.Applications.Views.ObjectModel.RhitLocation RhitLocations \endlink that link back to the map with the selected location PushPin shown.
 /// 
 /// \subsection search_page Search Page (SearchPage)
-/// \link Rhit.Applications.View.Views.SearchPage SearchPage \endlink allows the user to search for both people and places with Rose-Hulman.
+/// \link Rhit.Applications.Views.SearchPage SearchPage \endlink allows the user to search for both people and places with Rose-Hulman.
 /// 
 /// \subsection settings_page Application Settings Page (SettingsPage)
-/// \link Rhit.Applications.View.Views.SettingsPage SettingsPage \endlink allows the user to change several different options for the app.
+/// \link Rhit.Applications.Views.SettingsPage SettingsPage \endlink allows the user to change several different options for the app.
 /// For example, the user can switch between using Bing maps to using Google maps.
 /// 
 /// \section doc_maintenance_sec Maintaining This Documentation

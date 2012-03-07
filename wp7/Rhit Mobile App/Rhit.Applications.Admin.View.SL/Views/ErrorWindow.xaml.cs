@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 
-namespace Rhit.Applications.View.Views {
+namespace Rhit.Applications.Views {
     public partial class ErrorWindow : ChildWindow {
         public ErrorWindow(Exception e) {
             InitializeComponent();

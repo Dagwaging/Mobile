@@ -1,5 +1,5 @@
 ﻿
-namespace Rhit.Applications.Model {
+namespace Rhit.Applications.Models {
     public enum LocationType {
         NormalLocation,
         PointOfInterest,

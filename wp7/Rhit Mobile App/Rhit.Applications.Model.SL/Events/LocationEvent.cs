@@ -1,12 +1,12 @@
 ﻿using System;
 
-namespace Rhit.Applications.Model.Events {
+namespace Rhit.Applications.Models.Events {
     public delegate void LocationEventHandler(Object sender, LocationEventArgs e);
 
     public class LocationEventArgs : ServiceEventArgs {
         public LocationEventArgs(ServiceEventArgs baseArgs) : base() {
             Copy(baseArgs);
         }
-        public RhitLocation Location { get; set; }
+        public LocationData Location { get; set; }
     }
 }

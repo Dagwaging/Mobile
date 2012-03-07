@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Rhit.Applications.Model.Services.Requests {
+namespace Rhit.Applications.Models.Services.Requests {
     public class ToursRequestPart : RequestPart {
         public ToursRequestPart(string baseUrl)
             : base(baseUrl) {

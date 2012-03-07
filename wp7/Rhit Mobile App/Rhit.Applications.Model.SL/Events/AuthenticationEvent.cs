@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Rhit.Applications.Model.Events {
+namespace Rhit.Applications.Models.Events {
     public delegate void AuthenticationEventHandler(Object sender, AuthenticationEventArgs e);
 
     public class AuthenticationEventArgs : ServiceEventArgs {

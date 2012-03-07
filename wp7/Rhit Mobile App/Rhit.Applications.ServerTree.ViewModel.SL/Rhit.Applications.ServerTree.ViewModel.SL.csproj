@@ -76,9 +76,9 @@
     <Compile Include="RequestNode.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Rhit.Applications.Model.SL\Rhit.Applications.Model.SL.csproj">
+    <ProjectReference Include="..\Rhit.Applications.Model.SL\Rhit.Applications.Models.SL.csproj">
       <Project>{8539E822-5EF8-49C0-B7D8-C250F48D7B9B}</Project>
-      <Name>Rhit.Applications.Model.SL</Name>
+      <Name>Rhit.Applications.Models.SL</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />

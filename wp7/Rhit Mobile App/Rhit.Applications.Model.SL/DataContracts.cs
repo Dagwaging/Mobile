@@ -10,7 +10,7 @@ using Microsoft.Maps.MapControl;
 #endif
 
 
-namespace Rhit.Applications.Model {
+namespace Rhit.Applications.Models {
     [DataContract]
     public class ServerObject {
         #region OffCampusResponse
@@ -121,9 +121,9 @@ namespace Rhit.Applications.Model {
         public List<Path_DC> Paths { get; set; }
         #endregion
 
-        public static List<RhitLocation> GetLocations(List<Location_DC> locations) {
+        public static List<LocationData> GetLocations(List<Location_DC> locations) {
             if(locations == null) return null;
-            List<RhitLocation> _locations = new List<RhitLocation>();
+            List<LocationData> _locations = new List<LocationData>();
             foreach(Location_DC location in locations)
                 _locations.Add(location.ToRhitLocation());
             return _locations;
@@ -211,14 +211,14 @@ namespace Rhit.Applications.Model {
         [DataMember(Name = "Type")]
         public string Type { get; set; }
 
-        public RhitLocation ToRhitLocation() {
+        public LocationData ToRhitLocation() {
             LocationCollection locations = new LocationCollection();
             if(LocationData != null && LocationData.Locations != null) {
                 foreach(GeoCoordinate_DC coordinate in LocationData.Locations)
                     locations.Add(coordinate.ToGeoCoordinate());
             }
 
-            RhitLocation location = new RhitLocation() {
+            LocationData location = new LocationData() {
                 Center = Center.ToGeoCoordinate(),
                 Corners = locations,
                 Id = Id,

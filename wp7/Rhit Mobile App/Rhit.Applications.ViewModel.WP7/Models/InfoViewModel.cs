@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
-using Rhit.Applications.Model;
-using Rhit.Applications.ViewModel.Controllers;
+using Rhit.Applications.Models;
+using Rhit.Applications.ViewModels.Controllers;
 
-namespace Rhit.Applications.ViewModel.Models {
+namespace Rhit.Applications.ViewModels {
     public class InfoViewModel {
         public InfoViewModel() {
             if(DesignerProperties.IsInDesignTool) return;

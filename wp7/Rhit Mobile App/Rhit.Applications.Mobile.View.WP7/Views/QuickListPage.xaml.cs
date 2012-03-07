@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Windows.Controls;
-using System.Windows.Media;
 using Microsoft.Phone.Controls;
-using Rhit.Applications.ViewModel.Controllers;
-using Rhit.Applications.ViewModel.Models;
+using Rhit.Applications.ViewModels;
 
-namespace Rhit.Applications.View.Views {
+namespace Rhit.Applications.Views {
     /// \ingroup pages
     public partial class QuickListPage : PhoneApplicationPage {
         public QuickListPage() {

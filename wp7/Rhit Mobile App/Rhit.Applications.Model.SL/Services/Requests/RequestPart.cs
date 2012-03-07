@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Rhit.Applications.Model.Services.Requests {
+namespace Rhit.Applications.Models.Services.Requests {
     public abstract class RequestPart {
         public RequestPart(string baseUrl) {
             BaseUrl = baseUrl;

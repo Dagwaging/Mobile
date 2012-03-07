@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
-namespace Rhit.Applications.View.Converters {
+namespace Rhit.Applications.Views.Converters {
     public class ListToVisibilityConverter : IValueConverter {
         public ListToVisibilityConverter() {
             NotNullValue = Visibility.Visible;

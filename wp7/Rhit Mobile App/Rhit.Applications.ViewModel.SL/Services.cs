@@ -1,7 +1,7 @@
 ﻿using System.Windows.Threading;
-using Rhit.Applications.Model.Services;
+using Rhit.Applications.Models.Services;
 
-namespace Rhit.Applications.ViewModel {
+namespace Rhit.Applications.ViewModels {
     public static class Services {
         public static void Start(Dispatcher dispatcher) {
             DataCollector.Instance.BaseAddress = "http://mobilewin.csse.rose-hulman.edu:5600";

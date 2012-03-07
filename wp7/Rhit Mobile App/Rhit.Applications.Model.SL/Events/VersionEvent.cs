@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Rhit.Applications.Model.Events {
+namespace Rhit.Applications.Models.Events {
     public delegate void VersionEventHandler(Object sender, VersionEventArgs e);
 
     public class VersionEventArgs : ServiceEventArgs {

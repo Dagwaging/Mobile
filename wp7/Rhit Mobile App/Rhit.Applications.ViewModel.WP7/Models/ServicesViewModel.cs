@@ -1,12 +1,10 @@
-﻿using System.Collections.Generic;
-using Rhit.Applications.Model;
-using Rhit.Applications.ViewModel.Controllers;
+﻿using System;
 using System.ComponentModel;
 using System.Windows;
-using System;
-using Rhit.Applications.ViewModel.Utilities;
+using Rhit.Applications.ViewModels.Controllers;
+using Rhit.Applications.ViewModels.Utilities;
 
-namespace Rhit.Applications.ViewModel.Models {
+namespace Rhit.Applications.ViewModels {
     public class ServicesViewModel : DependencyObject {
         public ServicesViewModel() {
             //TODO: Use test data instead of just disabling it

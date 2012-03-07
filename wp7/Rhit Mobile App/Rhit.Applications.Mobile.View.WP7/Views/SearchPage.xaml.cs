@@ -1,11 +1,10 @@
-﻿using System.Windows.Input;
-using Microsoft.Phone.Controls;
+﻿using System;
 using System.Windows.Controls;
-using System.Windows.Media;
-using System;
-using Rhit.Applications.ViewModel.Models;
+using System.Windows.Input;
+using Microsoft.Phone.Controls;
+using Rhit.Applications.ViewModels;
 
-namespace Rhit.Applications.View.Views {
+namespace Rhit.Applications.Views {
     /// \ingroup pages
     public partial class SearchPage : PhoneApplicationPage {
         public SearchPage() {

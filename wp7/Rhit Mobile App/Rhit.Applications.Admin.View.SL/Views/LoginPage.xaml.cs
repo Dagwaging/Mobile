@@ -1,10 +1,10 @@
 ﻿using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Navigation;
-using Rhit.Applications.ViewModel.Models;
+using Rhit.Applications.ViewModels;
 using System;
 
-namespace Rhit.Applications.View.Views {
+namespace Rhit.Applications.Views {
     public partial class LoginPage : Page {
         public LoginPage() {
             InitializeComponent();

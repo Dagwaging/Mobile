@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Windows;
-using Rhit.Applications.ViewModel;
-using Rhit.Applications.View.Views;
-using Rhit.Applications.ViewModel.Controllers;
+using Rhit.Applications.ViewModels;
+using Rhit.Applications.Views;
+using Rhit.Applications.ViewModels.Controllers;
 using System.Windows.Shapes;
 
-namespace Rhit.Applications.View {
+namespace Rhit.Applications.Views {
     public partial class App : Application {
         internal const string MapId = "AthZ1tu5ROM0PUWcIYFSxC1oQALFR-g0aoFIuL9tlbeGJ9Z6qKIRYoB_jGpct8Yu";
 

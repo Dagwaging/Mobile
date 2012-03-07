@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Rhit.Applications.Model.Services.Requests {
+namespace Rhit.Applications.Models.Services.Requests {
     public class RequestQuery : RequestPart {
         public RequestQuery(string baseUrl, string name, object value)
             : base(baseUrl) {

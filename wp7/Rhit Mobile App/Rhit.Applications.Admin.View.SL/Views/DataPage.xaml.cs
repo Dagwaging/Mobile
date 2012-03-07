@@ -1,11 +1,10 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Navigation;
-using Rhit.Applications.ViewModel.Controllers;
-using Rhit.Applications.ViewModel.Models;
 using System.Windows.Input;
+using System.Windows.Navigation;
+using Rhit.Applications.ViewModels;
 
-namespace Rhit.Applications.View.Views {
+namespace Rhit.Applications.Views {
     public partial class DataPage : Page {
         public DataPage() {
             InitializeComponent();

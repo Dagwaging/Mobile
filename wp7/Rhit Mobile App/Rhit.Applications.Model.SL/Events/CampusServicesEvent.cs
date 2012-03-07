@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Rhit.Applications.Model.Services;
+using Rhit.Applications.Models.Services;
 
-namespace Rhit.Applications.Model.Events {
+namespace Rhit.Applications.Models.Events {
     public delegate void CampusServicesEventHandler(Object sender, CampusServicesEventArgs e);
 
     public class CampusServicesEventArgs : ServiceEventArgs {

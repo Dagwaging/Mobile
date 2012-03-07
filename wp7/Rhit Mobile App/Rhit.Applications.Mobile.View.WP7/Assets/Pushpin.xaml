@@ -11,7 +11,21 @@
             <StackPanel>
                 <Grid MinWidth="35" MinHeight="30" Margin="0">
                     <Rectangle Fill="{TemplateBinding Background}" Stroke="{TemplateBinding BorderBrush}" StrokeThickness="2" RadiusX="10" RadiusY="10" />
-                    <ContentPresenter HorizontalAlignment="Center" Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" Margin="6,2,6,0" />
+                    <StackPanel Orientation="Horizontal" >
+                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" Margin="6,2,6,0" />
+                    <!--<Ellipse Fill="" Width="20" Height="20" HorizontalAlignment="Right" VerticalAlignment="Center"/>-->
+                        <Grid>
+                        <Polygon HorizontalAlignment="Right" VerticalAlignment="Center" Fill="White" Margin="0,0,5,0">
+                            <Polygon.Points>
+                                <Point X="0" Y="0" />
+                                <Point X="0" Y="20" />
+                                <Point X="10" Y="10" />
+                            </Polygon.Points>
+                        </Polygon>
+                            <!--<Ellipse Width="20" Height="20" Stroke="White" StrokeThickness="1" Margin="5"/>-->
+                        </Grid>
+                        <!--<TextBlock Text="Tap for more..." FontSize="12"/>-->
+                    </StackPanel>
                 </Grid>
                 <Path Data="M0,0 L20,0 L10,15 z" Fill="{TemplateBinding BorderBrush}" HorizontalAlignment="Center" Height="15" Stretch="Fill" Width="20" UseLayoutRounding="False" Margin="0,-1,0,0" />
             </StackPanel>

@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
-using Rhit.Applications.Model;
-using Rhit.Applications.Model.Events;
-using Rhit.Applications.Model.Services;
-using Rhit.Applications.ViewModel.Utilities;
+using Rhit.Applications.Models;
+using Rhit.Applications.Models.Events;
+using Rhit.Applications.Models.Services;
+using Rhit.Applications.ViewModels.Utilities;
 
-namespace Rhit.Applications.ViewModel.Controllers {
+namespace Rhit.Applications.ViewModels.Controllers {
     public class ServicesController : DependencyObject {
         private static ServicesController _instance;
 

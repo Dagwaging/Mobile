@@ -7,7 +7,7 @@ using Microsoft.Phone.Controls.Maps;
 using Rhit.Applications.Mvvm.Commands;
 using Rhit.Applications.Extentions.Maps;
 
-namespace Rhit.Applications.View.Views {
+namespace Rhit.Applications.Views {
     /// \ingroup pages
     public partial class MapPage : PhoneApplicationPage {
 
@@ -23,6 +23,7 @@ namespace Rhit.Applications.View.Views {
             QuickListCommand = new RelayCommand(p => GotoQuickList());
             SearchCommand = new RelayCommand(p => GotoSearch());
             SettingsCommand = new RelayCommand(p => GotoSettings());
+            RhitCommand = new RelayCommand(p => GotoRhit());
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e) {
@@ -52,6 +53,14 @@ namespace Rhit.Applications.View.Views {
 
         private void GotoCampusServices() {
             NavigationService.Navigate(new Uri("/Views/CampusServicesPage.xaml", UriKind.Relative));
+        }
+        #endregion
+
+        #region Rhit Command
+        public ICommand RhitCommand { get; private set; }
+
+        private void GotoRhit() {
+            ViewModel.GotoRhit();
         }
         #endregion
 

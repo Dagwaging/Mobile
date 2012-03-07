@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Windows;
-using Rhit.Applications.Model;
-using Rhit.Applications.Model.Events;
-using Rhit.Applications.Model.Services;
-using Rhit.Applications.ViewModel.Utilities;
+using Rhit.Applications.Models;
+using Rhit.Applications.Models.Events;
+using Rhit.Applications.Models.Services;
+using Rhit.Applications.ViewModels.Utilities;
 using System.Collections.Generic;
 
 #if WINDOWS_PHONE
@@ -15,7 +15,7 @@ using System.Device.Location;
 using Microsoft.Maps.MapControl;
 #endif
 
-namespace Rhit.Applications.ViewModel.Controllers {
+namespace Rhit.Applications.ViewModels.Controllers {
     public class PathsController : DependencyObject {
         
         private PathsController() {

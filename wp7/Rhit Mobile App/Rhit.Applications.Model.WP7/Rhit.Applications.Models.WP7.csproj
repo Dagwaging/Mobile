@@ -1,0 +1,172 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.20506</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{17BE6337-47BB-418E-9869-2E11A5824BE3}</ProjectGuid>
+    <ProjectTypeGuids>{C089C8C0-30E0-4E22-80C0-CE093F111A43};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Rhit.Applications.Model</RootNamespace>
+    <AssemblyName>Rhit.Applications.Model.WP7</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
+    <TargetFrameworkProfile>WindowsPhone71</TargetFrameworkProfile>
+    <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
+    <SilverlightApplication>false</SilverlightApplication>
+    <ValidateXaml>true</ValidateXaml>
+    <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>Bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;TRACE;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoWarn>0809</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>Bin\Release</OutputPath>
+    <DefineConstants>TRACE;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoWarn>0809</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'AdminApp|AnyCPU'">
+    <OutputPath>bin\AdminApp\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MobileApp|AnyCPU'">
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
+    <NoWarn>0809</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ServerTreeApp|AnyCPU'">
+    <OutputPath>bin\ServerTreeApp\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Phone.Controls.Maps, Version=7.0.0.0, Culture=neutral, PublicKeyToken=24eec0d8c86cda1e, processorArchitecture=MSIL" />
+    <Reference Include="System.Device" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Servicemodel.Web" />
+    <Reference Include="System.Windows" />
+    <Reference Include="system" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Net" />
+    <Reference Include="mscorlib.extensions" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\Rhit.Applications.Model.SL\DataContracts.cs">
+      <Link>DataContracts.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Events\AuthenticationEvent.cs">
+      <Link>Events\AuthenticationEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Events\CampusServicesEvent.cs">
+      <Link>Events\CampusServicesEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Events\DirectionsEvent.cs">
+      <Link>Events\DirectionsEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Events\LocationEvent.cs">
+      <Link>Events\LocationEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Events\LocationsEvent.cs">
+      <Link>Events\LocationsEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Events\ServiceEvent.cs">
+      <Link>Events\ServiceEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Events\TagsEvent.cs">
+      <Link>Events\TagsEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Events\VersionEvent.cs">
+      <Link>Events\VersionEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\LocationData.cs">
+      <Link>LocationData.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\LocationType.cs">
+      <Link>LocationType.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Services\AsyncServiceResult.cs">
+      <Link>Services\AsyncServiceResult.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Services\Connection.cs">
+      <Link>Services\Connection.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Services\DataCollector.cs">
+      <Link>Services\DataCollector.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Services\DataStorage.cs">
+      <Link>Services\DataStorage.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Services\Requests\AdminRequests.cs">
+      <Link>Services\Requests\AdminRequests.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Services\Requests\DirectionsRequests.cs">
+      <Link>Services\Requests\DirectionsRequests.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Services\Requests\LocationsRequests.cs">
+      <Link>Services\Requests\LocationsRequests.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Services\Requests\RequestBuilder.cs">
+      <Link>Services\Requests\RequestBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Services\Requests\RequestPart.cs">
+      <Link>Services\Requests\RequestPart.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Services\Requests\RequestQuery.cs">
+      <Link>Services\Requests\RequestQuery.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Services\Requests\ServicesRequestPart.cs">
+      <Link>Services\Requests\ServicesRequestPart.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Services\Requests\ToursRequests.cs">
+      <Link>Services\Requests\ToursRequests.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Services\Requests\VersionRequestPart.cs">
+      <Link>Services\Requests\VersionRequestPart.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Services\RequestType.cs">
+      <Link>Services\RequestType.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Services\ResponseHandler.cs">
+      <Link>Services\ResponseHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Services\ResponseType.cs">
+      <Link>Services\ResponseType.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Services\ServiceRequest.cs">
+      <Link>Services\ServiceRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.Model.SL\Services\StorageKey.cs">
+      <Link>Services\StorageKey.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Binaries\Microsoft.Phone.Controls.Maps.dll" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.$(TargetFrameworkProfile).Overrides.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.CSharp.targets" />
+  <ProjectExtensions />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

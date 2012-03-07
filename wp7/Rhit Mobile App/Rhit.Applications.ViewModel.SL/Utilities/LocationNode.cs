@@ -1,16 +1,16 @@
 ﻿using System.Collections.ObjectModel;
-using Rhit.Applications.Model;
+using Rhit.Applications.Models;
 
-namespace Rhit.Applications.ViewModel.Utilities {
+namespace Rhit.Applications.ViewModels.Utilities {
     public class LocationNode {
-        public LocationNode(RhitLocation location) {
+        public LocationNode(LocationData location) {
             ChildLocations = new ObservableCollection<LocationNode>();
             Location = location;
             Name = Location.Label;
             Id = Location.Id;
         }
 
-        public RhitLocation Location { get; private set; }
+        public LocationData Location { get; private set; }
 
         public ObservableCollection<LocationNode> ChildLocations { get; set; }
 

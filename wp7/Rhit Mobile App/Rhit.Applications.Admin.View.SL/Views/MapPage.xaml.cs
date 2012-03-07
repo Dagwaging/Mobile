@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -8,17 +7,17 @@ using System.Windows.Navigation;
 using Microsoft.Maps.MapControl;
 using Microsoft.Maps.MapControl.Navigation;
 using Microsoft.Maps.MapControl.Overlays;
-using Rhit.Applications.View.Controls;
-using Rhit.Applications.ViewModel.Providers;
+using Rhit.Applications.Extentions.Controls;
 
-namespace Rhit.Applications.View.Views {
+namespace Rhit.Applications.Views {
     public partial class MapPage : Page {
         public MapPage() {
             InitializeComponent();
 
             //TODO: Try not to have to do this
-            ViewModel.SetMode(MyMap);
+            //ViewModel.SetMode(MyMap);
 
+            //TODO: Shouldn't have to do this
             DraggablePushpin.ParentMap = MyMap;
             DraggableShape.ParentContainer = MyCanvas;
 

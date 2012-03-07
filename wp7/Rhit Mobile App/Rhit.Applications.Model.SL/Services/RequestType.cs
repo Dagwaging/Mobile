@@ -1,5 +1,5 @@
 ﻿
-namespace Rhit.Applications.Model.Services {
+namespace Rhit.Applications.Models.Services {
     public enum RequestType { 
         AllLocations,
         CampusServices,

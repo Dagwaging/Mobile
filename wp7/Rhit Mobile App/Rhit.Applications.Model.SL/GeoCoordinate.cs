@@ -1,6 +1,6 @@
 ﻿using Microsoft.Maps.MapControl;
 
-namespace Rhit.Applications.Model {
+namespace Rhit.Applications.Models {
     public class GeoCoordinate : Location {
         public GeoCoordinate() : base() { }
         public GeoCoordinate(Location location) : base(location) { }

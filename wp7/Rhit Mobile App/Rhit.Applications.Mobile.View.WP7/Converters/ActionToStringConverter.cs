@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media.Imaging;
-using Rhit.Applications.ViewModel.Utilities;
+using Rhit.Applications.ViewModels.Utilities;
 
-namespace Rhit.Applications.View.Converters {
+namespace Rhit.Applications.Views.Converters {
     public class ActionToStringConverter : IValueConverter {
         private static string DefaultMessage;
 

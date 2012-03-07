@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Rhit.Applications.Model.Services.Requests {
+namespace Rhit.Applications.Models.Services.Requests {
     public class AdminRequestPart : RequestPart {
         public AdminRequestPart(string baseUrl)
             : base(baseUrl) {

@@ -3,7 +3,7 @@ using System.Device.Location;
 using System.Threading;
 using System.Windows;
 
-namespace Rhit.Applications.ViewModel.Controllers {
+namespace Rhit.Applications.ViewModels.Controllers {
     public class UserController : DependencyObject {
         private static UserController _instance;
 

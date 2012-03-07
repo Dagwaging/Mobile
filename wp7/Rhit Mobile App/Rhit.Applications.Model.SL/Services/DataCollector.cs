@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Threading;
-using Rhit.Applications.Model.Events;
-using Rhit.Applications.Model.Services.Requests;
+using Rhit.Applications.Models.Events;
+using Rhit.Applications.Models.Services.Requests;
 using System;
 
 
@@ -11,7 +11,7 @@ using System.Device.Location;
 using Microsoft.Maps.MapControl;
 #endif
 
-namespace Rhit.Applications.Model.Services {
+namespace Rhit.Applications.Models.Services {
     public class DataCollector {
         #region Events
         #region CampusServicesReturned
@@ -67,7 +67,7 @@ namespace Rhit.Applications.Model.Services {
 
         #region LocationUpdate
         public event LocationEventHandler LocationUpdate;
-        protected virtual void OnLocationUpdate(ServiceEventArgs e, RhitLocation location) {
+        protected virtual void OnLocationUpdate(ServiceEventArgs e, LocationData location) {
             LocationEventArgs args = new LocationEventArgs(e) {
                 Location = location,
             };
@@ -77,7 +77,7 @@ namespace Rhit.Applications.Model.Services {
 
         #region LocationsReturned
         public event LocationsEventHandler LocationsReturned;
-        protected virtual void OnLocationsUpdate(ServiceEventArgs e, IList<RhitLocation> locations) {
+        protected virtual void OnLocationsUpdate(ServiceEventArgs e, IList<LocationData> locations) {
             LocationsEventArgs args = new LocationsEventArgs(e) {
                 Locations = locations,
             };
@@ -87,7 +87,7 @@ namespace Rhit.Applications.Model.Services {
 
         #region SearchResultsReturned
         public event LocationsEventHandler SearchResultsReturned;
-        protected virtual void OnSearchResultsReturned(ServiceEventArgs e, IList<RhitLocation> locations) {
+        protected virtual void OnSearchResultsReturned(ServiceEventArgs e, IList<LocationData> locations) {
             LocationsEventArgs args = new LocationsEventArgs(e) {
                 Locations = locations,
             };
@@ -97,7 +97,7 @@ namespace Rhit.Applications.Model.Services {
 
         #region LocationDeleted
         public event LocationEventHandler LocationDeleted;
-        protected virtual void OnLocationDeletion(ServiceEventArgs e, RhitLocation location) {
+        protected virtual void OnLocationDeletion(ServiceEventArgs e, LocationData location) {
             LocationEventArgs args = new LocationEventArgs(e) {
                 Location = location,
             };
@@ -242,14 +242,14 @@ namespace Rhit.Applications.Model.Services {
         private void HandleSearchResponse(ServiceEventArgs eventArgs) {
             ServerObject response = eventArgs.ResponseObject;
             if(response.Locations == null || response.Locations.Count <= 0) return;
-            List<RhitLocation> locations = ServerObject.GetLocations(response.Locations);
+            List<LocationData> locations = ServerObject.GetLocations(response.Locations);
             OnSearchResultsReturned(eventArgs, locations);
         }
 
         private void HandleLocationsResponse(ServiceEventArgs eventArgs) {
             ServerObject response = eventArgs.ResponseObject;
             if(response.Locations == null || response.Locations.Count <= 0) return;
-            List<RhitLocation> locations = ServerObject.GetLocations(response.Locations);
+            List<LocationData> locations = ServerObject.GetLocations(response.Locations);
             SetVersion(response.Version, eventArgs);
             OnLocationsUpdate(eventArgs, locations);
         }
@@ -270,12 +270,12 @@ namespace Rhit.Applications.Model.Services {
 
         private void HandleLocationResponse(ServiceEventArgs eventArgs) {
             if(eventArgs.Type == ResponseType.DeleteLocation) {
-                OnLocationDeletion(eventArgs, new RhitLocation() { Id = (int) eventArgs.Request.UserMetaData["LocationId"], });
+                OnLocationDeletion(eventArgs, new LocationData() { Id = (int) eventArgs.Request.UserMetaData["LocationId"], });
                 return;
             }
             ServerObject response = eventArgs.ResponseObject;
             if(response.Locations == null || response.Locations.Count <= 0) return;
-            List<RhitLocation> locations = ServerObject.GetLocations(response.Locations);
+            List<LocationData> locations = ServerObject.GetLocations(response.Locations);
             SetVersion(response.Version, eventArgs);
             OnLocationUpdate(eventArgs, locations[0]);
         }
@@ -317,7 +317,7 @@ namespace Rhit.Applications.Model.Services {
             Connection.MakeRequest(request, RequestType.Login);
         }
 
-        public void GetDirections(RhitLocation from, RhitLocation to) {
+        public void GetDirections(LocationData from, LocationData to) {
             GetDirections(from.Id, to.Id);
         }
 
@@ -365,7 +365,7 @@ namespace Rhit.Applications.Model.Services {
             Connection.MakeRequest(request, RequestType.CampusServices);
         }
 
-        public void GetChildLocations(RhitLocation parent) { GetChildLocations(parent.Id); }
+        public void GetChildLocations(LocationData parent) { GetChildLocations(parent.Id); }
 
         public void GetChildLocations(int parentId) {
             RequestPart request = new RequestBuilder(BaseAddress).Locations.Data.Within(parentId);

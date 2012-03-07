@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Net;
 
-namespace Rhit.Applications.Model.Services {
+namespace Rhit.Applications.Models.Services {
     public class AsyncServiceResult {
         public AsyncServiceResult(IAsyncResult result, ServiceRequest request) {
             Request = request;

@@ -2,11 +2,11 @@
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
-using Rhit.Applications.ViewModel;
-using Rhit.Applications.ViewModel.Controllers;
+using Rhit.Applications.ViewModels;
+using Rhit.Applications.ViewModels.Controllers;
 using System.Windows.Media;
 
-namespace Rhit.Applications.View {
+namespace Rhit.Applications.Views {
     public partial class App : Application {
         private bool phoneApplicationInitialized = false;
 

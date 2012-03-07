@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Rhit.Applications.Model.Events {
+namespace Rhit.Applications.Models.Events {
     public delegate void TagsEventHandler(Object sender, TagsEventArgs e);
 
     public class TagsEventArgs : ServiceEventArgs {
