@@ -48,8 +48,13 @@
                     <Rectangle x:Name="Divider2" Style="{StaticResource DividerStyle}"/>
 
                     <HyperlinkButton x:Name="DataLink" Style="{StaticResource LinkStyle}" 
-                                     NavigateUri="/DataPage" TargetName="ContentFrame" Content="Data"/>
-                    
+                                     NavigateUri="/DataPage" TargetName="ContentFrame" Content="Location Metadata"/>
+
+                    <Rectangle x:Name="Divider3" Style="{StaticResource DividerStyle}"/>
+
+                    <HyperlinkButton x:Name="ServicesLink" Style="{StaticResource LinkStyle}" 
+                                     NavigateUri="/ServicesPage" TargetName="ContentFrame" Content="Campus Services"/>
+
                 </StackPanel>
             </Border>
 
