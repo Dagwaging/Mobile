@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.VisualBasic.FileIO;
 
-namespace RHITMobileService.Data_Import
+namespace RHITMobile.Secure.Data_Import
 {
 
     public abstract class BannerCsvParser<T> : IEnumerable<T>, IEnumerator<T> where T : BannerCsvRecord

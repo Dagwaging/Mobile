@@ -5,7 +5,7 @@ using System.Text;
 using System.IO;
 using System.Diagnostics;
 
-namespace RHITMobileService.Data_Import
+namespace RHITMobile.Secure.Data_Import
 {
     class Importer
     {

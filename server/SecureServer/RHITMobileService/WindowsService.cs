@@ -9,7 +9,7 @@ using System.Text;
 using System.ServiceModel;
 using RHITMobile.Secure;
 
-namespace RHITMobileService
+namespace RHITMobile.Secure
 {
     public partial class WindowsService : ServiceBase
     {

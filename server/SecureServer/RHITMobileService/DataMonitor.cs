@@ -5,9 +5,9 @@ using System.Text;
 using System.IO;
 using System.Configuration;
 using System.Diagnostics;
-using RHITMobileService.Data_Import;
+using RHITMobile.Secure.Data_Import;
 
-namespace RHITMobileService
+namespace RHITMobile.Secure
 {
     class DataMonitor
     {

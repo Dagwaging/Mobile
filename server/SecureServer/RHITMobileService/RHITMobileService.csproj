@@ -8,7 +8,7 @@
     <ProjectGuid>{EDD4EB1F-AB93-43DD-A2F5-21DAB16F42AC}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RHITMobileService</RootNamespace>
+    <RootNamespace>RHITMobile.Secure</RootNamespace>
     <AssemblyName>RHITMobileService</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
@@ -34,7 +34,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>RHITMobileService.WindowsService</StartupObject>
+    <StartupObject>RHITMobile.Secure.WindowsService</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.VisualBasic" />

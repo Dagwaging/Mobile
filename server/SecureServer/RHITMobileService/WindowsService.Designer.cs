@@ -1,4 +1,4 @@
-﻿namespace RHITMobileService
+﻿namespace RHITMobile.Secure
 {
     public partial class WindowsService
     {
