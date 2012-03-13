@@ -39,6 +39,7 @@
   <ItemGroup>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
     <Reference Include="System.ServiceModel" />
@@ -51,6 +52,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data Import\BannerCsvParser.cs" />
+    <Compile Include="Data Import\Importer.cs" />
+    <Compile Include="DataMonitor.cs" />
     <Compile Include="ProjectInstaller.cs">
       <SubType>Component</SubType>
     </Compile>

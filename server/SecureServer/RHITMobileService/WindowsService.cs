@@ -16,6 +16,7 @@ namespace RHITMobileService
         public static String SERVICE_NAME = "RHITMobileService";
 
         public ServiceHost serviceHost = null;
+        private DataMonitor dataMonitor = null;
 
         public WindowsService()
         {
@@ -25,22 +26,32 @@ namespace RHITMobileService
 
         protected override void OnStart(string[] args)
         {
+            Cleanup();
+
+            serviceHost = new ServiceHost(typeof(WebService));
+            serviceHost.Open();
+
+            dataMonitor = new DataMonitor(EventLog);
+            dataMonitor.Start();
+        }
+
+        protected override void OnStop()
+        {
+            Cleanup();
+        }
+
+        private void Cleanup()
+        {
             if (serviceHost != null)
             {
                 serviceHost.Close();
                 serviceHost = null;
             }
 
-            serviceHost = new ServiceHost(typeof(WebService));
-            serviceHost.Open();
-        }
-
-        protected override void OnStop()
-        {
-            if (serviceHost != null)
+            if (dataMonitor != null)
             {
-                serviceHost.Close();
-                serviceHost = null;
+                dataMonitor.Stop();
+                dataMonitor = null;
             }
         }
 

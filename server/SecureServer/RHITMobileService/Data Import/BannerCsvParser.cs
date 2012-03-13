@@ -7,8 +7,9 @@ using Microsoft.VisualBasic.FileIO;
 namespace RHITMobileService.Data_Import
 {
 
-    public abstract class BannerCsvParser<T>
+    public abstract class BannerCsvParser<T> : IEnumerable<T>, IEnumerator<T> where T : BannerCsvRecord
     {
+        private T current;
         private TextFieldParser parser;
         private String termCode;
 
@@ -21,23 +22,82 @@ namespace RHITMobileService.Data_Import
             termCode = parser.ReadLine();
         }
 
-        public Boolean hasMore()
+        private bool hasMore()
         {
             return !parser.EndOfData;
         }
 
-        public T getRecord()
+        private T getRecord()
         {
-            String[] fields = parser.ReadFields();
-            for (int i = 0; i < fields.Length; i++)
-                fields[i] = fields[i].Trim();
-            return convertRecord(fields);
+            T res = null;
+            do
+            {
+                String[] fields = parser.ReadFields();
+                for (int i = 0; i < fields.Length; i++)
+                    fields[i] = fields[i].Trim();
+
+                try
+                {
+                    res = convertRecord(fields);
+                }
+                catch (Exception)
+                {
+                    //skip the record
+                }
+            } while (res == null && hasMore());
+
+            return res;
         }
 
-        public abstract T convertRecord(String[] fields);
+        protected abstract T convertRecord(String[] fields);
+
+        public T Current
+        {
+            get { return current; }
+        }
+
+        public void Dispose()
+        {
+            current = null;
+            if (parser != null)
+            {
+                parser.Close();
+                parser = null;
+            }
+        }
+
+        object System.Collections.IEnumerator.Current
+        {
+            get { return Current; }
+        }
+
+        public bool MoveNext()
+        {
+            current = getRecord();
+            return current != null;
+        }
+
+        public void Reset()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            return this;
+        }
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            return this;
+        }
     }
 
-    public class User
+    public class BannerCsvRecord
+    {
+    }
+
+    public class User : BannerCsvRecord
     {
         public String ID { get; set; }
         public String Username { get; set; }
@@ -54,14 +114,14 @@ namespace RHITMobileService.Data_Import
         public String Room { get; set; }
     }
 
-    public class UserCsvParser : BannerCsvParser<User>
+    public class UserCsvParser : BannerCsvParser<User>, IEnumerator<User>
     {
         public UserCsvParser(String path)
             : base(path)
         {
         }
 
-        public override User convertRecord(String[] fields)
+        protected override User convertRecord(String[] fields)
         {
             User res = new User();
 
