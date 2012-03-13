@@ -3,23 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.VisualBasic.FileIO;
+using System.Text.RegularExpressions;
 
 namespace RHITMobile.Secure.Data_Import
 {
 
-    public abstract class BannerCsvParser<T> : IEnumerable<T>, IEnumerator<T> where T : BannerCsvRecord
+    public abstract class BannerCsvParser<T> : IEnumerable<T>, IEnumerator<T> where T:class
     {
         private T current;
         private TextFieldParser parser;
-        private String termCode;
+        private int termCode;
 
-        public String TermCode { get { return termCode; } }
+        public int TermCode { get { return termCode; } }
 
         public BannerCsvParser(String path)
         {
             parser = new TextFieldParser(path);
             parser.SetDelimiters("|");
-            termCode = parser.ReadLine();
+            termCode = int.Parse(parser.ReadLine());
         }
 
         private bool hasMore()
@@ -33,8 +34,7 @@ namespace RHITMobile.Secure.Data_Import
             do
             {
                 String[] fields = parser.ReadFields();
-                for (int i = 0; i < fields.Length; i++)
-                    fields[i] = fields[i].Trim();
+                trim(fields);
 
                 try
                 {
@@ -91,56 +91,24 @@ namespace RHITMobile.Secure.Data_Import
         {
             return this;
         }
-    }
 
-    public class BannerCsvRecord
-    {
-    }
-
-    public class User : BannerCsvRecord
-    {
-        public String ID { get; set; }
-        public String Username { get; set; }
-        public String Alias { get; set; }
-        public String Mailbox { get; set; }
-        public String Major { get; set; }
-        public String Class { get; set; }
-        //Year
-        public String LastName { get; set; }
-        public String FirstName { get; set; }
-        public String MiddleName { get; set; }
-        public String Department { get; set; }
-        public String Phone { get; set; }
-        public String Room { get; set; }
-    }
-
-    public class UserCsvParser : BannerCsvParser<User>, IEnumerator<User>
-    {
-        public UserCsvParser(String path)
-            : base(path)
+        public void trim(String[] fields)
         {
+            for (int i = 0; i < fields.Length; i++)
+            {
+                fields[i] = fields[i].Trim();
+                if (Regex.IsMatch(fields[i], "^(&nbsp|&nbsp;)+$"))
+                    fields[i] = "";
+            }
         }
 
-        protected override User convertRecord(String[] fields)
+        public int toInt(String field)
         {
-            User res = new User();
+            int result;
+            if (!int.TryParse(field, out result))
+                return -1;
 
-            int i = 0;
-
-            res.ID = fields[i++];
-            res.Username = fields[i++].ToLower();
-            res.Alias = fields[i++].ToLower();
-            res.Mailbox = fields[i++];
-            res.Major = fields[i++];
-            res.Class = fields[i++];
-            res.LastName = fields[i++];
-            res.FirstName = fields[i++];
-            res.MiddleName = fields[i++];
-            res.Department = fields[i++];
-            res.Phone = fields[i++];
-            res.Room = fields[i++];
-
-            return res;
+            return result;
         }
     }
 }

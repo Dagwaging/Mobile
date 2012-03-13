@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Diagnostics;
+using RHITMobile.Secure.Data;
 
 namespace RHITMobile.Secure.Data_Import
 {

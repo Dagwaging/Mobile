@@ -53,7 +53,10 @@
   <ItemGroup>
     <Compile Include="Data Import\BannerCsvParser.cs" />
     <Compile Include="Data Import\Importer.cs" />
+    <Compile Include="Data Import\UserParser.cs" />
     <Compile Include="DataMonitor.cs" />
+    <Compile Include="Data\Course.cs" />
+    <Compile Include="Data\User.cs" />
     <Compile Include="ProjectInstaller.cs">
       <SubType>Component</SubType>
     </Compile>

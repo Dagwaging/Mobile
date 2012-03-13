@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.ServiceModel;
+using RHITMobile.Secure.Data;
 
 namespace RHITMobile.Secure
 {
@@ -14,6 +15,9 @@ namespace RHITMobile.Secure
 
         [OperationContract]
         int getUserCount();
+
+        [OperationContract]
+        User getUser(string username);
     }
 
     public class WebService : IWebService
@@ -25,6 +29,11 @@ namespace RHITMobile.Secure
         public int getUserCount()
         {
             return 45;
+        }
+
+        public User getUser(string usename)
+        {
+            return null;
         }
     }
 }
