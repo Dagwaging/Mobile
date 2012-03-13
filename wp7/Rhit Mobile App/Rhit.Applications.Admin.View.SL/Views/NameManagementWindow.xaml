@@ -1,0 +1,45 @@
+﻿<controls:ChildWindow x:Class="Rhit.Applications.View.Views.NameManagementWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+    xmlns:controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls"
+    Width="400" Height="300" 
+    Title="Add/Remove Alternate Names">
+
+    <Grid x:Name="LayoutRoot" Margin="2">
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <ListBox Name="NamesList" ItemsSource="{Binding Names}" Grid.Row="0"/>
+            <Button Content="Remove Name" Margin="5" Click="RemoveNameButton_Click" HorizontalAlignment="Center" Grid.Row="1"/>
+            <Rectangle Height="1" HorizontalAlignment="Stretch" Margin="5" Grid.Row="2" Stroke="Gray"/>
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <TextBlock Text="Name:" FontWeight="Bold" Margin="5" VerticalAlignment="Center" Grid.Column="0"/>
+            <TextBox Name="AddName" Margin="5" VerticalContentAlignment="Center" Text="Enter a New Alternate Name" Grid.Column="1" KeyUp="AddName_KeyUp"/>
+            <Button Content="Add Name" Margin="5" Click="AddNameButton_Click" Grid.Column="2"/>
+            <Rectangle Height="1" HorizontalAlignment="Stretch" Margin="5" Grid.Row="1" Grid.ColumnSpan="3" Stroke="Gray"/>
+        </Grid>
+
+        <Button x:Name="CancelButton" Content="Cancel" Click="CancelButton_Click" Width="75" Height="23" HorizontalAlignment="Right" Margin="0,12,0,0" Grid.Row="2" />
+        <Button x:Name="OKButton" Content="OK" Click="OKButton_Click" Width="75" Height="23" HorizontalAlignment="Right" Margin="0,12,79,0" Grid.Row="2" />
+    </Grid>
+</controls:ChildWindow>
