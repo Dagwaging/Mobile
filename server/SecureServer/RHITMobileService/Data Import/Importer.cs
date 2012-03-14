@@ -21,6 +21,8 @@ namespace RHITMobile.Secure.Data_Import
 
         public void ImportData()
         {
+            Dictionary<String, String> idToUsername = new Dictionary<String, String>();
+
             string[] userpaths = Directory.GetFiles(inputPath, "*.usr");
             foreach (string userpath in userpaths)
             {
@@ -28,11 +30,25 @@ namespace RHITMobile.Secure.Data_Import
                 int count = 0;
                 foreach (User user in parser)
                 {
+                    idToUsername.Add(user.ID, user.Username);
+
                     //TODO something
                     count++;
                 }
                 log.WriteEntry("Read " + count + " user entries for term " + parser.TermCode, EventLogEntryType.Information);
-
+            }
+            
+            string[] coursepaths = Directory.GetFiles(inputPath, "*.cls");
+            foreach (string coursepath in coursepaths)
+            {
+                CourseCsvParser parser = new CourseCsvParser(coursepath);
+                int count = 0;
+                foreach (Course course in parser)
+                {
+                    //TODO something
+                    count++;
+                }
+                log.WriteEntry("Read " + count + " course entries for term " + parser.TermCode, EventLogEntryType.Information);
             }
             
         }

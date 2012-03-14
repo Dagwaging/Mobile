@@ -47,4 +47,12 @@ namespace RHITMobile.Secure.Data
         public int Period { get; set; }
         public String Room { get; set; }
     }
+
+    class Enrollment
+    {
+        public String Username { get; set; }
+        public int Term { get; set; }
+        public List<int> CRNs { get; set; }
+
+    }
 }
