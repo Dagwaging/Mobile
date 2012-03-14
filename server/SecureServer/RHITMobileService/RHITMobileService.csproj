@@ -52,11 +52,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data Import\BannerCsvParser.cs" />
+    <Compile Include="Data Import\CourseParser.cs" />
+    <Compile Include="Data Import\EnrollmentParser.cs" />
     <Compile Include="Data Import\Importer.cs" />
     <Compile Include="Data Import\UserParser.cs" />
+    <Compile Include="Data.cs" />
     <Compile Include="DataMonitor.cs" />
-    <Compile Include="Data\Course.cs" />
-    <Compile Include="Data\User.cs" />
     <Compile Include="ProjectInstaller.cs">
       <SubType>Component</SubType>
     </Compile>
