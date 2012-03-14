@@ -39,7 +39,7 @@ namespace RHITMobile.Secure
         public String[] getUserNames()
         {
             List<String> res = new List<String>();
-            foreach (User user in Data_Import.Importer.users)
+            foreach (User user in Data_Import.Importer.users.Take(20))
             {
                 res.Add(user.Username);
             }

@@ -32,7 +32,11 @@ namespace RHITMobile.Secure
             serviceHost.Open();
 
             dataMonitor = new DataMonitor(new EventLogger(EventLog));
-            dataMonitor.Start();
+            if (!dataMonitor.Start())
+            {
+                ExitCode = 1;
+                Stop();
+            }
         }
 
         protected override void OnStop()
