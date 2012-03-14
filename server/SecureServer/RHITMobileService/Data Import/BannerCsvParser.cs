@@ -34,15 +34,18 @@ namespace RHITMobile.Secure.Data_Import
             do
             {
                 String[] fields = parser.ReadFields();
-                trim(fields);
+                if (fields != null)
+                {
+                    trim(fields);
 
-                try
-                {
-                    res = convertRecord(fields);
-                }
-                catch (Exception)
-                {
-                    //skip the record
+                    try
+                    {
+                        res = convertRecord(fields);
+                    }
+                    catch (Exception)
+                    {
+                        //skip the record
+                    }
                 }
             } while (res == null && hasMore());
 

@@ -21,7 +21,7 @@ namespace RHITMobile.Secure.Data_Import
             res.Term = TermCode;
             res.CRN = toInt(fields[i++]);
 
-            res.Course = fields[i++];
+            res.Name = fields[i++];
             res.Title = fields[i++];
             res.Instructor = fields[i++];
             res.Credit = toInt(fields[i++]);

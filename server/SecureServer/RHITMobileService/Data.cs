@@ -14,6 +14,7 @@ namespace RHITMobile.Secure.Data
         public String Major { get; set; }
         public String Class { get; set; }
         public String Year { get; set; }
+        public String Advisor { get; set; }
         public String LastName { get; set; }
         public String FirstName { get; set; }
         public String MiddleName { get; set; }
@@ -22,12 +23,12 @@ namespace RHITMobile.Secure.Data
         public String Room { get; set; }
     }
     
-    class Course
+    public class Course
     {
         public int Term { get; set; }
         public int CRN { get; set; }
 
-        public String Course { get; set; }
+        public String Name { get; set; }
         public String Title { get; set; }
         public String Instructor { get; set; }
         public int Credit { get; set; }
@@ -41,14 +42,14 @@ namespace RHITMobile.Secure.Data
         public List<CourseTime> Schedule { get; set; }
     }
 
-    class CourseTime
+    public class CourseTime
     {
         public char Day { get; set; }
         public int Period { get; set; }
         public String Room { get; set; }
     }
 
-    class Enrollment
+    public class Enrollment
     {
         public String Username { get; set; }
         public int Term { get; set; }

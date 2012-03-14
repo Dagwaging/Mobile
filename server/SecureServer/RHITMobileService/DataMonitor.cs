@@ -4,19 +4,18 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Configuration;
-using System.Diagnostics;
 using RHITMobile.Secure.Data_Import;
 
 namespace RHITMobile.Secure
 {
     class DataMonitor
     {
-        private EventLog log;
+        private Logger log;
 
         private String inputPath;
         private FileSystemWatcher fsWatcher;
 
-        public DataMonitor(EventLog log)
+        public DataMonitor(Logger log)
         {
             this.log = log;
         }
@@ -29,9 +28,9 @@ namespace RHITMobile.Secure
             {
                 inputPath = ConfigurationManager.AppSettings["InputPath"];
             }
-            catch (ConfigurationErrorsException)
+            catch (ConfigurationErrorsException ex)
             {
-                log.WriteEntry("InputPath not specified, unable to update Banner data", EventLogEntryType.Error);
+                log.Error("InputPath not specified, unable to update Banner data", ex);
                 return;
             }
 
@@ -49,7 +48,7 @@ namespace RHITMobile.Secure
 
             fsWatcher.EnableRaisingEvents = true;
 
-            log.WriteEntry("Setup filesystem monitor for " + fsWatcher.Path, EventLogEntryType.Information);
+            log.Info("Setup filesystem monitor for " + fsWatcher.Path);
 
             //TODO start a slow polling monitor
         }

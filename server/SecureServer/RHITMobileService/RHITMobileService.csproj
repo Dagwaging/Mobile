@@ -58,6 +58,7 @@
     <Compile Include="Data Import\UserParser.cs" />
     <Compile Include="Data.cs" />
     <Compile Include="DataMonitor.cs" />
+    <Compile Include="Logger.cs" />
     <Compile Include="ProjectInstaller.cs">
       <SubType>Component</SubType>
     </Compile>

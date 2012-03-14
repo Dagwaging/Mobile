@@ -3,17 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
-using System.Diagnostics;
 using RHITMobile.Secure.Data;
 
 namespace RHITMobile.Secure.Data_Import
 {
-    class Importer
+    public class Importer
     {
-        private EventLog log;
+        //TODO use a database
+        public static List<User> users;
+        public static List<Course> courses;
+        public static List<Enrollment> enrollment;
+
+        private Logger log;
         private String inputPath;
 
-        public Importer(EventLog log, String inputPath)
+        public Importer(Logger log, String inputPath)
         {
             this.log = log;
             this.inputPath = inputPath;
@@ -23,34 +27,61 @@ namespace RHITMobile.Secure.Data_Import
         {
             Dictionary<String, String> idToUsername = new Dictionary<String, String>();
 
-            string[] userpaths = Directory.GetFiles(inputPath, "*.usr");
-            foreach (string userpath in userpaths)
             {
-                UserCsvParser parser = new UserCsvParser(userpath);
-                int count = 0;
-                foreach (User user in parser)
+                users = new List<User>();
+                Dictionary<int, String> termUserMap = new Dictionary<int, String>();
+                String[] userpaths = Directory.GetFiles(inputPath, "*.usr");
+                foreach (String path in userpaths)
                 {
-                    idToUsername.Add(user.ID, user.Username);
+                    using (UserCsvParser parser = new UserCsvParser(path))
+                    {
+                        termUserMap.Add(parser.TermCode, path);
+                    }
+                }
+                String userpath = termUserMap[termUserMap.Keys.Max()];
+                using (UserCsvParser parser = new UserCsvParser(userpath))
+                {
+                    foreach (User user in parser)
+                    {
+                        idToUsername.Add(user.ID, user.Username);
+                        users.Add(user);
+                    }
+                    log.Info("Read " + users.Count + " user entries for term " + parser.TermCode);
+                }
+            }
 
-                    //TODO something
-                    count++;
-                }
-                log.WriteEntry("Read " + count + " user entries for term " + parser.TermCode, EventLogEntryType.Information);
-            }
-            
-            string[] coursepaths = Directory.GetFiles(inputPath, "*.cls");
-            foreach (string coursepath in coursepaths)
             {
-                CourseCsvParser parser = new CourseCsvParser(coursepath);
-                int count = 0;
-                foreach (Course course in parser)
+                courses = new List<Course>();
+                String[] coursepaths = Directory.GetFiles(inputPath, "*.cls");
+                foreach (String coursepath in coursepaths)
                 {
-                    //TODO something
-                    count++;
+                    using (CourseCsvParser parser = new CourseCsvParser(coursepath))
+                    {
+                        foreach (Course course in parser)
+                        {
+                            courses.Add(course);
+                        }
+                        log.Info("Read " + courses.Count + " course entries for term " + parser.TermCode);
+                    }
                 }
-                log.WriteEntry("Read " + count + " course entries for term " + parser.TermCode, EventLogEntryType.Information);
             }
             
+            {
+                enrollment = new List<Enrollment>();
+                String[] enrollmentpaths = Directory.GetFiles(inputPath, "*.ssf");
+                foreach (String enrollmentpath in enrollmentpaths)
+                {
+                    using (EnrollmentCsvParser parser = new EnrollmentCsvParser(enrollmentpath, idToUsername))
+                    {
+                        foreach (Enrollment course in parser)
+                        {
+                            enrollment.Add(course);
+                        }
+                        log.Info("Read " + enrollment.Count + " enrollment entries for term " + parser.TermCode);
+                    }
+                }
+            }
+
         }
     }
 }

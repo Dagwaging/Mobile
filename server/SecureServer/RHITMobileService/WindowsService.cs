@@ -31,7 +31,7 @@ namespace RHITMobile.Secure
             serviceHost = new ServiceHost(typeof(WebService));
             serviceHost.Open();
 
-            dataMonitor = new DataMonitor(EventLog);
+            dataMonitor = new DataMonitor(new EventLogger(EventLog));
             dataMonitor.Start();
         }
 

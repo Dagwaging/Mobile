@@ -21,9 +21,15 @@ namespace RHITMobile.Secure.Data_Import
             res.ID = fields[i++];
             res.Username = fields[i++].ToLower();
             res.Alias = fields[i++].ToLower();
-            res.Mailbox = toInt(fields[i++]);
+            {
+                String mailbox = fields[i++];
+                mailbox = mailbox.Replace("CM", "").Trim();
+                res.Mailbox = toInt(mailbox);
+            }
             res.Major = fields[i++];
             res.Class = fields[i++];
+            res.Year = fields[i++];
+            res.Advisor = fields[i++].ToLower();
             res.LastName = fields[i++];
             res.FirstName = fields[i++];
             res.MiddleName = fields[i++];

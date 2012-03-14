@@ -17,6 +17,9 @@ namespace RHITMobile.Secure
         int getUserCount();
 
         [OperationContract]
+        String[] getUserNames();
+
+        [OperationContract]
         User getUser(string username);
     }
 
@@ -24,15 +27,33 @@ namespace RHITMobile.Secure
     {
         public void forceUpdate()
         {
+            Data_Import.Importer importer = new Data_Import.Importer(new NullLogger(), "C:\\InputData");
+            importer.ImportData();
         }
 
         public int getUserCount()
         {
-            return 45;
+            return Data_Import.Importer.users.Count;
         }
 
-        public User getUser(string usename)
+        public String[] getUserNames()
         {
+            List<String> res = new List<String>();
+            foreach (User user in Data_Import.Importer.users)
+            {
+                res.Add(user.Username);
+            }
+            res.Sort();
+            return res.ToArray();
+        }
+
+        public User getUser(string username)
+        {
+            foreach (User user in Data_Import.Importer.users)
+            {
+                if (user.Username == username.ToLower())
+                    return user;
+            }
             return null;
         }
     }
