@@ -13,9 +13,9 @@ using System.Windows.Navigation;
 
 namespace Rhit.Applications.Views.Views
 {
-    public partial class Page1 : Page
+    public partial class ServicesPage : Page
     {
-        public Page1()
+        public ServicesPage()
         {
             InitializeComponent();
         }
@@ -24,6 +24,5 @@ namespace Rhit.Applications.Views.Views
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
         }
-
     }
 }
