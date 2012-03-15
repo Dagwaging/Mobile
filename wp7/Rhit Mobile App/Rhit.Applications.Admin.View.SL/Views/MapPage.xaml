@@ -17,6 +17,7 @@
     xmlns:exts="clr-namespace:Rhit.Applications.Extentions.Controls;assembly=Rhit.Applications.Extentions.SL"
     xmlns:util="clr-namespace:Rhit.Applications.Views.Utilities"
     xmlns:vm="clr-namespace:Rhit.Applications.ViewModels;assembly=Rhit.Applications.ViewModels.SL"
+    xmlns:mapexts="clr-namespace:Rhit.Applications.Extentions.Maps;assembly=Rhit.Applications.Extentions.SL"
     Title="MapPage" d:DesignHeight="480" d:DesignWidth="640"
     Style="{StaticResource PageStyle}"
     mc:Ignorable="d">
@@ -29,8 +30,13 @@
         <util:LocationsProvider x:Name="ViewLocations" />
         <util:LocalImageLoader x:Name="ImageLoader" />
         <vm:TaskedViewModel x:Name="ViewModel" />
+        <mapexts:RhitMapExtender x:Key="RhitMap" />
 
-        <vm:MapModelInitializer x:Name="Initializer" BitmapProvider="{StaticResource ImageLoader}" BuildingMappingProvider="{StaticResource Calibrator}" LocationsProvider="{StaticResource ViewLocations}" ViewModelInstance="{StaticResource ViewModel}" />
+        <vm:MapModelInitializer x:Name="Initializer"
+                                BitmapProvider="{StaticResource ImageLoader}"
+                                BuildingMappingProvider="{StaticResource Calibrator}"
+                                LocationsProvider="{StaticResource ViewLocations}"
+                                ViewModelInstance="{StaticResource ViewModel}" />
 
         <DataTemplate x:Name="DualItemTemplate">
             <exts:DraggablePushpin Content="{Binding Label}" MouseLeftButtonDown="DraggablePushpin_MouseLeftButtonDown" Tag="{Binding BaseLocation.Id}" VirtualLocation="{Binding Location, Mode=TwoWay}" />
@@ -85,11 +91,26 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
-        <StackPanel x:Name="NavigationBarItems" Orientation="Horizontal">
-            <ListBox ItemsSource="{Binding Map.Modes}" SelectedValue="{Binding Map.CurrentMode, Mode=TwoWay}" Style="{StaticResource NavigationBarList}" />
+        
+        
+        <StackPanel x:Name="NavigationBarItems" DataContext="{StaticResource RhitMap}" Orientation="Horizontal">
+            <TextBlock Text="HI" Foreground="White" />
+            <ListBox x:Name="XList" ItemsSource="{Binding Settings.Modes, ElementName=RhitMap}" Width="200">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="What" Foreground="White" />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+            </ListBox>
+            <TextBlock Text="BYE" Foreground="White" />
+                <!--<ListBox ItemsSource="{Binding Settings.Modes}" SelectedValue="{Binding Settings.CurrentMode, Mode=TwoWay}" Style="{StaticResource NavigationBarList}" />
             <navi:CommandSeparator />
-            <ListBox ItemsSource="{Binding Map.Sources}" SelectedValue="{Binding Map.CurrentSource, Mode=TwoWay}" Style="{StaticResource NavigationBarList}" />
+            <ListBox ItemsSource="{Binding Settings.Sources}" SelectedValue="{Binding Settings.CurrentSource, Mode=TwoWay}" Style="{StaticResource NavigationBarList}" />-->
         </StackPanel>
 
         <DataTemplate x:Name="CalPushpinItemTemplate">
@@ -226,20 +247,23 @@
                 <ColumnDefinition Width="{Binding Image.Loaded, Converter={StaticResource GridLengthConverter}}" />
             </Grid.ColumnDefinitions>
 
-            <map:Map x:Name="MyMap" Grid.Row="0" Grid.Column="0" Center="{Binding Map.Center, Mode=TwoWay}" CopyrightVisibility="Collapsed" CredentialsProvider="AthZ1tu5ROM0PUWcIYFSxC1oQALFR-g0aoFIuL9tlbeGJ9Z6qKIRYoB_jGpct8Yu" ZoomLevel="{Binding Map.ZoomLevel, Mode=TwoWay}">
-                <!--  <map:MapTileLayer Content="{Binding Map.Tiles}"/>  -->
+            <map:Map x:Name="MyMap" Grid.Row="0" Grid.Column="0" Center="{Binding Center, Mode=TwoWay}"
+                     CopyrightVisibility="Collapsed" ZoomLevel="{Binding ZoomLevel, Mode=TwoWay}"
+                     CredentialsProvider="AthZ1tu5ROM0PUWcIYFSxC1oQALFR-g0aoFIuL9tlbeGJ9Z6qKIRYoB_jGpct8Yu" >
                 <map:MapLayer>
                     <map:MapItemsControl ItemsSource="{Binding Locations, ElementName=ViewLocations}" ItemTemplate="{StaticResource PushpinItemTemplate2}" />
                     <map:MapItemsControl ItemsSource="{Binding Locations.Buildings}" ItemTemplate="{StaticResource PolygonItemTemplate}" Visibility="{Binding Settings.ShowBuildings, Converter={StaticResource VisibilityConverter}}" />
                     <map:MapItemsControl ItemsSource="{Binding Locations.Corners}" ItemTemplate="{StaticResource CornerPushpinTemplate}" />
-                    <map:MapItemsControl ItemsSource="{Binding Locations.All}" ItemTemplate="{StaticResource PushpinItemTemplate}" Visibility="{Binding ShowAllLocations, Converter={StaticResource VisibilityConverter}}" />
-                    <map:MapItemsControl ItemsSource="{Binding Locations.Top}" ItemTemplate="{StaticResource PushpinItemTemplate}" Visibility="{Binding ShowTopLocations, Converter={StaticResource VisibilityConverter}}" />
+                    <!--<map:MapItemsControl ItemsSource="{Binding Locations.All}" ItemTemplate="{StaticResource PushpinItemTemplate}" Visibility="{Binding ShowAllLocations, Converter={StaticResource VisibilityConverter}}" />-->
+                    <!--<map:MapItemsControl ItemsSource="{Binding Locations.Top}" ItemTemplate="{StaticResource PushpinItemTemplate}" Visibility="{Binding ShowTopLocations, Converter={StaticResource VisibilityConverter}}" />-->
                     <map:MapItemsControl ItemsSource="{Binding Locations.InnerLocations}" ItemTemplate="{StaticResource PushpinItemTemplate}" Visibility="{Binding ShowInnerLocations, Converter={StaticResource VisibilityConverter}}" />
                     <map:MapItemsControl ItemsSource="{Binding Mapper.Locations}" ItemTemplate="{StaticResource DualItemTemplate}" />
                     <map:MapItemsControl ItemsSource="{Binding Locations, ElementName=Calibrator}" ItemTemplate="{StaticResource CalPushpinItemTemplate}" />
                     <map:MapItemsControl ItemsSource="{Binding Paths.All}" ItemTemplate="{StaticResource CalPushpinItemTemplate}" />
                 </map:MapLayer>
-                <exts:DraggablePushpin Content="{Binding Locations.CurrentLocation.Label, Mode=TwoWay}" Location="{Binding Locations.CurrentLocation.Center, Mode=TwoWay}" Visibility="{Binding Locations.CurrentLocation, Converter={StaticResource ObjectVisibilityConverter}}" />
+                <exts:DraggablePushpin Content="{Binding Locations.CurrentLocation.Label, Mode=TwoWay}"
+                                       Location="{Binding Locations.CurrentLocation.Center, Mode=TwoWay}"
+                                       Visibility="{Binding Locations.CurrentLocation, Converter={StaticResource ObjectVisibilityConverter}}" />
             </map:Map>
 
             <sdk:GridSplitter Grid.Column="1" Width="8" HorizontalAlignment="Left" VerticalAlignment="Stretch" ShowsPreview="True" />

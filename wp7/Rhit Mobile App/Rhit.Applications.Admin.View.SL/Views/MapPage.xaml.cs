@@ -8,6 +8,7 @@ using Microsoft.Maps.MapControl;
 using Microsoft.Maps.MapControl.Navigation;
 using Microsoft.Maps.MapControl.Overlays;
 using Rhit.Applications.Extentions.Controls;
+using Rhit.Applications.Extentions.Maps;
 
 namespace Rhit.Applications.Views {
     public partial class MapPage : Page {
@@ -27,7 +28,7 @@ namespace Rhit.Applications.Views {
             MyCanvas.MouseLeftButtonUp += Calibrator.ImageViewer_Click;
 
             MyCanvas.MouseLeftButtonUp += ViewLocations.ImageViewer_Click;
-
+            RhitMapExtender.Attach(MyMap);
             MyMap.MouseClick += new EventHandler<MapMouseEventArgs>(Map_MouseClick);
             MyMap.MapForeground.TemplateApplied += new EventHandler(MapForeground_TemplateApplied);
 
@@ -69,20 +70,26 @@ namespace Rhit.Applications.Views {
             UIElementCollection children = naviBar.HorizontalPanel.Children;
             children.Clear();
 
+            ListBox lb = new ListBox();
+            lb.ItemsSource = RhitMapExtender.Settings.Modes;
+            lb.Style = (Style) this.Resources["NavigationBarList"];
+            children.Add(lb);
 
-            List<UIElement> elements = new List<UIElement>();
-            foreach(UIElement element in NavigationBarItems.Children)
-                elements.Add(element);
-            foreach(UIElement element in elements) {
-                NavigationBarItems.Children.Remove(element);
-                naviBar.HorizontalPanel.Children.Add(element);
-            }
+            children.Add(new CommandSeparator());
+
+            lb = new ListBox();
+            lb.ItemsSource = RhitMapExtender.Settings.Sources;
+            lb.Style = (Style) this.Resources["NavigationBarList"];
+            children.Add(lb);
+
         }
         #endregion
 
         #region Page Navigation
         // Executes when the user navigates to this page.
-        protected override void OnNavigatedTo(NavigationEventArgs e) { }
+        protected override void OnNavigatedTo(NavigationEventArgs e) {
+            
+        }
 
         // Executes when the user navigates away from this page.
         protected override void OnNavigatedFrom(NavigationEventArgs e) {

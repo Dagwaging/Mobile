@@ -20,7 +20,7 @@ namespace Rhit.Applications.ViewModels {
         internal void Initialize(IBuildingMappingProvider buildingMappingProvider,
             ILocationsProvider locationsProvider, IBitmapProvider imageProvider) {
 
-                Locations = LocationsController.Instance;
+            Locations = LocationsController.Instance;
 
             LocationsProvider = locationsProvider;
             LocationsController.Instance.CurrentLocationChanged += new EventHandler(CurrentLocationChanged);
@@ -39,7 +39,6 @@ namespace Rhit.Applications.ViewModels {
 
             ImageController.CreateImageController(imageProvider, buildingMappingProvider);
             Image = ImageController.Instance;
-            //Map = MapController.Instance;
 
             Mapper = LocationPositionMapper.Instance;
         }
