@@ -57,14 +57,11 @@
     <Compile Include="..\Rhit.Applications.ViewModel.SL\Controllers\PathsController.cs">
       <Link>Controllers\PathsController.cs</Link>
     </Compile>
+    <Compile Include="..\Rhit.Applications.ViewModel.SL\Controllers\ServicesController.cs">
+      <Link>Controllers\ServicesController.cs</Link>
+    </Compile>
     <Compile Include="..\Rhit.Applications.ViewModel.SL\Controllers\SettingsController.cs">
       <Link>Controllers\SettingsController.cs</Link>
-    </Compile>
-    <Compile Include="..\Rhit.Applications.ViewModel.SL\Models\BaseMapViewModel.cs">
-      <Link>Models\BaseMapViewModel.cs</Link>
-    </Compile>
-    <Compile Include="..\Rhit.Applications.ViewModel.SL\Models\MapViewModel.cs">
-      <Link>Models\MapViewModel.cs</Link>
     </Compile>
     <Compile Include="..\Rhit.Applications.ViewModel.SL\Services.cs">
       <Link>Services.cs</Link>
@@ -90,14 +87,21 @@
     <Compile Include="..\Rhit.Applications.ViewModel.SL\Utilities\SimpleRhitLocation.cs">
       <Link>Utilities\SimpleRhitLocation.cs</Link>
     </Compile>
-    <Compile Include="Controllers\ServicesController.cs" />
+    <Compile Include="..\Rhit.Applications.ViewModel.SL\ViewModels\BaseMapViewModel.cs">
+      <Link>ViewModels\BaseMapViewModel.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.ViewModel.SL\ViewModels\MapViewModel.cs">
+      <Link>ViewModels\MapViewModel.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhit.Applications.ViewModel.SL\ViewModels\ServicesViewModel.cs">
+      <Link>ViewModels\ServicesViewModel.cs</Link>
+    </Compile>
     <Compile Include="Controllers\TagsController.cs" />
     <Compile Include="Controllers\UserController.cs" />
-    <Compile Include="Models\DirectionsViewModel.cs" />
-    <Compile Include="Models\InfoViewModel.cs" />
-    <Compile Include="Models\SearchViewModel.cs" />
-    <Compile Include="Models\ServicesViewModel.cs" />
-    <Compile Include="Models\SimpleViewModel.cs" />
+    <Compile Include="ViewModels\DirectionsViewModel.cs" />
+    <Compile Include="ViewModels\InfoViewModel.cs" />
+    <Compile Include="ViewModels\SearchViewModel.cs" />
+    <Compile Include="ViewModels\SimpleViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

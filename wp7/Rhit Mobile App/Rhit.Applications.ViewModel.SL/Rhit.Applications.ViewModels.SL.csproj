@@ -63,6 +63,8 @@
     <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="ViewModels\BaseMapViewModel.cs" />
     <Compile Include="ViewModels\DataViewModel.cs" />
+    <Compile Include="Controllers\ServicesController.cs" />
+    <Compile Include="ViewModels\ServicesViewModel.cs" />
     <Compile Include="ViewModels\TaskedViewModel.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
