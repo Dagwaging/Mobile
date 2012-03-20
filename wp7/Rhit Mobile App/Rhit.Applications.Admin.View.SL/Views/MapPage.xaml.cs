@@ -71,14 +71,22 @@ namespace Rhit.Applications.Views {
             children.Clear();
 
             ListBox lb = new ListBox();
-            lb.ItemsSource = RhitMapExtender.Settings.Modes;
+            lb.DataContext = new RhitMapExtender();
+            lb.SetBinding(ListBox.ItemsSourceProperty, new System.Windows.Data.Binding("Settings.Modes"));
+            System.Windows.Data.Binding binding = new System.Windows.Data.Binding("Settings.CurrentMode");
+            binding.Mode = System.Windows.Data.BindingMode.TwoWay;
+            lb.SetBinding(ListBox.SelectedValueProperty, binding);
             lb.Style = (Style) this.Resources["NavigationBarList"];
             children.Add(lb);
 
             children.Add(new CommandSeparator());
 
             lb = new ListBox();
-            lb.ItemsSource = RhitMapExtender.Settings.Sources;
+            lb.DataContext = new RhitMapExtender();
+            lb.SetBinding(ListBox.ItemsSourceProperty, new System.Windows.Data.Binding("Settings.Sources"));
+            binding = new System.Windows.Data.Binding("Settings.CurrentSource");
+            binding.Mode = System.Windows.Data.BindingMode.TwoWay;
+            lb.SetBinding(ListBox.SelectedValueProperty, binding);
             lb.Style = (Style) this.Resources["NavigationBarList"];
             children.Add(lb);
 
