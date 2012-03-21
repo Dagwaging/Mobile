@@ -86,7 +86,7 @@
     <Compile Include="Events\ServiceEvent.cs" />
     <Compile Include="Events\VersionEvent.cs" />
     <Compile Include="GeoCoordinate.cs" />
-    <Compile Include="Events\LocationType.cs" />
+    <Compile Include="LocationType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="LocationData.cs" />
     <Compile Include="Services\Connection.cs" />

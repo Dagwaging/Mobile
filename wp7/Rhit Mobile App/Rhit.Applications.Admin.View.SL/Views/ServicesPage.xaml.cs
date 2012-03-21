@@ -25,6 +25,11 @@ namespace Rhit.Applications.Views.Views
             InitializeComponent();
         }
 
+        private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            ViewModel.SelectServiceNode((sender as TreeView).SelectedItem);
+        }
+
         // Executes when the user navigates to this page.
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {

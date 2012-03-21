@@ -29,7 +29,7 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
-                <sdk:TreeView ItemsSource="{Binding Services.ServicesTree}" ItemTemplate="{StaticResource ServicesTreeTemplate}" />
+                <sdk:TreeView ItemsSource="{Binding Services.ServicesTree}" ItemTemplate="{StaticResource ServicesTreeTemplate}" SelectedItemChanged="TreeView_SelectedItemChanged" />
 
                 <Grid Grid.Row="1">
                     <Grid.ColumnDefinitions>
@@ -43,15 +43,15 @@
             </Grid>
 
             <StackPanel Grid.Column="1" Grid.Row="1" Margin="12">
-                <sdk:Label Grid.Column="1" Content="Type of Record" FontWeight="Bold" FontSize="18" Margin="12,0,0,12" />
+                <sdk:Label Grid.Column="1" Content="{Binding CurrentHeading,  FallbackValue='Record Type'}" FontWeight="Bold" FontSize="18" Margin="12,0,0,12" />
 
                 <sdk:Label VerticalAlignment="Center" Content="Name" FontSize="14" />
                 <TextBox VerticalAlignment="Center" />
 
-                <sdk:Label Margin="0,12,0,0" VerticalAlignment="Center" FontSize="14" Content="URL of Web Page" />
-                <TextBox VerticalAlignment="Center"/>
+                <sdk:Label Margin="0,12,0,0" VerticalAlignment="Center" FontSize="14" Content="URL of Web Page" Visibility="{Binding LinkFieldsVisibility}"/>
+                <TextBox VerticalAlignment="Center" Visibility="{Binding LinkFieldsVisibility}" />
 
-                <Button Content="Check URL" HorizontalAlignment="Left" Margin="12,5" />
+                <Button Content="Check URL" HorizontalAlignment="Left" Margin="12,5" Visibility="{Binding LinkFieldsVisibility}" />
 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                     <Button Content="Save" />

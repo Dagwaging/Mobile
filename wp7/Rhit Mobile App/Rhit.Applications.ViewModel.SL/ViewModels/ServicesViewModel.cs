@@ -10,6 +10,8 @@ namespace Rhit.Applications.ViewModels {
             //TODO: Use test data instead of just disabling it
             if (DesignerProperties.IsInDesignTool) return;
 
+            CurrentHeading = "Select a Service";
+
             Services = ServicesController.Instance;
             Services.Start();
             ServicesController.Instance.CampusServicesUpdated += new EventHandler(CampusServicesUpdated);
@@ -54,6 +56,46 @@ namespace Rhit.Applications.ViewModels {
            DependencyProperty.Register("Parent", typeof(CampusService), typeof(ServicesViewModel), new PropertyMetadata(null));
         #endregion
 
+        #region CurrentHeading
+        public String CurrentHeading
+        {
+            get { return (String)GetValue(CurrentHeadingProperty); }
+            private set { SetValue(CurrentHeadingProperty, value); }
+        }
+
+        private static readonly DependencyProperty CurrentHeadingProperty = DependencyProperty.Register("CurrentHeading", typeof(String), typeof(ServicesViewModel), new PropertyMetadata(null));
+        #endregion
+
+        #region LinkFieldsVisibility
+        public Visibility LinkFieldsVisibility
+        {
+            get { return (Visibility)GetValue(LinkFieldsVisibilityProperty); }
+            private set { SetValue(LinkFieldsVisibilityProperty, value); }
+        }
+
+        private static readonly DependencyProperty LinkFieldsVisibilityProperty = DependencyProperty.Register("LinkFieldsVisibility", typeof(Visibility), typeof(ServicesViewModel), new PropertyMetadata(null));
+        #endregion
+
         public ServicesController Services { get; private set; }
+
+        public void SelectServiceNode(object serviceNode)
+        {
+            try { SelectServiceNode((ServiceNode)serviceNode); }
+            catch { }
+        }
+
+        public void SelectServiceNode(ServiceNode serviceNode)
+        {
+            if (serviceNode is ServiceCategoryNode)
+            {
+                CurrentHeading = "Category";
+                LinkFieldsVisibility = Visibility.Collapsed;
+            }
+            else if (serviceNode is ServiceLinkNode)
+            {
+                CurrentHeading = "Service Link";
+                LinkFieldsVisibility = Visibility.Visible;
+            }
+        }
     }
 }
