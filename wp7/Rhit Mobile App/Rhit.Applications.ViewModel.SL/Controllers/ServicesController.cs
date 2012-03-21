@@ -13,6 +13,7 @@ namespace Rhit.Applications.ViewModels.Controllers {
 
         private ServicesController() {
             All = new ObservableCollection<CampusService>();
+            ServicesTree = new ObservableCollection<ServiceNode>();
             CampusServiceDictionary = new Dictionary<int, CampusService>();
             CampusServiceParentDictionary = new Dictionary<int, int>();
 
@@ -42,6 +43,16 @@ namespace Rhit.Applications.ViewModels.Controllers {
             Root.Label = "Campus Services";
             AddCampusService(Root, -1);
             OnCampusServicesUpdated();
+
+            foreach (CampusService child in Root.Children)
+            {
+                ServicesTree.Add(new ServiceCategoryNode(child));
+            }
+
+            foreach (Link link in Root.Links)
+            {
+                ServicesTree.Add(new ServiceLinkNode(link));
+            }
         }
 
         private void AddCampusService(CampusService campusService, int parentId) {
@@ -76,5 +87,7 @@ namespace Rhit.Applications.ViewModels.Controllers {
         }
 
         public ObservableCollection<CampusService> All { get; private set; }
+
+        public ObservableCollection<ServiceNode> ServicesTree { get; private set; }
     }
 }
