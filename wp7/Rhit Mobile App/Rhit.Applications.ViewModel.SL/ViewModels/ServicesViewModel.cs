@@ -63,6 +63,26 @@ namespace Rhit.Applications.ViewModels {
             private set { SetValue(CurrentHeadingProperty, value); }
         }
 
+        #region CurrentName
+        public String CurrentName
+        {
+            get { return (String)GetValue(CurrentNameProperty); }
+            private set { SetValue(CurrentNameProperty, value); }
+        }
+
+        private static readonly DependencyProperty CurrentNameProperty = DependencyProperty.Register("CurrentName", typeof(String), typeof(ServicesViewModel), new PropertyMetadata(null));
+        #endregion
+
+        #region CurrentURL
+        public String CurrentURL
+        {
+            get { return (String)GetValue(CurrentURLProperty); }
+            private set { SetValue(CurrentURLProperty, value); }
+        }
+
+        private static readonly DependencyProperty CurrentURLProperty = DependencyProperty.Register("CurrentURL", typeof(String), typeof(ServicesViewModel), new PropertyMetadata(null));
+        #endregion
+
         private static readonly DependencyProperty CurrentHeadingProperty = DependencyProperty.Register("CurrentHeading", typeof(String), typeof(ServicesViewModel), new PropertyMetadata(null));
         #endregion
 
@@ -89,11 +109,15 @@ namespace Rhit.Applications.ViewModels {
             if (serviceNode is ServiceCategoryNode)
             {
                 CurrentHeading = "Category";
+                CurrentName = serviceNode.Name;
+                CurrentURL = "";
                 LinkFieldsVisibility = Visibility.Collapsed;
             }
             else if (serviceNode is ServiceLinkNode)
             {
                 CurrentHeading = "Service Link";
+                CurrentName = serviceNode.Name;
+                CurrentURL = ((ServiceLinkNode)serviceNode).Link.Address;
                 LinkFieldsVisibility = Visibility.Visible;
             }
         }

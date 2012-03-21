@@ -46,10 +46,10 @@
                 <sdk:Label Grid.Column="1" Content="{Binding CurrentHeading,  FallbackValue='Record Type'}" FontWeight="Bold" FontSize="18" Margin="12,0,0,12" />
 
                 <sdk:Label VerticalAlignment="Center" Content="Name" FontSize="14" />
-                <TextBox VerticalAlignment="Center" />
+                <TextBox VerticalAlignment="Center" Text="{Binding CurrentName, Mode=TwoWay}"/>
 
                 <sdk:Label Margin="0,12,0,0" VerticalAlignment="Center" FontSize="14" Content="URL of Web Page" Visibility="{Binding LinkFieldsVisibility}"/>
-                <TextBox VerticalAlignment="Center" Visibility="{Binding LinkFieldsVisibility}" />
+                <TextBox VerticalAlignment="Center" Text="{Binding CurrentURL, Mode=TwoWay}" Visibility="{Binding LinkFieldsVisibility}" />
 
                 <Button Content="Check URL" HorizontalAlignment="Left" Margin="12,5" Visibility="{Binding LinkFieldsVisibility}" />
 
