@@ -29,7 +29,7 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
-                <sdk:TreeView />
+                <sdk:TreeView ItemsSource="{Binding Services.ServicesTree}" ItemTemplate="{StaticResource ServicesTreeTemplate}" />
 
                 <Grid Grid.Row="1">
                     <Grid.ColumnDefinitions>

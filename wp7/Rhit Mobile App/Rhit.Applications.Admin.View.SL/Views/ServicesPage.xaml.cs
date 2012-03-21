@@ -10,13 +10,18 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using System.Windows.Navigation;
+using Rhit.Applications.ViewModels;
 
 namespace Rhit.Applications.Views.Views
 {
     public partial class ServicesPage : Page
     {
+        private ServicesViewModel ViewModel { get; set; }
+
         public ServicesPage()
         {
+            ViewModel = new ServicesViewModel();
+            DataContext = ViewModel;
             InitializeComponent();
         }
 
