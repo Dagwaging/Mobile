@@ -61,6 +61,9 @@
     <Compile Include="Controllers\LocationsController.cs" />
     <Compile Include="Controllers\PathsController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
+    <Compile Include="Utilities\ServiceCategoryNode.cs" />
+    <Compile Include="Utilities\ServiceLinkNode.cs" />
+    <Compile Include="Utilities\ServiceNode.cs" />
     <Compile Include="ViewModels\BaseMapViewModel.cs" />
     <Compile Include="ViewModels\DataViewModel.cs" />
     <Compile Include="Controllers\ServicesController.cs" />
