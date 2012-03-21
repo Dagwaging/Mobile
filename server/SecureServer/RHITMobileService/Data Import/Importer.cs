@@ -27,6 +27,9 @@ namespace RHITMobile.Secure.Data_Import
         {
             Dictionary<String, String> idToUsername = new Dictionary<String, String>();
 
+            DB db = DB.Instance;
+            db.ClearData();
+
             {
                 users = new List<User>();
                 Dictionary<int, String> termUserMap = new Dictionary<int, String>();
@@ -45,6 +48,11 @@ namespace RHITMobile.Secure.Data_Import
                     {
                         idToUsername.Add(user.ID, user.Username);
                         users.Add(user);
+                        db.AddUser(user);
+                    }
+                    foreach (User user in users)
+                    {
+                        db.SetAdvisor(user);
                     }
                     log.Info("Read " + users.Count + " user entries for term " + parser.TermCode);
                 }
@@ -81,6 +89,7 @@ namespace RHITMobile.Secure.Data_Import
                     }
                 }
             }
+            db.Flip();
 
         }
     }
