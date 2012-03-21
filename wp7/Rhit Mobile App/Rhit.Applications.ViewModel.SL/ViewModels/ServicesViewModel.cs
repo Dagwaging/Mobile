@@ -10,7 +10,8 @@ namespace Rhit.Applications.ViewModels {
             //TODO: Use test data instead of just disabling it
             if (DesignerProperties.IsInDesignTool) return;
 
-            ServicesController.Instance.Start();
+            Services = ServicesController.Instance;
+            Services.Start();
             ServicesController.Instance.CampusServicesUpdated += new EventHandler(CampusServicesUpdated);
         }
 
@@ -52,5 +53,7 @@ namespace Rhit.Applications.ViewModels {
         public static readonly DependencyProperty ParentProperty =
            DependencyProperty.Register("Parent", typeof(CampusService), typeof(ServicesViewModel), new PropertyMetadata(null));
         #endregion
+
+        public ServicesController Services { get; private set; }
     }
 }
