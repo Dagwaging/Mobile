@@ -3,57 +3,50 @@ using System.ComponentModel;
 using System.Windows;
 using Rhit.Applications.ViewModels.Controllers;
 using Rhit.Applications.ViewModels.Utilities;
+using System.Windows.Input;
+using Rhit.Applications.Mvvm.Commands;
 
 namespace Rhit.Applications.ViewModels {
     public class ServicesViewModel : DependencyObject {
         public ServicesViewModel() {
-            //TODO: Use test data instead of just disabling it
-            if (DesignerProperties.IsInDesignTool) return;
+            AddCategoryCommand = new RelayCommand(p => AddCategory());
+            AddServiceCommand = new RelayCommand(p => AddService());
+            SaveCurrentCommand = new RelayCommand(p => SaveCurrent());
+            DeleteCurrentCommand = new RelayCommand(p => DeleteCurrent());
+            CheckURLCommand = new RelayCommand(p => CheckURL());
 
-            CurrentHeading = "Select a Service";
+            AllFieldsVisibility = Visibility.Collapsed;
 
             Services = ServicesController.Instance;
-            Services.Start();
-            ServicesController.Instance.CampusServicesUpdated += new EventHandler(CampusServicesUpdated);
         }
 
-        private void CampusServicesUpdated(object sender, EventArgs e) {
-            Update();
+        #region Command Implementations
+        private void AddCategory()
+        {
+
         }
 
-        private int Index { get; set; }
+        private void AddService()
+        {
 
-        private void Update() {
-            CampusService campusService = ServicesController.Instance.GetCampusService(Index);
-            if(campusService == null) return;
-
-            CurrentService = ServicesController.Instance.GetCampusService(Index);
-            Parent = ServicesController.Instance.GetParentCategory(CurrentService.Id);
         }
 
-        public void SetIndex(int id) {
-            Index = id;
-            Update();
+        private void SaveCurrent()
+        {
+
+            ReloadServices();
         }
 
-        #region CurrentService
-        public CampusService CurrentService {
-            get { return (CampusService) GetValue(CurrentServiceProperty); }
-            set { SetValue(CurrentServiceProperty, value); }
+        private void DeleteCurrent()
+        {
+
+            ReloadServices();
         }
 
-        public static readonly DependencyProperty CurrentServiceProperty =
-           DependencyProperty.Register("CurrentService", typeof(CampusService), typeof(ServicesViewModel), new PropertyMetadata(null));
-        #endregion
+        private void CheckURL()
+        {
 
-        #region Parent
-        public CampusService Parent {
-            get { return (CampusService) GetValue(ParentProperty); }
-            set { SetValue(ParentProperty, value); }
         }
-
-        public static readonly DependencyProperty ParentProperty =
-           DependencyProperty.Register("Parent", typeof(CampusService), typeof(ServicesViewModel), new PropertyMetadata(null));
         #endregion
 
         #region CurrentHeading
@@ -62,6 +55,9 @@ namespace Rhit.Applications.ViewModels {
             get { return (String)GetValue(CurrentHeadingProperty); }
             private set { SetValue(CurrentHeadingProperty, value); }
         }
+
+        private static readonly DependencyProperty CurrentHeadingProperty = DependencyProperty.Register("CurrentHeading", typeof(String), typeof(ServicesViewModel), new PropertyMetadata(null));
+        #endregion
 
         #region CurrentName
         public String CurrentName
@@ -83,9 +79,6 @@ namespace Rhit.Applications.ViewModels {
         private static readonly DependencyProperty CurrentURLProperty = DependencyProperty.Register("CurrentURL", typeof(String), typeof(ServicesViewModel), new PropertyMetadata(null));
         #endregion
 
-        private static readonly DependencyProperty CurrentHeadingProperty = DependencyProperty.Register("CurrentHeading", typeof(String), typeof(ServicesViewModel), new PropertyMetadata(null));
-        #endregion
-
         #region LinkFieldsVisibility
         public Visibility LinkFieldsVisibility
         {
@@ -96,7 +89,23 @@ namespace Rhit.Applications.ViewModels {
         private static readonly DependencyProperty LinkFieldsVisibilityProperty = DependencyProperty.Register("LinkFieldsVisibility", typeof(Visibility), typeof(ServicesViewModel), new PropertyMetadata(null));
         #endregion
 
+        #region AllFieldsVisibility
+        public Visibility AllFieldsVisibility
+        {
+            get { return (Visibility)GetValue(AllFieldsVisibilityProperty); }
+            private set { SetValue(AllFieldsVisibilityProperty, value); }
+        }
+
+        private static readonly DependencyProperty AllFieldsVisibilityProperty = DependencyProperty.Register("AllFieldsVisibility", typeof(Visibility), typeof(ServicesViewModel), new PropertyMetadata(null));
+        #endregion
+
         public ServicesController Services { get; private set; }
+
+        public void ReloadServices()
+        {
+            AllFieldsVisibility = Visibility.Collapsed;
+            Services.ReloadServices();
+        }
 
         public void SelectServiceNode(object serviceNode)
         {
@@ -106,8 +115,11 @@ namespace Rhit.Applications.ViewModels {
 
         public void SelectServiceNode(ServiceNode serviceNode)
         {
+            Services.CurrentServiceNode = serviceNode;
+
             if (serviceNode is ServiceCategoryNode)
             {
+                AllFieldsVisibility = Visibility.Visible;
                 CurrentHeading = "Category";
                 CurrentName = serviceNode.Name;
                 CurrentURL = "";
@@ -115,11 +127,25 @@ namespace Rhit.Applications.ViewModels {
             }
             else if (serviceNode is ServiceLinkNode)
             {
+                AllFieldsVisibility = Visibility.Visible;
                 CurrentHeading = "Service Link";
                 CurrentName = serviceNode.Name;
                 CurrentURL = ((ServiceLinkNode)serviceNode).Link.Address;
                 LinkFieldsVisibility = Visibility.Visible;
             }
         }
+
+        #region Commands
+        public ICommand AddServiceCommand { get; private set; }
+
+        public ICommand AddCategoryCommand { get; private set; }
+
+        public ICommand SaveCurrentCommand { get; private set; }
+
+        public ICommand DeleteCurrentCommand { get; private set; }
+
+        public ICommand CheckURLCommand { get; private set; }
+        #endregion
+
     }
 }
