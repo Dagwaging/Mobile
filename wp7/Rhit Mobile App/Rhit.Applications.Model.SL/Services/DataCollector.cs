@@ -409,7 +409,7 @@ namespace Rhit.Applications.Models.Services {
             RequestPart request = new RequestBuilder(BaseAddress).Admin.StoredProcedure(Connection.ServiceTokenGuid, "spDeleteCampusServiceLink");
 
             String name = Uri.EscapeDataString(link.Name);
-            String category = Uri.EscapeDataString(categoryName == null ? "ServiceRoot" : categoryName);
+            String category = Uri.EscapeDataString(categoryName == null ? "\0" : categoryName);
 
             request = request.AddQueryParameter("name", name);
             request = request.AddQueryParameter("category", category);
@@ -422,7 +422,7 @@ namespace Rhit.Applications.Models.Services {
             RequestPart request = new RequestBuilder(BaseAddress).Admin.StoredProcedure(Connection.ServiceTokenGuid, "spAddCampusServiceCategory");
 
             String name = Uri.EscapeDataString("New Category " + DateTime.Now.ToFileTimeUtc());
-            String parentName = Uri.EscapeDataString(parent == null || parent.Name == null ? "ServicesRoot" : parent.Name);
+            String parentName = Uri.EscapeDataString(parent == null || parent.Name == null ? "\0" : parent.Name);
 
             request = request.AddQueryParameter("name", name);
             request = request.AddQueryParameter("parent", parentName);
@@ -436,7 +436,7 @@ namespace Rhit.Applications.Models.Services {
 
             String url = Uri.EscapeDataString("http://www.rose-hulman.edu/");
             String name = Uri.EscapeDataString("New Service " + DateTime.Now.ToFileTimeUtc());
-            String parentName = Uri.EscapeDataString(parent == null || parent.Name == null ? "ServicesRoot" : parent.Name);
+            String parentName = Uri.EscapeDataString(parent == null || parent.Name == null ? "\0" : parent.Name);
 
             request = request.AddQueryParameter("name", name);
             request = request.AddQueryParameter("url", url);

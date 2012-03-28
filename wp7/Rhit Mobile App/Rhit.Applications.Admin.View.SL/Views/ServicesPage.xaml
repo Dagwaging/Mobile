@@ -40,8 +40,8 @@
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
 
-                    <Button Content="Add Root Category" cmds:CommandManager.Command="{Binding AddCategoryCommand}" cmds:CommandManager.CommandEventName="Click" />
-                    <Button Content="Add Root Service" Grid.Column="1" cmds:CommandManager.Command="{Binding AddServiceCommand}" cmds:CommandManager.CommandEventName="Click" />
+                    <Button Content="Add Root Category" cmds:CommandManager.Command="{Binding AddRootCategoryCommand}" cmds:CommandManager.CommandEventName="Click" />
+                    <Button Content="Add Root Service" Grid.Column="1" cmds:CommandManager.Command="{Binding AddRootServiceCommand}" cmds:CommandManager.CommandEventName="Click" />
                 </Grid>
 
                 <sdk:TreeView ItemsSource="{Binding Services.ServicesTree}" ItemTemplate="{StaticResource ServicesTreeTemplate}" SelectedItemChanged="TreeView_SelectedItemChanged" Grid.Row="2"/>

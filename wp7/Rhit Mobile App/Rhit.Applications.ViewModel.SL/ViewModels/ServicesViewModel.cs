@@ -12,6 +12,8 @@ namespace Rhit.Applications.ViewModels {
         public ServicesViewModel() {
             AddCategoryCommand = new RelayCommand(p => AddCategory());
             AddServiceCommand = new RelayCommand(p => AddService());
+            AddRootCategoryCommand = new RelayCommand(p => AddRootCategory());
+            AddRootServiceCommand = new RelayCommand(p => AddRootService());
             SaveCurrentCommand = new RelayCommand(p => SaveCurrent());
             DeleteCurrentCommand = new RelayCommand(p => DeleteCurrent());
             CheckURLCommand = new RelayCommand(p => CheckURL());
@@ -58,6 +60,16 @@ namespace Rhit.Applications.ViewModels {
             }
 
             ReloadServices();
+        }
+
+        private void AddRootCategory()
+        {
+            DataCollector.Instance.AddCampusServiceCategory(null);
+        }
+
+        private void AddRootService()
+        {
+            DataCollector.Instance.AddCampusServiceLink(null);
         }
 
         private void SaveCurrent()
@@ -181,6 +193,10 @@ namespace Rhit.Applications.ViewModels {
         public ICommand AddServiceCommand { get; private set; }
 
         public ICommand AddCategoryCommand { get; private set; }
+
+        public ICommand AddRootServiceCommand { get; private set; }
+
+        public ICommand AddRootCategoryCommand { get; private set; }
 
         public ICommand SaveCurrentCommand { get; private set; }
 
