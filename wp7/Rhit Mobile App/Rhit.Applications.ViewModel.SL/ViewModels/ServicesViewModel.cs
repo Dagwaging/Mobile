@@ -5,6 +5,7 @@ using Rhit.Applications.ViewModels.Controllers;
 using Rhit.Applications.ViewModels.Utilities;
 using System.Windows.Input;
 using Rhit.Applications.Mvvm.Commands;
+using Rhit.Applications.Models.Services;
 
 namespace Rhit.Applications.ViewModels {
     public class ServicesViewModel : DependencyObject {
@@ -14,31 +15,70 @@ namespace Rhit.Applications.ViewModels {
             SaveCurrentCommand = new RelayCommand(p => SaveCurrent());
             DeleteCurrentCommand = new RelayCommand(p => DeleteCurrent());
             CheckURLCommand = new RelayCommand(p => CheckURL());
+            RefreshCommand = new RelayCommand(p => ReloadServices());
+
+            DataCollector.Instance.CampusServicesUpdateReturned += new EventHandler(Instance_CampusServicesUpdateReturned);
 
             AllFieldsVisibility = Visibility.Collapsed;
 
             Services = ServicesController.Instance;
         }
 
+        void Instance_CampusServicesUpdateReturned(object sender, EventArgs e)
+        {
+            ReloadServices();
+        }
+
         #region Command Implementations
         private void AddCategory()
         {
+            if (Services.CurrentServiceNode is ServiceCategoryNode)
+            {
+                DataCollector.Instance.AddCampusServiceCategory(((ServiceCategoryNode)Services.CurrentServiceNode).Category.ToLightWeightDataContract());
+            }
 
+            else
+            {
+                DataCollector.Instance.AddCampusServiceCategory(null);
+            }
+
+            ReloadServices();
         }
 
         private void AddService()
         {
+            if (Services.CurrentServiceNode is ServiceCategoryNode)
+            {
+                DataCollector.Instance.AddCampusServiceLink(((ServiceCategoryNode)Services.CurrentServiceNode).Category.ToLightWeightDataContract());
+            }
 
+            else
+            {
+                DataCollector.Instance.AddCampusServiceLink(null);
+            }
+
+            ReloadServices();
         }
 
         private void SaveCurrent()
         {
-
+            //TODO
             ReloadServices();
         }
 
         private void DeleteCurrent()
         {
+            if (Services.CurrentServiceNode is ServiceCategoryNode)
+            {
+                ServiceCategoryNode node = (ServiceCategoryNode)Services.CurrentServiceNode;
+                DataCollector.Instance.DeleteCampusServiceCategory(node.Category.ToLightWeightDataContract(), node.Parent.Name);
+            }
+
+            else if (Services.CurrentServiceNode is ServiceLinkNode)
+            {
+                ServiceLinkNode node = (ServiceLinkNode)Services.CurrentServiceNode;
+                DataCollector.Instance.DeleteCampuServiceLink(node.Link.ToLightWeightDataContract(), node.Parent.Name);
+            }
 
             ReloadServices();
         }
@@ -136,6 +176,8 @@ namespace Rhit.Applications.ViewModels {
         }
 
         #region Commands
+        public ICommand RefreshCommand { get; private set; }
+
         public ICommand AddServiceCommand { get; private set; }
 
         public ICommand AddCategoryCommand { get; private set; }

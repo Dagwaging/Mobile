@@ -3,6 +3,7 @@ namespace Rhit.Applications.Models.Services {
     public enum ResponseType {
         AllLocations,
         CampusServices,
+        CampusServicesUpdate,
         ChangeCorners,
         ConnectionError,
         DeleteLocation,

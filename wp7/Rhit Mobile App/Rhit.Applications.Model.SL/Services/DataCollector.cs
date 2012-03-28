@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Threading;
+using System.Windows.Browser;
 using Rhit.Applications.Models.Events;
 using Rhit.Applications.Models.Services.Requests;
 using System;
@@ -21,6 +22,14 @@ namespace Rhit.Applications.Models.Services {
                 Root = root,
             };
             if(CampusServicesReturned != null) CampusServicesReturned(this, args);
+        }
+        #endregion
+
+        #region CampusServicesUpdateReturned
+        public event EventHandler CampusServicesUpdateReturned;
+        protected virtual void OnCampusServicesUpdateReturned(EventArgs args)
+        {
+            if (CampusServicesUpdateReturned != null) CampusServicesUpdateReturned(this, args);
         }
         #endregion
 
@@ -206,6 +215,10 @@ namespace Rhit.Applications.Models.Services {
                     HandleCampusServicesResponse(eventArgs);
                     break;
 
+                case ResponseType.CampusServicesUpdate:
+                    HandleCampusServicesUpdateResponse(eventArgs);
+                    break;
+
                 case ResponseType.ServerError:
                 case ResponseType.ConnectionError:
                     OnServerErrorReturned(eventArgs);
@@ -237,6 +250,11 @@ namespace Rhit.Applications.Models.Services {
             ServerObject response = eventArgs.ResponseObject;
             if(response.CampusServicesRoot == null) return;
             OnCampusServicesReturned(eventArgs, response.CampusServicesRoot);
+        }
+
+        private void HandleCampusServicesUpdateResponse(ServiceEventArgs eventArgs)
+        {
+            OnCampusServicesUpdateReturned(eventArgs);
         }
 
         private void HandleSearchResponse(ServiceEventArgs eventArgs) {
@@ -363,6 +381,68 @@ namespace Rhit.Applications.Models.Services {
         public void GetCampusServices() {
             RequestPart request = new RequestBuilder(BaseAddress).Services;
             Connection.MakeRequest(request, RequestType.CampusServices);
+        }
+
+        public void SaveCampusServiceCategory(CampusServicesCategory_DC category, String parentCategoryName)
+        {
+
+        }
+
+        public void SaveCampusServiceLink(Link_DC link, String oldName, String categoryName)
+        {
+
+        }
+
+        public void DeleteCampusServiceCategory(CampusServicesCategory_DC category, String parentCategoryName)
+        {
+            RequestPart request = new RequestBuilder(BaseAddress).Admin.StoredProcedure(Connection.ServiceTokenGuid, "spDeleteCampusServiceCategory");
+
+            String name = Uri.EscapeDataString(category.Name);
+
+            request = request.AddQueryParameter("name", name);
+
+            Connection.MakeRequest(request, RequestType.CampusServicesUpdate);
+        }
+
+        public void DeleteCampuServiceLink(Link_DC link, String categoryName)
+        {
+            RequestPart request = new RequestBuilder(BaseAddress).Admin.StoredProcedure(Connection.ServiceTokenGuid, "spDeleteCampusServiceLink");
+
+            String name = Uri.EscapeDataString(link.Name);
+            String category = Uri.EscapeDataString(categoryName == null ? "ServiceRoot" : categoryName);
+
+            request = request.AddQueryParameter("name", name);
+            request = request.AddQueryParameter("category", category);
+
+            Connection.MakeRequest(request, RequestType.CampusServicesUpdate);
+        }
+
+        public void AddCampusServiceCategory(CampusServicesCategory_DC parent)
+        {
+            RequestPart request = new RequestBuilder(BaseAddress).Admin.StoredProcedure(Connection.ServiceTokenGuid, "spAddCampusServiceCategory");
+
+            String name = Uri.EscapeDataString("New Category " + DateTime.Now.ToFileTimeUtc());
+            String parentName = Uri.EscapeDataString(parent == null || parent.Name == null ? "ServicesRoot" : parent.Name);
+
+            request = request.AddQueryParameter("name", name);
+            request = request.AddQueryParameter("parent", parentName);
+
+            Connection.MakeRequest(request, RequestType.CampusServicesUpdate);
+        }
+
+        public void AddCampusServiceLink(CampusServicesCategory_DC parent)
+        {
+            RequestPart request = new RequestBuilder(BaseAddress).Admin.StoredProcedure(Connection.ServiceTokenGuid, "spAddCampusServiceLink");
+
+            String url = Uri.EscapeDataString("http://www.rose-hulman.edu/");
+            String name = Uri.EscapeDataString("New Service " + DateTime.Now.ToFileTimeUtc());
+            String parentName = Uri.EscapeDataString(parent == null || parent.Name == null ? "ServicesRoot" : parent.Name);
+
+            request = request.AddQueryParameter("name", name);
+            request = request.AddQueryParameter("url", url);
+            request = request.AddQueryParameter("category", parentName);
+
+            Connection.MakeRequest(request, RequestType.CampusServicesUpdate);
         }
 
         public void GetChildLocations(LocationData parent) { GetChildLocations(parent.Id); }

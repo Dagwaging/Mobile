@@ -14,12 +14,8 @@ namespace Rhit.Applications.ViewModels.Utilities
 {
     public abstract class ServiceNode
     {
-        public static ServiceNode New(CampusService service)
-        {
-            return new ServiceCategoryNode(service);
-        }
-
         public ObservableCollection<ServiceNode> Children { get; set; }
+        public ServiceCategoryNode Parent { get; set; }
         public string Name { get; set; }
     }
 }
