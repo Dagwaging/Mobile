@@ -9,6 +9,7 @@ using Microsoft.Maps.MapControl.Navigation;
 using Microsoft.Maps.MapControl.Overlays;
 using Rhit.Applications.Extentions.Controls;
 using Rhit.Applications.Extentions.Maps;
+using Rhit.Applications.Views.Utilities;
 
 namespace Rhit.Applications.Views {
     public partial class MapPage : Page {
@@ -33,7 +34,11 @@ namespace Rhit.Applications.Views {
             MyMap.MapForeground.TemplateApplied += new EventHandler(MapForeground_TemplateApplied);
 
             DataContext = ViewModel;
+            TaskModes2 = Resources["TaskModes"] as TaskMode;
+            //TaskModes.CurrentTaskMode = BuildingTasks;
         }
+
+        public TaskMode TaskModes2 { get; set; }
 
         #region Click Event Methods/Properties
         private Point LastEventCoordinate { get; set; }
@@ -96,12 +101,12 @@ namespace Rhit.Applications.Views {
         #region Page Navigation
         // Executes when the user navigates to this page.
         protected override void OnNavigatedTo(NavigationEventArgs e) {
-            
+            //TaskModes.CurrentTaskMode = BuildingTasks;
         }
 
         // Executes when the user navigates away from this page.
         protected override void OnNavigatedFrom(NavigationEventArgs e) {
-            LayoutRoot.Children.Remove(MyMap);
+            MapLayout.Children.Remove(MyMap);
             MyMap.Children.Clear();
         }
         #endregion
@@ -114,6 +119,16 @@ namespace Rhit.Applications.Views {
         private void DraggablePushpin_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
             LastEventCoordinate = e.GetPosition(MyMap);
             ViewModel.SelectLocation((int) (sender as Pushpin).Tag);
+        }
+
+        private void TaskModeRadioButton_Checked(object sender, RoutedEventArgs e) {
+            var s = (sender as RadioButton).Content;
+            var tmp = new TaskContainer();
+            var tasks = new List<Task>() {
+                new Task() { Label="Task1" },
+            };
+            tmp.AddTasks(tasks);
+            TaskModes2.CurrentTaskMode = new TaskContainer();
         }
     }
 }

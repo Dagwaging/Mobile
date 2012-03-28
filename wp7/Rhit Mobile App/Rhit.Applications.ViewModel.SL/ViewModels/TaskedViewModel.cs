@@ -15,7 +15,9 @@ namespace Rhit.Applications.ViewModels {
 
         //NOTE: Requires a call to Initialize and SetMode before class is usable
         //Note: NoArg Constructor so ViewModel can be created in xaml
-        public TaskedViewModel() { }//: base(false) {}
+        public TaskedViewModel() {
+            Paths = PathsController.Instance;
+        }
 
         internal void Initialize(IBuildingMappingProvider buildingMappingProvider,
             ILocationsProvider locationsProvider, IBitmapProvider imageProvider) {
@@ -25,13 +27,8 @@ namespace Rhit.Applications.ViewModels {
             LocationsProvider = locationsProvider;
             LocationsController.Instance.CurrentLocationChanged += new EventHandler(CurrentLocationChanged);
 
-            SaveCommand = new RelayCommand(p => Save());
-            CancelCommand = new RelayCommand(p => Cancel());
+            InitializeCommands();
 
-            AddLocationCommand = new RelayCommand(p => AddLocation());
-            AddCornersCommand = new RelayCommand(p => CreateCorners());
-            ChangeCornersCommand = new RelayCommand(p => ShowCorners());
-            LoadFloorCommand = new RelayCommand(p => LoadFloor());
             State = BehaviorState.Default;
 
             Settings = SettingsController.Instance;
@@ -43,103 +40,17 @@ namespace Rhit.Applications.ViewModels {
             Mapper = LocationPositionMapper.Instance;
         }
 
-        #region Commands
+        private void InitializeCommands() {
+            SaveCommand = new RelayCommand(p => Save());
+            CancelCommand = new RelayCommand(p => Cancel());
+            AddLocationCommand = new RelayCommand(p => AddLocation());
+            AddCornersCommand = new RelayCommand(p => CreateCorners());
+            ChangeCornersCommand = new RelayCommand(p => ShowCorners());
+            LoadFloorCommand = new RelayCommand(p => LoadFloor());
+        }
+
+        #region Save Command/Methods
         public ICommand SaveCommand { get; private set; }
-
-        public ICommand CancelCommand { get; private set; }
-
-        public ICommand AddLocationCommand { get; private set; }
-
-        public ICommand AddCornersCommand { get; private set; }
-
-        public ICommand ChangeCornersCommand { get; private set; }
-
-        public ICommand LoadFloorCommand { get; private set; }
-        #endregion
-
-
-        private BehaviorState State { get; set; }
-
-        private ILocationsProvider LocationsProvider { get; set; }
-
-        public ImageController Image { get; private set; }
-
-        public LocationPositionMapper Mapper { get; set; }
-
-
-        #region Dependency Properties
-        #region ShowInnerLocations
-        public bool ShowInnerLocations {
-            get { return (bool) GetValue(ShowInnerLocationsProperty); }
-            set { SetValue(ShowInnerLocationsProperty, value); }
-        }
-
-        public static readonly DependencyProperty ShowInnerLocationsProperty =
-           DependencyProperty.Register("ShowInnerLocations", typeof(bool), typeof(TaskedViewModel), new PropertyMetadata(false));
-        #endregion
-
-        #region ShowFloorLocations
-        public bool ShowFloorLocations {
-            get { return (bool) GetValue(ShowFloorLocationsProperty); }
-            set { SetValue(ShowFloorLocationsProperty, value); }
-        }
-
-        public static readonly DependencyProperty ShowFloorLocationsProperty =
-           DependencyProperty.Register("ShowFloorLocations", typeof(bool), typeof(TaskedViewModel), new PropertyMetadata(false));
-        #endregion
-
-        #region ShowSave
-        public bool ShowSave {
-            get { return (bool) GetValue(ShowSaveProperty); }
-            set { SetValue(ShowSaveProperty, value); }
-        }
-
-        public static readonly DependencyProperty ShowSaveProperty =
-           DependencyProperty.Register("ShowSave", typeof(bool), typeof(TaskedViewModel), new PropertyMetadata(false));
-        #endregion
-        #endregion
-
-
-        private void AddLocation() {
-            if(State == BehaviorState.Floor) {
-                State = BehaviorState.FloorAddingLocation;
-                LocationsProvider.QueryLocation();
-            } else {
-                Settings.ShowBuildings = false;
-                State = BehaviorState.AddingLocation;
-                LocationsProvider.QueryLocation();
-            }
-        }
-
-        private void CreateCorners() {
-            if(LocationsController.Instance.CurrentLocation == null) return;
-            State = BehaviorState.CreatingCorners;
-            Settings.ShowBuildings = false;
-            LocationsProvider.CreateNewCorners();
-            ShowSave = true;
-        }
-
-        private void ShowCorners() {
-            if(LocationsController.Instance.CurrentLocation == null) return;
-            State = BehaviorState.MovingCorners;
-            Settings.ShowBuildings = false;
-            LocationsProvider.DisplayCorners(LocationsController.Instance.CurrentLocation.Corners as ICollection<Location>);
-            ShowSave = true;
-        }
-
-        private void SaveCorners() {
-            DataCollector.Instance.ChangeLocationCorners(LocationsController.Instance.CurrentLocation.Id, LocationsProvider.GetLocations());
-            Cancel();
-        }
-
-        private void LoadFloor() {
-            ShowSave = false;
-            if(LocationsController.Instance.CurrentLocation == null) return;
-            State = BehaviorState.Floor;
-            Settings.ShowBuildings = false;
-            ShowFloorLocations = true;
-            ImageController.Instance.LoadImage();
-        }
 
         private void SaveFloor() {
             ImageController.Instance.CloseImage();
@@ -171,6 +82,11 @@ namespace Rhit.Applications.ViewModels {
             }
         }
 
+        private void SaveCorners() {
+            DataCollector.Instance.ChangeLocationCorners(LocationsController.Instance.CurrentLocation.Id, LocationsProvider.GetLocations());
+            Cancel();
+        }
+
         private void SaveLocation() {
             if(State == BehaviorState.FloorAddingLocation) {
                 IList<Location> locations = LocationsProvider.GetLocations();
@@ -192,6 +108,10 @@ namespace Rhit.Applications.ViewModels {
 
             Cancel();
         }
+        #endregion
+
+        #region Cancel Command/Method
+        public ICommand CancelCommand { get; private set; }
 
         private void Cancel() {
             if(State == BehaviorState.FloorAddingLocation) {
@@ -205,9 +125,102 @@ namespace Rhit.Applications.ViewModels {
             State = BehaviorState.Default;
             Mapper.Locations.Clear();
         }
+        #endregion
+
+        #region Add Location Command/Method
+        public ICommand AddLocationCommand { get; private set; }
+
+        private void AddLocation() {
+            if(State == BehaviorState.Floor) {
+                State = BehaviorState.FloorAddingLocation;
+                LocationsProvider.QueryLocation();
+            } else {
+                Settings.ShowBuildings = false;
+                State = BehaviorState.AddingLocation;
+                LocationsProvider.QueryLocation();
+            }
+        }
+        #endregion
+
+        #region Add Corners Command/Method
+        public ICommand AddCornersCommand { get; private set; }
+
+        private void CreateCorners() {
+            if(LocationsController.Instance.CurrentLocation == null) return;
+            State = BehaviorState.CreatingCorners;
+            Settings.ShowBuildings = false;
+            LocationsProvider.CreateNewCorners();
+            ShowSave = true;
+        }
+        #endregion
+
+        #region Change Corners Command/Method
+        public ICommand ChangeCornersCommand { get; private set; }
+
+        private void ShowCorners() {
+            if(LocationsController.Instance.CurrentLocation == null) return;
+            State = BehaviorState.MovingCorners;
+            Settings.ShowBuildings = false;
+            LocationsProvider.DisplayCorners(LocationsController.Instance.CurrentLocation.Corners as ICollection<Location>);
+            ShowSave = true;
+        }
+        #endregion
+
+        #region Load Floor Command/Method
+        public ICommand LoadFloorCommand { get; private set; }
+
+        private void LoadFloor() {
+            ShowSave = false;
+            if(LocationsController.Instance.CurrentLocation == null) return;
+            State = BehaviorState.Floor;
+            Settings.ShowBuildings = false;
+            ShowFloorLocations = true;
+            ImageController.Instance.LoadImage();
+        }
+        #endregion
+
+        public PathsController Paths { get; set; }
+
+        private BehaviorState State { get; set; }
+
+        private ILocationsProvider LocationsProvider { get; set; }
+
+        public ImageController Image { get; private set; }
+
+        public LocationPositionMapper Mapper { get; set; }
 
         public override void SelectLocation(int id) {
             LocationsController.Instance.SelectLocation(id);
         }
+
+        #region ShowInnerLocations
+        public bool ShowInnerLocations {
+            get { return (bool) GetValue(ShowInnerLocationsProperty); }
+            set { SetValue(ShowInnerLocationsProperty, value); }
+        }
+
+        public static readonly DependencyProperty ShowInnerLocationsProperty =
+           DependencyProperty.Register("ShowInnerLocations", typeof(bool), typeof(TaskedViewModel), new PropertyMetadata(false));
+        #endregion
+
+        #region ShowFloorLocations
+        public bool ShowFloorLocations {
+            get { return (bool) GetValue(ShowFloorLocationsProperty); }
+            set { SetValue(ShowFloorLocationsProperty, value); }
+        }
+
+        public static readonly DependencyProperty ShowFloorLocationsProperty =
+           DependencyProperty.Register("ShowFloorLocations", typeof(bool), typeof(TaskedViewModel), new PropertyMetadata(false));
+        #endregion
+
+        #region ShowSave
+        public bool ShowSave {
+            get { return (bool) GetValue(ShowSaveProperty); }
+            set { SetValue(ShowSaveProperty, value); }
+        }
+
+        public static readonly DependencyProperty ShowSaveProperty =
+           DependencyProperty.Register("ShowSave", typeof(bool), typeof(TaskedViewModel), new PropertyMetadata(false));
+        #endregion
     }
 }

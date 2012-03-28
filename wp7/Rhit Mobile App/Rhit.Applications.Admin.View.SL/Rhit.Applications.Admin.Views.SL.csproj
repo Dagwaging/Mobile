@@ -119,6 +119,7 @@
     <Compile Include="Utilities\LocationsProvider.cs" />
     <Compile Include="Utilities\Task.cs" />
     <Compile Include="Utilities\TaskContainer.cs" />
+    <Compile Include="Utilities\TaskMode.cs" />
     <Compile Include="Utilities\TaskRequirement.cs" />
     <Compile Include="Utilities\TaskStep.cs" />
     <Compile Include="Views\DataPage.xaml.cs">
