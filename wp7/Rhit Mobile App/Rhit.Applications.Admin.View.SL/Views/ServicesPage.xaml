@@ -67,8 +67,6 @@
                 <sdk:Label Margin="0,12,0,0" VerticalAlignment="Center" FontSize="14" Content="URL of Web Page" Visibility="{Binding LinkFieldsVisibility}"/>
                 <TextBox VerticalAlignment="Center" Text="{Binding CurrentURL, Mode=TwoWay}" Visibility="{Binding LinkFieldsVisibility}" />
 
-                <Button Content="Check URL" HorizontalAlignment="Left" Margin="12,5" Visibility="{Binding LinkFieldsVisibility}" cmds:CommandManager.Command="{Binding CheckURLCommand}" cmds:CommandManager.CommandEventName="Click"/>
-
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                     <Button Content="Save" cmds:CommandManager.Command="{Binding SaveCurrentCommand}" cmds:CommandManager.CommandEventName="Click"/>
                     <Button Content="Delete" cmds:CommandManager.Command="{Binding DeleteCurrentCommand}" cmds:CommandManager.CommandEventName="Click" />

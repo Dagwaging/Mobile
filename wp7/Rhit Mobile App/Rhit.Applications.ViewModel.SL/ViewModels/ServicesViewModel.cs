@@ -16,7 +16,6 @@ namespace Rhit.Applications.ViewModels {
             AddRootServiceCommand = new RelayCommand(p => AddRootService());
             SaveCurrentCommand = new RelayCommand(p => SaveCurrent());
             DeleteCurrentCommand = new RelayCommand(p => DeleteCurrent());
-            CheckURLCommand = new RelayCommand(p => CheckURL());
             RefreshCommand = new RelayCommand(p => ReloadServices());
 
             DataCollector.Instance.CampusServicesUpdateReturned += new EventHandler(Instance_CampusServicesUpdateReturned);
@@ -100,11 +99,6 @@ namespace Rhit.Applications.ViewModels {
                 ServiceLinkNode node = (ServiceLinkNode)Services.CurrentServiceNode;
                 DataCollector.Instance.DeleteCampuServiceLink(node.Link.ToLightWeightDataContract(), node.Parent.Name);
             }
-        }
-
-        private void CheckURL()
-        {
-
         }
         #endregion
 
@@ -208,8 +202,6 @@ namespace Rhit.Applications.ViewModels {
         public ICommand SaveCurrentCommand { get; private set; }
 
         public ICommand DeleteCurrentCommand { get; private set; }
-
-        public ICommand CheckURLCommand { get; private set; }
         #endregion
 
     }
