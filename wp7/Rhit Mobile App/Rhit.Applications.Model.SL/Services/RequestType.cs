@@ -3,6 +3,7 @@ namespace Rhit.Applications.Models.Services {
     public enum RequestType { 
         AllLocations,
         CampusServices,
+        CampusServicesUpdate,
         ChangeCorners,
         DeleteLocation,
         Directions,

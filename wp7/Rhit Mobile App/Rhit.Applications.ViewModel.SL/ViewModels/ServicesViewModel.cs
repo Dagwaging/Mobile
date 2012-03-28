@@ -3,57 +3,103 @@ using System.ComponentModel;
 using System.Windows;
 using Rhit.Applications.ViewModels.Controllers;
 using Rhit.Applications.ViewModels.Utilities;
+using System.Windows.Input;
+using Rhit.Applications.Mvvm.Commands;
+using Rhit.Applications.Models.Services;
 
 namespace Rhit.Applications.ViewModels {
     public class ServicesViewModel : DependencyObject {
         public ServicesViewModel() {
-            //TODO: Use test data instead of just disabling it
-            if (DesignerProperties.IsInDesignTool) return;
+            AddCategoryCommand = new RelayCommand(p => AddCategory());
+            AddServiceCommand = new RelayCommand(p => AddService());
+            AddRootCategoryCommand = new RelayCommand(p => AddRootCategory());
+            AddRootServiceCommand = new RelayCommand(p => AddRootService());
+            SaveCurrentCommand = new RelayCommand(p => SaveCurrent());
+            DeleteCurrentCommand = new RelayCommand(p => DeleteCurrent());
+            RefreshCommand = new RelayCommand(p => ReloadServices());
 
-            CurrentHeading = "Select a Service";
+            DataCollector.Instance.CampusServicesUpdateReturned += new EventHandler(Instance_CampusServicesUpdateReturned);
+
+            AllFieldsVisibility = Visibility.Collapsed;
 
             Services = ServicesController.Instance;
-            Services.Start();
-            ServicesController.Instance.CampusServicesUpdated += new EventHandler(CampusServicesUpdated);
         }
 
-        private void CampusServicesUpdated(object sender, EventArgs e) {
-            Update();
+        void Instance_CampusServicesUpdateReturned(object sender, EventArgs e)
+        {
+            ReloadServices();
         }
 
-        private int Index { get; set; }
+        #region Command Implementations
+        private void AddCategory()
+        {
+            if (Services.CurrentServiceNode is ServiceCategoryNode)
+            {
+                DataCollector.Instance.AddCampusServiceCategory(((ServiceCategoryNode)Services.CurrentServiceNode).Category.ToLightWeightDataContract());
+            }
 
-        private void Update() {
-            CampusService campusService = ServicesController.Instance.GetCampusService(Index);
-            if(campusService == null) return;
+            else
+            {
+                DataCollector.Instance.AddCampusServiceCategory(null);
+            }
 
-            CurrentService = ServicesController.Instance.GetCampusService(Index);
-            Parent = ServicesController.Instance.GetParentCategory(CurrentService.Id);
+            ReloadServices();
         }
 
-        public void SetIndex(int id) {
-            Index = id;
-            Update();
+        private void AddService()
+        {
+            if (Services.CurrentServiceNode is ServiceCategoryNode)
+            {
+                DataCollector.Instance.AddCampusServiceLink(((ServiceCategoryNode)Services.CurrentServiceNode).Category.ToLightWeightDataContract());
+            }
+
+            else
+            {
+                DataCollector.Instance.AddCampusServiceLink(null);
+            }
+
+            ReloadServices();
         }
 
-        #region CurrentService
-        public CampusService CurrentService {
-            get { return (CampusService) GetValue(CurrentServiceProperty); }
-            set { SetValue(CurrentServiceProperty, value); }
+        private void AddRootCategory()
+        {
+            DataCollector.Instance.AddCampusServiceCategory(null);
         }
 
-        public static readonly DependencyProperty CurrentServiceProperty =
-           DependencyProperty.Register("CurrentService", typeof(CampusService), typeof(ServicesViewModel), new PropertyMetadata(null));
-        #endregion
-
-        #region Parent
-        public CampusService Parent {
-            get { return (CampusService) GetValue(ParentProperty); }
-            set { SetValue(ParentProperty, value); }
+        private void AddRootService()
+        {
+            DataCollector.Instance.AddCampusServiceLink(null);
         }
 
-        public static readonly DependencyProperty ParentProperty =
-           DependencyProperty.Register("Parent", typeof(CampusService), typeof(ServicesViewModel), new PropertyMetadata(null));
+        private void SaveCurrent()
+        {
+            if (Services.CurrentServiceNode is ServiceCategoryNode)
+            {
+                ServiceCategoryNode node = (ServiceCategoryNode)Services.CurrentServiceNode;
+                DataCollector.Instance.SaveCampusServiceCategory(node.Category.ToLightWeightDataContract(), CurrentName, node.Parent == null ? null : node.Parent.Name);
+            }
+
+            else if (Services.CurrentServiceNode is ServiceLinkNode)
+            {
+                ServiceLinkNode node = (ServiceLinkNode)Services.CurrentServiceNode;
+                DataCollector.Instance.SaveCampusServiceLink(node.Link.ToLightWeightDataContract(), CurrentName, CurrentURL, node.Parent == null ? null : node.Parent.Name);
+            }
+        }
+
+        private void DeleteCurrent()
+        {
+            if (Services.CurrentServiceNode is ServiceCategoryNode)
+            {
+                ServiceCategoryNode node = (ServiceCategoryNode)Services.CurrentServiceNode;
+                DataCollector.Instance.DeleteCampusServiceCategory(node.Category.ToLightWeightDataContract(), node.Parent == null ? null : node.Parent.Name);
+            }
+
+            else if (Services.CurrentServiceNode is ServiceLinkNode)
+            {
+                ServiceLinkNode node = (ServiceLinkNode)Services.CurrentServiceNode;
+                DataCollector.Instance.DeleteCampuServiceLink(node.Link.ToLightWeightDataContract(), node.Parent == null ? null : node.Parent.Name);
+            }
+        }
         #endregion
 
         #region CurrentHeading
@@ -62,6 +108,9 @@ namespace Rhit.Applications.ViewModels {
             get { return (String)GetValue(CurrentHeadingProperty); }
             private set { SetValue(CurrentHeadingProperty, value); }
         }
+
+        private static readonly DependencyProperty CurrentHeadingProperty = DependencyProperty.Register("CurrentHeading", typeof(String), typeof(ServicesViewModel), new PropertyMetadata(null));
+        #endregion
 
         #region CurrentName
         public String CurrentName
@@ -83,9 +132,6 @@ namespace Rhit.Applications.ViewModels {
         private static readonly DependencyProperty CurrentURLProperty = DependencyProperty.Register("CurrentURL", typeof(String), typeof(ServicesViewModel), new PropertyMetadata(null));
         #endregion
 
-        private static readonly DependencyProperty CurrentHeadingProperty = DependencyProperty.Register("CurrentHeading", typeof(String), typeof(ServicesViewModel), new PropertyMetadata(null));
-        #endregion
-
         #region LinkFieldsVisibility
         public Visibility LinkFieldsVisibility
         {
@@ -96,7 +142,23 @@ namespace Rhit.Applications.ViewModels {
         private static readonly DependencyProperty LinkFieldsVisibilityProperty = DependencyProperty.Register("LinkFieldsVisibility", typeof(Visibility), typeof(ServicesViewModel), new PropertyMetadata(null));
         #endregion
 
+        #region AllFieldsVisibility
+        public Visibility AllFieldsVisibility
+        {
+            get { return (Visibility)GetValue(AllFieldsVisibilityProperty); }
+            private set { SetValue(AllFieldsVisibilityProperty, value); }
+        }
+
+        private static readonly DependencyProperty AllFieldsVisibilityProperty = DependencyProperty.Register("AllFieldsVisibility", typeof(Visibility), typeof(ServicesViewModel), new PropertyMetadata(null));
+        #endregion
+
         public ServicesController Services { get; private set; }
+
+        public void ReloadServices()
+        {
+            AllFieldsVisibility = Visibility.Collapsed;
+            Services.ReloadServices();
+        }
 
         public void SelectServiceNode(object serviceNode)
         {
@@ -106,8 +168,11 @@ namespace Rhit.Applications.ViewModels {
 
         public void SelectServiceNode(ServiceNode serviceNode)
         {
+            Services.CurrentServiceNode = serviceNode;
+
             if (serviceNode is ServiceCategoryNode)
             {
+                AllFieldsVisibility = Visibility.Visible;
                 CurrentHeading = "Category";
                 CurrentName = serviceNode.Name;
                 CurrentURL = "";
@@ -115,11 +180,29 @@ namespace Rhit.Applications.ViewModels {
             }
             else if (serviceNode is ServiceLinkNode)
             {
+                AllFieldsVisibility = Visibility.Visible;
                 CurrentHeading = "Service Link";
                 CurrentName = serviceNode.Name;
                 CurrentURL = ((ServiceLinkNode)serviceNode).Link.Address;
                 LinkFieldsVisibility = Visibility.Visible;
             }
         }
+
+        #region Commands
+        public ICommand RefreshCommand { get; private set; }
+
+        public ICommand AddServiceCommand { get; private set; }
+
+        public ICommand AddCategoryCommand { get; private set; }
+
+        public ICommand AddRootServiceCommand { get; private set; }
+
+        public ICommand AddRootCategoryCommand { get; private set; }
+
+        public ICommand SaveCurrentCommand { get; private set; }
+
+        public ICommand DeleteCurrentCommand { get; private set; }
+        #endregion
+
     }
 }

@@ -23,12 +23,16 @@ namespace Rhit.Applications.ViewModels.Utilities
 
             foreach (CampusService service in Category.Children)
             {
-                Children.Add(new ServiceCategoryNode(service));
+                ServiceCategoryNode node = new ServiceCategoryNode(service);
+                node.Parent = this;
+                Children.Add(node);
             }
 
             foreach (Link link in Category.Links)
             {
-                Children.Add(new ServiceLinkNode(link));
+                ServiceLinkNode node = new ServiceLinkNode(link);
+                node.Parent = this;
+                Children.Add(node);
             }
         }
 

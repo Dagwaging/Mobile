@@ -5,6 +5,15 @@ namespace Rhit.Applications.ViewModels.Utilities {
     public class Link : DependencyObject, ILink {
         public Link() { }
 
+        public Link_DC ToLightWeightDataContract()
+        {
+            Link_DC result = new Link_DC();
+            result.Name = Name;
+            result.Address = Address;
+
+            return result;
+        }
+
         #region string Name
         public string Name {
             get { return (string) GetValue(NameProperty); }

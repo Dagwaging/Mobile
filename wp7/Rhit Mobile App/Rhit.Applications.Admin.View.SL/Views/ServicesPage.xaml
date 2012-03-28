@@ -4,6 +4,7 @@
     xmlns:sdk="http://schemas.microsoft.com/winfx/2006/xaml/presentation/sdk"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:cmds="clr-namespace:Rhit.Applications.Mvvm.Commands;assembly=Rhit.Applications.Mvvm.SL"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d" d:DesignWidth="1025" d:DesignHeight="476"
     Title="Campus Services" >
@@ -25,39 +26,55 @@
 
             <Grid>
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
-                <sdk:TreeView ItemsSource="{Binding Services.ServicesTree}" ItemTemplate="{StaticResource ServicesTreeTemplate}" SelectedItemChanged="TreeView_SelectedItemChanged" />
+                <Button Content="Refresh All" Height="Auto" HorizontalAlignment="Stretch" Margin="5" Name="button1" VerticalAlignment="Top" Width="Auto" cmds:CommandManager.Command="{Binding RefreshCommand}" cmds:CommandManager.CommandEventName="Click" />
 
-                <Grid Grid.Row="1">
+                <Button Content="Add Root Category" Grid.Row="1" cmds:CommandManager.Command="{Binding AddRootCategoryCommand}" cmds:CommandManager.CommandEventName="Click" />
+
+                <sdk:TreeView ItemsSource="{Binding Services.ServicesTree}" ItemTemplate="{StaticResource ServicesTreeTemplate}" SelectedItemChanged="TreeView_SelectedItemChanged" Grid.Row="2"/>
+
+                <Grid Grid.Row="3">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
 
-                    <Button Content="Add Category" />
-                    <Button Content="Add Service" Grid.Column="1" />
+                    <Button Content="Add Category" cmds:CommandManager.Command="{Binding AddCategoryCommand}" cmds:CommandManager.CommandEventName="Click" />
+                    <Button Content="Add Service" Grid.Column="1" cmds:CommandManager.Command="{Binding AddServiceCommand}" cmds:CommandManager.CommandEventName="Click" />
                 </Grid>
+
             </Grid>
 
-            <StackPanel Grid.Column="1" Grid.Row="1" Margin="12">
-                <sdk:Label Grid.Column="1" Content="{Binding CurrentHeading,  FallbackValue='Record Type'}" FontWeight="Bold" FontSize="18" Margin="12,0,0,12" />
+            <Grid Grid.Column="1" Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <StackPanel Margin="12" Visibility="{Binding AllFieldsVisibility}">
+                    <sdk:Label Grid.Column="1" Content="{Binding CurrentHeading,  FallbackValue='Record Type'}" FontWeight="Bold" FontSize="18" Margin="12,0,0,12" />
 
-                <sdk:Label VerticalAlignment="Center" Content="Name" FontSize="14" />
-                <TextBox VerticalAlignment="Center" Text="{Binding CurrentName, Mode=TwoWay}"/>
+                    <sdk:Label VerticalAlignment="Center" Content="Name" FontSize="14" />
+                    <TextBox VerticalAlignment="Center" Text="{Binding CurrentName, Mode=TwoWay}"/>
 
-                <sdk:Label Margin="0,12,0,0" VerticalAlignment="Center" FontSize="14" Content="URL of Web Page" Visibility="{Binding LinkFieldsVisibility}"/>
-                <TextBox VerticalAlignment="Center" Text="{Binding CurrentURL, Mode=TwoWay}" Visibility="{Binding LinkFieldsVisibility}" />
+                    <sdk:Label Margin="0,12,0,0" VerticalAlignment="Center" FontSize="14" Content="URL of Web Page" Visibility="{Binding LinkFieldsVisibility}"/>
+                    <TextBox VerticalAlignment="Center" Text="{Binding CurrentURL, Mode=TwoWay}" Visibility="{Binding LinkFieldsVisibility}" />
 
-                <Button Content="Check URL" HorizontalAlignment="Left" Margin="12,5" Visibility="{Binding LinkFieldsVisibility}" />
-
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Button Content="Save" />
-                    <Button Content="Delete" />
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button Content="Save" cmds:CommandManager.Command="{Binding SaveCurrentCommand}" cmds:CommandManager.CommandEventName="Click"/>
+                        <Button Content="Delete" cmds:CommandManager.Command="{Binding DeleteCurrentCommand}" cmds:CommandManager.CommandEventName="Click" />
+                    </StackPanel>
                 </StackPanel>
-            </StackPanel>
+
+                <StackPanel  Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Right">
+                    <sdk:Label Content="Increment the services version to push the current changes to phones"/>
+                    <Button Content="Increment Campus Services Version (Currently X)" cmds:CommandManager.Command="{Binding AddServiceCommand}" cmds:CommandManager.CommandEventName="Click" />
+                </StackPanel>
+            </Grid>
         </Grid>
     </ScrollViewer>
 </navigation:Page>

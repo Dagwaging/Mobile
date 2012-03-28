@@ -22,6 +22,14 @@ namespace Rhit.Applications.ViewModels.Utilities {
 
         }
 
+        public CampusServicesCategory_DC ToLightWeightDataContract()
+        {
+            CampusServicesCategory_DC result = new CampusServicesCategory_DC();
+            result.Name = Label;
+
+            return result;
+        }
+
         #region Label
         public string Label {
             get { return (string) GetValue(LabelProperty); }
