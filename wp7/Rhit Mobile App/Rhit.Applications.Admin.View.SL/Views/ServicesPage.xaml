@@ -34,15 +34,7 @@
 
                 <Button Content="Refresh All" Height="Auto" HorizontalAlignment="Stretch" Margin="5" Name="button1" VerticalAlignment="Top" Width="Auto" cmds:CommandManager.Command="{Binding RefreshCommand}" cmds:CommandManager.CommandEventName="Click" />
 
-                <Grid Grid.Row="1">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-
-                    <Button Content="Add Root Category" cmds:CommandManager.Command="{Binding AddRootCategoryCommand}" cmds:CommandManager.CommandEventName="Click" />
-                    <Button Content="Add Root Service" Grid.Column="1" cmds:CommandManager.Command="{Binding AddRootServiceCommand}" cmds:CommandManager.CommandEventName="Click" />
-                </Grid>
+                <Button Content="Add Root Category" Grid.Row="1" cmds:CommandManager.Command="{Binding AddRootCategoryCommand}" cmds:CommandManager.CommandEventName="Click" />
 
                 <sdk:TreeView ItemsSource="{Binding Services.ServicesTree}" ItemTemplate="{StaticResource ServicesTreeTemplate}" SelectedItemChanged="TreeView_SelectedItemChanged" Grid.Row="2"/>
 
@@ -58,20 +50,31 @@
 
             </Grid>
 
-            <StackPanel Grid.Column="1" Grid.Row="1" Margin="12" Visibility="{Binding AllFieldsVisibility}">
-                <sdk:Label Grid.Column="1" Content="{Binding CurrentHeading,  FallbackValue='Record Type'}" FontWeight="Bold" FontSize="18" Margin="12,0,0,12" />
+            <Grid Grid.Column="1" Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <StackPanel Margin="12" Visibility="{Binding AllFieldsVisibility}">
+                    <sdk:Label Grid.Column="1" Content="{Binding CurrentHeading,  FallbackValue='Record Type'}" FontWeight="Bold" FontSize="18" Margin="12,0,0,12" />
 
-                <sdk:Label VerticalAlignment="Center" Content="Name" FontSize="14" />
-                <TextBox VerticalAlignment="Center" Text="{Binding CurrentName, Mode=TwoWay}"/>
+                    <sdk:Label VerticalAlignment="Center" Content="Name" FontSize="14" />
+                    <TextBox VerticalAlignment="Center" Text="{Binding CurrentName, Mode=TwoWay}"/>
 
-                <sdk:Label Margin="0,12,0,0" VerticalAlignment="Center" FontSize="14" Content="URL of Web Page" Visibility="{Binding LinkFieldsVisibility}"/>
-                <TextBox VerticalAlignment="Center" Text="{Binding CurrentURL, Mode=TwoWay}" Visibility="{Binding LinkFieldsVisibility}" />
+                    <sdk:Label Margin="0,12,0,0" VerticalAlignment="Center" FontSize="14" Content="URL of Web Page" Visibility="{Binding LinkFieldsVisibility}"/>
+                    <TextBox VerticalAlignment="Center" Text="{Binding CurrentURL, Mode=TwoWay}" Visibility="{Binding LinkFieldsVisibility}" />
 
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Button Content="Save" cmds:CommandManager.Command="{Binding SaveCurrentCommand}" cmds:CommandManager.CommandEventName="Click"/>
-                    <Button Content="Delete" cmds:CommandManager.Command="{Binding DeleteCurrentCommand}" cmds:CommandManager.CommandEventName="Click" />
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button Content="Save" cmds:CommandManager.Command="{Binding SaveCurrentCommand}" cmds:CommandManager.CommandEventName="Click"/>
+                        <Button Content="Delete" cmds:CommandManager.Command="{Binding DeleteCurrentCommand}" cmds:CommandManager.CommandEventName="Click" />
+                    </StackPanel>
                 </StackPanel>
-            </StackPanel>
+
+                <StackPanel  Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Right">
+                    <sdk:Label Content="Increment the services version to push the current changes to phones"/>
+                    <Button Content="Increment Campus Services Version (Currently X)" cmds:CommandManager.Command="{Binding AddServiceCommand}" cmds:CommandManager.CommandEventName="Click" />
+                </StackPanel>
+            </Grid>
         </Grid>
     </ScrollViewer>
 </navigation:Page>

@@ -91,13 +91,13 @@ namespace Rhit.Applications.ViewModels {
             if (Services.CurrentServiceNode is ServiceCategoryNode)
             {
                 ServiceCategoryNode node = (ServiceCategoryNode)Services.CurrentServiceNode;
-                DataCollector.Instance.DeleteCampusServiceCategory(node.Category.ToLightWeightDataContract(), node.Parent.Name);
+                DataCollector.Instance.DeleteCampusServiceCategory(node.Category.ToLightWeightDataContract(), node.Parent == null ? null : node.Parent.Name);
             }
 
             else if (Services.CurrentServiceNode is ServiceLinkNode)
             {
                 ServiceLinkNode node = (ServiceLinkNode)Services.CurrentServiceNode;
-                DataCollector.Instance.DeleteCampuServiceLink(node.Link.ToLightWeightDataContract(), node.Parent.Name);
+                DataCollector.Instance.DeleteCampuServiceLink(node.Link.ToLightWeightDataContract(), node.Parent == null ? null : node.Parent.Name);
             }
         }
         #endregion
