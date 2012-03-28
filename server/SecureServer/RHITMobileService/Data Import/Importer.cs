@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using RHITMobile.Secure.Data;
+using System.Transactions;
 
 namespace RHITMobile.Secure.Data_Import
 {
@@ -52,12 +53,14 @@ namespace RHITMobile.Secure.Data_Import
                     }
                     foreach (User user in users)
                     {
-                        db.SetAdvisor(user);
+                        if (user.Advisor != null && user.Advisor != "")
+                        {
+                            db.SetAdvisor(user);
+                        }
                     }
                     log.Info("Read " + users.Count + " user entries for term " + parser.TermCode);
                 }
             }
-
             {
                 courses = new List<Course>();
                 String[] coursepaths = Directory.GetFiles(inputPath, "*.cls");
@@ -68,12 +71,12 @@ namespace RHITMobile.Secure.Data_Import
                         foreach (Course course in parser)
                         {
                             courses.Add(course);
+                            db.AddCourse(course);
                         }
                         log.Info("Read " + courses.Count + " course entries for term " + parser.TermCode);
                     }
                 }
             }
-            
             {
                 enrollment = new List<Enrollment>();
                 String[] enrollmentpaths = Directory.GetFiles(inputPath, "*.ssf");
@@ -84,6 +87,7 @@ namespace RHITMobile.Secure.Data_Import
                         foreach (Enrollment course in parser)
                         {
                             enrollment.Add(course);
+                            db.AddUserEnrollment(course);
                         }
                         log.Info("Read " + enrollment.Count + " enrollment entries for term " + parser.TermCode);
                     }

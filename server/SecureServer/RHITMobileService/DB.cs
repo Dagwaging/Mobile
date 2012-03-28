@@ -43,15 +43,28 @@ namespace RHITMobile.Secure
         public void AddUser(User user)
         {
             QueriesTableAdapter adapter = new QueriesTableAdapter();
-            adapter.AddUser(_switch, user);
+            adapter.AddUser(!_switch, user);
         }
-        
+
         public void SetAdvisor(User user)
         {
             QueriesTableAdapter adapter = new QueriesTableAdapter();
-            adapter.spSetAdvisor(_switch, user.Username, user.Advisor);
+            adapter.spSetAdvisor(!_switch, user.Username, user.Advisor);
         }
 
+        public void AddCourse(Course course)
+        {
+            QueriesTableAdapter adapter = new QueriesTableAdapter();
+            adapter.AddCourse(!_switch, course);
+            adapter.AddCourseSchedule(!_switch, course);
+        }
+        
+        public void AddUserEnrollment(Enrollment enrollment)
+        {
+            QueriesTableAdapter adapter = new QueriesTableAdapter();
+            adapter.AddUserEnrollment(!_switch, enrollment);
+        }
+        
         public User GetUser(String username)
         {
             GetUserDataTableAdapter adapter = new GetUserDataTableAdapter();

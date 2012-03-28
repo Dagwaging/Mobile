@@ -55,14 +55,27 @@ namespace RHITMobile.Secure.Data_Import
                 trim(spotArgs);
 
                 String days = spotArgs[0];
-                int hour = toInt(spotArgs[1]);
+                int startperiod;
+                int endperiod;
+                if (spotArgs[1].Contains('-'))
+                {
+                    String[] hours = spotArgs[1].Split('-');
+                    startperiod = toInt(hours[0]);
+                    endperiod = toInt(hours[1]);
+                }
+                else
+                {
+                    startperiod = toInt(spotArgs[1]);
+                    endperiod = startperiod;
+                }
                 String room = spotArgs[2];
 
                 foreach (char c in days)
                 {
                     CourseTime time = new CourseTime();
                     time.Day = c;
-                    time.Period = hour;
+                    time.StartPeriod = startperiod;
+                    time.EndPeriod = endperiod;
                     time.Room = room;
                     res.Add(time);
                 }

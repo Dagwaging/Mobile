@@ -45,7 +45,8 @@ namespace RHITMobile.Secure.Data
     public class CourseTime
     {
         public char Day { get; set; }
-        public int Period { get; set; }
+        public int StartPeriod { get; set; }
+        public int EndPeriod { get; set; }
         public String Room { get; set; }
     }
 
