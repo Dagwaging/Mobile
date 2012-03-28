@@ -184,7 +184,7 @@
             </util:TaskContainer.Tasks>
         </util:TaskContainer>
 
-        <util:TaskMode x:Key="TaskModes" CurrentTaskMode="{StaticResource BuildingTasks}" />
+        <util:TaskMode x:Name="TaskModes" CurrentTaskMode="{StaticResource BuildingTasks}" />
 
         <ControlTemplate x:Key="DirectionsPushpinTemplate" TargetType="map:Pushpin">
             <Grid>
@@ -261,7 +261,7 @@
                     <map:MapItemsControl ItemsSource="{Binding Mapper.Locations}" ItemTemplate="{StaticResource DualItemTemplate}" />
                     <map:MapItemsControl ItemsSource="{Binding Locations, ElementName=Calibrator}" ItemTemplate="{StaticResource CalPushpinItemTemplate}" />-->
                     
-                    <map:MapItemsControl ItemsSource="{Binding Paths.Nodes}" ItemTemplate="{StaticResource NodeTemplate}" />
+                    <map:MapItemsControl ItemsSource="{Binding Paths.OutsideNodes}" ItemTemplate="{StaticResource NodeTemplate}" />
                 </map:MapLayer>
                 <exts:DraggablePushpin Content="{Binding Locations.CurrentLocation.Label, Mode=TwoWay}"
                                        Location="{Binding Locations.CurrentLocation.Center, Mode=TwoWay}" Visibility="{Binding Locations.CurrentLocation, Converter={StaticResource ObjectVisibilityConverter}}" Style="{StaticResource CustomPushpinStyle}" />
@@ -315,7 +315,8 @@
                                 </DataTemplate>
                             </StackPanel.Resources>
                             <TextBlock FontWeight="Bold" Text="Tasks"  HorizontalAlignment="Center"/>
-                            <ItemsControl DataContext="{Binding ElementName=TaskModes.CurrentTaskMode}" ItemsSource="{Binding Tasks}" ItemTemplate="{StaticResource TaskTemplate}" />
+                            <!--<ItemsControl ItemsSource="{Binding CurrentTaskMode.Tasks, ElementName=TaskModes}" ItemTemplate="{StaticResource TaskTemplate}" />-->
+                            <ItemsControl DataContext="{Binding CurrentTaskMode, ElementName=TaskModes}" ItemsSource="{Binding Tasks}" ItemTemplate="{StaticResource TaskTemplate}" />
                             <!--<ItemsControl DataContext="{Binding ElementName=BuildingTasks}" ItemsSource="{Binding Tasks}" ItemTemplate="{StaticResource TaskTemplate}" />-->
                         </StackPanel>
                     </Border>

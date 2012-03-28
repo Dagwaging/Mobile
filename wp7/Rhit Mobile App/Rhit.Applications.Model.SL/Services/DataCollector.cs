@@ -122,6 +122,13 @@ namespace Rhit.Applications.Models.Services {
             if(ServerErrorReturned != null) ServerErrorReturned(this, args);
         }
         #endregion
+
+        #region PathDataReturned
+        public event PathDataEventHandler PathDataReturned;
+        protected virtual void OnPathDataReturned(PathDataEventArgs args) {
+            if(PathDataReturned != null) PathDataReturned(this, args);
+        }
+        #endregion
         #endregion
 
         private DataCollector() {
@@ -287,12 +294,15 @@ namespace Rhit.Applications.Models.Services {
             if(response.Nodes == null || response.Nodes.Count <= 0) return;
             if(response.Partitions == null || response.Partitions.Count <= 0) return;
             if(response.Paths == null || response.Paths.Count <= 0) return;
-            SetVersion(response.Version, eventArgs);
 
-            //TODO: Bryan - Send data to ViewModel
-            //Example:
-            //      List<RhitLocation> locations = ServerObject.GetLocations(response.Locations);
-            //      OnLocationsUpdate(eventArgs, locations);
+            PathDataEventArgs args = new PathDataEventArgs(eventArgs) {
+                Directions = response.Directions,
+                Messages = response.Messages,
+                Nodes = response.Nodes,
+                Partitions = response.Partitions,
+                Paths = response.Paths,
+            };
+            OnPathDataReturned(args);
         }
         #endregion
 

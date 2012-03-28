@@ -34,11 +34,8 @@ namespace Rhit.Applications.Views {
             MyMap.MapForeground.TemplateApplied += new EventHandler(MapForeground_TemplateApplied);
 
             DataContext = ViewModel;
-            TaskModes2 = Resources["TaskModes"] as TaskMode;
-            //TaskModes.CurrentTaskMode = BuildingTasks;
+            TaskModes.CurrentTaskMode = BuildingTasks;
         }
-
-        public TaskMode TaskModes2 { get; set; }
 
         #region Click Event Methods/Properties
         private Point LastEventCoordinate { get; set; }
@@ -128,7 +125,7 @@ namespace Rhit.Applications.Views {
                 new Task() { Label="Task1" },
             };
             tmp.AddTasks(tasks);
-            TaskModes2.CurrentTaskMode = new TaskContainer();
+            TaskModes.CurrentTaskMode = tmp;
         }
     }
 }

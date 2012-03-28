@@ -17,6 +17,7 @@ namespace Rhit.Applications.ViewModels {
         //Note: NoArg Constructor so ViewModel can be created in xaml
         public TaskedViewModel() {
             Paths = PathsController.Instance;
+            Paths.GetPathData();
         }
 
         internal void Initialize(IBuildingMappingProvider buildingMappingProvider,
