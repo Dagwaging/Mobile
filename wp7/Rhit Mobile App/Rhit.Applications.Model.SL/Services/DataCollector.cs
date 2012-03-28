@@ -383,14 +383,36 @@ namespace Rhit.Applications.Models.Services {
             Connection.MakeRequest(request, RequestType.CampusServices);
         }
 
-        public void SaveCampusServiceCategory(CampusServicesCategory_DC category, String parentCategoryName)
+        public void SaveCampusServiceCategory(CampusServicesCategory_DC category, String newCategoryName, String parentCategoryName)
         {
+            String name = Uri.EscapeDataString(category.Name);
+            String newName = Uri.EscapeDataString(newCategoryName);
+            String newParent = Uri.EscapeDataString(parentCategoryName == null ? "\0" : parentCategoryName);
 
+            RequestPart request = new RequestBuilder(BaseAddress).Admin.StoredProcedure(Connection.ServiceTokenGuid, "spUpdateCampusServiceCategory")
+                .AddQueryParameter("name", name)
+                .AddQueryParameter("newname", newName)
+                .AddQueryParameter("newparent", newParent);
+
+            Connection.MakeRequest(request, RequestType.CampusServicesUpdate);
         }
 
-        public void SaveCampusServiceLink(Link_DC link, String oldName, String categoryName)
+        public void SaveCampusServiceLink(Link_DC link, String newLinkName, String newLinkURL, String categoryName)
         {
+            String category = Uri.EscapeDataString(categoryName == null ? "\0" : categoryName);
+            String name = Uri.EscapeDataString(link.Name);
+            String newCategory = category;
+            String newName = Uri.EscapeDataString(newLinkName);
+            String newURL = Uri.EscapeDataString(newLinkURL);
 
+            RequestPart request = new RequestBuilder(BaseAddress).Admin.StoredProcedure(Connection.ServiceTokenGuid, "spUpdateCampusServiceLink")
+                .AddQueryParameter("category", category)
+                .AddQueryParameter("name", name)
+                .AddQueryParameter("newcategory", newCategory)
+                .AddQueryParameter("newname", newName)
+                .AddQueryParameter("newurl", newURL);
+
+            Connection.MakeRequest(request, RequestType.CampusServicesUpdate);
         }
 
         public void DeleteCampusServiceCategory(CampusServicesCategory_DC category, String parentCategoryName)

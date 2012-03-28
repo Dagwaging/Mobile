@@ -74,8 +74,17 @@ namespace Rhit.Applications.ViewModels {
 
         private void SaveCurrent()
         {
-            //TODO
-            ReloadServices();
+            if (Services.CurrentServiceNode is ServiceCategoryNode)
+            {
+                ServiceCategoryNode node = (ServiceCategoryNode)Services.CurrentServiceNode;
+                DataCollector.Instance.SaveCampusServiceCategory(node.Category.ToLightWeightDataContract(), CurrentName, node.Parent == null ? null : node.Parent.Name);
+            }
+
+            else if (Services.CurrentServiceNode is ServiceLinkNode)
+            {
+                ServiceLinkNode node = (ServiceLinkNode)Services.CurrentServiceNode;
+                DataCollector.Instance.SaveCampusServiceLink(node.Link.ToLightWeightDataContract(), CurrentName, CurrentURL, node.Parent == null ? null : node.Parent.Name);
+            }
         }
 
         private void DeleteCurrent()
@@ -91,8 +100,6 @@ namespace Rhit.Applications.ViewModels {
                 ServiceLinkNode node = (ServiceLinkNode)Services.CurrentServiceNode;
                 DataCollector.Instance.DeleteCampuServiceLink(node.Link.ToLightWeightDataContract(), node.Parent.Name);
             }
-
-            ReloadServices();
         }
 
         private void CheckURL()
