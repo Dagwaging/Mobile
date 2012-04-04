@@ -11,50 +11,23 @@ namespace RHITMobile.Secure
     public interface IWebService
     {
         [OperationContract]
-        void forceUpdate();
+        void ForceUpdate();
 
         [OperationContract]
-        int getUserCount();
-
-        [OperationContract]
-        String[] getUserNames();
-
-        [OperationContract]
-        User getUser(string username);
+        User GetUser(string username);
     }
 
     public class WebService : IWebService
     {
-        public void forceUpdate()
+        public void ForceUpdate()
         {
-            Data_Import.Importer importer = new Data_Import.Importer(new NullLogger(), "C:\\InputData");
-            importer.ImportData();
+            //Data_Import.Importer importer = new Data_Import.Importer(new NullLogger(), "C:\\InputData");
+            //importer.ImportData();
         }
 
-        public int getUserCount()
+        public User GetUser(string username)
         {
-            return Data_Import.Importer.users.Count;
-        }
-
-        public String[] getUserNames()
-        {
-            List<String> res = new List<String>();
-            foreach (User user in Data_Import.Importer.users.Take(20))
-            {
-                res.Add(user.Username);
-            }
-            res.Sort();
-            return res.ToArray();
-        }
-
-        public User getUser(string username)
-        {
-            foreach (User user in Data_Import.Importer.users)
-            {
-                if (user.Username == username.ToLower())
-                    return user;
-            }
-            return null;
+            return DB.Instance.GetUser(username);
         }
     }
 }

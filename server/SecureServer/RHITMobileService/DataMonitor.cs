@@ -11,15 +11,15 @@ namespace RHITMobile.Secure
 {
     class DataMonitor : IDisposable
     {
-        private Logger log;
+        private Logger _log;
 
-        private FileSystemWatcher fsWatcher;
-        private DataUpdater dataUpdater;
-        private UpdateTimer updateTimer;
+        private FileSystemWatcher _fsWatcher;
+        private DataUpdater _dataUpdater;
+        private UpdateTimer _updateTimer;
 
         public DataMonitor(Logger log)
         {
-            this.log = log;
+            _log = log;
         }
 
         public bool Start()
@@ -33,36 +33,36 @@ namespace RHITMobile.Secure
             }
             catch (ConfigurationErrorsException ex)
             {
-                log.Error("InputPath not specified, unable to update Banner data", ex);
+                _log.Error("InputPath not specified, unable to update Banner data", ex);
                 return false;
             }
 
-            dataUpdater = new DataUpdater(log, inputPath);
+            _dataUpdater = new DataUpdater(_log, inputPath);
 
-            fsWatcher = new FileSystemWatcher();
-            fsWatcher.Path = inputPath;
-            fsWatcher.NotifyFilter = NotifyFilters.CreationTime |
+            _fsWatcher = new FileSystemWatcher();
+            _fsWatcher.Path = inputPath;
+            _fsWatcher.NotifyFilter = NotifyFilters.CreationTime |
                 NotifyFilters.LastWrite |
                 NotifyFilters.Attributes |
                 NotifyFilters.Security |
                 NotifyFilters.Size;
 
-            fsWatcher.Changed += new FileSystemEventHandler(fsWatcher_Notify);
-            fsWatcher.Created += new FileSystemEventHandler(fsWatcher_Notify);
-            fsWatcher.Deleted += new FileSystemEventHandler(fsWatcher_Notify);
+            _fsWatcher.Changed += new FileSystemEventHandler(fsWatcher_Notify);
+            _fsWatcher.Created += new FileSystemEventHandler(fsWatcher_Notify);
+            _fsWatcher.Deleted += new FileSystemEventHandler(fsWatcher_Notify);
 
-            fsWatcher.EnableRaisingEvents = true;
+            _fsWatcher.EnableRaisingEvents = true;
 
-            log.Info("Setup filesystem monitor for " + fsWatcher.Path);
+            _log.Info("Setup filesystem monitor for " + _fsWatcher.Path);
 
-            updateTimer = new UpdateTimer(dataUpdater);
+            _updateTimer = new UpdateTimer(_dataUpdater);
 
             return true;
         }
 
         void fsWatcher_Notify(object sender, FileSystemEventArgs e)
         {
-            dataUpdater.Update();
+            _dataUpdater.Update();
         }
 
         public void Stop()
@@ -72,23 +72,23 @@ namespace RHITMobile.Secure
 
         private void Cleanup()
         {
-            if (fsWatcher != null)
+            if (_fsWatcher != null)
             {
-                fsWatcher.EnableRaisingEvents = false;
-                fsWatcher.Dispose();
-                fsWatcher = null;
+                _fsWatcher.EnableRaisingEvents = false;
+                _fsWatcher.Dispose();
+                _fsWatcher = null;
             }
 
-            if (updateTimer != null)
+            if (_updateTimer != null)
             {
-                updateTimer.Dispose();
-                updateTimer = null;
+                _updateTimer.Dispose();
+                _updateTimer = null;
             }
 
-            if (dataUpdater != null)
+            if (_dataUpdater != null)
             {
-                dataUpdater.Stop();
-                dataUpdater = null;
+                _dataUpdater.Stop();
+                _dataUpdater = null;
             }
         }
         
@@ -100,54 +100,112 @@ namespace RHITMobile.Secure
 
     class UpdateTimer : IDisposable
     {
-        private DataUpdater updater;
-        private Timer timer;
+        private DataUpdater _updater;
+        private Timer _timer;
 
         public UpdateTimer(DataUpdater updater)
         {
-            this.updater = updater;
-            timer = new Timer(new TimerCallback(TimerElapsed), null, new TimeSpan(0, 0, 5), new TimeSpan(24, 0, 0));
+            _updater = updater;
+            _timer = new Timer(new TimerCallback(TimerElapsed), null, new TimeSpan(0, 0, 5), new TimeSpan(24, 0, 0));
         }
 
         private void TimerElapsed(object state)
         {
-            updater.Update();
+            _updater.Update();
         }
 
         public void Dispose()
         {
-            if (timer != null)
+            if (_timer != null)
             {
-                timer.Dispose();
-                timer = null;
+                _timer.Dispose();
+                _timer = null;
             }
         }
     }
 
     class DataUpdater
     {
-        private Logger log;
-        private String inputPath;
+        private Logger _log;
+        private String _inputPath;
+
+        private Thread _updateThread;
+        private UpdaterThreadData _updaterThreadData;
+        private AutoResetEvent _updateEvent;
 
         public DataUpdater(Logger log, String inputPath)
         {
-            this.log = log;
-            this.inputPath = inputPath;
+            _log = log;
+            _inputPath = inputPath;
+
+            _updaterThreadData = new UpdaterThreadData();
+            _updateEvent = new AutoResetEvent(false);
+            _updateThread = new Thread(new ThreadStart(UpdaterThread));
+            _updateThread.Start();
         }
 
         public void Update()
         {
-            log.Info("Update Queued");
-            
-            //TODO push into a new thread that limits time between executions
-            Importer importer = new Importer(log, inputPath);
-            importer.ImportData();
+            lock (_updaterThreadData)
+            {
+                if (!_updaterThreadData.updateQueued)
+                {
+                    _log.Info("Update Queued");
+                }
+                _updaterThreadData.updateQueued = true;
+            }
+            _updateEvent.Set();
+        }
+
+        private bool IsUpdateQueued()
+        {
+            lock (_updaterThreadData)
+            {
+                return _updaterThreadData.updateQueued;
+            }
+        }
+
+        private void UpdaterThread()
+        {
+            while (true)
+            {
+                //wait for an update to be queued
+                while (!IsUpdateQueued())
+                {
+                    _updateEvent.WaitOne();
+                }
+
+                //import the data
+                Thread.BeginCriticalRegion();
+                try
+                {
+                    Importer importer = new Importer(_log, _inputPath);
+                    importer.ImportData();
+                }
+                catch (Exception ex)
+                {
+                    _log.Error("Data inport failed", ex);
+                }
+                Thread.EndCriticalRegion();
+
+                //wait for a few hours in between requests
+                Thread.Sleep(TimeSpan.FromHours(4));
+            }
         }
         
         public void Stop()
         {
-
+            lock (_updaterThreadData)
+            {
+                _updaterThreadData.updateQueued = false;
+            }
+            _updateThread.Abort();
+            _updateThread = null;
         }
 
+        private class UpdaterThreadData
+        {
+            public bool updateQueued;
+        }
     }
 }

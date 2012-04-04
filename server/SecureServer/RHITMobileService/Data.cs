@@ -21,6 +21,39 @@ namespace RHITMobile.Secure.Data
         public String Department { get; set; }
         public String Phone { get; set; }
         public String Room { get; set; }
+
+        public static bool operator ==(User a, User b)
+        {
+            return //ID == b.ID && //ID will not be returned by the server
+                a.Username == b.Username &&
+                a.Alias == b.Alias &&
+                a.Mailbox == b.Mailbox &&
+                a.Major == b.Major &&
+                a.Class == b.Class &&
+                a.Year == b.Year &&
+                a.Advisor == b.Advisor &&
+                a.LastName == b.LastName &&
+                a.FirstName == b.FirstName &&
+                a.MiddleName == b.MiddleName &&
+                a.Department == b.Department &&
+                a.Phone == b.Phone &&
+                a.Room == b.Room;
+        }
+        
+        public static bool operator !=(User a, User b)
+        {
+            return !(a == b);
+        }
+
+        public override bool Equals(object obj)
+        {
+            return (obj is User) && this == (User)obj;
+        }
+
+        public override int GetHashCode()
+        {
+            return Username.GetHashCode();
+        }
     }
     
     public class Course

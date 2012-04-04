@@ -42,9 +42,10 @@ namespace RHITMobile.Secure.Data_Import
                     {
                         res = convertRecord(fields);
                     }
-                    catch (Exception)
+                    catch (Exception e)
                     {
                         //skip the record
+                        Console.WriteLine("Failed to parse record: {0}", e.ToString());
                     }
                 }
             } while (res == null && hasMore());

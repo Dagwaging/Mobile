@@ -4,7 +4,7 @@ namespace RHITMobile.Secure
 {
     public partial class Banner
     {
-        partial class GetUserDataDataTable
+        partial class GetUserDataTable
         {
             public User User
             {
@@ -13,22 +13,45 @@ namespace RHITMobile.Secure
                     if (Count < 1)
                         return null;
 
-                    Banner.GetUserDataRow row = this[0];
+                    Banner.GetUserRow row = this[0];
                     User res = new User();
 
                     res.Username = row.Username;
-                    res.Alias = row.Email;
-                    res.Mailbox = row.CM;
-                    res.Major = row.Major;
-                    res.Class = row.Class;
-                    res.Year = row.Year;
-                    res.Advisor = row.AdvUsername;
+
+                    if (!row.IsEmailNull())
+                        res.Alias = row.Email;
+
+                    if (!row.IsCMNull())
+                        res.Mailbox = row.CM;
+                    else
+                        res.Mailbox = -1;
+
+                    if (!row.IsMajorNull())
+                        res.Major = row.Major;
+
+                    if (!row.IsClassNull())
+                        res.Class = row.Class;
+
+                    if (!row.IsYearNull())
+                        res.Year = row.Year;
+
+                    if (!row.IsAdvisorNull())
+                        res.Advisor = row.Advisor;
+
                     res.LastName = row.LastName;
                     res.FirstName = row.FirstName;
-                    res.MiddleName = row.MiddleName;
-                    res.Department = row.Department;
-                    res.Phone = row.Telephone;
-                    res.Room = row.Room;
+
+                    if (!row.IsMiddleNameNull())
+                        res.MiddleName = row.MiddleName;
+
+                    if (!row.IsDepartmentNull())
+                        res.Department = row.Department;
+
+                    if (!row.IsTelephoneNull())
+                        res.Phone = row.Telephone;
+
+                    if (!row.IsRoomNull())
+                        res.Room = row.Room;
 
                     return res;
 

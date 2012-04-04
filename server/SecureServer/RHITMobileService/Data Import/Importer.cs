@@ -10,11 +10,6 @@ namespace RHITMobile.Secure.Data_Import
 {
     public class Importer
     {
-        //TODO use a database
-        public static List<User> users;
-        public static List<Course> courses;
-        public static List<Enrollment> enrollment;
-
         private Logger log;
         private String inputPath;
 
@@ -26,75 +21,80 @@ namespace RHITMobile.Secure.Data_Import
 
         public void ImportData()
         {
+            DateTime startTime = DateTime.Now;
             Dictionary<String, String> idToUsername = new Dictionary<String, String>();
 
             DB db = DB.Instance;
-            db.ClearData();
+            using (var writeLock = db.AcquireWriteLock())
+            {
+                db.ClearData();
 
-            {
-                users = new List<User>();
-                Dictionary<int, String> termUserMap = new Dictionary<int, String>();
-                String[] userpaths = Directory.GetFiles(inputPath, "*.usr");
-                foreach (String path in userpaths)
                 {
-                    using (UserCsvParser parser = new UserCsvParser(path))
+                    List<User> users = new List<User>();
+                    Dictionary<int, String> termUserMap = new Dictionary<int, String>();
+                    String[] userpaths = Directory.GetFiles(inputPath, "*.usr");
+                    foreach (String path in userpaths)
                     {
-                        termUserMap.Add(parser.TermCode, path);
-                    }
-                }
-                String userpath = termUserMap[termUserMap.Keys.Max()];
-                using (UserCsvParser parser = new UserCsvParser(userpath))
-                {
-                    foreach (User user in parser)
-                    {
-                        idToUsername.Add(user.ID, user.Username);
-                        users.Add(user);
-                        db.AddUser(user);
-                    }
-                    foreach (User user in users)
-                    {
-                        if (user.Advisor != null && user.Advisor != "")
+                        using (UserCsvParser parser = new UserCsvParser(path))
                         {
-                            db.SetAdvisor(user);
+                            termUserMap.Add(parser.TermCode, path);
                         }
                     }
-                    log.Info("Read " + users.Count + " user entries for term " + parser.TermCode);
-                }
-            }
-            {
-                courses = new List<Course>();
-                String[] coursepaths = Directory.GetFiles(inputPath, "*.cls");
-                foreach (String coursepath in coursepaths)
-                {
-                    using (CourseCsvParser parser = new CourseCsvParser(coursepath))
+                    String userpath = termUserMap[termUserMap.Keys.Max()];
+                    using (UserCsvParser parser = new UserCsvParser(userpath))
                     {
-                        foreach (Course course in parser)
+                        foreach (User user in parser)
                         {
-                            courses.Add(course);
-                            db.AddCourse(course);
+                            idToUsername.Add(user.ID, user.Username);
+                            users.Add(user);
+                            db.AddUser(user);
                         }
-                        log.Info("Read " + courses.Count + " course entries for term " + parser.TermCode);
+                        foreach (User user in users)
+                        {
+                            if (user.Advisor != null && user.Advisor != "")
+                            {
+                                db.SetAdvisor(user);
+                            }
+                        }
+                        log.Info("Read " + users.Count + " user entries for term " + parser.TermCode);
                     }
                 }
-            }
-            {
-                enrollment = new List<Enrollment>();
-                String[] enrollmentpaths = Directory.GetFiles(inputPath, "*.ssf");
-                foreach (String enrollmentpath in enrollmentpaths)
                 {
-                    using (EnrollmentCsvParser parser = new EnrollmentCsvParser(enrollmentpath, idToUsername))
+                    String[] coursepaths = Directory.GetFiles(inputPath, "*.cls");
+                    foreach (String coursepath in coursepaths)
                     {
-                        foreach (Enrollment course in parser)
+                        using (CourseCsvParser parser = new CourseCsvParser(coursepath))
                         {
-                            enrollment.Add(course);
-                            db.AddUserEnrollment(course);
+                            int count = 0;
+                            foreach (Course course in parser)
+                            {
+                                db.AddCourse(course);
+                                count++;
+                            }
+                            log.Info("Read " + count + " course entries for term " + parser.TermCode);
                         }
-                        log.Info("Read " + enrollment.Count + " enrollment entries for term " + parser.TermCode);
                     }
                 }
+                {
+                    String[] enrollmentpaths = Directory.GetFiles(inputPath, "*.ssf");
+                    foreach (String enrollmentpath in enrollmentpaths)
+                    {
+                        using (EnrollmentCsvParser parser = new EnrollmentCsvParser(enrollmentpath, idToUsername))
+                        {
+                            int count = 0;
+                            foreach (Enrollment course in parser)
+                            {
+                                db.AddUserEnrollment(course);
+                                count++;
+                            }
+                            log.Info("Read " + count + " enrollment entries for term " + parser.TermCode);
+                        }
+                    }
+                }
+                db.Flip();
             }
-            db.Flip();
 
+            log.Info("Imported Banner Data in " + DateTime.Now.Subtract(startTime).ToString());
         }
     }
 }
