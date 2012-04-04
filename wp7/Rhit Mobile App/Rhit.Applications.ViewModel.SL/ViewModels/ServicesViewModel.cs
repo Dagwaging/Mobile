@@ -13,7 +13,6 @@ namespace Rhit.Applications.ViewModels {
             AddCategoryCommand = new RelayCommand(p => AddCategory());
             AddServiceCommand = new RelayCommand(p => AddService());
             AddRootCategoryCommand = new RelayCommand(p => AddRootCategory());
-            AddRootServiceCommand = new RelayCommand(p => AddRootService());
             SaveCurrentCommand = new RelayCommand(p => SaveCurrent());
             DeleteCurrentCommand = new RelayCommand(p => DeleteCurrent());
             RefreshCommand = new RelayCommand(p => ReloadServices());
@@ -53,45 +52,44 @@ namespace Rhit.Applications.ViewModels {
         #region Command Implementations
         private void AddCategory()
         {
+            String name = "New Category " + DateTime.Now.ToFileTimeUtc();
+
             if (Services.CurrentServiceNode is ServiceCategoryNode)
             {
-                DataCollector.Instance.AddCampusServiceCategory(((ServiceCategoryNode)Services.CurrentServiceNode).Category.ToLightWeightDataContract());
+                DataCollector.Instance.AddCampusServiceCategory(name, ((ServiceCategoryNode)Services.CurrentServiceNode).Category.ToLightWeightDataContract());
             }
 
-            else
-            {
-                DataCollector.Instance.AddCampusServiceCategory(null);
-            }
+            Services.Creating = true;
+            Services.CreatedOrUpdatedItem = name;
         }
 
         private void AddService()
         {
+            String name = "New Service " + DateTime.Now.ToFileTimeUtc();
+
             if (Services.CurrentServiceNode is ServiceCategoryNode)
             {
-                DataCollector.Instance.AddCampusServiceLink(((ServiceCategoryNode)Services.CurrentServiceNode).Category.ToLightWeightDataContract());
-            }
-
-            else
-            {
-                DataCollector.Instance.AddCampusServiceLink(null);
+                DataCollector.Instance.AddCampusServiceLink(name, ((ServiceCategoryNode)Services.CurrentServiceNode).Category.ToLightWeightDataContract());
             }
 
             Services.Creating = true;
-            Services.CreatedItem = ""; //TODO
+            Services.CreatedOrUpdatedItem = name;
         }
 
         private void AddRootCategory()
         {
-            DataCollector.Instance.AddCampusServiceCategory(null);
-        }
+            String name = "New Category " + DateTime.Now.ToFileTimeUtc();
+            DataCollector.Instance.AddCampusServiceCategory(name, null);
 
-        private void AddRootService()
-        {
-            DataCollector.Instance.AddCampusServiceLink(null);
+            Services.Creating = true;
+            Services.CreatedOrUpdatedItem = name;
         }
 
         private void SaveCurrent()
         {
+            Services.Updating = true;
+            Services.CreatedOrUpdatedItem = CurrentName;
+
             if (Services.CurrentServiceNode is ServiceCategoryNode)
             {
                 ServiceCategoryNode node = (ServiceCategoryNode)Services.CurrentServiceNode;
@@ -118,6 +116,8 @@ namespace Rhit.Applications.ViewModels {
                 ServiceLinkNode node = (ServiceLinkNode)Services.CurrentServiceNode;
                 DataCollector.Instance.DeleteCampuServiceLink(node.Link.ToLightWeightDataContract(), node.Parent == null ? null : node.Parent.Name);
             }
+
+            if (Services.CurrentServiceNode != null) Services.CurrentServiceNode = Services.CurrentServiceNode.Parent;
         }
 
         private void IncrementVersion()
@@ -228,8 +228,6 @@ namespace Rhit.Applications.ViewModels {
         public ICommand AddServiceCommand { get; private set; }
 
         public ICommand AddCategoryCommand { get; private set; }
-
-        public ICommand AddRootServiceCommand { get; private set; }
 
         public ICommand AddRootCategoryCommand { get; private set; }
 

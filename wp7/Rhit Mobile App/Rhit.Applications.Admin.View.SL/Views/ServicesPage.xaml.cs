@@ -24,12 +24,15 @@ namespace Rhit.Applications.Views.Views
 
         void ViewModel_UpdateSelectedServiceNode(object sender, ServicesViewModel.SelectedServiceNodeArgs args)
         {
+            if (ServicesTreeView == null) return;
+
             ServicesTreeView.UpdateLayout();
 
             TreeViewItem item = ServicesTreeView.ItemContainerGenerator.ContainerFromItem(args.Selected) as TreeViewItem;
             if (item != null)
             {
                 item.IsSelected = true;
+                item.IsExpanded = true;
             }
             else
             {
@@ -82,11 +85,10 @@ namespace Rhit.Applications.Views.Views
                     targetItem = parentItem.ItemContainerGenerator.ContainerFromItem(targetNode) as TreeViewItem;
                 }
 
-
-
                 if (targetItem != null)
                 {
                     targetItem.IsSelected = true;
+                    targetItem.IsExpanded = true;
                 }
             }
         }

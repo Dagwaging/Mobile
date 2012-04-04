@@ -34,11 +34,19 @@ namespace Rhit.Applications.ViewModels.Controllers {
 
             if (Creating)
             {
-                currentName = CreatedItem;
+                currentName = CreatedOrUpdatedItem;
                 currentParent = CurrentServiceNode == null ? null : CurrentServiceNode.Name;
 
-                CreatedItem = null;
+                CreatedOrUpdatedItem = null;
                 Creating = false;
+            }
+            else if (Updating)
+            {
+                currentName = CreatedOrUpdatedItem;
+                currentParent = CurrentServiceNode == null ? null : (CurrentServiceNode.Parent == null ? null : CurrentServiceNode.Parent.Name);
+
+                CreatedOrUpdatedItem = null;
+                Updating = false;
             }
             else
             {
@@ -64,7 +72,7 @@ namespace Rhit.Applications.ViewModels.Controllers {
 
             foreach (ServiceNode node in ServicesTree)
             {
-                if (node.Name == currentName && (node.Parent == null && currentParent == null || node.Parent.Name == currentParent))
+                if (node.Name == currentName && ((node.Parent == null && currentParent == null) || (node.Parent != null && node.Parent.Name == currentParent)))
                 {
                     CurrentServiceNode = node;
                 }
@@ -81,7 +89,9 @@ namespace Rhit.Applications.ViewModels.Controllers {
 
         public Boolean Creating { get; set; }
 
-        public String CreatedItem { get; set; }
+        public Boolean Updating { get; set; }
+
+        public String CreatedOrUpdatedItem { get; set; }
 
         private CampusService Root { get; set; }
 

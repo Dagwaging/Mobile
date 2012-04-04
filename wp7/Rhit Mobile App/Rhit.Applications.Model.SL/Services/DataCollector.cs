@@ -451,28 +451,28 @@ namespace Rhit.Applications.Models.Services {
             Connection.MakeRequest(request, RequestType.CampusServicesUpdate);
         }
 
-        public void AddCampusServiceCategory(CampusServicesCategory_DC parent)
+        public void AddCampusServiceCategory(String name, CampusServicesCategory_DC parent)
         {
             RequestPart request = new RequestBuilder(BaseAddress).Admin.StoredProcedure(Connection.ServiceTokenGuid, "spAddCampusServiceCategory");
 
-            String name = Uri.EscapeDataString("New Category " + DateTime.Now.ToFileTimeUtc());
+            String escapedName = Uri.EscapeDataString(name);
             String parentName = Uri.EscapeDataString(parent == null || parent.Name == null ? "\0" : parent.Name);
 
-            request = request.AddQueryParameter("name", name);
+            request = request.AddQueryParameter("name", escapedName);
             request = request.AddQueryParameter("parent", parentName);
 
             Connection.MakeRequest(request, RequestType.CampusServicesUpdate);
         }
 
-        public void AddCampusServiceLink(CampusServicesCategory_DC parent)
+        public void AddCampusServiceLink(String name, CampusServicesCategory_DC parent)
         {
             RequestPart request = new RequestBuilder(BaseAddress).Admin.StoredProcedure(Connection.ServiceTokenGuid, "spAddCampusServiceLink");
 
             String url = Uri.EscapeDataString("http://www.rose-hulman.edu/");
-            String name = Uri.EscapeDataString("New Service " + DateTime.Now.ToFileTimeUtc());
+            String escapedName = Uri.EscapeDataString(name);
             String parentName = Uri.EscapeDataString(parent == null || parent.Name == null ? "\0" : parent.Name);
 
-            request = request.AddQueryParameter("name", name);
+            request = request.AddQueryParameter("name", escapedName);
             request = request.AddQueryParameter("url", url);
             request = request.AddQueryParameter("category", parentName);
 
