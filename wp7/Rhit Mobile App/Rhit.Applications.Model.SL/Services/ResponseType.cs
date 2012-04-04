@@ -4,6 +4,7 @@ namespace Rhit.Applications.Models.Services {
         AllLocations,
         CampusServices,
         CampusServicesUpdate,
+        CampusServicesVersionUpdate,
         ChangeCorners,
         ConnectionError,
         DeleteLocation,

@@ -45,6 +45,11 @@ namespace Rhit.Applications.ViewModels.Controllers {
             }
         }
 
+        private void VersionReturned(object sender, VersionEventArgs e)
+        {
+            CurrentVersion = e.ServicesVersion.ToString();
+        }
+
         private CampusService Root { get; set; }
 
         public ServiceNode CurrentServiceNode { get; set; }
@@ -55,5 +60,7 @@ namespace Rhit.Applications.ViewModels.Controllers {
         }
 
         public ObservableCollection<ServiceNode> ServicesTree { get; private set; }
+
+        public String CurrentVersion { get; private set; }
     }
 }

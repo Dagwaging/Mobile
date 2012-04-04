@@ -14,6 +14,8 @@ namespace Rhit.Applications.ViewModels {
         }
 
         private void VersionUpdate(object sender, VersionEventArgs e) {
+            if (e.ServerVersion == 0) return;
+
             Version = e.ServerVersion;
         }
 

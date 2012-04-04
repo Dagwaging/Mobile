@@ -12,7 +12,12 @@ namespace Rhit.Applications.Models.Services.Requests {
         }
 
         public UpdateVersionRequestPart UpdateVersion(Guid token, double version) {
-            return new UpdateVersionRequestPart(FullUrl, token, version);
+            return new UpdateVersionRequestPart(FullUrl, token, "locations", version);
+        }
+
+        public UpdateVersionRequestPart UpdateServicesVersion(Guid token, double version)
+        {
+            return new UpdateVersionRequestPart(FullUrl, token, "services", version);
         }
 
         public AuthenticateRequestPart Authenticate(string username, string password) {
@@ -90,18 +95,21 @@ namespace Rhit.Applications.Models.Services.Requests {
     }
 
     public class UpdateVersionRequestPart : RequestPart {
-        public UpdateVersionRequestPart(string baseUrl, Guid token, double version)
+        public UpdateVersionRequestPart(string baseUrl, Guid token, String type, double version)
             : base(baseUrl) {
             Token = token;
             Version = version;
-            PartUrl = "/{1}/updateversion/{2}{0}";
+            VersionType = type;
+            PartUrl = "/{0}/updateversion?{1}={2}";
         }
 
         protected override string FullUrl {
-            get { return String.Format(String.Format(BaseUrl, PartUrl), "{0}", Token, Version); }
+            get { return String.Format(String.Format(BaseUrl, PartUrl), Token, VersionType, Version); }
         }
 
         public Guid Token { get; set; }
+
+        public String VersionType { get; set; }
 
         public double Version { get; set; }
 

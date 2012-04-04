@@ -27,6 +27,8 @@ namespace Rhit.Applications.Models.Services {
                     return ResponseType.CampusServices;
                 case RequestType.CampusServicesUpdate:
                     return ResponseType.CampusServicesUpdate;
+                case RequestType.CampusServicesVersionUpdate:
+                    return ResponseType.CampusServicesVersionUpdate;
                 case RequestType.ChangeCorners:
                     return ResponseType.ChangeCorners;
                 case RequestType.DeleteLocation:

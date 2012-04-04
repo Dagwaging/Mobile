@@ -19,8 +19,9 @@ namespace Rhit.Applications.Models.Services {
         public event CampusServicesEventHandler CampusServicesReturned;
         protected virtual void OnCampusServicesReturned(ServiceEventArgs e, CampusServicesCategory_DC root) {
             CampusServicesEventArgs args = new CampusServicesEventArgs(e) {
-                Root = root,
+                Root = root
             };
+
             if(CampusServicesReturned != null) CampusServicesReturned(this, args);
         }
         #endregion
@@ -152,10 +153,19 @@ namespace Rhit.Applications.Models.Services {
 
         public static double Version { get; private set; }
 
+        public static double ServicesVersion { get; private set; }
+
         private void SetVersion(double version, ServiceEventArgs args) {
             if(version == Version) return;
             Version = version;
             OnVersionUpdate(args, version, 0);
+        }
+
+        private void SetServicesVersion(double version, ServiceEventArgs args)
+        {
+            if (version == ServicesVersion) return;
+            ServicesVersion = version;
+            OnVersionUpdate(args, 0, version);
         }
 
         private void ResponseReceived(object sender, ServiceEventArgs eventArgs) {
@@ -201,6 +211,7 @@ namespace Rhit.Applications.Models.Services {
 
                 case ResponseType.Version:
                     SetVersion(eventArgs.ResponseObject.LocationsVersion, eventArgs);
+                    SetServicesVersion(eventArgs.ResponseObject.ServicesVersion, eventArgs);
                     break;
 
                 case ResponseType.Login:
@@ -249,6 +260,7 @@ namespace Rhit.Applications.Models.Services {
         private void HandleCampusServicesResponse(ServiceEventArgs eventArgs) {
             ServerObject response = eventArgs.ResponseObject;
             if(response.CampusServicesRoot == null) return;
+            SetServicesVersion(eventArgs.ResponseObject.Version, eventArgs);
             OnCampusServicesReturned(eventArgs, response.CampusServicesRoot);
         }
 
@@ -579,6 +591,12 @@ namespace Rhit.Applications.Models.Services {
 
         public void IncreaseServerVersion() {
             RequestPart request = new RequestBuilder(BaseAddress).Admin.UpdateVersion(Connection.ServiceTokenGuid, Version+0.001);
+            Connection.MakeRequest(request, RequestType.IncrementVersion);
+        }
+
+        public void IncreaseServicesVersion()
+        {
+            RequestPart request = new RequestBuilder(BaseAddress).Admin.UpdateServicesVersion(Connection.ServiceTokenGuid, ServicesVersion + 0.001);
             Connection.MakeRequest(request, RequestType.IncrementVersion);
         }
         #endregion

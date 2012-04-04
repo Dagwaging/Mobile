@@ -17,12 +17,21 @@ namespace Rhit.Applications.ViewModels {
             SaveCurrentCommand = new RelayCommand(p => SaveCurrent());
             DeleteCurrentCommand = new RelayCommand(p => DeleteCurrent());
             RefreshCommand = new RelayCommand(p => ReloadServices());
+            IncrementVersionCommand = new RelayCommand(p => IncrementVersion());
 
             DataCollector.Instance.CampusServicesUpdateReturned += new EventHandler(Instance_CampusServicesUpdateReturned);
+            DataCollector.Instance.VersionUpdate += new Models.Events.VersionEventHandler(Instance_VersionUpdate);
 
             AllFieldsVisibility = Visibility.Collapsed;
 
             Services = ServicesController.Instance;
+        }
+
+        void Instance_VersionUpdate(object sender, Models.Events.VersionEventArgs e)
+        {
+            if (e.ServicesVersion == 0) return;
+
+            ServicesVersionStatus = String.Format("Increment services version (currently {0})", e.ServicesVersion);
         }
 
         void Instance_CampusServicesUpdateReturned(object sender, EventArgs e)
@@ -42,8 +51,6 @@ namespace Rhit.Applications.ViewModels {
             {
                 DataCollector.Instance.AddCampusServiceCategory(null);
             }
-
-            ReloadServices();
         }
 
         private void AddService()
@@ -57,8 +64,6 @@ namespace Rhit.Applications.ViewModels {
             {
                 DataCollector.Instance.AddCampusServiceLink(null);
             }
-
-            ReloadServices();
         }
 
         private void AddRootCategory()
@@ -99,6 +104,11 @@ namespace Rhit.Applications.ViewModels {
                 ServiceLinkNode node = (ServiceLinkNode)Services.CurrentServiceNode;
                 DataCollector.Instance.DeleteCampuServiceLink(node.Link.ToLightWeightDataContract(), node.Parent == null ? null : node.Parent.Name);
             }
+        }
+
+        private void IncrementVersion()
+        {
+            DataCollector.Instance.IncreaseServicesVersion();
         }
         #endregion
 
@@ -152,6 +162,16 @@ namespace Rhit.Applications.ViewModels {
         private static readonly DependencyProperty AllFieldsVisibilityProperty = DependencyProperty.Register("AllFieldsVisibility", typeof(Visibility), typeof(ServicesViewModel), new PropertyMetadata(null));
         #endregion
 
+        #region ServicesVersionStatus
+        public String ServicesVersionStatus
+        {
+            get { return (String)GetValue(ServicesVersionStatusProperty); }
+            private set { SetValue(ServicesVersionStatusProperty, value); }
+        }
+
+        private static readonly DependencyProperty ServicesVersionStatusProperty = DependencyProperty.Register("ServicesVersionStatus", typeof(String), typeof(ServicesViewModel), new PropertyMetadata(null));
+        #endregion
+
         public ServicesController Services { get; private set; }
 
         public void ReloadServices()
@@ -202,6 +222,8 @@ namespace Rhit.Applications.ViewModels {
         public ICommand SaveCurrentCommand { get; private set; }
 
         public ICommand DeleteCurrentCommand { get; private set; }
+
+        public ICommand IncrementVersionCommand { get; private set; }
         #endregion
 
     }
