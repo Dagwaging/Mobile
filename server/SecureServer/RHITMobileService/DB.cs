@@ -7,6 +7,7 @@ using System.Configuration;
 using RHITMobile.Secure.Data;
 using RHITMobile.Secure.BannerTableAdapters;
 using System.Threading;
+using System.Data;
 
 namespace RHITMobile.Secure
 {
@@ -79,14 +80,43 @@ namespace RHITMobile.Secure
                 return table.User;
             }
         }
+        
+        public User[] SearchUsers(String search)
+        {
+            using (SwitchLock switchLock = AcquireReadSwitch())
+            {
+                SearchUsersTableAdapter adapter = new SearchUsersTableAdapter();
+                Banner.SearchUsersDataTable table = adapter.GetData(switchLock.Switch, search);
+                return table.Users;
+            }
+        }
+        
+        public Course GetCourse(int term, int crn)
+        {
+            using (SwitchLock switchLock = AcquireReadSwitch())
+            {
+                GetCourseTableAdapter adapter = new GetCourseTableAdapter();
+                Banner.GetCourseDataTable table = adapter.GetData(switchLock.Switch, term, crn);
+                return table.Course;
+            }
+        }
+
+        public Course[] SearchCourses(String search)
+        {
+            using (SwitchLock switchLock = AcquireReadSwitch())
+            {
+                SearchCoursesTableAdapter adapter = new SearchCoursesTableAdapter();
+                Banner.SearchCoursesDataTable table = adapter.GetData(switchLock.Switch, search);
+                return table.Courses;
+            }
+        }
 
         private SwitchLock AcquireReadSwitch()
         {
             return new SwitchLock(_switchLock);
         }
-    
-
     }
+
 
     class Counter
     {

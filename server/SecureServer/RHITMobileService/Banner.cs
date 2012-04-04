@@ -4,6 +4,160 @@ namespace RHITMobile.Secure
 {
     public partial class Banner
     {
+        partial class GetCourseDataTable
+        {
+            public Course Course
+            {
+                get
+                {
+                    if (Count < 1)
+                        return null;
+
+                    var row = this[0];
+
+                    Course course = new Course();
+
+                    course.Term = row.Term;
+                    course.CRN = row.CRN;
+
+                    course.Name = row.Course;
+                    course.Title = row.Title;
+
+                    if (!row.IsInstructorNull())
+                        course.Instructor = row.Instructor;
+
+                    course.Credit = row.Credits;
+
+                    if (!row.IsFinalDayNull())
+                        course.FinalDay = row.FinalDay[0];
+                    else
+                        course.FinalDay = '\0';
+
+                    if (!row.IsFinalHourNull())
+                        course.FinalHour = row.FinalHour;
+                    else
+                        course.FinalHour = -1;
+
+                    if (!row.IsFinalRoomNull())
+                        course.FinalRoom = row.FinalRoom;
+
+                    course.Enrolled = row.Enrolled;
+                    course.MaxEnrollment = row.MaxEnrolled;
+
+                    if (!row.IsCommentsNull())
+                        course.Comments = row.Comments;
+
+                    return course;
+                }
+            }
+        }
+
+        partial class SearchCoursesDataTable
+        {
+            public Course[] Courses
+            {
+                get
+                {
+                    List<Course> courses = new List<Course>();
+
+                    foreach (var row in this)
+                    {
+                        Course course = new Course();
+
+                        course.Term = row.Term;
+                        course.CRN = row.CRN;
+
+                        course.Name = row.Course;
+                        course.Title = row.Title;
+
+                        if (!row.IsInstructorNull())
+                            course.Instructor = row.Instructor;
+
+                        course.Credit = row.Credits;
+
+                        if (!row.IsFinalDayNull())
+                            course.FinalDay = row.FinalDay[0];
+                        else
+                            course.FinalDay = '\0';
+
+                        if (!row.IsFinalHourNull())
+                            course.FinalHour = row.FinalHour;
+                        else
+                            course.FinalHour = -1;
+
+                        if (!row.IsFinalRoomNull())
+                            course.FinalRoom = row.FinalRoom;
+
+                        course.Enrolled = row.Enrolled;
+                        course.MaxEnrollment = row.MaxEnrolled;
+
+                        if (!row.IsCommentsNull())
+                            course.Comments = row.Comments;
+
+                        courses.Add(course);
+                    }
+
+                    return courses.ToArray();
+                }
+            }
+        }
+    
+        partial class SearchUsersDataTable
+        {
+            public User[] Users
+            {
+                get
+                {
+                    List<User> users = new List<User>();
+
+                    foreach (var row in this)
+                    {
+                        User user = new User();
+
+                        user.Username = row.Username;
+
+                        if (!row.IsEmailNull())
+                            user.Alias = row.Email;
+
+                        if (!row.IsCMNull())
+                            user.Mailbox = row.CM;
+                        else
+                            user.Mailbox = -1;
+
+                        if (!row.IsMajorNull())
+                            user.Major = row.Major;
+
+                        if (!row.IsClassNull())
+                            user.Class = row.Class;
+
+                        if (!row.IsYearNull())
+                            user.Year = row.Year;
+
+                        if (!row.IsAdvisorNull())
+                            user.Advisor = row.Advisor;
+
+                        user.LastName = row.LastName;
+                        user.FirstName = row.FirstName;
+
+                        if (!row.IsMiddleNameNull())
+                            user.MiddleName = row.MiddleName;
+
+                        if (!row.IsDepartmentNull())
+                            user.Department = row.Department;
+
+                        if (!row.IsTelephoneNull())
+                            user.Phone = row.Telephone;
+
+                        if (!row.IsRoomNull())
+                            user.Room = row.Room;
+                        users.Add(user);
+                    }
+
+                    return users.ToArray();
+                }
+            }
+        }
+    
         partial class GetUserDataTable
         {
             public User User

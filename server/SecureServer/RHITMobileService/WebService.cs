@@ -7,27 +7,93 @@ using RHITMobile.Secure.Data;
 
 namespace RHITMobile.Secure
 {
+    public class AuthenticationResponse
+    {
+        public string Token { get; set; }
+        public DateTime Expiration { get; set; }
+    }
+
     [ServiceContract]
     public interface IWebService
     {
         [OperationContract]
-        void ForceUpdate();
+        AuthenticationResponse login(string username, string password);
+
+        [OperationContract(IsOneWay = true)]
+        void logout(string authToken);
 
         [OperationContract]
-        User GetUser(string username);
+        User GetUser(string authToken, string username);
+        
+        [OperationContract]
+        User[] SearchUsers(string authToken, string search);
+
+        [OperationContract]
+        Course GetCourse(string authToken, int term, int crn);
+
+        [OperationContract]
+        Course[] SearchCourses(string authToken, string search);
     }
 
     public class WebService : IWebService
     {
-        public void ForceUpdate()
+        private Authentication _auth;
+
+        public WebService()
         {
-            //Data_Import.Importer importer = new Data_Import.Importer(new NullLogger(), "C:\\InputData");
-            //importer.ImportData();
+            _auth = new Authentication();
         }
 
-        public User GetUser(string username)
+        public AuthenticationResponse login(string username, string password)
         {
+            AuthenticationResponse response = new AuthenticationResponse();
+
+            DateTime expiration;
+            response.Token = _auth.AuthenticateUser(username, password, out expiration);
+            response.Expiration = expiration;
+
+            if (response.Token == null)
+                return null;
+
+            return response;
+        }
+
+        public void logout(string authToken)
+        {
+            _auth.Invalidate(authToken);
+        }
+
+        public User GetUser(string authToken, string username)
+        {
+            if (!_auth.IsAuthenticated(authToken))
+                return null;
+
             return DB.Instance.GetUser(username);
         }
+
+        public User[] SearchUsers(string authToken, string search)
+        {
+            if (!_auth.IsAuthenticated(authToken))
+                return null;
+
+            return DB.Instance.SearchUsers(search);
+        }
+
+        public Course GetCourse(string authToken, int term, int crn)
+        {
+            if (!_auth.IsAuthenticated(authToken))
+                return null;
+
+            return DB.Instance.GetCourse(term, crn);
+        }
+
+        public Course[] SearchCourses(string authToken, string search)
+        {
+            if (!_auth.IsAuthenticated(authToken))
+                return null;
+
+            return DB.Instance.SearchCourses(search);
+        }
+
     }
 }
