@@ -21,10 +21,21 @@ namespace Rhit.Applications.ViewModels {
 
             DataCollector.Instance.CampusServicesUpdateReturned += new EventHandler(Instance_CampusServicesUpdateReturned);
             DataCollector.Instance.VersionUpdate += new Models.Events.VersionEventHandler(Instance_VersionUpdate);
+            DataCollector.Instance.CampusServicesReturned += new Models.Events.CampusServicesEventHandler(Instance_CampusServicesReturned);
 
             AllFieldsVisibility = Visibility.Collapsed;
 
             Services = ServicesController.Instance;
+        }
+
+        void Instance_CampusServicesReturned(object sender, Models.Events.CampusServicesEventArgs e)
+        {
+            Services.CampusServicesReturned(sender, e);
+
+            if (Services.CurrentServiceNode != null)
+            {
+                OnUpdateSelectedServiceNode(Services.CurrentServiceNode);
+            }
         }
 
         void Instance_VersionUpdate(object sender, Models.Events.VersionEventArgs e)
@@ -64,6 +75,9 @@ namespace Rhit.Applications.ViewModels {
             {
                 DataCollector.Instance.AddCampusServiceLink(null);
             }
+
+            Services.Creating = true;
+            Services.CreatedItem = ""; //TODO
         }
 
         private void AddRootCategory()
@@ -226,5 +240,23 @@ namespace Rhit.Applications.ViewModels {
         public ICommand IncrementVersionCommand { get; private set; }
         #endregion
 
+        #region UpdateSelectedServiceNode
+        public delegate void UpdateSelectedServiceNodeEventHandler(Object sender, SelectedServiceNodeArgs args);
+
+        public class SelectedServiceNodeArgs : EventArgs
+        {
+            public ServiceNode Selected { get; set; }
+        }
+
+        public event UpdateSelectedServiceNodeEventHandler UpdateSelectedServiceNode;
+        protected virtual void OnUpdateSelectedServiceNode(ServiceNode selectedNode)
+        {
+            SelectedServiceNodeArgs args = new SelectedServiceNodeArgs() {
+                Selected = selectedNode,
+            };
+
+            if (UpdateSelectedServiceNode != null) UpdateSelectedServiceNode(this, args);
+        }
+        #endregion
     }
 }

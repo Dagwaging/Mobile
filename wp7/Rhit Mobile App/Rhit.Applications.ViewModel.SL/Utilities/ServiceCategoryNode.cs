@@ -36,6 +36,22 @@ namespace Rhit.Applications.ViewModels.Utilities
             }
         }
 
+        public override ObservableCollection<ServiceNode> GetRecursiveChildren()
+        {
+            ObservableCollection<ServiceNode> result = new ObservableCollection<ServiceNode>();
+            foreach (ServiceNode node in Children)
+            {
+                result.Add(node);
+
+                foreach (ServiceNode childNode in node.GetRecursiveChildren())
+                {
+                    result.Add(childNode);
+                }
+            }
+
+            return result;
+        }
+
         public CampusService Category { get; private set; }
     }
 }

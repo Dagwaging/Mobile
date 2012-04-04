@@ -23,5 +23,10 @@ namespace Rhit.Applications.ViewModels.Utilities
         }
 
         public Link Link { get; private set; }
+
+        public override ObservableCollection<ServiceNode> GetRecursiveChildren()
+        {
+            return new ObservableCollection<ServiceNode>();
+        }
     }
 }

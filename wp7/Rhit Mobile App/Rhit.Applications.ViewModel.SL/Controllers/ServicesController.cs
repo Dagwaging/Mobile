@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
+using System.Windows.Controls;
 using Rhit.Applications.Models;
 using Rhit.Applications.Models.Events;
 using Rhit.Applications.Models.Services;
@@ -14,7 +15,6 @@ namespace Rhit.Applications.ViewModels.Controllers {
         private ServicesController() {
             ServicesTree = new ObservableCollection<ServiceNode>();
 
-            DataCollector.Instance.CampusServicesReturned += new CampusServicesEventHandler(CampusServicesReturned);
             DataCollector.Instance.GetCampusServices();
         }
 
@@ -28,8 +28,26 @@ namespace Rhit.Applications.ViewModels.Controllers {
         }
         #endregion
 
-        private void CampusServicesReturned(object sender, CampusServicesEventArgs e) {
+        public void CampusServicesReturned(object sender, CampusServicesEventArgs e) {
+            String currentName;
+            String currentParent;
+
+            if (Creating)
+            {
+                currentName = CreatedItem;
+                currentParent = CurrentServiceNode == null ? null : CurrentServiceNode.Name;
+
+                CreatedItem = null;
+                Creating = false;
+            }
+            else
+            {
+                currentName = CurrentServiceNode == null ? null : CurrentServiceNode.Name;
+                currentParent = CurrentServiceNode == null ? null : (CurrentServiceNode.Parent == null ? null : CurrentServiceNode.Parent.Name);
+            }
+
             ServicesTree.Clear();
+            CurrentServiceNode = null;
 
             Root = new CampusService(e.Root);
             Root.Label = "Campus Services";
@@ -43,12 +61,27 @@ namespace Rhit.Applications.ViewModels.Controllers {
             {
                 ServicesTree.Add(new ServiceLinkNode(link));
             }
+
+            foreach (ServiceNode node in ServicesTree)
+            {
+                if (node.Name == currentName && (node.Parent == null && currentParent == null || node.Parent.Name == currentParent))
+                {
+                    CurrentServiceNode = node;
+                }
+
+                foreach (ServiceNode childNode in node.GetRecursiveChildren())
+                {
+                    if (childNode.Name == currentName && (childNode.Parent == null && currentParent == null || childNode.Parent.Name == currentParent))
+                    {
+                        CurrentServiceNode = childNode;
+                    }
+                }
+            }
         }
 
-        private void VersionReturned(object sender, VersionEventArgs e)
-        {
-            CurrentVersion = e.ServicesVersion.ToString();
-        }
+        public Boolean Creating { get; set; }
+
+        public String CreatedItem { get; set; }
 
         private CampusService Root { get; set; }
 
@@ -60,7 +93,5 @@ namespace Rhit.Applications.ViewModels.Controllers {
         }
 
         public ObservableCollection<ServiceNode> ServicesTree { get; private set; }
-
-        public String CurrentVersion { get; private set; }
     }
 }
