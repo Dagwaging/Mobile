@@ -4,6 +4,93 @@ namespace RHITMobile.Secure
 {
     public partial class Banner
     {
+        partial class GetRoomScheduleDataTable
+        {
+            public RoomSchedule[] Schedule
+            {
+                get
+                {
+                    List<RoomSchedule> schedule = new List<RoomSchedule>();
+
+                    foreach (var row in this)
+                    {
+                        RoomSchedule item = new RoomSchedule();
+
+                        item.Term = row.Term;
+                        item.CRN = row.CRN;
+                        item.Day = row.Day[0];
+                        item.StartPeriod = row.StartPeriod;
+                        item.EndPeriod = row.EndPeriod;
+
+                        schedule.Add(item);
+                    }
+                    return schedule.ToArray();
+                }
+            }
+        }
+    
+        partial class GetCourseScheduleDataTable
+        {
+            public CourseTime[] Schedule
+            {
+                get
+                {
+                    List<CourseTime> schedule = new List<CourseTime>();
+
+                    foreach (var row in this)
+                    {
+                        CourseTime item = new CourseTime();
+
+                        item.Day = row.Day[0];
+                        item.StartPeriod = row.StartPeriod;
+                        item.EndPeriod = row.EndPeriod;
+                        item.Room = row.Room;
+
+                        schedule.Add(item);
+                    }
+                    return schedule.ToArray();
+                }
+            }
+        }
+    
+        partial class GetCourseEnrollmentDataTable
+        {
+            public string[] Enrollment
+            {
+                get
+                {
+                    List<string> enrollment = new List<string>();
+
+                    foreach (var row in this)
+                        enrollment.Add(row.Username);
+
+                    return enrollment.ToArray();
+                }
+            }
+        }
+    
+        partial class GetUserEnrollmentDataTable
+        {
+            public UserEnrollment[] Enrollment
+            {
+                get
+                {
+                    List<UserEnrollment> enrollment = new List<UserEnrollment>();
+
+                    foreach (var row in this)
+                    {
+                        UserEnrollment item = new UserEnrollment();
+
+                        item.Term = row.Term;
+                        item.CRN = row.CRN;
+
+                        enrollment.Add(item);
+                    }
+                    return enrollment.ToArray();
+                }
+            }
+        }
+    
         partial class GetCourseDataTable
         {
             public Course Course

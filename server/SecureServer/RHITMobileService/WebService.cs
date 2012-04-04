@@ -33,6 +33,18 @@ namespace RHITMobile.Secure
 
         [OperationContract]
         Course[] SearchCourses(string authToken, string search);
+        
+        [OperationContract]
+        string[] GetCourseEnrollment(string authToken, int term, int crn);
+        
+        [OperationContract]
+        UserEnrollment[] GetUserEnrollment(string authToken, string username);
+        
+        [OperationContract]
+        CourseTime[] GetCourseSchedule(string authToken, int term, int crn);
+        
+        [OperationContract]
+        RoomSchedule[] GetRoomSchedule(string authToken, string room);
     }
 
     public class WebService : IWebService
@@ -95,5 +107,36 @@ namespace RHITMobile.Secure
             return DB.Instance.SearchCourses(search);
         }
 
+        public string[] GetCourseEnrollment(string authToken, int term, int crn)
+        {
+            if (!_auth.IsAuthenticated(authToken))
+                return null;
+
+            return DB.Instance.GetCourseEnrollment(term, crn);
+        }
+
+        public UserEnrollment[] GetUserEnrollment(string authToken, string username)
+        {
+            if (!_auth.IsAuthenticated(authToken))
+                return null;
+
+            return DB.Instance.GetUserEnrollment(username);
+        }
+
+        public CourseTime[] GetCourseSchedule(string authToken, int term, int crn)
+        {
+            if (!_auth.IsAuthenticated(authToken))
+                return null;
+
+            return DB.Instance.GetCourseSchedule(term, crn);
+        }
+
+        public RoomSchedule[] GetRoomSchedule(string authToken, string room)
+        {
+            if (!_auth.IsAuthenticated(authToken))
+                return null;
+
+            return DB.Instance.GetRoomSchedule(room);
+        }
     }
 }

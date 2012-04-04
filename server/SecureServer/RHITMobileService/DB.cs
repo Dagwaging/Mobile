@@ -110,6 +110,46 @@ namespace RHITMobile.Secure
                 return table.Courses;
             }
         }
+        
+        public string[] GetCourseEnrollment(int term, int crn)
+        {
+            using (SwitchLock switchLock = AcquireReadSwitch())
+            {
+                GetCourseEnrollmentTableAdapter adapter = new GetCourseEnrollmentTableAdapter();
+                Banner.GetCourseEnrollmentDataTable table = adapter.GetData(switchLock.Switch, term, crn);
+                return table.Enrollment;
+            }
+        }
+        
+        public UserEnrollment[] GetUserEnrollment(string username)
+        {
+            using (SwitchLock switchLock = AcquireReadSwitch())
+            {
+                GetUserEnrollmentTableAdapter adapter = new GetUserEnrollmentTableAdapter();
+                Banner.GetUserEnrollmentDataTable table = adapter.GetData(switchLock.Switch, username);
+                return table.Enrollment;
+            }
+        }
+        
+        public CourseTime[] GetCourseSchedule(int term, int crn)
+        {
+            using (SwitchLock switchLock = AcquireReadSwitch())
+            {
+                GetCourseScheduleTableAdapter adapter = new GetCourseScheduleTableAdapter();
+                Banner.GetCourseScheduleDataTable table = adapter.GetData(switchLock.Switch, term, crn);
+                return table.Schedule;
+            }
+        }
+        
+        public RoomSchedule[] GetRoomSchedule(string room)
+        {
+            using (SwitchLock switchLock = AcquireReadSwitch())
+            {
+                GetRoomScheduleTableAdapter adapter = new GetRoomScheduleTableAdapter();
+                Banner.GetRoomScheduleDataTable table = adapter.GetData(switchLock.Switch, room);
+                return table.Schedule;
+            }
+        }
 
         private SwitchLock AcquireReadSwitch()
         {

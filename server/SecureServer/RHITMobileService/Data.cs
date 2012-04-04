@@ -88,6 +88,20 @@ namespace RHITMobile.Secure.Data
         public String Username { get; set; }
         public int Term { get; set; }
         public List<int> CRNs { get; set; }
+    }
 
+    public class UserEnrollment
+    {
+        public int Term { get; set; }
+        public int CRN { get; set; }
+    }
+
+    public class RoomSchedule
+    {
+        public int Term { get; set; }
+        public int CRN { get; set; }
+        public char Day { get; set; }
+        public int StartPeriod { get; set; }
+        public int EndPeriod { get; set; }
     }
 }
