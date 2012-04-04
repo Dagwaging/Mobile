@@ -166,6 +166,16 @@ namespace Rhit.Applications.ViewModels {
         private static readonly DependencyProperty LinkFieldsVisibilityProperty = DependencyProperty.Register("LinkFieldsVisibility", typeof(Visibility), typeof(ServicesViewModel), new PropertyMetadata(null));
         #endregion
 
+        #region CanAddChildItems
+        public Boolean CanAddChildItems
+        {
+            get { return (Boolean)GetValue(CanAddChildItemsProperty); }
+            private set { SetValue(CanAddChildItemsProperty, value); }
+        }
+
+        private static readonly DependencyProperty CanAddChildItemsProperty = DependencyProperty.Register("CanAddChildItems", typeof(Boolean), typeof(ServicesViewModel), new PropertyMetadata(null));
+        #endregion
+
         #region AllFieldsVisibility
         public Visibility AllFieldsVisibility
         {
@@ -211,6 +221,7 @@ namespace Rhit.Applications.ViewModels {
                 CurrentName = serviceNode.Name;
                 CurrentURL = "";
                 LinkFieldsVisibility = Visibility.Collapsed;
+                CanAddChildItems = true;
             }
             else if (serviceNode is ServiceLinkNode)
             {
@@ -219,6 +230,7 @@ namespace Rhit.Applications.ViewModels {
                 CurrentName = serviceNode.Name;
                 CurrentURL = ((ServiceLinkNode)serviceNode).Link.Address;
                 LinkFieldsVisibility = Visibility.Visible;
+                CanAddChildItems = false;
             }
         }
 

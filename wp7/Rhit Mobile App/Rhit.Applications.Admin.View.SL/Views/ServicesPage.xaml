@@ -44,8 +44,8 @@
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
 
-                    <Button Content="Add Category" cmds:CommandManager.Command="{Binding AddCategoryCommand}" cmds:CommandManager.CommandEventName="Click" />
-                    <Button Content="Add Service" Grid.Column="1" cmds:CommandManager.Command="{Binding AddServiceCommand}" cmds:CommandManager.CommandEventName="Click" />
+                    <Button Content="Add Category" IsEnabled="{Binding CanAddChildItems}" cmds:CommandManager.Command="{Binding AddCategoryCommand}" cmds:CommandManager.CommandEventName="Click" />
+                    <Button Content="Add Service" IsEnabled="{Binding CanAddChildItems}" Grid.Column="1" cmds:CommandManager.Command="{Binding AddServiceCommand}" cmds:CommandManager.CommandEventName="Click" />
                 </Grid>
 
             </Grid>
