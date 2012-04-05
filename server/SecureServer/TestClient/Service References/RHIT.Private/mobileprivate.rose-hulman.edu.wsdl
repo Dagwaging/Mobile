@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://mobileprivate.rose-hulman.edu" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://mobileprivate.rose-hulman.edu" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://mobileprivate.rose-hulman.edu/Imports">
+      <xsd:import namespace="http://mobileprivate.rose-hulman.edu" />
+      <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/RHITMobile.Secure" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/RHITMobile.Secure.Data" />
+      <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="IWebService_Login_InputMessage">
+    <wsdl:part name="parameters" element="tns:Login" />
+  </wsdl:message>
+  <wsdl:message name="IWebService_Login_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LoginResponse" />
+  </wsdl:message>
+  <wsdl:message name="IWebService_Logout_InputMessage">
+    <wsdl:part name="parameters" element="tns:Logout" />
+  </wsdl:message>
+  <wsdl:message name="IWebService_GetUser_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetUser" />
+  </wsdl:message>
+  <wsdl:message name="IWebService_GetUser_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetUserResponse" />
+  </wsdl:message>
+  <wsdl:message name="IWebService_SearchUsers_InputMessage">
+    <wsdl:part name="parameters" element="tns:SearchUsers" />
+  </wsdl:message>
+  <wsdl:message name="IWebService_SearchUsers_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SearchUsersResponse" />
+  </wsdl:message>
+  <wsdl:message name="IWebService_GetCourse_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetCourse" />
+  </wsdl:message>
+  <wsdl:message name="IWebService_GetCourse_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetCourseResponse" />
+  </wsdl:message>
+  <wsdl:message name="IWebService_SearchCourses_InputMessage">
+    <wsdl:part name="parameters" element="tns:SearchCourses" />
+  </wsdl:message>
+  <wsdl:message name="IWebService_SearchCourses_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SearchCoursesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IWebService_GetCourseEnrollment_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetCourseEnrollment" />
+  </wsdl:message>
+  <wsdl:message name="IWebService_GetCourseEnrollment_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetCourseEnrollmentResponse" />
+  </wsdl:message>
+  <wsdl:message name="IWebService_GetUserEnrollment_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetUserEnrollment" />
+  </wsdl:message>
+  <wsdl:message name="IWebService_GetUserEnrollment_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetUserEnrollmentResponse" />
+  </wsdl:message>
+  <wsdl:message name="IWebService_GetCourseSchedule_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetCourseSchedule" />
+  </wsdl:message>
+  <wsdl:message name="IWebService_GetCourseSchedule_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetCourseScheduleResponse" />
+  </wsdl:message>
+  <wsdl:message name="IWebService_GetRoomSchedule_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetRoomSchedule" />
+  </wsdl:message>
+  <wsdl:message name="IWebService_GetRoomSchedule_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetRoomScheduleResponse" />
+  </wsdl:message>
+  <wsdl:portType name="IWebService">
+    <wsdl:operation name="Login">
+      <wsdl:input wsaw:Action="http://mobileprivate.rose-hulman.edu/IWebService/Login" message="tns:IWebService_Login_InputMessage" />
+      <wsdl:output wsaw:Action="http://mobileprivate.rose-hulman.edu/IWebService/LoginResponse" message="tns:IWebService_Login_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="Logout">
+      <wsdl:input wsaw:Action="http://mobileprivate.rose-hulman.edu/IWebService/Logout" message="tns:IWebService_Logout_InputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetUser">
+      <wsdl:input wsaw:Action="http://mobileprivate.rose-hulman.edu/IWebService/GetUser" message="tns:IWebService_GetUser_InputMessage" />
+      <wsdl:output wsaw:Action="http://mobileprivate.rose-hulman.edu/IWebService/GetUserResponse" message="tns:IWebService_GetUser_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SearchUsers">
+      <wsdl:input wsaw:Action="http://mobileprivate.rose-hulman.edu/IWebService/SearchUsers" message="tns:IWebService_SearchUsers_InputMessage" />
+      <wsdl:output wsaw:Action="http://mobileprivate.rose-hulman.edu/IWebService/SearchUsersResponse" message="tns:IWebService_SearchUsers_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCourse">
+      <wsdl:input wsaw:Action="http://mobileprivate.rose-hulman.edu/IWebService/GetCourse" message="tns:IWebService_GetCourse_InputMessage" />
+      <wsdl:output wsaw:Action="http://mobileprivate.rose-hulman.edu/IWebService/GetCourseResponse" message="tns:IWebService_GetCourse_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SearchCourses">
+      <wsdl:input wsaw:Action="http://mobileprivate.rose-hulman.edu/IWebService/SearchCourses" message="tns:IWebService_SearchCourses_InputMessage" />
+      <wsdl:output wsaw:Action="http://mobileprivate.rose-hulman.edu/IWebService/SearchCoursesResponse" message="tns:IWebService_SearchCourses_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCourseEnrollment">
+      <wsdl:input wsaw:Action="http://mobileprivate.rose-hulman.edu/IWebService/GetCourseEnrollment" message="tns:IWebService_GetCourseEnrollment_InputMessage" />
+      <wsdl:output wsaw:Action="http://mobileprivate.rose-hulman.edu/IWebService/GetCourseEnrollmentResponse" message="tns:IWebService_GetCourseEnrollment_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetUserEnrollment">
+      <wsdl:input wsaw:Action="http://mobileprivate.rose-hulman.edu/IWebService/GetUserEnrollment" message="tns:IWebService_GetUserEnrollment_InputMessage" />
+      <wsdl:output wsaw:Action="http://mobileprivate.rose-hulman.edu/IWebService/GetUserEnrollmentResponse" message="tns:IWebService_GetUserEnrollment_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCourseSchedule">
+      <wsdl:input wsaw:Action="http://mobileprivate.rose-hulman.edu/IWebService/GetCourseSchedule" message="tns:IWebService_GetCourseSchedule_InputMessage" />
+      <wsdl:output wsaw:Action="http://mobileprivate.rose-hulman.edu/IWebService/GetCourseScheduleResponse" message="tns:IWebService_GetCourseSchedule_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetRoomSchedule">
+      <wsdl:input wsaw:Action="http://mobileprivate.rose-hulman.edu/IWebService/GetRoomSchedule" message="tns:IWebService_GetRoomSchedule_InputMessage" />
+      <wsdl:output wsaw:Action="http://mobileprivate.rose-hulman.edu/IWebService/GetRoomScheduleResponse" message="tns:IWebService_GetRoomSchedule_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+</wsdl:definitions>
