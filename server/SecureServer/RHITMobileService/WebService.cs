@@ -13,14 +13,25 @@ namespace RHITMobile.Secure
         public DateTime Expiration { get; set; }
     }
 
-    [ServiceContract]
+    public class AuthFault
+    {
+    }
+
+    public class AuthFaultException : FaultException<AuthFault>
+    {
+        public AuthFaultException()
+            : base(new AuthFault(), "Invalid authorization token")
+        { }
+    }
+
+    [ServiceContract(Namespace="http://mobileprivate.rose-hulman.edu")]
     public interface IWebService
     {
         [OperationContract]
-        AuthenticationResponse login(string username, string password);
+        AuthenticationResponse Login(string username, string password);
 
         [OperationContract(IsOneWay = true)]
-        void logout(string authToken);
+        void Logout(string authToken);
 
         [OperationContract]
         User GetUser(string authToken, string username);
@@ -44,6 +55,7 @@ namespace RHITMobile.Secure
         CourseTime[] GetCourseSchedule(string authToken, int term, int crn);
         
         [OperationContract]
+        [FaultContract(typeof(AuthFault))]
         RoomSchedule[] GetRoomSchedule(string authToken, string room);
     }
 
@@ -56,7 +68,7 @@ namespace RHITMobile.Secure
             _auth = new Authentication();
         }
 
-        public AuthenticationResponse login(string username, string password)
+        public AuthenticationResponse Login(string username, string password)
         {
             AuthenticationResponse response = new AuthenticationResponse();
 
@@ -70,71 +82,69 @@ namespace RHITMobile.Secure
             return response;
         }
 
-        public void logout(string authToken)
+        public void Logout(string authToken)
         {
             _auth.Invalidate(authToken);
         }
 
-        public User GetUser(string authToken, string username)
+        private void Authorize(string authToken)
         {
             if (!_auth.IsAuthenticated(authToken))
-                return null;
+                throw new AuthFaultException();
+        }
+
+        public User GetUser(string authToken, string username)
+        {
+            Authorize(authToken);
 
             return DB.Instance.GetUser(username);
         }
 
         public User[] SearchUsers(string authToken, string search)
         {
-            if (!_auth.IsAuthenticated(authToken))
-                return null;
+            Authorize(authToken);
 
             return DB.Instance.SearchUsers(search);
         }
 
         public Course GetCourse(string authToken, int term, int crn)
         {
-            if (!_auth.IsAuthenticated(authToken))
-                return null;
+            Authorize(authToken);
 
             return DB.Instance.GetCourse(term, crn);
         }
 
         public Course[] SearchCourses(string authToken, string search)
         {
-            if (!_auth.IsAuthenticated(authToken))
-                return null;
+            Authorize(authToken);
 
             return DB.Instance.SearchCourses(search);
         }
 
         public string[] GetCourseEnrollment(string authToken, int term, int crn)
         {
-            if (!_auth.IsAuthenticated(authToken))
-                return null;
+            Authorize(authToken);
 
             return DB.Instance.GetCourseEnrollment(term, crn);
         }
 
         public UserEnrollment[] GetUserEnrollment(string authToken, string username)
         {
-            if (!_auth.IsAuthenticated(authToken))
-                return null;
+            Authorize(authToken);
 
             return DB.Instance.GetUserEnrollment(username);
         }
 
         public CourseTime[] GetCourseSchedule(string authToken, int term, int crn)
         {
-            if (!_auth.IsAuthenticated(authToken))
-                return null;
+            Authorize(authToken);
 
             return DB.Instance.GetCourseSchedule(term, crn);
         }
 
         public RoomSchedule[] GetRoomSchedule(string authToken, string room)
         {
-            if (!_auth.IsAuthenticated(authToken))
-                return null;
+            Authorize(authToken);
 
             return DB.Instance.GetRoomSchedule(room);
         }

@@ -59,8 +59,18 @@ namespace RHITMobile.Secure
             }
         }
 
-        public static void Main()
+        public static void Main(string[] args)
         {
+            if (args.Length == 1 && args[0] == "--standalone")
+            {
+                var service = new WindowsService();
+                service.OnStart(args);
+                Console.WriteLine("Running server...");
+                Console.ReadLine();
+                service.OnStop();
+                return;
+            }
+
             ServiceBase.Run(new WindowsService());
         }
     }

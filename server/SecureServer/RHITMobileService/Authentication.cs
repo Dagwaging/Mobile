@@ -21,7 +21,7 @@ namespace RHITMobile.Secure
         private void RemoveExpiredTokens()
         {
             DateTime now = DateTime.UtcNow;
-            var toRemove = _activeTokens.Where(kvp => kvp.Value > now).Select(kvp => kvp.Key);
+            var toRemove = _activeTokens.Where(kvp => now >= kvp.Value).Select(kvp => kvp.Key).ToArray();
             foreach (string authToken in toRemove)
             {
                 _activeTokens.Remove(authToken);

@@ -14,6 +14,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceTest", "ServiceTest\
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "ServiceInstaller", "ServiceInstaller\ServiceInstaller.vdproj", "{FC2DC6E0-FE99-4145-8D61-8CB39392668D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestClient", "TestClient\TestClient.csproj", "{FAAFD755-42CC-4F02-9324-19EB32E96F88}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = SecureServer.vsmdi
@@ -53,6 +55,16 @@ Global
 		{FC2DC6E0-FE99-4145-8D61-8CB39392668D}.Release|Any CPU.ActiveCfg = Release
 		{FC2DC6E0-FE99-4145-8D61-8CB39392668D}.Release|Mixed Platforms.ActiveCfg = Release
 		{FC2DC6E0-FE99-4145-8D61-8CB39392668D}.Release|x86.ActiveCfg = Release
+		{FAAFD755-42CC-4F02-9324-19EB32E96F88}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{FAAFD755-42CC-4F02-9324-19EB32E96F88}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{FAAFD755-42CC-4F02-9324-19EB32E96F88}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{FAAFD755-42CC-4F02-9324-19EB32E96F88}.Debug|x86.ActiveCfg = Debug|x86
+		{FAAFD755-42CC-4F02-9324-19EB32E96F88}.Debug|x86.Build.0 = Debug|x86
+		{FAAFD755-42CC-4F02-9324-19EB32E96F88}.Release|Any CPU.ActiveCfg = Release|x86
+		{FAAFD755-42CC-4F02-9324-19EB32E96F88}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{FAAFD755-42CC-4F02-9324-19EB32E96F88}.Release|Mixed Platforms.Build.0 = Release|x86
+		{FAAFD755-42CC-4F02-9324-19EB32E96F88}.Release|x86.ActiveCfg = Release|x86
+		{FAAFD755-42CC-4F02-9324-19EB32E96F88}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

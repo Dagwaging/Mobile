@@ -157,11 +157,14 @@ namespace RHITMobile.Secure
             _updateEvent.Set();
         }
 
-        private bool IsUpdateQueued()
+        private bool CheckUpdateQueued()
         {
             lock (_updaterThreadData)
             {
-                return _updaterThreadData.updateQueued;
+                bool res = _updaterThreadData.updateQueued;
+                if (res)
+                    _updaterThreadData.updateQueued = false;
+                return res;
             }
         }
 
@@ -170,7 +173,7 @@ namespace RHITMobile.Secure
             while (true)
             {
                 //wait for an update to be queued
-                while (!IsUpdateQueued())
+                while (!CheckUpdateQueued())
                 {
                     _updateEvent.WaitOne();
                 }
@@ -182,9 +185,13 @@ namespace RHITMobile.Secure
                     Importer importer = new Importer(_log, _inputPath);
                     importer.ImportData();
                 }
+                catch (ThreadAbortException)
+                {
+                    _log.Info("Aborted data import");
+                }
                 catch (Exception ex)
                 {
-                    _log.Error("Data inport failed", ex);
+                    _log.Error("Data import failed", ex);
                 }
                 Thread.EndCriticalRegion();
 

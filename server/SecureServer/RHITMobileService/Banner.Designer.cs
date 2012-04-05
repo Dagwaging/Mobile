@@ -369,7 +369,7 @@ namespace RHITMobile.Secure {
         private void InitClass() {
             this.DataSetName = "Banner";
             this.Prefix = "";
-            this.Namespace = "http://tempuri.org/Banner.xsd";
+            this.Namespace = "http://mobileprivate.rose-hulman.edu/Banner.xsd";
             this.EnforceConstraints = true;
             this.SchemaSerializationMode = global::System.Data.SchemaSerializationMode.IncludeSchema;
             this.tableGetUser = new GetUserDataTable();
