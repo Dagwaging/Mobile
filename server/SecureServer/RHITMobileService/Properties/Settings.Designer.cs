@@ -23,17 +23,6 @@ namespace RHITMobile.Secure.Properties {
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=tcp:mobilewin.csse.rose-hulman.edu,4848;Initial Catalog=BannerData;Pe" +
-            "rsist Security Info=True;User ID=kevin;Password=<redacted>")]
-        public string BannerDataConnectionString {
-            get {
-                return ((string)(this["BannerDataConnectionString"]));
-            }
-        }
-        
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
@@ -43,6 +32,17 @@ namespace RHITMobile.Secure.Properties {
             }
             set {
                 this["Switch"] = value;
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=tcp:mobileprivate.csse.rose-hulman.edu,4848;Initial Catalog=BannerDat" +
+            "a;Integrated Security=True")]
+        public string BannerDataConnectionString {
+            get {
+                return ((string)(this["BannerDataConnectionString"]));
             }
         }
     }
