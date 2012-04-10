@@ -103,5 +103,15 @@ namespace Rhit.Applications.ViewModels.Controllers {
         }
 
         public ObservableCollection<ServiceNode> ServicesTree { get; private set; }
+
+        #region ServicesVersionStatus
+        public String ServicesVersionStatus
+        {
+            get { return (String)GetValue(ServicesVersionStatusProperty); }
+            set { SetValue(ServicesVersionStatusProperty, value); }
+        }
+
+        private static readonly DependencyProperty ServicesVersionStatusProperty = DependencyProperty.Register("ServicesVersionStatus", typeof(String), typeof(ServicesController), new PropertyMetadata(null));
+        #endregion
     }
 }

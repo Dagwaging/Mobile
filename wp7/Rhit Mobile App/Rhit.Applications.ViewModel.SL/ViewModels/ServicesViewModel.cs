@@ -25,6 +25,7 @@ namespace Rhit.Applications.ViewModels {
             AllFieldsVisibility = Visibility.Collapsed;
 
             Services = ServicesController.Instance;
+            if (Services.ServicesVersionStatus == null) Services.ServicesVersionStatus = "Waiting for version data";
         }
 
         void Instance_CampusServicesReturned(object sender, Models.Events.CampusServicesEventArgs e)
@@ -41,7 +42,7 @@ namespace Rhit.Applications.ViewModels {
         {
             if (e.ServicesVersion == 0) return;
 
-            ServicesVersionStatus = String.Format("Increment services version (currently {0})", e.ServicesVersion);
+            Services.ServicesVersionStatus = String.Format("Increment services version (currently {0})", e.ServicesVersion);
         }
 
         void Instance_CampusServicesUpdateReturned(object sender, EventArgs e)
@@ -122,6 +123,7 @@ namespace Rhit.Applications.ViewModels {
 
         private void IncrementVersion()
         {
+            Services.ServicesVersionStatus = "Updating Version...";
             DataCollector.Instance.IncreaseServicesVersion();
         }
         #endregion
@@ -184,16 +186,6 @@ namespace Rhit.Applications.ViewModels {
         }
 
         private static readonly DependencyProperty AllFieldsVisibilityProperty = DependencyProperty.Register("AllFieldsVisibility", typeof(Visibility), typeof(ServicesViewModel), new PropertyMetadata(null));
-        #endregion
-
-        #region ServicesVersionStatus
-        public String ServicesVersionStatus
-        {
-            get { return (String)GetValue(ServicesVersionStatusProperty); }
-            private set { SetValue(ServicesVersionStatusProperty, value); }
-        }
-
-        private static readonly DependencyProperty ServicesVersionStatusProperty = DependencyProperty.Register("ServicesVersionStatus", typeof(String), typeof(ServicesViewModel), new PropertyMetadata(null));
         #endregion
 
         public ServicesController Services { get; private set; }
