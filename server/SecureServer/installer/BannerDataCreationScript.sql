@@ -1,3 +1,6 @@
+USE [BannerData]
+GO
+
 -- User table creation
 
 /****** Object:  Table [dbo].[User]    Script Date: 04/10/2012 19:58:51 ******/

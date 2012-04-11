@@ -24,6 +24,8 @@ reflect the actual database name being used.
    The path that the service will import data from is located in the appSettings
    section.  Replace the value specified in the "value" field with the
    appropriate path to the data files.  This path may include network shares.
+   If a network share is used, the *machine account* must have read access to
+   the remote directory.
 
    The connection string is located in the connectionStrings section.  A
    connection string is simply a semicolon separated list of parameters
