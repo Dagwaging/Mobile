@@ -9,7 +9,7 @@ namespace Rhit.Applications.ViewModels {
     public class LoginViewModel : DependencyObject {
 
         public LoginViewModel() {
-            LoginStatus = "Login to Access Data";
+            LoginStatus = "Log In to Access Data";
             LoginCommand = new RelayCommand(p => Login());
             DataCollector.Instance.LoginResultsReturned += new AuthenticationEventHandler(LoginRequestReturned);
             DataCollector.Instance.ServerErrorReturned += new ServiceEventHandler(ServerErrorReturned);

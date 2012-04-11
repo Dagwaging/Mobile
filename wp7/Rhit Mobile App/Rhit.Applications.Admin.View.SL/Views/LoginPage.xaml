@@ -13,7 +13,7 @@
     <Grid x:Name="LayoutRoot">
      
             <StackPanel VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,30,0,0">
-                <TextBlock Text="{Binding LoginStatus, FallbackValue='Login to Access Data'}" FontWeight="Bold" FontSize="12"/>
+                <TextBlock Text="{Binding LoginStatus, FallbackValue='Log In to Access Data'}" FontWeight="Bold" FontSize="12"/>
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition/>
@@ -29,7 +29,7 @@
                     <TextBlock Text="Password:" Margin="5" VerticalAlignment="Center" FontWeight="Bold" Grid.Row="1" Grid.Column="0"/>
                     <PasswordBox Password="{Binding Password, Mode=TwoWay}" util:BindingUtility.UpdateSourceOnChange="True" MinWidth="200" Grid.Row="1" Grid.Column="1" Background="LightGray" Margin="5" KeyUp="TextBox_KeyUp"/>
                 </Grid>
-                <Button Content="Login" HorizontalAlignment="Right" MinWidth="60" Margin="5" cmds:CommandManager.Command="{Binding LoginCommand}" cmds:CommandManager.CommandEventName="Click"/>
+                <Button Content="Log In" HorizontalAlignment="Right" MinWidth="60" Margin="5" cmds:CommandManager.Command="{Binding LoginCommand}" cmds:CommandManager.CommandEventName="Click"/>
             </StackPanel>
  
     </Grid>
