@@ -4,6 +4,8 @@ using System.Windows.Navigation;
 using Rhit.Applications.ViewModels;
 using Rhit.Applications.ViewModels.Utilities;
 using System.Collections.Generic;
+using Rhit.Applications.ViewModels.Controllers;
+using System;
 
 namespace Rhit.Applications.Views.Views
 {
@@ -102,6 +104,10 @@ namespace Rhit.Applications.Views.Views
         // Executes when the user navigates to this page.
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            if (!LoginController.Instance.IsLoggedIn)
+            {
+                NavigationService.Navigate(new Uri("/LoginPage", UriKind.Relative));
+            }
         }
     }
 }

@@ -3,6 +3,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Navigation;
 using Rhit.Applications.ViewModels;
+using Rhit.Applications.ViewModels.Controllers;
+using System;
 
 namespace Rhit.Applications.Views {
     public partial class DataPage : Page {
@@ -20,7 +22,12 @@ namespace Rhit.Applications.Views {
 
         #region Page Navigation
         // Executes when the user navigates to this page.
-        protected override void OnNavigatedTo(NavigationEventArgs e) { }
+        protected override void OnNavigatedTo(NavigationEventArgs e) {
+            if (!LoginController.Instance.IsLoggedIn)
+            {
+                NavigationService.Navigate(new Uri("/LoginPage", UriKind.Relative));
+            }
+        }
 
         // Executes when the user navigates away from this page.
         protected override void OnNavigatedFrom(NavigationEventArgs e) { }
