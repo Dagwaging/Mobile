@@ -1,6 +1,14 @@
 
 # RHIT Mobile Secure Server
 
+## Database Configuration
+
+Included with this readme is a sql script (BannerDataCreationScript.sql) capable
+of populating a database with the necessary tables and stored procedures for
+running the mobile server.  Note that the script assumes it is operating on a
+database called "BannerData".  Change the first line of the file as necessary to
+reflect the actual database name being used.
+
 ## Installation Instructions
 
  - Included with this readme is an installer (SecureMobileServerInstaller.msi).
