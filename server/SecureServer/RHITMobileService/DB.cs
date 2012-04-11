@@ -30,8 +30,19 @@ namespace RHITMobile.Secure
             }
         }
 
+        public int ActiveReaderCount
+        {
+            get
+            {
+                return _switchLock.ActiveReaders;
+            }
+        }
+
+        public int AffectedRows { get; private set; }
+
         public IDisposable AcquireWriteLock()
         {
+            AffectedRows = 0;
             return _switchLock.AcquireWriteLock();
         }
 
@@ -49,26 +60,26 @@ namespace RHITMobile.Secure
         public void AddUser(User user)
         {
             QueriesTableAdapter adapter = new QueriesTableAdapter();
-            adapter.AddUser(_switchLock.WriteSwitch, user);
+            AffectedRows += adapter.AddUser(_switchLock.WriteSwitch, user);
         }
 
         public void SetAdvisor(User user)
         {
             QueriesTableAdapter adapter = new QueriesTableAdapter();
-            adapter.spSetAdvisor(_switchLock.WriteSwitch, user.Username, user.Advisor);
+            AffectedRows += adapter.spSetAdvisor(_switchLock.WriteSwitch, user.Username, user.Advisor);
         }
 
         public void AddCourse(Course course)
         {
             QueriesTableAdapter adapter = new QueriesTableAdapter();
-            adapter.AddCourse(_switchLock.WriteSwitch, course);
-            adapter.AddCourseSchedule(_switchLock.WriteSwitch, course);
+            AffectedRows += adapter.AddCourse(_switchLock.WriteSwitch, course);
+            AffectedRows += adapter.AddCourseSchedule(_switchLock.WriteSwitch, course);
         }
         
         public void AddUserEnrollment(Enrollment enrollment)
         {
             QueriesTableAdapter adapter = new QueriesTableAdapter();
-            adapter.AddUserEnrollment(_switchLock.WriteSwitch, enrollment);
+            AffectedRows += adapter.AddUserEnrollment(_switchLock.WriteSwitch, enrollment);
         }
         
         public User GetUser(String username)
@@ -201,6 +212,17 @@ namespace RHITMobile.Secure
                 return _count2;
             else
                 return _count1;
+        }
+
+        public int ActiveReaders
+        {
+            get
+            {
+                lock (this)
+                {
+                    return ReadCounter().Count + WriteCounter().Count;
+                }
+            }
         }
 
         public bool AcquireSwitch()

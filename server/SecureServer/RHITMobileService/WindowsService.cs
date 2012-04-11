@@ -13,26 +13,29 @@ namespace RHITMobile.Secure
 {
     public partial class WindowsService : ServiceBase
     {
-        public static String SERVICE_NAME = "RHITMobileService";
+        public static String SERVICE_NAME = "RHITMobileSecureServer";
 
-        public ServiceHost serviceHost = null;
-        private DataMonitor dataMonitor = null;
+        public ServiceHost ServiceHost { get; private set; }
+        public DataMonitor DataMonitor { get; private set; }
+
+        public static WindowsService Instance { get; private set; }
 
         public WindowsService()
         {
             InitializeComponent();
             ServiceName = SERVICE_NAME;
+            Instance = this;
         }
 
         protected override void OnStart(string[] args)
         {
             Cleanup();
 
-            serviceHost = new ServiceHost(typeof(WebService));
-            serviceHost.Open();
+            ServiceHost = new ServiceHost(typeof(WebService));
+            ServiceHost.Open();
 
-            dataMonitor = new DataMonitor(new EventLogger(EventLog));
-            if (!dataMonitor.Start())
+            DataMonitor = new DataMonitor(new EventLogger(EventLog));
+            if (!DataMonitor.Start())
             {
                 ExitCode = 1;
                 Stop();
@@ -46,16 +49,25 @@ namespace RHITMobile.Secure
 
         private void Cleanup()
         {
-            if (serviceHost != null)
+            if (ServiceHost != null)
             {
-                serviceHost.Close();
-                serviceHost = null;
+                ServiceHost.Close();
+                ServiceHost = null;
             }
 
-            if (dataMonitor != null)
+            if (DataMonitor != null)
             {
-                dataMonitor.Stop();
-                dataMonitor = null;
+                DataMonitor.Stop();
+                DataMonitor = null;
+            }
+        }
+
+        private DateTime _startTime = DateTime.UtcNow;
+        public TimeSpan Uptime
+        {
+            get
+            {
+                return DateTime.UtcNow.Subtract(_startTime);
             }
         }
 

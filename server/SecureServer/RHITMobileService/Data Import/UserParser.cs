@@ -18,6 +18,13 @@ namespace RHITMobile.Secure.Data_Import
 
             int i = 0;
 
+            //Skip potentially blank columns that may or may not exist
+            int gid;
+            if (!int.TryParse(fields[0], out gid))
+            {
+                i = 1;
+            }
+
             res.ID = fields[i++];
             res.Username = fields[i++].ToLower();
             res.Alias = fields[i++].ToLower();

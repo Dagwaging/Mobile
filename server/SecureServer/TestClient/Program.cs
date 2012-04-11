@@ -23,15 +23,16 @@ namespace TestClient
             if (auth == null)
             {
                 Console.WriteLine("Unable to login");
-                Environment.Exit(0);
+                Environment.Exit(1);
             }
             token = auth.Token;
 
             int option;
             do
             {
-                Console.WriteLine("1. Search Users");
-                Console.WriteLine("2. Lookup User");
+                Console.WriteLine("1. Get server status");
+                Console.WriteLine("2. Search Users");
+                Console.WriteLine("3. Lookup User");
                 Console.WriteLine("9. Quit");
                 Console.Write("> ");
                 option = int.Parse(Console.ReadLine());
@@ -39,14 +40,32 @@ namespace TestClient
                 switch (option)
                 {
                     case 1:
-                        SearchUser();
+                        ServerStatus();
                         break;
                     case 2:
+                        SearchUser();
+                        break;
+                    case 3:
                         LookupUser();
                         break;
                 }
 
             } while (option != 9);
+
+            service.Logout(token);
+        }
+
+        static void ServerStatus()
+        {
+            var state = service.GetState();
+
+            Console.WriteLine("Last update:       {0}", state.LastUpdateTime);
+            Console.WriteLine("Update Queued:     {0}", state.IsUpdateQueued);
+            Console.WriteLine("Active Requests:   {0}", state.ActiveRequests);
+            Console.WriteLine("Active User Count: {0}", state.ActiveUserCount);
+            Console.WriteLine("Records Affected:  {0}", state.LastRecordsAffected);
+            Console.WriteLine("Uptime:            {0}", state.Uptime);
+            Console.WriteLine("Request Count:     {0}", state.RequestCount);
         }
 
         static void SearchUser()

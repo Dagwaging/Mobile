@@ -20,11 +20,20 @@ namespace RHITMobile.Secure.Data_Import
         {
             Enrollment res = new Enrollment();
 
-            String id = fields[0];
+            int i = 0;
+
+            //Skip potentially blank columns that may or may not exist
+            int gid;
+            if (!int.TryParse(fields[0], out gid))
+            {
+                i = 1;
+            }
+
+            String id = fields[i++];
             res.Username = idToUsername[id];
             res.Term = TermCode;
 
-            res.CRNs = convertCRNs(fields.Skip(1).ToArray());
+            res.CRNs = convertCRNs(fields.Skip(i).ToArray());
 
             return res;
         }

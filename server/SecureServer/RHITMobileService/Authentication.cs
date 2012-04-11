@@ -30,17 +30,36 @@ namespace RHITMobile.Secure
 
         public bool IsAuthenticated(string authToken)
         {
-            RemoveExpiredTokens();
+            lock (this)
+            {
+                RemoveExpiredTokens();
 
-            if (!_activeTokens.ContainsKey(authToken))
-                return false;
+                if (!_activeTokens.ContainsKey(authToken))
+                    return false;
 
-            return true;
+                return true;
+            }
+        }
+
+        public int ActiveUsers
+        {
+            get
+            {
+                lock (this)
+                {
+                    RemoveExpiredTokens();
+
+                    return _activeTokens.Count;
+                }
+            }
         }
 
         public void Invalidate(string authToken)
         {
-            _activeTokens.Remove(authToken);
+            lock (this)
+            {
+                _activeTokens.Remove(authToken);
+            }
         }
 
         public string AuthenticateUser(string username, string password, out DateTime expiration)
@@ -51,10 +70,13 @@ namespace RHITMobile.Secure
                 return null;
             }
 
-            string authToken = Guid.NewGuid().ToString("N");
-            expiration = DateTime.UtcNow.AddHours(1);
-            _activeTokens.Add(authToken, expiration);
-            return authToken;
+            lock (this)
+            {
+                string authToken = Guid.NewGuid().ToString("N");
+                expiration = DateTime.UtcNow.AddHours(1);
+                _activeTokens.Add(authToken, expiration);
+                return authToken;
+            }
         }
     }
 

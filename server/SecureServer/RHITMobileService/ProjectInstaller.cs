@@ -26,22 +26,6 @@ namespace RHITMobile.Secure
 
             AfterInstall += new InstallEventHandler(AfterInstall_StartService);
             BeforeUninstall += new InstallEventHandler(BeforeUninstall_StopService);
-
-            //POST BUILD NOTES (from an Administrative VS2010 command prompt!):
-
-            //Ensure that everyone has full control of the output directory (bin\Debug)
-
-            //Stop the service
-            //$ net stop RHITMobileService
-
-            //Uninstall the old app
-            //$installutil /u RHITMobileService.exe
-
-            //Install the app:
-            //$installutil RHITMobileService.exe
-
-            //Start the service
-            //$ net start RHITMobileService
         }
 
         public void BeforeUninstall_StopService(object sender, InstallEventArgs e)
@@ -62,16 +46,16 @@ namespace RHITMobile.Secure
             {
                 sc.Start();
                 sc.WaitForStatus(ServiceControllerStatus.Running, TimeSpan.FromSeconds(10));
-                if (sc.Status != ServiceControllerStatus.Running && sc.Status != ServiceControllerStatus.StartPending)
-                {
-                    throw new InvalidOperationException("Service failed to start");
-                }
+                //if (sc.Status != ServiceControllerStatus.Running && sc.Status != ServiceControllerStatus.StartPending)
+                //{
+                //   throw new InvalidOperationException("Service failed to start");
+                //}
 
-                sc.WaitForStatus(ServiceControllerStatus.Running, TimeSpan.FromMinutes(1));
-                if (sc.Status != ServiceControllerStatus.Running)
-                {
-                    throw new InvalidOperationException("Service failed to start in a reasonable amount of time");
-                }
+                //sc.WaitForStatus(ServiceControllerStatus.Running, TimeSpan.FromMinutes(1));
+                //if (sc.Status != ServiceControllerStatus.Running)
+                //{
+                //    throw new InvalidOperationException("Service failed to start in a reasonable amount of time");
+                //}
             }
         }
     }

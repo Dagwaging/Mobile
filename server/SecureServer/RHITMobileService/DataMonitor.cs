@@ -9,7 +9,7 @@ using System.Threading;
 
 namespace RHITMobile.Secure
 {
-    class DataMonitor : IDisposable
+    public class DataMonitor : IDisposable
     {
         private Logger _log;
 
@@ -63,6 +63,14 @@ namespace RHITMobile.Secure
         void fsWatcher_Notify(object sender, FileSystemEventArgs e)
         {
             _dataUpdater.Update();
+        }
+
+        public DataUpdater Updater
+        {
+            get
+            {
+                return _dataUpdater;
+            }
         }
 
         public void Stop()
@@ -124,7 +132,7 @@ namespace RHITMobile.Secure
         }
     }
 
-    class DataUpdater
+    public class DataUpdater
     {
         private Logger _log;
         private String _inputPath;
@@ -144,17 +152,44 @@ namespace RHITMobile.Secure
             _updateThread.Start();
         }
 
-        public void Update()
+        public bool Update()
         {
+            bool res = false;
+
             lock (_updaterThreadData)
             {
                 if (!_updaterThreadData.updateQueued)
                 {
+                    res = true;
                     _log.Info("Update Queued");
                 }
                 _updaterThreadData.updateQueued = true;
             }
             _updateEvent.Set();
+
+            return res;
+        }
+
+        public DateTime LastUpdateTime
+        {
+            get
+            {
+                lock (_updaterThreadData)
+                {
+                    return _updaterThreadData.lastUpdate;
+                }
+            }
+        }
+
+        public bool IsUpdateQueued
+        {
+            get
+            {
+                lock (_updaterThreadData)
+                {
+                    return _updaterThreadData.updateQueued;
+                }
+            }
         }
 
         private bool CheckUpdateQueued()
@@ -184,6 +219,10 @@ namespace RHITMobile.Secure
                 {
                     Importer importer = new Importer(_log, _inputPath);
                     importer.ImportData();
+                    lock (_updaterThreadData)
+                    {
+                        _updaterThreadData.lastUpdate = DateTime.UtcNow;
+                    }
                 }
                 catch (ThreadAbortException)
                 {
@@ -213,6 +252,7 @@ namespace RHITMobile.Secure
         private class UpdaterThreadData
         {
             public bool updateQueued;
+            public DateTime lastUpdate;
         }
     }
 }

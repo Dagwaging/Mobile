@@ -89,6 +89,9 @@
     <None Include="Service References\RHIT.Private\TestClient.RHIT.Private.RoomSchedule.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\RHIT.Private\TestClient.RHIT.Private.ServerState.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\RHIT.Private\TestClient.RHIT.Private.User.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>

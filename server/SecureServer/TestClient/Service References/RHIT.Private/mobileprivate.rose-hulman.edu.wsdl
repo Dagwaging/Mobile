@@ -24,11 +24,17 @@
   <wsdl:message name="IWebService_GetUser_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetUserResponse" />
   </wsdl:message>
+  <wsdl:message name="IWebService_GetUser_AuthFaultFault_FaultMessage">
+    <wsdl:part xmlns:q1="http://schemas.datacontract.org/2004/07/RHITMobile.Secure" name="detail" element="q1:AuthFault" />
+  </wsdl:message>
   <wsdl:message name="IWebService_SearchUsers_InputMessage">
     <wsdl:part name="parameters" element="tns:SearchUsers" />
   </wsdl:message>
   <wsdl:message name="IWebService_SearchUsers_OutputMessage">
     <wsdl:part name="parameters" element="tns:SearchUsersResponse" />
+  </wsdl:message>
+  <wsdl:message name="IWebService_SearchUsers_AuthFaultFault_FaultMessage">
+    <wsdl:part xmlns:q2="http://schemas.datacontract.org/2004/07/RHITMobile.Secure" name="detail" element="q2:AuthFault" />
   </wsdl:message>
   <wsdl:message name="IWebService_GetCourse_InputMessage">
     <wsdl:part name="parameters" element="tns:GetCourse" />
@@ -36,11 +42,17 @@
   <wsdl:message name="IWebService_GetCourse_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetCourseResponse" />
   </wsdl:message>
+  <wsdl:message name="IWebService_GetCourse_AuthFaultFault_FaultMessage">
+    <wsdl:part xmlns:q3="http://schemas.datacontract.org/2004/07/RHITMobile.Secure" name="detail" element="q3:AuthFault" />
+  </wsdl:message>
   <wsdl:message name="IWebService_SearchCourses_InputMessage">
     <wsdl:part name="parameters" element="tns:SearchCourses" />
   </wsdl:message>
   <wsdl:message name="IWebService_SearchCourses_OutputMessage">
     <wsdl:part name="parameters" element="tns:SearchCoursesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IWebService_SearchCourses_AuthFaultFault_FaultMessage">
+    <wsdl:part xmlns:q4="http://schemas.datacontract.org/2004/07/RHITMobile.Secure" name="detail" element="q4:AuthFault" />
   </wsdl:message>
   <wsdl:message name="IWebService_GetCourseEnrollment_InputMessage">
     <wsdl:part name="parameters" element="tns:GetCourseEnrollment" />
@@ -48,11 +60,17 @@
   <wsdl:message name="IWebService_GetCourseEnrollment_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetCourseEnrollmentResponse" />
   </wsdl:message>
+  <wsdl:message name="IWebService_GetCourseEnrollment_AuthFaultFault_FaultMessage">
+    <wsdl:part xmlns:q5="http://schemas.datacontract.org/2004/07/RHITMobile.Secure" name="detail" element="q5:AuthFault" />
+  </wsdl:message>
   <wsdl:message name="IWebService_GetUserEnrollment_InputMessage">
     <wsdl:part name="parameters" element="tns:GetUserEnrollment" />
   </wsdl:message>
   <wsdl:message name="IWebService_GetUserEnrollment_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetUserEnrollmentResponse" />
+  </wsdl:message>
+  <wsdl:message name="IWebService_GetUserEnrollment_AuthFaultFault_FaultMessage">
+    <wsdl:part xmlns:q6="http://schemas.datacontract.org/2004/07/RHITMobile.Secure" name="detail" element="q6:AuthFault" />
   </wsdl:message>
   <wsdl:message name="IWebService_GetCourseSchedule_InputMessage">
     <wsdl:part name="parameters" element="tns:GetCourseSchedule" />
@@ -60,11 +78,29 @@
   <wsdl:message name="IWebService_GetCourseSchedule_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetCourseScheduleResponse" />
   </wsdl:message>
+  <wsdl:message name="IWebService_GetCourseSchedule_AuthFaultFault_FaultMessage">
+    <wsdl:part xmlns:q7="http://schemas.datacontract.org/2004/07/RHITMobile.Secure" name="detail" element="q7:AuthFault" />
+  </wsdl:message>
   <wsdl:message name="IWebService_GetRoomSchedule_InputMessage">
     <wsdl:part name="parameters" element="tns:GetRoomSchedule" />
   </wsdl:message>
   <wsdl:message name="IWebService_GetRoomSchedule_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetRoomScheduleResponse" />
+  </wsdl:message>
+  <wsdl:message name="IWebService_GetRoomSchedule_AuthFaultFault_FaultMessage">
+    <wsdl:part xmlns:q8="http://schemas.datacontract.org/2004/07/RHITMobile.Secure" name="detail" element="q8:AuthFault" />
+  </wsdl:message>
+  <wsdl:message name="IWebService_RequestUpdate_InputMessage">
+    <wsdl:part name="parameters" element="tns:RequestUpdate" />
+  </wsdl:message>
+  <wsdl:message name="IWebService_RequestUpdate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RequestUpdateResponse" />
+  </wsdl:message>
+  <wsdl:message name="IWebService_GetState_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetState" />
+  </wsdl:message>
+  <wsdl:message name="IWebService_GetState_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetStateResponse" />
   </wsdl:message>
   <wsdl:portType name="IWebService">
     <wsdl:operation name="Login">
@@ -77,34 +113,50 @@
     <wsdl:operation name="GetUser">
       <wsdl:input wsaw:Action="http://mobileprivate.rose-hulman.edu/IWebService/GetUser" message="tns:IWebService_GetUser_InputMessage" />
       <wsdl:output wsaw:Action="http://mobileprivate.rose-hulman.edu/IWebService/GetUserResponse" message="tns:IWebService_GetUser_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://mobileprivate.rose-hulman.edu/IWebService/GetUserAuthFaultFault" name="AuthFaultFault" message="tns:IWebService_GetUser_AuthFaultFault_FaultMessage" />
     </wsdl:operation>
     <wsdl:operation name="SearchUsers">
       <wsdl:input wsaw:Action="http://mobileprivate.rose-hulman.edu/IWebService/SearchUsers" message="tns:IWebService_SearchUsers_InputMessage" />
       <wsdl:output wsaw:Action="http://mobileprivate.rose-hulman.edu/IWebService/SearchUsersResponse" message="tns:IWebService_SearchUsers_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://mobileprivate.rose-hulman.edu/IWebService/SearchUsersAuthFaultFault" name="AuthFaultFault" message="tns:IWebService_SearchUsers_AuthFaultFault_FaultMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetCourse">
       <wsdl:input wsaw:Action="http://mobileprivate.rose-hulman.edu/IWebService/GetCourse" message="tns:IWebService_GetCourse_InputMessage" />
       <wsdl:output wsaw:Action="http://mobileprivate.rose-hulman.edu/IWebService/GetCourseResponse" message="tns:IWebService_GetCourse_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://mobileprivate.rose-hulman.edu/IWebService/GetCourseAuthFaultFault" name="AuthFaultFault" message="tns:IWebService_GetCourse_AuthFaultFault_FaultMessage" />
     </wsdl:operation>
     <wsdl:operation name="SearchCourses">
       <wsdl:input wsaw:Action="http://mobileprivate.rose-hulman.edu/IWebService/SearchCourses" message="tns:IWebService_SearchCourses_InputMessage" />
       <wsdl:output wsaw:Action="http://mobileprivate.rose-hulman.edu/IWebService/SearchCoursesResponse" message="tns:IWebService_SearchCourses_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://mobileprivate.rose-hulman.edu/IWebService/SearchCoursesAuthFaultFault" name="AuthFaultFault" message="tns:IWebService_SearchCourses_AuthFaultFault_FaultMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetCourseEnrollment">
       <wsdl:input wsaw:Action="http://mobileprivate.rose-hulman.edu/IWebService/GetCourseEnrollment" message="tns:IWebService_GetCourseEnrollment_InputMessage" />
       <wsdl:output wsaw:Action="http://mobileprivate.rose-hulman.edu/IWebService/GetCourseEnrollmentResponse" message="tns:IWebService_GetCourseEnrollment_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://mobileprivate.rose-hulman.edu/IWebService/GetCourseEnrollmentAuthFaultFault" name="AuthFaultFault" message="tns:IWebService_GetCourseEnrollment_AuthFaultFault_FaultMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetUserEnrollment">
       <wsdl:input wsaw:Action="http://mobileprivate.rose-hulman.edu/IWebService/GetUserEnrollment" message="tns:IWebService_GetUserEnrollment_InputMessage" />
       <wsdl:output wsaw:Action="http://mobileprivate.rose-hulman.edu/IWebService/GetUserEnrollmentResponse" message="tns:IWebService_GetUserEnrollment_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://mobileprivate.rose-hulman.edu/IWebService/GetUserEnrollmentAuthFaultFault" name="AuthFaultFault" message="tns:IWebService_GetUserEnrollment_AuthFaultFault_FaultMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetCourseSchedule">
       <wsdl:input wsaw:Action="http://mobileprivate.rose-hulman.edu/IWebService/GetCourseSchedule" message="tns:IWebService_GetCourseSchedule_InputMessage" />
       <wsdl:output wsaw:Action="http://mobileprivate.rose-hulman.edu/IWebService/GetCourseScheduleResponse" message="tns:IWebService_GetCourseSchedule_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://mobileprivate.rose-hulman.edu/IWebService/GetCourseScheduleAuthFaultFault" name="AuthFaultFault" message="tns:IWebService_GetCourseSchedule_AuthFaultFault_FaultMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetRoomSchedule">
       <wsdl:input wsaw:Action="http://mobileprivate.rose-hulman.edu/IWebService/GetRoomSchedule" message="tns:IWebService_GetRoomSchedule_InputMessage" />
       <wsdl:output wsaw:Action="http://mobileprivate.rose-hulman.edu/IWebService/GetRoomScheduleResponse" message="tns:IWebService_GetRoomSchedule_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://mobileprivate.rose-hulman.edu/IWebService/GetRoomScheduleAuthFaultFault" name="AuthFaultFault" message="tns:IWebService_GetRoomSchedule_AuthFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RequestUpdate">
+      <wsdl:input wsaw:Action="http://mobileprivate.rose-hulman.edu/IWebService/RequestUpdate" message="tns:IWebService_RequestUpdate_InputMessage" />
+      <wsdl:output wsaw:Action="http://mobileprivate.rose-hulman.edu/IWebService/RequestUpdateResponse" message="tns:IWebService_RequestUpdate_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetState">
+      <wsdl:input wsaw:Action="http://mobileprivate.rose-hulman.edu/IWebService/GetState" message="tns:IWebService_GetState_InputMessage" />
+      <wsdl:output wsaw:Action="http://mobileprivate.rose-hulman.edu/IWebService/GetStateResponse" message="tns:IWebService_GetState_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
 </wsdl:definitions>
