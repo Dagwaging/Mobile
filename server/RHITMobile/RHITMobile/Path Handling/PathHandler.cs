@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Net;
+using System.Collections.Specialized;
 
 namespace RHITMobile
 {
@@ -21,7 +22,7 @@ namespace RHITMobile
         protected PathHandler FloatRedirect { get; set; }
         protected PathHandler UnknownRedirect { get; set; }
 
-        public IEnumerable<ThreadInfo> HandlePath(ThreadManager TM, IEnumerable<string> path, Dictionary<string, string> query, object state)
+        public virtual IEnumerable<ThreadInfo> HandlePath(ThreadManager TM, bool isSSL, IEnumerable<string> path, Dictionary<string, string> query, NameValueCollection headers, object state)
         {
             var currentThread = TM.CurrentThread;
 
@@ -29,7 +30,7 @@ namespace RHITMobile
             {
                 if (Redirects.ContainsKey(path.First()))
                 {
-                    yield return TM.Await(currentThread, Redirects[path.First()].HandlePath(TM, path.Skip(1), query, state));
+                    yield return TM.Await(currentThread, Redirects[path.First()].HandlePath(TM, isSSL, path.Skip(1), query, headers, state));
                 }
                 else
                 {
@@ -38,7 +39,7 @@ namespace RHITMobile
                     {
                         yield return TM.Await(currentThread, HandleIntPath(TM, intValue, state));
                         if (!(TM.GetResultNoException(currentThread) is JsonResponse))
-                            yield return TM.Await(currentThread, IntRedirect.HandlePath(TM, path.Skip(1), query, TM.GetResult(currentThread)));
+                            yield return TM.Await(currentThread, IntRedirect.HandlePath(TM, isSSL, path.Skip(1), query, headers, TM.GetResult(currentThread)));
                     }
                     else
                     {
@@ -47,13 +48,13 @@ namespace RHITMobile
                         {
                             yield return TM.Await(currentThread, HandleFloatPath(TM, floatValue, state));
                             if (!(TM.GetResultNoException(currentThread) is JsonResponse))
-                                yield return TM.Await(currentThread, FloatRedirect.HandlePath(TM, path.Skip(1), query, TM.GetResult(currentThread)));
+                                yield return TM.Await(currentThread, FloatRedirect.HandlePath(TM, isSSL, path.Skip(1), query, headers, TM.GetResult(currentThread)));
                         }
                         else
                         {
                             yield return TM.Await(currentThread, HandleUnknownPath(TM, path.First(), state));
                             if (!(TM.GetResultNoException(currentThread) is JsonResponse))
-                                yield return TM.Await(currentThread, UnknownRedirect.HandlePath(TM, path.Skip(1), query, TM.GetResult(currentThread)));
+                                yield return TM.Await(currentThread, UnknownRedirect.HandlePath(TM, isSSL, path.Skip(1), query, headers, TM.GetResult(currentThread)));
                         }
                     }
                 }

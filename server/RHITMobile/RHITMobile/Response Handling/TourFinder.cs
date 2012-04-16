@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Data;
+using System.Data.SqlClient;
 
 namespace RHITMobile {
     public class TourFinder : PathHandler {
@@ -111,6 +112,13 @@ namespace RHITMobile {
                 _pathFindingDone = (double)(locNum * locNum) / (double)(Locations.Count * Locations.Count);
 
                 var location = Locations[locNum];
+
+                yield return TM.MakeDbCall(currentThread, Program.ConnectionString, "spIsNodeInLocation",
+                    new SqlParameter("node", _start.Id),
+                    new SqlParameter("location", location.LocId));
+                using (var table = TM.GetResult<DataTable>(currentThread)) {
+                    if ((bool)table.Rows[0][0]) break;
+                }
 
                 int numPaths = pathsBetweenLocs.Count;
                 var pathsToReplace = new List<KeyValuePair<double, int>>();

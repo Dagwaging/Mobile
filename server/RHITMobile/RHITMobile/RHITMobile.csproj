@@ -69,7 +69,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Path Handling\BannerData.cs" />
     <Compile Include="Path Handling\CampusServices.cs" />
+    <Compile Include="Path Handling\SecurePathHandler.cs" />
     <Compile Include="Path Handling\Tours.cs" />
     <Compile Include="Response Handling\DatabaseScripter.cs" />
     <Compile Include="Path Handling\AdminInterface.cs" />
@@ -88,9 +90,70 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Path Handling\WebController.cs" />
     <Compile Include="Response Handling\TourFinder.cs" />
+    <Compile Include="Service References\RhitPrivate\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="Service References\RhitPrivate\Arrays.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\RhitPrivate\mobileprivate.rose-hulman.edu.wsdl" />
+    <None Include="Service References\RhitPrivate\mobileprivate.rose-hulman.edu.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\RhitPrivate\RHITMobile.RhitPrivate.AuthenticationResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\RhitPrivate\RHITMobile.RhitPrivate.Course.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\RhitPrivate\RHITMobile.RhitPrivate.CourseTime.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\RhitPrivate\RHITMobile.RhitPrivate.RoomSchedule.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\RhitPrivate\RHITMobile.RhitPrivate.ServerState.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\RhitPrivate\RHITMobile.RhitPrivate.User.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\RhitPrivate\RHITMobile.RhitPrivate.UserEnrollment.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\RhitPrivate\RHITMobile.Secure.Data.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\RhitPrivate\RHITMobile.Secure.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\RhitPrivate\service.wsdl" />
+    <None Include="Service References\RhitPrivate\service.xsd">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\RhitPrivate\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\RhitPrivate\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\RhitPrivate\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\RhitPrivate\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

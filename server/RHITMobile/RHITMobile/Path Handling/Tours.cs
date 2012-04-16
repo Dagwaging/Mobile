@@ -57,8 +57,11 @@ namespace RHITMobile {
             using (var table = TM.GetResult<DataTable>(currentThread)) {
                 foreach (DataRow row in table.Rows) {
                     var category = new TagCategory(row);
-                    categories[category.Parent ?? ""].Children.Add(category);
                     categories.Add(category.Name, category);
+                }
+                foreach (DataRow row in table.Rows) {
+                    var category = new TagCategory(row);
+                    categories[category.Parent ?? ""].Children.Add(categories[category.Name]);
                 }
             }
 
@@ -167,7 +170,7 @@ namespace RHITMobile {
             yield return TM.Await(currentThread, ToursHandler.GetTaggedLocations(TM, tourFinder.Tags));
             tourFinder.Locations = TM.GetResult<IOrderedEnumerable<LocationRank>>(currentThread).ToList();
 
-            yield return TM.Await(currentThread, tourFinder.HandlePath(TM, new List<string>(), query, true));
+            yield return TM.Await(currentThread, tourFinder.HandlePath(TM, false, new List<string>(), query, null, true));
             yield return TM.Return(currentThread);
         }
     }

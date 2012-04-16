@@ -27,8 +27,11 @@ namespace RHITMobile {
             using (var table = TM.GetResult<DataTable>(currentThread)) {
                 foreach (DataRow row in table.Rows) {
                     var category = new CampusServicesCategory(row);
-                    categories[category.Parent ?? ""].Children.Add(category);
                     categories.Add(category.Name, category);
+                }
+                foreach (DataRow row in table.Rows) {
+                    var category = new CampusServicesCategory(row);
+                    categories[category.Parent ?? ""].Children.Add(categories[category.Name]);
                 }
             }
 

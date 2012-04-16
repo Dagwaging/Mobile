@@ -6,60 +6,63 @@ using System.Net.Sockets;
 using System.Net;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
+using System.Security.Cryptography.X509Certificates;
 
-namespace RHITMobile
-{
-    public static class WebController
-    {
+namespace RHITMobile {
+    public static class WebController {
+        public static Dictionary<int, bool> ListenPorts = new Dictionary<int, bool>() {
+            { 5600, false },
+            { 5601, true },
+        };
+
         public static bool[] RequestsBeingHandled = new bool[10];
         public static int RequestCounter = 0;
 
-        public static IEnumerable<ThreadInfo> HandleClients(ThreadManager TM)
-        {
+        public static IEnumerable<ThreadInfo> HandleClients(ThreadManager TM) {
             var currentThread = TM.CurrentThread;
 
-            while (true)
-            {
+            while (true) {
                 int tries = 1;
                 HttpListener listener = null;
-                while (true)
-                {
-                    try
-                    {
+                while (true) {
+                    try {
+                        string message;
+                        if (!SetupSsl(5601, out message)) {
+                            Console.WriteLine("Could not setup SSL: {0}", message);
+                            Console.WriteLine("Please fix and restart the program.");
+                            while (true) {
+                                Console.ReadLine();
+                            }
+                        } else {
+                            Console.WriteLine(message);
+                        }
                         listener = new HttpListener();
-                        listener.Prefixes.Add("http://+:5600/");
+                        foreach (var kvp in ListenPorts) {
+                            listener.Prefixes.Add(String.Format("http{0}://+:{1}/", kvp.Value ? "s" : "", kvp.Key));
+                        }
                         Console.WriteLine("[{0}]\nAttempt #{1} to start HttpListener...", DateTime.Now, tries);
                         listener.Start();
                         Console.WriteLine("HttpListener successfully started.\n");
                         break;
-                    }
-                    catch (Exception ex)
-                    {
+                    } catch (Exception ex) {
                         Console.WriteLine("HttpListener failed to start with exception:\nMessage: {0}\nStack trace:\n{1}\n", ex.Message, ex.StackTrace);
                         tries++;
                     }
-                    if (tries > 5)
-                    {
+                    if (tries > 5) {
                         Console.WriteLine("[{0}]\nMaximum number of attempts reached.  Try again later.\n", DateTime.Now);
                         yield return TM.Return(currentThread);
-                    }
-                    else
-                    {
+                    } else {
                         Console.WriteLine("[{0}]\nWaiting 5 seconds before attemping again...", DateTime.Now);
                         yield return TM.Sleep(currentThread, 5000);
                     }
                 }
                 Console.WriteLine("[{0}]\nWaiting for requests...\n", DateTime.Now);
-                while (true)
-                {
+                while (true) {
                     yield return TM.WaitForClient(currentThread, listener);
                     HttpListenerContext context = null;
-                    try
-                    {
+                    try {
                         context = TM.GetResult<HttpListenerContext>(currentThread);
-                    }
-                    catch (Exception ex)
-                    {
+                    } catch (Exception ex) {
                         Console.WriteLine("HttpListener threw an exception while waiting for a client:\nMessage: {0}\nStack trace:\n{1}\n\nGoing to restart the HttpListener...", ex.Message, ex.StackTrace);
                         break;
                     }
@@ -69,11 +72,64 @@ namespace RHITMobile
             }
         }
 
+        private static bool SetupSsl(int port, out string message) {
+            message = null;
+            X509Store store = new X509Store(StoreLocation.LocalMachine);
+            //Use the first cert to configure Ssl
+            store.Open(OpenFlags.ReadOnly);
+            //Assumption is we have certs. If not then this call will fail :(
+            try {
+                bool found = false;
+                foreach (X509Certificate2 cert in store.Certificates) {
+                    String certHash = cert.GetCertHashString();
+                    //Only install certs issued for the machine and has the name as the machine name
+                    if (cert.Subject.ToUpper().IndexOf(Environment.MachineName.ToUpper()) >= 0) {
+                        try {
+                            found = true;
+                            ExecuteNetshCommand(String.Format("http delete sslcert ipport=0.0.0.0:{0}", port));
+                            message = ExecuteNetshCommand(String.Format("http add sslcert ipport=0.0.0.0:{1} certhash={0} appid={{{2}}}", certHash, port, Guid.NewGuid()));
+                        } catch (Exception e) {
+                            message = String.Format("Execution of netsh.exe threw an exception: {0}", e.Message);
+                            return false;
+                        }
+                    }
+                }
+
+                if (!found) {
+                    message = "Could not find a certificate.";
+                    return false;
+                }
+
+            } catch (Exception e) {
+                message = "Certificate retrieval threw an exception.";
+                return false;
+            } finally {
+                if (store != null) {
+                    store.Close();
+                }
+            }
+
+            return true;
+        }
+
+        private static string ExecuteNetshCommand(string command) {
+            var procStartInfo = new System.Diagnostics.ProcessStartInfo("netsh", command);
+            procStartInfo.RedirectStandardOutput = true;
+            procStartInfo.UseShellExecute = false;
+            procStartInfo.CreateNoWindow = true;
+
+            var proc = new System.Diagnostics.Process();
+            proc.StartInfo = procStartInfo;
+            proc.Start();
+            return proc.StandardOutput.ReadToEnd();
+        }
+
         private static PathHandler _handler = new InitialPathHandler();
 
-        private static IEnumerable<ThreadInfo> HandleRequest(ThreadManager TM, HttpListenerContext context)
-        {
+        private static IEnumerable<ThreadInfo> HandleRequest(ThreadManager TM, HttpListenerContext context) {
             var currentThread = TM.CurrentThread;
+
+            bool isSSL = ListenPorts[context.Request.Url.Port];
 
             int requestNum = 0;
             string line = "+------------------------------------------------------------------------------+";
@@ -125,14 +181,11 @@ namespace RHITMobile
 
             var path = Uri.UnescapeDataString(context.Request.Url.LocalPath).Split('/').SkipWhile(String.IsNullOrEmpty).TakeWhile(s => !String.IsNullOrEmpty(s));
             Dictionary<string, string> query = new Dictionary<string, string>();
-            if (!String.IsNullOrEmpty(context.Request.Url.Query))
-            {
+            if (!String.IsNullOrEmpty(context.Request.Url.Query)) {
                 var querySplit = Uri.UnescapeDataString(context.Request.Url.Query).Split('?', '&', ';').Skip(1);
-                foreach (string field in querySplit)
-                {
+                foreach (string field in querySplit) {
                     int equalsPos = field.IndexOf('=');
-                    if (equalsPos == -1 || equalsPos == 0 || equalsPos == field.Length - 1)
-                    {
+                    if (equalsPos == -1 || equalsPos == 0 || equalsPos == field.Length - 1) {
                         result = new JsonResponse(HttpStatusCode.BadRequest);
                         break;
                     }
@@ -140,27 +193,20 @@ namespace RHITMobile
                 }
             }
 
-            if (result == null)
-            {
-                yield return TM.Await(currentThread, _handler.HandlePath(TM, path, query, new object()));
-                try
-                {
+            if (result == null) {
+                yield return TM.Await(currentThread, _handler.HandlePath(TM, isSSL, path, query, context.Request.Headers, new object()));
+                try {
                     result = TM.GetResult<JsonResponse>(currentThread);
-                }
-                catch (Exception)
-                {
+                } catch (Exception) {
                     result = new JsonResponse(HttpStatusCode.InternalServerError);
                 }
             }
 
             var encoding = new ASCIIEncoding();
             byte[] b;
-            if (result.Json != null)
-            {
+            if (result.Json != null) {
                 b = encoding.GetBytes(result.Json.Serialize());
-            }
-            else
-            {
+            } else {
                 b = encoding.GetBytes(result.Message);
             }
 
@@ -204,11 +250,9 @@ namespace RHITMobile
             yield return TM.Return(currentThread, null);
         }
 
-        public static string MakePath(this IEnumerable<string> paths)
-        {
+        public static string MakePath(this IEnumerable<string> paths) {
             var builder = new StringBuilder();
-            foreach (var path in paths)
-            {
+            foreach (var path in paths) {
                 builder.Append('/');
                 builder.Append(path);
             }
@@ -219,7 +263,7 @@ namespace RHITMobile
             var currentThread = TM.CurrentThread;
 
             while (true) {
-                yield return TM.Sleep(currentThread, 1000);
+                yield return TM.Sleep(currentThread, 3000);
                 for (int j = 0; j < 10; j++)
                     if (RequestsBeingHandled[j])
                         Console.Write("   ||   ");
@@ -229,10 +273,8 @@ namespace RHITMobile
         }
     }
 
-    public class InitialPathHandler : PathHandler
-    {
-        public InitialPathHandler()
-        {
+    public class InitialPathHandler : PathHandler {
+        public InitialPathHandler() {
             Redirects.Add("locations", new LocationsHandler());
             Redirects.Add("directions", new DirectionsHandler());
             Redirects.Add("tours", new ToursHandler());
@@ -241,31 +283,26 @@ namespace RHITMobile
             Redirects.Add("clientaccesspolicy.xml", new ClientAccessPolicyHandler());
         }
 
-        protected override IEnumerable<ThreadInfo> HandleNoPath(ThreadManager TM, Dictionary<string, string> query, object state)
-        {
+        protected override IEnumerable<ThreadInfo> HandleNoPath(ThreadManager TM, Dictionary<string, string> query, object state) {
             var currentThread = TM.CurrentThread;
             yield return TM.Return(currentThread, new JsonResponse(new VersionResponse()));
         }
     }
 
-    public class JsonResponse
-    {
-        public JsonResponse(JsonObject obj)
-        {
+    public class JsonResponse {
+        public JsonResponse(JsonObject obj) {
             Json = obj;
             StatusCode = HttpStatusCode.OK;
             Message = "";
         }
 
-        public JsonResponse(HttpStatusCode code)
-        {
+        public JsonResponse(HttpStatusCode code) {
             Json = null;
             StatusCode = code;
             Message = "";
         }
 
-        public JsonResponse(string message)
-        {
+        public JsonResponse(string message) {
             Json = null;
             StatusCode = HttpStatusCode.OK;
             Message = message;
