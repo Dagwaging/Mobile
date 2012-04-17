@@ -42,9 +42,10 @@ namespace Rhit.Applications.Models.Services {
             return request.Send(ResponseHandler.RequestCallback);
         }
 
-        public static IAsyncResult MakeLocationRequest(RequestPart requestPart, RequestType type, int locationId) {
+        public static IAsyncResult MakeMetaDataRequest(RequestPart requestPart, RequestType type, Dictionary<string, object> metadata) {
             ServiceRequest request = new ServiceRequest(requestPart, type);
-            request.UserMetaData["LocationId"] = locationId;
+            foreach(KeyValuePair<string, object> kvp in metadata)
+                request.UserMetaData[kvp.Key] = kvp.Value;
             return MakeRequest(request);
         }
 

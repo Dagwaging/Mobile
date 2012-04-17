@@ -121,6 +121,19 @@ namespace Rhit.Applications.Models {
         public List<Path_DC> Paths { get; set; }
         #endregion
 
+        public static Node_DC ParseNode(ServerObject instance) {
+            //""Columns\":[\"id\",\"lat\",\"lon\",\"altitude\",\"outside\",\"location\"],\
+            //"Table\":[[\"1083\",\"39.4840212214018\",\"-87.3248627936401\",\"0\",\"True\",null]]}"
+            return new Node_DC() {
+                Id=int.Parse(instance.Table[0][0]),
+                Latitude = double.Parse(instance.Table[0][1]),
+                Longitude = double.Parse(instance.Table[0][2]),
+                Altitude = double.Parse(instance.Table[0][3]),
+                Outside = bool.Parse(instance.Table[0][4]),
+                //Location = int.Parse(instance.Table[0][5]),
+            };
+        }
+
         public static List<LocationData> GetLocations(List<Location_DC> locations) {
             if(locations == null) return null;
             List<LocationData> _locations = new List<LocationData>();
@@ -385,6 +398,9 @@ namespace Rhit.Applications.Models {
 
         [DataMember(Name = "Id")]
         public int Id { get; set; }
+
+        [DataMember(Name = "NodeOffset")]
+        public int Offset { get; set; }
 
         [DataMember(Name = "Message1")]
         public string Message1 { get; set; }

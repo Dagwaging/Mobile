@@ -21,6 +21,10 @@ namespace Rhit.Applications.Models.Services {
 
         private static ResponseType ConvertType(RequestType request) {
             switch(request) {
+                case RequestType.NodeDeletion:
+                    return ResponseType.NodeDeletion;
+                case RequestType.NodeCreation:
+                    return ResponseType.NodeCreation;
                 case RequestType.AllLocations:
                     return ResponseType.AllLocations;
                 case RequestType.CampusServices:

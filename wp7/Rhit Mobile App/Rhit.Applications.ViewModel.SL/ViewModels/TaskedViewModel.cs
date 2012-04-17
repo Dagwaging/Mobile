@@ -11,12 +11,12 @@ using Rhit.Applications.ViewModels.Utilities;
 
 namespace Rhit.Applications.ViewModels {
     public class TaskedViewModel : MapViewModel {
-        private enum BehaviorState { Default, MovingCorners, CreatingCorners, Floor, AddingLocation, FloorAddingLocation };
+        private enum BehaviorState { Default, MovingCorners, CreatingCorners, Floor, AddingLocation, FloorAddingLocation, AddingNode, };
 
         //NOTE: Requires a call to Initialize and SetMode before class is usable
         //Note: NoArg Constructor so ViewModel can be created in xaml
         public TaskedViewModel() {
-            Paths = PathsController.Instance;
+            Paths = NodesController.Instance;
             Paths.GetPathData();
         }
 
@@ -48,6 +48,8 @@ namespace Rhit.Applications.ViewModels {
             AddCornersCommand = new RelayCommand(p => CreateCorners());
             ChangeCornersCommand = new RelayCommand(p => ShowCorners());
             LoadFloorCommand = new RelayCommand(p => LoadFloor());
+            AddNodeCommand = new RelayCommand(p => AddNode());
+            DeleteNodeCommand = new RelayCommand(p => DeleteNode());
         }
 
         #region Save Command/Methods
@@ -61,10 +63,10 @@ namespace Rhit.Applications.ViewModels {
         }
 
         private void Save() {
+
+
             switch(State) {
-                case BehaviorState.Default:
-                    Cancel();
-                    break;
+
                 case BehaviorState.MovingCorners:
                     SaveCorners();
                     break;
@@ -80,7 +82,24 @@ namespace Rhit.Applications.ViewModels {
                 case BehaviorState.FloorAddingLocation:
                     SaveLocation();
                     break;
+                case BehaviorState.AddingNode:
+                    CreateNode();
+                    break;
+                case BehaviorState.Default:
+                default:
+                    Cancel();
+                    break;
             }
+        }
+
+        private void CreateNode() {
+            IList<Location> locations = LocationsProvider.GetLocations();
+            Location newLocation = null;
+            if(locations.Count > 0) newLocation = locations[0];
+            if(newLocation != null) {
+                DataCollector.Instance.CreateNode(newLocation.Latitude, newLocation.Longitude, newLocation.Altitude, true, null);
+            }
+            Cancel();
         }
 
         private void SaveCorners() {
@@ -125,6 +144,28 @@ namespace Rhit.Applications.ViewModels {
             Settings.ShowBuildings = true;
             State = BehaviorState.Default;
             Mapper.Locations.Clear();
+            NodesController.Instance.RestoreToDefault();
+        }
+        #endregion
+
+
+        #region Add Node Command/Method
+        public ICommand AddNodeCommand { get; private set; }
+
+        private void AddNode() {
+            NodesController.Instance.RestoreToDefault();
+            LocationsProvider.CreateNewLocations(1);
+            ShowSave = true;
+            State = BehaviorState.AddingNode;
+        }
+        #endregion
+
+        #region Delete Node Command/Method
+        public ICommand DeleteNodeCommand { get; private set; }
+
+        private void DeleteNode() {
+            ShowSave = false;
+            NodesController.Instance.DeleteNextNode();
         }
         #endregion
 
@@ -180,7 +221,7 @@ namespace Rhit.Applications.ViewModels {
         }
         #endregion
 
-        public PathsController Paths { get; set; }
+        public NodesController Paths { get; set; }
 
         private BehaviorState State { get; set; }
 

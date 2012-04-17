@@ -79,6 +79,8 @@
     <Compile Include="DataContracts.cs" />
     <Compile Include="Events\AuthenticationEvent.cs" />
     <Compile Include="Events\CampusServicesEvent.cs" />
+    <Compile Include="Events\NodeEvent.cs" />
+    <Compile Include="Events\IdentificationEvent.cs" />
     <Compile Include="Events\PathDataEvent.cs" />
     <Compile Include="Events\TagsEvent.cs" />
     <Compile Include="Events\DirectionsEvent.cs" />

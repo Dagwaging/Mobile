@@ -138,6 +138,28 @@ namespace Rhit.Applications.Models.Services {
             if(PathDataReturned != null) PathDataReturned(this, args);
         }
         #endregion
+
+        #region NodeCreated
+        public event NodeEventHandler NodeCreated;
+        protected virtual void OnNodeCreated(ServiceEventArgs e) {
+            NodeEventArgs args = new NodeEventArgs(e) {
+                Node = ServerObject.ParseNode(e.ResponseObject),
+            };
+            if(NodeCreated != null) NodeCreated(this, args);
+        }
+        #endregion
+
+        #region NodeDeleted
+        public event IdentificationEventHandler NodeDeleted;
+        protected virtual void OnNodeDeleted(ServiceEventArgs e) {
+            int id = (int) e.Request.UserMetaData["NodeId"];
+            IdentificationEventArgs args = new IdentificationEventArgs(e) {
+                Id = id,
+            };
+            if(NodeDeleted != null) NodeDeleted(this, args);
+        }
+        #endregion
+        
         #endregion
 
         private DataCollector() {
@@ -230,7 +252,12 @@ namespace Rhit.Applications.Models.Services {
                 case ResponseType.ConnectionError:
                     OnServerErrorReturned(eventArgs);
                     break;
-
+                case ResponseType.NodeCreation:
+                    OnNodeCreated(eventArgs);
+                    break;
+                case ResponseType.NodeDeletion:
+                    OnNodeDeleted(eventArgs);
+                    break;
             }
         }
 
@@ -489,6 +516,25 @@ namespace Rhit.Applications.Models.Services {
             Connection.MakeRequest(request, RequestType.PathData);
         }
 
+        public void CreateNode(double latitude, double longitude, double altitude, bool outside, int? locationId) {
+            RequestPart request = new RequestBuilder(BaseAddress).Admin.StoredProcedure(Connection.ServiceTokenGuid, "spAddNode");
+            request = request.AddQueryParameter("lat", latitude);
+            request = request.AddQueryParameter("lon", longitude);
+            request = request.AddQueryParameter("altitude", altitude);
+            request = request.AddQueryParameter("outside", outside);
+            request = request.AddQueryParameter("location", (object) locationId ?? "%00");
+            Connection.MakeRequest(request, RequestType.NodeCreation);
+        }
+
+        public void DeleteNode(int id) {
+            RequestPart request = new RequestBuilder(BaseAddress).Admin.StoredProcedure(Connection.ServiceTokenGuid, "spDeleteNode");
+            request = request.AddQueryParameter("id", id);
+            
+            Dictionary<string, object> metadata = new Dictionary<string, object>();
+            metadata["NodeId"] = id;
+            Connection.MakeMetaDataRequest(request, RequestType.NodeDeletion, metadata);
+        }
+
         public void CreateLocation(int id, int parentId, string name, double latitude, double longitude, int floor) {
             RequestPart request = new RequestBuilder(BaseAddress).Admin.StoredProcedure(Connection.ServiceTokenGuid, "spCreateLocation");
             request = request.AddQueryParameter("id", id);
@@ -497,13 +543,17 @@ namespace Rhit.Applications.Models.Services {
             request = request.AddQueryParameter("lon", longitude);
             request = request.AddQueryParameter("floor", floor);
             request = request.AddQueryParameter("parent", parentId);
-            Connection.MakeLocationRequest(request, RequestType.LocationCreation, id);
+
+            Dictionary<string, object> metadata = new Dictionary<string, object>();
+            metadata["LocationId"] = id;
+            Connection.MakeMetaDataRequest(request, RequestType.LocationCreation, metadata);
         }
 
         public void DeleteLocation(int id) {
             RequestPart request = new RequestBuilder(BaseAddress).Admin.StoredProcedure(Connection.ServiceTokenGuid, "spDeleteLocation");
-            request = request.AddQueryParameter("location", id);
-            Connection.MakeLocationRequest(request, RequestType.DeleteLocation, id);
+            Dictionary<string, object> metadata = new Dictionary<string, object>();
+            metadata["LocationId"] = id;
+            Connection.MakeMetaDataRequest(request, RequestType.DeleteLocation, metadata);
         }
 
         public void MoveLocation(int id, double latitude, double longitude) {
@@ -511,7 +561,10 @@ namespace Rhit.Applications.Models.Services {
             request = request.AddQueryParameter("location", id);
             request = request.AddQueryParameter("lat", latitude);
             request = request.AddQueryParameter("lon", longitude);
-            Connection.MakeLocationRequest(request, RequestType.MoveLocation, id);
+
+            Dictionary<string, object> metadata = new Dictionary<string, object>();
+            metadata["LocationId"] = id;
+            Connection.MakeMetaDataRequest(request, RequestType.MoveLocation, metadata);
         }
 
 #if !WINDOWS_PHONE

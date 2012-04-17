@@ -16,43 +16,18 @@ using Microsoft.Maps.MapControl;
 #endif
 
 namespace Rhit.Applications.ViewModels.Controllers {
-    public class SimpleNode : DependencyObject {
-        public SimpleNode(Node_DC model) {
-            Center = new Location(model.Latitude, model.Longitude, model.Altitude);
-        }
 
-        #region Center
-        public Location Center {
-            get { return (Location) GetValue(CenterProperty); }
-            set { SetValue(CenterProperty, value); }
-        }
-
-        public static readonly DependencyProperty CenterProperty =
-           DependencyProperty.Register("Center", typeof(Location), typeof(SimpleNode), new PropertyMetadata(new Location()));
-        #endregion
-    }
 
     public class PathsController : DependencyObject {
         
         private PathsController() {
             Coordinates = new LocationCollection();
             Nodes = new ObservableCollection<PathNode>();
-            OutsideNodes = new ObservableCollection<SimpleNode>();
+            
             DataCollector.Instance.DirectionsReturned += new DirectionsEventHandler(DirectionsReturned);
             DataCollector.Instance.ToursReturned += new DirectionsEventHandler(DirectionsReturned);
-            DataCollector.Instance.PathDataReturned += new PathDataEventHandler(PathDataReturned);
         }
-
-        private void PathDataReturned(object sender, PathDataEventArgs e) {
-            Reset();
-            foreach(Node_DC node in e.Nodes)
-                OutsideNodes.Add(new SimpleNode(node));
-        }
-
-        internal void GetPathData() {
-            DataCollector.Instance.GetPathData();
-        }
-
+                
         internal void GetTestDirections() {
             DataCollector.Instance.GetTestDirections();
         }
@@ -152,7 +127,5 @@ namespace Rhit.Applications.ViewModels.Controllers {
         public LocationCollection Coordinates { get; protected set; }
 
         public ObservableCollection<PathNode> Nodes { get; protected set; }
-
-        public ObservableCollection<SimpleNode> OutsideNodes { get; protected set; }
     }
 }

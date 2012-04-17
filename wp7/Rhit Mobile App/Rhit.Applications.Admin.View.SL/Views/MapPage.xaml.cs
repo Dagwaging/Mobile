@@ -34,7 +34,7 @@ namespace Rhit.Applications.Views {
             MyMap.MapForeground.TemplateApplied += new EventHandler(MapForeground_TemplateApplied);
 
             DataContext = ViewModel;
-            TaskModes.CurrentTaskMode = BuildingTasks;
+            TaskModes.CurrentTaskMode = PathTasks;
         }
 
         #region Click Event Methods/Properties

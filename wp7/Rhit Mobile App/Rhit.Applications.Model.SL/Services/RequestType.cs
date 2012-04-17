@@ -1,6 +1,8 @@
 ﻿
 namespace Rhit.Applications.Models.Services {
     public enum RequestType { 
+        NodeDeletion,
+        NodeCreation,
         AllLocations,
         CampusServices,
         CampusServicesUpdate,

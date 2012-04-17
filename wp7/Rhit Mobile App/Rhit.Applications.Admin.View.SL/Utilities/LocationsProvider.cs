@@ -10,7 +10,7 @@ using Rhit.Applications.ViewModels.Providers;
 
 namespace Rhit.Applications.Views.Utilities {
     public class LocationsProvider : DependencyObject, ILocationsProvider {
-        private enum BehaviorState { Default, CreatingCorners, MovingCorners, AddingLocation };
+        private enum BehaviorState { Default, CreatingCorners, MovingCorners, AddingLocation, CreatingLocations };
 
         public LocationsProvider() {
             Locations = new ObservableCollection<LocationWrapper>();
@@ -50,6 +50,20 @@ namespace Rhit.Applications.Views.Utilities {
             return locations;
         }
 
+
+
+        public int LocationsNeeded { get; private set; }
+
+        public void CreateNewLocations(int num) {
+            Clear();
+            //num is the number of new locations to get
+            LocationsNeeded = num;
+            State = BehaviorState.CreatingLocations;
+        }
+
+
+
+
         public IList<Point> GetPoints() {
             return Points;
         }
@@ -65,21 +79,37 @@ namespace Rhit.Applications.Views.Utilities {
             State = BehaviorState.CreatingCorners;
         }
 
+
+
+
         public void Map_Click(object sender, MapMouseEventArgs e) {
-            if(State == BehaviorState.CreatingCorners) {
-                Location corner = (sender as Map).ViewportPointToLocation(e.ViewportPoint);
-                Locations.Add(new LocationWrapper(corner));
-                e.Handled = true;
-            }
-            if(State == BehaviorState.AddingLocation) {
-                if(Locations.Count <= 0) {
-                    Location newLocation = (sender as Map).ViewportPointToLocation(e.ViewportPoint);
-                    Locations.Add(new LocationWrapper(newLocation));
-                    Points.Clear();
-                }
-                e.Handled = true;
+            switch(State) {
+                case BehaviorState.CreatingCorners:
+                    Location corner = (sender as Map).ViewportPointToLocation(e.ViewportPoint);
+                    Locations.Add(new LocationWrapper(corner));
+                    e.Handled = true;
+                    break;
+                case BehaviorState.AddingLocation:
+                    if(Locations.Count <= 0) {
+                        Location newLocation = (sender as Map).ViewportPointToLocation(e.ViewportPoint);
+                        Locations.Add(new LocationWrapper(newLocation));
+                        Points.Clear();
+                    }
+                    e.Handled = true;
+                    break;
+                case BehaviorState.CreatingLocations:
+                    if(Locations.Count < LocationsNeeded) {
+                        Location newLocation = (sender as Map).ViewportPointToLocation(e.ViewportPoint);
+                        Locations.Add(new LocationWrapper(newLocation));
+                        Points.Clear();
+                    }
+                    e.Handled = true;
+                    break;
             }
         }
+
+
+
 
         public void ImageViewer_Click(object sender, MouseButtonEventArgs e) {
             if(State == BehaviorState.AddingLocation) {

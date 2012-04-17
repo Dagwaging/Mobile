@@ -118,7 +118,7 @@
         </DataTemplate>
 
         <DataTemplate x:Name="CalImagePinTemplate2">
-            <exts:DraggableShape VirtualLocation="{Binding}">
+            <exts:DraggableShape VirtualLocation="{Binding}" >
                 <exts:DraggableShape.Shape>
                     <Ellipse Width="10" Height="10" Fill="Red" Stroke="Black" StrokeThickness="2">
                         <Ellipse.RenderTransform>
@@ -184,25 +184,72 @@
             </util:TaskContainer.Tasks>
         </util:TaskContainer>
 
+        <util:TaskContainer x:Name="PathTasks" CanceledCommand="{Binding CancelCommand, ElementName=ViewModel}" CompletedCommand="{Binding SaveCommand, ElementName=ViewModel}">
+            <util:TaskContainer.Tasks>
+                <!--<util:Task Label="Sync Floor" StartCommand="{Binding SyncFloorCommand, ElementName=ViewModel}" ToolTip="Sync geo coordinates to floor plan image.">
+                    <util:Task.Steps>
+                        <util:TaskStep Number="1" Instructions="Select a floor plan to load to calibrate to the map." Label="Load Image" />
+                        <util:TaskStep Number="2" Instructions="Enter the floor you wish to calibrate to the loaded image. Use negative values for lower levels. Zero is never used." Label="Specify Floor" />
+                        <util:TaskStep Number="3" Instructions="To finalize calibration, click the 'Save' Button" Label="Save" />
+                    </util:Task.Steps>
+                </util:Task>-->
+                <util:Task Label="Add Node" StartCommand="{Binding AddNodeCommand, ElementName=ViewModel}" ToolTip="Create a new node">
+                    <util:Task.Steps>
+                        <util:TaskStep Number="1" Instructions="Click on the map to place a new node. You may drag the pushpin once it is placed." Label="Place Node" />
+                        <util:TaskStep Number="2" Instructions="Click the 'Save' Button" Label="Save"/>
+                    </util:Task.Steps>
+                </util:Task>
+                <util:Task Label="Delete Node" StartCommand="{Binding DeleteNodeCommand, ElementName=ViewModel}" ToolTip="Delete a node">
+                    <util:Task.Steps>
+                        <util:TaskStep Number="1" Instructions="Select a node to be deleted." Label="Select Node" />
+                    </util:Task.Steps>
+                </util:Task>
+                <!--<util:Task Label="Add Interior Node" StartCommand="{Binding AddNodeCommand, ElementName=ViewModel}" ToolTip="Create a new interior path node.">
+                    <util:Task.Requirements>
+                        <util:TaskRequirement Value="{Binding Mapper.FloorSynched, Source={StaticResource ViewModel}}" />
+                    </util:Task.Requirements>
+                    <util:Task.Steps>
+                        <util:TaskStep Number="1" Instructions="Click on the map/image to place a new node. You may drag the pushpin once it is placed." Label="Place Node" />
+                        <util:TaskStep Number="2" Instructions="Click the 'Save' Button" Label="Save" />
+                    </util:Task.Steps>
+                </util:Task>-->
+            </util:TaskContainer.Tasks>
+        </util:TaskContainer>
+
         <util:TaskMode x:Name="TaskModes" CurrentTaskMode="{StaticResource BuildingTasks}" />
 
         <ControlTemplate x:Key="DirectionsPushpinTemplate" TargetType="map:Pushpin">
             <Grid>
-                <Ellipse Fill="{TemplateBinding Background}" Width="20" Height="20" />
+                <Ellipse Fill="{TemplateBinding Background}" Width="16" Height="16" Stroke="White" StrokeThickness="1" />
                 <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" />
             </Grid>
         </ControlTemplate>
 
         <DataTemplate x:Key="NodeTemplate">
-            <map:Pushpin Location="{Binding Center}" Background="Black" PositionOrigin="Center" Template="{StaticResource DirectionsPushpinTemplate}">
-                <TextBlock Text="{Binding Number}" FontSize="12" />
+            <map:Pushpin Location="{Binding Center}" Tag="{Binding Id}" Background="Black" PositionOrigin="Center" Template="{StaticResource DirectionsPushpinTemplate}" cmds:CommandManager.Command="{Binding ClickCommand}" cmds:CommandManager.CommandEventName="MouseLeftButtonUp" >
+                <Grid>
+                    <Ellipse Fill="Green" Width="16" Height="16" Stroke="White" StrokeThickness="1" Visibility="{Binding IsSelected, Converter={StaticResource VisibilityConverter}}" />
+                    <Ellipse Fill="Red" Width="16" Height="16" Stroke="White" StrokeThickness="1" Visibility="{Binding IsEndNode, Converter={StaticResource VisibilityConverter}}" />
+                    <Ellipse Fill="Blue" Width="16" Height="16" Stroke="White" StrokeThickness="1" Visibility="{Binding CanSelect, Converter={StaticResource VisibilityConverter}}" />
+                </Grid>
             </map:Pushpin>
+        </DataTemplate>
+        
+        <DataTemplate x:Key="PathTemplate1">
+            <map:MapPolyline Background="White" Locations="{Binding Nodes}" Stroke="White" StrokeThickness="5" />
+        </DataTemplate>
+        <DataTemplate x:Key="PathTemplate2">
+            <map:MapPolyline Background="Black" Locations="{Binding Nodes}" Stroke="Black" StrokeThickness="3" />
+        </DataTemplate>
+        <DataTemplate x:Key="PathTemplate3">
+            <map:MapPolyline Background="Green" Locations="{Binding Nodes}" Stroke="Green" StrokeThickness="3" Visibility="{Binding CanSelect, Converter={StaticResource VisibilityConverter}}" />
+        </DataTemplate>
+        <DataTemplate x:Key="PathTemplate4">
+            <map:MapPolyline Background="Red" Locations="{Binding Nodes}" Stroke="Red" StrokeThickness="3" Visibility="{Binding IsSelected, Converter={StaticResource VisibilityConverter}}" />
         </DataTemplate>
     </navigation:Page.Resources>
     
-
     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -234,6 +281,11 @@
                     <TextBlock Text="{Binding CurrentTask.Label, ElementName=BuildingTasks}" />
                     <TextBlock Text="]" />
                 </StackPanel>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="[" />
+                    <TextBlock Text="{Binding Paths.CurrentMessage.Message}" />
+                    <TextBlock Text="]" />
+                </StackPanel>
             </StackPanel>
         </Grid>
 
@@ -260,11 +312,15 @@
                     <map:MapItemsControl ItemsSource="{Binding Locations.InnerLocations}" ItemTemplate="{StaticResource PushpinItemTemplate}" Visibility="{Binding ShowInnerLocations, Converter={StaticResource VisibilityConverter}}" />
                     <map:MapItemsControl ItemsSource="{Binding Mapper.Locations}" ItemTemplate="{StaticResource DualItemTemplate}" />
                     <map:MapItemsControl ItemsSource="{Binding Locations, ElementName=Calibrator}" ItemTemplate="{StaticResource CalPushpinItemTemplate}" />-->
-                    
-                    <map:MapItemsControl ItemsSource="{Binding Paths.OutsideNodes}" ItemTemplate="{StaticResource NodeTemplate}" />
+
+                    <map:MapItemsControl ItemsSource="{Binding Paths.Paths}" ItemTemplate="{StaticResource PathTemplate1}" />
+                    <map:MapItemsControl ItemsSource="{Binding Paths.Paths}" ItemTemplate="{StaticResource PathTemplate2}" />
+                    <map:MapItemsControl ItemsSource="{Binding Paths.Paths}" ItemTemplate="{StaticResource PathTemplate3}" />
+                    <map:MapItemsControl ItemsSource="{Binding Paths.Paths}" ItemTemplate="{StaticResource PathTemplate4}" />
+                    <map:MapItemsControl ItemsSource="{Binding Paths.Nodes}" ItemTemplate="{StaticResource NodeTemplate}" />
                 </map:MapLayer>
-                <exts:DraggablePushpin Content="{Binding Locations.CurrentLocation.Label, Mode=TwoWay}"
-                                       Location="{Binding Locations.CurrentLocation.Center, Mode=TwoWay}" Visibility="{Binding Locations.CurrentLocation, Converter={StaticResource ObjectVisibilityConverter}}" Style="{StaticResource CustomPushpinStyle}" />
+                
+                <exts:DraggablePushpin Content="{Binding Locations.CurrentLocation.Label, Mode=TwoWay}" Location="{Binding Locations.CurrentLocation.Center, Mode=TwoWay}" Visibility="{Binding Locations.CurrentLocation, Converter={StaticResource ObjectVisibilityConverter}}" Style="{StaticResource CustomPushpinStyle}" />
             </map:Map>
 
             <sdk:GridSplitter Grid.Column="1" Width="8" HorizontalAlignment="Left" VerticalAlignment="Stretch" ShowsPreview="True" />
@@ -321,7 +377,7 @@
                         </StackPanel>
                     </Border>
 
-                    <StackPanel DataContext="{StaticResource BuildingTasks}" Visibility="{Binding CurrentTask, Converter={StaticResource ObjectVisibilityConverter}}">
+                    <StackPanel DataContext="{StaticResource PathTasks}" Visibility="{Binding CurrentTask, Converter={StaticResource ObjectVisibilityConverter}}">
                         <Border Margin="1" BorderBrush="Black" BorderThickness="2">
                             <StackPanel>
                                 <TextBlock HorizontalAlignment="Center" FontWeight="Bold" Text="Curent Task" />

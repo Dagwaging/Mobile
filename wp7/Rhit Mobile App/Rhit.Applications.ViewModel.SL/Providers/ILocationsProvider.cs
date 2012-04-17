@@ -25,5 +25,7 @@ namespace Rhit.Applications.ViewModels.Providers {
         void Clear();
 
         void QueryLocation();
+
+        void CreateNewLocations(int num);
     }
 }

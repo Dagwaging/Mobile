@@ -8,7 +8,6 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d">
 
-
     <converter:ObjectToVisibilityConverter x:Key="ObjectVisibilityConverter"/>
     <converter:ObjectToVisibilityConverter x:Key="RObjectVisibilityConverter" NullValue="Visible" NotNullValue="Collapsed"/>
     <converter:BoolToVisibilityConverter x:Key="VisibilityConverter"/>
@@ -44,9 +43,6 @@
             <TextBlock Text="{Binding Address}" Grid.Column="1"/>
         </Grid>
     </DataTemplate>
-
-
-
 
     <!-- ******MAIN PAGE STYLES****** -->
     <!-- **************************** -->
