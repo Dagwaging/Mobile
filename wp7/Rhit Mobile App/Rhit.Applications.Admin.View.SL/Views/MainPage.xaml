@@ -28,12 +28,12 @@
 
                     <ContentControl Style="{StaticResource LogoIcon}"/>
                     <TextBlock x:Name="ApplicationNameTextBlock" Style="{StaticResource ApplicationNameStyle}" 
-                               Text="Rhit Mobile Admin Application"/>
+                               Text="Rose-Hulman Mobile Administration"/>
 
                 </StackPanel>
             </Border>
 
-            <Border x:Name="LinksBorder" Style="{StaticResource LinksBorderStyle}">
+            <Border x:Name="LinksBorder" Style="{StaticResource LinksBorderStyle}" Visibility="Collapsed">
                 <StackPanel x:Name="LinksStackPanel" Style="{StaticResource LinksStackPanelStyle}">
 
                     <HyperlinkButton x:Name="HomeLink" Style="{StaticResource LinkStyle}" 

@@ -17,5 +17,7 @@ namespace Rhit.Applications.ViewModels.Utilities
         public ObservableCollection<ServiceNode> Children { get; set; }
         public ServiceCategoryNode Parent { get; set; }
         public string Name { get; set; }
+
+        public abstract ObservableCollection<ServiceNode> GetRecursiveChildren();
     }
 }

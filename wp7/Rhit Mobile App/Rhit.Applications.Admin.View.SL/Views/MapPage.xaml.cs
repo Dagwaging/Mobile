@@ -9,7 +9,11 @@ using Microsoft.Maps.MapControl.Navigation;
 using Microsoft.Maps.MapControl.Overlays;
 using Rhit.Applications.Extentions.Controls;
 using Rhit.Applications.Extentions.Maps;
+<<<<<<< HEAD
 using Rhit.Applications.Views.Utilities;
+=======
+using Rhit.Applications.ViewModels.Controllers;
+>>>>>>> a6cf0b03602d81afc53e1eea0032bc47df3ffe54
 
 namespace Rhit.Applications.Views {
     public partial class MapPage : Page {
@@ -98,7 +102,14 @@ namespace Rhit.Applications.Views {
         #region Page Navigation
         // Executes when the user navigates to this page.
         protected override void OnNavigatedTo(NavigationEventArgs e) {
+<<<<<<< HEAD
             //TaskModes.CurrentTaskMode = BuildingTasks;
+=======
+            if (!LoginController.Instance.IsLoggedIn)
+            {
+                NavigationService.Navigate(new Uri("/LoginPage", UriKind.Relative));
+            }
+>>>>>>> a6cf0b03602d81afc53e1eea0032bc47df3ffe54
         }
 
         // Executes when the user navigates away from this page.

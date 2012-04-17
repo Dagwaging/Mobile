@@ -60,6 +60,7 @@
     <Compile Include="Controllers\ImageController.cs" />
     <Compile Include="Controllers\LocationsController.cs" />
     <Compile Include="Controllers\NodesController.cs" />
+    <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\PathsController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Utilities\ServiceCategoryNode.cs" />

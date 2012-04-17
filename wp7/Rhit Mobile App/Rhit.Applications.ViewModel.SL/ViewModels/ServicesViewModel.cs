@@ -13,16 +13,36 @@ namespace Rhit.Applications.ViewModels {
             AddCategoryCommand = new RelayCommand(p => AddCategory());
             AddServiceCommand = new RelayCommand(p => AddService());
             AddRootCategoryCommand = new RelayCommand(p => AddRootCategory());
-            AddRootServiceCommand = new RelayCommand(p => AddRootService());
             SaveCurrentCommand = new RelayCommand(p => SaveCurrent());
             DeleteCurrentCommand = new RelayCommand(p => DeleteCurrent());
             RefreshCommand = new RelayCommand(p => ReloadServices());
+            IncrementVersionCommand = new RelayCommand(p => IncrementVersion());
 
             DataCollector.Instance.CampusServicesUpdateReturned += new EventHandler(Instance_CampusServicesUpdateReturned);
+            DataCollector.Instance.VersionUpdate += new Models.Events.VersionEventHandler(Instance_VersionUpdate);
+            DataCollector.Instance.CampusServicesReturned += new Models.Events.CampusServicesEventHandler(Instance_CampusServicesReturned);
 
             AllFieldsVisibility = Visibility.Collapsed;
 
             Services = ServicesController.Instance;
+            if (Services.ServicesVersionStatus == null) Services.ServicesVersionStatus = "Waiting for version data";
+        }
+
+        void Instance_CampusServicesReturned(object sender, Models.Events.CampusServicesEventArgs e)
+        {
+            Services.CampusServicesReturned(sender, e);
+
+            if (Services.CurrentServiceNode != null)
+            {
+                OnUpdateSelectedServiceNode(Services.CurrentServiceNode);
+            }
+        }
+
+        void Instance_VersionUpdate(object sender, Models.Events.VersionEventArgs e)
+        {
+            if (e.ServicesVersion == 0) return;
+
+            Services.ServicesVersionStatus = String.Format("Increment services version (currently {0})", e.ServicesVersion);
         }
 
         void Instance_CampusServicesUpdateReturned(object sender, EventArgs e)
@@ -33,46 +53,44 @@ namespace Rhit.Applications.ViewModels {
         #region Command Implementations
         private void AddCategory()
         {
+            String name = "New Category " + DateTime.Now.ToFileTimeUtc();
+
             if (Services.CurrentServiceNode is ServiceCategoryNode)
             {
-                DataCollector.Instance.AddCampusServiceCategory(((ServiceCategoryNode)Services.CurrentServiceNode).Category.ToLightWeightDataContract());
+                DataCollector.Instance.AddCampusServiceCategory(name, ((ServiceCategoryNode)Services.CurrentServiceNode).Category.ToLightWeightDataContract());
             }
 
-            else
-            {
-                DataCollector.Instance.AddCampusServiceCategory(null);
-            }
-
-            ReloadServices();
+            Services.Creating = true;
+            Services.CreatedOrUpdatedItem = name;
         }
 
         private void AddService()
         {
+            String name = "New Service " + DateTime.Now.ToFileTimeUtc();
+
             if (Services.CurrentServiceNode is ServiceCategoryNode)
             {
-                DataCollector.Instance.AddCampusServiceLink(((ServiceCategoryNode)Services.CurrentServiceNode).Category.ToLightWeightDataContract());
+                DataCollector.Instance.AddCampusServiceLink(name, ((ServiceCategoryNode)Services.CurrentServiceNode).Category.ToLightWeightDataContract());
             }
 
-            else
-            {
-                DataCollector.Instance.AddCampusServiceLink(null);
-            }
-
-            ReloadServices();
+            Services.Creating = true;
+            Services.CreatedOrUpdatedItem = name;
         }
 
         private void AddRootCategory()
         {
-            DataCollector.Instance.AddCampusServiceCategory(null);
-        }
+            String name = "New Category " + DateTime.Now.ToFileTimeUtc();
+            DataCollector.Instance.AddCampusServiceCategory(name, null);
 
-        private void AddRootService()
-        {
-            DataCollector.Instance.AddCampusServiceLink(null);
+            Services.Creating = true;
+            Services.CreatedOrUpdatedItem = name;
         }
 
         private void SaveCurrent()
         {
+            Services.Updating = true;
+            Services.CreatedOrUpdatedItem = CurrentName;
+
             if (Services.CurrentServiceNode is ServiceCategoryNode)
             {
                 ServiceCategoryNode node = (ServiceCategoryNode)Services.CurrentServiceNode;
@@ -99,6 +117,14 @@ namespace Rhit.Applications.ViewModels {
                 ServiceLinkNode node = (ServiceLinkNode)Services.CurrentServiceNode;
                 DataCollector.Instance.DeleteCampuServiceLink(node.Link.ToLightWeightDataContract(), node.Parent == null ? null : node.Parent.Name);
             }
+
+            if (Services.CurrentServiceNode != null) Services.CurrentServiceNode = Services.CurrentServiceNode.Parent;
+        }
+
+        private void IncrementVersion()
+        {
+            Services.ServicesVersionStatus = "Updating Version...";
+            DataCollector.Instance.IncreaseServicesVersion();
         }
         #endregion
 
@@ -142,6 +168,16 @@ namespace Rhit.Applications.ViewModels {
         private static readonly DependencyProperty LinkFieldsVisibilityProperty = DependencyProperty.Register("LinkFieldsVisibility", typeof(Visibility), typeof(ServicesViewModel), new PropertyMetadata(null));
         #endregion
 
+        #region CanAddChildItems
+        public Boolean CanAddChildItems
+        {
+            get { return (Boolean)GetValue(CanAddChildItemsProperty); }
+            private set { SetValue(CanAddChildItemsProperty, value); }
+        }
+
+        private static readonly DependencyProperty CanAddChildItemsProperty = DependencyProperty.Register("CanAddChildItems", typeof(Boolean), typeof(ServicesViewModel), new PropertyMetadata(null));
+        #endregion
+
         #region AllFieldsVisibility
         public Visibility AllFieldsVisibility
         {
@@ -177,6 +213,7 @@ namespace Rhit.Applications.ViewModels {
                 CurrentName = serviceNode.Name;
                 CurrentURL = "";
                 LinkFieldsVisibility = Visibility.Collapsed;
+                CanAddChildItems = true;
             }
             else if (serviceNode is ServiceLinkNode)
             {
@@ -185,6 +222,7 @@ namespace Rhit.Applications.ViewModels {
                 CurrentName = serviceNode.Name;
                 CurrentURL = ((ServiceLinkNode)serviceNode).Link.Address;
                 LinkFieldsVisibility = Visibility.Visible;
+                CanAddChildItems = false;
             }
         }
 
@@ -195,14 +233,32 @@ namespace Rhit.Applications.ViewModels {
 
         public ICommand AddCategoryCommand { get; private set; }
 
-        public ICommand AddRootServiceCommand { get; private set; }
-
         public ICommand AddRootCategoryCommand { get; private set; }
 
         public ICommand SaveCurrentCommand { get; private set; }
 
         public ICommand DeleteCurrentCommand { get; private set; }
+
+        public ICommand IncrementVersionCommand { get; private set; }
         #endregion
 
+        #region UpdateSelectedServiceNode
+        public delegate void UpdateSelectedServiceNodeEventHandler(Object sender, SelectedServiceNodeArgs args);
+
+        public class SelectedServiceNodeArgs : EventArgs
+        {
+            public ServiceNode Selected { get; set; }
+        }
+
+        public event UpdateSelectedServiceNodeEventHandler UpdateSelectedServiceNode;
+        protected virtual void OnUpdateSelectedServiceNode(ServiceNode selectedNode)
+        {
+            SelectedServiceNodeArgs args = new SelectedServiceNodeArgs() {
+                Selected = selectedNode,
+            };
+
+            if (UpdateSelectedServiceNode != null) UpdateSelectedServiceNode(this, args);
+        }
+        #endregion
     }
 }

@@ -44,8 +44,8 @@
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
 
-                    <Button Content="Add Category" cmds:CommandManager.Command="{Binding AddCategoryCommand}" cmds:CommandManager.CommandEventName="Click" />
-                    <Button Content="Add Service" Grid.Column="1" cmds:CommandManager.Command="{Binding AddServiceCommand}" cmds:CommandManager.CommandEventName="Click" />
+                    <Button Content="Add Category" IsEnabled="{Binding CanAddChildItems}" cmds:CommandManager.Command="{Binding AddCategoryCommand}" cmds:CommandManager.CommandEventName="Click" />
+                    <Button Content="Add Service" IsEnabled="{Binding CanAddChildItems}" Grid.Column="1" cmds:CommandManager.Command="{Binding AddServiceCommand}" cmds:CommandManager.CommandEventName="Click" />
                 </Grid>
 
             </Grid>
@@ -72,7 +72,7 @@
 
                 <StackPanel  Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Right">
                     <sdk:Label Content="Increment the services version to push the current changes to phones"/>
-                    <Button Content="Increment Campus Services Version (Currently X)" cmds:CommandManager.Command="{Binding AddServiceCommand}" cmds:CommandManager.CommandEventName="Click" />
+                    <Button Content="{Binding Services.ServicesVersionStatus, Mode=OneWay, FallbackValue='Increment Version'}" cmds:CommandManager.Command="{Binding IncrementVersionCommand}" cmds:CommandManager.CommandEventName="Click" />
                 </StackPanel>
             </Grid>
         </Grid>
