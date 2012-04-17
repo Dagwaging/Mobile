@@ -1,6 +1,6 @@
 ﻿
 namespace Rhit.Applications.Models.Services {
-    public enum RequestType { 
+    public enum RequestType {
         NodeDeletion,
         NodeCreation,
         AllLocations,
@@ -22,5 +22,7 @@ namespace Rhit.Applications.Models.Services {
         Tags,
         Tours,
         Version,
+        PathCreation,
+        PathDeletion,
     }
 }

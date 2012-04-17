@@ -149,6 +149,16 @@ namespace Rhit.Applications.Models.Services {
         }
         #endregion
 
+        #region PathCreated
+        public event PathEventHandler PathCreated;
+        protected virtual void OnPathCreated(ServiceEventArgs e) {
+            PathEventArgs args = new PathEventArgs(e) {
+                Path = ServerObject.ParsePath(e.ResponseObject),
+            };
+            if(PathCreated != null) PathCreated(this, args);
+        }
+        #endregion
+
         #region NodeDeleted
         public event IdentificationEventHandler NodeDeleted;
         protected virtual void OnNodeDeleted(ServiceEventArgs e) {
@@ -157,6 +167,17 @@ namespace Rhit.Applications.Models.Services {
                 Id = id,
             };
             if(NodeDeleted != null) NodeDeleted(this, args);
+        }
+        #endregion
+
+        #region PathDeleted
+        public event IdentificationEventHandler PathDeleted;
+        protected virtual void OnPathDeleted(ServiceEventArgs e) {
+            int id = (int) e.Request.UserMetaData["PathId"];
+            IdentificationEventArgs args = new IdentificationEventArgs(e) {
+                Id = id,
+            };
+            if(PathDeleted != null) PathDeleted(this, args);
         }
         #endregion
         
@@ -257,6 +278,13 @@ namespace Rhit.Applications.Models.Services {
                     break;
                 case ResponseType.NodeDeletion:
                     OnNodeDeleted(eventArgs);
+                    break;
+                case ResponseType.PathCreation:
+                    OnPathCreated(eventArgs);
+                    break;
+
+                case ResponseType.PathDeletion:
+                    OnPathDeleted(eventArgs);
                     break;
             }
         }
@@ -524,6 +552,26 @@ namespace Rhit.Applications.Models.Services {
             request = request.AddQueryParameter("outside", outside);
             request = request.AddQueryParameter("location", (object) locationId ?? "%00");
             Connection.MakeRequest(request, RequestType.NodeCreation);
+        }
+
+        public void CreatePath(int node1, int node2, bool elevator, int stairs, int partition) {
+            RequestPart request = new RequestBuilder(BaseAddress).Admin.StoredProcedure(Connection.ServiceTokenGuid, "spAddPath");
+
+            request = request.AddQueryParameter("elevator", elevator);
+            request = request.AddQueryParameter("node1", node1);
+            request = request.AddQueryParameter("node2", node2);
+            request = request.AddQueryParameter("partition", partition);
+            request = request.AddQueryParameter("stairs", stairs);
+            Connection.MakeRequest(request, RequestType.PathCreation);
+        }
+
+        public void DeletePath(int id) {
+            RequestPart request = new RequestBuilder(BaseAddress).Admin.StoredProcedure(Connection.ServiceTokenGuid, "spDeletePath");
+            request = request.AddQueryParameter("id", id);
+
+            Dictionary<string, object> metadata = new Dictionary<string, object>();
+            metadata["PathId"] = id;
+            Connection.MakeMetaDataRequest(request, RequestType.PathDeletion, metadata);
         }
 
         public void DeleteNode(int id) {

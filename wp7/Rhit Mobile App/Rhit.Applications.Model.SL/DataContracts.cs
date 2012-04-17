@@ -141,6 +141,17 @@ namespace Rhit.Applications.Models {
                 _locations.Add(location.ToRhitLocation());
             return _locations;
         }
+
+        internal static Path_DC ParsePath(ServerObject instance) {
+            return new Path_DC() {
+                Id = int.Parse(instance.Table[0][0]),
+                Node1 = int.Parse(instance.Table[0][1]),
+                Node2 = int.Parse(instance.Table[0][2]),
+                Stairs = int.Parse(instance.Table[0][3]),
+                Elevator = bool.Parse(instance.Table[0][4]),
+                Partition = int.Parse(instance.Table[0][5]),
+            };
+        }
     }
 
     #region TagsCategory - Data Contract

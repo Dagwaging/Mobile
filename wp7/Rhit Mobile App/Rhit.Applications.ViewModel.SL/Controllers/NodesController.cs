@@ -33,11 +33,9 @@ namespace Rhit.Applications.ViewModels.Controllers {
             Node2.AddPathBinding(this);
         }
 
-
         public LocationCollection Nodes { get; private set; }
 
         public int Id { get; private set; }
-
 
         #region IsOutside
         public bool IsOutside {
@@ -129,7 +127,6 @@ namespace Rhit.Applications.ViewModels.Controllers {
 
             PathBindingDictionary[other] = path;
         }
-
 
         #region Id
         public int Id {
@@ -306,7 +303,27 @@ namespace Rhit.Applications.ViewModels.Controllers {
 
             DataCollector.Instance.NodeCreated += new NodeEventHandler(Instance_NodeCreated);
             DataCollector.Instance.NodeDeleted += new IdentificationEventHandler(Instance_NodeDeleted);
+            DataCollector.Instance.PathCreated += new PathEventHandler(Instance_PathCreated);
+            DataCollector.Instance.PathDeleted += new IdentificationEventHandler(Instance_PathDeleted);
             State = BehaviorState.Default;
+        }
+
+        private void Instance_PathDeleted(object sender, IdentificationEventArgs e) {
+            if(!PathDictionary.ContainsKey(e.Id)) return;
+            Path path = PathDictionary[e.Id];
+            RestoreToDefault();
+            
+            PathDictionary.Remove(path.Id);
+            AllPaths.Remove(path);
+            Paths.Remove(path);
+        }
+
+        private void Instance_PathCreated(object sender, PathEventArgs e) {
+            Path path = new Path(e.Path, NodeDictionary[e.Path.Node1], NodeDictionary[e.Path.Node2]);
+            AllPaths.Add(path);
+            PathDictionary[path.Id] = path;
+            if(path.IsOutside) 
+                Paths.Add(path);
         }
 
         private void Instance_NodeDeleted(object sender, IdentificationEventArgs e) {
@@ -436,7 +453,27 @@ namespace Rhit.Applications.ViewModels.Controllers {
             SimpleNode node = sender as SimpleNode;
             switch(State) {
                 case BehaviorState.DeletingNode:
-                    DeleteNode(node);
+                    DataCollector.Instance.DeleteNode(node.Id);
+                    RestoreToDefault();
+                    break;
+
+                case BehaviorState.DeletingPath:
+                    SelectedNodes.Add(node);
+                    if(SelectedNodes.Count >= 2) {
+                        Path path;
+                        if(SelectedNodes[0] == node) path = node.GetPath(SelectedNodes[1]);
+                        else path = node.GetPath(SelectedNodes[0]);
+                        DataCollector.Instance.DeletePath(path.Id);
+                        RestoreToDefault();
+                    }
+                    break;
+
+                case BehaviorState.CreatingPath:
+                    SelectedNodes.Add(node);
+                    if(SelectedNodes.Count >= 2) {
+                        CreatePath();
+                        RestoreToDefault();
+                    }
                     break;
 
                 case BehaviorState.Default:
@@ -458,6 +495,11 @@ namespace Rhit.Applications.ViewModels.Controllers {
                     CurrentMessage = MessageSearch();
                     break;
             }
+        }
+
+        private void CreatePath() {
+            DataCollector.Instance.CreatePath(SelectedNodes[0].Id, SelectedNodes[1].Id, false, 0, 100);
+            RestoreToDefault();
         }
 
         public DirectionMessage MessageSearch() {
@@ -485,14 +527,9 @@ namespace Rhit.Applications.ViewModels.Controllers {
             return NullMessage;
         }
 
-        protected enum BehaviorState { Default, DeletingNode, };
+        protected enum BehaviorState { Default, DeletingNode, CreatingPath, DeletingPath, };
 
         protected BehaviorState State { get; set; }
-
-        private void DeleteNode(SimpleNode node) {
-            DataCollector.Instance.DeleteNode(node.Id);
-            State = BehaviorState.Default;
-        }
 
         public void DeleteNextNode() {
             RestoreToDefault();
@@ -501,6 +538,8 @@ namespace Rhit.Applications.ViewModels.Controllers {
 
         public void RestoreToDefault() {
             State = BehaviorState.Default;
+            SelectedPaths.Clear();
+            SelectedNodes.Clear();
             foreach(SimpleNode node in AllNodes) {
                 node.CanSelect = true;
                 node.IsEndNode = false;
@@ -518,6 +557,16 @@ namespace Rhit.Applications.ViewModels.Controllers {
 
         public DirectionMessage GetMessage(int id) {
             return MessageDictionary[id];
+        }
+
+        internal void CreateNewPath() {
+            RestoreToDefault();
+            State = BehaviorState.CreatingPath;
+        }
+
+        internal void DeleteNextPath() {
+            RestoreToDefault();
+            State = BehaviorState.DeletingPath;
         }
     }
 }

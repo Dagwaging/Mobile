@@ -204,6 +204,16 @@
                         <util:TaskStep Number="1" Instructions="Select a node to be deleted." Label="Select Node" />
                     </util:Task.Steps>
                 </util:Task>
+                <util:Task Label="Add Path" StartCommand="{Binding AddPathCommand, ElementName=ViewModel}" ToolTip="Add a path">
+                    <util:Task.Steps>
+                        <util:TaskStep Number="1" Instructions="Select two nodes to create a path." Label="Select Nodes" />
+                    </util:Task.Steps>
+                </util:Task>
+                <util:Task Label="Delete Path" StartCommand="{Binding DeletePathCommand, ElementName=ViewModel}" ToolTip="Delete a path">
+                    <util:Task.Steps>
+                        <util:TaskStep Number="1" Instructions="Select two nodes to delete a path." Label="Select Nodes" />
+                    </util:Task.Steps>
+                </util:Task>
                 <!--<util:Task Label="Add Interior Node" StartCommand="{Binding AddNodeCommand, ElementName=ViewModel}" ToolTip="Create a new interior path node.">
                     <util:Task.Requirements>
                         <util:TaskRequirement Value="{Binding Mapper.FloorSynched, Source={StaticResource ViewModel}}" />

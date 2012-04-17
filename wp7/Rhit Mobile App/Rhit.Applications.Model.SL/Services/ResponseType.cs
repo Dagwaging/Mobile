@@ -24,5 +24,7 @@ namespace Rhit.Applications.Models.Services {
         Tags,
         Tours,
         Version,
+        PathCreation,
+        PathDeletion,
     }
 }

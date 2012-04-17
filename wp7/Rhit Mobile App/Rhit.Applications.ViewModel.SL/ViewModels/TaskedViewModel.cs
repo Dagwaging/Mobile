@@ -50,6 +50,8 @@ namespace Rhit.Applications.ViewModels {
             LoadFloorCommand = new RelayCommand(p => LoadFloor());
             AddNodeCommand = new RelayCommand(p => AddNode());
             DeleteNodeCommand = new RelayCommand(p => DeleteNode());
+            AddPathCommand = new RelayCommand(p => AddPath());
+            DeletePathCommand = new RelayCommand(p => DeletePath());
         }
 
         #region Save Command/Methods
@@ -166,6 +168,24 @@ namespace Rhit.Applications.ViewModels {
         private void DeleteNode() {
             ShowSave = false;
             NodesController.Instance.DeleteNextNode();
+        }
+        #endregion
+
+        #region Add Path Command/Method
+        public ICommand AddPathCommand { get; private set; }
+
+        private void AddPath() {
+            ShowSave = false;
+            NodesController.Instance.CreateNewPath();
+        }
+        #endregion
+
+        #region Delete Path Command/Method
+        public ICommand DeletePathCommand { get; private set; }
+
+        private void DeletePath() {
+            ShowSave = false;
+            NodesController.Instance.DeleteNextPath();
         }
         #endregion
 

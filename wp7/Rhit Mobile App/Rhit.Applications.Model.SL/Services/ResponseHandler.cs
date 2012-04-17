@@ -21,6 +21,10 @@ namespace Rhit.Applications.Models.Services {
 
         private static ResponseType ConvertType(RequestType request) {
             switch(request) {
+                case RequestType.PathDeletion:
+                    return ResponseType.PathDeletion;
+                case RequestType.PathCreation:
+                    return ResponseType.PathCreation;
                 case RequestType.NodeDeletion:
                     return ResponseType.NodeDeletion;
                 case RequestType.NodeCreation:
