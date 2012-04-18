@@ -90,6 +90,20 @@ namespace TestClient
             }
 
             PrintUser(user);
+
+            var userEnrollment = service.GetUserEnrollment(token, username);
+            if (userEnrollment != null && userEnrollment.Length > 0)
+            {
+                Console.WriteLine("Student Schedule: ");
+                PrintEnrollment(userEnrollment);
+            }
+
+            var profEnrollment = service.GetInstructorSchedule(token, username);
+            if (profEnrollment != null && profEnrollment.Length > 0)
+            {
+                Console.WriteLine("Instructor Schedule: ");
+                PrintEnrollment(profEnrollment);
+            }
         }
 
         static void PrintUser(User user)
@@ -105,6 +119,15 @@ namespace TestClient
             Console.WriteLine("Phone:       {0}", user.Phone);
             Console.WriteLine("Room:        {0}", user.Room);
             Console.WriteLine();
+        }
+
+        static void PrintEnrollment(UserEnrollment[] enrollment)
+        {
+            foreach (var item in enrollment)
+            {
+                var course = service.GetCourse(token, item.Term, item.CRN);
+                Console.WriteLine("{0} {1}", course.Name, course.Title);
+            }
         }
 
         static string ReadPassword()

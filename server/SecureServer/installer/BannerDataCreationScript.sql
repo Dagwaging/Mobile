@@ -102,6 +102,14 @@ GO
 ALTER TABLE [dbo].[Course] CHECK CONSTRAINT [FK_Course_User]
 GO
 
+/****** Object:  Index [Index_Course_Nonclustered]    Script Date: 04/18/2012 14:18:56 ******/
+CREATE NONCLUSTERED INDEX [Index_Course_Nonclustered] ON [dbo].[Course] 
+(
+	[switch] ASC,
+	[instructor] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+
 -- CourseSchedule table creation
 
 /****** Object:  Table [dbo].[CourseSchedule]    Script Date: 04/10/2012 20:00:58 ******/
@@ -320,6 +328,32 @@ END
 
 GO
 
+/****** Object:  StoredProcedure [dbo].[spGetInstructorSchedule]    Script Date: 04/18/2012 13:55:05 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE PROCEDURE [dbo].[spGetInstructorSchedule]
+	@switch bit,
+	@username varchar(50)
+AS
+BEGIN
+	SELECT e.term, e.crn
+	FROM [User] u
+		JOIN [Course] e ON e.switch = @switch AND e.instructor = u.id
+	WHERE u.switch = @switch
+		AND u.username = @username
+END
+
+GO
+
 /****** Object:  StoredProcedure [dbo].[spGetRoomSchedule]    Script Date: 04/10/2012 20:04:46 ******/
 SET ANSI_NULLS ON
 GO
@@ -334,7 +368,7 @@ GO
 -- =============================================
 CREATE PROCEDURE [dbo].[spGetRoomSchedule]
 	@switch bit,
-	@room varchar(10)
+	@room varchar(20)
 AS
 BEGIN
 	SELECT term, crn, [day], startperiod, endperiod

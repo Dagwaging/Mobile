@@ -72,6 +72,15 @@
   <wsdl:message name="IWebService_GetUserEnrollment_AuthFaultFault_FaultMessage">
     <wsdl:part xmlns:q6="http://schemas.datacontract.org/2004/07/RHITMobile.Secure" name="detail" element="q6:AuthFault" />
   </wsdl:message>
+  <wsdl:message name="IWebService_GetInstructorSchedule_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetInstructorSchedule" />
+  </wsdl:message>
+  <wsdl:message name="IWebService_GetInstructorSchedule_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetInstructorScheduleResponse" />
+  </wsdl:message>
+  <wsdl:message name="IWebService_GetInstructorSchedule_AuthFaultFault_FaultMessage">
+    <wsdl:part xmlns:q7="http://schemas.datacontract.org/2004/07/RHITMobile.Secure" name="detail" element="q7:AuthFault" />
+  </wsdl:message>
   <wsdl:message name="IWebService_GetCourseSchedule_InputMessage">
     <wsdl:part name="parameters" element="tns:GetCourseSchedule" />
   </wsdl:message>
@@ -79,7 +88,7 @@
     <wsdl:part name="parameters" element="tns:GetCourseScheduleResponse" />
   </wsdl:message>
   <wsdl:message name="IWebService_GetCourseSchedule_AuthFaultFault_FaultMessage">
-    <wsdl:part xmlns:q7="http://schemas.datacontract.org/2004/07/RHITMobile.Secure" name="detail" element="q7:AuthFault" />
+    <wsdl:part xmlns:q8="http://schemas.datacontract.org/2004/07/RHITMobile.Secure" name="detail" element="q8:AuthFault" />
   </wsdl:message>
   <wsdl:message name="IWebService_GetRoomSchedule_InputMessage">
     <wsdl:part name="parameters" element="tns:GetRoomSchedule" />
@@ -88,7 +97,7 @@
     <wsdl:part name="parameters" element="tns:GetRoomScheduleResponse" />
   </wsdl:message>
   <wsdl:message name="IWebService_GetRoomSchedule_AuthFaultFault_FaultMessage">
-    <wsdl:part xmlns:q8="http://schemas.datacontract.org/2004/07/RHITMobile.Secure" name="detail" element="q8:AuthFault" />
+    <wsdl:part xmlns:q9="http://schemas.datacontract.org/2004/07/RHITMobile.Secure" name="detail" element="q9:AuthFault" />
   </wsdl:message>
   <wsdl:message name="IWebService_RequestUpdate_InputMessage">
     <wsdl:part name="parameters" element="tns:RequestUpdate" />
@@ -139,6 +148,11 @@
       <wsdl:input wsaw:Action="http://mobileprivate.rose-hulman.edu/IWebService/GetUserEnrollment" message="tns:IWebService_GetUserEnrollment_InputMessage" />
       <wsdl:output wsaw:Action="http://mobileprivate.rose-hulman.edu/IWebService/GetUserEnrollmentResponse" message="tns:IWebService_GetUserEnrollment_OutputMessage" />
       <wsdl:fault wsaw:Action="http://mobileprivate.rose-hulman.edu/IWebService/GetUserEnrollmentAuthFaultFault" name="AuthFaultFault" message="tns:IWebService_GetUserEnrollment_AuthFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetInstructorSchedule">
+      <wsdl:input wsaw:Action="http://mobileprivate.rose-hulman.edu/IWebService/GetInstructorSchedule" message="tns:IWebService_GetInstructorSchedule_InputMessage" />
+      <wsdl:output wsaw:Action="http://mobileprivate.rose-hulman.edu/IWebService/GetInstructorScheduleResponse" message="tns:IWebService_GetInstructorSchedule_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://mobileprivate.rose-hulman.edu/IWebService/GetInstructorScheduleAuthFaultFault" name="AuthFaultFault" message="tns:IWebService_GetInstructorSchedule_AuthFaultFault_FaultMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetCourseSchedule">
       <wsdl:input wsaw:Action="http://mobileprivate.rose-hulman.edu/IWebService/GetCourseSchedule" message="tns:IWebService_GetCourseSchedule_InputMessage" />
