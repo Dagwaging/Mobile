@@ -90,6 +90,28 @@ namespace RHITMobile.Secure
                 }
             }
         }
+
+        partial class GetInstructorScheduleDataTable
+        {
+            public UserEnrollment[] Schedule
+            {
+                get
+                {
+                    List<UserEnrollment> enrollment = new List<UserEnrollment>();
+
+                    foreach (var row in this)
+                    {
+                        UserEnrollment item = new UserEnrollment();
+
+                        item.Term = row.Term;
+                        item.CRN = row.CRN;
+
+                        enrollment.Add(item);
+                    }
+                    return enrollment.ToArray();
+                }
+            }
+        }
     
         partial class GetCourseDataTable
         {

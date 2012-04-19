@@ -126,6 +126,18 @@
         <soap12:fault use="literal" name="AuthFaultFault" namespace="" />
       </wsdl:fault>
     </wsdl:operation>
+    <wsdl:operation name="GetInstructorSchedule">
+      <soap12:operation soapAction="http://mobileprivate.rose-hulman.edu/IWebService/GetInstructorSchedule" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="AuthFaultFault">
+        <soap12:fault use="literal" name="AuthFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
     <wsdl:operation name="GetCourseSchedule">
       <soap12:operation soapAction="http://mobileprivate.rose-hulman.edu/IWebService/GetCourseSchedule" style="document" />
       <wsdl:input>
@@ -175,7 +187,7 @@
       <wsa10:EndpointReference>
         <wsa10:Address>net.tcp://localhost:8000/RhitPrivate</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Spn>host/wellska1-1.rose-hulman.edu</Spn>
+          <Upn>wellska1-1\wellska1</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>

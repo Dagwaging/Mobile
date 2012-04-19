@@ -24,21 +24,23 @@ reflect the actual database name being used.
    The path that the service will import data from is located in the appSettings
    section.  Replace the value specified in the "value" field with the
    appropriate path to the data files.  This path may include network shares.
+   If a network share is used, the *machine account* must have read access to
+   the remote directory.
 
    The connection string is located in the connectionStrings section.  A
    connection string is simply a semicolon separated list of parameters
    necessary to connect to the database.  Relevant fields include:
 
     - Data Source: The address of the database server.  Connecting via TCP is of
-	               the form `tcp:address,port`
-	
-	- Initial Catalog: The name of the database to use.
+      the form `tcp:address,port`
+    
+    - Initial Catalog: The name of the database to use.
 
-	- User Id: If the machine account cannot be used for authentication, a
-	  username must be specified here.
-	
-	- Password: If the machine account cannot be used for authentication, a
-	  password must be specified here.
+    - User Id: If the machine account cannot be used for authentication, a
+      username must be specified here.
+    
+    - Password: If the machine account cannot be used for authentication, a
+      password must be specified here.
 
  - In order for configuration changes to take effect, the service needs to be
    restarted, either through `services.msc` or via the command line:
@@ -51,9 +53,9 @@ reflect the actual database name being used.
    `services.msc`
 
     - Open the properties for RHITMobileSecureServer
-	- Click the **Recovery** tab
-	- For each failure type, select "Restart the Service"
-	- Click OK
+    - Click the **Recovery** tab
+    - For each failure type, select "Restart the Service"
+    - Click OK
 
 ## Monitoring
 

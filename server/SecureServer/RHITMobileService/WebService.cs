@@ -56,7 +56,11 @@ namespace RHITMobile.Secure
         [OperationContract]
         [FaultContract(typeof(AuthFault))]
         UserEnrollment[] GetUserEnrollment(string authToken, string username);
-        
+
+        [OperationContract]
+        [FaultContract(typeof(AuthFault))]
+        UserEnrollment[] GetInstructorSchedule(string authToken, string username);
+
         [OperationContract]
         [FaultContract(typeof(AuthFault))]
         CourseTime[] GetCourseSchedule(string authToken, int term, int crn);
@@ -176,6 +180,13 @@ namespace RHITMobile.Secure
             Authorize(authToken);
 
             return DB.Instance.GetUserEnrollment(username);
+        }
+
+        public UserEnrollment[] GetInstructorSchedule(string authToken, string username)
+        {
+            Authorize(authToken);
+
+            return DB.Instance.GetInstructorSchedule(username);
         }
 
         public CourseTime[] GetCourseSchedule(string authToken, int term, int crn)

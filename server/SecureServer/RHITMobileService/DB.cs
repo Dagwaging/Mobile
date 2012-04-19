@@ -131,7 +131,7 @@ namespace RHITMobile.Secure
                 return table.Enrollment;
             }
         }
-        
+
         public UserEnrollment[] GetUserEnrollment(string username)
         {
             using (SwitchLock switchLock = AcquireReadSwitch())
@@ -139,6 +139,16 @@ namespace RHITMobile.Secure
                 GetUserEnrollmentTableAdapter adapter = new GetUserEnrollmentTableAdapter();
                 Banner.GetUserEnrollmentDataTable table = adapter.GetData(switchLock.Switch, username);
                 return table.Enrollment;
+            }
+        }
+
+        public UserEnrollment[] GetInstructorSchedule(string username)
+        {
+            using (SwitchLock switchLock = AcquireReadSwitch())
+            {
+                GetInstructorScheduleTableAdapter adapter = new GetInstructorScheduleTableAdapter();
+                Banner.GetInstructorScheduleDataTable table = adapter.GetData(switchLock.Switch, username);
+                return table.Schedule;
             }
         }
         

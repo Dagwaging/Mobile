@@ -64,7 +64,12 @@ namespace RHITMobile.Secure
             using (var sc = new ServiceController(WindowsService.SERVICE_NAME))
             {
                 sc.Start();
-                sc.WaitForStatus(ServiceControllerStatus.Running, TimeSpan.FromSeconds(10));
+                try
+                {
+                    sc.WaitForStatus(ServiceControllerStatus.Running, TimeSpan.FromSeconds(10));
+                }
+                catch (System.ServiceProcess.TimeoutException)
+                { }
                 //if (sc.Status != ServiceControllerStatus.Running && sc.Status != ServiceControllerStatus.StartPending)
                 //{
                 //   throw new InvalidOperationException("Service failed to start");
