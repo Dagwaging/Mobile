@@ -186,7 +186,7 @@ namespace RHITMobile {
                 foreach (string field in querySplit) {
                     int equalsPos = field.IndexOf('=');
                     if (equalsPos == -1 || equalsPos == 0 || equalsPos == field.Length - 1) {
-                        result = new JsonResponse(HttpStatusCode.BadRequest);
+                        result = new JsonResponse(HttpStatusCode.BadRequest, "Invalid query parameter(s).");
                         break;
                     }
                     query.Add(field.Substring(0, equalsPos), field.Substring(equalsPos + 1, field.Length - equalsPos - 1));
@@ -197,6 +197,10 @@ namespace RHITMobile {
                 yield return TM.Await(currentThread, _handler.HandlePath(TM, isSSL, path, query, context.Request.Headers, new object()));
                 try {
                     result = TM.GetResult<JsonResponse>(currentThread);
+                } catch (UpToDateException e) {
+                    result = new JsonResponse(HttpStatusCode.NoContent, e.Message);
+                } catch (BadRequestException e) {
+                    result = new JsonResponse(HttpStatusCode.BadRequest, e.Message);
                 } catch (Exception) {
                     result = new JsonResponse(HttpStatusCode.InternalServerError);
                 }
@@ -280,6 +284,7 @@ namespace RHITMobile {
             Redirects.Add("tours", new ToursHandler());
             Redirects.Add("admin", new AdminHandler());
             Redirects.Add("services", new ServicesHandler());
+            Redirects.Add("banner", new BannerHandler());
             Redirects.Add("clientaccesspolicy.xml", new ClientAccessPolicyHandler());
         }
 
@@ -302,6 +307,12 @@ namespace RHITMobile {
             Message = "";
         }
 
+        public JsonResponse(HttpStatusCode code, string message) {
+            Json = null;
+            StatusCode = code;
+            Message = message;
+        }
+
         public JsonResponse(string message) {
             Json = null;
             StatusCode = HttpStatusCode.OK;
@@ -311,5 +322,19 @@ namespace RHITMobile {
         public JsonObject Json { get; set; }
         public HttpStatusCode StatusCode { get; set; }
         public string Message { get; set; }
+    }
+
+    public class BadRequestException : Exception {
+        public BadRequestException(string message) : base(message) { }
+
+        public BadRequestException(string message, params object[] obj)
+            : base(String.Format(message, obj)) { }
+    }
+
+    public class UpToDateException : Exception {
+        public UpToDateException(string message) : base(message) { }
+
+        public UpToDateException(string message, params object[] obj)
+            : base(String.Format(message, obj)) { }
     }
 }

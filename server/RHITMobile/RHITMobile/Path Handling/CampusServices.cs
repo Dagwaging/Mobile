@@ -14,7 +14,7 @@ namespace RHITMobile {
                 double version;
                 if (Double.TryParse(query["version"], out version)) {
                     if (version >= Program.ServicesVersion) {
-                        yield return TM.Return(currentThread, new JsonResponse(HttpStatusCode.NoContent));
+                        throw new UpToDateException("Version is up to date.");
                     }
                 }
             }

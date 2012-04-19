@@ -6,6 +6,7 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.IO;
 using System.Data;
+using RHITMobile.RhitPrivate;
 
 namespace RHITMobile {
     [DataContract]
@@ -553,10 +554,15 @@ namespace RHITMobile {
 
     #region Admin Interface
     [DataContract]
-    public class AuthenticationResponse : JsonObject {
-        public AuthenticationResponse(DateTime expiration, Guid id) {
+    public class SAuthenticationResponse : JsonObject {
+        public SAuthenticationResponse(DateTime expiration, Guid id) {
             Expiration = expiration;
             Token = id.ToString();
+        }
+
+        public SAuthenticationResponse(DateTime expiration, string token) {
+            Expiration = expiration;
+            Token = token;
         }
 
         [DataMember]
@@ -736,6 +742,193 @@ namespace RHITMobile {
         public string Action2 { get; set; }
         [DataMember]
         public int NodeOffset { get; set; }
+    }
+    #endregion
+
+    #region UserDataResponse, UsersResponse, & CoursesResponse
+    [DataContract]
+    public class UserDataResponse : JsonObject {
+        public UserDataResponse(User user) {
+            Advisor = null;
+            Class = user.Class;
+            CM = user.Mailbox;
+            Department = user.Department;
+            Email = user.Alias;
+            FirstName = user.FirstName;
+            LastName = user.LastName;
+            Majors = user.Major;
+            MiddleName = user.MiddleName;
+            Office = user.Room;
+            Telephone = user.Phone;
+            User = new ShortUser(user);
+            Year = user.Year;
+        }
+
+        public UserDataResponse(User user, User advisor)
+            : this(user) {
+            Advisor = new ShortUser(advisor);
+        }
+
+        [DataMember]
+        public ShortUser Advisor { get; set; }
+        [DataMember]
+        public string Class { get; set; }
+        [DataMember]
+        public int CM { get; set; }
+        [DataMember]
+        public string Department { get; set; }
+        [DataMember]
+        public string Email { get; set; }
+        [DataMember]
+        public string FirstName { get; set; }
+        [DataMember]
+        public string LastName { get; set; }
+        [DataMember]
+        public string Majors { get; set; }
+        [DataMember]
+        public string MiddleName { get; set; }
+        [DataMember]
+        public string Office { get; set; }
+        [DataMember]
+        public string Telephone { get; set; }
+        [DataMember]
+        public ShortUser User { get; set; }
+        [DataMember]
+        public string Year { get; set; }
+    }
+
+    [DataContract]
+    public class UsersResponse : JsonObject {
+        public UsersResponse(User[] users) {
+            Users = users.Select(user => new ShortUser(user)).ToList();
+        }
+
+        [DataMember]
+        public List<ShortUser> Users { get; set; }
+    }
+
+    [DataContract]
+    public class CoursesResponse : JsonObject {
+        public CoursesResponse() {
+            Courses = new List<SCourse>();
+        }
+
+        [DataMember]
+        public List<SCourse> Courses { get; set; }
+    }
+
+    [DataContract]
+    public class SCourse : JsonObject {
+        public SCourse(Course course) {
+            Comments = course.Comments;
+            CourseNumber = course.Name;
+            Credits = course.Credit;
+            CRN = course.CRN;
+            Enrolled = course.Enrolled;
+            FinalDay = course.FinalDay + "";
+            FinalHour = course.FinalHour;
+            FinalRoom = course.FinalRoom;
+            MaxEnrolled = course.MaxEnrollment;
+            Term = course.Term;
+            Title = course.Title;
+        }
+
+        [DataMember]
+        public string Comments { get; set; }
+        [DataMember]
+        public string CourseNumber { get; set; }
+        [DataMember]
+        public int Credits { get; set; }
+        [DataMember]
+        public int CRN { get; set; }
+        [DataMember]
+        public int Enrolled { get; set; }
+        [DataMember]
+        public string FinalDay { get; set; }
+        [DataMember]
+        public int? FinalHour { get; set; }
+        [DataMember]
+        public string FinalRoom { get; set; }
+        [DataMember]
+        public ShortUser Instructor { get; set; }
+        [DataMember]
+        public int MaxEnrolled { get; set; }
+        [DataMember]
+        public List<CourseMeeting> Schedule { get; set; }
+        [DataMember]
+        public List<ShortUser> Students { get; set; }
+        [DataMember]
+        public int Term { get; set; }
+        [DataMember]
+        public string Title { get; set; }
+    }
+
+    [DataContract]
+    public class CourseMeeting : JsonObject {
+        public CourseMeeting(CourseTime time) {
+            Day = time.Day + "";
+            EndPeriod = time.EndPeriod;
+            StartPeriod = time.StartPeriod;
+            Room = time.Room;
+        }
+
+        public CourseMeeting(RoomSchedule time, string room) {
+            Day = time.Day + "";
+            EndPeriod = time.EndPeriod;
+            StartPeriod = time.StartPeriod;
+            Room = room;
+        }
+
+        [DataMember]
+        public string Day { get; set; }
+        [DataMember]
+        public int EndPeriod { get; set; }
+        [DataMember]
+        public int StartPeriod { get; set; }
+        [DataMember]
+        public string Room { get; set; }
+    }
+
+    [DataContract]
+    public class ShortUser : JsonObject {
+        public ShortUser(User user) {
+            Username = user.Username;
+
+            if (user.MiddleName == null)
+                FullName = String.Format("{0} {1}", user.FirstName, user.LastName);
+            else
+                FullName = String.Format("{0} {1} {2}", user.FirstName, user.MiddleName, user.LastName);
+
+            int isStudent = 0;
+            isStudent += String.IsNullOrWhiteSpace(user.Advisor) ? -1 : 1;
+            isStudent += String.IsNullOrWhiteSpace(user.Class) ? -1 : 1;
+            isStudent += String.IsNullOrWhiteSpace(user.Department) ? 1 : -1;
+            isStudent += String.IsNullOrWhiteSpace(user.Major) ? -1 : 1;
+            isStudent += String.IsNullOrWhiteSpace(user.Year) ? -1 : 1;
+
+            if (isStudent > 0) {
+                if (!String.IsNullOrWhiteSpace(user.Class) && !String.IsNullOrWhiteSpace(user.Major))
+                    Subtitle = String.Format("{0} {1} Student", user.Class, user.Major);
+                else if (!String.IsNullOrWhiteSpace(user.Class))
+                    Subtitle = String.Format("{0} Student", user.Class);
+                else if (!String.IsNullOrWhiteSpace(user.Major))
+                    Subtitle = String.Format("{0} Student", user.Major);
+                else
+                    Subtitle = "Student";
+            } else {
+                if (!String.IsNullOrWhiteSpace(user.Department))
+                    Subtitle = String.Format("Faculty in {0}", user.Department);
+                else
+                    Subtitle = "Faculty";
+            }
+        }
+
+        [DataMember]
+        public string FullName { get; set; }
+        [DataMember]
+        public string Subtitle { get; set; }
+        [DataMember]
+        public string Username { get; set; }
     }
     #endregion
 

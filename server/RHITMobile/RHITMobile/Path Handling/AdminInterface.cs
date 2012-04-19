@@ -8,32 +8,43 @@ using System.Data.SqlClient;
 using System.Collections.Specialized;
 
 namespace RHITMobile {
-    public class AdminHandler : SecurePathHandler {
+    public class AdminHandler : PathHandler {
         public static Dictionary<Guid, SqlLoginData> Logins = new Dictionary<Guid, SqlLoginData>();
 
         public AdminHandler() {
             Redirects.Add("authenticate", new AdminAuthenticateHandler());
-            Redirects.Add("action", new AdminActionHandler());
+            Redirects.Add("storedproc", new AdminStoredProcHandler());
+            Redirects.Add("updateversion", new AdminUpdateVersionHandler());
+            Redirects.Add("scriptdb", new DatabaseScripter());
+            Redirects.Add("pathdata", new AdminPathDataHandler());
             UnknownRedirect = new AdminTokenHandler(); //TODO: Remove
         }
 
         protected override IEnumerable<ThreadInfo> HandleUnknownPath(ThreadManager TM, string path, object state) { //TODO: Remove
             var currentThread = TM.CurrentThread;
-            bool success = true;
+
+            yield return TM.Return(currentThread, path);
+        }
+
+        public static IEnumerable<ThreadInfo> VerifyToken(ThreadManager TM, NameValueCollection headers) {
+            var currentThread = TM.CurrentThread;
+
+            string token = headers["Auth-Token"];
+            if (token == null)
+                throw new BadRequestException("An authentication token is required for this request.");
+
             Guid id = new Guid();
             try {
-                id = new Guid((string)path);
-                if (!AdminHandler.Logins.ContainsKey(id) || Logins[id].Expiration < DateTime.Now) {
-                    success = false;
-                }
-            } catch {
-                success = false;
+                id = new Guid(token);
+            } catch (Exception e) {
+                throw new BadRequestException(e.Message);
             }
-            if (success) {
-                yield return TM.Return(currentThread, Logins[id]);
-            } else {
-                yield return TM.Return(currentThread, new JsonResponse(HttpStatusCode.BadRequest));
-            }
+            if (!AdminHandler.Logins.ContainsKey(id))
+                throw new BadRequestException("Authentication token is invalid.");
+            if (AdminHandler.Logins[id].Expiration < DateTime.Now)
+                throw new BadRequestException("Authentication token has expired.");
+
+            yield return TM.Return(currentThread, AdminHandler.Logins[id]);
         }
 
         public static IEnumerable<ThreadInfo> DeleteExpiredLogins(ThreadManager TM) {
@@ -49,7 +60,7 @@ namespace RHITMobile {
         }
     }
 
-    public class AdminAuthenticateHandler : SecurePathHandler {
+    public class AdminAuthenticateHandler : PathHandler {
         public AdminAuthenticateHandler() {
             UnknownRedirect = new AdminAuthenticateUsernameHandler(); //TODO: Remove
         }
@@ -83,19 +94,19 @@ namespace RHITMobile {
                     id = Guid.NewGuid();
                 var loginData = new SqlLoginData(username, password);
                 AdminHandler.Logins[id] = loginData;
-                yield return TM.Return(currentThread, new AuthenticationResponse(loginData.Expiration, id));
+                yield return TM.Return(currentThread, new SAuthenticationResponse(loginData.Expiration, id));
             } else {
-                yield return TM.Return(currentThread, new JsonResponse(HttpStatusCode.BadRequest));
+                throw new BadRequestException("SQL authentication failed.");
             }
         }
 
         protected override IEnumerable<ThreadInfo> HandleNoPath(ThreadManager TM, Dictionary<string, string> query, object state) {
             var currentThread = TM.CurrentThread;
-            yield return TM.Return(currentThread, new JsonResponse((AuthenticationResponse)state));
+            yield return TM.Return(currentThread, new JsonResponse((SAuthenticationResponse)state));
         }
     }
 
-    public class AdminAuthenticateUsernameHandler : SecurePathHandler { //TODO: Remove
+    public class AdminAuthenticateUsernameHandler : PathHandler { //TODO: Remove
         public AdminAuthenticateUsernameHandler() {
             UnknownRedirect = new AdminAuthenticatePasswordHandler();
         }
@@ -106,7 +117,7 @@ namespace RHITMobile {
         }
     }
 
-    public class AdminAuthenticatePasswordHandler : SecurePathHandler { //TODO: Remove
+    public class AdminAuthenticatePasswordHandler : PathHandler { //TODO: Remove
         protected override IEnumerable<ThreadInfo> HandleNoPath(ThreadManager TM, Dictionary<string, string> query, object state) {
             var currentThread = TM.CurrentThread;
             var loginData = (SqlLoginData)state;
@@ -129,15 +140,15 @@ namespace RHITMobile {
                 while (AdminHandler.Logins.ContainsKey(id))
                     id = Guid.NewGuid();
                 AdminHandler.Logins[id] = loginData;
-                yield return TM.Return(currentThread, new JsonResponse(new AuthenticationResponse(loginData.Expiration, id)));
+                yield return TM.Return(currentThread, new JsonResponse(new SAuthenticationResponse(loginData.Expiration, id)));
             } else {
-                yield return TM.Return(currentThread, new JsonResponse(HttpStatusCode.BadRequest));
+                throw new BadRequestException("SQL authentication failed.");
             }
         }
     }
 
-    public class AdminActionHandler : SecurePathHandler {
-        public AdminActionHandler() {
+    public class AdminTokenHandler : PathHandler { //TODO: Remove
+        public AdminTokenHandler() {
             Redirects.Add("storedproc", new AdminStoredProcHandler());
             Redirects.Add("updateversion", new AdminUpdateVersionHandler());
             Redirects.Add("scriptdb", new DatabaseScripter());
@@ -146,41 +157,18 @@ namespace RHITMobile {
 
         public override IEnumerable<ThreadInfo> VerifyHeaders(ThreadManager TM, NameValueCollection headers, object state) {
             var currentThread = TM.CurrentThread;
-
-            string token = headers["Auth-Token"];
-            if (token == null)
-                yield return TM.Return(currentThread, new JsonResponse(HttpStatusCode.BadRequest));
-
-            bool success = true;
-            Guid id = new Guid();
-            try {
-                id = new Guid(token);
-                if (!AdminHandler.Logins.ContainsKey(id) || AdminHandler.Logins[id].Expiration < DateTime.Now) {
-                    success = false;
-                }
-            } catch {
-                success = false;
-            }
-            if (success) {
-                yield return TM.Return(currentThread, AdminHandler.Logins[id]);
-            } else {
-                yield return TM.Return(currentThread, new JsonResponse(HttpStatusCode.BadRequest));
-            }
+            headers.Add("Auth-Token", (string)state);
+            yield return TM.Return(currentThread, null);
         }
     }
 
-    public class AdminTokenHandler : SecurePathHandler { //TODO: Remove
-        public AdminTokenHandler() {
-            Redirects.Add("storedproc", new AdminStoredProcHandler());
-            Redirects.Add("updateversion", new AdminUpdateVersionHandler());
-            Redirects.Add("scriptdb", new DatabaseScripter());
-            Redirects.Add("pathdata", new AdminPathDataHandler());
-        }
-    }
-
-    public class AdminStoredProcHandler : SecurePathHandler {
+    public class AdminStoredProcHandler : PathHandler {
         public AdminStoredProcHandler() {
             UnknownRedirect = new AdminStoredProcNameHandler();
+        }
+
+        public override IEnumerable<ThreadInfo> VerifyHeaders(ThreadManager TM, NameValueCollection headers, object state) {
+            return AdminHandler.VerifyToken(TM, headers);
         }
 
         protected override IEnumerable<ThreadInfo> HandleUnknownPath(ThreadManager TM, string path, object state) {
@@ -189,7 +177,7 @@ namespace RHITMobile {
         }
     }
 
-    public class AdminStoredProcNameHandler : SecurePathHandler {
+    public class AdminStoredProcNameHandler : PathHandler {
         protected override IEnumerable<ThreadInfo> HandleNoPath(ThreadManager TM, Dictionary<string, string> query, object state) {
             var currentThread = TM.CurrentThread;
             var storedProcData = (SqlStoredProcData)state;
@@ -203,7 +191,6 @@ namespace RHITMobile {
                 i++;
             }
             yield return TM.MakeDbCall(currentThread, Program.GetConnectionString(storedProcData.LoginData.Username, storedProcData.LoginData.Password), storedProcData.StoredProcName, parameters);
-            bool success = true;
             var response = new StoredProcedureResponse();
             try {
                 var table = TM.GetResult<DataTable>(currentThread);
@@ -218,19 +205,19 @@ namespace RHITMobile {
                     }
                     response.Table.Add(rowList);
                 }
-            } catch {
-                success = false;
+            } catch (Exception e) {
+                throw new BadRequestException(e.Message);
             }
 
-            if (success) {
-                yield return TM.Return(currentThread, new JsonResponse(response));
-            } else {
-                yield return TM.Return(currentThread, new JsonResponse(HttpStatusCode.BadRequest));
-            }
+            yield return TM.Return(currentThread, new JsonResponse(response));
         }
     }
 
-    public class AdminUpdateVersionHandler : SecurePathHandler {
+    public class AdminUpdateVersionHandler : PathHandler {
+        public override IEnumerable<ThreadInfo> VerifyHeaders(ThreadManager TM, NameValueCollection headers, object state) {
+            return AdminHandler.VerifyToken(TM, headers);
+        }
+
         protected override IEnumerable<ThreadInfo> HandleNoPath(ThreadManager TM, Dictionary<string, string> query, object state) {
             var currentThread = TM.CurrentThread;
             double newLocations = Program.LocationsVersion;
@@ -269,7 +256,11 @@ namespace RHITMobile {
         }
     }
 
-    public class AdminPathDataHandler : SecurePathHandler {
+    public class AdminPathDataHandler : PathHandler {
+        public override IEnumerable<ThreadInfo> VerifyHeaders(ThreadManager TM, NameValueCollection headers, object state) {
+            return AdminHandler.VerifyToken(TM, headers);
+        }
+
         protected override IEnumerable<ThreadInfo> HandleNoPath(ThreadManager TM, Dictionary<string, string> query, object state) {
             var currentThread = TM.CurrentThread;
             var result = new PathDataResponse(Program.LocationsVersion);

@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:tns="http://schemas.datacontract.org/2004/07/RHITMobile.Secure" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/RHITMobile.Secure" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:complexType name="AuthenticationResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Expiration" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Token" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="AuthenticationResponse" nillable="true" type="tns:AuthenticationResponse" />
+  <xs:complexType name="AuthFault">
+    <xs:sequence />
+  </xs:complexType>
+  <xs:element name="AuthFault" nillable="true" type="tns:AuthFault" />
+  <xs:complexType name="ServerState">
+    <xs:annotation>
+      <xs:appinfo>
+        <IsValueType xmlns="http://schemas.microsoft.com/2003/10/Serialization/">true</IsValueType>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ActiveRequests" type="xs:int" />
+      <xs:element minOccurs="0" name="ActiveUserCount" type="xs:int" />
+      <xs:element minOccurs="0" name="IsUpdateQueued" type="xs:boolean" />
+      <xs:element minOccurs="0" name="LastRecordsAffected" type="xs:int" />
+      <xs:element minOccurs="0" name="LastUpdateTime" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="RequestCount" type="xs:int" />
+      <xs:element minOccurs="0" name="Uptime" type="ser:duration" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ServerState" nillable="true" type="tns:ServerState" />
+</xs:schema>

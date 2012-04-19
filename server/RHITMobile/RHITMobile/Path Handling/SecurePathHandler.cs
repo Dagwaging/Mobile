@@ -10,19 +10,17 @@ namespace RHITMobile {
         public override IEnumerable<ThreadInfo> HandlePath(ThreadManager TM, bool isSSL, IEnumerable<string> path, Dictionary<string, string> query, NameValueCollection headers, object state) {
             var currentThread = TM.CurrentThread;
 
-            if (!isSSL) {
-                yield return TM.Return(currentThread, new JsonResponse(HttpStatusCode.Unauthorized));
-            }
+            if (!isSSL)
+                throw new BadRequestException("SSL required for this request.");
 
             yield return TM.Await(currentThread, VerifyHeaders(TM, headers, state));
 
-            if (!(TM.GetResultNoException(currentThread) is JsonResponse))
-                yield return TM.Await(currentThread, base.HandlePath(TM, true, path, query, headers, TM.GetResult(currentThread)));
+            yield return TM.Await(currentThread, base.HandlePath(TM, true, path, query, headers, TM.GetResult(currentThread)));
 
             yield return TM.Return(currentThread);
         }
 
-        public virtual IEnumerable<ThreadInfo> VerifyHeaders(ThreadManager TM, NameValueCollection headers, object state) {
+        public override IEnumerable<ThreadInfo> VerifyHeaders(ThreadManager TM, NameValueCollection headers, object state) {
             var currentThread = TM.CurrentThread;
             yield return TM.Return(currentThread, state);
         }

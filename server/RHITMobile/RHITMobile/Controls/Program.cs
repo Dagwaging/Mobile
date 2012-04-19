@@ -38,6 +38,9 @@ namespace RHITMobile {
             // Start the expiration checker for admin logins
             TM.Enqueue(AdminHandler.DeleteExpiredLogins(TM), ThreadPriority.Low);
 
+            // Start the expiration checker for banner logins
+            TM.Enqueue(BannerHandler.ClearAuthenticationExpirations(TM), ThreadPriority.Low);
+
             // Start the listener for console commands
             TM.Enqueue(HandleConsoleRequests(TM), ThreadPriority.Low);
 
@@ -189,6 +192,7 @@ namespace RHITMobile {
         public const double StairLength = 11 / 12;
         public const double StairRatio = StairHeight / StairLength;
         public static double StairAngle = Math.Asin(StairRatio); // radians
+        public const int MaxDailySecureServerCalls = 25000;
 
         public static double UseStairsStairMultiplier = (Math.Sqrt(1 + MaxSlopeRatio * MaxSlopeRatio) * StairRatio - Math.Sqrt(1 + StairRatio * StairRatio) * MaxSlopeRatio) * StairHeight / (MaxSlopeRatio * StairRatio);
     }
