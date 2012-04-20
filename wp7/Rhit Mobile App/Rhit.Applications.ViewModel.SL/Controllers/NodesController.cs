@@ -19,18 +19,30 @@ using System;
 namespace Rhit.Applications.ViewModels.Controllers {
     public class Path : DependencyObject {
         public Path(Path_DC model, SimpleNode node1, SimpleNode node2) {
-
+            
             Nodes = new LocationCollection();
-            Nodes.Add(node1.Center);
-            Nodes.Add(node2.Center);
+            
             Node1 = node1;
             Node2 = node2;
+            Nodes.Add(Node1.Center);
+            Nodes.Add(Node2.Center);
+            Node1.CenterChanged += new EventHandler(Node_CenterChanged);
+            Node2.CenterChanged += new EventHandler(Node_CenterChanged);
             Id = model.Id;
+            IsElevator = model.Elevator;
+            StairCount = model.Stairs;
             if(Node1.IsOutside || Node2.IsOutside)
                 IsOutside = true;
+            else IsOutside = false;
 
             Node1.AddPathBinding(this);
             Node2.AddPathBinding(this);
+        }
+
+        private void Node_CenterChanged(object sender, EventArgs e) {
+            Nodes.Clear();
+            Nodes.Add(Node1.Center);
+            Nodes.Add(Node2.Center);
         }
 
         public LocationCollection Nodes { get; private set; }
@@ -45,6 +57,26 @@ namespace Rhit.Applications.ViewModels.Controllers {
 
         public static readonly DependencyProperty IsOutsideProperty =
            DependencyProperty.Register("IsOutside", typeof(bool), typeof(Path), new PropertyMetadata(true));
+        #endregion
+
+        #region StairCount
+        public int StairCount {
+            get { return (int) GetValue(StairCountProperty); }
+            set { SetValue(StairCountProperty, value); }
+        }
+
+        public static readonly DependencyProperty StairCountProperty =
+           DependencyProperty.Register("StairCount", typeof(int), typeof(Path), new PropertyMetadata(0));
+        #endregion
+
+        #region IsElevator
+        public bool IsElevator {
+            get { return (bool) GetValue(IsElevatorProperty); }
+            set { SetValue(IsElevatorProperty, value); }
+        }
+
+        public static readonly DependencyProperty IsElevatorProperty =
+           DependencyProperty.Register("IsElevator", typeof(bool), typeof(Path), new PropertyMetadata(false));
         #endregion
 
         #region IsSelected
@@ -95,11 +127,12 @@ namespace Rhit.Applications.ViewModels.Controllers {
 
     public class SimpleNode : DependencyObject {
         public SimpleNode(Node_DC model) {
+            Model = model;
             PathBindingDictionary = new Dictionary<SimpleNode, Path>();
             InitializeCommands();
-            Center = new Location(model.Latitude, model.Longitude, model.Altitude);
-            IsOutside = model.Outside;
-            Id = model.Id;
+            Center = new Location(Model.Latitude, Model.Longitude, Model.Altitude);
+            IsOutside = Model.Outside;
+            Id = Model.Id;
         }
 
         #region Selected Event
@@ -116,6 +149,12 @@ namespace Rhit.Applications.ViewModels.Controllers {
         }
         #endregion
 
+        #region CenterChanged Event
+        public event EventHandler CenterChanged;
+        protected virtual void OnCenterChanged() {
+            if(CenterChanged != null) CenterChanged(this, new EventArgs());
+        }
+        #endregion
 
         private Dictionary<SimpleNode, Path> PathBindingDictionary { get; set; }
 
@@ -128,15 +167,7 @@ namespace Rhit.Applications.ViewModels.Controllers {
             PathBindingDictionary[other] = path;
         }
 
-        #region Id
-        public int Id {
-            get { return (int) GetValue(IdProperty); }
-            set { SetValue(IdProperty, value); }
-        }
-
-        public static readonly DependencyProperty IdProperty =
-           DependencyProperty.Register("Id", typeof(int), typeof(SimpleNode), new PropertyMetadata(-1));
-        #endregion
+        public int Id { get; private set; }
 
         private void InitializeCommands() {
             ClickCommand = new RelayCommand(p => OnClick());
@@ -162,7 +193,11 @@ namespace Rhit.Applications.ViewModels.Controllers {
         }
 
         public static readonly DependencyProperty CenterProperty =
-           DependencyProperty.Register("Center", typeof(Location), typeof(SimpleNode), new PropertyMetadata(new Location()));
+           DependencyProperty.Register("Center", typeof(Location), typeof(SimpleNode), new PropertyMetadata(new Location(), new PropertyChangedCallback(OnCenterPropertyChanged)));
+
+        private static void OnCenterPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
+            (d as SimpleNode).OnCenterChanged();
+        }
         #endregion
 
         #region IsSelected
@@ -205,12 +240,32 @@ namespace Rhit.Applications.ViewModels.Controllers {
            DependencyProperty.Register("IsOutside", typeof(bool), typeof(SimpleNode), new PropertyMetadata(true));
         #endregion
 
+        #region CanMove
+        public bool CanMove {
+            get { return (bool) GetValue(CanMoveProperty); }
+            set { SetValue(CanMoveProperty, value); }
+        }
+
+        public static readonly DependencyProperty CanMoveProperty =
+           DependencyProperty.Register("CanMove", typeof(bool), typeof(SimpleNode), new PropertyMetadata(false));
+        #endregion
+
         internal ICollection<SimpleNode> GetAdjacentNodes() {
             return PathBindingDictionary.Keys;
         }
 
         internal Path GetPath(SimpleNode node) {
             return PathBindingDictionary[node];
+        }
+
+        protected Node_DC Model { get; private set; }
+
+        internal bool HasChanges() {
+            if(IsOutside != Model.Outside) return true;
+            if(Center.Latitude != Model.Latitude) return true;
+            if(Center.Longitude != Model.Longitude) return true;
+            if(Center.Altitude != Model.Altitude) return true;
+            return false;
         }
     }
 
@@ -357,7 +412,22 @@ namespace Rhit.Applications.ViewModels.Controllers {
         }
         #endregion
 
+        private void Clear() {
+            AllNodes.Clear();
+            AllPaths.Clear();
+            AllDirections.Clear();
+            Paths.Clear();
+            Nodes.Clear();
+            NodeDictionary.Clear();
+            PathDictionary.Clear();
+            MessageDictionary.Clear();
+            SelectedNodes.Clear();
+            State = BehaviorState.Default;
+        }
+
         private void PathDataReturned(object sender, PathDataEventArgs e) {
+            Clear();
+
             foreach(Node_DC node in e.Nodes) {
                 SimpleNode _node = new SimpleNode(node);
                 _node.Selected += new EventHandler(Node_Selected);
@@ -391,7 +461,7 @@ namespace Rhit.Applications.ViewModels.Controllers {
                 AllDirections.Add(new Direction(direction));
         }
 
-        private void addNodes(Path path) {
+        private void AddNodes(Path path) {
             if(!Nodes.Contains(path.Node1))
                 Nodes.Add(path.Node1);
             if(!Nodes.Contains(path.Node2))
@@ -540,6 +610,7 @@ namespace Rhit.Applications.ViewModels.Controllers {
             State = BehaviorState.Default;
             SelectedPaths.Clear();
             SelectedNodes.Clear();
+            LastNode = null;
             foreach(SimpleNode node in AllNodes) {
                 node.CanSelect = true;
                 node.IsEndNode = false;
@@ -549,6 +620,7 @@ namespace Rhit.Applications.ViewModels.Controllers {
                 path.CanSelect = false;
                 path.IsSelected = false;
             }
+            AllowMovement(false);
         }
 
         public Path GetPath(int id) {
@@ -567,6 +639,28 @@ namespace Rhit.Applications.ViewModels.Controllers {
         internal void DeleteNextPath() {
             RestoreToDefault();
             State = BehaviorState.DeletingPath;
+        }
+
+        internal void AllowMovement() {
+            AllowMovement(true);
+        }
+
+        internal void AllowMovement(bool canMove) {
+            if(canMove) {
+                foreach(SimpleNode node in Nodes)
+                    node.CanMove = true;
+            } else {
+                foreach(SimpleNode node in AllNodes)
+                    node.CanMove = false;
+            }
+        }
+
+        internal void SaveNodes() {
+            foreach(SimpleNode node in Nodes) {
+                if(node.HasChanges())
+                    DataCollector.Instance.UpdateNode(node.Id, node.Center.Latitude, node.Center.Longitude, node.Center.Altitude, node.IsOutside, null);
+            }
+            RestoreToDefault();
         }
     }
 }

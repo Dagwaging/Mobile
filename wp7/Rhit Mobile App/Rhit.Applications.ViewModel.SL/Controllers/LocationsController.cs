@@ -212,8 +212,8 @@ namespace Rhit.Applications.ViewModels.Controllers {
 
         #region SelectLocation Methods
         protected void SetSelectedLocation(LocationData location) {
-            CurrentLocation = new SimpleRhitLocation(location);
-            //CurrentLocation = new RhitLocation(location);
+            //CurrentLocation = new SimpleRhitLocation(location);
+            CurrentLocation = new RhitLocation(location);
         }
 
         public void SelectLocation(int id) {

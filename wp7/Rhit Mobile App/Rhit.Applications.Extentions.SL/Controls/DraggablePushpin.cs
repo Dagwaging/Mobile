@@ -52,19 +52,14 @@ namespace Rhit.Applications.Extentions.Controls {
 
         #region Event Handlers
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e) {
-            // I do this initialization here because it is the first point
-            //   where I know the pushpin is added to the map.
+            if(!CanChange) return;
             AddEventHandlers();
-
-            // Enable Dragging
             isDragging = true;
-
             base.OnMouseLeftButtonDown(e);
         }
 
         private void ParentMap_MousePan(object sender, MapMouseDragEventArgs e) {
-            // If the Pushpin is being dragged, then suppress the
-            //  other event handlers from firing
+            if(!CanChange) return;
             if(isDragging) e.Handled = true;
         }
 
@@ -74,6 +69,7 @@ namespace Rhit.Applications.Extentions.Controls {
         }
 
         private void ParentMap_MouseMove(object sender, MouseEventArgs e) {
+            if(!CanChange) return;
             Map map = sender as Microsoft.Maps.MapControl.Map;
             MapLayer parentLayer = FindVisualParent<MapLayer>(this);
 
@@ -99,6 +95,17 @@ namespace Rhit.Applications.Extentions.Controls {
             DraggablePushpin instance = (DraggablePushpin) d;
             instance.Location = instance.VirtualLocation;
         }
+        #endregion
+
+
+        #region CanChange
+        public bool CanChange {
+            get { return (bool) GetValue(CanChangeProperty); }
+            set { SetValue(CanChangeProperty, value); }
+        }
+
+        public static readonly DependencyProperty CanChangeProperty =
+           DependencyProperty.Register("CanChange", typeof(bool), typeof(DraggablePushpin), new PropertyMetadata(true));
         #endregion
     }
 }

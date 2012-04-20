@@ -1,6 +1,7 @@
 ﻿
 namespace Rhit.Applications.Models.Services {
     public enum ResponseType {
+        NodeUpdate,
         NodeDeletion,
         NodeCreation,
         AllLocations,

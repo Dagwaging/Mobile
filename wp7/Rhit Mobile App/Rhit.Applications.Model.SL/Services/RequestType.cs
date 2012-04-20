@@ -25,5 +25,6 @@ namespace Rhit.Applications.Models.Services {
         Version,
         PathCreation,
         PathDeletion,
+        NodeUpdate,
     }
 }
