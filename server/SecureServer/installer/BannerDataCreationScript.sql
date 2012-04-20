@@ -214,6 +214,30 @@ GO
 
 -- Stored procedure creation
 
+/****** Object:  StoredProcedure [dbo].[spGetTerms]    Script Date: 04/18/2012 13:55:05 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE PROCEDURE [dbo].[spGetTerms]
+	@switch bit
+AS
+BEGIN
+	SELECT DISTINCT term
+	FROM Course
+	WHERE switch = @switch
+	ORDER BY term
+END
+
+GO
+
 /****** Object:  StoredProcedure [dbo].[spDeleteData]    Script Date: 04/10/2012 20:03:58 ******/
 SET ANSI_NULLS ON
 GO

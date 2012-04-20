@@ -34,6 +34,7 @@ namespace TestClient
                 Console.WriteLine("2. Request update");
                 Console.WriteLine("3. Search Users");
                 Console.WriteLine("4. Lookup User");
+                Console.WriteLine("5. Get Terms");
                 Console.WriteLine("9. Quit");
                 Console.Write("> ");
                 option = int.Parse(Console.ReadLine());
@@ -51,6 +52,9 @@ namespace TestClient
                         break;
                     case 4:
                         LookupUser();
+                        break;
+                    case 5:
+                        GetTerms();
                         break;
                 }
 
@@ -112,6 +116,16 @@ namespace TestClient
             {
                 Console.WriteLine("Instructor Schedule: ");
                 PrintEnrollment(profEnrollment);
+            }
+        }
+
+        static void GetTerms()
+        {
+            var terms = service.GetTerms(token);
+
+            foreach (var term in terms)
+            {
+                Console.WriteLine(term);
             }
         }
 
