@@ -31,8 +31,9 @@ namespace TestClient
             do
             {
                 Console.WriteLine("1. Get server status");
-                Console.WriteLine("2. Search Users");
-                Console.WriteLine("3. Lookup User");
+                Console.WriteLine("2. Request update");
+                Console.WriteLine("3. Search Users");
+                Console.WriteLine("4. Lookup User");
                 Console.WriteLine("9. Quit");
                 Console.Write("> ");
                 option = int.Parse(Console.ReadLine());
@@ -43,9 +44,12 @@ namespace TestClient
                         ServerStatus();
                         break;
                     case 2:
-                        SearchUser();
+                        RequestUpdate();
                         break;
                     case 3:
+                        SearchUser();
+                        break;
+                    case 4:
                         LookupUser();
                         break;
                 }
@@ -66,6 +70,11 @@ namespace TestClient
             Console.WriteLine("Records Affected:  {0}", state.LastRecordsAffected);
             Console.WriteLine("Uptime:            {0}", state.Uptime);
             Console.WriteLine("Request Count:     {0}", state.RequestCount);
+        }
+
+        static void RequestUpdate()
+        {
+            service.RequestUpdate();
         }
 
         static void SearchUser()

@@ -321,6 +321,23 @@ namespace RHITMobile.Secure
                 }
             }
         }
+
+        partial class GetTermsDataTable
+        {
+            public int[] Terms
+            {
+                get
+                {
+                    List<int> terms = new List<int>();
+
+                    foreach (var row in this)
+                    {
+                        terms.Add(row.Term);
+                    }
+                    return terms.ToArray();
+                }
+            }
+        }
     }
 }
 

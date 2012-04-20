@@ -54,6 +54,18 @@
         <soap12:body use="literal" />
       </wsdl:input>
     </wsdl:operation>
+    <wsdl:operation name="GetTerms">
+      <soap12:operation soapAction="http://mobileprivate.rose-hulman.edu/IWebService/GetTerms" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="AuthFaultFault">
+        <soap12:fault use="literal" name="AuthFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
     <wsdl:operation name="GetUser">
       <soap12:operation soapAction="http://mobileprivate.rose-hulman.edu/IWebService/GetUser" style="document" />
       <wsdl:input>

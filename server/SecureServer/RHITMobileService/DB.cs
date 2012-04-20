@@ -82,6 +82,16 @@ namespace RHITMobile.Secure
             AffectedRows += adapter.AddUserEnrollment(_switchLock.WriteSwitch, enrollment);
         }
         
+        public int[] GetTerms()
+        {
+            using (SwitchLock switchLock = AcquireReadSwitch())
+            {
+                GetTermsTableAdapter adapter = new GetTermsTableAdapter();
+                Banner.GetTermsDataTable table = adapter.GetData(switchLock.Switch);
+                return table.Terms;
+            }
+        }
+        
         public User GetUser(String username)
         {
             using (SwitchLock switchLock = AcquireReadSwitch())

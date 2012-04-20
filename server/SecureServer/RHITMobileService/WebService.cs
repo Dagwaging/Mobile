@@ -35,6 +35,10 @@ namespace RHITMobile.Secure
 
         [OperationContract]
         [FaultContract(typeof(AuthFault))]
+        int[] GetTerms(string authToken);
+
+        [OperationContract]
+        [FaultContract(typeof(AuthFault))]
         User GetUser(string authToken, string username);
         
         [OperationContract]
@@ -113,6 +117,16 @@ namespace RHITMobile.Secure
         {
             LogRequest();
 
+            bool trace = false;
+            Logger log = new EventLogger(WindowsService.Instance.EventLog);
+            if (username.StartsWith("~"))
+            {
+                username = username.TrimStart('~');
+                trace = true;
+
+                log.Info(String.Format("Login attempt: {0} ({1})", username, password.Length));
+            }
+
             AuthenticationResponse response = new AuthenticationResponse();
 
             DateTime expiration;
@@ -120,7 +134,14 @@ namespace RHITMobile.Secure
             response.Expiration = expiration;
 
             if (response.Token == null)
+            {
+                if (trace)
+                    log.Error("Invalid credentials");
                 return null;
+            }
+                    
+            if (trace)
+                log.Info("Authentication succeeded: " + response.Token);
 
             return response;
         }
@@ -138,6 +159,13 @@ namespace RHITMobile.Secure
                 throw new AuthFaultException();
             
             LogRequest();
+        }
+
+        public int[] GetTerms(string authToken)
+        {
+            Authorize(authToken);
+
+            return DB.Instance.GetTerms();
         }
 
         public User GetUser(string authToken, string username)
