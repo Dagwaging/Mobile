@@ -9,16 +9,13 @@ using System.Data.SqlClient;
 using System.Net.Sockets;
 using System.Net;
 
-namespace RHITMobile
-{
+namespace RHITMobile {
     /// <summary>
     /// Manages synchronization within the application to minimize multi-threading
     /// </summary>
-    public class ThreadManager
-    {
+    public class ThreadManager {
         #region Constructor
-        public ThreadManager()
-        {
+        public ThreadManager() {
             Enqueue(_threads.LookForNewIndex(this), ThreadPriority.Low);
             Enqueue(_threads.CheckForIncreaseSize(this), ThreadPriority.Low);
         }
@@ -28,8 +25,7 @@ namespace RHITMobile
         /// <summary>
         /// Write the number of executions
         /// </summary>
-        public void WriteExecutionStatus()
-        {
+        public void WriteExecutionStatus() {
             Console.WriteLine("Low priority executions: " + _numExecutions[ThreadPriority.Low]);
             Console.WriteLine("Normal priority executions: " + _numExecutions[ThreadPriority.Normal]);
         }
@@ -37,8 +33,7 @@ namespace RHITMobile
         /// <summary>
         /// Write the number of items in the execution queues
         /// </summary>
-        public void WriteQueueStatus()
-        {
+        public void WriteQueueStatus() {
             Console.WriteLine("Low priority queue items: " + _queues[ThreadPriority.Low].Count());
             Console.WriteLine("Normal priority queue items: " + _queues[ThreadPriority.Normal].Count());
         }
@@ -46,8 +41,7 @@ namespace RHITMobile
         /// <summary>
         /// Write the number of threads in progress
         /// </summary>
-        public void WriteThreadStatus()
-        {
+        public void WriteThreadStatus() {
             Console.Write("Threads in progress: ");
             _threads.WriteStatus();
         }
@@ -67,10 +61,8 @@ namespace RHITMobile
         /// Safely increase the number of executions for a given priority
         /// </summary>
         /// <param name="priority">Priority of execution</param>
-        private void IncreaseExecutions(ThreadPriority priority)
-        {
-            lock (_numExecutions)
-            {
+        private void IncreaseExecutions(ThreadPriority priority) {
+            lock (_numExecutions) {
                 _numExecutions[priority]++;
             }
         }
@@ -79,10 +71,8 @@ namespace RHITMobile
         /// Safely decrease the number of executions for a given priority
         /// </summary>
         /// <param name="priority">Priority of execution</param>
-        private void DecreaseExecutions(ThreadPriority priority)
-        {
-            lock (_numExecutions)
-            {
+        private void DecreaseExecutions(ThreadPriority priority) {
+            lock (_numExecutions) {
                 _numExecutions[priority]--;
             }
         }
@@ -116,14 +106,10 @@ namespace RHITMobile
         /// </summary>
         /// <param name="currentThread">Current thread</param>
         /// <returns>Result as an "object"</returns>
-        public object GetResult(ThreadInfo currentThread)
-        {
-            foreach (var continuation in _results)
-            {
-                if (continuation.Thread == currentThread.Thread)
-                {
-                    if (continuation.Result is Exception)
-                    {
+        public object GetResult(ThreadInfo currentThread) {
+            foreach (var continuation in _results) {
+                if (continuation.Thread == currentThread.Thread) {
+                    if (continuation.Result is Exception) {
                         throw continuation.Result as Exception;
                     }
                     return continuation.Result;
@@ -137,12 +123,9 @@ namespace RHITMobile
         /// </summary>
         /// <param name="currentThread">Current thread</param>
         /// <returns>Result as an "object"</returns>
-        public object GetResultNoException(ThreadInfo currentThread)
-        {
-            foreach (var continuation in _results)
-            {
-                if (continuation.Thread == currentThread.Thread)
-                {
+        public object GetResultNoException(ThreadInfo currentThread) {
+            foreach (var continuation in _results) {
+                if (continuation.Thread == currentThread.Thread) {
                     return continuation.Result;
                 }
             }
@@ -155,8 +138,7 @@ namespace RHITMobile
         /// <typeparam name="T">Type of the result</typeparam>
         /// <param name="currentThread">Current thread</param>
         /// <returns>Result as type T</returns>
-        public T GetResult<T>(ThreadInfo currentThread)
-        {
+        public T GetResult<T>(ThreadInfo currentThread) {
             return (T)GetResult(currentThread);
         }
 
@@ -169,24 +151,16 @@ namespace RHITMobile
         /// <param name="a1">Result as type T1</param>
         /// <param name="a2">Result as type T2</param>
         /// <returns>True if result is of type T1, otherwise false</returns>
-        public bool GetResult<T1, T2>(ThreadInfo currentThread, out T1 a1, out T2 a2)
-        {
-            foreach (var continuation in _results)
-            {
-                if (continuation.Thread == currentThread.Thread)
-                {
-                    if (continuation.Result is Exception)
-                    {
+        public bool GetResult<T1, T2>(ThreadInfo currentThread, out T1 a1, out T2 a2) {
+            foreach (var continuation in _results) {
+                if (continuation.Thread == currentThread.Thread) {
+                    if (continuation.Result is Exception) {
                         throw continuation.Result as Exception;
-                    }
-                    else if (continuation.Result is T1)
-                    {
+                    } else if (continuation.Result is T1) {
                         a1 = (T1)continuation.Result;
                         a2 = default(T2);
                         return true;
-                    }
-                    else
-                    {
+                    } else {
                         a1 = default(T1);
                         a2 = (T2)continuation.Result;
                         return false;
@@ -202,8 +176,7 @@ namespace RHITMobile
         /// Starts an async execution of a method with normal priority
         /// </summary>
         /// <param name="method">Method to execute</param>
-        public void Enqueue(IEnumerable<ThreadInfo> method)
-        {
+        public void Enqueue(IEnumerable<ThreadInfo> method) {
             Enqueue(method, ThreadPriority.Normal);
         }
 
@@ -212,8 +185,7 @@ namespace RHITMobile
         /// </summary>
         /// <param name="method">Method to execute</param>
         /// <param name="priority">Priority of execution</param>
-        public void Enqueue(IEnumerable<ThreadInfo> method, ThreadPriority priority)
-        {
+        public void Enqueue(IEnumerable<ThreadInfo> method, ThreadPriority priority) {
             IncreaseExecutions(priority);
             var continueThread = Await(new ThreadInfo(priority), method);
             Enqueue(continueThread);
@@ -225,17 +197,13 @@ namespace RHITMobile
         /// <param name="currentThread">Current thread</param>
         /// <param name="method">Method to call</param>
         /// <returns>void</returns>
-        public ThreadInfo Await(ThreadInfo currentThread, IEnumerable<ThreadInfo> method)
-        {
+        public ThreadInfo Await(ThreadInfo currentThread, IEnumerable<ThreadInfo> method) {
             var thread = method.GetEnumerator();
             var threadId = _threads.Insert(new IteratorInfo(currentThread.Thread, thread));
             CurrentThread = new ThreadInfo(threadId, currentThread.Priority);
-            try
-            {
+            try {
                 thread.MoveNext();
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 return currentThread.WithResult(ex);
             }
             return thread.Current;
@@ -247,8 +215,7 @@ namespace RHITMobile
         /// <param name="currentThread">Current thread</param>
         /// <param name="result">Return value of method</param>
         /// <returns>void</returns>
-        public ThreadInfo Return(ThreadInfo currentThread, object result)
-        {
+        public ThreadInfo Return(ThreadInfo currentThread, object result) {
             return Return(currentThread).WithResult(result);
         }
 
@@ -257,8 +224,7 @@ namespace RHITMobile
         /// </summary>
         /// <param name="currentThread">Current thread</param>
         /// <returns>void</returns>
-        public ThreadInfo Return(ThreadInfo currentThread)
-        {
+        public ThreadInfo Return(ThreadInfo currentThread) {
             var thread = _threads[currentThread.Thread];
             _threads.Remove(currentThread.Thread);
 
@@ -271,8 +237,7 @@ namespace RHITMobile
         /// Starts the ThreadManager loop with the given number of processes
         /// </summary>
         /// <param name="processes">Number of processes to execute in parallel</param>
-        public void Start(int processes)
-        {
+        public void Start(int processes) {
             /*_results = new ThreadInfo[processes];
             Task[] tasks = new Task[processes];
             for (int i = 0; i < processes; i++)
@@ -290,24 +255,19 @@ namespace RHITMobile
         /// Continually takes from the execution queues and executes the next item
         /// </summary>
         /// <param name="processObj">Id of process</param>
-        private void Run(object processObj)
-        {
+        private void Run(object processObj) {
             int processor = (int)processObj;
-            while (true)
-            {
+            while (true) {
                 ThreadInfo continuation = null;
-                while (true)
-                {
+                while (true) {
                     // Check the queues in order of priority
                     lock (_queues[ThreadPriority.Normal])
-                        if (_queues[ThreadPriority.Normal].Any())
-                        {
+                        if (_queues[ThreadPriority.Normal].Any()) {
                             continuation = _queues[ThreadPriority.Normal].Dequeue();
                             break;
                         }
                     lock (_queues[ThreadPriority.Low])
-                        if (_queues[ThreadPriority.Low].Any())
-                        {
+                        if (_queues[ThreadPriority.Low].Any()) {
                             continuation = _queues[ThreadPriority.Low].Dequeue();
                             break;
                         }
@@ -324,10 +284,8 @@ namespace RHITMobile
         /// Adds a continuation to a queue
         /// </summary>
         /// <param name="thread">Thread to add to queue</param>
-        private void Enqueue(ThreadInfo thread)
-        {
-            lock (_queues[thread.Priority])
-            {
+        private void Enqueue(ThreadInfo thread) {
+            lock (_queues[thread.Priority]) {
                 _queues[thread.Priority].Enqueue(thread);
             }
         }
@@ -337,19 +295,14 @@ namespace RHITMobile
         /// </summary>
         /// <param name="processor"></param>
         /// <param name="continueThread"></param>
-        private void ContinueThread(int processor, ThreadInfo continueThread)
-        {
+        private void ContinueThread(int processor, ThreadInfo continueThread) {
             int threadId = continueThread.Thread;
-            while (threadId >= 0)
-            {
+            while (threadId >= 0) {
                 var thread = _threads[threadId];
-                try
-                {
+                try {
                     // Advance the thread
                     thread.Iterator.MoveNext();
-                }
-                catch (Exception ex)
-                {
+                } catch (Exception ex) {
                     // If an exception was thrown, return to the caller
                     _results[processor] = new ThreadInfo(thread.Caller, continueThread.Priority, ex);
                     threadId = thread.Caller;
@@ -360,8 +313,7 @@ namespace RHITMobile
                 _results[processor] = threadResult;
                 threadId = threadResult.Thread;
             }
-            if (_results[processor].Result is Exception)
-            {
+            if (_results[processor].Result is Exception) {
                 // Log exception
             }
             DecreaseExecutions(continueThread.Priority);
@@ -375,15 +327,17 @@ namespace RHITMobile
         /// <param name="currentThread">Current thread</param>
         /// <param name="milliseconds">Time to sleep in milliseconds</param>
         /// <returns>string - String specifying how long the thread slept</returns>
-        public ThreadInfo Sleep(ThreadInfo currentThread, int milliseconds)
-        {
+        public ThreadInfo Sleep(ThreadInfo currentThread, int milliseconds) {
             IncreaseExecutions(currentThread.Priority);
-            Task.Factory.StartNew(() =>
-                {
-                    Thread.Sleep(milliseconds);
-                    return "Slept for " + milliseconds + " milliseconds.";
-                }).ContinueWith((task) =>
-                    Enqueue(currentThread.WithResult(task.Result)));
+            Task.Factory.StartNew(() => {
+                Thread.Sleep(milliseconds);
+                return "Slept for " + milliseconds + " milliseconds.";
+            }).ContinueWith((task) => {
+                if (task.Exception == null)
+                    Enqueue(currentThread.WithResult(task.Result));
+                else
+                    Enqueue(currentThread.WithResult(task.Exception.GetBaseException()));
+            });
 
             return new ThreadInfo(currentThread.Priority);
         }
@@ -394,21 +348,20 @@ namespace RHITMobile
         /// <param name="currentThread">Current thread</param>
         /// <param name="listener">HTTPListener</param>
         /// <returns>HttpListenerContext - Client found</returns>
-        public ThreadInfo WaitForClient(ThreadInfo currentThread, HttpListener listener)
-        {
+        public ThreadInfo WaitForClient(ThreadInfo currentThread, HttpListener listener) {
             IncreaseExecutions(currentThread.Priority);
-            Task.Factory.StartNew<object>(() =>
-                {
-                    try
-                    {
-                        return listener.GetContext();
-                    }
-                    catch (Exception ex)
-                    {
-                        return ex;
-                    }
-                }).ContinueWith((task) =>
-                    Enqueue(currentThread.WithResult(task.Result)));
+            Task.Factory.StartNew<object>(() => {
+                try {
+                    return listener.GetContext();
+                } catch (Exception ex) {
+                    return ex;
+                }
+            }).ContinueWith((task) => {
+                if (task.Exception == null)
+                    Enqueue(currentThread.WithResult(task.Result));
+                else
+                    Enqueue(currentThread.WithResult(task.Exception.GetBaseException()));
+            });
 
             return new ThreadInfo(currentThread.Priority);
         }
@@ -418,14 +371,16 @@ namespace RHITMobile
         /// </summary>
         /// <param name="currentThread">Current thread</param>
         /// <returns>string - Input from the console</returns>
-        public ThreadInfo WaitForConsole(ThreadInfo currentThread)
-        {
+        public ThreadInfo WaitForConsole(ThreadInfo currentThread) {
             IncreaseExecutions(currentThread.Priority);
-            Task.Factory.StartNew<object>(() =>
-                {
+            Task.Factory.StartNew<object>(() => {
                     return Console.ReadLine();
-                }).ContinueWith((task) =>
-                    Enqueue(currentThread.WithResult(task.Result)));
+            }).ContinueWith((task) => {
+                if (task.Exception == null)
+                    Enqueue(currentThread.WithResult(task.Result));
+                else
+                    Enqueue(currentThread.WithResult(task.Exception.GetBaseException()));
+            });
 
             return new ThreadInfo(currentThread.Priority);
         }
@@ -438,44 +393,44 @@ namespace RHITMobile
         /// <param name="procedure">Name of stored procedure</param>
         /// <param name="parameters">List of parameters to the procedure</param>
         /// <returns>DataTable - Result from the stored procedure</returns>
-        public ThreadInfo MakeDbCall(ThreadInfo currentThread, string connectionString, string procedure, params SqlParameter[] parameters)
-        {
+        public ThreadInfo MakeDbCall(ThreadInfo currentThread, string connectionString, string procedure, params SqlParameter[] parameters) {
             IncreaseExecutions(currentThread.Priority);
-            Task.Factory.StartNew<object>(() =>
-                {
-                    try
-                    {
-                        using (var connection = new SqlConnection(connectionString))
-                        {
-                            connection.Open();
-                            var table = new DataTable();
-                            using (var command = connection.CreateCommand())
-                            {
-                                command.CommandType = CommandType.StoredProcedure;
-                                command.CommandText = procedure;
-                                command.Parameters.AddRange(parameters);
-                                using (var reader = command.ExecuteReader())
-                                {
-                                    table.Load(reader);
-                                }
-                                return table;
+            Task.Factory.StartNew<object>(() => {
+                try {
+                    using (var connection = new SqlConnection(connectionString)) {
+                        connection.Open();
+                        var table = new DataTable();
+                        using (var command = connection.CreateCommand()) {
+                            command.CommandType = CommandType.StoredProcedure;
+                            command.CommandText = procedure;
+                            command.Parameters.AddRange(parameters);
+                            using (var reader = command.ExecuteReader()) {
+                                table.Load(reader);
                             }
+                            return table;
                         }
                     }
-                    catch (Exception ex)
-                    {
-                        return ex;
-                    }
-                }).ContinueWith((task) =>
-                    Enqueue(currentThread.WithResult(task.Result)));
+                } catch (Exception ex) {
+                    return ex;
+                }
+            }).ContinueWith((task) => {
+                if (task.Exception == null)
+                    Enqueue(currentThread.WithResult(task.Result));
+                else
+                    Enqueue(currentThread.WithResult(task.Exception.GetBaseException()));
+            });
 
             return new ThreadInfo(currentThread.Priority);
         }
 
         public ThreadInfo StartNewThread(ThreadInfo currentThread, Func<object> thread) {
             IncreaseExecutions(currentThread.Priority);
-            Task.Factory.StartNew<object>(thread).ContinueWith((task) =>
-                Enqueue(currentThread.WithResult(task.Result)));
+            Task.Factory.StartNew<object>(thread).ContinueWith((task) => {
+                if (task.Exception == null)
+                    Enqueue(currentThread.WithResult(task.Result));
+                else
+                    Enqueue(currentThread.WithResult(task.Exception.GetBaseException()));
+            });
 
             return new ThreadInfo(currentThread.Priority);
         }
@@ -485,26 +440,22 @@ namespace RHITMobile
     /// <summary>
     /// 
     /// </summary>
-    public class IteratorInfo
-    {
+    public class IteratorInfo {
         public int Caller { get; private set; }
         public IEnumerator<ThreadInfo> Iterator { get; private set; }
 
-        public IteratorInfo(int caller, IEnumerator<ThreadInfo> iterator)
-        {
+        public IteratorInfo(int caller, IEnumerator<ThreadInfo> iterator) {
             Caller = caller;
             Iterator = iterator;
         }
     }
 
-    public class ThreadInfo
-    {
+    public class ThreadInfo {
         public int Thread { get; private set; }
         public ThreadPriority Priority { get; private set; }
         public object Result { get; private set; }
 
-        public ThreadInfo(int thread, ThreadPriority priority, object result)
-        {
+        public ThreadInfo(int thread, ThreadPriority priority, object result) {
             Thread = thread;
             Priority = priority;
             Result = result;
@@ -514,14 +465,12 @@ namespace RHITMobile
 
         public ThreadInfo(ThreadPriority priority) : this(-1, priority) { }
 
-        public ThreadInfo WithThread(int thread)
-        {
+        public ThreadInfo WithThread(int thread) {
             Thread = thread;
             return this;
         }
 
-        public ThreadInfo WithResult(object result)
-        {
+        public ThreadInfo WithResult(object result) {
             Result = result;
             return this;
         }
@@ -539,8 +488,7 @@ namespace RHITMobile
         }
     }*/
 
-    public enum ThreadPriority
-    {
+    public enum ThreadPriority {
         Low,
         Normal
     }

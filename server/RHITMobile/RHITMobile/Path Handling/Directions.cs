@@ -20,9 +20,8 @@ namespace RHITMobile {
         protected override IEnumerable<ThreadInfo> HandleIntPath(ThreadManager TM, int value, object state) {
             var currentThread = TM.CurrentThread;
             IntRedirect = DirectionsFinder.GetFinder(value);
-            if (IntRedirect == null) {
-                yield return TM.Return(currentThread, new JsonResponse(HttpStatusCode.BadRequest));
-            }
+            if (IntRedirect == null)
+                throw new BadRequestException("Invalid Directions ID.");
             yield return TM.Return(currentThread, -1);
         }
     }
@@ -37,11 +36,10 @@ namespace RHITMobile {
             yield return TM.MakeDbCall(currentThread, Program.ConnectionString, "spGetLocationDepartNode",
                 new SqlParameter("@location", value));
             var table = TM.GetResult<DataTable>(currentThread);
-            if (table.Rows.Count > 0) {
-                yield return TM.Return(currentThread, new DirectionsFinder(table.Rows[0]));
-            } else {
-                yield return TM.Return(currentThread, new JsonResponse(HttpStatusCode.BadRequest));
-            }
+            if (table.Rows.Count == 0)
+                throw new BadRequestException("Cannot depart from this location.");
+
+            yield return TM.Return(currentThread, new DirectionsFinder(table.Rows[0]));
         }
     }
 

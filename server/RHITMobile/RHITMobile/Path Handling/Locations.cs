@@ -148,7 +148,7 @@ namespace RHITMobile {
                 double version;
                 if (Double.TryParse(query["version"], out version)) {
                     if (version >= Program.LocationsVersion) {
-                        yield return TM.Return(currentThread, new JsonResponse(HttpStatusCode.NoContent));
+                        throw new UpToDateException("Version is up to date.");
                     }
                 }
             }
@@ -259,7 +259,7 @@ namespace RHITMobile {
                 double version;
                 if (Double.TryParse(query["version"], out version)) {
                     if (version >= Program.LocationsVersion) {
-                        yield return TM.Return(currentThread, new JsonResponse(HttpStatusCode.NoContent));
+                        throw new UpToDateException("Version is up to date.");
                     }
                 }
             }
@@ -302,7 +302,7 @@ namespace RHITMobile {
             foreach (DataRow row in table.Rows) {
                 yield return TM.Return(currentThread, new JsonResponse(new LocationDescResponse(row)));
             }
-            yield return TM.Return(currentThread, new JsonResponse(HttpStatusCode.BadRequest));
+            throw new BadRequestException("Could not find location with ID {0}.", state);
         }
     }
 }

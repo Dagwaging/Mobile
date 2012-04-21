@@ -14,7 +14,7 @@ namespace RHITMobile {
                 double version;
                 if (Double.TryParse(query["version"], out version)) {
                     if (version >= Program.ServicesVersion) {
-                        yield return TM.Return(currentThread, new JsonResponse(HttpStatusCode.NoContent));
+                        throw new UpToDateException("Version is up to date.");
                     }
                 }
             }
@@ -27,8 +27,11 @@ namespace RHITMobile {
             using (var table = TM.GetResult<DataTable>(currentThread)) {
                 foreach (DataRow row in table.Rows) {
                     var category = new CampusServicesCategory(row);
-                    categories[category.Parent ?? ""].Children.Add(category);
                     categories.Add(category.Name, category);
+                }
+                foreach (DataRow row in table.Rows) {
+                    var category = new CampusServicesCategory(row);
+                    categories[category.Parent ?? ""].Children.Add(categories[category.Name]);
                 }
             }
 

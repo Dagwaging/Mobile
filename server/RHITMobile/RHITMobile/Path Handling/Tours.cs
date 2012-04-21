@@ -44,7 +44,7 @@ namespace RHITMobile {
                 double version;
                 if (Double.TryParse(query["version"], out version)) {
                     if (version >= Program.TagsVersion) {
-                        yield return TM.Return(currentThread, new JsonResponse(HttpStatusCode.NoContent));
+                        throw new UpToDateException("Version is up to date.");
                     }
                 }
             }
@@ -57,8 +57,11 @@ namespace RHITMobile {
             using (var table = TM.GetResult<DataTable>(currentThread)) {
                 foreach (DataRow row in table.Rows) {
                     var category = new TagCategory(row);
-                    categories[category.Parent ?? ""].Children.Add(category);
                     categories.Add(category.Name, category);
+                }
+                foreach (DataRow row in table.Rows) {
+                    var category = new TagCategory(row);
+                    categories[category.Parent ?? ""].Children.Add(categories[category.Name]);
                 }
             }
 
@@ -91,9 +94,8 @@ namespace RHITMobile {
         protected override IEnumerable<ThreadInfo> HandleNoPath(ThreadManager TM, Dictionary<string, string> query, object state) {
             var currentThread = TM.CurrentThread;
 
-            if (!(state is List<int>)) {
-                yield return TM.Return(currentThread, new JsonResponse(HttpStatusCode.BadRequest));
-            }
+            if (!(state is List<int>))
+                throw new BadRequestException("Need to specify at least one tag.");
 
             yield return TM.Await(currentThread, ToursHandler.GetTaggedLocations(TM, (List<int>)state));
 
@@ -115,9 +117,8 @@ namespace RHITMobile {
         protected override IEnumerable<ThreadInfo> HandleIntPath(ThreadManager TM, int value, object state) {
             var currentThread = TM.CurrentThread;
             IntRedirect = TourFinder.GetFinder(value);
-            if (IntRedirect == null) {
-                yield return TM.Return(currentThread, new JsonResponse(HttpStatusCode.BadRequest));
-            }
+            if (IntRedirect == null)
+                throw new BadRequestException("Invalid Tours ID.");
             yield return TM.Return(currentThread, false);
         }
     }
@@ -132,11 +133,9 @@ namespace RHITMobile {
             yield return TM.MakeDbCall(currentThread, Program.ConnectionString, "spGetLocationDepartNode",
                 new SqlParameter("@location", value));
             var table = TM.GetResult<DataTable>(currentThread);
-            if (table.Rows.Count > 0) {
-                yield return TM.Return(currentThread, new TourFinder(table.Rows[0]));
-            } else {
-                yield return TM.Return(currentThread, new JsonResponse(HttpStatusCode.BadRequest));
-            }
+            if (table.Rows.Count == 0)
+                throw new BadRequestException("Cannot depart from this location.");
+            yield return TM.Return(currentThread, new TourFinder(table.Rows[0]));
         }
     }
 
@@ -160,14 +159,13 @@ namespace RHITMobile {
             var currentThread = TM.CurrentThread;
 
             var tourFinder = (TourFinder)state;
-            if (!tourFinder.Tags.Any()) {
-                yield return TM.Return(currentThread, new JsonResponse(HttpStatusCode.BadRequest));
-            }
+            if (!tourFinder.Tags.Any())
+                throw new BadRequestException("Need to specify at least one tag.");
 
             yield return TM.Await(currentThread, ToursHandler.GetTaggedLocations(TM, tourFinder.Tags));
             tourFinder.Locations = TM.GetResult<IOrderedEnumerable<LocationRank>>(currentThread).ToList();
 
-            yield return TM.Await(currentThread, tourFinder.HandlePath(TM, new List<string>(), query, true));
+            yield return TM.Await(currentThread, tourFinder.HandlePath(TM, false, new List<string>(), query, null, true));
             yield return TM.Return(currentThread);
         }
     }

@@ -38,6 +38,9 @@ namespace RHITMobile {
             // Start the expiration checker for admin logins
             TM.Enqueue(AdminHandler.DeleteExpiredLogins(TM), ThreadPriority.Low);
 
+            // Start the expiration checker for banner logins
+            TM.Enqueue(BannerHandler.ClearAuthenticationExpirations(TM), ThreadPriority.Low);
+
             // Start the listener for console commands
             TM.Enqueue(HandleConsoleRequests(TM), ThreadPriority.Low);
 
@@ -125,12 +128,14 @@ namespace RHITMobile {
             Console.WriteLine("Version update from file successful.");
         }
 
-        public static void WriteServerVersion(double version) {
-            LocationsVersion = version;
+        public static void WriteVersions(double locations, double services, double tags) {
+            LocationsVersion = locations;
+            ServicesVersion = services;
+            TagsVersion = tags;
             using (var fileWriter = new StreamWriter("version.txt", false)) {
-                fileWriter.WriteLine("Locations:\t" + version);
-                fileWriter.WriteLine("Services:\t" + ServicesVersion);
-                fileWriter.WriteLine("Tags:\t\t" + TagsVersion);
+                fileWriter.WriteLine("Locations:\t" + locations);
+                fileWriter.WriteLine("Services:\t" + services);
+                fileWriter.WriteLine("Tags:\t\t" + tags);
             }
             Console.WriteLine("Version was updated.");
         }
@@ -178,7 +183,7 @@ namespace RHITMobile {
         public static double LocationsVersion;
         public static double ServicesVersion;
         public static double TagsVersion;
-        private const string CustomConnectionString = @"Data Source=mobilewin.csse.rose-hulman.edu\RHITMobile;Initial Catalog=MapData;User Id={0};Password={1};Persist Security Info=true";
+        private const string CustomConnectionString = @"Data Source=tcp:mobilewin.csse.rose-hulman.edu,4848\RHITMobile;Initial Catalog=MapData;User Id={0};Password={1};Persist Security Info=true";
         public const double EarthRadius = 20925524.9; // feet
         public const double DegToRad = Math.PI / 180;
         public const double MaxSlopeAngle = 10 * DegToRad; // radians
@@ -187,6 +192,7 @@ namespace RHITMobile {
         public const double StairLength = 11 / 12;
         public const double StairRatio = StairHeight / StairLength;
         public static double StairAngle = Math.Asin(StairRatio); // radians
+        public const int MaxDailySecureServerCalls = 25000;
 
         public static double UseStairsStairMultiplier = (Math.Sqrt(1 + MaxSlopeRatio * MaxSlopeRatio) * StairRatio - Math.Sqrt(1 + StairRatio * StairRatio) * MaxSlopeRatio) * StairHeight / (MaxSlopeRatio * StairRatio);
     }

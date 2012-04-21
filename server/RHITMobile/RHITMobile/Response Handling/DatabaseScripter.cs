@@ -7,9 +7,14 @@ using System.IO;
 using Microsoft.SqlServer.Management.Smo;
 using Microsoft.SqlServer.Management.Common;
 using Microsoft.SqlServer.Management.Sdk.Sfc;
+using System.Collections.Specialized;
 
 namespace RHITMobile {
-    public class DatabaseScripter : PathHandler {
+    public class DatabaseScripter : SecurePathHandler {
+        public override IEnumerable<ThreadInfo> VerifyHeaders(ThreadManager TM, NameValueCollection headers, object state) {
+            return AdminHandler.VerifyToken(TM, headers);
+        }
+
         protected override IEnumerable<ThreadInfo> HandleNoPath(ThreadManager TM, Dictionary<string, string> query, object state) {
             var now = DateTime.Now;
             return ScriptDatabase(TM, Program.ConnectionString, "MapData", String.Format("C:/DBBackup/Dropbox/MapData_Backup_{0:yyyy_MM_dd_HH_mm_ss}.sql", now), now, ((SqlLoginData)state).Username);
