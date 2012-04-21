@@ -68,6 +68,7 @@ namespace TestClient
             var state = service.GetState();
 
             Console.WriteLine("Last update:       {0}", state.LastUpdateTime);
+            Console.WriteLine("Parse Errors:      {0}", state.ParseErrors);
             Console.WriteLine("Update Queued:     {0}", state.IsUpdateQueued);
             Console.WriteLine("Active Requests:   {0}", state.ActiveRequests);
             Console.WriteLine("Active User Count: {0}", state.ActiveUserCount);

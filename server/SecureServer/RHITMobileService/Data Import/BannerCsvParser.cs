@@ -17,6 +17,8 @@ namespace RHITMobile.Secure.Data_Import
 
         public int TermCode { get { return termCode; } }
 
+        public int ParseErrors { get; private set; }
+
         public BannerCsvParser(String path)
         {
             parser = new TextFieldParser(path);
@@ -35,20 +37,30 @@ namespace RHITMobile.Secure.Data_Import
             T res = null;
             do
             {
-                String[] fields = parser.ReadFields();
-                if (fields != null)
+                try
                 {
-                    trim(fields);
+                    String[] fields = parser.ReadFields();
+                    if (fields != null)
+                    {
+                        trim(fields);
 
-                    try
-                    {
-                        res = convertRecord(fields);
+                        try
+                        {
+                            res = convertRecord(fields);
+                        }
+                        catch (Exception e)
+                        {
+                            //skip the record
+                            Console.WriteLine("Failed to parse record: {0}", e.ToString());
+                            ParseErrors++;
+                        }
                     }
-                    catch (Exception e)
-                    {
-                        //skip the record
-                        Console.WriteLine("Failed to parse record: {0}", e.ToString());
-                    }
+                }
+                catch (Exception e)
+                {
+                    //skip the record
+                    Console.WriteLine("Failed to initially parse record: {0}", e.ToString());
+                    ParseErrors++;
                 }
             } while (res == null && hasMore());
 

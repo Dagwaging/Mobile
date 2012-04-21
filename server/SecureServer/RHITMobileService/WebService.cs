@@ -83,6 +83,7 @@ namespace RHITMobile.Secure
     public struct ServerState
     {
         public DateTime LastUpdateTime { get; set; }
+        public int ParseErrors { get; set; }
         public bool IsUpdateQueued { get; set; }
         public int ActiveRequests { get; set; }
         public int ActiveUserCount { get; set; }
@@ -246,6 +247,7 @@ namespace RHITMobile.Secure
             DataUpdater updater = service.DataMonitor.Updater;
 
             state.LastUpdateTime = updater.LastUpdateTime;
+            state.ParseErrors = updater.LastParseErrors;
             state.IsUpdateQueued = updater.IsUpdateQueued;
             state.ActiveRequests = DB.Instance.ActiveReaderCount;
             state.ActiveUserCount = _auth.ActiveUsers;

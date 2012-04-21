@@ -27,6 +27,7 @@ namespace RHITMobile.Secure.Data_Import
             DB db = DB.Instance;
             using (var writeLock = db.AcquireWriteLock())
             {
+                ParseErrors = 0;
                 db.ClearData();
 
                 {
@@ -56,8 +57,10 @@ namespace RHITMobile.Secure.Data_Import
                                 db.SetAdvisor(user);
                             }
                         }
+                        ParseErrors += parser.ParseErrors;
                         log.Info("Read " + users.Count + " user entries for term " + parser.TermCode);
                     }
+
                 }
                 {
                     String[] coursepaths = Directory.GetFiles(inputPath, "*.cls");
@@ -71,6 +74,7 @@ namespace RHITMobile.Secure.Data_Import
                                 db.AddCourse(course);
                                 count++;
                             }
+                            ParseErrors += parser.ParseErrors;
                             log.Info("Read " + count + " course entries for term " + parser.TermCode);
                         }
                     }
@@ -87,6 +91,7 @@ namespace RHITMobile.Secure.Data_Import
                                 db.AddUserEnrollment(course);
                                 count++;
                             }
+                            ParseErrors += parser.ParseErrors;
                             log.Info("Read " + count + " enrollment entries for term " + parser.TermCode);
                         }
                     }
@@ -96,5 +101,7 @@ namespace RHITMobile.Secure.Data_Import
 
             log.Info("Imported Banner Data in " + DateTime.Now.Subtract(startTime).ToString());
         }
+
+        public int ParseErrors { get; private set; }
     }
 }

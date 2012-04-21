@@ -881,6 +881,9 @@ namespace TestClient.RHIT.Private {
         private System.DateTime LastUpdateTimeField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int ParseErrorsField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private int RequestCountField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -956,6 +959,19 @@ namespace TestClient.RHIT.Private {
                 if ((this.LastUpdateTimeField.Equals(value) != true)) {
                     this.LastUpdateTimeField = value;
                     this.RaisePropertyChanged("LastUpdateTime");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int ParseErrors {
+            get {
+                return this.ParseErrorsField;
+            }
+            set {
+                if ((this.ParseErrorsField.Equals(value) != true)) {
+                    this.ParseErrorsField = value;
+                    this.RaisePropertyChanged("ParseErrors");
                 }
             }
         }
