@@ -47,6 +47,7 @@ namespace Rhit.Applications.Views.Utilities {
             IList<Location> locations = new List<Location>();
             foreach(LocationWrapper location in Locations)
                 locations.Add(location.Location);
+            Clear();
             return locations;
         }
 

@@ -127,8 +127,16 @@
             <exts:DraggablePushpin CanChange="{Binding CanMove}" Location="{Binding Center, Mode=TwoWay}" Tag="{Binding Id}" Background="Black" PositionOrigin="Center" Template="{StaticResource DirectionsPushpinTemplate}" cmds:CommandManager.Command="{Binding ClickCommand}" cmds:CommandManager.CommandEventName="MouseLeftButtonUp">
                 <Grid>
                     <Ellipse Fill="Green" Width="16" Height="16" Stroke="White" StrokeThickness="1" Visibility="{Binding IsSelected, Converter={StaticResource VisibilityConverter}}" />
-                    <Ellipse Fill="Red" Width="16" Height="16" Stroke="White" StrokeThickness="1" Visibility="{Binding IsEndNode, Converter={StaticResource VisibilityConverter}}" />
                     <Ellipse Fill="Blue" Width="16" Height="16" Stroke="White" StrokeThickness="1" Visibility="{Binding CanSelect, Converter={StaticResource VisibilityConverter}}" />
+                    <Ellipse Fill="Red" Width="16" Height="16" Stroke="White" StrokeThickness="1" Visibility="{Binding IsEndNode, Converter={StaticResource VisibilityConverter}}" />
+                </Grid>
+            </exts:DraggablePushpin>
+        </DataTemplate>
+
+        <DataTemplate x:Key="NodeLocationTemplate">
+            <exts:DraggablePushpin CanChange="True" Location="{Binding Location, Mode=TwoWay}" Background="Black" PositionOrigin="Center" Template="{StaticResource DirectionsPushpinTemplate}" cmds:CommandManager.Command="{Binding ClickCommand}" cmds:CommandManager.CommandEventName="MouseLeftButtonDown">
+                <Grid>
+                    <Ellipse Fill="Red" Width="16" Height="16" Stroke="White" StrokeThickness="1" />
                 </Grid>
             </exts:DraggablePushpin>
         </DataTemplate>
@@ -171,6 +179,7 @@
                     <map:MapItemsControl ItemsSource="{Binding Paths.Paths}" ItemTemplate="{StaticResource PathTemplate3}" />
                     <map:MapItemsControl ItemsSource="{Binding Paths.Paths}" ItemTemplate="{StaticResource PathTemplate4}" />
                     <map:MapItemsControl ItemsSource="{Binding Paths.Nodes}" ItemTemplate="{StaticResource NodeTemplate}" />
+                    <map:MapItemsControl ItemsSource="{Binding Locations, ElementName=ViewLocations}" ItemTemplate="{StaticResource NodeLocationTemplate}" />
                 </map:MapLayer>
             </map:Map>
 

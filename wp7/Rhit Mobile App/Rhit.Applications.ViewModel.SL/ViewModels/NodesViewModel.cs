@@ -11,7 +11,7 @@ using Rhit.Applications.ViewModels.Utilities;
 
 namespace Rhit.Applications.ViewModels {
     public class NodesViewModel : TaskedViewModel {
-         private enum BehaviorState { Default, AddingNode, MovingNodes, };
+        private enum BehaviorState { Default, AddingNode, MovingNodes, DeletingNode, CreatingPath, DeletingPath, };
 
          protected override void Initialize() {
              base.Initialize();
@@ -32,21 +32,28 @@ namespace Rhit.Applications.ViewModels {
         }
 
         protected override void Save() {
-
-
             switch(State) {
+                case BehaviorState.DeletingNode:
+                    Paths.DeleteNode();
+                    break;
+                case BehaviorState.CreatingPath:
+                    Paths.CreatePath();
+                    break;
+                case BehaviorState.DeletingPath:
+                    Paths.DeletePath();
+                    break;
                 case BehaviorState.AddingNode:
                     CreateNode();
                     break;
                 case BehaviorState.MovingNodes:
-                    NodesController.Instance.SaveNodes();
+                    Paths.SaveNodes();
                     Cancel();
                     break;
                 case BehaviorState.Default:
                 default:
-                    Cancel();
                     break;
             }
+            Cancel();
         }
 
         private void CreateNode() {
@@ -60,7 +67,7 @@ namespace Rhit.Applications.ViewModels {
         }
 
         protected override void Cancel() {
-            NodesController.Instance.RestoreToDefault();
+            Paths.RestoreToDefault();
             State = BehaviorState.Default;
         }
 
@@ -68,10 +75,10 @@ namespace Rhit.Applications.ViewModels {
         public ICommand AddNodeCommand { get; private set; }
 
         private void AddNode() {
-            NodesController.Instance.RestoreToDefault();
+            State = BehaviorState.AddingNode;
+            Paths.RestoreToDefault();
             LocationsProvider.CreateNewLocations(1);
             ShowSave = true;
-            State = BehaviorState.AddingNode;
         }
         #endregion
 
@@ -79,10 +86,10 @@ namespace Rhit.Applications.ViewModels {
         public ICommand MoveNodesCommand { get; private set; }
 
         private void MoveNodes() {
-            NodesController.Instance.RestoreToDefault();
-            ShowSave = true;
             State = BehaviorState.MovingNodes;
-            NodesController.Instance.AllowMovement();
+            Paths.RestoreToDefault();
+            ShowSave = true;
+            Paths.AllowMovement();
         }
         #endregion
 
@@ -90,8 +97,9 @@ namespace Rhit.Applications.ViewModels {
         public ICommand DeleteNodeCommand { get; private set; }
 
         private void DeleteNode() {
+            State = BehaviorState.DeletingNode;
             ShowSave = false;
-            NodesController.Instance.DeleteNextNode();
+            Paths.DeleteNextNode();
         }
         #endregion
 
@@ -99,8 +107,9 @@ namespace Rhit.Applications.ViewModels {
         public ICommand AddPathCommand { get; private set; }
 
         private void AddPath() {
+            State = BehaviorState.CreatingPath;
             ShowSave = false;
-            NodesController.Instance.CreateNewPath();
+            Paths.CreateNewPath();
         }
         #endregion
 
@@ -108,15 +117,14 @@ namespace Rhit.Applications.ViewModels {
         public ICommand DeletePathCommand { get; private set; }
 
         private void DeletePath() {
+            State = BehaviorState.DeletingPath;
             ShowSave = false;
-            NodesController.Instance.DeleteNextPath();
+            Paths.DeleteNextPath();
         }
         #endregion
 
         public NodesController Paths { get; set; }
 
         private BehaviorState State { get; set; }
-
-
     }
 }

@@ -26,8 +26,8 @@ namespace Rhit.Applications.ViewModels.Controllers {
             Node2 = node2;
             Nodes.Add(Node1.Center);
             Nodes.Add(Node2.Center);
-            Node1.CenterChanged += new EventHandler(Node_CenterChanged);
-            Node2.CenterChanged += new EventHandler(Node_CenterChanged);
+            Node1.Moved += new EventHandler(Node_CenterChanged);
+            Node2.Moved += new EventHandler(Node_CenterChanged);
             Id = model.Id;
             IsElevator = model.Elevator;
             StairCount = model.Stairs;
@@ -150,9 +150,9 @@ namespace Rhit.Applications.ViewModels.Controllers {
         #endregion
 
         #region CenterChanged Event
-        public event EventHandler CenterChanged;
-        protected virtual void OnCenterChanged() {
-            if(CenterChanged != null) CenterChanged(this, new EventArgs());
+        public event EventHandler Moved;
+        protected virtual void OnMove() {
+            if(Moved != null) Moved(this, new EventArgs());
         }
         #endregion
 
@@ -196,7 +196,12 @@ namespace Rhit.Applications.ViewModels.Controllers {
            DependencyProperty.Register("Center", typeof(Location), typeof(SimpleNode), new PropertyMetadata(new Location(), new PropertyChangedCallback(OnCenterPropertyChanged)));
 
         private static void OnCenterPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
-            (d as SimpleNode).OnCenterChanged();
+            SimpleNode node = d as SimpleNode;
+            if(node.Center.Latitude == node.Model.Latitude)
+                if(node.Center.Longitude == node.Model.Longitude)
+                    if(node.Center.Altitude == node.Model.Altitude)
+                        return;
+            node.OnMove();
         }
         #endregion
 
@@ -255,7 +260,9 @@ namespace Rhit.Applications.ViewModels.Controllers {
         }
 
         internal Path GetPath(SimpleNode node) {
-            return PathBindingDictionary[node];
+            if(PathBindingDictionary.ContainsKey(node))
+                return PathBindingDictionary[node];
+            return null;
         }
 
         protected Node_DC Model { get; private set; }
@@ -266,6 +273,21 @@ namespace Rhit.Applications.ViewModels.Controllers {
             if(Center.Longitude != Model.Longitude) return true;
             if(Center.Altitude != Model.Altitude) return true;
             return false;
+        }
+
+        internal void Revert() {
+            CanSelect = false;
+            IsEndNode = false;
+            IsSelected = false;
+            CanMove = false;
+            Center = new Location(Model.Latitude, Model.Longitude, Model.Altitude);
+            IsOutside = Model.Outside;
+            OnMove();
+        }
+
+        internal void RemoveAdjacentNode(SimpleNode node) {
+            if(PathBindingDictionary.ContainsKey(node))
+                PathBindingDictionary.Remove(node);
         }
     }
 
@@ -390,6 +412,8 @@ namespace Rhit.Applications.ViewModels.Controllers {
             NodeDictionary.Remove(node.Id);
             AllNodes.Remove(node);
             Nodes.Remove(node);
+            foreach(SimpleNode _node in node.GetAdjacentNodes())
+                _node.RemoveAdjacentNode(node);
         }
 
         private void Instance_NodeCreated(object sender, NodeEventArgs e) {
@@ -432,6 +456,7 @@ namespace Rhit.Applications.ViewModels.Controllers {
                 SimpleNode _node = new SimpleNode(node);
                 _node.Selected += new EventHandler(Node_Selected);
                 _node.Unselected += new EventHandler(Node_Unselected);
+                _node.Moved += new EventHandler(Node_Moved);
                 NodeDictionary[_node.Id] = _node;
                 AllNodes.Add(_node);
             }
@@ -459,6 +484,14 @@ namespace Rhit.Applications.ViewModels.Controllers {
             }
             foreach(Direction_DC direction in e.Directions)
                 AllDirections.Add(new Direction(direction));
+        }
+
+        private void Node_Moved(object sender, EventArgs e) {
+            SimpleNode node = sender as SimpleNode;
+            if(State == BehaviorState.MovingNodes) {
+                if(!SelectedNodes.Contains(node)) SelectedNodes.Add(node);
+                if(!node.IsSelected) node.IsSelected = true;
+            }
         }
 
         private void AddNodes(Path path) {
@@ -519,57 +552,86 @@ namespace Rhit.Applications.ViewModels.Controllers {
 
         }
 
+        private void ProccessSelectedNode(SimpleNode node) {
+            ProccessSelectedNode(node, false);
+        }
+
+        private void ProccessSelectedNode(SimpleNode node, bool multipleEndNodes) {
+            SelectedNodes.Add(node);
+            node.IsSelected = true;
+            node.IsEndNode = true;
+
+            if(LastNode != null) {
+                Path path = LastNode.GetPath(node);
+                if(path != null) {
+                    SelectedPaths.Add(path);
+                    path.IsSelected = true;
+                }
+                LastNode.IsEndNode = multipleEndNodes;
+            }
+            LastNode = node;
+            CurrentMessage = MessageSearch();
+        }
+
+        private void CalculateSelectableNodes() {
+            foreach(SimpleNode other in AllNodes)
+                other.CanSelect = false;
+            foreach(SimpleNode other in LastNode.GetAdjacentNodes())
+                other.CanSelect = true;
+        }
+
         private void Node_Selected(object sender, EventArgs e) {
             SimpleNode node = sender as SimpleNode;
             switch(State) {
+                case BehaviorState.MovingNodes:
+                    if(!SelectedNodes.Contains(node)) SelectedNodes.Add(node);
+                    if(!node.IsSelected) node.IsSelected = true;
+                    break;
+
                 case BehaviorState.DeletingNode:
-                    DataCollector.Instance.DeleteNode(node.Id);
-                    RestoreToDefault();
+                    if(SelectedNodes.Count >= 1) break;
+                    ProccessSelectedNode(node);
                     break;
 
                 case BehaviorState.DeletingPath:
-                    SelectedNodes.Add(node);
-                    if(SelectedNodes.Count >= 2) {
-                        Path path;
-                        if(SelectedNodes[0] == node) path = node.GetPath(SelectedNodes[1]);
-                        else path = node.GetPath(SelectedNodes[0]);
-                        DataCollector.Instance.DeletePath(path.Id);
-                        RestoreToDefault();
-                    }
+                    if(SelectedNodes.Count >= 2 || SelectedNodes.Contains(node)) break;
+                    ProccessSelectedNode(node, true);
+                    if(SelectedNodes.Count >= 2) break;
+                    CalculateSelectableNodes();
                     break;
 
                 case BehaviorState.CreatingPath:
-                    SelectedNodes.Add(node);
-                    if(SelectedNodes.Count >= 2) {
-                        CreatePath();
-                        RestoreToDefault();
-                    }
+                    if(SelectedNodes.Count >= 2 || SelectedNodes.Contains(node)) break;
+                    ProccessSelectedNode(node, true);
                     break;
 
                 case BehaviorState.Default:
                 default:
-                    SelectedNodes.Add(node);
-                    node.IsEndNode = true;
-
-                    foreach(SimpleNode other in AllNodes)
-                        other.CanSelect = false;
-
-                    if(LastNode != null) {
-                        LastNode.IsEndNode = false;
-                        SelectedPaths.Add(LastNode.GetPath(node));
-                    }
-                    LastNode = node;
-                    foreach(SimpleNode other in LastNode.GetAdjacentNodes())
-                        other.CanSelect = true;
-
-                    CurrentMessage = MessageSearch();
+                    ProccessSelectedNode(node);
+                    CalculateSelectableNodes();
                     break;
             }
         }
 
-        private void CreatePath() {
+        internal bool DeletePath() {
+            if(SelectedNodes.Count < 2) return false;
+            Path path = SelectedNodes[0].GetPath(SelectedNodes[1]);
+            if(path == null) return false;
+            DataCollector.Instance.DeletePath(path.Id);
+            return true;
+        }
+
+        internal bool CreatePath() {
+            if(SelectedNodes.Count < 2) return false;
             DataCollector.Instance.CreatePath(SelectedNodes[0].Id, SelectedNodes[1].Id, false, 0, 100);
-            RestoreToDefault();
+            return true;
+        }
+
+        internal bool DeleteNode() {
+            if(SelectedNodes.Count < 1) return false;
+            SimpleNode node = SelectedNodes[0];
+            DataCollector.Instance.DeleteNode(node.Id);
+            return true;
         }
 
         public DirectionMessage MessageSearch() {
@@ -597,7 +659,7 @@ namespace Rhit.Applications.ViewModels.Controllers {
             return NullMessage;
         }
 
-        protected enum BehaviorState { Default, DeletingNode, CreatingPath, DeletingPath, };
+        protected enum BehaviorState { Default, DeletingNode, CreatingPath, DeletingPath, MovingNodes, };
 
         protected BehaviorState State { get; set; }
 
@@ -612,15 +674,13 @@ namespace Rhit.Applications.ViewModels.Controllers {
             SelectedNodes.Clear();
             LastNode = null;
             foreach(SimpleNode node in AllNodes) {
+                node.Revert();
                 node.CanSelect = true;
-                node.IsEndNode = false;
-                node.IsSelected = false;
             }
             foreach(Path path in AllPaths) {
                 path.CanSelect = false;
                 path.IsSelected = false;
             }
-            AllowMovement(false);
         }
 
         public Path GetPath(int id) {
@@ -647,12 +707,12 @@ namespace Rhit.Applications.ViewModels.Controllers {
 
         internal void AllowMovement(bool canMove) {
             if(canMove) {
-                foreach(SimpleNode node in Nodes)
+                foreach(SimpleNode node in Nodes) {
                     node.CanMove = true;
-            } else {
-                foreach(SimpleNode node in AllNodes)
-                    node.CanMove = false;
-            }
+                    node.CanSelect = false;
+                }
+                State = BehaviorState.MovingNodes;
+            } else RestoreToDefault();
         }
 
         internal void SaveNodes() {

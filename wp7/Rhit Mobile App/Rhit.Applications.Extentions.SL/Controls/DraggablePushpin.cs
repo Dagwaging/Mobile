@@ -97,7 +97,6 @@ namespace Rhit.Applications.Extentions.Controls {
         }
         #endregion
 
-
         #region CanChange
         public bool CanChange {
             get { return (bool) GetValue(CanChangeProperty); }
