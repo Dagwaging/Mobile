@@ -160,6 +160,16 @@ namespace Rhit.Applications.Models.Services {
         }
         #endregion
 
+        #region NodeUpdated
+        public event NodeEventHandler NodeUpdated;
+        protected virtual void OnNodeUpdated(ServiceEventArgs e) {
+            NodeEventArgs args = new NodeEventArgs(e) {
+                Node = ServerObject.ParseNode(e.ResponseObject),
+            };
+            if(NodeUpdated != null) NodeUpdated(this, args);
+        }
+        #endregion
+
         #region NodeDeleted
         public event IdentificationEventHandler NodeDeleted;
         protected virtual void OnNodeDeleted(ServiceEventArgs e) {
@@ -296,6 +306,10 @@ namespace Rhit.Applications.Models.Services {
 
                 case ResponseType.PathDeletion:
                     OnPathDeleted(eventArgs);
+                    break;
+
+                case ResponseType.NodeUpdate:
+                    OnNodeUpdated(eventArgs);
                     break;
             }
         }

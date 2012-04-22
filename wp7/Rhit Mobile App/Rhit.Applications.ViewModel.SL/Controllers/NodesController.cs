@@ -14,6 +14,7 @@ using System.Device.Location;
 #else
 using Microsoft.Maps.MapControl;
 using System;
+using Rhit.Applications.ViewModels.Utilities;
 #endif
 
 namespace Rhit.Applications.ViewModels.Controllers {
@@ -132,6 +133,7 @@ namespace Rhit.Applications.ViewModels.Controllers {
             InitializeCommands();
             Center = new Location(Model.Latitude, Model.Longitude, Model.Altitude);
             IsOutside = Model.Outside;
+            Location = LocationsController.Instance.GetLocation(model.Location);
             Id = Model.Id;
         }
 
@@ -149,12 +151,21 @@ namespace Rhit.Applications.ViewModels.Controllers {
         }
         #endregion
 
-        #region CenterChanged Event
+        #region Moved Event
         public event EventHandler Moved;
         protected virtual void OnMove() {
             if(Moved != null) Moved(this, new EventArgs());
         }
         #endregion
+
+        internal void UpdateModel(Node_DC model) {
+            if(model.Id != Model.Id) return;
+            Model = model;
+            Center = new Location(Model.Latitude, Model.Longitude, Model.Altitude);
+            IsOutside = Model.Outside;
+            Location = LocationsController.Instance.GetLocation(model.Location);
+            OnMove();
+        }
 
         private Dictionary<SimpleNode, Path> PathBindingDictionary { get; set; }
 
@@ -203,6 +214,16 @@ namespace Rhit.Applications.ViewModels.Controllers {
                         return;
             node.OnMove();
         }
+        #endregion
+
+        #region Location
+        public LocationData Location {
+            get { return (LocationData) GetValue(LocationProperty); }
+            set { SetValue(LocationProperty, value); }
+        }
+
+        public static readonly DependencyProperty LocationProperty =
+           DependencyProperty.Register("Location", typeof(LocationData), typeof(SimpleNode), new PropertyMetadata(null));
         #endregion
 
         #region IsSelected
@@ -272,6 +293,7 @@ namespace Rhit.Applications.ViewModels.Controllers {
             if(Center.Latitude != Model.Latitude) return true;
             if(Center.Longitude != Model.Longitude) return true;
             if(Center.Altitude != Model.Altitude) return true;
+            if(Location.Id != Model.Location) return true;
             return false;
         }
 
@@ -379,10 +401,16 @@ namespace Rhit.Applications.ViewModels.Controllers {
             SelectedNodes = new List<SimpleNode>();
 
             DataCollector.Instance.NodeCreated += new NodeEventHandler(Instance_NodeCreated);
+            DataCollector.Instance.NodeUpdated += new NodeEventHandler(Instance_NodeUpdated);
             DataCollector.Instance.NodeDeleted += new IdentificationEventHandler(Instance_NodeDeleted);
             DataCollector.Instance.PathCreated += new PathEventHandler(Instance_PathCreated);
             DataCollector.Instance.PathDeleted += new IdentificationEventHandler(Instance_PathDeleted);
             State = BehaviorState.Default;
+        }
+
+        private void Instance_NodeUpdated(object sender, NodeEventArgs e) {
+            if(!NodeDictionary.ContainsKey(e.Node.Id)) return;
+                NodeDictionary[e.Node.Id].UpdateModel(e.Node);
         }
 
         private void Instance_PathDeleted(object sender, IdentificationEventArgs e) {
@@ -717,8 +745,12 @@ namespace Rhit.Applications.ViewModels.Controllers {
 
         internal void SaveNodes() {
             foreach(SimpleNode node in Nodes) {
-                if(node.HasChanges())
-                    DataCollector.Instance.UpdateNode(node.Id, node.Center.Latitude, node.Center.Longitude, node.Center.Altitude, node.IsOutside, null);
+                if(node.HasChanges()) {
+                    int? locationId;
+                    if(node.Location == null) locationId = null;
+                    else locationId = node.Location.Id;
+                    DataCollector.Instance.UpdateNode(node.Id, node.Center.Latitude, node.Center.Longitude, node.Center.Altitude, node.IsOutside, locationId);
+                }
             }
             RestoreToDefault();
         }

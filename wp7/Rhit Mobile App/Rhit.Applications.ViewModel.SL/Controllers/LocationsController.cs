@@ -261,5 +261,10 @@ namespace Rhit.Applications.ViewModels.Controllers {
         public static readonly DependencyProperty CurrentLocationProperty =
            DependencyProperty.Register("CurrentLocation", typeof(SimpleRhitLocation), typeof(LocationsController), new PropertyMetadata(null));
         #endregion
+
+        internal LocationData GetLocation(int id) {
+            if(!LocationDictionary.ContainsKey(id)) return null;
+            return LocationDictionary[id];
+        }
     }
 }
