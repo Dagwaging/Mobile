@@ -209,6 +209,9 @@
 #ifndef RHITMobile_RHConstants_h
 #define RHITMobile_RHConstants_h
 
+// Loader debugging
+#define RHITMobile_RHLoaderDebug
+
 // Network debugging
 #define RHITMobile_RHNetworkDebug
 
