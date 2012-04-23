@@ -122,12 +122,12 @@ namespace RHITMobile.Secure
             }
         }
 
-        public Course[] SearchCourses(String search)
+        public Course[] SearchCourses(int term, String search)
         {
             using (SwitchLock switchLock = AcquireReadSwitch())
             {
                 SearchCoursesTableAdapter adapter = new SearchCoursesTableAdapter();
-                Banner.SearchCoursesDataTable table = adapter.GetData(switchLock.Switch, search);
+                Banner.SearchCoursesDataTable table = adapter.GetData(switchLock.Switch, term, search);
                 return table.Courses;
             }
         }
@@ -142,22 +142,22 @@ namespace RHITMobile.Secure
             }
         }
 
-        public UserEnrollment[] GetUserEnrollment(string username)
+        public UserEnrollment[] GetUserEnrollment(int term, string username)
         {
             using (SwitchLock switchLock = AcquireReadSwitch())
             {
                 GetUserEnrollmentTableAdapter adapter = new GetUserEnrollmentTableAdapter();
-                Banner.GetUserEnrollmentDataTable table = adapter.GetData(switchLock.Switch, username);
+                Banner.GetUserEnrollmentDataTable table = adapter.GetData(switchLock.Switch, term, username);
                 return table.Enrollment;
             }
         }
 
-        public UserEnrollment[] GetInstructorSchedule(string username)
+        public UserEnrollment[] GetInstructorSchedule(int term, string username)
         {
             using (SwitchLock switchLock = AcquireReadSwitch())
             {
                 GetInstructorScheduleTableAdapter adapter = new GetInstructorScheduleTableAdapter();
-                Banner.GetInstructorScheduleDataTable table = adapter.GetData(switchLock.Switch, username);
+                Banner.GetInstructorScheduleDataTable table = adapter.GetData(switchLock.Switch, term, username);
                 return table.Schedule;
             }
         }
@@ -172,12 +172,12 @@ namespace RHITMobile.Secure
             }
         }
         
-        public RoomSchedule[] GetRoomSchedule(string room)
+        public RoomSchedule[] GetRoomSchedule(int term, string room)
         {
             using (SwitchLock switchLock = AcquireReadSwitch())
             {
                 GetRoomScheduleTableAdapter adapter = new GetRoomScheduleTableAdapter();
-                Banner.GetRoomScheduleDataTable table = adapter.GetData(switchLock.Switch, room);
+                Banner.GetRoomScheduleDataTable table = adapter.GetData(switchLock.Switch, term, room);
                 return table.Schedule;
             }
         }

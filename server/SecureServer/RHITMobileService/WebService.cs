@@ -51,7 +51,7 @@ namespace RHITMobile.Secure
 
         [OperationContract]
         [FaultContract(typeof(AuthFault))]
-        Course[] SearchCourses(string authToken, string search);
+        Course[] SearchCourses(string authToken, int term, string search);
         
         [OperationContract]
         [FaultContract(typeof(AuthFault))]
@@ -59,11 +59,11 @@ namespace RHITMobile.Secure
         
         [OperationContract]
         [FaultContract(typeof(AuthFault))]
-        UserEnrollment[] GetUserEnrollment(string authToken, string username);
+        UserEnrollment[] GetUserEnrollment(string authToken, int term, string username);
 
         [OperationContract]
         [FaultContract(typeof(AuthFault))]
-        UserEnrollment[] GetInstructorSchedule(string authToken, string username);
+        UserEnrollment[] GetInstructorSchedule(string authToken, int term, string username);
 
         [OperationContract]
         [FaultContract(typeof(AuthFault))]
@@ -71,7 +71,7 @@ namespace RHITMobile.Secure
         
         [OperationContract]
         [FaultContract(typeof(AuthFault))]
-        RoomSchedule[] GetRoomSchedule(string authToken, string room);
+        RoomSchedule[] GetRoomSchedule(string authToken, int term, string room);
 
         [OperationContract]
         bool RequestUpdate();
@@ -190,11 +190,11 @@ namespace RHITMobile.Secure
             return DB.Instance.GetCourse(term, crn);
         }
 
-        public Course[] SearchCourses(string authToken, string search)
+        public Course[] SearchCourses(string authToken, int term, string search)
         {
             Authorize(authToken);
 
-            return DB.Instance.SearchCourses(search);
+            return DB.Instance.SearchCourses(term, search);
         }
 
         public string[] GetCourseEnrollment(string authToken, int term, int crn)
@@ -204,18 +204,18 @@ namespace RHITMobile.Secure
             return DB.Instance.GetCourseEnrollment(term, crn);
         }
 
-        public UserEnrollment[] GetUserEnrollment(string authToken, string username)
+        public UserEnrollment[] GetUserEnrollment(string authToken, int term, string username)
         {
             Authorize(authToken);
 
-            return DB.Instance.GetUserEnrollment(username);
+            return DB.Instance.GetUserEnrollment(term, username);
         }
 
-        public UserEnrollment[] GetInstructorSchedule(string authToken, string username)
+        public UserEnrollment[] GetInstructorSchedule(string authToken, int term, string username)
         {
             Authorize(authToken);
 
-            return DB.Instance.GetInstructorSchedule(username);
+            return DB.Instance.GetInstructorSchedule(term, username);
         }
 
         public CourseTime[] GetCourseSchedule(string authToken, int term, int crn)
@@ -225,11 +225,11 @@ namespace RHITMobile.Secure
             return DB.Instance.GetCourseSchedule(term, crn);
         }
 
-        public RoomSchedule[] GetRoomSchedule(string authToken, string room)
+        public RoomSchedule[] GetRoomSchedule(string authToken, int term, string room)
         {
             Authorize(authToken);
 
-            return DB.Instance.GetRoomSchedule(room);
+            return DB.Instance.GetRoomSchedule(term, room);
         }
 
         public bool RequestUpdate()
