@@ -19,9 +19,10 @@
 
 #import "RHDataVersionsLoader.h"
 #import "RHLoaderRequestsWrapper.h"
+#import "RHLocationsLoader.h"
 
 
-#define kFileName @"DataVersions.plist"
+#define kFileName @"CachedDataVersions.plist"
 #define kLocationsVersionKey @"LocationsVersion"
 #define kCampusServicesVesionkey @"ServicesVersion"
 #define kTourTagsVersionKey @"TagsVersion"
@@ -31,6 +32,7 @@
 @private
     NSString *_plistPath;
     NSDictionary *_versionsDict;
+    BOOL _currentlyUpdating;
 }
 
 - (void)saveData;
@@ -64,6 +66,8 @@ static RHDataVersionsLoader * _instance;
     self = [super init];
     
     if (self) {
+        _currentlyUpdating = NO;
+        
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
         NSString *documentsDirectory = [paths objectAtIndex:0];
         
@@ -75,8 +79,15 @@ static RHDataVersionsLoader * _instance;
     return self;
 }
 
+- (BOOL)currentlyUpdating
+{
+    return _currentlyUpdating;
+}
+
 - (void)checkForNewVersions
 {
+    _currentlyUpdating = YES;
+    
     [RHLoaderRequestsWrapper makeDataVersionsRequestWithSuccessBlock:^(NSDictionary *jsonDict) {
         
         NSNumber *oldLocationsVersion = [_versionsDict objectForKey:kLocationsVersionKey];
@@ -87,27 +98,40 @@ static RHDataVersionsLoader * _instance;
         NSNumber *newCampusServicesVersion = [jsonDict objectForKey:kCampusServicesVesionkey];
         NSNumber *newTourTagsVersion = [jsonDict objectForKey:kTourTagsVersionKey];
         
+        BOOL upToDate = YES;
+        
         if (oldLocationsVersion.doubleValue < newLocationsVersion.doubleValue) {
             NSLog(@"Locations update required");
+            upToDate = NO;
             
-            // TODO
+            [RHLocationsLoader.instance updateLocations:oldLocationsVersion.doubleValue];
         }
         
         if (oldCampusServicesVersion.doubleValue < newCampusServicesVersion.doubleValue) {
             NSLog(@"Campus services update required");
+            upToDate = NO;
             
             // TODO
         }
         
         if (oldTourTagsVersion.doubleValue < newTourTagsVersion.doubleValue) {
             NSLog(@"Tour tags update required");
+            upToDate = NO;
             
             // TODO
         }
         
+        if (upToDate) {
+            NSLog(@"All cached data up to date");
+        }
+        
+        _currentlyUpdating = NO;
+        
     } failureBlock:^(NSError *error) {
         
         NSLog(@"Error checking for new versions: %@", error);
+        
+        _currentlyUpdating = NO;
         
     }];
 }

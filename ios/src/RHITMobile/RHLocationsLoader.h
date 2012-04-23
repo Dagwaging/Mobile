@@ -21,4 +21,15 @@
 
 @interface RHLocationsLoader : NSObject
 
++ (id)instance;
+
+@property (nonatomic, readonly) BOOL currentlyUpdating;
+
+- (void)updateLocations:(double)version;
+
+- (void)registerCallbackForTopLevelLocations:(void (^)(void))callback;
+
+- (void)registerCallbackForLocationWithId:(NSInteger)locationId
+                                 callback:(void (^)(void))callback;
+
 @end

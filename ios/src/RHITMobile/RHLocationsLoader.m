@@ -18,7 +18,75 @@
 //
 
 #import "RHLocationsLoader.h"
+#import "RHLoaderRequestsWrapper.h"
+
+
+@interface RHLocationsLoader () {
+    @private
+    BOOL _currentlyUpdating;
+}
+
+@end
+
 
 @implementation RHLocationsLoader
+
+static RHLocationsLoader *_instance;
+
++ (void)initialize
+{
+    static BOOL initialized = NO;
+    if(!initialized)
+    {
+        initialized = YES;
+        _instance = [[RHLocationsLoader alloc] init];
+    }
+}
+
+- (id)init
+{
+    if (self = [super init]) {
+        _currentlyUpdating = NO;
+    }
+    
+    return self;
+}
+
++ (id)instance
+{
+    return _instance;
+}
+
+- (BOOL)currentlyUpdating
+{
+    return _currentlyUpdating;
+}
+
+- (void)updateLocations:(double)version
+{
+    [RHLoaderRequestsWrapper makeTopLocationsRequestWithVersion:version successBlock:^(NSDictionary *jsonDict) {
+        
+        // TODO
+        
+        _currentlyUpdating = NO;
+        
+    } failureBlock:^(NSError *error) {
+        
+        NSLog(@"Error while updating top level locations: %@", error);
+        _currentlyUpdating = NO;
+        
+    }];
+}
+
+- (void)registerCallbackForTopLevelLocations:(void (^)(void))callback
+{
+    // TODO
+}
+
+- (void)registerCallbackForLocationWithId:(NSInteger)locationId
+                                 callback:(void (^)(void))callback
+{
+    // TODO
+}
 
 @end

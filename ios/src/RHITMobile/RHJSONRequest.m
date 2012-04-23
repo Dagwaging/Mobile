@@ -58,6 +58,10 @@
     NSString *allArgs = @"";
     
     for (NSString *key in urlArgs.keyEnumerator) {
+        if (allArgs.length != 0) {
+            allArgs = [allArgs stringByAppendingString:@"&"];
+        }
+        
         NSString *encodedKey = (__bridge NSString *)CFURLCreateStringByAddingPercentEscapes(NULL,(__bridge CFStringRef)key, NULL, (CFStringRef)@"!*'();:@&=+$,/?%#[]",kCFStringEncodingUTF8 );
         NSString *encodedValue = (__bridge NSString *)CFURLCreateStringByAddingPercentEscapes(NULL,(__bridge CFStringRef)[urlArgs objectForKey:key], NULL, (CFStringRef)@"!*'();:@&=+$,/?%#[]",kCFStringEncodingUTF8 );
         
@@ -133,6 +137,10 @@
     }
     
 #ifdef RHITMobile_RHNetworkDebug
+    NSLog(@"Successful response from server");
+#endif
+    
+#ifdef RHITMobile_RHJSONDebug
     NSLog(@"Successful response from server: %@", jsonDict);
 #endif
     _successBlock(jsonDict);

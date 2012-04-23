@@ -23,6 +23,8 @@
 
 + (id)instance;
 
+@property (nonatomic, readonly) BOOL currentlyUpdating;
+
 - (void)checkForNewVersions;
 
 - (void)setLocationsVersion:(NSNumber *)locationsVersion;
