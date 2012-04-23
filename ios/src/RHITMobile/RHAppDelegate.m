@@ -30,7 +30,7 @@
 #import "RHTopLocationsRequester.h"
 #import "RHTagsRequester.h"
 
-#import "RHJSONRequest.h"
+#import "RHLoadersWrapper.h"
 
 
 #pragma mark Private Category Declaration
@@ -76,11 +76,7 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
        instance_ = self; 
     }
     
-    [RHJSONRequest makeRequestWithPath:@"/" urlArgs:nil successBlock:^(NSDictionary *response) {
-        NSLog(@"Success!");
-    } failureBlock:^(NSError *error) {
-        NSLog(@"Failure: %@", error);
-    }];
+    [RHLoadersWrapper updateAllStoredData];
     
     // Add tab bar controller to window
     self.window.rootViewController = self.tabBarController;

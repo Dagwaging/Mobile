@@ -21,9 +21,8 @@
 
 @interface RHLoaderRequestsWrapper : NSObject
 
-+ (void)makeDataVersionsRequestWithVersion:(double)version
-                              successBlock:(void (^)(NSDictionary *))successBlock
-                              failureBlock:(void (^)(NSError *))failureBlock;
++ (void)makeDataVersionsRequestWithSuccessBlock:(void (^)(NSDictionary *))successBlock
+                                   failureBlock:(void (^)(NSError *))failureBlock;
 
 + (void)makeTopLocationsRequestWithVersion:(double)version
                               successBlock:(void (^)(NSDictionary *))successBlock

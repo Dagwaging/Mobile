@@ -21,4 +21,14 @@
 
 @interface RHDataVersionsLoader : NSObject
 
++ (id)instance;
+
+- (void)checkForNewVersions;
+
+- (void)setLocationsVersion:(NSNumber *)locationsVersion;
+
+- (void)setCampusServicesVersion:(NSNumber *)campusServicesVersion;
+
+- (void)setTourTagsVersion:(NSNumber *)tourTagsVersion;
+
 @end

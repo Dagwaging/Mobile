@@ -21,4 +21,6 @@
 
 @interface RHLoadersWrapper : NSObject
 
++ (void)updateAllStoredData;
+
 @end

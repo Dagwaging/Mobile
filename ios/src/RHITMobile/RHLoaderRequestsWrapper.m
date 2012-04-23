@@ -29,19 +29,15 @@
 
 #define kVersionKey @"version"
 
+
 @implementation RHLoaderRequestsWrapper
 
 #pragma mark - DataVersionsLoader Requests
 
-+ (void)makeDataVersionsRequestWithVersion:(double)version
-                              successBlock:(void (^)(NSDictionary *))successBlock
-                              failureBlock:(void (^)(NSError *))failureBlock
-{
-    NSString *versionString = [NSString stringWithFormat:@"%f", version];
-    NSDictionary *urlArgs = [NSDictionary dictionaryWithObject:versionString
-                                                        forKey:kVersionKey];
++ (void)makeDataVersionsRequestWithSuccessBlock:(void (^)(NSDictionary *))successBlock
+                                   failureBlock:(void (^)(NSError *))failureBlock {
     [RHJSONRequest makeRequestWithPath:kDataVersionsPath
-                               urlArgs:urlArgs
+                               urlArgs:nil
                           successBlock:successBlock
                           failureBlock:failureBlock];
 }
@@ -50,8 +46,7 @@
 
 + (void)makeTopLocationsRequestWithVersion:(double)version
                               successBlock:(void (^)(NSDictionary *))successBlock
-                              failureBlock:(void (^)(NSError *))failureBlock
-{
+                              failureBlock:(void (^)(NSError *))failureBlock {
     NSString *versionString = [NSString stringWithFormat:@"%f", version];
     NSDictionary *urlArgs = [NSDictionary dictionaryWithObject:versionString
                                                         forKey:kVersionKey];
@@ -64,8 +59,7 @@
 + (void)makeInternalLocationsRequestWithVersion:(double)version
                                parentLocationId:(NSInteger)parentId
                                    successBlock:(void (^)(NSDictionary *))successBlock
-                                   failureBlock:(void (^)(NSError *))failureBlock
-{
+                                   failureBlock:(void (^)(NSError *))failureBlock {
     NSString *versionString = [NSString stringWithFormat:@"%f", version];
     NSDictionary *urlArgs = [NSDictionary dictionaryWithObject:versionString
                                                         forKey:kVersionKey];
@@ -80,8 +74,7 @@
 
 + (void)makeCampusServicesRequestWithVersion:(double)version
                                 successBlock:(void (^)(NSDictionary *))successBlock
-                                failureBlock:(void (^)(NSError *))failureBlock
-{
+                                failureBlock:(void (^)(NSError *))failureBlock {
     NSString *versionString = [NSString stringWithFormat:@"%f", version];
     NSDictionary *urlArgs = [NSDictionary dictionaryWithObject:versionString
                                                         forKey:kVersionKey];
@@ -95,8 +88,7 @@
 
 + (void)makeTourTagsRequestWithVersion:(double)version
                           SuccessBlock:(void (^)(NSDictionary *))successBlock
-                          failureBlock:(void (^)(NSError *))failureBlock
-{
+                          failureBlock:(void (^)(NSError *))failureBlock {
     NSString *versionString = [NSString stringWithFormat:@"%f", version];
     NSDictionary *urlArgs = [NSDictionary dictionaryWithObject:versionString
                                                         forKey:kVersionKey];

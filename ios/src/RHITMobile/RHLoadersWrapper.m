@@ -18,7 +18,13 @@
 //
 
 #import "RHLoadersWrapper.h"
+#import "RHDataVersionsLoader.h"
 
 @implementation RHLoadersWrapper
+
++ (void)updateAllStoredData
+{
+    [RHDataVersionsLoader.instance checkForNewVersions];
+}
 
 @end
