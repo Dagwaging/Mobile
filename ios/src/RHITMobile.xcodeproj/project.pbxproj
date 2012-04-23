@@ -647,7 +647,7 @@
 		9265FE9B1409AB5C00AE406E /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0430;
 				ORGANIZATIONNAME = "Rose-Hulman Institute of Technology";
 			};
 			buildConfigurationList = 9265FE9E1409AB5C00AE406E /* Build configuration list for PBXProject "RHITMobile" */;
@@ -884,7 +884,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "1B59DD42-5DEF-478D-BD0F-87F0F30D444F";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "1B59DD42-5DEF-478D-BD0F-87F0F30D444F";
-				RUN_CLANG_STATIC_ANALYZER = YES;
+				RUN_CLANG_STATIC_ANALYZER = NO;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -903,7 +903,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "1B59DD42-5DEF-478D-BD0F-87F0F30D444F";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "1B59DD42-5DEF-478D-BD0F-87F0F30D444F";
-				RUN_CLANG_STATIC_ANALYZER = YES;
+				RUN_CLANG_STATIC_ANALYZER = NO;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
