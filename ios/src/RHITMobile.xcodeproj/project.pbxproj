@@ -32,6 +32,7 @@
 		9236CE9F144E3CBC00D0FB59 /* RHQuickListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9236CE9D144E3CBC00D0FB59 /* RHQuickListViewController.m */; };
 		9236CEA1144E3CBC00D0FB59 /* RHQuickListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9236CE9E144E3CBC00D0FB59 /* RHQuickListViewController.xib */; };
 		9236CEA6144F33C400D0FB59 /* RHPinAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9236CEA5144F33C400D0FB59 /* RHPinAnnotationView.m */; };
+		923919451545EA8400D3C611 /* RHJSONRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 923919441545EA8400D3C611 /* RHJSONRequest.m */; };
 		923C841414298C5800DFE415 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 923C841314298C5800DFE415 /* CoreData.framework */; };
 		923C841C14298DD500DFE415 /* RHDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 923C841A14298DD500DFE415 /* RHDataModel.xcdatamodeld */; };
 		9246368C142BAAC700A5E399 /* RHLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9246368B142BAAC700A5E399 /* RHLocation.m */; };
@@ -158,6 +159,8 @@
 		9236CE9E144E3CBC00D0FB59 /* RHQuickListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RHQuickListViewController.xib; sourceTree = "<group>"; };
 		9236CEA4144F33C300D0FB59 /* RHPinAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHPinAnnotationView.h; sourceTree = "<group>"; };
 		9236CEA5144F33C400D0FB59 /* RHPinAnnotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHPinAnnotationView.m; sourceTree = "<group>"; };
+		923919431545EA8400D3C611 /* RHJSONRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; path = RHJSONRequest.h; sourceTree = "<group>"; };
+		923919441545EA8400D3C611 /* RHJSONRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHJSONRequest.m; sourceTree = "<group>"; };
 		923C841314298C5800DFE415 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		923C841B14298DD500DFE415 /* RHDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = RHDataModel.xcdatamodel; sourceTree = "<group>"; };
 		9246368A142BAAC700A5E399 /* RHLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHLocation.h; sourceTree = "<group>"; };
@@ -317,6 +320,8 @@
 		920656F314303CB200D50293 /* Server Communication */ = {
 			isa = PBXGroup;
 			children = (
+				923919421545EA0D00D3C611 /* Requests */,
+				923919401545E9FC00D3C611 /* Loaders */,
 				9233414114DA48CB004C1ACC /* RHLocationsRequester.h */,
 				9233414214DA48CB004C1ACC /* RHLocationsRequester.m */,
 				9233414414DA48E6004C1ACC /* RHTopLocationsRequester.h */,
@@ -399,6 +404,22 @@
 				9246368B142BAAC700A5E399 /* RHLocation.m */,
 			);
 			name = "Model (CoreData)";
+			sourceTree = "<group>";
+		};
+		923919401545E9FC00D3C611 /* Loaders */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Loaders;
+			sourceTree = "<group>";
+		};
+		923919421545EA0D00D3C611 /* Requests */ = {
+			isa = PBXGroup;
+			children = (
+				923919431545EA8400D3C611 /* RHJSONRequest.h */,
+				923919441545EA8400D3C611 /* RHJSONRequest.m */,
+			);
+			name = Requests;
 			sourceTree = "<group>";
 		};
 		9265FE991409AB5C00AE406E = {
@@ -779,6 +800,7 @@
 				92ADDE0814E3422400655869 /* RHPath.m in Sources */,
 				92ADDE1114E36CB100655869 /* RHLocationSelectorViewController.m in Sources */,
 				921F3C5D14EA22F700EDD02A /* RHMapDirectionsManager.m in Sources */,
+				923919451545EA8400D3C611 /* RHJSONRequest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -209,6 +209,9 @@
 #ifndef RHITMobile_RHConstants_h
 #define RHITMobile_RHConstants_h
 
+// Network debugging
+#define RHITMobile_RHNetworkDebug
+
 #define kRHCampusCenterLatitude 39.483011
 #define kRHCampusCenterLongitude -87.325623
 

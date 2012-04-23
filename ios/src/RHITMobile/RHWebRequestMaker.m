@@ -35,7 +35,7 @@
                                           host:kURLHost
                                           path:[path stringByAppendingString:args]];
     
-    NSLog(@"Web request: %@", url.absoluteString);
+    //NSLog(@"Web request: %@", url.absoluteString);
     
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     
