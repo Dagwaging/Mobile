@@ -1,5 +1,5 @@
 //
-//  RHGenericRequest.h
+//  RHLoadersWrapper.h
 //  Rose-Hulman Mobile
 //
 //  Copyright 2012 Rose-Hulman Institute of Technology
@@ -19,12 +19,6 @@
 
 #import <Foundation/Foundation.h>
 
-
-@interface RHJSONRequest : NSObject <NSURLConnectionDelegate>
-
-+ (void)makeRequestWithPath:(NSString *)path
-                    urlArgs:(NSDictionary *)urlArgs
-               successBlock:(void (^)(NSDictionary *))successBlock
-               failureBlock:(void (^)(NSError *))failureBlock;
+@interface RHLoadersWrapper : NSObject
 
 @end

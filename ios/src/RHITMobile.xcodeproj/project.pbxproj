@@ -33,6 +33,12 @@
 		9236CEA1144E3CBC00D0FB59 /* RHQuickListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9236CE9E144E3CBC00D0FB59 /* RHQuickListViewController.xib */; };
 		9236CEA6144F33C400D0FB59 /* RHPinAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9236CEA5144F33C400D0FB59 /* RHPinAnnotationView.m */; };
 		923919451545EA8400D3C611 /* RHJSONRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 923919441545EA8400D3C611 /* RHJSONRequest.m */; };
+		92391950154600F100D3C611 /* RHLocationsLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9239194F154600F100D3C611 /* RHLocationsLoader.m */; };
+		92391954154600FF00D3C611 /* RHCampusServicesLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 92391953154600FF00D3C611 /* RHCampusServicesLoader.m */; };
+		923919571546011A00D3C611 /* RHTourTagsLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 923919561546011A00D3C611 /* RHTourTagsLoader.m */; };
+		9239195A1546016C00D3C611 /* RHLoaderRequestsWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 923919591546016C00D3C611 /* RHLoaderRequestsWrapper.m */; };
+		9239195D1546018F00D3C611 /* RHDataVersionsLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9239195C1546018F00D3C611 /* RHDataVersionsLoader.m */; };
+		92391960154601F700D3C611 /* RHLoadersWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9239195F154601F700D3C611 /* RHLoadersWrapper.m */; };
 		923C841414298C5800DFE415 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 923C841314298C5800DFE415 /* CoreData.framework */; };
 		923C841C14298DD500DFE415 /* RHDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 923C841A14298DD500DFE415 /* RHDataModel.xcdatamodeld */; };
 		9246368C142BAAC700A5E399 /* RHLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9246368B142BAAC700A5E399 /* RHLocation.m */; };
@@ -159,8 +165,20 @@
 		9236CE9E144E3CBC00D0FB59 /* RHQuickListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RHQuickListViewController.xib; sourceTree = "<group>"; };
 		9236CEA4144F33C300D0FB59 /* RHPinAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHPinAnnotationView.h; sourceTree = "<group>"; };
 		9236CEA5144F33C400D0FB59 /* RHPinAnnotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHPinAnnotationView.m; sourceTree = "<group>"; };
-		923919431545EA8400D3C611 /* RHJSONRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; path = RHJSONRequest.h; sourceTree = "<group>"; };
+		923919431545EA8400D3C611 /* RHJSONRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHJSONRequest.h; sourceTree = "<group>"; };
 		923919441545EA8400D3C611 /* RHJSONRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHJSONRequest.m; sourceTree = "<group>"; };
+		9239194E154600F100D3C611 /* RHLocationsLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHLocationsLoader.h; sourceTree = "<group>"; };
+		9239194F154600F100D3C611 /* RHLocationsLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHLocationsLoader.m; sourceTree = "<group>"; };
+		92391952154600FF00D3C611 /* RHCampusServicesLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHCampusServicesLoader.h; sourceTree = "<group>"; };
+		92391953154600FF00D3C611 /* RHCampusServicesLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHCampusServicesLoader.m; sourceTree = "<group>"; };
+		923919551546011A00D3C611 /* RHTourTagsLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHTourTagsLoader.h; sourceTree = "<group>"; };
+		923919561546011A00D3C611 /* RHTourTagsLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHTourTagsLoader.m; sourceTree = "<group>"; };
+		923919581546016C00D3C611 /* RHLoaderRequestsWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHLoaderRequestsWrapper.h; sourceTree = "<group>"; };
+		923919591546016C00D3C611 /* RHLoaderRequestsWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHLoaderRequestsWrapper.m; sourceTree = "<group>"; };
+		9239195B1546018F00D3C611 /* RHDataVersionsLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHDataVersionsLoader.h; sourceTree = "<group>"; };
+		9239195C1546018F00D3C611 /* RHDataVersionsLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHDataVersionsLoader.m; sourceTree = "<group>"; };
+		9239195E154601F700D3C611 /* RHLoadersWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHLoadersWrapper.h; sourceTree = "<group>"; };
+		9239195F154601F700D3C611 /* RHLoadersWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHLoadersWrapper.m; sourceTree = "<group>"; };
 		923C841314298C5800DFE415 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		923C841B14298DD500DFE415 /* RHDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = RHDataModel.xcdatamodel; sourceTree = "<group>"; };
 		9246368A142BAAC700A5E399 /* RHLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHLocation.h; sourceTree = "<group>"; };
@@ -409,6 +427,16 @@
 		923919401545E9FC00D3C611 /* Loaders */ = {
 			isa = PBXGroup;
 			children = (
+				9239195E154601F700D3C611 /* RHLoadersWrapper.h */,
+				9239195F154601F700D3C611 /* RHLoadersWrapper.m */,
+				9239195B1546018F00D3C611 /* RHDataVersionsLoader.h */,
+				9239195C1546018F00D3C611 /* RHDataVersionsLoader.m */,
+				9239194E154600F100D3C611 /* RHLocationsLoader.h */,
+				9239194F154600F100D3C611 /* RHLocationsLoader.m */,
+				92391952154600FF00D3C611 /* RHCampusServicesLoader.h */,
+				92391953154600FF00D3C611 /* RHCampusServicesLoader.m */,
+				923919551546011A00D3C611 /* RHTourTagsLoader.h */,
+				923919561546011A00D3C611 /* RHTourTagsLoader.m */,
 			);
 			name = Loaders;
 			sourceTree = "<group>";
@@ -418,6 +446,8 @@
 			children = (
 				923919431545EA8400D3C611 /* RHJSONRequest.h */,
 				923919441545EA8400D3C611 /* RHJSONRequest.m */,
+				923919581546016C00D3C611 /* RHLoaderRequestsWrapper.h */,
+				923919591546016C00D3C611 /* RHLoaderRequestsWrapper.m */,
 			);
 			name = Requests;
 			sourceTree = "<group>";
@@ -801,6 +831,12 @@
 				92ADDE1114E36CB100655869 /* RHLocationSelectorViewController.m in Sources */,
 				921F3C5D14EA22F700EDD02A /* RHMapDirectionsManager.m in Sources */,
 				923919451545EA8400D3C611 /* RHJSONRequest.m in Sources */,
+				92391950154600F100D3C611 /* RHLocationsLoader.m in Sources */,
+				92391954154600FF00D3C611 /* RHCampusServicesLoader.m in Sources */,
+				923919571546011A00D3C611 /* RHTourTagsLoader.m in Sources */,
+				9239195A1546016C00D3C611 /* RHLoaderRequestsWrapper.m in Sources */,
+				9239195D1546018F00D3C611 /* RHDataVersionsLoader.m in Sources */,
+				92391960154601F700D3C611 /* RHLoadersWrapper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
