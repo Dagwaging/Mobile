@@ -21,12 +21,14 @@
 #import "RHAppDelegate.h"
 #import "RHBoundaryNode.h"
 #import "RHConstants.h"
+#import "RHDataVersionsLoader.h"
 #import "RHLabelNode.h"
 #import "RHLoaderRequestsWrapper.h"
 #import "RHLocation.h"
 #import "RHLocationLink.h"
 
 #define kLocationsKey @"Locations"
+#define kVersionKey @"Version"
 #define kIDKey @"Id"
 #define kNameKey @"Name"
 #define kAltNamesKey @"AltNames"
@@ -115,6 +117,15 @@ static RHLocationsLoader *_instance;
     
     if (currentError) {
         NSLog(@"Problem updating top level locations: %@", currentError);
+        _currentlyUpdating = NO;
+        return;
+    }
+    
+    // Retrieve the new version
+    NSNumber *newVersion = [jsonResponse objectForKey:kVersionKey];
+    
+    if (newVersion.doubleValue <= 0) {
+        NSLog(@"New version not specified in top locations. Bailing");
         _currentlyUpdating = NO;
         return;
     }
@@ -262,6 +273,9 @@ static RHLocationsLoader *_instance;
 #endif
     
     // TODO: Notify if applicable
+    
+    // Set the stored version
+    [RHDataVersionsLoader.instance setLocationsVersion:newVersion];
     
     _currentlyUpdating = NO;
 }

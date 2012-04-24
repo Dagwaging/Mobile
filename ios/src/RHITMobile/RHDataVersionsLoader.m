@@ -18,6 +18,7 @@
 //
 
 #import "RHDataVersionsLoader.h"
+#import "RHConstants.h"
 #import "RHLoaderRequestsWrapper.h"
 #import "RHLocationsLoader.h"
 
@@ -116,7 +117,7 @@ static RHDataVersionsLoader * _instance;
     
     // Check for location update
     if (oldLocationsVersion.doubleValue < newLocationsVersion.doubleValue) {
-        NSLog(@"Locations update required");
+        NSLog(@"Locations update required (%f => %f)", oldLocationsVersion.doubleValue, newLocationsVersion.doubleValue);
         upToDate = NO;
         
         [RHLocationsLoader.instance updateLocations:oldLocationsVersion];
@@ -124,7 +125,7 @@ static RHDataVersionsLoader * _instance;
     
     // Check for campus services update
     if (oldCampusServicesVersion.doubleValue < newCampusServicesVersion.doubleValue) {
-        NSLog(@"Campus services update required");
+        NSLog(@"Campus services update required (%f => %f)", oldCampusServicesVersion.doubleValue, newCampusServicesVersion.doubleValue);
         upToDate = NO;
         
         // TODO
@@ -132,7 +133,7 @@ static RHDataVersionsLoader * _instance;
     
     // Check for tour tags update
     if (oldTourTagsVersion.doubleValue < newTourTagsVersion.doubleValue) {
-        NSLog(@"Tour tags update required");
+        NSLog(@"Tour tags update required (%f => %f)", oldTourTagsVersion.doubleValue, newTourTagsVersion.doubleValue);
         upToDate = NO;
         
         // TODO
@@ -183,6 +184,13 @@ static RHDataVersionsLoader * _instance;
 {
     @synchronized (self) {
         _versionsDict = [NSDictionary dictionaryWithContentsOfFile:_plistPath];
+        
+        if (_versionsDict == nil) {
+#ifdef RHITMobile_RHLoaderDebug
+            NSLog(@"No version data stored yet. Creating");
+#endif
+            _versionsDict = [[NSMutableDictionary alloc] init];
+        }
     }
 }
 

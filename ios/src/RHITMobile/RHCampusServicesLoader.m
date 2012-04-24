@@ -54,6 +54,11 @@ static RHCampusServicesLoader *_instance;
     return _instance;
 }
 
+- (BOOL)currentlyUpdating
+{
+    return _currentlyUpdating;
+}
+
 - (void)updateCampusServices:(NSNumber *)version
 {
     // TODO
