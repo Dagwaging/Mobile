@@ -34,68 +34,67 @@
 
 #pragma mark - DataVersionsLoader Requests
 
-+ (void)makeDataVersionsRequestWithSuccessBlock:(void (^)(NSDictionary *))successBlock
-                                   failureBlock:(void (^)(NSError *))failureBlock {
-    [RHJSONRequest makeRequestWithPath:kDataVersionsPath
-                               urlArgs:nil
-                          successBlock:successBlock
-                          failureBlock:failureBlock];
++ (NSDictionary *)makeSynchronousDataVersionsRequestWithError:(NSError *__strong *)error
+{
+    return [RHJSONRequest makeSynchronousRequestWithPath:kDataVersionsPath
+                                                 urlArgs:nil
+                                                   error:error];
 }
+
 
 #pragma mark - LocationsLoader Requests
 
-+ (void)makeTopLocationsRequestWithVersion:(double)version
-                              successBlock:(void (^)(NSDictionary *))successBlock
-                              failureBlock:(void (^)(NSError *))failureBlock {
-    NSString *versionString = [NSString stringWithFormat:@"%f", version];
++ (NSDictionary *)makeSynchronousTopLocationsRequestWithWithVersion:(NSNumber *)version
+                                                              error:(NSError *__strong *)error
+{
+    NSString *versionString = [NSString stringWithFormat:@"%f", version.doubleValue];
     NSDictionary *urlArgs = [NSDictionary dictionaryWithObject:versionString
                                                         forKey:kVersionKey];
-    [RHJSONRequest makeRequestWithPath:kTopLocationsPath
-                               urlArgs:urlArgs
-                          successBlock:successBlock
-                          failureBlock:failureBlock];
+    
+    return [RHJSONRequest makeSynchronousRequestWithPath:kTopLocationsPath
+                                                 urlArgs:urlArgs
+                                                   error:error];
 }
 
-+ (void)makeInternalLocationsRequestWithVersion:(double)version
-                               parentLocationId:(NSInteger)parentId
-                                   successBlock:(void (^)(NSDictionary *))successBlock
-                                   failureBlock:(void (^)(NSError *))failureBlock {
-    NSString *versionString = [NSString stringWithFormat:@"%f", version];
++ (NSDictionary *)makeSynchronousInternalLocationsRequestForParentLocationID:(NSNumber *)parentId 
+                                                                     version:(NSNumber *)version 
+                                                                       error:(NSError *__strong *)error
+{
+    NSString *versionString = [NSString stringWithFormat:@"%f", version.doubleValue];
     NSDictionary *urlArgs = [NSDictionary dictionaryWithObject:versionString
                                                         forKey:kVersionKey];
-    NSString *path = [NSString stringWithFormat:kInternalLocationsPath, parentId];
-    [RHJSONRequest makeRequestWithPath:path
-                               urlArgs:urlArgs
-                          successBlock:successBlock
-                          failureBlock:failureBlock];
+    NSString *path = [NSString stringWithFormat:kInternalLocationsPath, parentId.intValue];
+    
+    return [RHJSONRequest makeSynchronousRequestWithPath:path urlArgs:urlArgs error:error];
 }
+
 
 #pragma mark - CampusServicesLoader Requests
 
-+ (void)makeCampusServicesRequestWithVersion:(double)version
-                                successBlock:(void (^)(NSDictionary *))successBlock
-                                failureBlock:(void (^)(NSError *))failureBlock {
++ (NSDictionary *)makeSynchronousCampusServicesRequestWithWithVersion:(NSNumber *)version
+                                                                error:(NSError *__strong *)error
+{
     NSString *versionString = [NSString stringWithFormat:@"%f", version];
     NSDictionary *urlArgs = [NSDictionary dictionaryWithObject:versionString
                                                         forKey:kVersionKey];
-    [RHJSONRequest makeRequestWithPath:kCampusServicesPath
-                               urlArgs:urlArgs
-                          successBlock:successBlock
-                          failureBlock:failureBlock];   
+    
+    return [RHJSONRequest makeSynchronousRequestWithPath:kCampusServicesPath
+                                                 urlArgs:urlArgs
+                                                   error:error];
 }
+
 
 #pragma mark - TourTagsLoader Requests
 
-+ (void)makeTourTagsRequestWithVersion:(double)version
-                          SuccessBlock:(void (^)(NSDictionary *))successBlock
-                          failureBlock:(void (^)(NSError *))failureBlock {
++ (NSDictionary *)makeSynchronousTourTagsRequestWithWithVersion:(NSNumber *)version error:(NSError *__strong *)error
+{
     NSString *versionString = [NSString stringWithFormat:@"%f", version];
     NSDictionary *urlArgs = [NSDictionary dictionaryWithObject:versionString
                                                         forKey:kVersionKey];
-    [RHJSONRequest makeRequestWithPath:kTourTagsPath
-                               urlArgs:urlArgs
-                          successBlock:successBlock
-                          failureBlock:failureBlock];
+    
+    return [RHJSONRequest makeSynchronousRequestWithPath:kTourTagsPath
+                                                 urlArgs:urlArgs
+                                                   error:error];
 }
 
 @end

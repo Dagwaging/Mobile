@@ -21,24 +21,19 @@
 
 @interface RHLoaderRequestsWrapper : NSObject
 
-+ (void)makeDataVersionsRequestWithSuccessBlock:(void (^)(NSDictionary *))successBlock
-                                   failureBlock:(void (^)(NSError *))failureBlock;
++ (NSDictionary *)makeSynchronousDataVersionsRequestWithError:(NSError *__strong*)error;
 
-+ (void)makeTopLocationsRequestWithVersion:(double)version
-                              successBlock:(void (^)(NSDictionary *))successBlock
-                              failureBlock:(void (^)(NSError *))failureBlock;
++ (NSDictionary *)makeSynchronousTopLocationsRequestWithWithVersion:(NSNumber *)version
+                                                              error:(NSError *__strong*)error;
 
-+ (void)makeInternalLocationsRequestWithVersion:(double)version
-                               parentLocationId:(NSInteger)parentId
-                                   successBlock:(void (^)(NSDictionary *))successBlock
-                                   failureBlock:(void (^)(NSError *))failureBlock;
++ (NSDictionary *)makeSynchronousInternalLocationsRequestForParentLocationID:(NSNumber *)parentId
+                                                                     version:(NSNumber *)version
+                                                                       error:(NSError *__strong*)error;
 
-+ (void)makeCampusServicesRequestWithVersion:(double)version
-                                successBlock:(void (^)(NSDictionary *))successBlock
-                                failureBlock:(void (^)(NSError *))failureBlock;
++ (NSDictionary *)makeSynchronousCampusServicesRequestWithWithVersion:(NSNumber *)version
+                                                                error:(NSError *__strong*)error;
 
-+ (void)makeTourTagsRequestWithVersion:(double)version
-                          SuccessBlock:(void (^)(NSDictionary *))successBlock
-                          failureBlock:(void (^)(NSError *))failureBlock;
++ (NSDictionary *)makeSynchronousTourTagsRequestWithWithVersion:(NSNumber *)version
+                                                          error:(NSError *__strong*)error;
 
 @end
