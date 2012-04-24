@@ -11,6 +11,8 @@ namespace RHITMobile.Secure.Data_Import
 
     public abstract class BannerCsvParser<T> : IEnumerable<T>, IEnumerator<T> where T:class
     {
+        private Logger _log;
+
         private T current;
         private TextFieldParser parser;
         private int termCode;
@@ -19,8 +21,9 @@ namespace RHITMobile.Secure.Data_Import
 
         public int ParseErrors { get; private set; }
 
-        public BannerCsvParser(String path)
+        public BannerCsvParser(Logger log, String path)
         {
+            _log = log;
             parser = new TextFieldParser(path);
             parser.HasFieldsEnclosedInQuotes = false;
             parser.SetDelimiters("|");
@@ -39,6 +42,7 @@ namespace RHITMobile.Secure.Data_Import
             {
                 try
                 {
+                    LineNumber = parser.LineNumber;
                     String[] fields = parser.ReadFields();
                     if (fields != null)
                     {
@@ -51,7 +55,8 @@ namespace RHITMobile.Secure.Data_Import
                         catch (Exception e)
                         {
                             //skip the record
-                            Console.WriteLine("Failed to parse record: {0}", e.ToString());
+                            if (ParseErrors < 3)
+                                _log.Error(string.Format("Failed to convert record at line {0}", LineNumber), e);
                             ParseErrors++;
                         }
                     }
@@ -59,7 +64,8 @@ namespace RHITMobile.Secure.Data_Import
                 catch (Exception e)
                 {
                     //skip the record
-                    Console.WriteLine("Failed to initially parse record: {0}", e.ToString());
+                    if (ParseErrors < 3)
+                        _log.Error(string.Format("Failed to read record at line {0}", LineNumber), e);
                     ParseErrors++;
                 }
             } while (res == null && hasMore());
@@ -68,6 +74,8 @@ namespace RHITMobile.Secure.Data_Import
         }
 
         protected abstract T convertRecord(String[] fields);
+
+        public long LineNumber { get; private set; }
 
         public T Current
         {

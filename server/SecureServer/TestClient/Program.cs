@@ -9,6 +9,7 @@ namespace TestClient
     class Program
     {
         private static string token;
+        private static int term;
         private static IWebService service = new WebServiceClient();
 
         static void Main(string[] args)
@@ -27,6 +28,13 @@ namespace TestClient
             }
             token = auth.Token;
 
+            {
+                var terms = service.GetTerms(token);
+                term = terms.Last();
+                Console.WriteLine(string.Join(", ", terms));
+                Console.WriteLine("Using term {0}", term);
+            }
+
             int option;
             do
             {
@@ -34,7 +42,8 @@ namespace TestClient
                 Console.WriteLine("2. Request update");
                 Console.WriteLine("3. Search Users");
                 Console.WriteLine("4. Lookup User");
-                Console.WriteLine("5. Get Terms");
+                Console.WriteLine("5. Search Courses");
+                Console.WriteLine("6. Lookup Course");
                 Console.WriteLine("9. Quit");
                 Console.Write("> ");
                 option = int.Parse(Console.ReadLine());
@@ -54,7 +63,10 @@ namespace TestClient
                         LookupUser();
                         break;
                     case 5:
-                        GetTerms();
+                        SearchCourses();
+                        break;
+                    case 6:
+                        LookupCourse();
                         break;
                 }
 
@@ -105,14 +117,14 @@ namespace TestClient
 
             PrintUser(user);
 
-            var userEnrollment = service.GetUserEnrollment(token, username);
+            var userEnrollment = service.GetUserEnrollment(token, term, username);
             if (userEnrollment != null && userEnrollment.Length > 0)
             {
                 Console.WriteLine("Student Schedule: ");
                 PrintEnrollment(userEnrollment);
             }
 
-            var profEnrollment = service.GetInstructorSchedule(token, username);
+            var profEnrollment = service.GetInstructorSchedule(token, term, username);
             if (profEnrollment != null && profEnrollment.Length > 0)
             {
                 Console.WriteLine("Instructor Schedule: ");
@@ -120,14 +132,42 @@ namespace TestClient
             }
         }
 
-        static void GetTerms()
+        static void SearchCourses()
         {
-            var terms = service.GetTerms(token);
+            Console.Write("Search: ");
+            string search = Console.ReadLine();
+            var courses = service.SearchCourses(token, term, search);
 
-            foreach (var term in terms)
-            {
-                Console.WriteLine(term);
-            }
+            foreach (var course in courses)
+                PrintCourse(course);
+        }
+
+        static void LookupCourse()
+        {
+            Console.Write("crn: ");
+            int crn = int.Parse(Console.ReadLine());
+            var course = service.GetCourse(token, term, crn);
+
+            PrintCourse(course);
+
+            var enrollment = service.GetCourseEnrollment(token, term, crn);
+            Console.WriteLine("Students: {0}", string.Join(", ", enrollment));
+
+            var schedule = service.GetCourseSchedule(token, term, crn);
+            Console.WriteLine("Schedule:");
+            foreach (var meeting in schedule)
+                Console.WriteLine("- {0} from {1} to {2} in {3}", meeting.Day, meeting.StartPeriod, meeting.EndPeriod, meeting.Room);
+        }
+
+        static void PrintCourse(Course course)
+        {
+            Console.WriteLine("{0} {1}", course.Name, course.Title);
+            Console.WriteLine("CRN:          {0}", course.CRN);
+            Console.WriteLine("Enrollment:   {0}/{1}", course.Enrolled, course.MaxEnrollment);
+            Console.WriteLine("Instructor:   {0}", course.Instructor);
+            Console.WriteLine("Credit Hours: {0}", course.Credit);
+            Console.WriteLine("Final Info:   {0}{1} in {2}", course.FinalDay, course.FinalHour, course.FinalRoom);
+            Console.WriteLine("Comments:     {0}", course.Comments);
         }
 
         static void PrintUser(User user)

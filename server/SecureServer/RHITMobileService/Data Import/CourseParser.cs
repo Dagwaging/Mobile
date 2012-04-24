@@ -8,8 +8,8 @@ namespace RHITMobile.Secure.Data_Import
 {
     class CourseCsvParser : BannerCsvParser<Course>
     {
-        public CourseCsvParser(String path)
-            : base(path)
+        public CourseCsvParser(Logger log, String path)
+            : base(log, path)
         { }
 
         protected override Course convertRecord(String[] fields)

@@ -1040,7 +1040,7 @@ namespace TestClient.RHIT.Private {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://mobileprivate.rose-hulman.edu/IWebService/SearchCourses", ReplyAction="http://mobileprivate.rose-hulman.edu/IWebService/SearchCoursesResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(TestClient.RHIT.Private.AuthFault), Action="http://mobileprivate.rose-hulman.edu/IWebService/SearchCoursesAuthFaultFault", Name="AuthFault", Namespace="http://schemas.datacontract.org/2004/07/RHITMobile.Secure")]
-        TestClient.RHIT.Private.Course[] SearchCourses(string authToken, string search);
+        TestClient.RHIT.Private.Course[] SearchCourses(string authToken, int term, string search);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://mobileprivate.rose-hulman.edu/IWebService/GetCourseEnrollment", ReplyAction="http://mobileprivate.rose-hulman.edu/IWebService/GetCourseEnrollmentResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(TestClient.RHIT.Private.AuthFault), Action="http://mobileprivate.rose-hulman.edu/IWebService/GetCourseEnrollmentAuthFaultFaul" +
@@ -1049,12 +1049,12 @@ namespace TestClient.RHIT.Private {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://mobileprivate.rose-hulman.edu/IWebService/GetUserEnrollment", ReplyAction="http://mobileprivate.rose-hulman.edu/IWebService/GetUserEnrollmentResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(TestClient.RHIT.Private.AuthFault), Action="http://mobileprivate.rose-hulman.edu/IWebService/GetUserEnrollmentAuthFaultFault", Name="AuthFault", Namespace="http://schemas.datacontract.org/2004/07/RHITMobile.Secure")]
-        TestClient.RHIT.Private.UserEnrollment[] GetUserEnrollment(string authToken, string username);
+        TestClient.RHIT.Private.UserEnrollment[] GetUserEnrollment(string authToken, int term, string username);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://mobileprivate.rose-hulman.edu/IWebService/GetInstructorSchedule", ReplyAction="http://mobileprivate.rose-hulman.edu/IWebService/GetInstructorScheduleResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(TestClient.RHIT.Private.AuthFault), Action="http://mobileprivate.rose-hulman.edu/IWebService/GetInstructorScheduleAuthFaultFa" +
             "ult", Name="AuthFault", Namespace="http://schemas.datacontract.org/2004/07/RHITMobile.Secure")]
-        TestClient.RHIT.Private.UserEnrollment[] GetInstructorSchedule(string authToken, string username);
+        TestClient.RHIT.Private.UserEnrollment[] GetInstructorSchedule(string authToken, int term, string username);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://mobileprivate.rose-hulman.edu/IWebService/GetCourseSchedule", ReplyAction="http://mobileprivate.rose-hulman.edu/IWebService/GetCourseScheduleResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(TestClient.RHIT.Private.AuthFault), Action="http://mobileprivate.rose-hulman.edu/IWebService/GetCourseScheduleAuthFaultFault", Name="AuthFault", Namespace="http://schemas.datacontract.org/2004/07/RHITMobile.Secure")]
@@ -1062,7 +1062,7 @@ namespace TestClient.RHIT.Private {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://mobileprivate.rose-hulman.edu/IWebService/GetRoomSchedule", ReplyAction="http://mobileprivate.rose-hulman.edu/IWebService/GetRoomScheduleResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(TestClient.RHIT.Private.AuthFault), Action="http://mobileprivate.rose-hulman.edu/IWebService/GetRoomScheduleAuthFaultFault", Name="AuthFault", Namespace="http://schemas.datacontract.org/2004/07/RHITMobile.Secure")]
-        TestClient.RHIT.Private.RoomSchedule[] GetRoomSchedule(string authToken, string room);
+        TestClient.RHIT.Private.RoomSchedule[] GetRoomSchedule(string authToken, int term, string room);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://mobileprivate.rose-hulman.edu/IWebService/RequestUpdate", ReplyAction="http://mobileprivate.rose-hulman.edu/IWebService/RequestUpdateResponse")]
         bool RequestUpdate();
@@ -1122,28 +1122,28 @@ namespace TestClient.RHIT.Private {
             return base.Channel.GetCourse(authToken, term, crn);
         }
         
-        public TestClient.RHIT.Private.Course[] SearchCourses(string authToken, string search) {
-            return base.Channel.SearchCourses(authToken, search);
+        public TestClient.RHIT.Private.Course[] SearchCourses(string authToken, int term, string search) {
+            return base.Channel.SearchCourses(authToken, term, search);
         }
         
         public string[] GetCourseEnrollment(string authToken, int term, int crn) {
             return base.Channel.GetCourseEnrollment(authToken, term, crn);
         }
         
-        public TestClient.RHIT.Private.UserEnrollment[] GetUserEnrollment(string authToken, string username) {
-            return base.Channel.GetUserEnrollment(authToken, username);
+        public TestClient.RHIT.Private.UserEnrollment[] GetUserEnrollment(string authToken, int term, string username) {
+            return base.Channel.GetUserEnrollment(authToken, term, username);
         }
         
-        public TestClient.RHIT.Private.UserEnrollment[] GetInstructorSchedule(string authToken, string username) {
-            return base.Channel.GetInstructorSchedule(authToken, username);
+        public TestClient.RHIT.Private.UserEnrollment[] GetInstructorSchedule(string authToken, int term, string username) {
+            return base.Channel.GetInstructorSchedule(authToken, term, username);
         }
         
         public TestClient.RHIT.Private.CourseTime[] GetCourseSchedule(string authToken, int term, int crn) {
             return base.Channel.GetCourseSchedule(authToken, term, crn);
         }
         
-        public TestClient.RHIT.Private.RoomSchedule[] GetRoomSchedule(string authToken, string room) {
-            return base.Channel.GetRoomSchedule(authToken, room);
+        public TestClient.RHIT.Private.RoomSchedule[] GetRoomSchedule(string authToken, int term, string room) {
+            return base.Channel.GetRoomSchedule(authToken, term, room);
         }
         
         public bool RequestUpdate() {
