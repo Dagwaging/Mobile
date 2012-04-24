@@ -33,4 +33,6 @@
 - (void)registerCallbackForLocationWithId:(NSInteger)locationId
                                  callback:(void (^)(void))callback;
 
+// TODO: failure callbacks
+
 @end

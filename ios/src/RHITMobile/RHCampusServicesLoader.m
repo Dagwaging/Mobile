@@ -19,6 +19,49 @@
 
 #import "RHCampusServicesLoader.h"
 
+@interface RHCampusServicesLoader () {
+    @private
+    BOOL _currentlyUpdating;
+}
+
+@end
+
 @implementation RHCampusServicesLoader
+
+static RHCampusServicesLoader *_instance;
+
++ (void)initialize
+{
+    static BOOL initialized = NO;
+    if(!initialized)
+    {
+        initialized = YES;
+        _instance = [[RHCampusServicesLoader alloc] init];
+    }
+}
+
+- (id)init
+{
+    if (self = [super init]) {
+        _currentlyUpdating = NO;
+    }
+    
+    return self;
+}
+
++ (id)instance
+{
+    return _instance;
+}
+
+- (void)updateCampusServices:(NSNumber *)version
+{
+    // TODO
+}
+
+- (void)registerCallbackForCampusServices:(void (^)(void))callback
+{
+    // TODO
+}
 
 @end

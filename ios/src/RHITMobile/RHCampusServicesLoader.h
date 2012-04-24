@@ -21,4 +21,14 @@
 
 @interface RHCampusServicesLoader : NSObject
 
++ (id)instance;
+
+@property (nonatomic, readonly) BOOL currentlyUpdating;
+
+- (void)updateCampusServices:(NSNumber *)version;
+
+- (void)registerCallbackForCampusServices:(void(^)(void))callback;
+
+// TODO: failure callbacks
+
 @end

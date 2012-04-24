@@ -96,11 +96,17 @@ static RHLocationsLoader *_instance;
 
 - (void)updateLocations:(NSNumber *)version
 {
+    if (_currentlyUpdating) {
+        return;
+    }
+    
     // Only operate on background thread
     if ([NSThread isMainThread]) {
         [self performSelectorInBackground:@selector(updateLocations:) withObject:nil];
         return;
     }
+    
+    _currentlyUpdating = YES;
     
     NSManagedObjectContext *localContext = [self createThreadSafeManagedObjectContext];
     NSError *currentError = nil;
@@ -109,6 +115,7 @@ static RHLocationsLoader *_instance;
     
     if (currentError) {
         NSLog(@"Problem updating top level locations: %@", currentError);
+        _currentlyUpdating = NO;
         return;
     }
     
@@ -117,6 +124,7 @@ static RHLocationsLoader *_instance;
     
     if (locations.count == 0) {
         NSLog(@"Empty or improper top level location response. Bailing.");
+        _currentlyUpdating = NO;
         return;
     }
     
@@ -148,6 +156,7 @@ static RHLocationsLoader *_instance;
     
     if (currentError) {
         NSLog(@"Problem saving top level locations: %@", currentError);
+        _currentlyUpdating = NO;
         return;
     }
     
@@ -244,6 +253,7 @@ static RHLocationsLoader *_instance;
     
     if (currentError) {
         NSLog(@"Problem saving top level locations: %@", currentError);
+        _currentlyUpdating = NO;
         return;
     }
     
@@ -252,6 +262,8 @@ static RHLocationsLoader *_instance;
 #endif
     
     // TODO: Notify if applicable
+    
+    _currentlyUpdating = NO;
 }
 
 - (void)registerCallbackForTopLevelLocations:(void (^)(void))callback
