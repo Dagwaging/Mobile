@@ -11,24 +11,24 @@ namespace RHITMobile.Secure.Data_Import
 
     public abstract class BannerCsvParser<T> : IEnumerable<T>, IEnumerator<T> where T:class
     {
-        private Logger _log;
-
         private T current;
         private TextFieldParser parser;
         private int termCode;
 
         public int TermCode { get { return termCode; } }
 
-        public int ParseErrors { get; private set; }
+        public int ParseErrors { get; protected set; }
 
         public BannerCsvParser(Logger log, String path)
         {
-            _log = log;
+            Log = log;
             parser = new TextFieldParser(path);
             parser.HasFieldsEnclosedInQuotes = false;
             parser.SetDelimiters("|");
             termCode = int.Parse(parser.ReadLine());
         }
+        
+        protected Logger Log { get; private set; }
 
         private bool hasMore()
         {
@@ -56,7 +56,7 @@ namespace RHITMobile.Secure.Data_Import
                         {
                             //skip the record
                             if (ParseErrors < 3)
-                                _log.Error(string.Format("Failed to convert record at line {0}", LineNumber), e);
+                                Log.Error(string.Format("Failed to convert record at line {0}", LineNumber), e);
                             ParseErrors++;
                         }
                     }
@@ -65,7 +65,7 @@ namespace RHITMobile.Secure.Data_Import
                 {
                     //skip the record
                     if (ParseErrors < 3)
-                        _log.Error(string.Format("Failed to read record at line {0}", LineNumber), e);
+                        Log.Error(string.Format("Failed to read record at line {0}", LineNumber), e);
                     ParseErrors++;
                 }
             } while (res == null && hasMore());
