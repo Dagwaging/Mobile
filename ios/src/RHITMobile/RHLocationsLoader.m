@@ -250,9 +250,7 @@ static RHLocationsLoader *_instance;
     NSLog(@"Waiting for internal location creation to finish");
 #endif
     
-    while (locationsPopulated < locationsToPopulate) {
-        // Spin wait
-    }
+    [operationQueue waitUntilAllOperationsAreFinished];
     
 #ifdef RHITMobile_RHLoaderDebug
     NSLog(@"Saving new internal locations");

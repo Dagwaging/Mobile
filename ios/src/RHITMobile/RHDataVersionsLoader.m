@@ -115,12 +115,16 @@ static RHDataVersionsLoader * _instance;
     
     BOOL upToDate = YES;
     
+    NSOperationQueue *operationQueue = [[NSOperationQueue alloc] init];
+    
     // Check for location update
     if (oldLocationsVersion.doubleValue < newLocationsVersion.doubleValue) {
         NSLog(@"Locations update required (%f => %f)", oldLocationsVersion.doubleValue, newLocationsVersion.doubleValue);
         upToDate = NO;
         
-        [RHLocationsLoader.instance updateLocations:oldLocationsVersion];
+        [operationQueue addOperationWithBlock:^(void) {
+            [RHLocationsLoader.instance updateLocations:oldLocationsVersion]; 
+        }];
     }
     
     // Check for campus services update
@@ -128,7 +132,9 @@ static RHDataVersionsLoader * _instance;
         NSLog(@"Campus services update required (%f => %f)", oldCampusServicesVersion.doubleValue, newCampusServicesVersion.doubleValue);
         upToDate = NO;
         
-        // TODO
+        [operationQueue addOperationWithBlock:^(void) {
+            // TODO
+        }];
     }
     
     // Check for tour tags update
@@ -136,11 +142,21 @@ static RHDataVersionsLoader * _instance;
         NSLog(@"Tour tags update required (%f => %f)", oldTourTagsVersion.doubleValue, newTourTagsVersion.doubleValue);
         upToDate = NO;
         
-        // TODO
+        [operationQueue addOperationWithBlock:^(void) {
+            // TODO
+        }];
     }
     
     if (upToDate) {
         NSLog(@"All cached data up to date");
+    } else {
+#ifdef RHITMobile_RHLoaderDebug
+        NSLog(@"Waiting for version updates to finish");
+#endif
+        [operationQueue waitUntilAllOperationsAreFinished];
+#ifdef RHITMobile_RHLoaderDebug
+        NSLog(@"Version updates finished");
+#endif
     }
     
     _currentlyUpdating = NO;

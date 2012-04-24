@@ -46,10 +46,14 @@
 - (id)initWithSuccessBlock:(void (^)(NSDictionary *))successBlock
               failureBlock:(void (^)(NSError *))failureBlock;
 
++ (void)updateNotificationStatus;
+
 @end
 
 
 @implementation RHJSONRequest
+
+static int _numRequests = 0;
 
 + (void)makeRequestWithPath:(NSString *)path
                     urlArgs:(NSDictionary *)urlArgs
@@ -67,6 +71,13 @@
     NSURLRequest *request = [NSURLRequest requestWithURL:requestUrl];
     
     RHJSONRequest *rhRequest = [[RHJSONRequest alloc] initWithSuccessBlock:successBlock failureBlock:failureBlock];
+    
+    @synchronized ([RHJSONRequest class]) {
+        _numRequests ++;
+    }
+    
+    [RHJSONRequest updateNotificationStatus];
+    
     NSURLConnection *connection = [NSURLConnection connectionWithRequest:request delegate:rhRequest];
     rhRequest.connection = connection;
 }
@@ -84,7 +95,19 @@
     NSLog(@"Making request: %@", finalUrl.absoluteString);
 #endif
     
+    @synchronized ([RHJSONRequest class]) {
+        _numRequests ++;
+    }
+    
+    [RHJSONRequest updateNotificationStatus];
+    
     NSData *responseData = [NSURLConnection sendSynchronousRequest:[NSURLRequest requestWithURL:finalUrl] returningResponse:nil error:&currentError];
+    
+    @synchronized ([RHJSONRequest class]) {
+        _numRequests --;
+    }
+    
+    [RHJSONRequest updateNotificationStatus];
     
     if (currentError) {
         error = &currentError;
@@ -163,6 +186,12 @@
 - (void)connection:(NSURLConnection *)connection
   didFailWithError:(NSError *)error
 {
+    @synchronized ([RHJSONRequest class]) {
+        _numRequests --;
+    }
+    
+    [RHJSONRequest updateNotificationStatus];
+    
 #ifdef RHITMobile_RHNetworkDebug
     NSLog(@"Error from NSURLConnection: %@", error);
 #endif
@@ -171,6 +200,12 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
+    @synchronized ([RHJSONRequest class]) {
+        _numRequests --;
+    }
+    
+    [RHJSONRequest updateNotificationStatus];
+    
     NSError *potentialError;
     NSDictionary *jsonDict = [NSDictionary dictionaryWithJSONData:_responseData
                                                             error:&potentialError];
@@ -191,6 +226,17 @@
     NSLog(@"Successful response from server: %@", jsonDict);
 #endif
     _successBlock(jsonDict);
+}
+
++ (void)updateNotificationStatus
+{
+    @synchronized ([RHJSONRequest class]) {
+        if (_numRequests == 1) {
+            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+        } else if (_numRequests < 1) {
+            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        }
+    }
 }
 
 @end
