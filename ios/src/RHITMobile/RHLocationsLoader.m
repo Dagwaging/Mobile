@@ -51,12 +51,12 @@
     BOOL _currentlyUpdating;
 }
 
-@property (nonatomic, readonly) NSManagedObjectContext *managedObjectContext;
-
 - (RHLocation *)locationFromJSONResponse:(NSDictionary *)jsonResponse
                   inManagedObjectContext:(NSManagedObjectContext *)localContext;
 
 - (void)deleteAllLocations:(NSManagedObjectContext *)managedObjectContext;
+
+- (NSManagedObjectContext *)createThreadSafeManagedObjectContext;
 
 @end
 
@@ -94,89 +94,164 @@ static RHLocationsLoader *_instance;
     return _currentlyUpdating;
 }
 
-- (NSManagedObjectContext *)managedObjectContext {
-    return [(RHAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
-}
-
-- (void)updateLocations:(double)version
+- (void)updateLocations:(NSNumber *)version
 {
-    [RHLoaderRequestsWrapper makeTopLocationsRequestWithVersion:version successBlock:^(NSDictionary *jsonDict) {
-        
-        [self deleteAllLocations:self.managedObjectContext];
-        
-        NSArray *locations = [jsonDict objectForKey:kLocationsKey];
-        NSMutableArray *createdLocations = [NSMutableArray arrayWithCapacity:locations.count];
-        
-        for (NSDictionary *locationDict in locations) {
-            RHLocation *location = [self locationFromJSONResponse:locationDict
-                                           inManagedObjectContext:self.managedObjectContext];
-            location.retrievalStatus = RHLocationRetrievalStatusNoChildren;
-            
-            [createdLocations addObject:location];
-        }
-        
-        NSError *saveError;
-        [self.managedObjectContext save:&saveError];
-        
-        if (saveError) {
-            NSLog(@"Problem saving top level locations: %@", saveError);
-            return;
-        }
-        
+    // Only operate on background thread
+    if ([NSThread isMainThread]) {
+        [self performSelectorInBackground:@selector(updateLocations:) withObject:nil];
+        return;
+    }
+    
+    NSManagedObjectContext *localContext = [self createThreadSafeManagedObjectContext];
+    NSError *currentError = nil;
+    
+    NSDictionary *jsonResponse = [RHLoaderRequestsWrapper makeSynchronousTopLocationsRequestWithWithVersion:version error:&currentError];
+    
+    if (currentError) {
+        NSLog(@"Problem updating top level locations: %@", currentError);
+        return;
+    }
+    
+    // Retrieve locations list
+    NSArray *locations = [jsonResponse objectForKey:kLocationsKey];
+    
+    if (locations.count == 0) {
+        NSLog(@"Empty or improper top level location response. Bailing.");
+        return;
+    }
+    
 #ifdef RHITMobile_RHLoaderDebug
-        NSLog(@"Done updating top level locations");
+    NSLog(@"Deleting all locations");
 #endif
-        // TODO: Done updating top level locations
-        
-        int totalTopLocations = createdLocations.count;
-        __block int processedTopLocations = 0;
-        
-        for (RHLocation *parent in createdLocations) {
-            
-            [RHLoaderRequestsWrapper makeInternalLocationsRequestWithVersion:version parentLocationId:parent.serverIdentifier.integerValue successBlock:^(NSDictionary *internalJsonDict) {
-                
-                NSArray *locations = [internalJsonDict objectForKey:kLocationsKey];
-                
-                for (NSDictionary *locationDict in locations) {
-                    RHLocation *location = [self locationFromJSONResponse:locationDict inManagedObjectContext:self.managedObjectContext];
-                    location.retrievalStatus = RHLocationRetrievalStatusFull;
-                }
-                
-                parent.retrievalStatus = RHLocationRetrievalStatusFull;
-                
-                if (++ processedTopLocations >= totalTopLocations) {
-                    NSError *internalSaveError;
-                    [self.managedObjectContext save:&internalSaveError];
-                    
-                    if (internalSaveError) {
-                        NSLog(@"Problem saving internal locations: %@", saveError);
-                        return;
-                    }
-                    
+    
+    // Delete all locations first
+    [self deleteAllLocations:localContext];
+    
+    NSMutableArray *serverIds = [NSMutableArray arrayWithCapacity:locations.count];
+    
 #ifdef RHITMobile_RHLoaderDebug
-                    NSLog(@"Done updating internal locations");
+    NSLog(@"Saving new top level locations");
 #endif
-                    
-                    // TODO: Notify
-                    
-                    _currentlyUpdating = NO;
-                }
-                
-            } failureBlock:^(NSError *internalError) {
-                
-                NSLog(@"Error while updating internal locations: %@", internalError);
-                _currentlyUpdating = NO;
-                
-            }];
-
-        }
+    
+    // Create new top level locations from response
+    for (NSDictionary *locationDict in locations) {
+        RHLocation *location = [self locationFromJSONResponse:locationDict
+                                       inManagedObjectContext:localContext];
+        location.retrievalStatus = RHLocationRetrievalStatusNoChildren;
         
-    } failureBlock:^(NSError *error) {
+        [serverIds addObject:location.serverIdentifier.copy];
+    }
+    
+    // Save the new top level locations
+    currentError = nil;
+    [localContext save:&currentError];
+    
+    if (currentError) {
+        NSLog(@"Problem saving top level locations: %@", currentError);
+        return;
+    }
+    
+#ifdef RHITMobile_RHLoaderDebug
+    NSLog(@"Done updating top level locations");
+#endif
+    
+    int locationsToPopulate = serverIds.count;
+    __block int locationsPopulated = 0;
+    
+    NSOperationQueue *operationQueue = [[NSOperationQueue alloc] init];
+    
+#ifdef RHITMobile_RHLoaderDebug
+    NSLog(@"Kicking off internal location updates");
+#endif
+    
+    // Queue internal location updates
+    for (NSNumber *serverId in serverIds) {
         
-        NSLog(@"Error while updating top level locations: %@", error);
-        _currentlyUpdating = NO;
+        int parentId = serverId.intValue;
         
-    }];
+        [operationQueue addOperationWithBlock:^(void) {
+#ifdef RHITMobile_RHLoaderDebug
+            NSLog(@"Starting internal location update for location %d", parentId);
+#endif
+            // Create a thread safe managed object context
+            NSManagedObjectContext *blockContext = [[NSManagedObjectContext alloc] init];
+            blockContext.persistentStoreCoordinator = [(RHAppDelegate *) [[UIApplication sharedApplication] delegate] persistentStoreCoordinator];
+            
+            // Load the parent
+            NSFetchRequest *parentFetchRequest = [NSFetchRequest fetchRequestWithEntityName:kRHLocationEntityName];
+            parentFetchRequest.predicate = [NSPredicate predicateWithFormat:@"serverIdentifier == %d", parentId];
+            
+            NSError *blockError = nil;
+            NSArray *parentResults = [blockContext executeFetchRequest:parentFetchRequest error:&blockError];
+            
+            if (blockError) {
+                NSLog(@"Problem locating parent location for internal request: %@", blockError);
+                return;
+            }
+            
+            if (parentResults.count == 0) {
+                NSLog(@"Parent location not found: %d", parentId);
+                return;
+            }
+            
+            RHLocation *parent = [parentResults objectAtIndex:0];
+            
+            blockError = nil;
+            
+            // Request and create new internal locations
+            NSDictionary *internalJsonDict = [RHLoaderRequestsWrapper makeSynchronousInternalLocationsRequestForParentLocationID:[NSNumber numberWithInt:parentId] version:version error:&blockError];
+            
+            if (blockError) {
+                NSLog(@"Problem loading internal locations for %d: %@", parentId, blockError);
+                return;
+            }
+            
+            NSArray *locations = [internalJsonDict objectForKey:kLocationsKey];
+            
+            for (NSDictionary *locationDict in locations) {
+                RHLocation *location = [self locationFromJSONResponse:locationDict inManagedObjectContext:blockContext];
+                location.retrievalStatus = RHLocationRetrievalStatusFull;
+            }
+            
+            parent.retrievalStatus = RHLocationRetrievalStatusFull;
+            
+            // TODO: Notify if applicable
+            
+            locationsPopulated ++;
+#ifdef RHITMobile_RHLoaderDebug
+            NSLog(@"Finished internal location update for location %d", parentId);
+            NSLog(@"Internal location status: %d/%d locations complete", locationsPopulated, locationsToPopulate);
+#endif
+        }];
+        
+    }
+    
+#ifdef RHITMobile_RHLoaderDebug
+    NSLog(@"Waiting for internal location creation to finish");
+#endif
+    
+    while (locationsPopulated < locationsToPopulate) {
+        // Spin wait
+    }
+    
+#ifdef RHITMobile_RHLoaderDebug
+    NSLog(@"Saving new internal locations");
+#endif
+    
+    // Save the new top level locations
+    currentError = nil;
+    [localContext save:&currentError];
+    
+    if (currentError) {
+        NSLog(@"Problem saving top level locations: %@", currentError);
+        return;
+    }
+    
+#ifdef RHITMobile_RHLoaderDebug
+    NSLog(@"Done updating internal locations");
+#endif
+    
+    // TODO: Notify if applicable
 }
 
 - (void)registerCallbackForTopLevelLocations:(void (^)(void))callback
@@ -188,6 +263,13 @@ static RHLocationsLoader *_instance;
                                  callback:(void (^)(void))callback
 {
     // TODO
+}
+
+- (NSManagedObjectContext *)createThreadSafeManagedObjectContext
+{
+    NSManagedObjectContext *localContext = [[NSManagedObjectContext alloc] init];
+    localContext.persistentStoreCoordinator = [(RHAppDelegate *) [[UIApplication sharedApplication] delegate] persistentStoreCoordinator];
+    return localContext;
 }
 
 - (RHLocation *)locationFromJSONResponse:(NSDictionary *)jsonResponse

@@ -26,7 +26,7 @@
 
 @property (nonatomic, readonly) BOOL currentlyUpdating;
 
-- (void)updateLocations:(double)version;
+- (void)updateLocations:(NSNumber *)version;
 
 - (void)registerCallbackForTopLevelLocations:(void (^)(void))callback;
 

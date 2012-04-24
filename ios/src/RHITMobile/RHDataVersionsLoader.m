@@ -86,54 +86,63 @@ static RHDataVersionsLoader * _instance;
 
 - (void)checkForNewVersions
 {
-    _currentlyUpdating = YES;
+    // Only operate on background thread
+    if ([NSThread isMainThread]) {
+        [self performSelectorInBackground:@selector(checkForNewVersions) withObject:nil];
+        return;
+    }
     
-    [RHLoaderRequestsWrapper makeDataVersionsRequestWithSuccessBlock:^(NSDictionary *jsonDict) {
+    NSError *currentError = nil;
+    
+    NSDictionary *jsonResponse = [RHLoaderRequestsWrapper makeSynchronousDataVersionsRequestWithError:&currentError];
+    
+    if (currentError) {
+        NSLog(@"Problem loading current data versions: %@", currentError);
+    }
+    
+    _currentlyUpdating = YES;    
+    
+    // Old (cached) versions
+    NSNumber *oldLocationsVersion = [_versionsDict objectForKey:kLocationsVersionKey];
+    NSNumber *oldCampusServicesVersion = [_versionsDict objectForKey:kCampusServicesVesionkey];
+    NSNumber *oldTourTagsVersion = [_versionsDict objectForKey:kTourTagsVersionKey];
+    
+    // New (server) versions
+    NSNumber *newLocationsVersion = [jsonResponse objectForKey:kLocationsVersionKey];
+    NSNumber *newCampusServicesVersion = [jsonResponse objectForKey:kCampusServicesVesionkey];
+    NSNumber *newTourTagsVersion = [jsonResponse objectForKey:kTourTagsVersionKey];
+    
+    BOOL upToDate = YES;
+    
+    // Check for location update
+    if (oldLocationsVersion.doubleValue < newLocationsVersion.doubleValue) {
+        NSLog(@"Locations update required");
+        upToDate = NO;
         
-        NSNumber *oldLocationsVersion = [_versionsDict objectForKey:kLocationsVersionKey];
-        NSNumber *oldCampusServicesVersion = [_versionsDict objectForKey:kCampusServicesVesionkey];
-        NSNumber *oldTourTagsVersion = [_versionsDict objectForKey:kTourTagsVersionKey];
+        [RHLocationsLoader.instance updateLocations:oldLocationsVersion];
+    }
+    
+    // Check for campus services update
+    if (oldCampusServicesVersion.doubleValue < newCampusServicesVersion.doubleValue) {
+        NSLog(@"Campus services update required");
+        upToDate = NO;
         
-        NSNumber *newLocationsVersion = [jsonDict objectForKey:kLocationsVersionKey];
-        NSNumber *newCampusServicesVersion = [jsonDict objectForKey:kCampusServicesVesionkey];
-        NSNumber *newTourTagsVersion = [jsonDict objectForKey:kTourTagsVersionKey];
+        // TODO
+    }
+    
+    // Check for tour tags update
+    if (oldTourTagsVersion.doubleValue < newTourTagsVersion.doubleValue) {
+        NSLog(@"Tour tags update required");
+        upToDate = NO;
         
-        BOOL upToDate = YES;
-        
-        if (oldLocationsVersion.doubleValue < newLocationsVersion.doubleValue) {
-            NSLog(@"Locations update required");
-            upToDate = NO;
-            
-            [RHLocationsLoader.instance updateLocations:oldLocationsVersion.doubleValue];
-        }
-        
-        if (oldCampusServicesVersion.doubleValue < newCampusServicesVersion.doubleValue) {
-            NSLog(@"Campus services update required");
-            upToDate = NO;
-            
-            // TODO
-        }
-        
-        if (oldTourTagsVersion.doubleValue < newTourTagsVersion.doubleValue) {
-            NSLog(@"Tour tags update required");
-            upToDate = NO;
-            
-            // TODO
-        }
-        
-        if (upToDate) {
-            NSLog(@"All cached data up to date");
-        }
-        
-        _currentlyUpdating = NO;
-        
-    } failureBlock:^(NSError *error) {
-        
-        NSLog(@"Error checking for new versions: %@", error);
-        
-        _currentlyUpdating = NO;
-        
-    }];
+        // TODO
+    }
+    
+    if (upToDate) {
+        NSLog(@"All cached data up to date");
+    }
+    
+    _currentlyUpdating = NO;
 }
 
 - (void)setLocationsVersion:(NSNumber *)locationsVersion
@@ -165,12 +174,16 @@ static RHDataVersionsLoader * _instance;
 
 - (void)saveData
 {
-    [_versionsDict writeToFile:_plistPath atomically:YES];
+    @synchronized (self) {
+        [_versionsDict writeToFile:_plistPath atomically:YES];
+    }
 }
 
 - (void)loadData
 {
-    _versionsDict = [NSDictionary dictionaryWithContentsOfFile:_plistPath];
+    @synchronized (self) {
+        _versionsDict = [NSDictionary dictionaryWithContentsOfFile:_plistPath];
+    }
 }
 
 @end

@@ -79,6 +79,11 @@
     
     NSURL *finalUrl = [RHJSONRequest finalURLWithPath:path urlArgs:urlArgs];
     NSError *currentError;
+    
+#ifdef RHITMobile_RHNetworkDebug
+    NSLog(@"Making request: %@", finalUrl.absoluteString);
+#endif
+    
     NSData *responseData = [NSURLConnection sendSynchronousRequest:[NSURLRequest requestWithURL:finalUrl] returningResponse:nil error:&currentError];
     
     if (currentError) {
@@ -92,6 +97,14 @@
         error = &currentError;
         return nil;
     }
+    
+#ifdef RHITMobile_RHNetworkDebug
+    NSLog(@"Successful response from server");
+#endif
+    
+#ifdef RHITMobile_RHJSONDebug
+    NSLog(@"Successful response from server: %@", response);
+#endif
     
     return response;
 }
