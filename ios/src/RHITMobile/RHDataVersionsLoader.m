@@ -18,6 +18,7 @@
 //
 
 #import "RHDataVersionsLoader.h"
+#import "RHCampusServicesLoader.h"
 #import "RHConstants.h"
 #import "RHLoaderRequestsWrapper.h"
 #import "RHLocationsLoader.h"
@@ -87,11 +88,17 @@ static RHDataVersionsLoader * _instance;
 
 - (void)checkForNewVersions
 {
+    if (_currentlyUpdating) {
+        return;
+    }
+    
     // Only operate on background thread
     if ([NSThread isMainThread]) {
         [self performSelectorInBackground:@selector(checkForNewVersions) withObject:nil];
         return;
-    }
+    }    
+    
+    _currentlyUpdating = YES;   
     
     NSError *currentError = nil;
     
@@ -100,8 +107,6 @@ static RHDataVersionsLoader * _instance;
     if (currentError) {
         NSLog(@"Problem loading current data versions: %@", currentError);
     }
-    
-    _currentlyUpdating = YES;    
     
     // Old (cached) versions
     NSNumber *oldLocationsVersion = [_versionsDict objectForKey:kLocationsVersionKey];
@@ -133,7 +138,7 @@ static RHDataVersionsLoader * _instance;
         upToDate = NO;
         
         [operationQueue addOperationWithBlock:^(void) {
-            // TODO
+            [RHCampusServicesLoader.instance updateCampusServices:oldCampusServicesVersion];
         }];
     }
     

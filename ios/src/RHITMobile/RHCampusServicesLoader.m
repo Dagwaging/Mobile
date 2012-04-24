@@ -18,13 +18,41 @@
 //
 
 #import "RHCampusServicesLoader.h"
+#import "RHAppDelegate.h"
+#import "RHConstants.h"
+#import "RHDataVersionsLoader.h"
+#import "RHLoaderRequestsWrapper.h"
+#import "RHServiceCategory.h"
+#import "RHServiceLink.h"
+
+#define kVersionKey @"Version"
+
+#define kRootKey @"ServicesRoot"
+#define kChildrenKey @"Children"
+#define kLinksKey @"Links"
+#define kNameKey @"Name"
+#define kURLKey @"Url"
+
 
 @interface RHCampusServicesLoader () {
     @private
     BOOL _currentlyUpdating;
 }
 
+- (NSManagedObjectContext *)createThreadSafeManagedObjectContext;
+
+- (void)createManagedObjectsFromLinks:(NSArray *)links
+                             category:(RHServiceCategory *)category
+                 managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+
+- (void)createManagedObjectsFromCategories:(NSArray *)categories
+                            parentCategory:(RHServiceCategory *)parentCategory 
+                      managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+
+- (void)deleteAllCampusServices:(NSManagedObjectContext *)managedObjectContext;
+
 @end
+
 
 @implementation RHCampusServicesLoader
 
@@ -61,12 +89,151 @@ static RHCampusServicesLoader *_instance;
 
 - (void)updateCampusServices:(NSNumber *)version
 {
-    // TODO
+    if (_currentlyUpdating) {
+        return;
+    }
+    
+    // Only operate on background thread
+    if ([NSThread isMainThread]) {
+        [self performSelectorInBackground:@selector(updateCampusServices:) withObject:version];
+        return;
+    }
+    
+#ifdef RHITMobile_RHLoaderDebug
+    NSLog(@"Starting campus services update");
+#endif
+    
+    _currentlyUpdating = YES;
+    
+    NSError *currentError = nil;
+    
+    NSDictionary *jsonResponse = [RHLoaderRequestsWrapper makeSynchronousCampusServicesRequestWithWithVersion:version error:&currentError];
+    
+    if (currentError) {
+        NSLog(@"Error updating campus services: %@", currentError);
+        _currentlyUpdating = NO;
+        return;
+    }
+    
+    // Retrieve the new version
+    NSNumber *newVersion = [jsonResponse objectForKey:kVersionKey];
+    
+    if (newVersion.doubleValue <= 0) {
+        NSLog(@"New version not specified in campus services. Bailing");
+        _currentlyUpdating = NO;
+        return;
+    }
+    
+    NSManagedObjectContext *localContext = [self createThreadSafeManagedObjectContext];
+    
+#ifdef RHITMobile_RHLoaderDebug
+    NSLog(@"Deleting old campus services");
+#endif
+    
+    // Delete old campus services
+    [self deleteAllCampusServices:localContext];
+    
+#ifdef RHITMobile_RHLoaderDebug
+    NSLog(@"Saving new campus services");
+#endif
+    
+    // Retrieve new categories and links
+    NSDictionary *root = [jsonResponse objectForKey:kRootKey];
+    [self createManagedObjectsFromLinks:[root objectForKey:kLinksKey]
+                               category:nil
+                   managedObjectContext:localContext];
+    [self createManagedObjectsFromCategories:[root objectForKey:kChildrenKey]
+                              parentCategory:nil
+                        managedObjectContext:localContext];
+    
+    NSError *createError;
+    [localContext save:&createError];
+    
+    if (createError) {
+        NSLog(@"Problem saving new campus services: %@", createError);
+        return;
+    }
+    
+#ifdef RHITMobile_RHLoaderDebug
+    NSLog(@"Finished updating campus services");
+#endif
+    
+    // TODO: Notify
+    
+    // Update version
+    [RHDataVersionsLoader.instance setCampusServicesVersion:newVersion];
+    
+    _currentlyUpdating = NO;
 }
 
 - (void)registerCallbackForCampusServices:(void (^)(void))callback
 {
     // TODO
+}
+
+- (NSManagedObjectContext *)createThreadSafeManagedObjectContext
+{
+    NSManagedObjectContext *localContext = [[NSManagedObjectContext alloc] init];
+    localContext.persistentStoreCoordinator = [(RHAppDelegate *) [[UIApplication sharedApplication] delegate] persistentStoreCoordinator];
+    return localContext;
+}
+
+- (void)createManagedObjectsFromCategories:(NSArray *)categories
+                            parentCategory:(RHServiceCategory *)parentCategory 
+                      managedObjectContext:(NSManagedObjectContext *)managedObjectContext
+{
+    for (NSDictionary *category in categories) {
+        // Create managed object from this category
+        RHServiceCategory *newCategory;
+        newCategory = [NSEntityDescription insertNewObjectForEntityForName:kRHServiceCategoryEntityName
+                                                    inManagedObjectContext:managedObjectContext];
+        newCategory.name = [category objectForKey:kNameKey];
+        newCategory.parent = parentCategory;
+        
+        // Create managed objects from any leaf hyperlinks
+        NSArray *links = [category objectForKey:kLinksKey];
+        [self createManagedObjectsFromLinks:links
+                                   category:newCategory
+                       managedObjectContext:managedObjectContext];
+        
+        // Recurse into child categories
+        NSArray *children = [category objectForKey:kChildrenKey];
+        [self createManagedObjectsFromCategories:children
+                                  parentCategory:newCategory
+                            managedObjectContext:managedObjectContext];
+    }
+}
+
+- (void)createManagedObjectsFromLinks:(NSArray *)links
+                             category:(RHServiceCategory *)category
+                 managedObjectContext:(NSManagedObjectContext *)managedObjectContext
+{
+    for (NSDictionary *link in links) {
+        RHServiceLink *newLink = [NSEntityDescription
+                                  insertNewObjectForEntityForName:kRHServiceLinkEntityName 
+                                  inManagedObjectContext:managedObjectContext];
+        newLink.name = [link objectForKey:kNameKey];
+        newLink.url = [link objectForKey:kURLKey];
+        newLink.parent = category;
+    }
+}
+
+- (void)deleteAllCampusServices:(NSManagedObjectContext *)managedObjectContext
+{
+    NSFetchRequest *fetchReqeust = [NSFetchRequest fetchRequestWithEntityName:kRHServiceItemEntityName];
+    
+    NSError *error = nil;
+    NSArray *oldCampusServiceItems = [managedObjectContext executeFetchRequest:fetchReqeust
+                                                                         error:&error];
+    
+    if (error) {
+        NSLog(@"Problem finding old campus services to delete: %@", error);
+        return;
+    }
+    
+    for (RHServiceItem *serviceItem in oldCampusServiceItems) {
+        [managedObjectContext deleteObject:serviceItem];
+    }
 }
 
 @end
