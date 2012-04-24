@@ -19,6 +19,55 @@
 
 #import "RHTourTagsLoader.h"
 
+@interface RHTourTagsLoader () {
+    @private
+    BOOL _currentlyUpdating;
+}
+
+@end
+
+
 @implementation RHTourTagsLoader
+
+static RHTourTagsLoader *_instance;
+
++ (void)initialize
+{
+    static BOOL initialized = NO;
+    if(!initialized)
+    {
+        initialized = YES;
+        _instance = [[RHTourTagsLoader alloc] init];
+    }
+}
+
+- (id)init
+{
+    if (self = [super init]) {
+        _currentlyUpdating = NO;
+    }
+    
+    return self;
+}
+
++ (id)instance
+{
+    return _instance;
+}
+
+- (BOOL)currentlyUpdating
+{
+    return _currentlyUpdating;
+}
+
+- (void)updateTourTags:(NSNumber *)version
+{
+    // TODO
+}
+
+- (void)registerCallbackForTourTags:(void (^)(void))callback
+{
+    // TODO
+}
 
 @end

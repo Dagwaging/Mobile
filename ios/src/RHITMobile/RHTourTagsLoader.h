@@ -18,7 +18,16 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
 
 @interface RHTourTagsLoader : NSObject
+
++ (id)instance;
+
+@property (nonatomic, readonly) BOOL currentlyUpdating;
+
+- (void)updateTourTags:(NSNumber *)version;
+
+- (void)registerCallbackForTourTags:(void(^)(void))callback;
 
 @end
