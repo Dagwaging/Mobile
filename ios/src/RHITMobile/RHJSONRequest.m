@@ -40,6 +40,9 @@
     NSURLConnection *_connection;
 }
 
++ (NSURL *)finalURLWithPath:(NSString *)path
+                    urlArgs:(NSDictionary *)urlArgs;
+
 - (id)initWithSuccessBlock:(void (^)(NSDictionary *))successBlock
               failureBlock:(void (^)(NSError *))failureBlock;
 
@@ -55,6 +58,47 @@
 {
     [NSURLRequest setAllowsAnyHTTPSCertificate:YES forHost:kHostSansPort];
     
+    NSURL *requestUrl = [RHJSONRequest finalURLWithPath:path urlArgs:urlArgs];
+    
+#ifdef RHITMobile_RHNetworkDebug
+    NSLog(@"Making request: %@", requestUrl.absoluteString);
+#endif
+    
+    NSURLRequest *request = [NSURLRequest requestWithURL:requestUrl];
+    
+    RHJSONRequest *rhRequest = [[RHJSONRequest alloc] initWithSuccessBlock:successBlock failureBlock:failureBlock];
+    NSURLConnection *connection = [NSURLConnection connectionWithRequest:request delegate:rhRequest];
+    rhRequest.connection = connection;
+}
+
++ (NSDictionary *)makeSynchronousRequestWithPath:(NSString *)path
+                                         urlArgs:(NSDictionary *)urlArgs
+                                           error:(NSError *__strong *)error
+{
+    [NSURLRequest setAllowsAnyHTTPSCertificate:YES forHost:kHostSansPort];
+    
+    NSURL *finalUrl = [RHJSONRequest finalURLWithPath:path urlArgs:urlArgs];
+    NSError *currentError;
+    NSData *responseData = [NSURLConnection sendSynchronousRequest:[NSURLRequest requestWithURL:finalUrl] returningResponse:nil error:&currentError];
+    
+    if (currentError) {
+        error = &currentError;
+        return nil;
+    }
+    
+    NSDictionary *response = [NSDictionary dictionaryWithJSONData:responseData error:&currentError];
+    
+    if (currentError) {
+        error = &currentError;
+        return nil;
+    }
+    
+    return response;
+}
+
++ (NSURL *)finalURLWithPath:(NSString *)path
+                    urlArgs:(NSDictionary *)urlArgs
+{
     NSString *allArgs = @"";
     
     for (NSString *key in urlArgs.keyEnumerator) {
@@ -70,17 +114,7 @@
     
     NSString *urlPath = allArgs.length == 0 ? path : [path stringByAppendingFormat:@"?%@", allArgs];
     
-    NSURL *requestUrl = [[NSURL alloc] initWithScheme:kScheme host:kHost path:urlPath];
-    
-#ifdef RHITMobile_RHNetworkDebug
-    NSLog(@"Making request: %@", requestUrl.absoluteString);
-#endif
-    
-    NSURLRequest *request = [NSURLRequest requestWithURL:requestUrl];
-    
-    RHJSONRequest *rhRequest = [[RHJSONRequest alloc] initWithSuccessBlock:successBlock failureBlock:failureBlock];
-    NSURLConnection *connection = [NSURLConnection connectionWithRequest:request delegate:rhRequest];
-    rhRequest.connection = connection;
+    return [[NSURL alloc] initWithScheme:kScheme host:kHost path:urlPath];
 }
 
 - (id)initWithSuccessBlock:(void (^)(NSDictionary *))successBlock

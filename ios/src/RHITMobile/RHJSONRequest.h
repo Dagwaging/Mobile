@@ -27,4 +27,8 @@
                successBlock:(void (^)(NSDictionary *))successBlock
                failureBlock:(void (^)(NSError *))failureBlock;
 
++ (NSDictionary *)makeSynchronousRequestWithPath:(NSString *)path
+                                         urlArgs:(NSDictionary *)urlArgs
+                                           error:(NSError *__strong*)error;
+
 @end
