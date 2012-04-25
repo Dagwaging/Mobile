@@ -63,12 +63,14 @@ namespace RHITMobile.Secure.Data_Import
         {
             if (string.IsNullOrEmpty(finalSchedule))
                 return;
+            if (finalSchedule.ToUpper() == "TBA")
+                return;
 
             String[] finalArgs = finalSchedule.Split('/');
             trim(finalArgs);
             if (finalArgs.Length != 3)
                 return;
-            if (finalArgs.Any(arg => arg == "TBA"))
+            if (finalArgs.Take(2).Any(arg => arg == "TBA"))
                 return;
 
             course.FinalDay = finalArgs[0][0];
@@ -81,6 +83,8 @@ namespace RHITMobile.Secure.Data_Import
             List<CourseTime> res = new List<CourseTime>();
 
             if (string.IsNullOrEmpty(schedule))
+                return res;
+            if (schedule.ToUpper() == "TBA")
                 return res;
 
             String[] scheduleSpots = schedule.Split(':');
@@ -100,7 +104,7 @@ namespace RHITMobile.Secure.Data_Import
 
                     if (spotArgs.Length != 3)
                         continue;
-                    if (spotArgs.Any(arg => arg == "TBA"))
+                    if (spotArgs.Take(2).Any(arg => arg == "TBA"))
                         continue;
 
                     String days = spotArgs[0];

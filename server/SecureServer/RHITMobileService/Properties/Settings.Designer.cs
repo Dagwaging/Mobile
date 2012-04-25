@@ -38,8 +38,8 @@ namespace RHITMobile.Secure.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=tcp:mobilewin.csse.rose-hulman.edu,4848;Initial Catalog=BannerData;In" +
-            "tegrated Security=True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=tcp:mobilewin.csse.rose-hulman.edu,4848\\RHITMobile;Initial Catalog=Ba" +
+            "nnerData;Integrated Security=True")]
         public string BannerDataConnectionString {
             get {
                 return ((string)(this["BannerDataConnectionString"]));

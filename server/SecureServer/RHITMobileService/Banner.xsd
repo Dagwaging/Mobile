@@ -1,15 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<xs:schema id="Banner" targetNamespace="http://mobileprivate.rose-hulman.edu/Banner.xsd" xmlns:mstns="http://mobileprivate.rose-hulman.edu/Banner.xsd" xmlns="http://mobileprivate.rose-hulman.edu/Banner.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+<xs:schema id="Banner" targetNamespace="http://tempuri.org/BannerData.xsd" xmlns:mstns="http://tempuri.org/BannerData.xsd" xmlns="http://tempuri.org/BannerData.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
   <xs:annotation>
     <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
-      <DataSource DefaultConnectionIndex="2" FunctionsComponentName="QueriesTableAdapter" GeneratorFunctionsComponentClassName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" UserFunctionsComponentName="QueriesTableAdapter" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" GeneratorFunctionsComponentClassName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" UserFunctionsComponentName="QueriesTableAdapter" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
         <Connections>
           <Connection AppSettingsObjectName="Settings" AppSettingsPropertyName="BannerDataConnectionString" ConnectionStringObject="" IsAppSettingsProperty="true" Modifier="Assembly" Name="BannerDataConnectionString (Settings)" ParameterPrefix="@" PropertyReference="ApplicationSettings.RHITMobile.Secure.Properties.Settings.GlobalReference.Default.BannerDataConnectionString" Provider="System.Data.SqlClient" />
-          <Connection AppSettingsObjectName="Settings" AppSettingsPropertyName="BannerDataConnectionString1" ConnectionStringObject="" IsAppSettingsProperty="true" Modifier="Assembly" Name="BannerDataConnectionString1 (Settings)" ParameterPrefix="@" PropertyReference="ApplicationSettings.RHITMobile.Secure.Properties.Settings.GlobalReference.Default.BannerDataConnectionString1" Provider="System.Data.SqlClient" />
-          <Connection AppSettingsObjectName="Settings" AppSettingsPropertyName="BannerDataConnectionString1" ConnectionStringObject="" IsAppSettingsProperty="true" Modifier="Assembly" Name="BannerDataConnectionString1 (Settings)" ParameterPrefix="@" PropertyReference="ApplicationSettings.RHITMobile.Secure.Properties.Settings.GlobalReference.Default.BannerDataConnectionString1" Provider="System.Data.SqlClient" />
         </Connections>
         <Tables>
-          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="GetCourseTableAdapter" GeneratorDataComponentClassName="GetCourseTableAdapter" Name="GetCourse" UserDataComponentName="GetCourseTableAdapter">
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="spGetCourseTableAdapter" GeneratorDataComponentClassName="spGetCourseTableAdapter" Name="spGetCourse" UserDataComponentName="spGetCourseTableAdapter">
             <MainSource>
               <DbSource ConnectionRef="BannerDataConnectionString (Settings)" DbObjectName="BannerData.dbo.spGetCourse" DbObjectType="StoredProcedure" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="true" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetData" UserSourceName="Fill">
                 <SelectCommand>
@@ -26,22 +24,22 @@
               </DbSource>
             </MainSource>
             <Mappings>
-              <Mapping SourceColumn="term" DataSetColumn="Term" />
-              <Mapping SourceColumn="crn" DataSetColumn="CRN" />
-              <Mapping SourceColumn="course" DataSetColumn="Course" />
-              <Mapping SourceColumn="title" DataSetColumn="Title" />
-              <Mapping SourceColumn="credits" DataSetColumn="Credits" />
-              <Mapping SourceColumn="finalday" DataSetColumn="FinalDay" />
-              <Mapping SourceColumn="finalhour" DataSetColumn="FinalHour" />
-              <Mapping SourceColumn="finalroom" DataSetColumn="FinalRoom" />
-              <Mapping SourceColumn="enrolled" DataSetColumn="Enrolled" />
-              <Mapping SourceColumn="maxenrolled" DataSetColumn="MaxEnrolled" />
-              <Mapping SourceColumn="comments" DataSetColumn="Comments" />
-              <Mapping SourceColumn="instructor" DataSetColumn="Instructor" />
+              <Mapping SourceColumn="term" DataSetColumn="term" />
+              <Mapping SourceColumn="crn" DataSetColumn="crn" />
+              <Mapping SourceColumn="course" DataSetColumn="course" />
+              <Mapping SourceColumn="title" DataSetColumn="title" />
+              <Mapping SourceColumn="credits" DataSetColumn="credits" />
+              <Mapping SourceColumn="finalday" DataSetColumn="finalday" />
+              <Mapping SourceColumn="finalhour" DataSetColumn="finalhour" />
+              <Mapping SourceColumn="finalroom" DataSetColumn="finalroom" />
+              <Mapping SourceColumn="enrolled" DataSetColumn="enrolled" />
+              <Mapping SourceColumn="maxenrolled" DataSetColumn="maxenrolled" />
+              <Mapping SourceColumn="comments" DataSetColumn="comments" />
+              <Mapping SourceColumn="instructor" DataSetColumn="instructor" />
             </Mappings>
             <Sources />
           </TableAdapter>
-          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="GetCourseEnrollmentTableAdapter" GeneratorDataComponentClassName="GetCourseEnrollmentTableAdapter" Name="GetCourseEnrollment" UserDataComponentName="GetCourseEnrollmentTableAdapter">
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="spGetCourseEnrollmentTableAdapter" GeneratorDataComponentClassName="spGetCourseEnrollmentTableAdapter" Name="spGetCourseEnrollment" UserDataComponentName="spGetCourseEnrollmentTableAdapter">
             <MainSource>
               <DbSource ConnectionRef="BannerDataConnectionString (Settings)" DbObjectName="BannerData.dbo.spGetCourseEnrollment" DbObjectType="StoredProcedure" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="true" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetData" UserSourceName="Fill">
                 <SelectCommand>
@@ -58,11 +56,11 @@
               </DbSource>
             </MainSource>
             <Mappings>
-              <Mapping SourceColumn="username" DataSetColumn="Username" />
+              <Mapping SourceColumn="username" DataSetColumn="username" />
             </Mappings>
             <Sources />
           </TableAdapter>
-          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="GetCourseScheduleTableAdapter" GeneratorDataComponentClassName="GetCourseScheduleTableAdapter" Name="GetCourseSchedule" UserDataComponentName="GetCourseScheduleTableAdapter">
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="spGetCourseScheduleTableAdapter" GeneratorDataComponentClassName="spGetCourseScheduleTableAdapter" Name="spGetCourseSchedule" UserDataComponentName="spGetCourseScheduleTableAdapter">
             <MainSource>
               <DbSource ConnectionRef="BannerDataConnectionString (Settings)" DbObjectName="BannerData.dbo.spGetCourseSchedule" DbObjectType="StoredProcedure" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="true" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetData" UserSourceName="Fill">
                 <SelectCommand>
@@ -79,14 +77,80 @@
               </DbSource>
             </MainSource>
             <Mappings>
-              <Mapping SourceColumn="day" DataSetColumn="Day" />
-              <Mapping SourceColumn="startperiod" DataSetColumn="StartPeriod" />
-              <Mapping SourceColumn="endperiod" DataSetColumn="EndPeriod" />
-              <Mapping SourceColumn="room" DataSetColumn="Room" />
+              <Mapping SourceColumn="day" DataSetColumn="day" />
+              <Mapping SourceColumn="startperiod" DataSetColumn="startperiod" />
+              <Mapping SourceColumn="endperiod" DataSetColumn="endperiod" />
+              <Mapping SourceColumn="room" DataSetColumn="room" />
             </Mappings>
             <Sources />
           </TableAdapter>
-          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="GetUserTableAdapter" GeneratorDataComponentClassName="GetUserTableAdapter" Name="GetUser" UserDataComponentName="GetUserTableAdapter">
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="spGetInstructorScheduleTableAdapter" GeneratorDataComponentClassName="spGetInstructorScheduleTableAdapter" Name="spGetInstructorSchedule" UserDataComponentName="spGetInstructorScheduleTableAdapter">
+            <MainSource>
+              <DbSource ConnectionRef="BannerDataConnectionString (Settings)" DbObjectName="BannerData.dbo.spGetInstructorSchedule" DbObjectType="StoredProcedure" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="true" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetData" UserSourceName="Fill">
+                <SelectCommand>
+                  <DbCommand CommandType="StoredProcedure" ModifiedByUser="false">
+                    <CommandText>dbo.spGetInstructorSchedule</CommandText>
+                    <Parameters>
+                      <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="int" DbType="Int32" Direction="ReturnValue" ParameterName="@RETURN_VALUE" Precision="10" ProviderType="Int" Scale="0" Size="4" SourceColumnNullMapping="false" SourceVersion="Current" />
+                      <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="bit" DbType="Boolean" Direction="Input" ParameterName="@switch" Precision="1" ProviderType="Bit" Scale="0" Size="1" SourceColumnNullMapping="false" SourceVersion="Current" />
+                      <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="int" DbType="Int32" Direction="Input" ParameterName="@term" Precision="10" ProviderType="Int" Scale="0" Size="4" SourceColumnNullMapping="false" SourceVersion="Current" />
+                      <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="varchar" DbType="AnsiString" Direction="Input" ParameterName="@username" Precision="0" ProviderType="VarChar" Scale="0" Size="50" SourceColumnNullMapping="false" SourceVersion="Current" />
+                    </Parameters>
+                  </DbCommand>
+                </SelectCommand>
+              </DbSource>
+            </MainSource>
+            <Mappings>
+              <Mapping SourceColumn="term" DataSetColumn="term" />
+              <Mapping SourceColumn="crn" DataSetColumn="crn" />
+            </Mappings>
+            <Sources />
+          </TableAdapter>
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="spGetRoomScheduleTableAdapter" GeneratorDataComponentClassName="spGetRoomScheduleTableAdapter" Name="spGetRoomSchedule" UserDataComponentName="spGetRoomScheduleTableAdapter">
+            <MainSource>
+              <DbSource ConnectionRef="BannerDataConnectionString (Settings)" DbObjectName="BannerData.dbo.spGetRoomSchedule" DbObjectType="StoredProcedure" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="true" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetData" UserSourceName="Fill">
+                <SelectCommand>
+                  <DbCommand CommandType="StoredProcedure" ModifiedByUser="false">
+                    <CommandText>dbo.spGetRoomSchedule</CommandText>
+                    <Parameters>
+                      <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="int" DbType="Int32" Direction="ReturnValue" ParameterName="@RETURN_VALUE" Precision="10" ProviderType="Int" Scale="0" Size="4" SourceColumnNullMapping="false" SourceVersion="Current" />
+                      <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="bit" DbType="Boolean" Direction="Input" ParameterName="@switch" Precision="1" ProviderType="Bit" Scale="0" Size="1" SourceColumnNullMapping="false" SourceVersion="Current" />
+                      <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="int" DbType="Int32" Direction="Input" ParameterName="@term" Precision="10" ProviderType="Int" Scale="0" Size="4" SourceColumnNullMapping="false" SourceVersion="Current" />
+                      <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="varchar" DbType="AnsiString" Direction="Input" ParameterName="@room" Precision="0" ProviderType="VarChar" Scale="0" Size="50" SourceColumnNullMapping="false" SourceVersion="Current" />
+                    </Parameters>
+                  </DbCommand>
+                </SelectCommand>
+              </DbSource>
+            </MainSource>
+            <Mappings>
+              <Mapping SourceColumn="term" DataSetColumn="term" />
+              <Mapping SourceColumn="crn" DataSetColumn="crn" />
+              <Mapping SourceColumn="day" DataSetColumn="day" />
+              <Mapping SourceColumn="startperiod" DataSetColumn="startperiod" />
+              <Mapping SourceColumn="endperiod" DataSetColumn="endperiod" />
+            </Mappings>
+            <Sources />
+          </TableAdapter>
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="spGetTermsTableAdapter" GeneratorDataComponentClassName="spGetTermsTableAdapter" Name="spGetTerms" UserDataComponentName="spGetTermsTableAdapter">
+            <MainSource>
+              <DbSource ConnectionRef="BannerDataConnectionString (Settings)" DbObjectName="BannerData.dbo.spGetTerms" DbObjectType="StoredProcedure" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="true" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetData" UserSourceName="Fill">
+                <SelectCommand>
+                  <DbCommand CommandType="StoredProcedure" ModifiedByUser="false">
+                    <CommandText>dbo.spGetTerms</CommandText>
+                    <Parameters>
+                      <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="int" DbType="Int32" Direction="ReturnValue" ParameterName="@RETURN_VALUE" Precision="10" ProviderType="Int" Scale="0" Size="4" SourceColumnNullMapping="false" SourceVersion="Current" />
+                      <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="bit" DbType="Boolean" Direction="Input" ParameterName="@switch" Precision="1" ProviderType="Bit" Scale="0" Size="1" SourceColumnNullMapping="false" SourceVersion="Current" />
+                    </Parameters>
+                  </DbCommand>
+                </SelectCommand>
+              </DbSource>
+            </MainSource>
+            <Mappings>
+              <Mapping SourceColumn="term" DataSetColumn="term" />
+            </Mappings>
+            <Sources />
+          </TableAdapter>
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="spGetUserTableAdapter" GeneratorDataComponentClassName="spGetUserTableAdapter" Name="spGetUser" UserDataComponentName="spGetUserTableAdapter">
             <MainSource>
               <DbSource ConnectionRef="BannerDataConnectionString (Settings)" DbObjectName="BannerData.dbo.spGetUser" DbObjectType="StoredProcedure" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="true" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetData" UserSourceName="Fill">
                 <SelectCommand>
@@ -102,23 +166,77 @@
               </DbSource>
             </MainSource>
             <Mappings>
-              <Mapping SourceColumn="username" DataSetColumn="Username" />
-              <Mapping SourceColumn="email" DataSetColumn="Email" />
-              <Mapping SourceColumn="cm" DataSetColumn="CM" />
-              <Mapping SourceColumn="majors" DataSetColumn="Major" />
-              <Mapping SourceColumn="class" DataSetColumn="Class" />
-              <Mapping SourceColumn="year" DataSetColumn="Year" />
-              <Mapping SourceColumn="lastname" DataSetColumn="LastName" />
-              <Mapping SourceColumn="firstname" DataSetColumn="FirstName" />
-              <Mapping SourceColumn="middlename" DataSetColumn="MiddleName" />
-              <Mapping SourceColumn="department" DataSetColumn="Department" />
-              <Mapping SourceColumn="telephone" DataSetColumn="Telephone" />
-              <Mapping SourceColumn="office" DataSetColumn="Room" />
-              <Mapping SourceColumn="advisor" DataSetColumn="Advisor" />
+              <Mapping SourceColumn="username" DataSetColumn="username" />
+              <Mapping SourceColumn="email" DataSetColumn="email" />
+              <Mapping SourceColumn="cm" DataSetColumn="cm" />
+              <Mapping SourceColumn="majors" DataSetColumn="majors" />
+              <Mapping SourceColumn="class" DataSetColumn="class" />
+              <Mapping SourceColumn="year" DataSetColumn="year" />
+              <Mapping SourceColumn="lastname" DataSetColumn="lastname" />
+              <Mapping SourceColumn="firstname" DataSetColumn="firstname" />
+              <Mapping SourceColumn="middlename" DataSetColumn="middlename" />
+              <Mapping SourceColumn="department" DataSetColumn="department" />
+              <Mapping SourceColumn="telephone" DataSetColumn="telephone" />
+              <Mapping SourceColumn="office" DataSetColumn="office" />
+              <Mapping SourceColumn="advisor" DataSetColumn="advisor" />
             </Mappings>
             <Sources />
           </TableAdapter>
-          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="SearchUsersTableAdapter" GeneratorDataComponentClassName="SearchUsersTableAdapter" Name="SearchUsers" UserDataComponentName="SearchUsersTableAdapter">
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="spGetUserEnrollmentTableAdapter" GeneratorDataComponentClassName="spGetUserEnrollmentTableAdapter" Name="spGetUserEnrollment" UserDataComponentName="spGetUserEnrollmentTableAdapter">
+            <MainSource>
+              <DbSource ConnectionRef="BannerDataConnectionString (Settings)" DbObjectName="BannerData.dbo.spGetUserEnrollment" DbObjectType="StoredProcedure" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="true" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetData" UserSourceName="Fill">
+                <SelectCommand>
+                  <DbCommand CommandType="StoredProcedure" ModifiedByUser="false">
+                    <CommandText>dbo.spGetUserEnrollment</CommandText>
+                    <Parameters>
+                      <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="int" DbType="Int32" Direction="ReturnValue" ParameterName="@RETURN_VALUE" Precision="10" ProviderType="Int" Scale="0" Size="4" SourceColumnNullMapping="false" SourceVersion="Current" />
+                      <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="bit" DbType="Boolean" Direction="Input" ParameterName="@switch" Precision="1" ProviderType="Bit" Scale="0" Size="1" SourceColumnNullMapping="false" SourceVersion="Current" />
+                      <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="int" DbType="Int32" Direction="Input" ParameterName="@term" Precision="10" ProviderType="Int" Scale="0" Size="4" SourceColumnNullMapping="false" SourceVersion="Current" />
+                      <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="varchar" DbType="AnsiString" Direction="Input" ParameterName="@username" Precision="0" ProviderType="VarChar" Scale="0" Size="50" SourceColumnNullMapping="false" SourceVersion="Current" />
+                    </Parameters>
+                  </DbCommand>
+                </SelectCommand>
+              </DbSource>
+            </MainSource>
+            <Mappings>
+              <Mapping SourceColumn="term" DataSetColumn="term" />
+              <Mapping SourceColumn="crn" DataSetColumn="crn" />
+            </Mappings>
+            <Sources />
+          </TableAdapter>
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="spSearchCoursesTableAdapter" GeneratorDataComponentClassName="spSearchCoursesTableAdapter" Name="spSearchCourses" UserDataComponentName="spSearchCoursesTableAdapter">
+            <MainSource>
+              <DbSource ConnectionRef="BannerDataConnectionString (Settings)" DbObjectName="BannerData.dbo.spSearchCourses" DbObjectType="StoredProcedure" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="true" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetData" UserSourceName="Fill">
+                <SelectCommand>
+                  <DbCommand CommandType="StoredProcedure" ModifiedByUser="false">
+                    <CommandText>dbo.spSearchCourses</CommandText>
+                    <Parameters>
+                      <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="int" DbType="Int32" Direction="ReturnValue" ParameterName="@RETURN_VALUE" Precision="10" ProviderType="Int" Scale="0" Size="4" SourceColumnNullMapping="false" SourceVersion="Current" />
+                      <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="bit" DbType="Boolean" Direction="Input" ParameterName="@switch" Precision="1" ProviderType="Bit" Scale="0" Size="1" SourceColumnNullMapping="false" SourceVersion="Current" />
+                      <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="int" DbType="Int32" Direction="Input" ParameterName="@term" Precision="10" ProviderType="Int" Scale="0" Size="4" SourceColumnNullMapping="false" SourceVersion="Current" />
+                      <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="varchar" DbType="AnsiString" Direction="Input" ParameterName="@search" Precision="0" ProviderType="VarChar" Scale="0" Size="50" SourceColumnNullMapping="false" SourceVersion="Current" />
+                    </Parameters>
+                  </DbCommand>
+                </SelectCommand>
+              </DbSource>
+            </MainSource>
+            <Mappings>
+              <Mapping SourceColumn="term" DataSetColumn="term" />
+              <Mapping SourceColumn="crn" DataSetColumn="crn" />
+              <Mapping SourceColumn="course" DataSetColumn="course" />
+              <Mapping SourceColumn="title" DataSetColumn="title" />
+              <Mapping SourceColumn="credits" DataSetColumn="credits" />
+              <Mapping SourceColumn="finalday" DataSetColumn="finalday" />
+              <Mapping SourceColumn="finalhour" DataSetColumn="finalhour" />
+              <Mapping SourceColumn="finalroom" DataSetColumn="finalroom" />
+              <Mapping SourceColumn="enrolled" DataSetColumn="enrolled" />
+              <Mapping SourceColumn="maxenrolled" DataSetColumn="maxenrolled" />
+              <Mapping SourceColumn="comments" DataSetColumn="comments" />
+              <Mapping SourceColumn="instructor" DataSetColumn="instructor" />
+            </Mappings>
+            <Sources />
+          </TableAdapter>
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="spSearchUsersTableAdapter" GeneratorDataComponentClassName="spSearchUsersTableAdapter" Name="spSearchUsers" UserDataComponentName="spSearchUsersTableAdapter">
             <MainSource>
               <DbSource ConnectionRef="BannerDataConnectionString (Settings)" DbObjectName="BannerData.dbo.spSearchUsers" DbObjectType="StoredProcedure" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="true" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetData" UserSourceName="Fill">
                 <SelectCommand>
@@ -134,163 +252,31 @@
               </DbSource>
             </MainSource>
             <Mappings>
-              <Mapping SourceColumn="username" DataSetColumn="Username" />
-              <Mapping SourceColumn="email" DataSetColumn="Email" />
-              <Mapping SourceColumn="cm" DataSetColumn="CM" />
-              <Mapping SourceColumn="majors" DataSetColumn="Major" />
-              <Mapping SourceColumn="class" DataSetColumn="Class" />
-              <Mapping SourceColumn="year" DataSetColumn="Year" />
-              <Mapping SourceColumn="lastname" DataSetColumn="LastName" />
-              <Mapping SourceColumn="firstname" DataSetColumn="FirstName" />
-              <Mapping SourceColumn="middlename" DataSetColumn="MiddleName" />
-              <Mapping SourceColumn="department" DataSetColumn="Department" />
-              <Mapping SourceColumn="telephone" DataSetColumn="Telephone" />
-              <Mapping SourceColumn="office" DataSetColumn="Room" />
-              <Mapping SourceColumn="advisor" DataSetColumn="Advisor" />
-            </Mappings>
-            <Sources />
-          </TableAdapter>
-          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="GetTermsTableAdapter" GeneratorDataComponentClassName="GetTermsTableAdapter" Name="GetTerms" UserDataComponentName="GetTermsTableAdapter">
-            <MainSource>
-              <DbSource ConnectionRef="BannerDataConnectionString1 (Settings)" DbObjectName="BannerData.dbo.spGetTerms" DbObjectType="StoredProcedure" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="true" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetData" UserSourceName="Fill">
-                <SelectCommand>
-                  <DbCommand CommandType="StoredProcedure" ModifiedByUser="false">
-                    <CommandText>dbo.spGetTerms</CommandText>
-                    <Parameters>
-                      <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="int" DbType="Int32" Direction="ReturnValue" ParameterName="@RETURN_VALUE" Precision="10" ProviderType="Int" Scale="0" Size="4" SourceColumnNullMapping="false" SourceVersion="Current" />
-                      <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="bit" DbType="Boolean" Direction="Input" ParameterName="@switch" Precision="1" ProviderType="Bit" Scale="0" Size="1" SourceColumnNullMapping="false" SourceVersion="Current" />
-                    </Parameters>
-                  </DbCommand>
-                </SelectCommand>
-              </DbSource>
-            </MainSource>
-            <Mappings>
-              <Mapping SourceColumn="term" DataSetColumn="Term" />
-            </Mappings>
-            <Sources />
-          </TableAdapter>
-          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="GetInstructorScheduleTableAdapter" GeneratorDataComponentClassName="GetInstructorScheduleTableAdapter" Name="GetInstructorSchedule" UserDataComponentName="GetInstructorScheduleTableAdapter">
-            <MainSource>
-              <DbSource ConnectionRef="BannerDataConnectionString1 (Settings)" DbObjectName="BannerData.dbo.spGetInstructorSchedule" DbObjectType="StoredProcedure" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="true" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetData" UserSourceName="Fill">
-                <SelectCommand>
-                  <DbCommand CommandType="StoredProcedure" ModifiedByUser="false">
-                    <CommandText>dbo.spGetInstructorSchedule</CommandText>
-                    <Parameters>
-                      <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="int" DbType="Int32" Direction="ReturnValue" ParameterName="@RETURN_VALUE" Precision="10" ProviderType="Int" Scale="0" Size="4" SourceColumnNullMapping="false" SourceVersion="Current" />
-                      <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="bit" DbType="Boolean" Direction="Input" ParameterName="@switch" Precision="1" ProviderType="Bit" Scale="0" Size="1" SourceColumnNullMapping="false" SourceVersion="Current" />
-                      <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="int" DbType="Int32" Direction="Input" ParameterName="@term" Precision="10" ProviderType="Int" Scale="0" Size="4" SourceColumnNullMapping="false" SourceVersion="Current" />
-                      <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="varchar" DbType="AnsiString" Direction="Input" ParameterName="@username" Precision="0" ProviderType="VarChar" Scale="0" Size="50" SourceColumnNullMapping="false" SourceVersion="Current" />
-                    </Parameters>
-                  </DbCommand>
-                </SelectCommand>
-              </DbSource>
-            </MainSource>
-            <Mappings>
-              <Mapping SourceColumn="term" DataSetColumn="Term" />
-              <Mapping SourceColumn="crn" DataSetColumn="CRN" />
-            </Mappings>
-            <Sources />
-          </TableAdapter>
-          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="GetRoomScheduleTableAdapter" GeneratorDataComponentClassName="GetRoomScheduleTableAdapter" Name="GetRoomSchedule" UserDataComponentName="GetRoomScheduleTableAdapter">
-            <MainSource>
-              <DbSource ConnectionRef="BannerDataConnectionString1 (Settings)" DbObjectName="BannerData.dbo.spGetRoomSchedule" DbObjectType="StoredProcedure" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="true" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetData" UserSourceName="Fill">
-                <SelectCommand>
-                  <DbCommand CommandType="StoredProcedure" ModifiedByUser="false">
-                    <CommandText>dbo.spGetRoomSchedule</CommandText>
-                    <Parameters>
-                      <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="int" DbType="Int32" Direction="ReturnValue" ParameterName="@RETURN_VALUE" Precision="10" ProviderType="Int" Scale="0" Size="4" SourceColumnNullMapping="false" SourceVersion="Current" />
-                      <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="bit" DbType="Boolean" Direction="Input" ParameterName="@switch" Precision="1" ProviderType="Bit" Scale="0" Size="1" SourceColumnNullMapping="false" SourceVersion="Current" />
-                      <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="int" DbType="Int32" Direction="Input" ParameterName="@term" Precision="10" ProviderType="Int" Scale="0" Size="4" SourceColumnNullMapping="false" SourceVersion="Current" />
-                      <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="varchar" DbType="AnsiString" Direction="Input" ParameterName="@room" Precision="0" ProviderType="VarChar" Scale="0" Size="50" SourceColumnNullMapping="false" SourceVersion="Current" />
-                    </Parameters>
-                  </DbCommand>
-                </SelectCommand>
-              </DbSource>
-            </MainSource>
-            <Mappings>
-              <Mapping SourceColumn="term" DataSetColumn="Term" />
-              <Mapping SourceColumn="crn" DataSetColumn="CRN" />
-              <Mapping SourceColumn="day" DataSetColumn="Day" />
-              <Mapping SourceColumn="startperiod" DataSetColumn="StartPeriod" />
-              <Mapping SourceColumn="endperiod" DataSetColumn="EndPeriod" />
-            </Mappings>
-            <Sources />
-          </TableAdapter>
-          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="GetUserEnrollmentTableAdapter" GeneratorDataComponentClassName="GetUserEnrollmentTableAdapter" Name="GetUserEnrollment" UserDataComponentName="GetUserEnrollmentTableAdapter">
-            <MainSource>
-              <DbSource ConnectionRef="BannerDataConnectionString1 (Settings)" DbObjectName="BannerData.dbo.spGetUserEnrollment" DbObjectType="StoredProcedure" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="true" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetData" UserSourceName="Fill">
-                <SelectCommand>
-                  <DbCommand CommandType="StoredProcedure" ModifiedByUser="false">
-                    <CommandText>dbo.spGetUserEnrollment</CommandText>
-                    <Parameters>
-                      <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="int" DbType="Int32" Direction="ReturnValue" ParameterName="@RETURN_VALUE" Precision="10" ProviderType="Int" Scale="0" Size="4" SourceColumnNullMapping="false" SourceVersion="Current" />
-                      <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="bit" DbType="Boolean" Direction="Input" ParameterName="@switch" Precision="1" ProviderType="Bit" Scale="0" Size="1" SourceColumnNullMapping="false" SourceVersion="Current" />
-                      <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="int" DbType="Int32" Direction="Input" ParameterName="@term" Precision="10" ProviderType="Int" Scale="0" Size="4" SourceColumnNullMapping="false" SourceVersion="Current" />
-                      <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="varchar" DbType="AnsiString" Direction="Input" ParameterName="@username" Precision="0" ProviderType="VarChar" Scale="0" Size="50" SourceColumnNullMapping="false" SourceVersion="Current" />
-                    </Parameters>
-                  </DbCommand>
-                </SelectCommand>
-              </DbSource>
-            </MainSource>
-            <Mappings>
-              <Mapping SourceColumn="term" DataSetColumn="Term" />
-              <Mapping SourceColumn="crn" DataSetColumn="CRN" />
-            </Mappings>
-            <Sources />
-          </TableAdapter>
-          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="SearchCoursesTableAdapter" GeneratorDataComponentClassName="SearchCoursesTableAdapter" Name="SearchCourses" UserDataComponentName="SearchCoursesTableAdapter">
-            <MainSource>
-              <DbSource ConnectionRef="BannerDataConnectionString1 (Settings)" DbObjectName="BannerData.dbo.spSearchCourses" DbObjectType="StoredProcedure" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="true" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetData" UserSourceName="Fill">
-                <SelectCommand>
-                  <DbCommand CommandType="StoredProcedure" ModifiedByUser="false">
-                    <CommandText>dbo.spSearchCourses</CommandText>
-                    <Parameters>
-                      <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="int" DbType="Int32" Direction="ReturnValue" ParameterName="@RETURN_VALUE" Precision="10" ProviderType="Int" Scale="0" Size="4" SourceColumnNullMapping="false" SourceVersion="Current" />
-                      <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="bit" DbType="Boolean" Direction="Input" ParameterName="@switch" Precision="1" ProviderType="Bit" Scale="0" Size="1" SourceColumnNullMapping="false" SourceVersion="Current" />
-                      <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="int" DbType="Int32" Direction="Input" ParameterName="@term" Precision="10" ProviderType="Int" Scale="0" Size="4" SourceColumnNullMapping="false" SourceVersion="Current" />
-                      <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="varchar" DbType="AnsiString" Direction="Input" ParameterName="@search" Precision="0" ProviderType="VarChar" Scale="0" Size="50" SourceColumnNullMapping="false" SourceVersion="Current" />
-                    </Parameters>
-                  </DbCommand>
-                </SelectCommand>
-              </DbSource>
-            </MainSource>
-            <Mappings>
-              <Mapping SourceColumn="term" DataSetColumn="Term" />
-              <Mapping SourceColumn="crn" DataSetColumn="CRN" />
-              <Mapping SourceColumn="course" DataSetColumn="Course" />
-              <Mapping SourceColumn="title" DataSetColumn="Title" />
-              <Mapping SourceColumn="credits" DataSetColumn="Credits" />
-              <Mapping SourceColumn="finalday" DataSetColumn="FinalDay" />
-              <Mapping SourceColumn="finalhour" DataSetColumn="FinalHour" />
-              <Mapping SourceColumn="finalroom" DataSetColumn="FinalRoom" />
-              <Mapping SourceColumn="enrolled" DataSetColumn="Enrolled" />
-              <Mapping SourceColumn="maxenrolled" DataSetColumn="MaxEnrolled" />
-              <Mapping SourceColumn="comments" DataSetColumn="Comments" />
-              <Mapping SourceColumn="instructor" DataSetColumn="Instructor" />
+              <Mapping SourceColumn="username" DataSetColumn="username" />
+              <Mapping SourceColumn="email" DataSetColumn="email" />
+              <Mapping SourceColumn="cm" DataSetColumn="cm" />
+              <Mapping SourceColumn="majors" DataSetColumn="majors" />
+              <Mapping SourceColumn="class" DataSetColumn="class" />
+              <Mapping SourceColumn="year" DataSetColumn="year" />
+              <Mapping SourceColumn="lastname" DataSetColumn="lastname" />
+              <Mapping SourceColumn="firstname" DataSetColumn="firstname" />
+              <Mapping SourceColumn="middlename" DataSetColumn="middlename" />
+              <Mapping SourceColumn="department" DataSetColumn="department" />
+              <Mapping SourceColumn="telephone" DataSetColumn="telephone" />
+              <Mapping SourceColumn="office" DataSetColumn="office" />
+              <Mapping SourceColumn="advisor" DataSetColumn="advisor" />
             </Mappings>
             <Sources />
           </TableAdapter>
         </Tables>
         <Sources>
-          <DbSource ConnectionRef="BannerDataConnectionString (Settings)" DbObjectName="BannerData.dbo.spInsertUser" DbObjectType="StoredProcedure" GenerateShortCommands="true" GeneratorSourceName="spInsertUser" MethodsParameterType="CLR" Modifier="Public" Name="spInsertUser" QueryType="NoData" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy" UserSourceName="spInsertUser">
+          <DbSource ConnectionRef="BannerDataConnectionString (Settings)" DbObjectName="BannerData.dbo.spDeleteData" DbObjectType="StoredProcedure" GenerateShortCommands="true" GeneratorSourceName="spDeleteData" MethodsParameterType="CLR" Modifier="Public" Name="spDeleteData" QueryType="NoData" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy" UserSourceName="spDeleteData">
             <SelectCommand>
               <DbCommand CommandType="StoredProcedure" ModifiedByUser="false">
-                <CommandText>dbo.spInsertUser</CommandText>
+                <CommandText>dbo.spDeleteData</CommandText>
                 <Parameters>
                   <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="int" DbType="Int32" Direction="ReturnValue" ParameterName="@RETURN_VALUE" Precision="10" ProviderType="Int" Scale="0" Size="4" SourceColumnNullMapping="false" SourceVersion="Current" />
                   <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="bit" DbType="Boolean" Direction="Input" ParameterName="@switch" Precision="1" ProviderType="Bit" Scale="0" Size="1" SourceColumnNullMapping="false" SourceVersion="Current" />
-                  <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="varchar" DbType="AnsiString" Direction="Input" ParameterName="@username" Precision="0" ProviderType="VarChar" Scale="0" Size="20" SourceColumnNullMapping="false" SourceVersion="Current" />
-                  <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="varchar" DbType="AnsiString" Direction="Input" ParameterName="@email" Precision="0" ProviderType="VarChar" Scale="0" Size="50" SourceColumnNullMapping="false" SourceVersion="Current" />
-                  <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="int" DbType="Int32" Direction="Input" ParameterName="@cm" Precision="10" ProviderType="Int" Scale="0" Size="4" SourceColumnNullMapping="false" SourceVersion="Current" />
-                  <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="varchar" DbType="AnsiString" Direction="Input" ParameterName="@majors" Precision="0" ProviderType="VarChar" Scale="0" Size="15" SourceColumnNullMapping="false" SourceVersion="Current" />
-                  <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="char" DbType="AnsiStringFixedLength" Direction="Input" ParameterName="@class" Precision="0" ProviderType="Char" Scale="0" Size="2" SourceColumnNullMapping="false" SourceVersion="Current" />
-                  <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="char" DbType="AnsiStringFixedLength" Direction="Input" ParameterName="@year" Precision="0" ProviderType="Char" Scale="0" Size="2" SourceColumnNullMapping="false" SourceVersion="Current" />
-                  <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="nvarchar" DbType="String" Direction="Input" ParameterName="@lastname" Precision="0" ProviderType="NVarChar" Scale="0" Size="20" SourceColumnNullMapping="false" SourceVersion="Current" />
-                  <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="nvarchar" DbType="String" Direction="Input" ParameterName="@firstname" Precision="0" ProviderType="NVarChar" Scale="0" Size="20" SourceColumnNullMapping="false" SourceVersion="Current" />
-                  <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="nvarchar" DbType="String" Direction="Input" ParameterName="@middlename" Precision="0" ProviderType="NVarChar" Scale="0" Size="20" SourceColumnNullMapping="false" SourceVersion="Current" />
-                  <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="varchar" DbType="AnsiString" Direction="Input" ParameterName="@department" Precision="0" ProviderType="VarChar" Scale="0" Size="20" SourceColumnNullMapping="false" SourceVersion="Current" />
-                  <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="varchar" DbType="AnsiString" Direction="Input" ParameterName="@telephone" Precision="0" ProviderType="VarChar" Scale="0" Size="20" SourceColumnNullMapping="false" SourceVersion="Current" />
-                  <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="varchar" DbType="AnsiString" Direction="Input" ParameterName="@office" Precision="0" ProviderType="VarChar" Scale="0" Size="20" SourceColumnNullMapping="false" SourceVersion="Current" />
                 </Parameters>
               </DbCommand>
             </SelectCommand>
@@ -302,24 +288,13 @@
                 <Parameters>
                   <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="int" DbType="Int32" Direction="ReturnValue" ParameterName="@RETURN_VALUE" Precision="10" ProviderType="Int" Scale="0" Size="4" SourceColumnNullMapping="false" SourceVersion="Current" />
                   <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="bit" DbType="Boolean" Direction="Input" ParameterName="@switch" Precision="1" ProviderType="Bit" Scale="0" Size="1" SourceColumnNullMapping="false" SourceVersion="Current" />
-                  <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="varchar" DbType="AnsiString" Direction="Input" ParameterName="@student" Precision="0" ProviderType="VarChar" Scale="0" Size="20" SourceColumnNullMapping="false" SourceVersion="Current" />
-                  <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="varchar" DbType="AnsiString" Direction="Input" ParameterName="@advisor" Precision="0" ProviderType="VarChar" Scale="0" Size="20" SourceColumnNullMapping="false" SourceVersion="Current" />
+                  <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="varchar" DbType="AnsiString" Direction="Input" ParameterName="@student" Precision="0" ProviderType="VarChar" Scale="0" Size="50" SourceColumnNullMapping="false" SourceVersion="Current" />
+                  <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="varchar" DbType="AnsiString" Direction="Input" ParameterName="@advisor" Precision="0" ProviderType="VarChar" Scale="0" Size="50" SourceColumnNullMapping="false" SourceVersion="Current" />
                 </Parameters>
               </DbCommand>
             </SelectCommand>
           </DbSource>
-          <DbSource ConnectionRef="BannerDataConnectionString (Settings)" DbObjectName="BannerData.dbo.spDeleteData" DbObjectType="StoredProcedure" GenerateShortCommands="true" GeneratorSourceName="spDeleteData" MethodsParameterType="CLR" Modifier="Public" Name="spDeleteData" QueryType="NoData" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy2" UserSourceName="spDeleteData">
-            <SelectCommand>
-              <DbCommand CommandType="StoredProcedure" ModifiedByUser="false">
-                <CommandText>dbo.spDeleteData</CommandText>
-                <Parameters>
-                  <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="int" DbType="Int32" Direction="ReturnValue" ParameterName="@RETURN_VALUE" Precision="10" ProviderType="Int" Scale="0" Size="4" SourceColumnNullMapping="false" SourceVersion="Current" />
-                  <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="bit" DbType="Boolean" Direction="Input" ParameterName="@switch" Precision="1" ProviderType="Bit" Scale="0" Size="1" SourceColumnNullMapping="false" SourceVersion="Current" />
-                </Parameters>
-              </DbCommand>
-            </SelectCommand>
-          </DbSource>
-          <DbSource ConnectionRef="BannerDataConnectionString (Settings)" DbObjectName="BannerData.dbo.spInsertCourse" DbObjectType="StoredProcedure" GenerateShortCommands="true" GeneratorSourceName="spInsertCourse" MethodsParameterType="CLR" Modifier="Public" Name="spInsertCourse" QueryType="NoData" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy3" UserSourceName="spInsertCourse">
+          <DbSource ConnectionRef="BannerDataConnectionString (Settings)" DbObjectName="BannerData.dbo.spInsertCourse" DbObjectType="StoredProcedure" GenerateShortCommands="true" GeneratorSourceName="spInsertCourse" MethodsParameterType="CLR" Modifier="Public" Name="spInsertCourse" QueryType="NoData" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy2" UserSourceName="spInsertCourse">
             <SelectCommand>
               <DbCommand CommandType="StoredProcedure" ModifiedByUser="false">
                 <CommandText>dbo.spInsertCourse</CommandText>
@@ -328,21 +303,21 @@
                   <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="bit" DbType="Boolean" Direction="Input" ParameterName="@switch" Precision="1" ProviderType="Bit" Scale="0" Size="1" SourceColumnNullMapping="false" SourceVersion="Current" />
                   <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="int" DbType="Int32" Direction="Input" ParameterName="@term" Precision="10" ProviderType="Int" Scale="0" Size="4" SourceColumnNullMapping="false" SourceVersion="Current" />
                   <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="int" DbType="Int32" Direction="Input" ParameterName="@crn" Precision="10" ProviderType="Int" Scale="0" Size="4" SourceColumnNullMapping="false" SourceVersion="Current" />
-                  <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="varchar" DbType="AnsiString" Direction="Input" ParameterName="@course" Precision="0" ProviderType="VarChar" Scale="0" Size="10" SourceColumnNullMapping="false" SourceVersion="Current" />
+                  <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="varchar" DbType="AnsiString" Direction="Input" ParameterName="@course" Precision="0" ProviderType="VarChar" Scale="0" Size="50" SourceColumnNullMapping="false" SourceVersion="Current" />
                   <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="varchar" DbType="AnsiString" Direction="Input" ParameterName="@title" Precision="0" ProviderType="VarChar" Scale="0" Size="50" SourceColumnNullMapping="false" SourceVersion="Current" />
-                  <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="varchar" DbType="AnsiString" Direction="Input" ParameterName="@instructor" Precision="0" ProviderType="VarChar" Scale="0" Size="20" SourceColumnNullMapping="false" SourceVersion="Current" />
+                  <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="varchar" DbType="AnsiString" Direction="Input" ParameterName="@instructor" Precision="0" ProviderType="VarChar" Scale="0" Size="50" SourceColumnNullMapping="false" SourceVersion="Current" />
                   <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="int" DbType="Int32" Direction="Input" ParameterName="@credits" Precision="10" ProviderType="Int" Scale="0" Size="4" SourceColumnNullMapping="false" SourceVersion="Current" />
                   <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="char" DbType="AnsiStringFixedLength" Direction="Input" ParameterName="@finalday" Precision="0" ProviderType="Char" Scale="0" Size="1" SourceColumnNullMapping="false" SourceVersion="Current" />
                   <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="int" DbType="Int32" Direction="Input" ParameterName="@finalhour" Precision="10" ProviderType="Int" Scale="0" Size="4" SourceColumnNullMapping="false" SourceVersion="Current" />
-                  <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="varchar" DbType="AnsiString" Direction="Input" ParameterName="@finalroom" Precision="0" ProviderType="VarChar" Scale="0" Size="10" SourceColumnNullMapping="false" SourceVersion="Current" />
+                  <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="varchar" DbType="AnsiString" Direction="Input" ParameterName="@finalroom" Precision="0" ProviderType="VarChar" Scale="0" Size="50" SourceColumnNullMapping="false" SourceVersion="Current" />
                   <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="int" DbType="Int32" Direction="Input" ParameterName="@enrolled" Precision="10" ProviderType="Int" Scale="0" Size="4" SourceColumnNullMapping="false" SourceVersion="Current" />
                   <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="int" DbType="Int32" Direction="Input" ParameterName="@maxenrolled" Precision="10" ProviderType="Int" Scale="0" Size="4" SourceColumnNullMapping="false" SourceVersion="Current" />
-                  <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="varchar" DbType="AnsiString" Direction="Input" ParameterName="@comments" Precision="0" ProviderType="VarChar" Scale="0" Size="50" SourceColumnNullMapping="false" SourceVersion="Current" />
+                  <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="varchar" DbType="AnsiString" Direction="Input" ParameterName="@comments" Precision="0" ProviderType="VarChar" Scale="0" Size="500" SourceColumnNullMapping="false" SourceVersion="Current" />
                 </Parameters>
               </DbCommand>
             </SelectCommand>
           </DbSource>
-          <DbSource ConnectionRef="BannerDataConnectionString (Settings)" DbObjectName="BannerData.dbo.spInsertCourseSchedule" DbObjectType="StoredProcedure" GenerateShortCommands="true" GeneratorSourceName="spInsertCourseSchedule" MethodsParameterType="CLR" Modifier="Public" Name="spInsertCourseSchedule" QueryType="NoData" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy4" UserSourceName="spInsertCourseSchedule">
+          <DbSource ConnectionRef="BannerDataConnectionString (Settings)" DbObjectName="BannerData.dbo.spInsertCourseSchedule" DbObjectType="StoredProcedure" GenerateShortCommands="true" GeneratorSourceName="spInsertCourseSchedule" MethodsParameterType="CLR" Modifier="Public" Name="spInsertCourseSchedule" QueryType="NoData" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy3" UserSourceName="spInsertCourseSchedule">
             <SelectCommand>
               <DbCommand CommandType="StoredProcedure" ModifiedByUser="false">
                 <CommandText>dbo.spInsertCourseSchedule</CommandText>
@@ -354,21 +329,44 @@
                   <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="char" DbType="AnsiStringFixedLength" Direction="Input" ParameterName="@day" Precision="0" ProviderType="Char" Scale="0" Size="1" SourceColumnNullMapping="false" SourceVersion="Current" />
                   <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="int" DbType="Int32" Direction="Input" ParameterName="@startperiod" Precision="10" ProviderType="Int" Scale="0" Size="4" SourceColumnNullMapping="false" SourceVersion="Current" />
                   <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="int" DbType="Int32" Direction="Input" ParameterName="@endperiod" Precision="10" ProviderType="Int" Scale="0" Size="4" SourceColumnNullMapping="false" SourceVersion="Current" />
-                  <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="varchar" DbType="AnsiString" Direction="Input" ParameterName="@room" Precision="0" ProviderType="VarChar" Scale="0" Size="10" SourceColumnNullMapping="false" SourceVersion="Current" />
+                  <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="varchar" DbType="AnsiString" Direction="Input" ParameterName="@room" Precision="0" ProviderType="VarChar" Scale="0" Size="50" SourceColumnNullMapping="false" SourceVersion="Current" />
                 </Parameters>
               </DbCommand>
             </SelectCommand>
           </DbSource>
-          <DbSource ConnectionRef="BannerDataConnectionString (Settings)" DbObjectName="BannerData.dbo.spInsertEnrollment" DbObjectType="StoredProcedure" GenerateShortCommands="true" GeneratorSourceName="spInsertEnrollment" MethodsParameterType="CLR" Modifier="Public" Name="spInsertEnrollment" QueryType="NoData" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy5" UserSourceName="spInsertEnrollment">
+          <DbSource ConnectionRef="BannerDataConnectionString (Settings)" DbObjectName="BannerData.dbo.spInsertEnrollment" DbObjectType="StoredProcedure" GenerateShortCommands="true" GeneratorSourceName="spInsertEnrollment" MethodsParameterType="CLR" Modifier="Public" Name="spInsertEnrollment" QueryType="NoData" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy4" UserSourceName="spInsertEnrollment">
             <SelectCommand>
               <DbCommand CommandType="StoredProcedure" ModifiedByUser="false">
                 <CommandText>dbo.spInsertEnrollment</CommandText>
                 <Parameters>
                   <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="int" DbType="Int32" Direction="ReturnValue" ParameterName="@RETURN_VALUE" Precision="10" ProviderType="Int" Scale="0" Size="4" SourceColumnNullMapping="false" SourceVersion="Current" />
                   <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="bit" DbType="Boolean" Direction="Input" ParameterName="@switch" Precision="1" ProviderType="Bit" Scale="0" Size="1" SourceColumnNullMapping="false" SourceVersion="Current" />
-                  <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="varchar" DbType="AnsiString" Direction="Input" ParameterName="@student" Precision="0" ProviderType="VarChar" Scale="0" Size="20" SourceColumnNullMapping="false" SourceVersion="Current" />
+                  <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="varchar" DbType="AnsiString" Direction="Input" ParameterName="@student" Precision="0" ProviderType="VarChar" Scale="0" Size="50" SourceColumnNullMapping="false" SourceVersion="Current" />
                   <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="int" DbType="Int32" Direction="Input" ParameterName="@term" Precision="10" ProviderType="Int" Scale="0" Size="4" SourceColumnNullMapping="false" SourceVersion="Current" />
                   <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="int" DbType="Int32" Direction="Input" ParameterName="@crn" Precision="10" ProviderType="Int" Scale="0" Size="4" SourceColumnNullMapping="false" SourceVersion="Current" />
+                </Parameters>
+              </DbCommand>
+            </SelectCommand>
+          </DbSource>
+          <DbSource ConnectionRef="BannerDataConnectionString (Settings)" DbObjectName="BannerData.dbo.spInsertUser" DbObjectType="StoredProcedure" GenerateShortCommands="true" GeneratorSourceName="spInsertUser" MethodsParameterType="CLR" Modifier="Public" Name="spInsertUser" QueryType="NoData" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy5" UserSourceName="spInsertUser">
+            <SelectCommand>
+              <DbCommand CommandType="StoredProcedure" ModifiedByUser="false">
+                <CommandText>dbo.spInsertUser</CommandText>
+                <Parameters>
+                  <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="int" DbType="Int32" Direction="ReturnValue" ParameterName="@RETURN_VALUE" Precision="10" ProviderType="Int" Scale="0" Size="4" SourceColumnNullMapping="false" SourceVersion="Current" />
+                  <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="bit" DbType="Boolean" Direction="Input" ParameterName="@switch" Precision="1" ProviderType="Bit" Scale="0" Size="1" SourceColumnNullMapping="false" SourceVersion="Current" />
+                  <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="varchar" DbType="AnsiString" Direction="Input" ParameterName="@username" Precision="0" ProviderType="VarChar" Scale="0" Size="50" SourceColumnNullMapping="false" SourceVersion="Current" />
+                  <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="varchar" DbType="AnsiString" Direction="Input" ParameterName="@email" Precision="0" ProviderType="VarChar" Scale="0" Size="50" SourceColumnNullMapping="false" SourceVersion="Current" />
+                  <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="int" DbType="Int32" Direction="Input" ParameterName="@cm" Precision="10" ProviderType="Int" Scale="0" Size="4" SourceColumnNullMapping="false" SourceVersion="Current" />
+                  <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="varchar" DbType="AnsiString" Direction="Input" ParameterName="@majors" Precision="0" ProviderType="VarChar" Scale="0" Size="50" SourceColumnNullMapping="false" SourceVersion="Current" />
+                  <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="char" DbType="AnsiStringFixedLength" Direction="Input" ParameterName="@class" Precision="0" ProviderType="Char" Scale="0" Size="2" SourceColumnNullMapping="false" SourceVersion="Current" />
+                  <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="char" DbType="AnsiStringFixedLength" Direction="Input" ParameterName="@year" Precision="0" ProviderType="Char" Scale="0" Size="2" SourceColumnNullMapping="false" SourceVersion="Current" />
+                  <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="nvarchar" DbType="String" Direction="Input" ParameterName="@lastname" Precision="0" ProviderType="NVarChar" Scale="0" Size="50" SourceColumnNullMapping="false" SourceVersion="Current" />
+                  <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="nvarchar" DbType="String" Direction="Input" ParameterName="@firstname" Precision="0" ProviderType="NVarChar" Scale="0" Size="50" SourceColumnNullMapping="false" SourceVersion="Current" />
+                  <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="nvarchar" DbType="String" Direction="Input" ParameterName="@middlename" Precision="0" ProviderType="NVarChar" Scale="0" Size="50" SourceColumnNullMapping="false" SourceVersion="Current" />
+                  <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="varchar" DbType="AnsiString" Direction="Input" ParameterName="@department" Precision="0" ProviderType="VarChar" Scale="0" Size="50" SourceColumnNullMapping="false" SourceVersion="Current" />
+                  <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="varchar" DbType="AnsiString" Direction="Input" ParameterName="@telephone" Precision="0" ProviderType="VarChar" Scale="0" Size="50" SourceColumnNullMapping="false" SourceVersion="Current" />
+                  <Parameter AllowDbNull="true" AutogeneratedName="" DataSourceName="" DataTypeServer="varchar" DbType="AnsiString" Direction="Input" ParameterName="@office" Precision="0" ProviderType="VarChar" Scale="0" Size="50" SourceColumnNullMapping="false" SourceVersion="Current" />
                 </Parameters>
               </DbCommand>
             </SelectCommand>
@@ -380,51 +378,51 @@
   <xs:element name="Banner" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="Banner" msprop:Generator_UserDSName="Banner">
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="GetCourse" msprop:Generator_TableClassName="GetCourseDataTable" msprop:Generator_TableVarName="tableGetCourse" msprop:Generator_TablePropName="GetCourse" msprop:Generator_RowDeletingName="GetCourseRowDeleting" msprop:Generator_UserTableName="GetCourse" msprop:Generator_RowChangingName="GetCourseRowChanging" msprop:Generator_RowEvHandlerName="GetCourseRowChangeEventHandler" msprop:Generator_RowDeletedName="GetCourseRowDeleted" msprop:Generator_RowEvArgName="GetCourseRowChangeEvent" msprop:Generator_RowChangedName="GetCourseRowChanged" msprop:Generator_RowClassName="GetCourseRow">
+        <xs:element name="spGetCourse" msprop:Generator_TableClassName="spGetCourseDataTable" msprop:Generator_TableVarName="tablespGetCourse" msprop:Generator_TablePropName="spGetCourse" msprop:Generator_RowDeletingName="spGetCourseRowDeleting" msprop:Generator_UserTableName="spGetCourse" msprop:Generator_RowChangingName="spGetCourseRowChanging" msprop:Generator_RowEvHandlerName="spGetCourseRowChangeEventHandler" msprop:Generator_RowDeletedName="spGetCourseRowDeleted" msprop:Generator_RowEvArgName="spGetCourseRowChangeEvent" msprop:Generator_RowChangedName="spGetCourseRowChanged" msprop:Generator_RowClassName="spGetCourseRow">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="Term" msdata:Caption="term" msprop:Generator_ColumnVarNameInTable="columnTerm" msprop:Generator_ColumnPropNameInRow="Term" msprop:Generator_ColumnPropNameInTable="TermColumn" msprop:Generator_UserColumnName="Term" type="xs:int" />
-              <xs:element name="CRN" msdata:Caption="crn" msprop:Generator_ColumnVarNameInTable="columnCRN" msprop:Generator_ColumnPropNameInRow="CRN" msprop:Generator_ColumnPropNameInTable="CRNColumn" msprop:Generator_UserColumnName="CRN" type="xs:int" />
-              <xs:element name="Course" msdata:Caption="course" msprop:Generator_ColumnVarNameInTable="columnCourse" msprop:Generator_ColumnPropNameInRow="Course" msprop:Generator_ColumnPropNameInTable="CourseColumn" msprop:Generator_UserColumnName="Course">
+              <xs:element name="term" msprop:Generator_ColumnVarNameInTable="columnterm" msprop:Generator_ColumnPropNameInRow="term" msprop:Generator_ColumnPropNameInTable="termColumn" msprop:Generator_UserColumnName="term" type="xs:int" />
+              <xs:element name="crn" msprop:Generator_ColumnVarNameInTable="columncrn" msprop:Generator_ColumnPropNameInRow="crn" msprop:Generator_ColumnPropNameInTable="crnColumn" msprop:Generator_UserColumnName="crn" type="xs:int" />
+              <xs:element name="course" msprop:Generator_ColumnVarNameInTable="columncourse" msprop:Generator_ColumnPropNameInRow="course" msprop:Generator_ColumnPropNameInTable="courseColumn" msprop:Generator_UserColumnName="course">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="50" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="Title" msdata:Caption="title" msprop:Generator_ColumnVarNameInTable="columnTitle" msprop:Generator_ColumnPropNameInRow="Title" msprop:Generator_ColumnPropNameInTable="TitleColumn" msprop:Generator_UserColumnName="Title">
+              <xs:element name="title" msprop:Generator_ColumnVarNameInTable="columntitle" msprop:Generator_ColumnPropNameInRow="title" msprop:Generator_ColumnPropNameInTable="titleColumn" msprop:Generator_UserColumnName="title">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="100" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="Credits" msdata:Caption="credits" msprop:Generator_ColumnVarNameInTable="columnCredits" msprop:Generator_ColumnPropNameInRow="Credits" msprop:Generator_ColumnPropNameInTable="CreditsColumn" msprop:Generator_UserColumnName="Credits" type="xs:int" />
-              <xs:element name="FinalDay" msdata:Caption="finalday" msprop:Generator_ColumnVarNameInTable="columnFinalDay" msprop:Generator_ColumnPropNameInRow="FinalDay" msprop:Generator_ColumnPropNameInTable="FinalDayColumn" msprop:Generator_UserColumnName="FinalDay" minOccurs="0">
+              <xs:element name="credits" msprop:Generator_ColumnVarNameInTable="columncredits" msprop:Generator_ColumnPropNameInRow="credits" msprop:Generator_ColumnPropNameInTable="creditsColumn" msprop:Generator_UserColumnName="credits" type="xs:int" />
+              <xs:element name="finalday" msprop:Generator_ColumnVarNameInTable="columnfinalday" msprop:Generator_ColumnPropNameInRow="finalday" msprop:Generator_ColumnPropNameInTable="finaldayColumn" msprop:Generator_UserColumnName="finalday" minOccurs="0">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="1" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="FinalHour" msdata:Caption="finalhour" msprop:Generator_ColumnVarNameInTable="columnFinalHour" msprop:Generator_ColumnPropNameInRow="FinalHour" msprop:Generator_ColumnPropNameInTable="FinalHourColumn" msprop:Generator_UserColumnName="FinalHour" type="xs:int" minOccurs="0" />
-              <xs:element name="FinalRoom" msdata:Caption="finalroom" msprop:Generator_ColumnVarNameInTable="columnFinalRoom" msprop:Generator_ColumnPropNameInRow="FinalRoom" msprop:Generator_ColumnPropNameInTable="FinalRoomColumn" msprop:Generator_UserColumnName="FinalRoom" minOccurs="0">
+              <xs:element name="finalhour" msprop:Generator_ColumnVarNameInTable="columnfinalhour" msprop:Generator_ColumnPropNameInRow="finalhour" msprop:Generator_ColumnPropNameInTable="finalhourColumn" msprop:Generator_UserColumnName="finalhour" type="xs:int" minOccurs="0" />
+              <xs:element name="finalroom" msprop:Generator_ColumnVarNameInTable="columnfinalroom" msprop:Generator_ColumnPropNameInRow="finalroom" msprop:Generator_ColumnPropNameInTable="finalroomColumn" msprop:Generator_UserColumnName="finalroom" minOccurs="0">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="50" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="Enrolled" msdata:Caption="enrolled" msprop:Generator_ColumnVarNameInTable="columnEnrolled" msprop:Generator_ColumnPropNameInRow="Enrolled" msprop:Generator_ColumnPropNameInTable="EnrolledColumn" msprop:Generator_UserColumnName="Enrolled" type="xs:int" />
-              <xs:element name="MaxEnrolled" msdata:Caption="maxenrolled" msprop:Generator_ColumnVarNameInTable="columnMaxEnrolled" msprop:Generator_ColumnPropNameInRow="MaxEnrolled" msprop:Generator_ColumnPropNameInTable="MaxEnrolledColumn" msprop:Generator_UserColumnName="MaxEnrolled" type="xs:int" />
-              <xs:element name="Comments" msdata:Caption="comments" msprop:Generator_ColumnVarNameInTable="columnComments" msprop:Generator_ColumnPropNameInRow="Comments" msprop:Generator_ColumnPropNameInTable="CommentsColumn" msprop:Generator_UserColumnName="Comments" minOccurs="0">
+              <xs:element name="enrolled" msprop:Generator_ColumnVarNameInTable="columnenrolled" msprop:Generator_ColumnPropNameInRow="enrolled" msprop:Generator_ColumnPropNameInTable="enrolledColumn" msprop:Generator_UserColumnName="enrolled" type="xs:int" />
+              <xs:element name="maxenrolled" msprop:Generator_ColumnVarNameInTable="columnmaxenrolled" msprop:Generator_ColumnPropNameInRow="maxenrolled" msprop:Generator_ColumnPropNameInTable="maxenrolledColumn" msprop:Generator_UserColumnName="maxenrolled" type="xs:int" />
+              <xs:element name="comments" msprop:Generator_ColumnVarNameInTable="columncomments" msprop:Generator_ColumnPropNameInRow="comments" msprop:Generator_ColumnPropNameInTable="commentsColumn" msprop:Generator_UserColumnName="comments" minOccurs="0">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="500" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="Instructor" msdata:ReadOnly="true" msdata:Caption="instructor" msprop:Generator_ColumnVarNameInTable="columnInstructor" msprop:Generator_ColumnPropNameInRow="Instructor" msprop:Generator_ColumnPropNameInTable="InstructorColumn" msprop:Generator_UserColumnName="Instructor" minOccurs="0">
+              <xs:element name="instructor" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columninstructor" msprop:Generator_ColumnPropNameInRow="instructor" msprop:Generator_ColumnPropNameInTable="instructorColumn" msprop:Generator_UserColumnName="instructor" minOccurs="0">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="20" />
@@ -434,10 +432,10 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="GetCourseEnrollment" msprop:Generator_TableClassName="GetCourseEnrollmentDataTable" msprop:Generator_TableVarName="tableGetCourseEnrollment" msprop:Generator_TablePropName="GetCourseEnrollment" msprop:Generator_RowDeletingName="GetCourseEnrollmentRowDeleting" msprop:Generator_UserTableName="GetCourseEnrollment" msprop:Generator_RowChangingName="GetCourseEnrollmentRowChanging" msprop:Generator_RowEvHandlerName="GetCourseEnrollmentRowChangeEventHandler" msprop:Generator_RowDeletedName="GetCourseEnrollmentRowDeleted" msprop:Generator_RowEvArgName="GetCourseEnrollmentRowChangeEvent" msprop:Generator_RowChangedName="GetCourseEnrollmentRowChanged" msprop:Generator_RowClassName="GetCourseEnrollmentRow">
+        <xs:element name="spGetCourseEnrollment" msprop:Generator_TableClassName="spGetCourseEnrollmentDataTable" msprop:Generator_TableVarName="tablespGetCourseEnrollment" msprop:Generator_TablePropName="spGetCourseEnrollment" msprop:Generator_RowDeletingName="spGetCourseEnrollmentRowDeleting" msprop:Generator_UserTableName="spGetCourseEnrollment" msprop:Generator_RowChangingName="spGetCourseEnrollmentRowChanging" msprop:Generator_RowEvHandlerName="spGetCourseEnrollmentRowChangeEventHandler" msprop:Generator_RowDeletedName="spGetCourseEnrollmentRowDeleted" msprop:Generator_RowEvArgName="spGetCourseEnrollmentRowChangeEvent" msprop:Generator_RowChangedName="spGetCourseEnrollmentRowChanged" msprop:Generator_RowClassName="spGetCourseEnrollmentRow">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="Username" msdata:Caption="username" msprop:Generator_ColumnVarNameInTable="columnUsername" msprop:Generator_ColumnPropNameInRow="Username" msprop:Generator_ColumnPropNameInTable="UsernameColumn" msprop:Generator_UserColumnName="Username">
+              <xs:element name="username" msprop:Generator_ColumnVarNameInTable="columnusername" msprop:Generator_ColumnPropNameInRow="username" msprop:Generator_ColumnPropNameInTable="usernameColumn" msprop:Generator_UserColumnName="username">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="20" />
@@ -447,19 +445,19 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="GetCourseSchedule" msprop:Generator_TableClassName="GetCourseScheduleDataTable" msprop:Generator_TableVarName="tableGetCourseSchedule" msprop:Generator_TablePropName="GetCourseSchedule" msprop:Generator_RowDeletingName="GetCourseScheduleRowDeleting" msprop:Generator_UserTableName="GetCourseSchedule" msprop:Generator_RowChangingName="GetCourseScheduleRowChanging" msprop:Generator_RowEvHandlerName="GetCourseScheduleRowChangeEventHandler" msprop:Generator_RowDeletedName="GetCourseScheduleRowDeleted" msprop:Generator_RowEvArgName="GetCourseScheduleRowChangeEvent" msprop:Generator_RowChangedName="GetCourseScheduleRowChanged" msprop:Generator_RowClassName="GetCourseScheduleRow">
+        <xs:element name="spGetCourseSchedule" msprop:Generator_TableClassName="spGetCourseScheduleDataTable" msprop:Generator_TableVarName="tablespGetCourseSchedule" msprop:Generator_TablePropName="spGetCourseSchedule" msprop:Generator_RowDeletingName="spGetCourseScheduleRowDeleting" msprop:Generator_UserTableName="spGetCourseSchedule" msprop:Generator_RowChangingName="spGetCourseScheduleRowChanging" msprop:Generator_RowEvHandlerName="spGetCourseScheduleRowChangeEventHandler" msprop:Generator_RowDeletedName="spGetCourseScheduleRowDeleted" msprop:Generator_RowEvArgName="spGetCourseScheduleRowChangeEvent" msprop:Generator_RowChangedName="spGetCourseScheduleRowChanged" msprop:Generator_RowClassName="spGetCourseScheduleRow">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="Day" msdata:Caption="day" msprop:Generator_ColumnVarNameInTable="columnDay" msprop:Generator_ColumnPropNameInRow="Day" msprop:Generator_ColumnPropNameInTable="DayColumn" msprop:Generator_UserColumnName="Day">
+              <xs:element name="day" msprop:Generator_ColumnVarNameInTable="columnday" msprop:Generator_ColumnPropNameInRow="day" msprop:Generator_ColumnPropNameInTable="dayColumn" msprop:Generator_UserColumnName="day">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="1" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="StartPeriod" msdata:Caption="startperiod" msprop:Generator_ColumnVarNameInTable="columnStartPeriod" msprop:Generator_ColumnPropNameInRow="StartPeriod" msprop:Generator_ColumnPropNameInTable="StartPeriodColumn" msprop:Generator_UserColumnName="StartPeriod" type="xs:int" />
-              <xs:element name="EndPeriod" msdata:Caption="endperiod" msprop:Generator_ColumnVarNameInTable="columnEndPeriod" msprop:Generator_ColumnPropNameInRow="EndPeriod" msprop:Generator_ColumnPropNameInTable="EndPeriodColumn" msprop:Generator_UserColumnName="EndPeriod" type="xs:int" />
-              <xs:element name="Room" msdata:Caption="room" msprop:Generator_ColumnVarNameInTable="columnRoom" msprop:Generator_ColumnPropNameInRow="Room" msprop:Generator_ColumnPropNameInTable="RoomColumn" msprop:Generator_UserColumnName="Room">
+              <xs:element name="startperiod" msprop:Generator_ColumnVarNameInTable="columnstartperiod" msprop:Generator_ColumnPropNameInRow="startperiod" msprop:Generator_ColumnPropNameInTable="startperiodColumn" msprop:Generator_UserColumnName="startperiod" type="xs:int" />
+              <xs:element name="endperiod" msprop:Generator_ColumnVarNameInTable="columnendperiod" msprop:Generator_ColumnPropNameInRow="endperiod" msprop:Generator_ColumnPropNameInTable="endperiodColumn" msprop:Generator_UserColumnName="endperiod" type="xs:int" />
+              <xs:element name="room" msprop:Generator_ColumnVarNameInTable="columnroom" msprop:Generator_ColumnPropNameInRow="room" msprop:Generator_ColumnPropNameInTable="roomColumn" msprop:Generator_UserColumnName="room">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="50" />
@@ -469,273 +467,273 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="GetUser" msprop:Generator_TableClassName="GetUserDataTable" msprop:Generator_TableVarName="tableGetUser" msprop:Generator_TablePropName="GetUser" msprop:Generator_RowDeletingName="GetUserRowDeleting" msprop:Generator_UserTableName="GetUser" msprop:Generator_RowChangingName="GetUserRowChanging" msprop:Generator_RowEvHandlerName="GetUserRowChangeEventHandler" msprop:Generator_RowDeletedName="GetUserRowDeleted" msprop:Generator_RowEvArgName="GetUserRowChangeEvent" msprop:Generator_RowChangedName="GetUserRowChanged" msprop:Generator_RowClassName="GetUserRow">
+        <xs:element name="spGetInstructorSchedule" msprop:Generator_TableClassName="spGetInstructorScheduleDataTable" msprop:Generator_TableVarName="tablespGetInstructorSchedule" msprop:Generator_TablePropName="spGetInstructorSchedule" msprop:Generator_RowDeletingName="spGetInstructorScheduleRowDeleting" msprop:Generator_UserTableName="spGetInstructorSchedule" msprop:Generator_RowChangingName="spGetInstructorScheduleRowChanging" msprop:Generator_RowEvHandlerName="spGetInstructorScheduleRowChangeEventHandler" msprop:Generator_RowDeletedName="spGetInstructorScheduleRowDeleted" msprop:Generator_RowEvArgName="spGetInstructorScheduleRowChangeEvent" msprop:Generator_RowChangedName="spGetInstructorScheduleRowChanged" msprop:Generator_RowClassName="spGetInstructorScheduleRow">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="Username" msdata:Caption="username" msprop:Generator_ColumnVarNameInTable="columnUsername" msprop:Generator_ColumnPropNameInRow="Username" msprop:Generator_ColumnPropNameInTable="UsernameColumn" msprop:Generator_UserColumnName="Username">
-                <xs:simpleType>
-                  <xs:restriction base="xs:string">
-                    <xs:maxLength value="20" />
-                  </xs:restriction>
-                </xs:simpleType>
-              </xs:element>
-              <xs:element name="Email" msdata:Caption="email" msprop:Generator_ColumnVarNameInTable="columnEmail" msprop:Generator_ColumnPropNameInRow="Email" msprop:Generator_ColumnPropNameInTable="EmailColumn" msprop:Generator_UserColumnName="Email" minOccurs="0">
-                <xs:simpleType>
-                  <xs:restriction base="xs:string">
-                    <xs:maxLength value="50" />
-                  </xs:restriction>
-                </xs:simpleType>
-              </xs:element>
-              <xs:element name="CM" msdata:Caption="cm" msprop:Generator_ColumnVarNameInTable="columnCM" msprop:Generator_ColumnPropNameInRow="CM" msprop:Generator_ColumnPropNameInTable="CMColumn" msprop:Generator_UserColumnName="CM" type="xs:int" minOccurs="0" />
-              <xs:element name="Major" msdata:Caption="majors" msprop:Generator_ColumnVarNameInTable="columnMajor" msprop:Generator_ColumnPropNameInRow="Major" msprop:Generator_ColumnPropNameInTable="MajorColumn" msprop:Generator_UserColumnName="Major" minOccurs="0">
-                <xs:simpleType>
-                  <xs:restriction base="xs:string">
-                    <xs:maxLength value="50" />
-                  </xs:restriction>
-                </xs:simpleType>
-              </xs:element>
-              <xs:element name="Class" msdata:Caption="class" msprop:Generator_ColumnVarNameInTable="columnClass" msprop:Generator_ColumnPropNameInRow="Class" msprop:Generator_ColumnPropNameInTable="ClassColumn" msprop:Generator_UserColumnName="Class" minOccurs="0">
-                <xs:simpleType>
-                  <xs:restriction base="xs:string">
-                    <xs:maxLength value="2" />
-                  </xs:restriction>
-                </xs:simpleType>
-              </xs:element>
-              <xs:element name="Year" msdata:Caption="year" msprop:Generator_ColumnVarNameInTable="columnYear" msprop:Generator_ColumnPropNameInRow="Year" msprop:Generator_ColumnPropNameInTable="YearColumn" msprop:Generator_UserColumnName="Year" minOccurs="0">
-                <xs:simpleType>
-                  <xs:restriction base="xs:string">
-                    <xs:maxLength value="2" />
-                  </xs:restriction>
-                </xs:simpleType>
-              </xs:element>
-              <xs:element name="LastName" msdata:Caption="lastname" msprop:Generator_ColumnVarNameInTable="columnLastName" msprop:Generator_ColumnPropNameInRow="LastName" msprop:Generator_ColumnPropNameInTable="LastNameColumn" msprop:Generator_UserColumnName="LastName">
-                <xs:simpleType>
-                  <xs:restriction base="xs:string">
-                    <xs:maxLength value="50" />
-                  </xs:restriction>
-                </xs:simpleType>
-              </xs:element>
-              <xs:element name="FirstName" msdata:Caption="firstname" msprop:Generator_ColumnVarNameInTable="columnFirstName" msprop:Generator_ColumnPropNameInRow="FirstName" msprop:Generator_ColumnPropNameInTable="FirstNameColumn" msprop:Generator_UserColumnName="FirstName">
-                <xs:simpleType>
-                  <xs:restriction base="xs:string">
-                    <xs:maxLength value="50" />
-                  </xs:restriction>
-                </xs:simpleType>
-              </xs:element>
-              <xs:element name="MiddleName" msdata:Caption="middlename" msprop:Generator_ColumnVarNameInTable="columnMiddleName" msprop:Generator_ColumnPropNameInRow="MiddleName" msprop:Generator_ColumnPropNameInTable="MiddleNameColumn" msprop:Generator_UserColumnName="MiddleName" minOccurs="0">
-                <xs:simpleType>
-                  <xs:restriction base="xs:string">
-                    <xs:maxLength value="50" />
-                  </xs:restriction>
-                </xs:simpleType>
-              </xs:element>
-              <xs:element name="Department" msdata:Caption="department" msprop:Generator_ColumnVarNameInTable="columnDepartment" msprop:Generator_ColumnPropNameInRow="Department" msprop:Generator_ColumnPropNameInTable="DepartmentColumn" msprop:Generator_UserColumnName="Department" minOccurs="0">
-                <xs:simpleType>
-                  <xs:restriction base="xs:string">
-                    <xs:maxLength value="50" />
-                  </xs:restriction>
-                </xs:simpleType>
-              </xs:element>
-              <xs:element name="Telephone" msdata:Caption="telephone" msprop:Generator_ColumnVarNameInTable="columnTelephone" msprop:Generator_ColumnPropNameInRow="Telephone" msprop:Generator_ColumnPropNameInTable="TelephoneColumn" msprop:Generator_UserColumnName="Telephone" minOccurs="0">
-                <xs:simpleType>
-                  <xs:restriction base="xs:string">
-                    <xs:maxLength value="50" />
-                  </xs:restriction>
-                </xs:simpleType>
-              </xs:element>
-              <xs:element name="Room" msdata:Caption="office" msprop:Generator_ColumnVarNameInTable="columnRoom" msprop:Generator_ColumnPropNameInRow="Room" msprop:Generator_ColumnPropNameInTable="RoomColumn" msprop:Generator_UserColumnName="Room" minOccurs="0">
-                <xs:simpleType>
-                  <xs:restriction base="xs:string">
-                    <xs:maxLength value="50" />
-                  </xs:restriction>
-                </xs:simpleType>
-              </xs:element>
-              <xs:element name="Advisor" msdata:ReadOnly="true" msdata:Caption="advisor" msprop:Generator_ColumnVarNameInTable="columnAdvisor" msprop:Generator_ColumnPropNameInRow="Advisor" msprop:Generator_ColumnPropNameInTable="AdvisorColumn" msprop:Generator_UserColumnName="Advisor" minOccurs="0">
-                <xs:simpleType>
-                  <xs:restriction base="xs:string">
-                    <xs:maxLength value="20" />
-                  </xs:restriction>
-                </xs:simpleType>
-              </xs:element>
+              <xs:element name="term" msprop:Generator_ColumnVarNameInTable="columnterm" msprop:Generator_ColumnPropNameInRow="term" msprop:Generator_ColumnPropNameInTable="termColumn" msprop:Generator_UserColumnName="term" type="xs:int" />
+              <xs:element name="crn" msprop:Generator_ColumnVarNameInTable="columncrn" msprop:Generator_ColumnPropNameInRow="crn" msprop:Generator_ColumnPropNameInTable="crnColumn" msprop:Generator_UserColumnName="crn" type="xs:int" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="SearchUsers" msprop:Generator_TableClassName="SearchUsersDataTable" msprop:Generator_TableVarName="tableSearchUsers" msprop:Generator_TablePropName="SearchUsers" msprop:Generator_RowDeletingName="SearchUsersRowDeleting" msprop:Generator_UserTableName="SearchUsers" msprop:Generator_RowChangingName="SearchUsersRowChanging" msprop:Generator_RowEvHandlerName="SearchUsersRowChangeEventHandler" msprop:Generator_RowDeletedName="SearchUsersRowDeleted" msprop:Generator_RowEvArgName="SearchUsersRowChangeEvent" msprop:Generator_RowChangedName="SearchUsersRowChanged" msprop:Generator_RowClassName="SearchUsersRow">
+        <xs:element name="spGetRoomSchedule" msprop:Generator_TableClassName="spGetRoomScheduleDataTable" msprop:Generator_TableVarName="tablespGetRoomSchedule" msprop:Generator_TablePropName="spGetRoomSchedule" msprop:Generator_RowDeletingName="spGetRoomScheduleRowDeleting" msprop:Generator_UserTableName="spGetRoomSchedule" msprop:Generator_RowChangingName="spGetRoomScheduleRowChanging" msprop:Generator_RowEvHandlerName="spGetRoomScheduleRowChangeEventHandler" msprop:Generator_RowDeletedName="spGetRoomScheduleRowDeleted" msprop:Generator_RowEvArgName="spGetRoomScheduleRowChangeEvent" msprop:Generator_RowChangedName="spGetRoomScheduleRowChanged" msprop:Generator_RowClassName="spGetRoomScheduleRow">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="Username" msdata:Caption="username" msprop:Generator_ColumnVarNameInTable="columnUsername" msprop:Generator_ColumnPropNameInRow="Username" msprop:Generator_ColumnPropNameInTable="UsernameColumn" msprop:Generator_UserColumnName="Username">
-                <xs:simpleType>
-                  <xs:restriction base="xs:string">
-                    <xs:maxLength value="20" />
-                  </xs:restriction>
-                </xs:simpleType>
-              </xs:element>
-              <xs:element name="Email" msdata:Caption="email" msprop:Generator_ColumnVarNameInTable="columnEmail" msprop:Generator_ColumnPropNameInRow="Email" msprop:Generator_ColumnPropNameInTable="EmailColumn" msprop:Generator_UserColumnName="Email" minOccurs="0">
-                <xs:simpleType>
-                  <xs:restriction base="xs:string">
-                    <xs:maxLength value="50" />
-                  </xs:restriction>
-                </xs:simpleType>
-              </xs:element>
-              <xs:element name="CM" msdata:Caption="cm" msprop:Generator_ColumnVarNameInTable="columnCM" msprop:Generator_ColumnPropNameInRow="CM" msprop:Generator_ColumnPropNameInTable="CMColumn" msprop:Generator_UserColumnName="CM" type="xs:int" minOccurs="0" />
-              <xs:element name="Major" msdata:Caption="majors" msprop:Generator_ColumnVarNameInTable="columnMajor" msprop:Generator_ColumnPropNameInRow="Major" msprop:Generator_ColumnPropNameInTable="MajorColumn" msprop:Generator_UserColumnName="Major" minOccurs="0">
-                <xs:simpleType>
-                  <xs:restriction base="xs:string">
-                    <xs:maxLength value="50" />
-                  </xs:restriction>
-                </xs:simpleType>
-              </xs:element>
-              <xs:element name="Class" msdata:Caption="class" msprop:Generator_ColumnVarNameInTable="columnClass" msprop:Generator_ColumnPropNameInRow="Class" msprop:Generator_ColumnPropNameInTable="ClassColumn" msprop:Generator_UserColumnName="Class" minOccurs="0">
-                <xs:simpleType>
-                  <xs:restriction base="xs:string">
-                    <xs:maxLength value="2" />
-                  </xs:restriction>
-                </xs:simpleType>
-              </xs:element>
-              <xs:element name="Year" msdata:Caption="year" msprop:Generator_ColumnVarNameInTable="columnYear" msprop:Generator_ColumnPropNameInRow="Year" msprop:Generator_ColumnPropNameInTable="YearColumn" msprop:Generator_UserColumnName="Year" minOccurs="0">
-                <xs:simpleType>
-                  <xs:restriction base="xs:string">
-                    <xs:maxLength value="2" />
-                  </xs:restriction>
-                </xs:simpleType>
-              </xs:element>
-              <xs:element name="LastName" msdata:Caption="lastname" msprop:Generator_ColumnVarNameInTable="columnLastName" msprop:Generator_ColumnPropNameInRow="LastName" msprop:Generator_ColumnPropNameInTable="LastNameColumn" msprop:Generator_UserColumnName="LastName">
-                <xs:simpleType>
-                  <xs:restriction base="xs:string">
-                    <xs:maxLength value="50" />
-                  </xs:restriction>
-                </xs:simpleType>
-              </xs:element>
-              <xs:element name="FirstName" msdata:Caption="firstname" msprop:Generator_ColumnVarNameInTable="columnFirstName" msprop:Generator_ColumnPropNameInRow="FirstName" msprop:Generator_ColumnPropNameInTable="FirstNameColumn" msprop:Generator_UserColumnName="FirstName">
-                <xs:simpleType>
-                  <xs:restriction base="xs:string">
-                    <xs:maxLength value="50" />
-                  </xs:restriction>
-                </xs:simpleType>
-              </xs:element>
-              <xs:element name="MiddleName" msdata:Caption="middlename" msprop:Generator_ColumnVarNameInTable="columnMiddleName" msprop:Generator_ColumnPropNameInRow="MiddleName" msprop:Generator_ColumnPropNameInTable="MiddleNameColumn" msprop:Generator_UserColumnName="MiddleName" minOccurs="0">
-                <xs:simpleType>
-                  <xs:restriction base="xs:string">
-                    <xs:maxLength value="50" />
-                  </xs:restriction>
-                </xs:simpleType>
-              </xs:element>
-              <xs:element name="Department" msdata:Caption="department" msprop:Generator_ColumnVarNameInTable="columnDepartment" msprop:Generator_ColumnPropNameInRow="Department" msprop:Generator_ColumnPropNameInTable="DepartmentColumn" msprop:Generator_UserColumnName="Department" minOccurs="0">
-                <xs:simpleType>
-                  <xs:restriction base="xs:string">
-                    <xs:maxLength value="50" />
-                  </xs:restriction>
-                </xs:simpleType>
-              </xs:element>
-              <xs:element name="Telephone" msdata:Caption="telephone" msprop:Generator_ColumnVarNameInTable="columnTelephone" msprop:Generator_ColumnPropNameInRow="Telephone" msprop:Generator_ColumnPropNameInTable="TelephoneColumn" msprop:Generator_UserColumnName="Telephone" minOccurs="0">
-                <xs:simpleType>
-                  <xs:restriction base="xs:string">
-                    <xs:maxLength value="50" />
-                  </xs:restriction>
-                </xs:simpleType>
-              </xs:element>
-              <xs:element name="Room" msdata:Caption="office" msprop:Generator_ColumnVarNameInTable="columnRoom" msprop:Generator_ColumnPropNameInRow="Room" msprop:Generator_ColumnPropNameInTable="RoomColumn" msprop:Generator_UserColumnName="Room" minOccurs="0">
-                <xs:simpleType>
-                  <xs:restriction base="xs:string">
-                    <xs:maxLength value="50" />
-                  </xs:restriction>
-                </xs:simpleType>
-              </xs:element>
-              <xs:element name="Advisor" msdata:Caption="advisor" msprop:Generator_ColumnVarNameInTable="columnAdvisor" msprop:Generator_ColumnPropNameInRow="Advisor" msprop:Generator_ColumnPropNameInTable="AdvisorColumn" msprop:Generator_UserColumnName="Advisor" minOccurs="0">
-                <xs:simpleType>
-                  <xs:restriction base="xs:string">
-                    <xs:maxLength value="20" />
-                  </xs:restriction>
-                </xs:simpleType>
-              </xs:element>
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
-        <xs:element name="GetTerms" msprop:Generator_TableClassName="GetTermsDataTable" msprop:Generator_TableVarName="tableGetTerms" msprop:Generator_TablePropName="GetTerms" msprop:Generator_RowDeletingName="GetTermsRowDeleting" msprop:Generator_UserTableName="GetTerms" msprop:Generator_RowChangingName="GetTermsRowChanging" msprop:Generator_RowEvHandlerName="GetTermsRowChangeEventHandler" msprop:Generator_RowDeletedName="GetTermsRowDeleted" msprop:Generator_RowEvArgName="GetTermsRowChangeEvent" msprop:Generator_RowChangedName="GetTermsRowChanged" msprop:Generator_RowClassName="GetTermsRow">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element name="Term" msdata:Caption="term" msprop:Generator_ColumnVarNameInTable="columnTerm" msprop:Generator_ColumnPropNameInRow="Term" msprop:Generator_ColumnPropNameInTable="TermColumn" msprop:Generator_UserColumnName="Term" type="xs:int" />
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
-        <xs:element name="GetInstructorSchedule" msprop:Generator_TableClassName="GetInstructorScheduleDataTable" msprop:Generator_TableVarName="tableGetInstructorSchedule" msprop:Generator_TablePropName="GetInstructorSchedule" msprop:Generator_RowDeletingName="GetInstructorScheduleRowDeleting" msprop:Generator_UserTableName="GetInstructorSchedule" msprop:Generator_RowChangingName="GetInstructorScheduleRowChanging" msprop:Generator_RowEvHandlerName="GetInstructorScheduleRowChangeEventHandler" msprop:Generator_RowDeletedName="GetInstructorScheduleRowDeleted" msprop:Generator_RowEvArgName="GetInstructorScheduleRowChangeEvent" msprop:Generator_RowChangedName="GetInstructorScheduleRowChanged" msprop:Generator_RowClassName="GetInstructorScheduleRow">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element name="Term" msdata:Caption="term" msprop:Generator_ColumnVarNameInTable="columnTerm" msprop:Generator_ColumnPropNameInRow="Term" msprop:Generator_ColumnPropNameInTable="TermColumn" msprop:Generator_UserColumnName="Term" type="xs:int" />
-              <xs:element name="CRN" msdata:Caption="crn" msprop:Generator_ColumnVarNameInTable="columnCRN" msprop:Generator_ColumnPropNameInRow="CRN" msprop:Generator_ColumnPropNameInTable="CRNColumn" msprop:Generator_UserColumnName="CRN" type="xs:int" />
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
-        <xs:element name="GetRoomSchedule" msprop:Generator_TableClassName="GetRoomScheduleDataTable" msprop:Generator_TableVarName="tableGetRoomSchedule" msprop:Generator_TablePropName="GetRoomSchedule" msprop:Generator_RowDeletingName="GetRoomScheduleRowDeleting" msprop:Generator_UserTableName="GetRoomSchedule" msprop:Generator_RowChangingName="GetRoomScheduleRowChanging" msprop:Generator_RowEvHandlerName="GetRoomScheduleRowChangeEventHandler" msprop:Generator_RowDeletedName="GetRoomScheduleRowDeleted" msprop:Generator_RowEvArgName="GetRoomScheduleRowChangeEvent" msprop:Generator_RowChangedName="GetRoomScheduleRowChanged" msprop:Generator_RowClassName="GetRoomScheduleRow">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element name="Term" msdata:Caption="term" msprop:Generator_ColumnVarNameInTable="columnTerm" msprop:Generator_ColumnPropNameInRow="Term" msprop:Generator_ColumnPropNameInTable="TermColumn" msprop:Generator_UserColumnName="Term" type="xs:int" />
-              <xs:element name="CRN" msdata:Caption="crn" msprop:Generator_ColumnVarNameInTable="columnCRN" msprop:Generator_ColumnPropNameInRow="CRN" msprop:Generator_ColumnPropNameInTable="CRNColumn" msprop:Generator_UserColumnName="CRN" type="xs:int" />
-              <xs:element name="Day" msdata:Caption="day" msprop:Generator_ColumnVarNameInTable="columnDay" msprop:Generator_ColumnPropNameInRow="Day" msprop:Generator_ColumnPropNameInTable="DayColumn" msprop:Generator_UserColumnName="Day">
+              <xs:element name="term" msprop:Generator_ColumnVarNameInTable="columnterm" msprop:Generator_ColumnPropNameInRow="term" msprop:Generator_ColumnPropNameInTable="termColumn" msprop:Generator_UserColumnName="term" type="xs:int" />
+              <xs:element name="crn" msprop:Generator_ColumnVarNameInTable="columncrn" msprop:Generator_ColumnPropNameInRow="crn" msprop:Generator_ColumnPropNameInTable="crnColumn" msprop:Generator_UserColumnName="crn" type="xs:int" />
+              <xs:element name="day" msprop:Generator_ColumnVarNameInTable="columnday" msprop:Generator_ColumnPropNameInRow="day" msprop:Generator_ColumnPropNameInTable="dayColumn" msprop:Generator_UserColumnName="day">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="1" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="StartPeriod" msdata:Caption="startperiod" msprop:Generator_ColumnVarNameInTable="columnStartPeriod" msprop:Generator_ColumnPropNameInRow="StartPeriod" msprop:Generator_ColumnPropNameInTable="StartPeriodColumn" msprop:Generator_UserColumnName="StartPeriod" type="xs:int" />
-              <xs:element name="EndPeriod" msdata:Caption="endperiod" msprop:Generator_ColumnVarNameInTable="columnEndPeriod" msprop:Generator_ColumnPropNameInRow="EndPeriod" msprop:Generator_ColumnPropNameInTable="EndPeriodColumn" msprop:Generator_UserColumnName="EndPeriod" type="xs:int" />
+              <xs:element name="startperiod" msprop:Generator_ColumnVarNameInTable="columnstartperiod" msprop:Generator_ColumnPropNameInRow="startperiod" msprop:Generator_ColumnPropNameInTable="startperiodColumn" msprop:Generator_UserColumnName="startperiod" type="xs:int" />
+              <xs:element name="endperiod" msprop:Generator_ColumnVarNameInTable="columnendperiod" msprop:Generator_ColumnPropNameInRow="endperiod" msprop:Generator_ColumnPropNameInTable="endperiodColumn" msprop:Generator_UserColumnName="endperiod" type="xs:int" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="GetUserEnrollment" msprop:Generator_TableClassName="GetUserEnrollmentDataTable" msprop:Generator_TableVarName="tableGetUserEnrollment" msprop:Generator_TablePropName="GetUserEnrollment" msprop:Generator_RowDeletingName="GetUserEnrollmentRowDeleting" msprop:Generator_UserTableName="GetUserEnrollment" msprop:Generator_RowChangingName="GetUserEnrollmentRowChanging" msprop:Generator_RowEvHandlerName="GetUserEnrollmentRowChangeEventHandler" msprop:Generator_RowDeletedName="GetUserEnrollmentRowDeleted" msprop:Generator_RowEvArgName="GetUserEnrollmentRowChangeEvent" msprop:Generator_RowChangedName="GetUserEnrollmentRowChanged" msprop:Generator_RowClassName="GetUserEnrollmentRow">
+        <xs:element name="spGetTerms" msprop:Generator_TableClassName="spGetTermsDataTable" msprop:Generator_TableVarName="tablespGetTerms" msprop:Generator_TablePropName="spGetTerms" msprop:Generator_RowDeletingName="spGetTermsRowDeleting" msprop:Generator_UserTableName="spGetTerms" msprop:Generator_RowChangingName="spGetTermsRowChanging" msprop:Generator_RowEvHandlerName="spGetTermsRowChangeEventHandler" msprop:Generator_RowDeletedName="spGetTermsRowDeleted" msprop:Generator_RowEvArgName="spGetTermsRowChangeEvent" msprop:Generator_RowChangedName="spGetTermsRowChanged" msprop:Generator_RowClassName="spGetTermsRow">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="Term" msdata:Caption="term" msprop:Generator_ColumnVarNameInTable="columnTerm" msprop:Generator_ColumnPropNameInRow="Term" msprop:Generator_ColumnPropNameInTable="TermColumn" msprop:Generator_UserColumnName="Term" type="xs:int" />
-              <xs:element name="CRN" msdata:Caption="crn" msprop:Generator_ColumnVarNameInTable="columnCRN" msprop:Generator_ColumnPropNameInRow="CRN" msprop:Generator_ColumnPropNameInTable="CRNColumn" msprop:Generator_UserColumnName="CRN" type="xs:int" />
+              <xs:element name="term" msprop:Generator_ColumnVarNameInTable="columnterm" msprop:Generator_ColumnPropNameInRow="term" msprop:Generator_ColumnPropNameInTable="termColumn" msprop:Generator_UserColumnName="term" type="xs:int" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="SearchCourses" msprop:Generator_TableClassName="SearchCoursesDataTable" msprop:Generator_TableVarName="tableSearchCourses" msprop:Generator_TablePropName="SearchCourses" msprop:Generator_RowDeletingName="SearchCoursesRowDeleting" msprop:Generator_UserTableName="SearchCourses" msprop:Generator_RowChangingName="SearchCoursesRowChanging" msprop:Generator_RowEvHandlerName="SearchCoursesRowChangeEventHandler" msprop:Generator_RowDeletedName="SearchCoursesRowDeleted" msprop:Generator_RowEvArgName="SearchCoursesRowChangeEvent" msprop:Generator_RowChangedName="SearchCoursesRowChanged" msprop:Generator_RowClassName="SearchCoursesRow">
+        <xs:element name="spGetUser" msprop:Generator_TableClassName="spGetUserDataTable" msprop:Generator_TableVarName="tablespGetUser" msprop:Generator_TablePropName="spGetUser" msprop:Generator_RowDeletingName="spGetUserRowDeleting" msprop:Generator_UserTableName="spGetUser" msprop:Generator_RowChangingName="spGetUserRowChanging" msprop:Generator_RowEvHandlerName="spGetUserRowChangeEventHandler" msprop:Generator_RowDeletedName="spGetUserRowDeleted" msprop:Generator_RowEvArgName="spGetUserRowChangeEvent" msprop:Generator_RowChangedName="spGetUserRowChanged" msprop:Generator_RowClassName="spGetUserRow">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="Term" msdata:Caption="term" msprop:Generator_ColumnVarNameInTable="columnTerm" msprop:Generator_ColumnPropNameInRow="Term" msprop:Generator_ColumnPropNameInTable="TermColumn" msprop:Generator_UserColumnName="Term" type="xs:int" />
-              <xs:element name="CRN" msdata:Caption="crn" msprop:Generator_ColumnVarNameInTable="columnCRN" msprop:Generator_ColumnPropNameInRow="CRN" msprop:Generator_ColumnPropNameInTable="CRNColumn" msprop:Generator_UserColumnName="CRN" type="xs:int" />
-              <xs:element name="Course" msdata:Caption="course" msprop:Generator_ColumnVarNameInTable="columnCourse" msprop:Generator_ColumnPropNameInRow="Course" msprop:Generator_ColumnPropNameInTable="CourseColumn" msprop:Generator_UserColumnName="Course">
+              <xs:element name="username" msprop:Generator_ColumnVarNameInTable="columnusername" msprop:Generator_ColumnPropNameInRow="username" msprop:Generator_ColumnPropNameInTable="usernameColumn" msprop:Generator_UserColumnName="username">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="20" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="email" msprop:Generator_ColumnVarNameInTable="columnemail" msprop:Generator_ColumnPropNameInRow="email" msprop:Generator_ColumnPropNameInTable="emailColumn" msprop:Generator_UserColumnName="email" minOccurs="0">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="50" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="Title" msdata:Caption="title" msprop:Generator_ColumnVarNameInTable="columnTitle" msprop:Generator_ColumnPropNameInRow="Title" msprop:Generator_ColumnPropNameInTable="TitleColumn" msprop:Generator_UserColumnName="Title">
+              <xs:element name="cm" msprop:Generator_ColumnVarNameInTable="columncm" msprop:Generator_ColumnPropNameInRow="cm" msprop:Generator_ColumnPropNameInTable="cmColumn" msprop:Generator_UserColumnName="cm" type="xs:int" minOccurs="0" />
+              <xs:element name="majors" msprop:Generator_ColumnVarNameInTable="columnmajors" msprop:Generator_ColumnPropNameInRow="majors" msprop:Generator_ColumnPropNameInTable="majorsColumn" msprop:Generator_UserColumnName="majors" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="class" msprop:Generator_ColumnVarNameInTable="columnclass" msprop:Generator_ColumnPropNameInRow="_class" msprop:Generator_ColumnPropNameInTable="classColumn" msprop:Generator_UserColumnName="class" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="2" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="year" msprop:Generator_ColumnVarNameInTable="columnyear" msprop:Generator_ColumnPropNameInRow="year" msprop:Generator_ColumnPropNameInTable="yearColumn" msprop:Generator_UserColumnName="year" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="2" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="lastname" msprop:Generator_ColumnVarNameInTable="columnlastname" msprop:Generator_ColumnPropNameInRow="lastname" msprop:Generator_ColumnPropNameInTable="lastnameColumn" msprop:Generator_UserColumnName="lastname">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="firstname" msprop:Generator_ColumnVarNameInTable="columnfirstname" msprop:Generator_ColumnPropNameInRow="firstname" msprop:Generator_ColumnPropNameInTable="firstnameColumn" msprop:Generator_UserColumnName="firstname">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="middlename" msprop:Generator_ColumnVarNameInTable="columnmiddlename" msprop:Generator_ColumnPropNameInRow="middlename" msprop:Generator_ColumnPropNameInTable="middlenameColumn" msprop:Generator_UserColumnName="middlename" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="department" msprop:Generator_ColumnVarNameInTable="columndepartment" msprop:Generator_ColumnPropNameInRow="department" msprop:Generator_ColumnPropNameInTable="departmentColumn" msprop:Generator_UserColumnName="department" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="telephone" msprop:Generator_ColumnVarNameInTable="columntelephone" msprop:Generator_ColumnPropNameInRow="telephone" msprop:Generator_ColumnPropNameInTable="telephoneColumn" msprop:Generator_UserColumnName="telephone" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="office" msprop:Generator_ColumnVarNameInTable="columnoffice" msprop:Generator_ColumnPropNameInRow="office" msprop:Generator_ColumnPropNameInTable="officeColumn" msprop:Generator_UserColumnName="office" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="advisor" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnadvisor" msprop:Generator_ColumnPropNameInRow="advisor" msprop:Generator_ColumnPropNameInTable="advisorColumn" msprop:Generator_UserColumnName="advisor" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="20" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="spGetUserEnrollment" msprop:Generator_TableClassName="spGetUserEnrollmentDataTable" msprop:Generator_TableVarName="tablespGetUserEnrollment" msprop:Generator_TablePropName="spGetUserEnrollment" msprop:Generator_RowDeletingName="spGetUserEnrollmentRowDeleting" msprop:Generator_UserTableName="spGetUserEnrollment" msprop:Generator_RowChangingName="spGetUserEnrollmentRowChanging" msprop:Generator_RowEvHandlerName="spGetUserEnrollmentRowChangeEventHandler" msprop:Generator_RowDeletedName="spGetUserEnrollmentRowDeleted" msprop:Generator_RowEvArgName="spGetUserEnrollmentRowChangeEvent" msprop:Generator_RowChangedName="spGetUserEnrollmentRowChanged" msprop:Generator_RowClassName="spGetUserEnrollmentRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="term" msprop:Generator_ColumnVarNameInTable="columnterm" msprop:Generator_ColumnPropNameInRow="term" msprop:Generator_ColumnPropNameInTable="termColumn" msprop:Generator_UserColumnName="term" type="xs:int" />
+              <xs:element name="crn" msprop:Generator_ColumnVarNameInTable="columncrn" msprop:Generator_ColumnPropNameInRow="crn" msprop:Generator_ColumnPropNameInTable="crnColumn" msprop:Generator_UserColumnName="crn" type="xs:int" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="spSearchCourses" msprop:Generator_TableClassName="spSearchCoursesDataTable" msprop:Generator_TableVarName="tablespSearchCourses" msprop:Generator_TablePropName="spSearchCourses" msprop:Generator_RowDeletingName="spSearchCoursesRowDeleting" msprop:Generator_UserTableName="spSearchCourses" msprop:Generator_RowChangingName="spSearchCoursesRowChanging" msprop:Generator_RowEvHandlerName="spSearchCoursesRowChangeEventHandler" msprop:Generator_RowDeletedName="spSearchCoursesRowDeleted" msprop:Generator_RowEvArgName="spSearchCoursesRowChangeEvent" msprop:Generator_RowChangedName="spSearchCoursesRowChanged" msprop:Generator_RowClassName="spSearchCoursesRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="term" msprop:Generator_ColumnVarNameInTable="columnterm" msprop:Generator_ColumnPropNameInRow="term" msprop:Generator_ColumnPropNameInTable="termColumn" msprop:Generator_UserColumnName="term" type="xs:int" />
+              <xs:element name="crn" msprop:Generator_ColumnVarNameInTable="columncrn" msprop:Generator_ColumnPropNameInRow="crn" msprop:Generator_ColumnPropNameInTable="crnColumn" msprop:Generator_UserColumnName="crn" type="xs:int" />
+              <xs:element name="course" msprop:Generator_ColumnVarNameInTable="columncourse" msprop:Generator_ColumnPropNameInRow="course" msprop:Generator_ColumnPropNameInTable="courseColumn" msprop:Generator_UserColumnName="course">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="title" msprop:Generator_ColumnVarNameInTable="columntitle" msprop:Generator_ColumnPropNameInRow="title" msprop:Generator_ColumnPropNameInTable="titleColumn" msprop:Generator_UserColumnName="title">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="100" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="Credits" msdata:Caption="credits" msprop:Generator_ColumnVarNameInTable="columnCredits" msprop:Generator_ColumnPropNameInRow="Credits" msprop:Generator_ColumnPropNameInTable="CreditsColumn" msprop:Generator_UserColumnName="Credits" type="xs:int" />
-              <xs:element name="FinalDay" msdata:Caption="finalday" msprop:Generator_ColumnVarNameInTable="columnFinalDay" msprop:Generator_ColumnPropNameInRow="FinalDay" msprop:Generator_ColumnPropNameInTable="FinalDayColumn" msprop:Generator_UserColumnName="FinalDay" minOccurs="0">
+              <xs:element name="credits" msprop:Generator_ColumnVarNameInTable="columncredits" msprop:Generator_ColumnPropNameInRow="credits" msprop:Generator_ColumnPropNameInTable="creditsColumn" msprop:Generator_UserColumnName="credits" type="xs:int" />
+              <xs:element name="finalday" msprop:Generator_ColumnVarNameInTable="columnfinalday" msprop:Generator_ColumnPropNameInRow="finalday" msprop:Generator_ColumnPropNameInTable="finaldayColumn" msprop:Generator_UserColumnName="finalday" minOccurs="0">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="1" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="FinalHour" msdata:Caption="finalhour" msprop:Generator_ColumnVarNameInTable="columnFinalHour" msprop:Generator_ColumnPropNameInRow="FinalHour" msprop:Generator_ColumnPropNameInTable="FinalHourColumn" msprop:Generator_UserColumnName="FinalHour" type="xs:int" minOccurs="0" />
-              <xs:element name="FinalRoom" msdata:Caption="finalroom" msprop:Generator_ColumnVarNameInTable="columnFinalRoom" msprop:Generator_ColumnPropNameInRow="FinalRoom" msprop:Generator_ColumnPropNameInTable="FinalRoomColumn" msprop:Generator_UserColumnName="FinalRoom" minOccurs="0">
+              <xs:element name="finalhour" msprop:Generator_ColumnVarNameInTable="columnfinalhour" msprop:Generator_ColumnPropNameInRow="finalhour" msprop:Generator_ColumnPropNameInTable="finalhourColumn" msprop:Generator_UserColumnName="finalhour" type="xs:int" minOccurs="0" />
+              <xs:element name="finalroom" msprop:Generator_ColumnVarNameInTable="columnfinalroom" msprop:Generator_ColumnPropNameInRow="finalroom" msprop:Generator_ColumnPropNameInTable="finalroomColumn" msprop:Generator_UserColumnName="finalroom" minOccurs="0">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="50" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="Enrolled" msdata:Caption="enrolled" msprop:Generator_ColumnVarNameInTable="columnEnrolled" msprop:Generator_ColumnPropNameInRow="Enrolled" msprop:Generator_ColumnPropNameInTable="EnrolledColumn" msprop:Generator_UserColumnName="Enrolled" type="xs:int" />
-              <xs:element name="MaxEnrolled" msdata:Caption="maxenrolled" msprop:Generator_ColumnVarNameInTable="columnMaxEnrolled" msprop:Generator_ColumnPropNameInRow="MaxEnrolled" msprop:Generator_ColumnPropNameInTable="MaxEnrolledColumn" msprop:Generator_UserColumnName="MaxEnrolled" type="xs:int" />
-              <xs:element name="Comments" msdata:Caption="comments" msprop:Generator_ColumnVarNameInTable="columnComments" msprop:Generator_ColumnPropNameInRow="Comments" msprop:Generator_ColumnPropNameInTable="CommentsColumn" msprop:Generator_UserColumnName="Comments" minOccurs="0">
+              <xs:element name="enrolled" msprop:Generator_ColumnVarNameInTable="columnenrolled" msprop:Generator_ColumnPropNameInRow="enrolled" msprop:Generator_ColumnPropNameInTable="enrolledColumn" msprop:Generator_UserColumnName="enrolled" type="xs:int" />
+              <xs:element name="maxenrolled" msprop:Generator_ColumnVarNameInTable="columnmaxenrolled" msprop:Generator_ColumnPropNameInRow="maxenrolled" msprop:Generator_ColumnPropNameInTable="maxenrolledColumn" msprop:Generator_UserColumnName="maxenrolled" type="xs:int" />
+              <xs:element name="comments" msprop:Generator_ColumnVarNameInTable="columncomments" msprop:Generator_ColumnPropNameInRow="comments" msprop:Generator_ColumnPropNameInTable="commentsColumn" msprop:Generator_UserColumnName="comments" minOccurs="0">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="500" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="Instructor" msdata:Caption="instructor" msprop:Generator_ColumnVarNameInTable="columnInstructor" msprop:Generator_ColumnPropNameInRow="Instructor" msprop:Generator_ColumnPropNameInTable="InstructorColumn" msprop:Generator_UserColumnName="Instructor" minOccurs="0">
+              <xs:element name="instructor" msprop:Generator_ColumnVarNameInTable="columninstructor" msprop:Generator_ColumnPropNameInRow="instructor" msprop:Generator_ColumnPropNameInTable="instructorColumn" msprop:Generator_UserColumnName="instructor" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="20" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="spSearchUsers" msprop:Generator_TableClassName="spSearchUsersDataTable" msprop:Generator_TableVarName="tablespSearchUsers" msprop:Generator_TablePropName="spSearchUsers" msprop:Generator_RowDeletingName="spSearchUsersRowDeleting" msprop:Generator_UserTableName="spSearchUsers" msprop:Generator_RowChangingName="spSearchUsersRowChanging" msprop:Generator_RowEvHandlerName="spSearchUsersRowChangeEventHandler" msprop:Generator_RowDeletedName="spSearchUsersRowDeleted" msprop:Generator_RowEvArgName="spSearchUsersRowChangeEvent" msprop:Generator_RowChangedName="spSearchUsersRowChanged" msprop:Generator_RowClassName="spSearchUsersRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="username" msprop:Generator_ColumnVarNameInTable="columnusername" msprop:Generator_ColumnPropNameInRow="username" msprop:Generator_ColumnPropNameInTable="usernameColumn" msprop:Generator_UserColumnName="username">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="20" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="email" msprop:Generator_ColumnVarNameInTable="columnemail" msprop:Generator_ColumnPropNameInRow="email" msprop:Generator_ColumnPropNameInTable="emailColumn" msprop:Generator_UserColumnName="email" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="cm" msprop:Generator_ColumnVarNameInTable="columncm" msprop:Generator_ColumnPropNameInRow="cm" msprop:Generator_ColumnPropNameInTable="cmColumn" msprop:Generator_UserColumnName="cm" type="xs:int" minOccurs="0" />
+              <xs:element name="majors" msprop:Generator_ColumnVarNameInTable="columnmajors" msprop:Generator_ColumnPropNameInRow="majors" msprop:Generator_ColumnPropNameInTable="majorsColumn" msprop:Generator_UserColumnName="majors" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="class" msprop:Generator_ColumnVarNameInTable="columnclass" msprop:Generator_ColumnPropNameInRow="_class" msprop:Generator_ColumnPropNameInTable="classColumn" msprop:Generator_UserColumnName="class" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="2" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="year" msprop:Generator_ColumnVarNameInTable="columnyear" msprop:Generator_ColumnPropNameInRow="year" msprop:Generator_ColumnPropNameInTable="yearColumn" msprop:Generator_UserColumnName="year" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="2" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="lastname" msprop:Generator_ColumnVarNameInTable="columnlastname" msprop:Generator_ColumnPropNameInRow="lastname" msprop:Generator_ColumnPropNameInTable="lastnameColumn" msprop:Generator_UserColumnName="lastname">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="firstname" msprop:Generator_ColumnVarNameInTable="columnfirstname" msprop:Generator_ColumnPropNameInRow="firstname" msprop:Generator_ColumnPropNameInTable="firstnameColumn" msprop:Generator_UserColumnName="firstname">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="middlename" msprop:Generator_ColumnVarNameInTable="columnmiddlename" msprop:Generator_ColumnPropNameInRow="middlename" msprop:Generator_ColumnPropNameInTable="middlenameColumn" msprop:Generator_UserColumnName="middlename" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="department" msprop:Generator_ColumnVarNameInTable="columndepartment" msprop:Generator_ColumnPropNameInRow="department" msprop:Generator_ColumnPropNameInTable="departmentColumn" msprop:Generator_UserColumnName="department" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="telephone" msprop:Generator_ColumnVarNameInTable="columntelephone" msprop:Generator_ColumnPropNameInRow="telephone" msprop:Generator_ColumnPropNameInTable="telephoneColumn" msprop:Generator_UserColumnName="telephone" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="office" msprop:Generator_ColumnVarNameInTable="columnoffice" msprop:Generator_ColumnPropNameInRow="office" msprop:Generator_ColumnPropNameInTable="officeColumn" msprop:Generator_UserColumnName="office" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="advisor" msprop:Generator_ColumnVarNameInTable="columnadvisor" msprop:Generator_ColumnPropNameInRow="advisor" msprop:Generator_ColumnPropNameInTable="advisorColumn" msprop:Generator_UserColumnName="advisor" minOccurs="0">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="20" />
