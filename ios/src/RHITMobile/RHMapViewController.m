@@ -97,6 +97,9 @@
                             zoomLevel:kRHInitialZoomLevel
                              animated:NO];
     
+    // Add ourself as a delegate in case the locations change out from under us
+    [RHLocationsLoader.instance addDelegate:self];
+    
     // If a top-level update is happening right now, register a callback for when it's done
     if ([RHLocationsLoader.instance currentlyUpdating]) {
         __block RHMapViewController *blockSelf = self;

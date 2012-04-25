@@ -19,14 +19,14 @@
 
 #import <UIKit/UIKit.h>
 
-#import "RHCampusServicesRequesterDelegate.h"
+#import "RHLoader.h"
 
 #define kRHCampusServicesViewControllerNibName @"RHCampusServicesViewController"
 
 @class RHServiceCategory;
 
 /// \ingroup views
-@interface RHCampusServicesViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, RHCampusServicesRequesterDelegate>
+@interface RHCampusServicesViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, RHLoaderDelegate>
 
 @property (nonatomic, strong) IBOutlet UITableView *tableView;
 

@@ -18,6 +18,7 @@
 //
 
 #import "RHCampusServicesViewController.h"
+#import "RHCampusServicesLoader.h"
 #import "RHServiceCategory.h"
 #import "RHServiceLink.h"
 #import "RHAppDelegate.h"
@@ -58,6 +59,13 @@
     [super viewDidLoad];
     if ([self.navigationController.viewControllers objectAtIndex:0] == self) {
         [self loadRootServiceCategories];
+    }
+    
+    if ([RHCampusServicesLoader.instance currentlyUpdating]) {
+        __block RHCampusServicesViewController *blockSelf = self;
+        [RHCampusServicesLoader.instance registerCallbackForCampusServices:^(void) {
+            [blockSelf loadRootServiceCategories];
+        }];
     }
 }
 
@@ -148,9 +156,10 @@
     }
 }
 
-#pragma mark - RHCampusServicesRequesterDelegate Methods
+#pragma mark - Loader Delegate Methods
 
-- (void)didFinishUpdatingCampusServices {
+- (void)loaderDidUpdateUnderlyingData
+{
     [self loadRootServiceCategories];
 }
 
