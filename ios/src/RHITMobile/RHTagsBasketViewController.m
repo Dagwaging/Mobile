@@ -23,7 +23,6 @@
 #import "RHMapDirectionsManager.h"
 #import "RHPathRequest.h"
 #import "RHTagSelectionViewController.h"
-#import "RHTourRequester.h"
 #import "RHTourTagCategory.h"
 #import "RHTourTag.h"
 
@@ -38,6 +37,7 @@
 @synthesize tableView = tableView_;
 @synthesize isEditing = isEditing_;
 @synthesize isBuilding = isBuilding_;
+@synthesize duration = _duration;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -118,10 +118,6 @@
     NSIndexPath *finalIndexPath = [NSIndexPath indexPathForRow:self.tags.count inSection:0];
     [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:finalIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     
-    //    NSPersistentStoreCoordinator *persistantStoreCoordinator = [(RHAppDelegate *) [[UIApplication sharedApplication] delegate] persistentStoreCoordinator];
-    //    RHTourRequester *tourRequester = [[RHTourRequester alloc] initWithDelegate:self persistantStoreCoordinator:persistantStoreCoordinator];
-    //    [tourRequester requestTourWithTags:self.tags startLocation:nil type:RHTourRequestTypeOnCampus duration:[NSNumber numberWithInt:20]];
-    
     NSMutableArray *tagIds = [[NSMutableArray alloc] initWithCapacity:self.tags.count];
     
     for (RHTourTag *tag in self.tags) {
@@ -130,7 +126,7 @@
     
     [RHPathRequest makeOnCampusTourRequestWithTagIds:tagIds
                                   fromLocationWithId:[NSNumber numberWithInt:111] // TODO
-                                         forDuration:[NSNumber numberWithInt:60] // TODO
+                                         forDuration:self.duration
                                         successBlock:^(RHPath *path) {
                                             [self didLoadPath:path];
                                         } failureBlock:^(NSError *error) {

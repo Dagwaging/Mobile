@@ -31,6 +31,7 @@
 #define kDirectionsByLocationPath @"/directions/fromloc/%d/toloc/%d"
 
 #define kWaitKey @"wait"
+#define kLengthKey @"length"
 
 #define kURLTrue @"true"
 #define kURLFalse @"false"
@@ -112,7 +113,9 @@
                              successBlock:(void (^)(RHPath *))successBlock
                              failureBlock:(void (^)(NSError *))failureBlock
 {
-    NSDictionary *urlArgs = [NSDictionary dictionaryWithObject:kURLTrue forKey:kWaitKey];
+    NSMutableDictionary *urlArgs = [NSMutableDictionary dictionaryWithCapacity:2];
+    [urlArgs setObject:kURLTrue forKey:kWaitKey];
+    [urlArgs setObject:duration.description forKey:kLengthKey];
     
     NSString *fullPath = [NSString stringWithFormat:kOnCampusTourByLocationPath, startLocationServerId.intValue, [self pathComponentFromTags:tags]];
     

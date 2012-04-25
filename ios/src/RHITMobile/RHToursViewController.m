@@ -24,8 +24,9 @@
 #import "RHWrappedCoordinate.h"
 #import "RHAppDelegate.h"
 #import "RHMapViewController.h"
-#import "RHTourRequester.h"
+#import "RHMapDirectionsManager.h"
 #import "RHTagsBasketViewController.h"
+#import "RHPathRequest.h"
 
 @implementation RHToursViewController
 
@@ -33,6 +34,8 @@
 @synthesize locationLabel = locationLabel_;
 @synthesize locationControl = locationControl_;
 @synthesize durationSlider = durationSlider_;
+@synthesize duration = _duration;
+@synthesize isBuilding = _isBuilding;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -53,6 +56,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.duration = [NSNumber numberWithInt:30];
+    self.isBuilding = NO;
     // Do any additional setup after loading the view from its nib.
 }
 
@@ -68,11 +73,46 @@
 }
 
 - (void)defaultTour:(id)sender {
+    if (self.isBuilding) {
+        return;
+    }
     
+    self.isBuilding = YES;
+    self.navigationItem.title = @"Building Tour";
+    
+    UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
+    [activityIndicator startAnimating];
+    
+    NSArray *tagIds = [NSArray arrayWithObject:[NSNumber numberWithInt:1]];
+    
+    [RHPathRequest makeOnCampusTourRequestWithTagIds:tagIds
+                                  fromLocationWithId:[NSNumber numberWithInt:111] // TODO
+                                         forDuration:self.duration
+                                        successBlock:^(RHPath *path) {
+                                            self.isBuilding = NO;
+                                            [self didLoadPath:path];
+                                            self.navigationItem.title = @"Tours";
+                                            self.navigationItem.rightBarButtonItem = nil;
+                                        } failureBlock:^(NSError *error) {
+                                            [[[UIAlertView alloc] initWithTitle:@"Error"
+                                                                        message:@"Something went wrong building the tour. We're really sorry."
+                                                                       delegate:nil
+                                                              cancelButtonTitle:@"OK"
+                                                              otherButtonTitles: nil] show];
+                                            self.isBuilding = NO;
+                                            self.navigationItem.title = @"Tours";
+                                            self.navigationItem.rightBarButtonItem = nil;
+                                        }];
 }
 
 - (void)customTour:(id)sender {
+    if (self.isBuilding) {
+        return;
+    }
+    
     RHTagsBasketViewController *basketViewController = [[RHTagsBasketViewController alloc] initWithNibName:kRHTagsBasketViewControllerNibname bundle:nil];
+    basketViewController.duration = self.duration;
     [self.navigationController pushViewController:basketViewController animated:YES];
 }
 
@@ -107,12 +147,12 @@
     UISlider *slider = (UISlider *) sender;
     
     NSNumber *sliderValue = [NSNumber numberWithFloat:slider.value];
-    self.durationLabel.text = [NSString stringWithFormat:@"%d", sliderValue.intValue];
+    self.duration = [NSNumber numberWithInt:sliderValue.intValue];
+    self.durationLabel.text = [NSString stringWithFormat:@"%d", self.duration.intValue];
 }
 
-- (IBAction)didFinishLoadingTour:(NSArray *)directions {
-    
-    //[RHAppDelegate.instance.mapViewController displayDirections:directions];
+- (void)didLoadPath:(RHPath *)path {
+    [RHAppDelegate.instance.mapViewController.directionsManager displayPath:path];
     
     // Transition to view
     UITabBarController *tabBarController = RHAppDelegate.instance.tabBarController;
@@ -130,10 +170,8 @@
                             tabBarController.selectedIndex = 0;
                         }
                     }];
-}
-
-- (void)didLoadPath:(RHPath *)path {
     
+    [self.navigationController popToRootViewControllerAnimated:NO];
 }
 
 @end

@@ -364,7 +364,9 @@ static RHLocationsLoader *_instance;
     NSArray *possibleDuplicates = [localContext executeFetchRequest:duplicateRequest error:nil];
     
     if (possibleDuplicates.count > 0) {
-        NSLog(@"Warning: Tried to create duplicate location: %d", serverIdentifier.intValue);
+#ifdef RHITMobile_RHLoaderDebug
+        NSLog(@"Prevented duplicate location: %d", , serverIdentifier.intValue);
+#endif
         return [possibleDuplicates objectAtIndex:0];
     }
     

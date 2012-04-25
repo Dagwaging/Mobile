@@ -62,7 +62,7 @@
     
     // Quick check for a bad path
     if (path.steps.count < 1) {
-        NSLog(@"Path is empty. Skipping display.");
+        [[[UIAlertView alloc] initWithTitle:@"No path" message:@"Oops, we can't find a path to your desination. We're really sorry, but you're on your own." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
         return;
     }
     

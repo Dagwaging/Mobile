@@ -19,7 +19,6 @@
 
 
 #import <UIKit/UIKit.h>
-#import "RHPathRequesterDelegate.h"
 
 #define kRHLocationDetailViewControllerNibName @"RHLocationDetailViewController"
 

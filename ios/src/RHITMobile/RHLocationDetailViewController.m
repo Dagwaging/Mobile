@@ -25,7 +25,6 @@
 #import "RHLocationsLoader.h"
 #import "RHMapViewController.h"
 #import "RHWebViewController.h"
-#import "RHDirectionsRequester.h"
 #import "RHWrappedCoordinate.h"
 #import "RHLocationSelectorViewController.h"
 

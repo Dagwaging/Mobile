@@ -213,7 +213,7 @@
 //#define RHITMobile_RHLoaderDebug
 
 // Network debugging
-#define RHITMobile_RHNetworkDebug
+//#define RHITMobile_RHNetworkDebug
 
 // JSON response debugging
 //#define RHITMobile_RHJSONDebug

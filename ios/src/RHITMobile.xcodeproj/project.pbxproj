@@ -51,7 +51,6 @@
 		924DE4E8145E79DF00EEE8C6 /* RHDirectoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 924DE4E6145E79DF00EEE8C6 /* RHDirectoryViewController.m */; };
 		924DE4E9145E79DF00EEE8C6 /* RHDirectoryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 924DE4E7145E79DF00EEE8C6 /* RHDirectoryViewController.xib */; };
 		924E754D140ACC9A001DFC4C /* tab-bar-map-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 924E754C140ACC9A001DFC4C /* tab-bar-map-icon.png */; };
-		925465A61495BC6600C12B81 /* RHDirectionsRequester.m in Sources */ = {isa = PBXBuildFile; fileRef = 925465A51495BC6600C12B81 /* RHDirectionsRequester.m */; };
 		925465AA1495C69C00C12B81 /* RHWrappedCoordinate.m in Sources */ = {isa = PBXBuildFile; fileRef = 925465A91495C69C00C12B81 /* RHWrappedCoordinate.m */; };
 		925465AE1495EB7F00C12B81 /* RHToursViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 925465AC1495EB7E00C12B81 /* RHToursViewController.m */; };
 		925465AF1495EB7F00C12B81 /* RHToursViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 925465AD1495EB7F00C12B81 /* RHToursViewController.xib */; };
@@ -81,7 +80,6 @@
 		928B76E8144CBADA00D2F98D /* tab-bar-map-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 928B76E7144CBADA00D2F98D /* tab-bar-map-icon@2x.png */; };
 		92A49DDC145F8BA400B6F34E /* RHBetaRegistrationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92A49DDA145F8BA400B6F34E /* RHBetaRegistrationViewController.m */; };
 		92A49DDD145F8BA400B6F34E /* RHBetaRegistrationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92A49DDB145F8BA400B6F34E /* RHBetaRegistrationViewController.xib */; };
-		92ADDE0214E339C900655869 /* RHPathRequester.m in Sources */ = {isa = PBXBuildFile; fileRef = 92ADDE0114E339C900655869 /* RHPathRequester.m */; };
 		92ADDE0814E3422400655869 /* RHPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 92ADDE0714E3422400655869 /* RHPath.m */; };
 		92ADDE1114E36CB100655869 /* RHLocationSelectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92ADDE0F14E36CB000655869 /* RHLocationSelectorViewController.m */; };
 		92ADDE1214E36CB100655869 /* RHLocationSelectorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92ADDE1014E36CB000655869 /* RHLocationSelectorViewController.xib */; };
@@ -101,7 +99,6 @@
 		92E1AA7F1487115F0005BF34 /* RHWebRequestMaker.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E1AA7E1487115F0005BF34 /* RHWebRequestMaker.m */; };
 		92F1B8B51496F67900F7FFD8 /* RHPathStep.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F1B8B41496F67900F7FFD8 /* RHPathStep.m */; };
 		92F1B8B914972AE600F7FFD8 /* RHSimplePointAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F1B8B814972AE600F7FFD8 /* RHSimplePointAnnotation.m */; };
-		92F1B8BC1497BBE600F7FFD8 /* RHTourRequester.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F1B8BB1497BBE600F7FFD8 /* RHTourRequester.m */; };
 		92F20F6D1464383200603500 /* RHWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F20F6B1464383200603500 /* RHWebViewController.m */; };
 		92F20F6E1464383200603500 /* RHWebViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92F20F6C1464383200603500 /* RHWebViewController.xib */; };
 		92F5F21614DFC3C000324ACE /* RHTourItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F5F21514DFC3C000324ACE /* RHTourItem.m */; };
@@ -187,8 +184,6 @@
 		924DE4E6145E79DF00EEE8C6 /* RHDirectoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHDirectoryViewController.m; sourceTree = "<group>"; };
 		924DE4E7145E79DF00EEE8C6 /* RHDirectoryViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RHDirectoryViewController.xib; sourceTree = "<group>"; };
 		924E754C140ACC9A001DFC4C /* tab-bar-map-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab-bar-map-icon.png"; sourceTree = "<group>"; };
-		925465A41495BC6600C12B81 /* RHDirectionsRequester.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHDirectionsRequester.h; sourceTree = "<group>"; };
-		925465A51495BC6600C12B81 /* RHDirectionsRequester.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHDirectionsRequester.m; sourceTree = "<group>"; };
 		925465A81495C69B00C12B81 /* RHWrappedCoordinate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHWrappedCoordinate.h; sourceTree = "<group>"; };
 		925465A91495C69C00C12B81 /* RHWrappedCoordinate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHWrappedCoordinate.m; sourceTree = "<group>"; };
 		925465AB1495EB7E00C12B81 /* RHToursViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHToursViewController.h; sourceTree = "<group>"; };
@@ -240,9 +235,6 @@
 		92A49DD9145F8BA400B6F34E /* RHBetaRegistrationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHBetaRegistrationViewController.h; sourceTree = "<group>"; };
 		92A49DDA145F8BA400B6F34E /* RHBetaRegistrationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHBetaRegistrationViewController.m; sourceTree = "<group>"; };
 		92A49DDB145F8BA400B6F34E /* RHBetaRegistrationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RHBetaRegistrationViewController.xib; sourceTree = "<group>"; };
-		92ADDE0014E339C900655869 /* RHPathRequester.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHPathRequester.h; sourceTree = "<group>"; };
-		92ADDE0114E339C900655869 /* RHPathRequester.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHPathRequester.m; sourceTree = "<group>"; };
-		92ADDE0514E3402400655869 /* RHPathRequesterDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHPathRequesterDelegate.h; sourceTree = "<group>"; };
 		92ADDE0614E3422400655869 /* RHPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHPath.h; sourceTree = "<group>"; };
 		92ADDE0714E3422400655869 /* RHPath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHPath.m; sourceTree = "<group>"; };
 		92ADDE0E14E36CB000655869 /* RHLocationSelectorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHLocationSelectorViewController.h; sourceTree = "<group>"; };
@@ -277,8 +269,6 @@
 		92F1B8B41496F67900F7FFD8 /* RHPathStep.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHPathStep.m; sourceTree = "<group>"; };
 		92F1B8B714972AE600F7FFD8 /* RHSimplePointAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHSimplePointAnnotation.h; sourceTree = "<group>"; };
 		92F1B8B814972AE600F7FFD8 /* RHSimplePointAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHSimplePointAnnotation.m; sourceTree = "<group>"; };
-		92F1B8BA1497BBE600F7FFD8 /* RHTourRequester.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHTourRequester.h; sourceTree = "<group>"; };
-		92F1B8BB1497BBE600F7FFD8 /* RHTourRequester.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHTourRequester.m; sourceTree = "<group>"; };
 		92F20F6A1464383200603500 /* RHWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHWebViewController.h; sourceTree = "<group>"; };
 		92F20F6B1464383200603500 /* RHWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHWebViewController.m; sourceTree = "<group>"; };
 		92F20F6C1464383200603500 /* RHWebViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RHWebViewController.xib; sourceTree = "<group>"; };
@@ -324,13 +314,6 @@
 				9233415114DB10E4004C1ACC /* RHLocationsSearchRequester.h */,
 				9233415214DB10E6004C1ACC /* RHLocationsSearchRequester.m */,
 				9233415414DB1113004C1ACC /* RHLocationsSearchRequesterDelegate.h */,
-				92ADDE0014E339C900655869 /* RHPathRequester.h */,
-				92ADDE0114E339C900655869 /* RHPathRequester.m */,
-				92ADDE0514E3402400655869 /* RHPathRequesterDelegate.h */,
-				925465A41495BC6600C12B81 /* RHDirectionsRequester.h */,
-				925465A51495BC6600C12B81 /* RHDirectionsRequester.m */,
-				92F1B8BA1497BBE600F7FFD8 /* RHTourRequester.h */,
-				92F1B8BB1497BBE600F7FFD8 /* RHTourRequester.m */,
 			);
 			name = "Server Communication";
 			sourceTree = "<group>";
@@ -748,12 +731,10 @@
 				92A49DDC145F8BA400B6F34E /* RHBetaRegistrationViewController.m in Sources */,
 				92F20F6D1464383200603500 /* RHWebViewController.m in Sources */,
 				92E1AA7F1487115F0005BF34 /* RHWebRequestMaker.m in Sources */,
-				925465A61495BC6600C12B81 /* RHDirectionsRequester.m in Sources */,
 				925465AA1495C69C00C12B81 /* RHWrappedCoordinate.m in Sources */,
 				925465AE1495EB7F00C12B81 /* RHToursViewController.m in Sources */,
 				92F1B8B51496F67900F7FFD8 /* RHPathStep.m in Sources */,
 				92F1B8B914972AE600F7FFD8 /* RHSimplePointAnnotation.m in Sources */,
-				92F1B8BC1497BBE600F7FFD8 /* RHTourRequester.m in Sources */,
 				92D3672814B60DE000EE0504 /* RHPersonDetailViewController.m in Sources */,
 				920FAF8714BEAA1800BC4614 /* RHServiceItem.m in Sources */,
 				920FAF8A14BEAA2300BC4614 /* RHServiceCategory.m in Sources */,
@@ -774,7 +755,6 @@
 				92F5F21F14DFC3F900324ACE /* RHTourTagCategory.m in Sources */,
 				92FFAC5714E0E5F700240458 /* RHTagsBasketViewController.m in Sources */,
 				92FFAC5D14E0F2C100240458 /* RHTagSelectionViewController.m in Sources */,
-				92ADDE0214E339C900655869 /* RHPathRequester.m in Sources */,
 				92ADDE0814E3422400655869 /* RHPath.m in Sources */,
 				92ADDE1114E36CB100655869 /* RHLocationSelectorViewController.m in Sources */,
 				921F3C5D14EA22F700EDD02A /* RHMapDirectionsManager.m in Sources */,

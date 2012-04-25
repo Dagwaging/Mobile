@@ -20,14 +20,13 @@
 #import <UIKit/UIKit.h>
 
 #import "RHSearchViewController.h"
-#import "RHPathRequesterDelegate.h"
 
 #define kRHLocationSelectorViewControllerNibName @"RHSearchViewController"
 
 @class RHLocation;
 
 
-@interface RHLocationSelectorViewController : RHSearchViewController <RHPathRequesterDelegate>
+@interface RHLocationSelectorViewController : RHSearchViewController
 
 @property (nonatomic, strong) RHLocation *toLocation;
 

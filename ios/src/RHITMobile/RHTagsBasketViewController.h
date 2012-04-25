@@ -19,12 +19,10 @@
 
 #import <UIKit/UIKit.h>
 
-#import "RHPathRequesterDelegate.h"
-
 #define kRHTagsBasketViewControllerNibname @"RHTagsBasketViewController"
 
 
-@interface RHTagsBasketViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, RHPathRequesterDelegate>
+@interface RHTagsBasketViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, readonly) NSManagedObjectContext *managedObjectContext;
 
@@ -37,6 +35,8 @@
 @property (nonatomic, assign) BOOL isEditing;
 
 @property (nonatomic, assign) BOOL isBuilding;
+
+@property (nonatomic, strong) NSNumber *duration;
 
 - (IBAction)doneEditing:(id)sender;
 

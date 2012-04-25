@@ -19,10 +19,10 @@
 
 #import "RHLocationSelectorViewController.h"
 #import "RHAppDelegate.h"
-#import "RHDirectionsRequester.h"
 #import "RHLocation.h"
 #import "RHMapDirectionsManager.h"
 #import "RHMapViewController.h"
+#import "RHPathRequest.h"
 
 @implementation RHLocationSelectorViewController
 
@@ -83,11 +83,18 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (self.searchType == RHSearchViewControllerTypeLocation) {
         RHLocation *fromLocation = (RHLocation *) resultObject;
         
-        NSPersistentStoreCoordinator *psc = [(RHAppDelegate *) [[UIApplication sharedApplication] delegate] persistentStoreCoordinator];
-        
-        RHDirectionsRequester *directionsRequester = [[RHDirectionsRequester alloc] initWithDelegate:self persistantStoreCoordinator:psc];
-        
-        [directionsRequester requestDirectionsFromLocation:fromLocation toLocation:self.toLocation];
+        [RHPathRequest makeDirectionsRequestFromLocationWithId:fromLocation.serverIdentifier
+                                                    toLocation:self.toLocation.serverIdentifier
+                                                  successBlock:^(RHPath *path) {
+                                                      [self didLoadPath:path];
+                                                  } failureBlock:^(NSError *error) {
+                                                      [[[UIAlertView alloc] initWithTitle:@"Error"
+                                                                                  message:@"Something went wrong when we tried to get you directions. We're really sorry."
+                                                                                 delegate:nil
+                                                                        cancelButtonTitle:@"OK"
+                                                                        otherButtonTitles:nil] show];
+                                                      [self.navigationController popViewControllerAnimated:YES];
+                                                  }];
         
         self.navigationItem.title = @"Getting Directions";
         

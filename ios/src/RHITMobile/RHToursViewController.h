@@ -19,14 +19,12 @@
 
 #import <UIKit/UIKit.h>
 
-#import "RHPathRequesterDelegate.h"
-
 #define kRHToursViewControllerNibName @"RHToursViewController"
 
 
 @class RHTourRequester;
 
-@interface RHToursViewController : UIViewController <RHPathRequesterDelegate>
+@interface RHToursViewController : UIViewController
 
 @property (nonatomic, strong) IBOutlet UILabel *durationLabel;
 
@@ -35,6 +33,10 @@
 @property (nonatomic, strong) IBOutlet UISegmentedControl *locationControl;
 
 @property (nonatomic, strong) IBOutlet UISlider *durationSlider;
+
+@property (nonatomic, strong) NSNumber *duration;
+
+@property (nonatomic, assign) BOOL isBuilding;
 
 - (IBAction)defaultTour:(id)sender;
 
