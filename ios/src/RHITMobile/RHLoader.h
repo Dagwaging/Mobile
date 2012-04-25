@@ -1,5 +1,5 @@
 //
-//  RHDataVersionsLoader.h
+//  RHLoader.h
 //  Rose-Hulman Mobile
 //
 //  Copyright 2012 Rose-Hulman Institute of Technology
@@ -18,22 +18,21 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <CoreData/CoreData.h>
 
-#import "RHLoader.h"
 
-@interface RHDataVersionsLoader : RHLoader
+@protocol RHLoaderDelegate <NSObject>
 
-+ (id)instance;
+- (void)loaderDidUpdateUnderlyingData;
 
-@property (nonatomic, readonly) BOOL currentlyUpdating;
+@end
 
-- (void)checkForNewVersions;
 
-- (void)setLocationsVersion:(NSNumber *)locationsVersion;
+@interface RHLoader : NSObject
 
-- (void)setCampusServicesVersion:(NSNumber *)campusServicesVersion;
+@property (nonatomic, readonly) NSArray *delegates;
 
-- (void)setTourTagsVersion:(NSNumber *)tourTagsVersion;
+- (void)addDelegate:(NSObject<RHLoaderDelegate> *)delegate;
+
+- (void)removeDelegate:(NSObject<RHLoaderDelegate> *)delegate;
 
 @end

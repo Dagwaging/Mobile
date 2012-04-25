@@ -20,7 +20,10 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@interface RHCampusServicesLoader : NSObject
+#import "RHLoader.h"
+
+
+@interface RHCampusServicesLoader : RHLoader
 
 + (id)instance;
 

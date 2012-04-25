@@ -20,7 +20,10 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@interface RHTourTagsLoader : NSObject
+#import "RHLoader.h"
+
+
+@interface RHTourTagsLoader : RHLoader
 
 + (id)instance;
 

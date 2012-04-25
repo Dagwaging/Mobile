@@ -96,6 +96,7 @@
 		92ADEE2F14599D9500060A3F /* quicklist-toolbar-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 92ADEE2D14599D9500060A3F /* quicklist-toolbar-icon@2x.png */; };
 		92ADEE321459BC5E00060A3F /* tab-bar-directory-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 92ADEE301459BC5E00060A3F /* tab-bar-directory-icon.png */; };
 		92ADEE331459BC5E00060A3F /* tab-bar-directory-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 92ADEE311459BC5E00060A3F /* tab-bar-directory-icon@2x.png */; };
+		92B34D7D15477F520047B1BC /* RHLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 92B34D7C15477F520047B1BC /* RHLoader.m */; };
 		92CEFC2314BEAA830085CEDB /* RHServiceLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 92CEFC2214BEAA830085CEDB /* RHServiceLink.m */; };
 		92CEFC2614BEAC6B0085CEDB /* RHPerson.m in Sources */ = {isa = PBXBuildFile; fileRef = 92CEFC2514BEAC6A0085CEDB /* RHPerson.m */; };
 		92D3672814B60DE000EE0504 /* RHPersonDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92D3672614B60DE000EE0504 /* RHPersonDetailViewController.m */; };
@@ -274,6 +275,8 @@
 		92ADEE2D14599D9500060A3F /* quicklist-toolbar-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "quicklist-toolbar-icon@2x.png"; sourceTree = "<group>"; };
 		92ADEE301459BC5E00060A3F /* tab-bar-directory-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab-bar-directory-icon.png"; sourceTree = "<group>"; };
 		92ADEE311459BC5E00060A3F /* tab-bar-directory-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab-bar-directory-icon@2x.png"; sourceTree = "<group>"; };
+		92B34D7B15477F520047B1BC /* RHLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHLoader.h; sourceTree = "<group>"; };
+		92B34D7C15477F520047B1BC /* RHLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHLoader.m; sourceTree = "<group>"; };
 		92CEFC2114BEAA830085CEDB /* RHServiceLink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHServiceLink.h; sourceTree = "<group>"; };
 		92CEFC2214BEAA830085CEDB /* RHServiceLink.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHServiceLink.m; sourceTree = "<group>"; };
 		92CEFC2414BEAC6A0085CEDB /* RHPerson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHPerson.h; sourceTree = "<group>"; };
@@ -427,6 +430,8 @@
 		923919401545E9FC00D3C611 /* Loaders */ = {
 			isa = PBXGroup;
 			children = (
+				92B34D7B15477F520047B1BC /* RHLoader.h */,
+				92B34D7C15477F520047B1BC /* RHLoader.m */,
 				9239195E154601F700D3C611 /* RHLoadersWrapper.h */,
 				9239195F154601F700D3C611 /* RHLoadersWrapper.m */,
 				9239195B1546018F00D3C611 /* RHDataVersionsLoader.h */,
@@ -837,6 +842,7 @@
 				9239195A1546016C00D3C611 /* RHLoaderRequestsWrapper.m in Sources */,
 				9239195D1546018F00D3C611 /* RHDataVersionsLoader.m in Sources */,
 				92391960154601F700D3C611 /* RHLoadersWrapper.m in Sources */,
+				92B34D7D15477F520047B1BC /* RHLoader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
