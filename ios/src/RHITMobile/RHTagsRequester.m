@@ -132,7 +132,6 @@
                                       inCategory:newCategory
                           inManagedObjectContext:managedObjectContext];
     }
-    
 }
 
 - (void)createManagedObjectsFromTags:(NSArray *)tags

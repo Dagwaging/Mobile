@@ -22,6 +22,7 @@
 #import "RHConstants.h"
 #import "RHLoaderRequestsWrapper.h"
 #import "RHLocationsLoader.h"
+#import "RHTourTagsLoader.h"
 
 
 #define kFileName @"CachedDataVersions.plist"
@@ -148,7 +149,7 @@ static RHDataVersionsLoader * _instance;
         upToDate = NO;
         
         [operationQueue addOperationWithBlock:^(void) {
-            // TODO
+            [RHTourTagsLoader.instance updateTourTags:oldTourTagsVersion];
         }];
     }
     
