@@ -40,6 +40,18 @@ def chance_one_in x
     return rand(x) < 1
 end
 
+def rand_str len
+    if chance_one_in 4
+        return (0...len).map{65.+(rand(25)).chr}.join
+    elsif chance_one_in 3
+        return 'TBA'
+    elsif chance_one_in 2
+        return 'TBA/TBA/TBA'
+    else
+        return '&nbsp'
+    end
+end
+
 class Person
     attr_accessor :fname, :lname, :mname, :username,
         :phone_number, :mailbox, :banner_id, :location
@@ -92,9 +104,11 @@ class Student < Person
         majors = ['AB', 'BE', 'CE', 'CHE', 'CHEM', 'CPE',
             'CS', 'EE', 'EMGT', 'EP', 'MA', 'ME', 'OE', 'PH', 'SE']
 
-        if rand(6) < 1
+        if chance_one_in 6
             majors.shuffle!
             @major = "#{majors[0]}/#{majors[1]}"
+        elsif chance_one_in 10
+            @major = rand_str 4
         else
             @major = majors.sample
         end
@@ -102,6 +116,18 @@ class Student < Person
         @year = ['Y1', 'Y2', 'Y3', 'Y4', 'Y5'].sample
         @class_year = ['FR', 'SO', 'JR', 'SR', 'GR'].sample
         @advisor = $all_faculty.sample
+
+        if chance_one_in 50
+            # TODO: Make fake advisor
+        end
+
+        if chance_one_in 100
+            @year = rand_str 3
+        end
+
+        if chance_one_in 100
+            @class_year = rand_str 5
+        end
 
         if chance_one_in 10
             @location = Faker::Address.street_address
@@ -117,6 +143,10 @@ class Student < Person
     end
 
     def gen_username
+        if chance_one_in 50
+            return rand_str 10
+        end
+
         return "#{@lname[0..5].gsub(/[^A-Za-z]/i, '').upcase}" +
                "#{@fname[0..0].gsub(/[^A-Za-z]/i, '').upcase}" + 
                "#{@mname[0..0].gsub(/[^A-Za-z]/i, '').upcase}"
@@ -172,9 +202,17 @@ class Faculty < Person
             'Mathematics', 'Mechanical Engineering',
             'Physics & Optical Engineering'].sample
 
+        if chance_one_in 100
+            @department = rand_str 20
+        end
+
         halls = ['Moench Hall A', 'Moench Hall B', 'Moench Hall C', 
             'Moench Hall D', 'Moench Hall F', 'Crapo Hall G', 'Olin Hall O', 'HMU ']
         @location = "#{halls.sample}#{rand(200) + 100}"
+
+        if chance_one_in 50
+            @location = rand_str 14
+        end
 
         $all_people << self
         $all_faculty << self
@@ -211,6 +249,10 @@ class Course
             @location = "#{self.rand_days}/#{self.rand_hour}/#{self.rand_room}:#{self.rand_day}/#{self.rand_hour}/#{self.rand_room}"
         elsif chance_one_in 20
             @location = 'TBA/TBA/TBA'
+        elsif chance_one_in 10
+            @location = 'TBA'
+        elsif chance_one_in 10
+            @location = rand_str 20
         else
             @location = "#{self.rand_days}/#{self.rand_hour}/#{self.rand_room}"
         end
@@ -305,6 +347,10 @@ class Course
         if chance_one_in 5
             start = rand(9) + 1
             finish = start + rand(10 - start) + 1
+            return "#{start}-#{finish}"
+        elsif chance_one_in 5
+            start = rand(2300) + 1
+            finish = start + rand(2300 - start) + 1
             return "#{start}-#{finish}"
         else
             return rand(10) + 1
