@@ -367,7 +367,7 @@ static RHLocationsLoader *_instance;
 #ifdef RHITMobile_RHLoaderDebug
         NSLog(@"Prevented duplicate location: %d", , serverIdentifier.intValue);
 #endif
-        return [possibleDuplicates objectAtIndex:0];
+        return nil;
     }
     
     RHLocation *location = [NSEntityDescription insertNewObjectForEntityForName:kRHLocationEntityName 
