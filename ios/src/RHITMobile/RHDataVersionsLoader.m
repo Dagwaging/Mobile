@@ -166,6 +166,13 @@ static RHDataVersionsLoader * _instance;
     }
     
     _currentlyUpdating = NO;
+    
+    // Notify delegates
+    for (NSObject<RHLoaderDelegate> *delegate in self.delegates) {
+        [delegate performSelectorOnMainThread:@selector(loaderDidUpdateUnderlyingData)
+                                   withObject:nil
+                                waitUntilDone:NO];
+    }
 }
 
 - (void)setLocationsVersion:(NSNumber *)locationsVersion

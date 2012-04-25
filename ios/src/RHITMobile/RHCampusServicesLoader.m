@@ -158,12 +158,17 @@ static RHCampusServicesLoader *_instance;
     NSLog(@"Finished updating campus services");
 #endif
     
-    // TODO: Notify
-    
     // Update version
     [RHDataVersionsLoader.instance setCampusServicesVersion:newVersion];
     
     _currentlyUpdating = NO;
+    
+    // Notify delegates
+    for (NSObject<RHLoaderDelegate> *delegate in self.delegates) {
+        [delegate performSelectorOnMainThread:@selector(loaderDidUpdateUnderlyingData)
+                                   withObject:nil
+                                waitUntilDone:NO];
+    }
 }
 
 - (void)registerCallbackForCampusServices:(void (^)(void))callback

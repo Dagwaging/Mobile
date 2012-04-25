@@ -153,11 +153,16 @@ static RHTourTagsLoader *_instance;
     NSLog(@"Done saving tour tags");
 #endif
     
-    // TODO: Notify
-    
     [RHDataVersionsLoader.instance setTourTagsVersion:newVersion];
     
     _currentlyUpdating = NO;
+    
+    // Notify delegates
+    for (NSObject<RHLoaderDelegate> *delegate in self.delegates) {
+        [delegate performSelectorOnMainThread:@selector(loaderDidUpdateUnderlyingData)
+                                   withObject:nil
+                                waitUntilDone:NO];
+    }
 }
 
 - (void)registerCallbackForTourTags:(void (^)(void))callback

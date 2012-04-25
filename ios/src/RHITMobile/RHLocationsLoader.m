@@ -270,12 +270,17 @@ static RHLocationsLoader *_instance;
     NSLog(@"Done updating internal locations");
 #endif
     
-    // TODO: Notify if applicable
-    
     // Set the stored version
     [RHDataVersionsLoader.instance setLocationsVersion:newVersion];
     
     _currentlyUpdating = NO;
+    
+    // Notify delegates
+    for (NSObject<RHLoaderDelegate> *delegate in self.delegates) {
+        [delegate performSelectorOnMainThread:@selector(loaderDidUpdateUnderlyingData)
+                                   withObject:nil
+                                waitUntilDone:NO];
+    }
 }
 
 - (void)registerCallbackForTopLevelLocations:(void (^)(void))callback
