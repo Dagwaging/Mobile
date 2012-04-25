@@ -37,6 +37,7 @@
 @interface RHTourTagsLoader () {
 @private
     BOOL _currentlyUpdating;
+    void (^_callback)(void);
 }
 
 - (NSManagedObjectContext *)createThreadSafeManagedObjectContext;
@@ -72,6 +73,7 @@ static RHTourTagsLoader *_instance;
 {
     if (self = [super init]) {
         _currentlyUpdating = NO;
+        _callback = NULL;
     }
     
     return self;
@@ -157,17 +159,29 @@ static RHTourTagsLoader *_instance;
     
     _currentlyUpdating = NO;
     
+#ifdef RHITMobile_RHLoaderDebug
+    NSLog(@"Notifying delegates and performing callbacks");
+#endif
+    
     // Notify delegates
     for (NSObject<RHLoaderDelegate> *delegate in self.delegates) {
         [delegate performSelectorOnMainThread:@selector(loaderDidUpdateUnderlyingData)
                                    withObject:nil
                                 waitUntilDone:NO];
     }
+    
+    // Callback
+    if (_callback != NULL) {
+#ifdef RHITMobile_RHLoaderDebug
+        NSLog(@"Tour tags callback found. Calling.");
+#endif
+        _callback();
+    }
 }
 
 - (void)registerCallbackForTourTags:(void (^)(void))callback
 {
-    // TODO
+    _callback = callback;
 }
 
 - (NSManagedObjectContext *)createThreadSafeManagedObjectContext

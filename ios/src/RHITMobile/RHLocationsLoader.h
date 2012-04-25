@@ -33,7 +33,9 @@
 
 - (void)registerCallbackForTopLevelLocations:(void (^)(void))callback;
 
-- (void)registerCallbackForLocationWithId:(NSInteger)locationId
+- (void)registerCallbackForAllInternalLocations:(void (^)(void))callback;
+
+- (void)registerCallbackForLocationWithId:(NSNumber *)locationId
                                  callback:(void (^)(void))callback;
 
 // TODO: failure callbacks

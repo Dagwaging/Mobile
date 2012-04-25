@@ -48,9 +48,14 @@
 #define kCenterKey @"Center"
 #define kParentKey @"Parent"
 
+
 @interface RHLocationsLoader () {
 @private
     BOOL _currentlyUpdating;
+    void (^_topLocationsCallback)(void);
+    void (^_allInternalLocationsCallback)(void);
+    void (^_internalLocationCallback)(void);
+    int _internalLocationCallbackIdentifier;
 }
 
 - (RHLocation *)locationFromJSONResponse:(NSDictionary *)jsonResponse
@@ -81,6 +86,10 @@ static RHLocationsLoader *_instance;
 {
     if (self = [super init]) {
         _currentlyUpdating = NO;
+        _topLocationsCallback = NULL;
+        _allInternalLocationsCallback = NULL;
+        _internalLocationCallback = NULL;
+        _internalLocationCallbackIdentifier = -1;
     }
     
     return self;
@@ -165,6 +174,14 @@ static RHLocationsLoader *_instance;
     currentError = nil;
     [localContext save:&currentError];
     
+    // Callback on main thread
+    if (_topLocationsCallback != NULL) {
+#ifdef RHITMobile_RHLoaderDebug
+        NSLog(@"Top level locations callback found. Calling.");
+#endif
+        [[NSOperationQueue mainQueue] addOperationWithBlock:_topLocationsCallback];
+    }
+    
     if (currentError) {
         NSLog(@"Problem saving top level locations: %@", currentError);
         _currentlyUpdating = NO;
@@ -235,9 +252,18 @@ static RHLocationsLoader *_instance;
             
             parent.retrievalStatus = RHLocationRetrievalStatusFull;
             
-            // TODO: Notify if applicable
+            // Callback if applicable
+            if (_internalLocationCallback != NULL && _internalLocationCallbackIdentifier == parentId) {
+#ifdef RHITMobile_RHLoaderDebug
+                NSLog(@"Internal location callback found. Calling.");
+#endif
+                // Save here (early), so the callback receiver can do things with the data
+                [blockContext save:nil];
+                [[NSOperationQueue mainQueue] addOperationWithBlock:_internalLocationCallback];
+            }
             
             locationsPopulated ++;
+            
 #ifdef RHITMobile_RHLoaderDebug
             NSLog(@"Finished internal location update for location %d", parentId);
             NSLog(@"Internal location status: %d/%d locations complete", locationsPopulated, locationsToPopulate);
@@ -275,23 +301,41 @@ static RHLocationsLoader *_instance;
     
     _currentlyUpdating = NO;
     
+#ifdef RHITMobile_RHLoaderDebug
+    NSLog(@"Notifying delegates and performing callbacks");
+#endif
+    
     // Notify delegates
     for (NSObject<RHLoaderDelegate> *delegate in self.delegates) {
         [delegate performSelectorOnMainThread:@selector(loaderDidUpdateUnderlyingData)
                                    withObject:nil
                                 waitUntilDone:NO];
     }
+    
+    // Callback
+    if (_allInternalLocationsCallback != NULL) {
+#ifdef RHITMobile_RHLoaderDebug
+        NSLog(@"All internal locations callback found. Calling.");
+#endif
+        [[NSOperationQueue mainQueue] addOperationWithBlock:_allInternalLocationsCallback];
+    }
 }
 
 - (void)registerCallbackForTopLevelLocations:(void (^)(void))callback
 {
-    // TODO
+    _topLocationsCallback = callback;
 }
 
-- (void)registerCallbackForLocationWithId:(NSInteger)locationId
+- (void)registerCallbackForLocationWithId:(NSNumber *)locationId
                                  callback:(void (^)(void))callback
 {
-    // TODO
+    _internalLocationCallback = callback;
+    _internalLocationCallbackIdentifier = locationId.intValue;
+}
+
+- (void)registerCallbackForAllInternalLocations:(void (^)(void))callback
+{
+    _allInternalLocationsCallback = callback;
 }
 
 - (NSManagedObjectContext *)createThreadSafeManagedObjectContext
