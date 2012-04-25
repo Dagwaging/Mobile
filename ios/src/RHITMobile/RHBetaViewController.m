@@ -119,7 +119,7 @@
     
     self.authToken = [defaults stringForKey:kBetaAuthTokenDefault];
     
-    if (self.authToken == nil) {
+    if (self.authToken == nil && kRHBetaBuildNumber > -1) {
         RHBetaRegistrationViewController *registrationController = [[RHBetaRegistrationViewController alloc] initWithNibName:kRHBetaRegistrationViewControllerNibName bundle:nil];
         registrationController.betaViewController = self;
         [self presentModalViewController:registrationController animated:YES];
@@ -410,6 +410,10 @@ didDismissWithButtonIndex:(NSInteger)buttonIndex {
 }
 
 - (void)performCheckForUpdates:(NSNumber *)officialNumber {
+    if (kRHBetaBuildNumber == -1) {
+        return;
+    }
+    
     // Parse out BOOL for whether or not we're looking for an official build
     BOOL official = officialNumber.boolValue;
     
