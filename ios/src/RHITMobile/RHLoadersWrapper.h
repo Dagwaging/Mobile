@@ -24,4 +24,6 @@
 
 + (void)updateAllStoredData;
 
++ (void)forceUpdateAllStoredData;
+
 @end

@@ -26,9 +26,6 @@
 #import "RHCampusServicesViewController.h"
 #import "RHLocation.h"
 #import "RHToursViewController.h"
-#import "RHCampusServicesRequester.h"
-#import "RHTopLocationsRequester.h"
-#import "RHTagsRequester.h"
 
 #import "RHLoadersWrapper.h"
 

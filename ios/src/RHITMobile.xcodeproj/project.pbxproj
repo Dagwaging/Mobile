@@ -22,11 +22,6 @@
 		922F44A614985AE800D5C2C3 /* tab-bar-tours-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 922F44A414985AE800D5C2C3 /* tab-bar-tours-icon@2x.png */; };
 		92312438144FB8470074791E /* RHLocationDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92312436144FB8470074791E /* RHLocationDetailViewController.m */; };
 		9231243A144FB8470074791E /* RHLocationDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92312437144FB8470074791E /* RHLocationDetailViewController.xib */; };
-		9233414314DA48CB004C1ACC /* RHLocationsRequester.m in Sources */ = {isa = PBXBuildFile; fileRef = 9233414214DA48CB004C1ACC /* RHLocationsRequester.m */; };
-		9233414614DA48E6004C1ACC /* RHTopLocationsRequester.m in Sources */ = {isa = PBXBuildFile; fileRef = 9233414514DA48E6004C1ACC /* RHTopLocationsRequester.m */; };
-		9233414914DA4907004C1ACC /* RHInternalLocationsRequester.m in Sources */ = {isa = PBXBuildFile; fileRef = 9233414814DA4907004C1ACC /* RHInternalLocationsRequester.m */; };
-		9233414D14DA7668004C1ACC /* RHDataVersionRequester.m in Sources */ = {isa = PBXBuildFile; fileRef = 9233414C14DA7668004C1ACC /* RHDataVersionRequester.m */; };
-		9233415014DA7798004C1ACC /* RHDataVersionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9233414F14DA7798004C1ACC /* RHDataVersionManager.m */; };
 		9233415314DB10E9004C1ACC /* RHLocationsSearchRequester.m in Sources */ = {isa = PBXBuildFile; fileRef = 9233415214DB10E6004C1ACC /* RHLocationsSearchRequester.m */; };
 		9233DD0F141BAA3500B9A549 /* RHAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9233DD0E141BAA3500B9A549 /* RHAnnotation.m */; };
 		9236CE9F144E3CBC00D0FB59 /* RHQuickListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9236CE9D144E3CBC00D0FB59 /* RHQuickListViewController.m */; };
@@ -59,7 +54,6 @@
 		925465AA1495C69C00C12B81 /* RHWrappedCoordinate.m in Sources */ = {isa = PBXBuildFile; fileRef = 925465A91495C69C00C12B81 /* RHWrappedCoordinate.m */; };
 		925465AE1495EB7F00C12B81 /* RHToursViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 925465AC1495EB7E00C12B81 /* RHToursViewController.m */; };
 		925465AF1495EB7F00C12B81 /* RHToursViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 925465AD1495EB7F00C12B81 /* RHToursViewController.xib */; };
-		9258F02A14D0D5EE00B61545 /* RHCampusServicesRequester.m in Sources */ = {isa = PBXBuildFile; fileRef = 9258F02914D0D5EE00B61545 /* RHCampusServicesRequester.m */; };
 		926088A8144D2ADB0002D50E /* RHITMobileValues.plist in Resources */ = {isa = PBXBuildFile; fileRef = 926088A7144D2ADB0002D50E /* RHITMobileValues.plist */; };
 		9265FEA91409AB5D00AE406E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9265FEA81409AB5D00AE406E /* UIKit.framework */; };
 		9265FEAB1409AB5D00AE406E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9265FEAA1409AB5D00AE406E /* Foundation.framework */; };
@@ -83,7 +77,6 @@
 		9281A36114C68C8D001D9837 /* CJSONDeserializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9281A35514C68C8D001D9837 /* CJSONDeserializer.m */; };
 		9281A36214C68C8D001D9837 /* CJSONScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 9281A35714C68C8D001D9837 /* CJSONScanner.m */; settings = {COMPILER_FLAGS = "-w"; }; };
 		9281A36314C68C8D001D9837 /* CJSONSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9281A35914C68C8D001D9837 /* CJSONSerializer.m */; };
-		928A6440144955EB00521EB1 /* RHPListStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 928A643F144955EB00521EB1 /* RHPListStore.m */; };
 		928B76E8144CBADA00D2F98D /* tab-bar-map-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 928B76E7144CBADA00D2F98D /* tab-bar-map-icon@2x.png */; };
 		92A49DDC145F8BA400B6F34E /* RHBetaRegistrationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92A49DDA145F8BA400B6F34E /* RHBetaRegistrationViewController.m */; };
 		92A49DDD145F8BA400B6F34E /* RHBetaRegistrationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92A49DDB145F8BA400B6F34E /* RHBetaRegistrationViewController.xib */; };
@@ -113,7 +106,6 @@
 		92F5F21614DFC3C000324ACE /* RHTourItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F5F21514DFC3C000324ACE /* RHTourItem.m */; };
 		92F5F21C14DFC3E400324ACE /* RHTourTag.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F5F21B14DFC3E400324ACE /* RHTourTag.m */; };
 		92F5F21F14DFC3F900324ACE /* RHTourTagCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F5F21E14DFC3F900324ACE /* RHTourTagCategory.m */; };
-		92F5F22214DFC4FF00324ACE /* RHTagsRequester.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F5F22114DFC4FF00324ACE /* RHTagsRequester.m */; };
 		92FFAC5714E0E5F700240458 /* RHTagsBasketViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92FFAC5514E0E5F700240458 /* RHTagsBasketViewController.m */; };
 		92FFAC5814E0E5F700240458 /* RHTagsBasketViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92FFAC5614E0E5F700240458 /* RHTagsBasketViewController.xib */; };
 		92FFAC5D14E0F2C100240458 /* RHTagSelectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92FFAC5B14E0F2C000240458 /* RHTagSelectionViewController.m */; };
@@ -145,17 +137,6 @@
 		92312436144FB8470074791E /* RHLocationDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHLocationDetailViewController.m; sourceTree = "<group>"; };
 		92312437144FB8470074791E /* RHLocationDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RHLocationDetailViewController.xib; sourceTree = "<group>"; };
 		9233413614DA2C6E004C1ACC /* RHDataModel 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "RHDataModel 2.xcdatamodel"; sourceTree = "<group>"; };
-		9233414114DA48CB004C1ACC /* RHLocationsRequester.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHLocationsRequester.h; sourceTree = "<group>"; };
-		9233414214DA48CB004C1ACC /* RHLocationsRequester.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHLocationsRequester.m; sourceTree = "<group>"; };
-		9233414414DA48E6004C1ACC /* RHTopLocationsRequester.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHTopLocationsRequester.h; sourceTree = "<group>"; };
-		9233414514DA48E6004C1ACC /* RHTopLocationsRequester.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHTopLocationsRequester.m; sourceTree = "<group>"; };
-		9233414714DA4907004C1ACC /* RHInternalLocationsRequester.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHInternalLocationsRequester.h; sourceTree = "<group>"; };
-		9233414814DA4907004C1ACC /* RHInternalLocationsRequester.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHInternalLocationsRequester.m; sourceTree = "<group>"; };
-		9233414A14DA491F004C1ACC /* RHLocationsRequesterDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHLocationsRequesterDelegate.h; sourceTree = "<group>"; };
-		9233414B14DA7667004C1ACC /* RHDataVersionRequester.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHDataVersionRequester.h; sourceTree = "<group>"; };
-		9233414C14DA7668004C1ACC /* RHDataVersionRequester.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHDataVersionRequester.m; sourceTree = "<group>"; };
-		9233414E14DA7798004C1ACC /* RHDataVersionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHDataVersionManager.h; sourceTree = "<group>"; };
-		9233414F14DA7798004C1ACC /* RHDataVersionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHDataVersionManager.m; sourceTree = "<group>"; };
 		9233415114DB10E4004C1ACC /* RHLocationsSearchRequester.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHLocationsSearchRequester.h; sourceTree = "<group>"; };
 		9233415214DB10E6004C1ACC /* RHLocationsSearchRequester.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHLocationsSearchRequester.m; sourceTree = "<group>"; };
 		9233415414DB1113004C1ACC /* RHLocationsSearchRequesterDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHLocationsSearchRequesterDelegate.h; sourceTree = "<group>"; };
@@ -210,8 +191,6 @@
 		925465AB1495EB7E00C12B81 /* RHToursViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHToursViewController.h; sourceTree = "<group>"; };
 		925465AC1495EB7E00C12B81 /* RHToursViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHToursViewController.m; sourceTree = "<group>"; };
 		925465AD1495EB7F00C12B81 /* RHToursViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RHToursViewController.xib; sourceTree = "<group>"; };
-		9258F02814D0D5EE00B61545 /* RHCampusServicesRequester.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHCampusServicesRequester.h; sourceTree = "<group>"; };
-		9258F02914D0D5EE00B61545 /* RHCampusServicesRequester.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHCampusServicesRequester.m; sourceTree = "<group>"; };
 		926088A7144D2ADB0002D50E /* RHITMobileValues.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = RHITMobileValues.plist; sourceTree = "<group>"; };
 		9265FEA41409AB5D00AE406E /* RHITMobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RHITMobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9265FEA81409AB5D00AE406E /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -234,7 +213,6 @@
 		926D397E143D2CE400223121 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		927866FE1432F35C00749C2E /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		927867011432F36500749C2E /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
-		927A0CA114D8E6F300FAD2B2 /* RHCampusServicesRequesterDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHCampusServicesRequesterDelegate.h; sourceTree = "<group>"; };
 		9281A34514C68C8D001D9837 /* CDataScanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDataScanner.h; sourceTree = "<group>"; };
 		9281A34614C68C8D001D9837 /* CDataScanner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDataScanner.m; sourceTree = "<group>"; };
 		9281A34814C68C8D001D9837 /* CFilteringJSONSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFilteringJSONSerializer.h; sourceTree = "<group>"; };
@@ -254,8 +232,6 @@
 		9281A35814C68C8D001D9837 /* CJSONSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJSONSerializer.h; sourceTree = "<group>"; };
 		9281A35914C68C8D001D9837 /* CJSONSerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJSONSerializer.m; sourceTree = "<group>"; };
 		9281A35A14C68C8D001D9837 /* JSONRepresentation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONRepresentation.h; sourceTree = "<group>"; };
-		928A643E144955EB00521EB1 /* RHPListStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHPListStore.h; sourceTree = "<group>"; };
-		928A643F144955EB00521EB1 /* RHPListStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHPListStore.m; sourceTree = "<group>"; };
 		928B76E7144CBADA00D2F98D /* tab-bar-map-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab-bar-map-icon@2x.png"; sourceTree = "<group>"; };
 		929488F9142CD65500820A9C /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		92A49DD9145F8BA400B6F34E /* RHBetaRegistrationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHBetaRegistrationViewController.h; sourceTree = "<group>"; };
@@ -310,9 +286,6 @@
 		92F5F21B14DFC3E400324ACE /* RHTourTag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHTourTag.m; sourceTree = "<group>"; };
 		92F5F21D14DFC3F900324ACE /* RHTourTagCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHTourTagCategory.h; sourceTree = "<group>"; };
 		92F5F21E14DFC3F900324ACE /* RHTourTagCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHTourTagCategory.m; sourceTree = "<group>"; };
-		92F5F22014DFC4FF00324ACE /* RHTagsRequester.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHTagsRequester.h; sourceTree = "<group>"; };
-		92F5F22114DFC4FF00324ACE /* RHTagsRequester.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHTagsRequester.m; sourceTree = "<group>"; };
-		92F5F22314DFC54D00324ACE /* RHTagsRequesterDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHTagsRequesterDelegate.h; sourceTree = "<group>"; };
 		92FFAC5414E0E5F700240458 /* RHTagsBasketViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHTagsBasketViewController.h; sourceTree = "<group>"; };
 		92FFAC5514E0E5F700240458 /* RHTagsBasketViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHTagsBasketViewController.m; sourceTree = "<group>"; };
 		92FFAC5614E0E5F700240458 /* RHTagsBasketViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RHTagsBasketViewController.xib; sourceTree = "<group>"; };
@@ -343,26 +316,11 @@
 			children = (
 				923919421545EA0D00D3C611 /* Requests */,
 				923919401545E9FC00D3C611 /* Loaders */,
-				9233414114DA48CB004C1ACC /* RHLocationsRequester.h */,
-				9233414214DA48CB004C1ACC /* RHLocationsRequester.m */,
-				9233414414DA48E6004C1ACC /* RHTopLocationsRequester.h */,
-				9233414514DA48E6004C1ACC /* RHTopLocationsRequester.m */,
-				9233414714DA4907004C1ACC /* RHInternalLocationsRequester.h */,
-				9233414814DA4907004C1ACC /* RHInternalLocationsRequester.m */,
-				9233414A14DA491F004C1ACC /* RHLocationsRequesterDelegate.h */,
 				92E1AA7D1487115F0005BF34 /* RHWebRequestMaker.h */,
 				92E1AA7E1487115F0005BF34 /* RHWebRequestMaker.m */,
-				9258F02814D0D5EE00B61545 /* RHCampusServicesRequester.h */,
-				9258F02914D0D5EE00B61545 /* RHCampusServicesRequester.m */,
-				927A0CA114D8E6F300FAD2B2 /* RHCampusServicesRequesterDelegate.h */,
-				9233414B14DA7667004C1ACC /* RHDataVersionRequester.h */,
-				9233414C14DA7668004C1ACC /* RHDataVersionRequester.m */,
 				9233415114DB10E4004C1ACC /* RHLocationsSearchRequester.h */,
 				9233415214DB10E6004C1ACC /* RHLocationsSearchRequester.m */,
 				9233415414DB1113004C1ACC /* RHLocationsSearchRequesterDelegate.h */,
-				92F5F22014DFC4FF00324ACE /* RHTagsRequester.h */,
-				92F5F22114DFC4FF00324ACE /* RHTagsRequester.m */,
-				92F5F22314DFC54D00324ACE /* RHTagsRequesterDelegate.h */,
 				92ADDE0014E339C900655869 /* RHPathRequester.h */,
 				92ADDE0114E339C900655869 /* RHPathRequester.m */,
 				92ADDE0514E3402400655869 /* RHPathRequesterDelegate.h */,
@@ -506,7 +464,6 @@
 				9265FEBA1409AB5D00AE406E /* RHMainWindow.xib */,
 				92948907142D3ED400820A9C /* Map Customization */,
 				920656F314303CB200D50293 /* Server Communication */,
-				928A643C144954A900521EB1 /* Non-CoreData Storage */,
 				92ECC4C3141430510073C4C3 /* View Controllers */,
 				9226030C1409AE640065F705 /* Model (CoreData) */,
 				92ADDE0414E33A0C00655869 /* Unpersisted Models */,
@@ -578,17 +535,6 @@
 				9281A35A14C68C8D001D9837 /* JSONRepresentation.h */,
 			);
 			path = JSON;
-			sourceTree = "<group>";
-		};
-		928A643C144954A900521EB1 /* Non-CoreData Storage */ = {
-			isa = PBXGroup;
-			children = (
-				928A643E144955EB00521EB1 /* RHPListStore.h */,
-				928A643F144955EB00521EB1 /* RHPListStore.m */,
-				9233414E14DA7798004C1ACC /* RHDataVersionManager.h */,
-				9233414F14DA7798004C1ACC /* RHDataVersionManager.m */,
-			);
-			name = "Non-CoreData Storage";
 			sourceTree = "<group>";
 		};
 		92948907142D3ED400820A9C /* Map Customization */ = {
@@ -787,7 +733,6 @@
 				92463690142BAB5300A5E399 /* RHBoundaryNode.m in Sources */,
 				92463698142BAE0A00A5E399 /* RHNavigationNode.m in Sources */,
 				9201A4651432E96000069863 /* RHLocationOverlay.m in Sources */,
-				928A6440144955EB00521EB1 /* RHPListStore.m in Sources */,
 				9236CE9F144E3CBC00D0FB59 /* RHQuickListViewController.m in Sources */,
 				9236CEA6144F33C400D0FB59 /* RHPinAnnotationView.m in Sources */,
 				92312438144FB8470074791E /* RHLocationDetailViewController.m in Sources */,
@@ -818,17 +763,10 @@
 				9281A36114C68C8D001D9837 /* CJSONDeserializer.m in Sources */,
 				9281A36214C68C8D001D9837 /* CJSONScanner.m in Sources */,
 				9281A36314C68C8D001D9837 /* CJSONSerializer.m in Sources */,
-				9258F02A14D0D5EE00B61545 /* RHCampusServicesRequester.m in Sources */,
-				9233414314DA48CB004C1ACC /* RHLocationsRequester.m in Sources */,
-				9233414614DA48E6004C1ACC /* RHTopLocationsRequester.m in Sources */,
-				9233414914DA4907004C1ACC /* RHInternalLocationsRequester.m in Sources */,
-				9233414D14DA7668004C1ACC /* RHDataVersionRequester.m in Sources */,
-				9233415014DA7798004C1ACC /* RHDataVersionManager.m in Sources */,
 				9233415314DB10E9004C1ACC /* RHLocationsSearchRequester.m in Sources */,
 				92F5F21614DFC3C000324ACE /* RHTourItem.m in Sources */,
 				92F5F21C14DFC3E400324ACE /* RHTourTag.m in Sources */,
 				92F5F21F14DFC3F900324ACE /* RHTourTagCategory.m in Sources */,
-				92F5F22214DFC4FF00324ACE /* RHTagsRequester.m in Sources */,
 				92FFAC5714E0E5F700240458 /* RHTagsBasketViewController.m in Sources */,
 				92FFAC5D14E0F2C100240458 /* RHTagSelectionViewController.m in Sources */,
 				92ADDE0214E339C900655869 /* RHPathRequester.m in Sources */,

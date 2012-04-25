@@ -20,11 +20,21 @@
 #import "RHLoadersWrapper.h"
 #import "RHDataVersionsLoader.h"
 
+
 @implementation RHLoadersWrapper
 
 + (void)updateAllStoredData
 {
     [RHDataVersionsLoader.instance checkForNewVersions];
+}
+
++ (void)forceUpdateAllStoredData
+{
+    [RHDataVersionsLoader.instance setLocationsVersion:[NSNumber numberWithInt:-1]];
+    [RHDataVersionsLoader.instance setCampusServicesVersion:[NSNumber numberWithInt:-1]];
+    [RHDataVersionsLoader.instance setTourTagsVersion:[NSNumber numberWithInt:-1]];
+    
+    [self updateAllStoredData];
 }
 
 @end
