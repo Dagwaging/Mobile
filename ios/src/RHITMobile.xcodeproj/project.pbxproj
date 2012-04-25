@@ -66,6 +66,7 @@
 		9265FEC21409AB5D00AE406E /* RHSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9265FEC11409AB5D00AE406E /* RHSearchViewController.m */; };
 		9265FEC51409AB5D00AE406E /* RHMapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9265FEC31409AB5D00AE406E /* RHMapViewController.xib */; };
 		9265FEC81409AB5D00AE406E /* RHSearchViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9265FEC61409AB5D00AE406E /* RHSearchViewController.xib */; };
+		926C495115487DBE008FFA62 /* RHMainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 926C495015487DBE008FFA62 /* RHMainStoryboard.storyboard */; };
 		926D397F143D2CE400223121 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 926D397E143D2CE400223121 /* Settings.bundle */; };
 		927866FF1432F35C00749C2E /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 927866FE1432F35C00749C2E /* CoreLocation.framework */; };
 		9281A35B14C68C8D001D9837 /* CDataScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 9281A34614C68C8D001D9837 /* CDataScanner.m */; };
@@ -208,6 +209,7 @@
 		9265FEC41409AB5D00AE406E /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/RHMapViewController.xib; sourceTree = "<group>"; };
 		9265FEC71409AB5D00AE406E /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/RHSearchViewController.xib; sourceTree = "<group>"; };
 		9265FECF1409AB5D00AE406E /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		926C495015487DBE008FFA62 /* RHMainStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = RHMainStoryboard.storyboard; sourceTree = "<group>"; };
 		926D397E143D2CE400223121 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		927866FE1432F35C00749C2E /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		927867011432F36500749C2E /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
@@ -450,6 +452,7 @@
 				9265FEB71409AB5D00AE406E /* RHAppDelegate.h */,
 				9265FEB81409AB5D00AE406E /* RHAppDelegate.m */,
 				9265FEBA1409AB5D00AE406E /* RHMainWindow.xib */,
+				926C495015487DBE008FFA62 /* RHMainStoryboard.storyboard */,
 				92948907142D3ED400820A9C /* Map Customization */,
 				920656F314303CB200D50293 /* Server Communication */,
 				92ECC4C3141430510073C4C3 /* View Controllers */,
@@ -696,6 +699,7 @@
 				92FFAC5814E0E5F700240458 /* RHTagsBasketViewController.xib in Resources */,
 				92FFAC5E14E0F2C100240458 /* RHTagSelectionViewController.xib in Resources */,
 				92ADDE1214E36CB100655869 /* RHLocationSelectorViewController.xib in Resources */,
+				926C495115487DBE008FFA62 /* RHMainStoryboard.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -868,7 +872,7 @@
 				GCC_PREFIX_HEADER = "RHITMobile/RHITMobile-Prefix.pch";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "RHITMobile/RHITMobile-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "1B59DD42-5DEF-478D-BD0F-87F0F30D444F";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "1B59DD42-5DEF-478D-BD0F-87F0F30D444F";
@@ -887,7 +891,7 @@
 				GCC_PREFIX_HEADER = "RHITMobile/RHITMobile-Prefix.pch";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "RHITMobile/RHITMobile-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "1B59DD42-5DEF-478D-BD0F-87F0F30D444F";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "1B59DD42-5DEF-478D-BD0F-87F0F30D444F";

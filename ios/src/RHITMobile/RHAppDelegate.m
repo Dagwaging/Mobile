@@ -74,95 +74,95 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     }
     
     [RHLoadersWrapper updateAllStoredData];
-    
-    // Add tab bar controller to window
-    self.window.rootViewController = self.tabBarController;
-    
-    // Create and initialize the application's map view controller
-    self.mapViewController = [[RHMapViewController alloc]
-                              initWithNibName:kRHMapViewControllerNibName bundle:nil];
-    [self.mapNavigationViewController pushViewController:mapViewController
-                                                animated:NO];
-    self.mapViewController.navigationItem.title = @"Map";
-    UIImage *quickListIcon = [UIImage imageNamed:@"quicklist-toolbar-icon.png"];
-    UIBarButtonItem *mapLeftItem = [[UIBarButtonItem alloc] 
-                                    initWithImage:quickListIcon
-                                    style:UIBarButtonItemStylePlain
-                                    target:self.mapViewController
-                                    action:@selector(displayQuickList:)];
-    self.mapViewController.navigationItem.leftBarButtonItem = mapLeftItem; 
-    
-    UIBarButtonItem *mapRightItem = [UIBarButtonItem alloc]; 
-    mapRightItem = [mapRightItem
-                    initWithBarButtonSystemItem:UIBarButtonSystemItemSearch
-                    target:mapViewController
-                    action:@selector(displaySearch:)];
-    
-    self.mapViewController.navigationItem.rightBarButtonItem = mapRightItem;
-    
-    // Create and initialize the root info view controller
-    self.infoViewController = [[RHCampusServicesViewController alloc] initWithNibName:kRHCampusServicesViewControllerNibName
-                                                                               bundle:nil];
-    
-    [self.infoNavigationViewController pushViewController:self.infoViewController
-                                                 animated:NO];
-    
-    self.infoViewController.navigationItem.title = @"Campus Info";
-    
-    // Create and initialize the root directory view controller
-    RHDirectoryViewController *directoryController = [RHDirectoryViewController
-                                                      alloc];
-    directoryController = [directoryController initWithNibName:kRHDirectoryViewControllerNibName
-                                                        bundle:nil];
-    
-    [self.directoryNavigationViewController
-     pushViewController:directoryController
-     animated:NO];
-    
-    directoryController.navigationItem.title = @"Directory";
-    
-    // Create and initialize the root directory view controller
-    RHToursViewController *toursController = [RHToursViewController
-                                              alloc];
-    toursController = [toursController initWithNibName:kRHToursViewControllerNibName
-                                                bundle:nil];
-    
-    [self.toursNavigationViewController
-     pushViewController:toursController
-     animated:NO];
-    
-    toursController.navigationItem.title = @"Tours";
-    
-    // If this is a beta build, create and initizliaze the beta controller
-#ifdef RHITMobile_RHBeta
-    RHBetaViewController *beta = [[RHBetaViewController alloc]
-                                  initWithNibName:kRHBetaViewControllerNibName
-                                  bundle:nil];
-    UINavigationController *nav = [[UINavigationController alloc]
-                                   initWithRootViewController:beta];
-    UIImage *betaImage = [UIImage imageNamed:@"tab-bar-beta-icon.png"];
-    nav.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Beta"
-                                                   image:betaImage
-                                                     tag:0];
-    
-    
-    NSArray *newControllers = [self.tabBarController.viewControllers 
-                               arrayByAddingObject:nav];
-    self.tabBarController.viewControllers = newControllers;
-    
-#endif
-    
-    // Register ourselves for other managed object context save operations
-    NSNotificationCenter *notificationCenter = [NSNotificationCenter
-                                                defaultCenter];
-    [notificationCenter addObserver:self
-                           selector:@selector(managedContextDidSave:)
-                               name:NSManagedObjectContextDidSaveNotification 
-                             object:nil];
+//    
+//    // Add tab bar controller to window
+//    self.window.rootViewController = self.tabBarController;
+//    
+//    // Create and initialize the application's map view controller
+//    self.mapViewController = [[RHMapViewController alloc]
+//                              initWithNibName:kRHMapViewControllerNibName bundle:nil];
+//    [self.mapNavigationViewController pushViewController:mapViewController
+//                                                animated:NO];
+//    self.mapViewController.navigationItem.title = @"Map";
+//    UIImage *quickListIcon = [UIImage imageNamed:@"quicklist-toolbar-icon.png"];
+//    UIBarButtonItem *mapLeftItem = [[UIBarButtonItem alloc] 
+//                                    initWithImage:quickListIcon
+//                                    style:UIBarButtonItemStylePlain
+//                                    target:self.mapViewController
+//                                    action:@selector(displayQuickList:)];
+//    self.mapViewController.navigationItem.leftBarButtonItem = mapLeftItem; 
+//    
+//    UIBarButtonItem *mapRightItem = [UIBarButtonItem alloc]; 
+//    mapRightItem = [mapRightItem
+//                    initWithBarButtonSystemItem:UIBarButtonSystemItemSearch
+//                    target:mapViewController
+//                    action:@selector(displaySearch:)];
+//    
+//    self.mapViewController.navigationItem.rightBarButtonItem = mapRightItem;
+//    
+//    // Create and initialize the root info view controller
+//    self.infoViewController = [[RHCampusServicesViewController alloc] initWithNibName:kRHCampusServicesViewControllerNibName
+//                                                                               bundle:nil];
+//    
+//    [self.infoNavigationViewController pushViewController:self.infoViewController
+//                                                 animated:NO];
+//    
+//    self.infoViewController.navigationItem.title = @"Campus Info";
+//    
+//    // Create and initialize the root directory view controller
+//    RHDirectoryViewController *directoryController = [RHDirectoryViewController
+//                                                      alloc];
+//    directoryController = [directoryController initWithNibName:kRHDirectoryViewControllerNibName
+//                                                        bundle:nil];
+//    
+//    [self.directoryNavigationViewController
+//     pushViewController:directoryController
+//     animated:NO];
+//    
+//    directoryController.navigationItem.title = @"Directory";
+//    
+//    // Create and initialize the root directory view controller
+//    RHToursViewController *toursController = [RHToursViewController
+//                                              alloc];
+//    toursController = [toursController initWithNibName:kRHToursViewControllerNibName
+//                                                bundle:nil];
+//    
+//    [self.toursNavigationViewController
+//     pushViewController:toursController
+//     animated:NO];
+//    
+//    toursController.navigationItem.title = @"Tours";
+//    
+//    // If this is a beta build, create and initizliaze the beta controller
+//#ifdef RHITMobile_RHBeta
+//    RHBetaViewController *beta = [[RHBetaViewController alloc]
+//                                  initWithNibName:kRHBetaViewControllerNibName
+//                                  bundle:nil];
+//    UINavigationController *nav = [[UINavigationController alloc]
+//                                   initWithRootViewController:beta];
+//    UIImage *betaImage = [UIImage imageNamed:@"tab-bar-beta-icon.png"];
+//    nav.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Beta"
+//                                                   image:betaImage
+//                                                     tag:0];
+//    
+//    
+//    NSArray *newControllers = [self.tabBarController.viewControllers 
+//                               arrayByAddingObject:nav];
+//    self.tabBarController.viewControllers = newControllers;
+//    
+//#endif
+//    
+//    // Register ourselves for other managed object context save operations
+//    NSNotificationCenter *notificationCenter = [NSNotificationCenter
+//                                                defaultCenter];
+//    [notificationCenter addObserver:self
+//                           selector:@selector(managedContextDidSave:)
+//                               name:NSManagedObjectContextDidSaveNotification 
+//                             object:nil];
     
     // Finish setup and kick off defaults syncing
     [self.window makeKeyAndVisible];
-    [self setupDefaults];
+    //[self setupDefaults];
     //    
     //    // Kick off a locations update
     //    RHTopLocationsRequester *locationsRequester = [[RHTopLocationsRequester alloc] initWithDelegate:self.mapViewController persistantStoreCoordinator:self.persistentStoreCoordinator];
@@ -181,9 +181,9 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     //    [tagsRequester updateTags];
     
     // If this is a beta build, kick off initial beta setup
-#ifdef RHITMobile_RHBeta
-    [beta performInitialSetup];
-#endif
+//#ifdef RHITMobile_RHBeta
+//    [beta performInitialSetup];
+//#endif
     
     return YES;
 }

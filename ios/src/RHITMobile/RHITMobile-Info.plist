@@ -31,8 +31,8 @@
 	<string>DEVELOPMENT_BUILD</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSMainNibFile</key>
-	<string>RHMainWindow</string>
+	<key>UIMainStoryboardFile</key>
+	<string>RHMainStoryboard</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
