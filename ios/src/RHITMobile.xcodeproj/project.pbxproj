@@ -12,6 +12,7 @@
 		92085493142BA3C300BE55B8 /* RHLabelNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 92085492142BA3C300BE55B8 /* RHLabelNode.m */; };
 		920FAF8714BEAA1800BC4614 /* RHServiceItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 920FAF8614BEAA1800BC4614 /* RHServiceItem.m */; };
 		920FAF8A14BEAA2300BC4614 /* RHServiceCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 920FAF8914BEAA2300BC4614 /* RHServiceCategory.m */; };
+		921628191547A9A10017646C /* RHPathRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 921628181547A9A10017646C /* RHPathRequest.m */; };
 		9218208D144113A800A66923 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9218208C144113A800A66923 /* Default@2x.png */; };
 		9218208F144113B900A66923 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 9218208E144113B900A66923 /* Default.png */; };
 		921F3C5D14EA22F700EDD02A /* RHMapDirectionsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 921F3C5C14EA22F700EDD02A /* RHMapDirectionsManager.m */; };
@@ -124,6 +125,8 @@
 		920FAF8614BEAA1800BC4614 /* RHServiceItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHServiceItem.m; sourceTree = "<group>"; };
 		920FAF8814BEAA2300BC4614 /* RHServiceCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHServiceCategory.h; sourceTree = "<group>"; };
 		920FAF8914BEAA2300BC4614 /* RHServiceCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHServiceCategory.m; sourceTree = "<group>"; };
+		921628171547A9A10017646C /* RHPathRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHPathRequest.h; sourceTree = "<group>"; };
+		921628181547A9A10017646C /* RHPathRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHPathRequest.m; sourceTree = "<group>"; };
 		9218208C144113A800A66923 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		9218208E144113B900A66923 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		921F3C5B14EA22F700EDD02A /* RHMapDirectionsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHMapDirectionsManager.h; sourceTree = "<group>"; };
@@ -411,6 +414,8 @@
 				923919441545EA8400D3C611 /* RHJSONRequest.m */,
 				923919581546016C00D3C611 /* RHLoaderRequestsWrapper.h */,
 				923919591546016C00D3C611 /* RHLoaderRequestsWrapper.m */,
+				921628171547A9A10017646C /* RHPathRequest.h */,
+				921628181547A9A10017646C /* RHPathRequest.m */,
 			);
 			name = Requests;
 			sourceTree = "<group>";
@@ -781,6 +786,7 @@
 				9239195D1546018F00D3C611 /* RHDataVersionsLoader.m in Sources */,
 				92391960154601F700D3C611 /* RHLoadersWrapper.m in Sources */,
 				92B34D7D15477F520047B1BC /* RHLoader.m in Sources */,
+				921628191547A9A10017646C /* RHPathRequest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

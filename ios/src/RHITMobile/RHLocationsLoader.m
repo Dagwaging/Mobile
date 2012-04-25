@@ -192,7 +192,7 @@ static RHLocationsLoader *_instance;
     NSLog(@"Done updating top level locations");
 #endif
     
-    int locationsToPopulate = serverIds.count;
+    //int locationsToPopulate = serverIds.count;
     __block int locationsPopulated = 0;
     
     NSOperationQueue *operationQueue = [[NSOperationQueue alloc] init];
@@ -252,13 +252,20 @@ static RHLocationsLoader *_instance;
             
             parent.retrievalStatus = RHLocationRetrievalStatusFull;
             
+            // Save our progress
+            blockError = nil;
+            [blockContext save:&blockError];
+            
+            if (blockError) {
+                NSLog(@"Error saving internal locations: %@", blockError);
+                return;
+            }
+            
             // Callback if applicable
             if (_internalLocationCallback != NULL && _internalLocationCallbackIdentifier == parentId) {
 #ifdef RHITMobile_RHLoaderDebug
                 NSLog(@"Internal location callback found. Calling.");
 #endif
-                // Save here (early), so the callback receiver can do things with the data
-                [blockContext save:nil];
                 [[NSOperationQueue mainQueue] addOperationWithBlock:_internalLocationCallback];
             }
             
@@ -266,7 +273,7 @@ static RHLocationsLoader *_instance;
             
 #ifdef RHITMobile_RHLoaderDebug
             NSLog(@"Finished internal location update for location %d", parentId);
-            NSLog(@"Internal location status: %d/%d locations complete", locationsPopulated, locationsToPopulate);
+            NSLog(@"Internal location status: %d/%d locations complete", locationsPopulated, serverIds.count);
 #endif
         }];
         
@@ -357,6 +364,7 @@ static RHLocationsLoader *_instance;
     NSArray *possibleDuplicates = [localContext executeFetchRequest:duplicateRequest error:nil];
     
     if (possibleDuplicates.count > 0) {
+        NSLog(@"Warning: Tried to create duplicate location: %d", serverIdentifier.intValue);
         return [possibleDuplicates objectAtIndex:0];
     }
     

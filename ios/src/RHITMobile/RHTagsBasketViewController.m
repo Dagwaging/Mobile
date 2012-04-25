@@ -21,6 +21,7 @@
 #import "RHAppDelegate.h"
 #import "RHMapViewController.h"
 #import "RHMapDirectionsManager.h"
+#import "RHPathRequest.h"
 #import "RHTagSelectionViewController.h"
 #import "RHTourRequester.h"
 #import "RHTourTagCategory.h"
@@ -117,9 +118,29 @@
     NSIndexPath *finalIndexPath = [NSIndexPath indexPathForRow:self.tags.count inSection:0];
     [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:finalIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     
-    NSPersistentStoreCoordinator *persistantStoreCoordinator = [(RHAppDelegate *) [[UIApplication sharedApplication] delegate] persistentStoreCoordinator];
-    RHTourRequester *tourRequester = [[RHTourRequester alloc] initWithDelegate:self persistantStoreCoordinator:persistantStoreCoordinator];
-    [tourRequester requestTourWithTags:self.tags startLocation:nil type:RHTourRequestTypeOnCampus duration:[NSNumber numberWithInt:20]];
+    //    NSPersistentStoreCoordinator *persistantStoreCoordinator = [(RHAppDelegate *) [[UIApplication sharedApplication] delegate] persistentStoreCoordinator];
+    //    RHTourRequester *tourRequester = [[RHTourRequester alloc] initWithDelegate:self persistantStoreCoordinator:persistantStoreCoordinator];
+    //    [tourRequester requestTourWithTags:self.tags startLocation:nil type:RHTourRequestTypeOnCampus duration:[NSNumber numberWithInt:20]];
+    
+    NSMutableArray *tagIds = [[NSMutableArray alloc] initWithCapacity:self.tags.count];
+    
+    for (RHTourTag *tag in self.tags) {
+        [tagIds addObject:tag.serverIdentifier];
+    }
+    
+    [RHPathRequest makeOnCampusTourRequestWithTagIds:tagIds
+                                  fromLocationWithId:[NSNumber numberWithInt:111] // TODO
+                                         forDuration:[NSNumber numberWithInt:60] // TODO
+                                        successBlock:^(RHPath *path) {
+                                            [self didLoadPath:path];
+                                        } failureBlock:^(NSError *error) {
+                                            [[[UIAlertView alloc] initWithTitle:@"Error"
+                                                                        message:@"Something went wrong building the tour. We're really sorry."
+                                                                       delegate:nil
+                                                              cancelButtonTitle:@"OK"
+                                                              otherButtonTitles: nil] show];
+                                            [self.navigationController popViewControllerAnimated:YES];
+                                        }];
 }
 
 #pragma mark - UITableViewDelegate Methods

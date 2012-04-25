@@ -96,17 +96,17 @@
     [super viewDidLoad];
     self.navigationItem.title = self.location.name;
     // Do any additional setup after loading the view from its nib.
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    self.location = self.location;
+    [self.tableView reloadData];
     
     if (self.location.retrievalStatus != RHLocationRetrievalStatusFull) {
         [RHLocationsLoader.instance registerCallbackForLocationWithId:self.location.serverIdentifier callback:^(void) {
             [self setLocation:self.location];
         }];
     }
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    self.location = self.location;
-    [self.tableView reloadData];
 }
 
 - (void)viewDidUnload

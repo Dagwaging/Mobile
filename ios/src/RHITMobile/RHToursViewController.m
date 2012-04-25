@@ -81,8 +81,9 @@
     
     if (tourControl.selectedSegmentIndex == 0) {
         // On campus
-        self.durationSlider.enabled = YES;
-        self.locationControl.enabled = YES;
+        // TODO: Fix
+        self.durationSlider.enabled = NO;
+        self.locationControl.enabled = NO;
     } else {
         // Virtual
         self.durationSlider.enabled = NO;
