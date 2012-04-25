@@ -347,12 +347,27 @@ namespace RHITMobile.Secure.BannerTableAdapters
     {
         public int AddUser(bool s, User user)
         {
-            return spInsertUser(s, user.Username, user.Alias, user.Mailbox, user.Major, user.Class, user.Year, user.LastName, user.FirstName, user.MiddleName, user.Department, user.Phone, user.Room);
+            int? mailbox = user.Mailbox;
+            if (mailbox < 1)
+                mailbox = null;
+
+            return spInsertUser(s, user.Username, user.Alias, mailbox, user.Major, user.Class, user.Year, user.LastName, user.FirstName, user.MiddleName, user.Department, user.Phone, user.Room);
         }
         
         public int AddCourse(bool s, Course course)
         {
-            return spInsertCourse(s, course.Term, course.CRN, course.Name, course.Title, course.Instructor, course.Credit, course.FinalDay.ToString(), course.FinalHour, course.FinalRoom, course.Enrolled, course.MaxEnrollment, course.Comments);
+            string finalDay = course.FinalDay.ToString();
+            int? finalHour = course.FinalHour;
+            string finalRoom = course.FinalRoom;
+
+            if (course.FinalDay == char.MinValue || finalHour == 0)
+            {
+                finalDay = null;
+                finalHour = null;
+                finalRoom = null;
+            }
+
+            return spInsertCourse(s, course.Term, course.CRN, course.Name, course.Title, course.Instructor, course.Credit, finalDay, finalHour, finalRoom, course.Enrolled, course.MaxEnrollment, course.Comments);
         }
 
         public int AddCourseSchedule(bool s, Course course)
