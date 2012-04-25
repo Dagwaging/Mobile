@@ -17,10 +17,10 @@
 		9218208F144113B900A66923 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 9218208E144113B900A66923 /* Default.png */; };
 		921F3C5D14EA22F700EDD02A /* RHMapDirectionsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 921F3C5C14EA22F700EDD02A /* RHMapDirectionsManager.m */; };
 		9226030E1409AEF00065F705 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9226030D1409AEF00065F705 /* MapKit.framework */; };
-		922603581409C9480065F705 /* launch-icon-large.png in Resources */ = {isa = PBXBuildFile; fileRef = 922603571409C9480065F705 /* launch-icon-large.png */; };
-		9226035A1409C9680065F705 /* launch-icon-small.png in Resources */ = {isa = PBXBuildFile; fileRef = 922603591409C9680065F705 /* launch-icon-small.png */; };
-		922F44A514985AE800D5C2C3 /* tab-bar-tours-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 922F44A314985AE800D5C2C3 /* tab-bar-tours-icon.png */; };
-		922F44A614985AE800D5C2C3 /* tab-bar-tours-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 922F44A414985AE800D5C2C3 /* tab-bar-tours-icon@2x.png */; };
+		922603581409C9480065F705 /* LaunchIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 922603571409C9480065F705 /* LaunchIcon@2x.png */; };
+		9226035A1409C9680065F705 /* LaunchIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 922603591409C9680065F705 /* LaunchIcon.png */; };
+		922F44A514985AE800D5C2C3 /* TabBarToursIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 922F44A314985AE800D5C2C3 /* TabBarToursIcon.png */; };
+		922F44A614985AE800D5C2C3 /* TabBarToursIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 922F44A414985AE800D5C2C3 /* TabBarToursIcon@2x.png */; };
 		92312438144FB8470074791E /* RHLocationDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92312436144FB8470074791E /* RHLocationDetailViewController.m */; };
 		9231243A144FB8470074791E /* RHLocationDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92312437144FB8470074791E /* RHLocationDetailViewController.xib */; };
 		9233415314DB10E9004C1ACC /* RHLocationsSearchRequester.m in Sources */ = {isa = PBXBuildFile; fileRef = 9233415214DB10E6004C1ACC /* RHLocationsSearchRequester.m */; };
@@ -42,15 +42,15 @@
 		92463698142BAE0A00A5E399 /* RHNavigationNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 92463697142BAE0A00A5E399 /* RHNavigationNode.m */; };
 		924DE4D4145E6EC700EEE8C6 /* RHBetaViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 924DE4D2145E6EC700EEE8C6 /* RHBetaViewController.m */; };
 		924DE4D5145E6EC700EEE8C6 /* RHBetaViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 924DE4D3145E6EC700EEE8C6 /* RHBetaViewController.xib */; };
-		924DE4DA145E773800EEE8C6 /* tab-bar-info-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 924DE4D8145E773800EEE8C6 /* tab-bar-info-icon.png */; };
-		924DE4DB145E773800EEE8C6 /* tab-bar-info-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 924DE4D9145E773800EEE8C6 /* tab-bar-info-icon@2x.png */; };
-		924DE4DE145E787D00EEE8C6 /* tab-bar-beta-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 924DE4DC145E787D00EEE8C6 /* tab-bar-beta-icon.png */; };
-		924DE4DF145E787D00EEE8C6 /* tab-bar-beta-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 924DE4DD145E787D00EEE8C6 /* tab-bar-beta-icon@2x.png */; };
+		924DE4DA145E773800EEE8C6 /* TabBarInfoIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 924DE4D8145E773800EEE8C6 /* TabBarInfoIcon.png */; };
+		924DE4DB145E773800EEE8C6 /* TabBarInfoIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 924DE4D9145E773800EEE8C6 /* TabBarInfoIcon@2x.png */; };
+		924DE4DE145E787D00EEE8C6 /* TabBarBetaIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 924DE4DC145E787D00EEE8C6 /* TabBarBetaIcon.png */; };
+		924DE4DF145E787D00EEE8C6 /* TabBarBetaIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 924DE4DD145E787D00EEE8C6 /* TabBarBetaIcon@2x.png */; };
 		924DE4E3145E79A800EEE8C6 /* RHCampusServicesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 924DE4E1145E79A800EEE8C6 /* RHCampusServicesViewController.m */; };
 		924DE4E4145E79A800EEE8C6 /* RHCampusServicesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 924DE4E2145E79A800EEE8C6 /* RHCampusServicesViewController.xib */; };
 		924DE4E8145E79DF00EEE8C6 /* RHDirectoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 924DE4E6145E79DF00EEE8C6 /* RHDirectoryViewController.m */; };
 		924DE4E9145E79DF00EEE8C6 /* RHDirectoryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 924DE4E7145E79DF00EEE8C6 /* RHDirectoryViewController.xib */; };
-		924E754D140ACC9A001DFC4C /* tab-bar-map-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 924E754C140ACC9A001DFC4C /* tab-bar-map-icon.png */; };
+		924E754D140ACC9A001DFC4C /* TabBarMapIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 924E754C140ACC9A001DFC4C /* TabBarMapIcon.png */; };
 		925465AA1495C69C00C12B81 /* RHWrappedCoordinate.m in Sources */ = {isa = PBXBuildFile; fileRef = 925465A91495C69C00C12B81 /* RHWrappedCoordinate.m */; };
 		925465AE1495EB7F00C12B81 /* RHToursViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 925465AC1495EB7E00C12B81 /* RHToursViewController.m */; };
 		925465AF1495EB7F00C12B81 /* RHToursViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 925465AD1495EB7F00C12B81 /* RHToursViewController.xib */; };
@@ -78,17 +78,17 @@
 		9281A36114C68C8D001D9837 /* CJSONDeserializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9281A35514C68C8D001D9837 /* CJSONDeserializer.m */; };
 		9281A36214C68C8D001D9837 /* CJSONScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 9281A35714C68C8D001D9837 /* CJSONScanner.m */; settings = {COMPILER_FLAGS = "-w"; }; };
 		9281A36314C68C8D001D9837 /* CJSONSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9281A35914C68C8D001D9837 /* CJSONSerializer.m */; };
-		928B76E8144CBADA00D2F98D /* tab-bar-map-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 928B76E7144CBADA00D2F98D /* tab-bar-map-icon@2x.png */; };
+		928B76E8144CBADA00D2F98D /* TabBarMapIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 928B76E7144CBADA00D2F98D /* TabBarMapIcon@2x.png */; };
 		92A49DDC145F8BA400B6F34E /* RHBetaRegistrationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92A49DDA145F8BA400B6F34E /* RHBetaRegistrationViewController.m */; };
 		92A49DDD145F8BA400B6F34E /* RHBetaRegistrationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92A49DDB145F8BA400B6F34E /* RHBetaRegistrationViewController.xib */; };
 		92ADDE0814E3422400655869 /* RHPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 92ADDE0714E3422400655869 /* RHPath.m */; };
 		92ADDE1114E36CB100655869 /* RHLocationSelectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92ADDE0F14E36CB000655869 /* RHLocationSelectorViewController.m */; };
 		92ADDE1214E36CB100655869 /* RHLocationSelectorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92ADDE1014E36CB000655869 /* RHLocationSelectorViewController.xib */; };
 		92ADEE291459026600060A3F /* RHLocationLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 92ADEE281459026600060A3F /* RHLocationLink.m */; };
-		92ADEE2E14599D9500060A3F /* quicklist-toolbar-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 92ADEE2C14599D9500060A3F /* quicklist-toolbar-icon.png */; };
-		92ADEE2F14599D9500060A3F /* quicklist-toolbar-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 92ADEE2D14599D9500060A3F /* quicklist-toolbar-icon@2x.png */; };
-		92ADEE321459BC5E00060A3F /* tab-bar-directory-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 92ADEE301459BC5E00060A3F /* tab-bar-directory-icon.png */; };
-		92ADEE331459BC5E00060A3F /* tab-bar-directory-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 92ADEE311459BC5E00060A3F /* tab-bar-directory-icon@2x.png */; };
+		92ADEE2E14599D9500060A3F /* QuickListToolbarIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 92ADEE2C14599D9500060A3F /* QuickListToolbarIcon.png */; };
+		92ADEE2F14599D9500060A3F /* QuickListToolbarIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 92ADEE2D14599D9500060A3F /* QuickListToolbarIcon@2x.png */; };
+		92ADEE321459BC5E00060A3F /* TabBarDirectoryIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 92ADEE301459BC5E00060A3F /* TabBarDirectoryIcon.png */; };
+		92ADEE331459BC5E00060A3F /* TabBarDirectoryIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 92ADEE311459BC5E00060A3F /* TabBarDirectoryIcon@2x.png */; };
 		92B34D7D15477F520047B1BC /* RHLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 92B34D7C15477F520047B1BC /* RHLoader.m */; };
 		92CEFC2314BEAA830085CEDB /* RHServiceLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 92CEFC2214BEAA830085CEDB /* RHServiceLink.m */; };
 		92CEFC2614BEAC6B0085CEDB /* RHPerson.m in Sources */ = {isa = PBXBuildFile; fileRef = 92CEFC2514BEAC6A0085CEDB /* RHPerson.m */; };
@@ -130,10 +130,10 @@
 		921F3C5B14EA22F700EDD02A /* RHMapDirectionsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHMapDirectionsManager.h; sourceTree = "<group>"; };
 		921F3C5C14EA22F700EDD02A /* RHMapDirectionsManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHMapDirectionsManager.m; sourceTree = "<group>"; };
 		9226030D1409AEF00065F705 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
-		922603571409C9480065F705 /* launch-icon-large.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "launch-icon-large.png"; sourceTree = "<group>"; };
-		922603591409C9680065F705 /* launch-icon-small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "launch-icon-small.png"; sourceTree = "<group>"; };
-		922F44A314985AE800D5C2C3 /* tab-bar-tours-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab-bar-tours-icon.png"; sourceTree = "<group>"; };
-		922F44A414985AE800D5C2C3 /* tab-bar-tours-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab-bar-tours-icon@2x.png"; sourceTree = "<group>"; };
+		922603571409C9480065F705 /* LaunchIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "LaunchIcon@2x.png"; sourceTree = "<group>"; };
+		922603591409C9680065F705 /* LaunchIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LaunchIcon.png; sourceTree = "<group>"; };
+		922F44A314985AE800D5C2C3 /* TabBarToursIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TabBarToursIcon.png; sourceTree = "<group>"; };
+		922F44A414985AE800D5C2C3 /* TabBarToursIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TabBarToursIcon@2x.png"; sourceTree = "<group>"; };
 		92312435144FB8470074791E /* RHLocationDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHLocationDetailViewController.h; sourceTree = "<group>"; };
 		92312436144FB8470074791E /* RHLocationDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHLocationDetailViewController.m; sourceTree = "<group>"; };
 		92312437144FB8470074791E /* RHLocationDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RHLocationDetailViewController.xib; sourceTree = "<group>"; };
@@ -174,17 +174,17 @@
 		924DE4D2145E6EC700EEE8C6 /* RHBetaViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHBetaViewController.m; sourceTree = "<group>"; };
 		924DE4D3145E6EC700EEE8C6 /* RHBetaViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RHBetaViewController.xib; sourceTree = "<group>"; };
 		924DE4D7145E70CE00EEE8C6 /* RHBeta.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHBeta.h; sourceTree = "<group>"; };
-		924DE4D8145E773800EEE8C6 /* tab-bar-info-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab-bar-info-icon.png"; sourceTree = "<group>"; };
-		924DE4D9145E773800EEE8C6 /* tab-bar-info-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab-bar-info-icon@2x.png"; sourceTree = "<group>"; };
-		924DE4DC145E787D00EEE8C6 /* tab-bar-beta-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab-bar-beta-icon.png"; sourceTree = "<group>"; };
-		924DE4DD145E787D00EEE8C6 /* tab-bar-beta-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab-bar-beta-icon@2x.png"; sourceTree = "<group>"; };
+		924DE4D8145E773800EEE8C6 /* TabBarInfoIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TabBarInfoIcon.png; sourceTree = "<group>"; };
+		924DE4D9145E773800EEE8C6 /* TabBarInfoIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TabBarInfoIcon@2x.png"; sourceTree = "<group>"; };
+		924DE4DC145E787D00EEE8C6 /* TabBarBetaIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TabBarBetaIcon.png; sourceTree = "<group>"; };
+		924DE4DD145E787D00EEE8C6 /* TabBarBetaIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TabBarBetaIcon@2x.png"; sourceTree = "<group>"; };
 		924DE4E0145E79A800EEE8C6 /* RHCampusServicesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHCampusServicesViewController.h; sourceTree = "<group>"; };
 		924DE4E1145E79A800EEE8C6 /* RHCampusServicesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHCampusServicesViewController.m; sourceTree = "<group>"; };
 		924DE4E2145E79A800EEE8C6 /* RHCampusServicesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RHCampusServicesViewController.xib; sourceTree = "<group>"; };
 		924DE4E5145E79DF00EEE8C6 /* RHDirectoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHDirectoryViewController.h; sourceTree = "<group>"; };
 		924DE4E6145E79DF00EEE8C6 /* RHDirectoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHDirectoryViewController.m; sourceTree = "<group>"; };
 		924DE4E7145E79DF00EEE8C6 /* RHDirectoryViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RHDirectoryViewController.xib; sourceTree = "<group>"; };
-		924E754C140ACC9A001DFC4C /* tab-bar-map-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab-bar-map-icon.png"; sourceTree = "<group>"; };
+		924E754C140ACC9A001DFC4C /* TabBarMapIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TabBarMapIcon.png; sourceTree = "<group>"; };
 		925465A81495C69B00C12B81 /* RHWrappedCoordinate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHWrappedCoordinate.h; sourceTree = "<group>"; };
 		925465A91495C69C00C12B81 /* RHWrappedCoordinate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHWrappedCoordinate.m; sourceTree = "<group>"; };
 		925465AB1495EB7E00C12B81 /* RHToursViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHToursViewController.h; sourceTree = "<group>"; };
@@ -232,7 +232,7 @@
 		9281A35814C68C8D001D9837 /* CJSONSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJSONSerializer.h; sourceTree = "<group>"; };
 		9281A35914C68C8D001D9837 /* CJSONSerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJSONSerializer.m; sourceTree = "<group>"; };
 		9281A35A14C68C8D001D9837 /* JSONRepresentation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONRepresentation.h; sourceTree = "<group>"; };
-		928B76E7144CBADA00D2F98D /* tab-bar-map-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab-bar-map-icon@2x.png"; sourceTree = "<group>"; };
+		928B76E7144CBADA00D2F98D /* TabBarMapIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TabBarMapIcon@2x.png"; sourceTree = "<group>"; };
 		929488F9142CD65500820A9C /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		92A49DD9145F8BA400B6F34E /* RHBetaRegistrationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHBetaRegistrationViewController.h; sourceTree = "<group>"; };
 		92A49DDA145F8BA400B6F34E /* RHBetaRegistrationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHBetaRegistrationViewController.m; sourceTree = "<group>"; };
@@ -244,10 +244,10 @@
 		92ADDE1014E36CB000655869 /* RHLocationSelectorViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RHLocationSelectorViewController.xib; sourceTree = "<group>"; };
 		92ADEE271459026600060A3F /* RHLocationLink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHLocationLink.h; sourceTree = "<group>"; };
 		92ADEE281459026600060A3F /* RHLocationLink.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHLocationLink.m; sourceTree = "<group>"; };
-		92ADEE2C14599D9500060A3F /* quicklist-toolbar-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "quicklist-toolbar-icon.png"; sourceTree = "<group>"; };
-		92ADEE2D14599D9500060A3F /* quicklist-toolbar-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "quicklist-toolbar-icon@2x.png"; sourceTree = "<group>"; };
-		92ADEE301459BC5E00060A3F /* tab-bar-directory-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab-bar-directory-icon.png"; sourceTree = "<group>"; };
-		92ADEE311459BC5E00060A3F /* tab-bar-directory-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab-bar-directory-icon@2x.png"; sourceTree = "<group>"; };
+		92ADEE2C14599D9500060A3F /* QuickListToolbarIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = QuickListToolbarIcon.png; sourceTree = "<group>"; };
+		92ADEE2D14599D9500060A3F /* QuickListToolbarIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "QuickListToolbarIcon@2x.png"; sourceTree = "<group>"; };
+		92ADEE301459BC5E00060A3F /* TabBarDirectoryIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TabBarDirectoryIcon.png; sourceTree = "<group>"; };
+		92ADEE311459BC5E00060A3F /* TabBarDirectoryIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TabBarDirectoryIcon@2x.png"; sourceTree = "<group>"; };
 		92B34D7B15477F520047B1BC /* RHLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHLoader.h; sourceTree = "<group>"; };
 		92B34D7C15477F520047B1BC /* RHLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHLoader.m; sourceTree = "<group>"; };
 		92CEFC2114BEAA830085CEDB /* RHServiceLink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHServiceLink.h; sourceTree = "<group>"; };
@@ -323,18 +323,18 @@
 		9226030B1409AC820065F705 /* Images */ = {
 			isa = PBXGroup;
 			children = (
-				922F44A314985AE800D5C2C3 /* tab-bar-tours-icon.png */,
-				922F44A414985AE800D5C2C3 /* tab-bar-tours-icon@2x.png */,
-				924DE4DC145E787D00EEE8C6 /* tab-bar-beta-icon.png */,
-				924DE4DD145E787D00EEE8C6 /* tab-bar-beta-icon@2x.png */,
-				924DE4D8145E773800EEE8C6 /* tab-bar-info-icon.png */,
-				924DE4D9145E773800EEE8C6 /* tab-bar-info-icon@2x.png */,
-				92ADEE301459BC5E00060A3F /* tab-bar-directory-icon.png */,
-				92ADEE311459BC5E00060A3F /* tab-bar-directory-icon@2x.png */,
-				92ADEE2C14599D9500060A3F /* quicklist-toolbar-icon.png */,
-				92ADEE2D14599D9500060A3F /* quicklist-toolbar-icon@2x.png */,
-				928B76E7144CBADA00D2F98D /* tab-bar-map-icon@2x.png */,
-				924E754C140ACC9A001DFC4C /* tab-bar-map-icon.png */,
+				924E754C140ACC9A001DFC4C /* TabBarMapIcon.png */,
+				928B76E7144CBADA00D2F98D /* TabBarMapIcon@2x.png */,
+				92ADEE301459BC5E00060A3F /* TabBarDirectoryIcon.png */,
+				92ADEE311459BC5E00060A3F /* TabBarDirectoryIcon@2x.png */,
+				924DE4D8145E773800EEE8C6 /* TabBarInfoIcon.png */,
+				924DE4D9145E773800EEE8C6 /* TabBarInfoIcon@2x.png */,
+				922F44A314985AE800D5C2C3 /* TabBarToursIcon.png */,
+				922F44A414985AE800D5C2C3 /* TabBarToursIcon@2x.png */,
+				924DE4DC145E787D00EEE8C6 /* TabBarBetaIcon.png */,
+				924DE4DD145E787D00EEE8C6 /* TabBarBetaIcon@2x.png */,
+				92ADEE2C14599D9500060A3F /* QuickListToolbarIcon.png */,
+				92ADEE2D14599D9500060A3F /* QuickListToolbarIcon@2x.png */,
 			);
 			name = Images;
 			sourceTree = "<group>";
@@ -410,8 +410,8 @@
 			children = (
 				9218208E144113B900A66923 /* Default.png */,
 				9218208C144113A800A66923 /* Default@2x.png */,
-				922603591409C9680065F705 /* launch-icon-small.png */,
-				922603571409C9480065F705 /* launch-icon-large.png */,
+				922603591409C9680065F705 /* LaunchIcon.png */,
+				922603571409C9480065F705 /* LaunchIcon@2x.png */,
 				9281A34414C68C8D001D9837 /* TouchJSON */,
 				9265FEAE1409AB5D00AE406E /* RHITMobile */,
 				9265FEA71409AB5D00AE406E /* Frameworks */,
@@ -669,32 +669,32 @@
 				9265FEBC1409AB5D00AE406E /* RHMainWindow.xib in Resources */,
 				9265FEC51409AB5D00AE406E /* RHMapViewController.xib in Resources */,
 				9265FEC81409AB5D00AE406E /* RHSearchViewController.xib in Resources */,
-				922603581409C9480065F705 /* launch-icon-large.png in Resources */,
-				9226035A1409C9680065F705 /* launch-icon-small.png in Resources */,
-				924E754D140ACC9A001DFC4C /* tab-bar-map-icon.png in Resources */,
+				922603581409C9480065F705 /* LaunchIcon@2x.png in Resources */,
+				9226035A1409C9680065F705 /* LaunchIcon.png in Resources */,
+				924E754D140ACC9A001DFC4C /* TabBarMapIcon.png in Resources */,
 				926D397F143D2CE400223121 /* Settings.bundle in Resources */,
 				9218208D144113A800A66923 /* Default@2x.png in Resources */,
 				9218208F144113B900A66923 /* Default.png in Resources */,
-				928B76E8144CBADA00D2F98D /* tab-bar-map-icon@2x.png in Resources */,
+				928B76E8144CBADA00D2F98D /* TabBarMapIcon@2x.png in Resources */,
 				926088A8144D2ADB0002D50E /* RHITMobileValues.plist in Resources */,
 				9236CEA1144E3CBC00D0FB59 /* RHQuickListViewController.xib in Resources */,
 				9231243A144FB8470074791E /* RHLocationDetailViewController.xib in Resources */,
-				92ADEE2E14599D9500060A3F /* quicklist-toolbar-icon.png in Resources */,
-				92ADEE2F14599D9500060A3F /* quicklist-toolbar-icon@2x.png in Resources */,
-				92ADEE321459BC5E00060A3F /* tab-bar-directory-icon.png in Resources */,
-				92ADEE331459BC5E00060A3F /* tab-bar-directory-icon@2x.png in Resources */,
+				92ADEE2E14599D9500060A3F /* QuickListToolbarIcon.png in Resources */,
+				92ADEE2F14599D9500060A3F /* QuickListToolbarIcon@2x.png in Resources */,
+				92ADEE321459BC5E00060A3F /* TabBarDirectoryIcon.png in Resources */,
+				92ADEE331459BC5E00060A3F /* TabBarDirectoryIcon@2x.png in Resources */,
 				924DE4D5145E6EC700EEE8C6 /* RHBetaViewController.xib in Resources */,
-				924DE4DA145E773800EEE8C6 /* tab-bar-info-icon.png in Resources */,
-				924DE4DB145E773800EEE8C6 /* tab-bar-info-icon@2x.png in Resources */,
-				924DE4DE145E787D00EEE8C6 /* tab-bar-beta-icon.png in Resources */,
-				924DE4DF145E787D00EEE8C6 /* tab-bar-beta-icon@2x.png in Resources */,
+				924DE4DA145E773800EEE8C6 /* TabBarInfoIcon.png in Resources */,
+				924DE4DB145E773800EEE8C6 /* TabBarInfoIcon@2x.png in Resources */,
+				924DE4DE145E787D00EEE8C6 /* TabBarBetaIcon.png in Resources */,
+				924DE4DF145E787D00EEE8C6 /* TabBarBetaIcon@2x.png in Resources */,
 				924DE4E4145E79A800EEE8C6 /* RHCampusServicesViewController.xib in Resources */,
 				924DE4E9145E79DF00EEE8C6 /* RHDirectoryViewController.xib in Resources */,
 				92A49DDD145F8BA400B6F34E /* RHBetaRegistrationViewController.xib in Resources */,
 				92F20F6E1464383200603500 /* RHWebViewController.xib in Resources */,
 				925465AF1495EB7F00C12B81 /* RHToursViewController.xib in Resources */,
-				922F44A514985AE800D5C2C3 /* tab-bar-tours-icon.png in Resources */,
-				922F44A614985AE800D5C2C3 /* tab-bar-tours-icon@2x.png in Resources */,
+				922F44A514985AE800D5C2C3 /* TabBarToursIcon.png in Resources */,
+				922F44A614985AE800D5C2C3 /* TabBarToursIcon@2x.png in Resources */,
 				92D3672914B60DE000EE0504 /* RHPersonDetailViewController.xib in Resources */,
 				92FFAC5814E0E5F700240458 /* RHTagsBasketViewController.xib in Resources */,
 				92FFAC5E14E0F2C100240458 /* RHTagSelectionViewController.xib in Resources */,
