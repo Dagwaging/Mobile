@@ -19,30 +19,16 @@
 
 #import "RHWebViewController.h"
 
+
 @implementation RHWebViewController
 
-@synthesize webView;
+@synthesize webView = _webView;
 @synthesize url = url_;
-
-- (id)initWithNibName:(NSString *)nibNameOrNil
-               bundle:(NSBundle *)nibBundleOrNil {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    return self;
-}
-
-- (void)didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-    
-    // Release any cached data, images, etc that aren't in use.
-}
 
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Safari" style:UIBarButtonItemStylePlain target:self action:@selector(openInSafari)];
     
     self.webView.scalesPageToFit = YES;
     
@@ -50,12 +36,6 @@
         NSURLRequest *request = [NSURLRequest requestWithURL:self.url];
         [self.webView loadRequest:request];
     }
-}
-
-- (void)viewDidUnload {
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)io {

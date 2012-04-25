@@ -410,7 +410,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         
         NSURL *url = [NSURL URLWithString:link.url];
         
-        RHWebViewController *webViewController = [[RHWebViewController alloc] initWithNibName:kRHWebViewControllerNibName bundle:nil];
+        RHWebViewController *webViewController = [[RHWebViewController alloc] initWithNibName:@"" bundle:nil];
         
         
         webViewController.url = url;
@@ -429,7 +429,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         
         NSURL *url = [NSURL URLWithString:link.url];
         
-        RHWebViewController *webViewController = [[RHWebViewController alloc] initWithNibName:kRHWebViewControllerNibName bundle:nil];
+        RHWebViewController *webViewController = [[RHWebViewController alloc] initWithNibName:@"" bundle:nil];
         
         webViewController.url = url;
         webViewController.title = link.name;

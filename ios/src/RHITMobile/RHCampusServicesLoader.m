@@ -37,7 +37,6 @@
 @interface RHCampusServicesLoader () {
 @private
     BOOL _currentlyUpdating;
-    void (^_callback)(void);
 }
 
 - (NSManagedObjectContext *)createThreadSafeManagedObjectContext;
@@ -73,7 +72,6 @@ static RHCampusServicesLoader *_instance;
 {
     if (self = [super init]) {
         _currentlyUpdating = NO;
-        _callback = NULL;
     }
     
     return self;
@@ -175,18 +173,6 @@ static RHCampusServicesLoader *_instance;
                                    withObject:nil
                                 waitUntilDone:NO];
     }
-
-    if (_callback != NULL) {
-#ifdef RHITMobile_RHLoaderDebug
-    NSLog(@"Campus services callback found. Calling.");
-#endif
-        _callback();
-    }
-}
-
-- (void)registerCallbackForCampusServices:(void (^)(void))callback
-{
-    _callback = callback;
 }
 
 - (NSManagedObjectContext *)createThreadSafeManagedObjectContext

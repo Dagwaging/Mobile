@@ -19,16 +19,21 @@
 
 #import <UIKit/UIKit.h>
 
-#define kRHWebViewControllerNibName @"RHWebViewController"
 
-
-/// \ingroup views
+/// A view controller used to frame a web page. Meant to be pushed into a 
+/// UINavigationViewController, this view controller provides an "Open in Safari"
+/// button in the navigation item, which switches the user to the full blown Safari
+/// app with the current web page.
 @interface RHWebViewController : UIViewController
 
+/// The IBOutlet for this view controller's web view.
 @property (nonatomic, strong) IBOutlet UIWebView *webView;
 
+/// The NSURL to frame in this view controller's web view. This propery needs to be set
+/// before a segue orrurs.
 @property (nonatomic, strong) NSURL *url;
 
+/// The IBAction caused by tapping the "Open in Safari" button in the navigation item.
 - (IBAction)openInSafari;
 
 @end

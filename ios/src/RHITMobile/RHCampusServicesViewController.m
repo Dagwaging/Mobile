@@ -24,59 +24,63 @@
 #import "RHAppDelegate.h"
 #import "RHWebViewController.h"
 
-#define kLoadingReuseIdentifier @"LoadingCell"
-#define kReuseIdentifier @"ServiceItemCell"
+#define kCategorySegueIdentifier @"CampusServicesToCampusServicesSegue"
+#define kLinkSegueIdentifier @"CampusServicesToWebViewSegue"
+
+#define kCategoryCellIdentifier @"CampusServiceCategoryCell"
+#define kLinkCellIdentifier @"CampusServiceLinkCell"
+
+
+@interface RHCampusServicesViewController ()
+
+@property (nonatomic, readonly) NSManagedObjectContext *managedObjectContext;
+
+- (void)loadRootServiceCategories;
+
+@end
+
 
 @implementation RHCampusServicesViewController
 
 @synthesize serviceItems = serviceItems_;
-@synthesize tableView = tableView_;
 
-- (id)initWithNibName:(NSString *)nibNameOrNil
-               bundle:(NSBundle *)nibBundleOrNil {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
-
-- (void)didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-    
-    // Release any cached data, images, etc that aren't in use.
-}
-
-- (NSManagedObjectContext *)managedObjectContext {
-    RHAppDelegate *appDelegate = (RHAppDelegate *)[[UIApplication sharedApplication] delegate];
-    return appDelegate.managedObjectContext; 
-}
-
-#pragma mark - View lifecycle
+#pragma mark - View Lifecycle
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    if ([self.navigationController.viewControllers objectAtIndex:0] == self) {
-        [self loadRootServiceCategories];
-    }
     
-    if ([RHCampusServicesLoader.instance currentlyUpdating]) {
-        __block RHCampusServicesViewController *blockSelf = self;
-        [RHCampusServicesLoader.instance registerCallbackForCampusServices:^(void) {
-            [blockSelf loadRootServiceCategories];
-        }];
+    if ([self.navigationController.viewControllers objectAtIndex:0] == self) {
+        
+        // Initialization for root campus services controller
+        [self loadRootServiceCategories];
+        
+        [RHCampusServicesLoader.instance addDelegate:self];
     }
-}
-
-- (void)viewDidUnload {
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString:kCategorySegueIdentifier]) {
+        
+        RHServiceCategory *category = [self.serviceItems objectAtIndex:[[self.tableView indexPathForSelectedRow] row]];
+        
+        RHCampusServicesViewController *servicesViewController = segue.destinationViewController;
+        servicesViewController.serviceItems = category.sortedContents;
+        servicesViewController.title = category.name;
+        
+    } else if ([segue.identifier isEqualToString:kLinkSegueIdentifier]) {
+        
+        RHServiceLink *link = [self.serviceItems objectAtIndex:[[self.tableView indexPathForSelectedRow] row]];
+        
+        RHWebViewController *webViewController = segue.destinationViewController;
+        webViewController.url = [NSURL URLWithString:link.url];
+        webViewController.title = link.name;
+        
+    }
 }
 
 #pragma mark - UITableViewDataSource Methods
@@ -88,79 +92,51 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView
          cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kReuseIdentifier];
-    
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:kReuseIdentifier];
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    }
     
     RHServiceItem *serviceItem = [self.serviceItems objectAtIndex:indexPath.row];
-
+    
+    UITableViewCell *cell;
+    
+    if ([serviceItem isKindOfClass:[RHServiceCategory class]]) {
+        cell = [self.tableView dequeueReusableCellWithIdentifier:kCategoryCellIdentifier];
+    } else {
+        cell = [self.tableView dequeueReusableCellWithIdentifier:kLinkCellIdentifier];
+        cell.detailTextLabel.text = [(RHServiceLink *) serviceItem url];
+    }
+    
     cell.textLabel.text = serviceItem.name;
     
     return cell;
 }
 
 - (void)loadRootServiceCategories {
-    // Only execute on the main thread since we're using the main thread's MOC
-    if (![NSThread isMainThread]) {
-        [self performSelectorOnMainThread:@selector(loadRootServiceCategories)
-                               withObject:nil
-                            waitUntilDone:NO];
-        return;
-    }
-    
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:kRHServiceItemEntityName];
     
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"parent == nil"];
     fetchRequest.predicate = predicate;
     
-    NSError *error;
+    fetchRequest.sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES]];
+    
     self.serviceItems = [self.managedObjectContext
                          executeFetchRequest:fetchRequest
-                         error:&error];
-    
-    if (error) {
-        NSLog(@"Problem loading root campus services: %@", error);
-    }
+                         error:nil];
     
     [self.tableView reloadData];
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
-    RHServiceItem *serviceItem = [self.serviceItems objectAtIndex:indexPath.row];
-    
-    if ([serviceItem isKindOfClass:[RHServiceCategory class]]) {
-        RHServiceCategory *category = (RHServiceCategory *) serviceItem;
-        
-        RHCampusServicesViewController *nextViewController = [[RHCampusServicesViewController alloc]
-                                                  initWithNibName:kRHCampusServicesViewControllerNibName
-                                                  bundle:nil];
-        nextViewController.serviceItems = category.contents.allObjects;
-        nextViewController.title = category.name;
-        [self.navigationController pushViewController:nextViewController
-                                             animated:YES];
-    } else if ([serviceItem isKindOfClass:[RHServiceLink class]]) {
-        RHServiceLink *link = (RHServiceLink *) serviceItem;
-        
-        RHWebViewController *webViewController = [[RHWebViewController alloc]
-                                                initWithNibName:kRHWebViewControllerNibName
-                                                bundle:nil];
-        webViewController.url = [NSURL URLWithString:link.url];
-        webViewController.title = link.name;
-        
-        [self.navigationController pushViewController:webViewController animated:YES];
-    }
 }
 
 #pragma mark - Loader Delegate Methods
 
 - (void)loaderDidUpdateUnderlyingData
 {
+    NSLog(@"Reloading");
+    [self.navigationController popToRootViewControllerAnimated:NO];
     [self loadRootServiceCategories];
+}
+
+#pragma mark - Private Methods
+
+- (NSManagedObjectContext *)managedObjectContext{
+    return [(RHAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
 }
 
 @end

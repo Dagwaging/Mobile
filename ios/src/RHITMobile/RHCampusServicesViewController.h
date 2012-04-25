@@ -21,19 +21,16 @@
 
 #import "RHLoader.h"
 
-#define kRHCampusServicesViewControllerNibName @"RHCampusServicesViewController"
 
-@class RHServiceCategory;
+/// A view controller that displays a listing of RHServiceItem (RHServiceCategory
+/// and RHServiceLink) objects in a table. Selecting a category table cell will
+/// cause a "drill-down" into another RHCampusServicesViewController, while selecting
+/// a link cell will segue to an RHWebViewController.
+@interface RHCampusServicesViewController : UITableViewController <RHLoaderDelegate>
 
-/// \ingroup views
-@interface RHCampusServicesViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, RHLoaderDelegate>
-
-@property (nonatomic, strong) IBOutlet UITableView *tableView;
-
-@property (nonatomic, readonly) NSManagedObjectContext *managedObjectContext;
-
-@property (atomic, strong) NSArray *serviceItems;
-
-- (void)loadRootServiceCategories;
+/// An NSArray of RHServiceItem objects, pre-sorted, to be displayed by this view controller.
+/// This property will be automatically populated in the root campus services view controller,
+/// but later instances of this view controller will need to have it set before segue.
+@property (nonatomic, strong) NSArray *serviceItems;
 
 @end

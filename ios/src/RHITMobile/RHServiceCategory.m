@@ -19,10 +19,31 @@
 
 #import "RHServiceCategory.h"
 #import "RHServiceItem.h"
+#import "RHServiceLink.h"
 
 
 @implementation RHServiceCategory
 
 @dynamic contents;
+
+- (NSArray *)sortedContents
+{
+    return [[self.contents allObjects]
+            sortedArrayUsingComparator:^NSComparisonResult(id item1, id item2) {
+                if ([item1 isKindOfClass:[RHServiceCategory class]]) {
+                    if ([item2 isKindOfClass:[RHServiceLink class]]) {
+                        return NSOrderedAscending;
+                    } else {
+                        return [[item1 name] compare:[item2 name]];
+                    }
+                } else {
+                    if ([item1 isKindOfClass:[RHServiceCategory class]]) {
+                        return NSOrderedDescending;
+                    } else {
+                        return [[item1 name] compare:[item2 name]];
+                    }
+                }
+    }];
+}
 
 @end

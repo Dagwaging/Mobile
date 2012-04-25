@@ -137,7 +137,7 @@
         [app openURL:[NSURL URLWithString:stringURL]];
     } else if ([section isEqualToString:kWebPageTitle]) {
         NSString *url = [self.displayValues objectForKey:section];
-        RHWebViewController *webViewController = [[RHWebViewController alloc] initWithNibName:kRHWebViewControllerNibName bundle:nil];
+        RHWebViewController *webViewController = [[RHWebViewController alloc] initWithNibName:@"" bundle:nil];
         webViewController.url = [NSURL URLWithString:url];
         webViewController.title = self.title;
         [self.navigationController pushViewController:webViewController animated:YES];

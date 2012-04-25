@@ -30,6 +30,8 @@
 
 @property (nonatomic, strong) NSSet *contents;
 
+@property (nonatomic, readonly) NSArray *sortedContents;
+
 @end
 
 @interface RHServiceCategory (CoreDataGeneratedAccessors)

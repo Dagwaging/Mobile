@@ -6,21 +6,6 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="1181"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
-        <scene sceneID="atu-tv-fHA">
-            <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="8F1-y8-6fV" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <viewController id="dug-pp-NY4" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="Q6E-1g-GiT">
-                        <rect key="frame" x="0.0" y="64" width="320" height="367"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                    </view>
-                    <navigationItem key="navigationItem" id="EGi-78-olV"/>
-                </viewController>
-            </objects>
-            <point key="canvasLocation" x="1416" y="100"/>
-        </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="MoN-7o-KNZ">
             <objects>
@@ -38,12 +23,12 @@
             </objects>
             <point key="canvasLocation" x="236" y="100"/>
         </scene>
-        <!--Navigation Controller - Item-->
+        <!--Navigation Controller - Info-->
         <scene sceneID="kug-61-SXJ">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8E4-Za-6W4" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <navigationController id="MN9-5F-qEv" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" id="Of6-En-Nno"/>
+                    <tabBarItem key="tabBarItem" title="Info" image="TabBarInfoIcon.png" id="Of6-En-Nno"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="Kgv-Za-Loc">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -51,16 +36,135 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="dug-pp-NY4" kind="relationship" relationship="rootViewController" id="pDl-9T-Moa"/>
+                        <segue destination="3rJ-I1-Zix" kind="relationship" relationship="rootViewController" id="yrH-Av-Jeg"/>
                     </connections>
                 </navigationController>
             </objects>
-            <point key="canvasLocation" x="890" y="100"/>
+            <point key="canvasLocation" x="728" y="100"/>
+        </scene>
+        <!--Campus Services View Controller - Campus Info-->
+        <scene sceneID="Rc2-bg-TF0">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="NCx-J0-LeY" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tableViewController storyboardIdentifier="CampusServices" id="3rJ-I1-Zix" customClass="RHCampusServicesViewController" sceneMemberID="viewController">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="4LA-UD-9AM">
+                        <rect key="frame" x="0.0" y="64" width="320" height="367"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="CampusServiceCategoryCell" textLabel="iqj-1k-B5j" style="IBUITableViewCellStyleDefault" id="9VR-bO-rym">
+                                <rect key="frame" x="0.0" y="22" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="0.0" y="0.0" width="300" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Category" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="iqj-1k-B5j">
+                                            <rect key="frame" x="10" y="0.0" width="280" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </label>
+                                    </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
+                                <connections>
+                                    <segue destination="3rJ-I1-Zix" kind="push" identifier="CampusServicesToCampusServicesSegue" id="fTI-Qx-Wq0"/>
+                                </connections>
+                            </tableViewCell>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="CampusServiceLinkCell" textLabel="1d8-9y-b2b" detailTextLabel="Abd-CA-DYz" style="IBUITableViewCellStyleSubtitle" id="uoC-Dx-feQ">
+                                <rect key="frame" x="0.0" y="66" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="0.0" y="0.0" width="300" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Link" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="1d8-9y-b2b">
+                                            <rect key="frame" x="10" y="2" width="38" height="22"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
+                                            <color key="textColor" red="0.01006578575" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </label>
+                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Link URL" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Abd-CA-DYz">
+                                            <rect key="frame" x="10" y="24" width="58" height="18"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <color key="textColor" red="0.50196078431372548" green="0.50196078431372548" blue="0.50196078431372548" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </label>
+                                    </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
+                                <connections>
+                                    <segue destination="cL7-9t-cpY" kind="push" identifier="CampusServicesToWebViewSegue" id="LlX-xH-Kfm"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="3rJ-I1-Zix" id="hFN-aP-8hl"/>
+                            <outlet property="delegate" destination="3rJ-I1-Zix" id="H7f-V5-Y4W"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Campus Info" id="vO2-Na-qiB"/>
+                </tableViewController>
+            </objects>
+            <point key="canvasLocation" x="1255" y="100"/>
+        </scene>
+        <!--Web View Controller-->
+        <scene sceneID="TGq-c5-EGd">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="34Y-RE-u2p" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <viewController id="cL7-9t-cpY" customClass="RHWebViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="r4a-2s-Qw1">
+                        <rect key="frame" x="0.0" y="64" width="320" height="367"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <webView contentMode="scaleToFill" id="zqv-9s-56R">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="367"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            </webView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="Gjw-Gt-qSB">
+                        <barButtonItem key="rightBarButtonItem" title="Open in Safari" id="5bC-xz-WkQ">
+                            <connections>
+                                <action selector="openInSafari" destination="cL7-9t-cpY" id="zkr-aa-OjO"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="webView" destination="zqv-9s-56R" id="mD5-cG-9QG"/>
+                    </connections>
+                </viewController>
+            </objects>
+            <point key="canvasLocation" x="1794" y="100"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="TabBarInfoIcon.png" width="30" height="30"/>
+    </resources>
+    <classes>
+        <class className="RHCampusServicesViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHCampusServicesViewController.h"/>
+        </class>
+        <class className="RHWebViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHWebViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="openInSafari"/>
+                <relationship kind="outlet" name="webView" candidateClass="UIWebView"/>
+            </relationships>
+        </class>
+    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
+    <inferredMetricsTieBreakers>
+        <segue reference="yrH-Av-Jeg"/>
+    </inferredMetricsTieBreakers>
 </document>
