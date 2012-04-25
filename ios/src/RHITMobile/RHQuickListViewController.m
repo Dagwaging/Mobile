@@ -34,6 +34,8 @@
 @synthesize pickerView;
 @synthesize tableView;
 
+// TODO: This class needs to update when an update occurs
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];

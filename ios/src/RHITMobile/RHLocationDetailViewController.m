@@ -22,6 +22,7 @@
 #import "RHLocation.h"
 #import "RHLocationLink.h"
 #import "RHAppDelegate.h"
+#import "RHLocationsLoader.h"
 #import "RHMapViewController.h"
 #import "RHWebViewController.h"
 #import "RHDirectionsRequester.h"
@@ -95,6 +96,12 @@
     [super viewDidLoad];
     self.navigationItem.title = self.location.name;
     // Do any additional setup after loading the view from its nib.
+    
+    if (self.location.retrievalStatus != RHLocationRetrievalStatusFull) {
+        [RHLocationsLoader.instance registerCallbackForLocationWithId:self.location.serverIdentifier callback:^(void) {
+            [self setLocation:self.location];
+        }];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -165,13 +172,15 @@
         }];
     }
     
-    if (location.retrievalStatus != RHLocationRetrievalStatusFull) {
-        [self performSelector:@selector(setLocation:)
-                   withObject:location
-                   afterDelay:1.0];
-    } else {
-        [self.tableView reloadData];
-    }
+//    if (location.retrievalStatus != RHLocationRetrievalStatusFull) {
+//        [self performSelector:@selector(setLocation:)
+//                   withObject:location
+//                   afterDelay:1.0];
+//    } else {
+//        [self.tableView reloadData];
+//    }
+    
+    [self.tableView reloadData];
     
     location_ = location;
 }

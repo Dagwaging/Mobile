@@ -210,10 +210,10 @@
 #define RHITMobile_RHConstants_h
 
 // Loader debugging
-#define RHITMobile_RHLoaderDebug
+//#define RHITMobile_RHLoaderDebug
 
 // Network debugging
-#define RHITMobile_RHNetworkDebug
+//#define RHITMobile_RHNetworkDebug
 
 // JSON response debugging
 //#define RHITMobile_RHJSONDebug

@@ -26,6 +26,7 @@
 #import "RHNode.h"
 #import "RHLabelNode.h"
 #import "RHLocationOverlay.h"
+#import "RHLocationsLoader.h"
 #import "RHAppDelegate.h"
 #import "RHQuickListViewController.h"
 #import "RHPinAnnotationView.h"
@@ -95,6 +96,15 @@
     [self.mapView setCenterCoordinate:center
                             zoomLevel:kRHInitialZoomLevel
                              animated:NO];
+    
+    // If a top-level update is happening right now, register a callback for when it's done
+    if ([RHLocationsLoader.instance currentlyUpdating]) {
+        __block RHMapViewController *blockSelf = self;
+        
+        [RHLocationsLoader.instance registerCallbackForTopLevelLocations:^(void) {
+            [blockSelf loadStoredLocations];
+        }];
+    }
     
     [self loadStoredLocations];
 }
@@ -616,6 +626,13 @@
     [UIView commitAnimations];
     
     self.displayingDirections = NO;
+}
+
+#pragma mark - Loader Delegate Methods
+
+- (void)loaderDidUpdateUnderlyingData
+{
+    [self loadStoredLocations];
 }
 
 @end

@@ -22,7 +22,7 @@
 
 #import "MKMapView+ZoomLevel.h"
 #import "RHAnnotationViewDelegate.h"
-#import "RHLocationsRequesterDelegate.h"
+#import "RHLoader.h"
 
 #define kRHMapViewControllerNibName @"RHMapViewController"
 
@@ -37,7 +37,7 @@
 /// \ingroup views
 /// View controller for the map portion of the application.
 @interface RHMapViewController : UIViewController
-<MKMapViewDelegate, RHAnnotationViewDelegate, RHLocationsRequesterDelegate> {
+<MKMapViewDelegate, RHAnnotationViewDelegate, RHLoaderDelegate> {
     @private
     NSArray *currentDirections_;
     NSUInteger currentDirectionIndex_;
