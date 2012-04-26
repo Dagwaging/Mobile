@@ -128,7 +128,6 @@
 
 - (void)loaderDidUpdateUnderlyingData
 {
-    NSLog(@"Reloading");
     [self.navigationController popToRootViewControllerAnimated:NO];
     [self loadRootServiceCategories];
 }

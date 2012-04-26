@@ -22,13 +22,9 @@
 #define kRHTagSelectionViewControllerNibName @"RHTagSelectionViewController"
 
 @class RHTourTagCategory;
-@class RHTagsBasketViewController;
 
 
-@interface RHTagSelectionViewController : UIViewController <UITableViewDelegate, UITableViewDataSource> {
-    @private
-    NSArray *contents_;
-}
+@interface RHTagSelectionViewController : UITableViewController
 
 @property (nonatomic, strong) RHTourTagCategory *category;
 
@@ -38,8 +34,6 @@
 
 @property (nonatomic, strong) NSMutableArray *deselectedTags;
 
-@property (nonatomic, strong) RHTagsBasketViewController *parentBasket;
-
-- (IBAction)cancelSelection:(id)sender;
+- (IBAction)donePressed:(id)sender;
 
 @end

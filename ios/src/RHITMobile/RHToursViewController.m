@@ -28,6 +28,21 @@
 #import "RHTagsBasketViewController.h"
 #import "RHPathRequest.h"
 
+
+#define kSegueIdentifier @"ToursToTagsBasketSegue"
+
+
+@interface RHToursViewController ()
+
+@property (nonatomic, strong) NSNumber *duration;
+
+@property (nonatomic, assign) BOOL useGPS;
+
+@property (nonatomic, assign) BOOL onCampus;
+
+@end
+
+
 @implementation RHToursViewController
 
 @synthesize durationLabel = durationLabel_;
@@ -35,143 +50,54 @@
 @synthesize locationControl = locationControl_;
 @synthesize durationSlider = durationSlider_;
 @synthesize duration = _duration;
-@synthesize isBuilding = _isBuilding;
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
-
-- (void)didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-    
-    // Release any cached data, images, etc that aren't in use.
-}
+@synthesize useGPS = _useGPS;
+@synthesize onCampus = _onCampus;
 
 #pragma mark - View lifecycle
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     self.duration = [NSNumber numberWithInt:30];
-    self.isBuilding = NO;
-    // Do any additional setup after loading the view from its nib.
+    self.onCampus = YES;
+    self.useGPS = YES;
 }
 
-- (void)viewDidUnload {
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
-}
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
     // Return YES for supported orientations
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
-- (void)defaultTour:(id)sender {
-    if (self.isBuilding) {
-        return;
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString:kSegueIdentifier]) {
+        RHTagsBasketViewController *tagsBasketController = segue.destinationViewController;
+        tagsBasketController.duration = self.duration;
+        tagsBasketController.useGPS = self.useGPS;
+        tagsBasketController.onCampus = self.onCampus;
     }
-    
-    self.isBuilding = YES;
-    self.navigationItem.title = @"Building Tour";
-    
-    UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
-    [activityIndicator startAnimating];
-    
-    NSArray *tagIds = [NSArray arrayWithObject:[NSNumber numberWithInt:1]];
-    
-    [RHPathRequest makeOnCampusTourRequestWithTagIds:tagIds
-                                  fromLocationWithId:[NSNumber numberWithInt:111] // TODO
-                                         forDuration:self.duration
-                                        successBlock:^(RHPath *path) {
-                                            self.isBuilding = NO;
-                                            [self didLoadPath:path];
-                                            self.navigationItem.title = @"Tours";
-                                            self.navigationItem.rightBarButtonItem = nil;
-                                        } failureBlock:^(NSError *error) {
-                                            [[[UIAlertView alloc] initWithTitle:@"Error"
-                                                                        message:@"Something went wrong building the tour. We're really sorry."
-                                                                       delegate:nil
-                                                              cancelButtonTitle:@"OK"
-                                                              otherButtonTitles: nil] show];
-                                            self.isBuilding = NO;
-                                            self.navigationItem.title = @"Tours";
-                                            self.navigationItem.rightBarButtonItem = nil;
-                                        }];
 }
 
-- (void)customTour:(id)sender {
-    if (self.isBuilding) {
-        return;
-    }
-    
-    RHTagsBasketViewController *basketViewController = [[RHTagsBasketViewController alloc] initWithNibName:kRHTagsBasketViewControllerNibname bundle:nil];
-    basketViewController.duration = self.duration;
-    [self.navigationController pushViewController:basketViewController animated:YES];
-}
-
-- (void)tourTypeChanged:(id)sender {
+- (void)tourTypeChanged:(id)sender
+{
     UISegmentedControl *tourControl = (UISegmentedControl *) sender;
-    
-    if (tourControl.selectedSegmentIndex == 0) {
-        // On campus
-        // TODO: Fix
-        self.durationSlider.enabled = NO;
-        self.locationControl.enabled = NO;
-    } else {
-        // Virtual
-        self.durationSlider.enabled = NO;
-        self.locationControl.enabled = NO;
-    }
+    self.onCampus = tourControl.selectedSegmentIndex == 0;
 }
 
-- (void)locationTypeChanged:(id)sender {
+- (void)locationTypeChanged:(id)sender
+{
     UISegmentedControl *locationControl = (UISegmentedControl *) sender;
-    
-    if (locationControl.selectedSegmentIndex == 0) {
-        // Use GPS
-        self.locationLabel.text = @"(Determined Automatically)";
-    } else {
-        // Choose location
-        self.locationLabel.text = @"TODO";
-    }
+    self.useGPS = locationControl.selectedSegmentIndex == 0;
 }
 
-- (void)durationSliderMoved:(id)sender {
+- (void)durationSliderMoved:(id)sender
+{
     UISlider *slider = (UISlider *) sender;
     
     NSNumber *sliderValue = [NSNumber numberWithFloat:slider.value];
     self.duration = [NSNumber numberWithInt:sliderValue.intValue];
     self.durationLabel.text = [NSString stringWithFormat:@"%d", self.duration.intValue];
-}
-
-- (void)didLoadPath:(RHPath *)path {
-    [RHAppDelegate.instance.mapViewController.directionsManager displayPath:path];
-    
-    // Transition to view
-    UITabBarController *tabBarController = RHAppDelegate.instance.tabBarController;
-    
-    UIView *fromView = tabBarController.selectedViewController.view;
-    UIView *toView = [[tabBarController.viewControllers objectAtIndex:0] view];
-    
-    // Transition using a page curl.
-    [UIView transitionFromView:fromView 
-                        toView:toView 
-                      duration:0.5 
-                       options:UIViewAnimationOptionTransitionCurlDown
-                    completion:^(BOOL finished) {
-                        if (finished) {
-                            tabBarController.selectedIndex = 0;
-                        }
-                    }];
-    
-    [self.navigationController popToRootViewControllerAnimated:NO];
 }
 
 @end

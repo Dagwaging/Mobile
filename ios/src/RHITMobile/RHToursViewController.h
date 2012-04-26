@@ -24,7 +24,7 @@
 
 @class RHTourRequester;
 
-@interface RHToursViewController : UIViewController
+@interface RHToursViewController : UITableViewController
 
 @property (nonatomic, strong) IBOutlet UILabel *durationLabel;
 
@@ -33,14 +33,6 @@
 @property (nonatomic, strong) IBOutlet UISegmentedControl *locationControl;
 
 @property (nonatomic, strong) IBOutlet UISlider *durationSlider;
-
-@property (nonatomic, strong) NSNumber *duration;
-
-@property (nonatomic, assign) BOOL isBuilding;
-
-- (IBAction)defaultTour:(id)sender;
-
-- (IBAction)customTour:(id)sender;
 
 - (IBAction)tourTypeChanged:(id)sender;
 

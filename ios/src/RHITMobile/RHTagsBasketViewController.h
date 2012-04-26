@@ -19,24 +19,14 @@
 
 #import <UIKit/UIKit.h>
 
-#define kRHTagsBasketViewControllerNibname @"RHTagsBasketViewController"
 
-
-@interface RHTagsBasketViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
-
-@property (nonatomic, readonly) NSManagedObjectContext *managedObjectContext;
-
-@property (nonatomic, strong) NSMutableArray *tags;
-
-@property (nonatomic, strong) NSMutableArray *unusedTags;
-
-@property (nonatomic, strong) IBOutlet UITableView *tableView;
-
-@property (nonatomic, assign) BOOL isEditing;
-
-@property (nonatomic, assign) BOOL isBuilding;
+@interface RHTagsBasketViewController : UITableViewController
 
 @property (nonatomic, strong) NSNumber *duration;
+
+@property (nonatomic, assign) BOOL onCampus;
+
+@property (nonatomic, assign) BOOL useGPS;
 
 - (IBAction)doneEditing:(id)sender;
 

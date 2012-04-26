@@ -22,8 +22,10 @@
 #import "RHTourTag.h"
 #import "RHTourTagCategory.h"
 
-#define kCategoryReuseIdentifier @"CategoryCell"
-#define kTagReuseIdentifier @"TagCell"
+
+#define kSegueIdentifier @"TagSelectionToTagSelectionSegue"
+#define kCategoryReuseIdentifier @"TagSelectionCategoryCell"
+#define kTagReuseIdentifier @"TagSelectionTagCell"
 
 
 @implementation RHTagSelectionViewController
@@ -31,25 +33,25 @@
 @synthesize category = category_;
 @synthesize selectedTags = selectedTags_;
 @synthesize deselectedTags = deselectedTags_;
-@synthesize parentBasket = parentBasket_;
+@synthesize contents = contents_;
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString:kSegueIdentifier]) {
+        RHTagSelectionViewController *nextController = segue.destinationViewController;
+        nextController.category = [self.contents objectAtIndex:self.tableView.indexPathForSelectedRow.row];
+        nextController.selectedTags = self.selectedTags;
+        nextController.deselectedTags = self.deselectedTags;
     }
-    return self;
 }
 
-- (NSString *)title {
-    if (self.category.name == nil || self.category.name.length == 0) {
-        return @"Add Interest";
-    }
-    
+- (NSString *)title
+{
     return self.category.name;
 }
 
-- (NSArray *)contents {
+- (NSArray *)contents
+{
     if (contents_ == nil) {
         contents_ = [[self.category.children allObjects] sortedArrayUsingComparator:^(id a, id b) {
             RHTourItem *itemA = (RHTourItem *) a;
@@ -69,55 +71,28 @@
     return contents_;
 }
 
-- (void)didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-    
-    // Release any cached data, images, etc that aren't in use.
-}
-
-- (void)cancelSelection:(id)sender {
-//    self.parentBasket.tags = self.selectedTags;
-//    self.parentBasket.unusedTags = self.deselectedTags;
-    [self.parentBasket.tableView reloadData];
-    
+- (void)donePressed:(id)sender
+{
     [self dismissModalViewControllerAnimated:YES];
 }
 
 #pragma mark - View lifecycle
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(cancelSelection:)];
-}
-
-- (void)viewDidUnload {
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
-}
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
     // Return YES for supported orientations
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
 #pragma mark - UITableViewDelegate Methods
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     RHTourItem *item = [self.contents objectAtIndex:indexPath.row];
     
-    if ([item isKindOfClass:[RHTourTagCategory class]]) {
-        RHTagSelectionViewController *nextViewController = [[RHTagSelectionViewController alloc] initWithNibName:kRHTagSelectionViewControllerNibName bundle:nil];
-        nextViewController.category = (RHTourTagCategory *) item;
-        nextViewController.selectedTags = self.selectedTags;
-        nextViewController.deselectedTags = self.deselectedTags;
-        nextViewController.parentBasket = self.parentBasket;
-        [self.navigationController pushViewController:nextViewController animated:YES];
-    } else {
+    if ([item isKindOfClass:[RHTourTag class]]) {
         UITableViewCell *currentCell = [tableView cellForRowAtIndexPath:indexPath];
         RHTourTag *tag = (RHTourTag *) item;
         if (currentCell.accessoryType == UITableViewCellAccessoryCheckmark) {
@@ -132,15 +107,16 @@
     }
 }
 
-
 #pragma mark - UITableViewDataSource Methods
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
     return self.contents.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView
-         cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+         cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
     UITableViewCell *cell;
     
     RHTourItem *item = [self.contents objectAtIndex:indexPath.row];
@@ -149,26 +125,18 @@
         RHTourTagCategory *category = (RHTourTagCategory *) item;
         
         cell = [tableView dequeueReusableCellWithIdentifier:kCategoryReuseIdentifier];
-        
-        if (cell == nil) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCategoryReuseIdentifier];
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        }
-        
         cell.textLabel.text = category.name;
         
     } else if ([item isKindOfClass:[RHTourTag class]]) {
         RHTourTag *tag = (RHTourTag *) item;
         
         cell = [tableView dequeueReusableCellWithIdentifier:kTagReuseIdentifier];
-        
-        if (cell == nil) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:kTagReuseIdentifier];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.accessoryType = [self.selectedTags containsObject:tag] ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
-        }
-        
         cell.textLabel.text = tag.name;
+        if ([self.selectedTags containsObject:tag]) {
+            cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        } else {
+            cell.accessoryType = UITableViewCellAccessoryNone;
+        }
     }
     
     return cell;

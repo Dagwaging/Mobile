@@ -26,46 +26,44 @@
 #import "RHTourTagCategory.h"
 #import "RHTourTag.h"
 
-#define kTagCellReuseIdentifier @"TagCell"
-#define kAddCellReuseIdentifier @"AddCell"
+#define kSegueIdentifier @"TagsBasketToTagSelectionSegue"
+#define kTagCellReuseIdentifier @"TagsBasketTagCell"
+#define kAddCellReuseIdentifier @"TagsBasketAddCell"
+
+@interface RHTagsBasketViewController ()
+
+@property (nonatomic, readonly) NSManagedObjectContext *managedObjectContext;
+
+@property (nonatomic, strong) NSMutableArray *tags;
+
+@property (nonatomic, strong) NSMutableArray *unusedTags;
+
+@property (nonatomic, assign) BOOL isEditing;
+
+@property (nonatomic, assign) BOOL isBuilding;
+
+@end
 
 
 @implementation RHTagsBasketViewController
 
 @synthesize tags = tags_;
 @synthesize unusedTags = unusedTags_;
-@synthesize tableView = tableView_;
 @synthesize isEditing = isEditing_;
 @synthesize isBuilding = isBuilding_;
 @synthesize duration = _duration;
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        self.tags = [NSMutableArray arrayWithCapacity:15];
-    }
-    return self;
-}
-
-- (NSManagedObjectContext *)managedObjectContext {
-    return [((RHAppDelegate *) [[UIApplication sharedApplication] delegate]) managedObjectContext];
-}
-
-- (void)didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-    
-    // Release any cached data, images, etc that aren't in use.
-}
+@synthesize useGPS = _useGPS;
+@synthesize onCampus = _onCampus;
 
 #pragma mark - View lifecycle
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     
-    self.isEditing = NO;
+    self.tags = [NSMutableArray array];
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Build Tour" style:UIBarButtonItemStyleDone target:self action:@selector(buildTour:)];
+    self.isEditing = NO;
     
     // Load default tags
     NSFetchRequest *defaultRequest = [NSFetchRequest
@@ -84,30 +82,50 @@
     }
 }
 
-- (void)viewDidUnload {
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [self.tableView reloadData];
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
     // Return YES for supported orientations
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
-- (NSString *)title {
-    return @"Interests";
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString:kSegueIdentifier]) {
+        UINavigationController *navCon = segue.destinationViewController;
+        RHTagSelectionViewController *selectionController = [navCon.viewControllers objectAtIndex:0];
+        
+        NSFetchRequest *rootRequest = [NSFetchRequest fetchRequestWithEntityName:kRHTourTagCategoryEntityName];
+        rootRequest.predicate = [NSPredicate predicateWithFormat:@"parent == nil"];
+        NSArray *results = [self.managedObjectContext executeFetchRequest:rootRequest
+                                                                    error:nil];
+        
+        selectionController.category = [results objectAtIndex:0];
+        selectionController.selectedTags = self.tags;
+        selectionController.deselectedTags = self.unusedTags;
+    }
 }
 
-- (void)doneEditing:(id)sender {
+- (void)doneEditing:(id)sender
+{
     self.tableView.editing = NO;
     self.isEditing = NO;
+    
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Build Tour" style:UIBarButtonItemStyleDone target:self action:@selector(buildTour:)];
+    
     NSIndexPath *finalIndexPath = [NSIndexPath indexPathForRow:self.tags.count inSection:0];
+    
     [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:finalIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
-- (void)buildTour:(id)sender {
+- (void)buildTour:(id)sender
+{
     self.navigationItem.title = @"Building Tour";
     
     UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
@@ -128,7 +146,8 @@
                                   fromLocationWithId:[NSNumber numberWithInt:111] // TODO
                                          forDuration:self.duration
                                         successBlock:^(RHPath *path) {
-                                            [self didLoadPath:path];
+                                            //[self didLoadPath:path];
+                                            NSLog(@"Tour successful");
                                         } failureBlock:^(NSError *error) {
                                             [[[UIAlertView alloc] initWithTitle:@"Error"
                                                                         message:@"Something went wrong building the tour. We're really sorry."
@@ -141,32 +160,16 @@
 
 #pragma mark - UITableViewDelegate Methods
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     if (self.isBuilding) {
         return;
     }
     
-    if (indexPath.row == self.tags.count && !tableView.editing) {
-        // Find the root tag category
-        NSFetchRequest *rootRequest = [NSFetchRequest fetchRequestWithEntityName:kRHTourTagCategoryEntityName];
-        rootRequest.predicate = [NSPredicate predicateWithFormat:@"parent == nil"];
-        NSArray *results = [self.managedObjectContext executeFetchRequest:rootRequest error:nil];
-        
-        // Create and display a tag selector view controller
-        RHTagSelectionViewController *tagSelector = [[RHTagSelectionViewController alloc] initWithNibName:kRHTagSelectionViewControllerNibName bundle:nil];
-        
-        tagSelector.category = [results objectAtIndex:0];
-        tagSelector.selectedTags = self.tags;
-        tagSelector.deselectedTags = self.unusedTags;
-        tagSelector.parentBasket = self;
-        
-        UINavigationController *navCon = [[UINavigationController alloc] initWithRootViewController:tagSelector];
-        
-        [self presentModalViewController:navCon animated:YES];
-    } else {
-        tableView.editing = YES;
+    if (indexPath.row < self.tags.count) {
+        self.tableView.editing = YES;
         self.isEditing = YES;
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Done Editing" style:UIBarButtonItemStylePlain target:self action:@selector(doneEditing:)];
         NSIndexPath *finalIndexPath = [NSIndexPath indexPathForRow:self.tags.count inSection:0];
@@ -176,7 +179,8 @@
 
 #pragma mark - UITableViewDataSource Methods
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
     if (self.isEditing || self.isBuilding) {
         return self.tags.count;
     }
@@ -184,40 +188,28 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView
-         cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+         cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
     UITableViewCell *cell;
     if (indexPath.row == self.tags.count) {
         cell = [tableView dequeueReusableCellWithIdentifier:kAddCellReuseIdentifier];
-        
-        if (cell == nil) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault 
-                                          reuseIdentifier:kAddCellReuseIdentifier];
-            cell.textLabel.textColor = [UIColor blueColor];
-            cell.textLabel.text = @"Add Interests...";
-            cell.textLabel.textAlignment = UITextAlignmentCenter;
-        }
     } else {
         cell = [tableView dequeueReusableCellWithIdentifier:kTagCellReuseIdentifier];
         
-        if (cell == nil) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1
-                                          reuseIdentifier:kTagCellReuseIdentifier];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        }
-        
         RHTourTag *tag = [self.tags objectAtIndex:indexPath.row];
-        
         cell.textLabel.text = tag.name;
     }
     
     return cell;
 }
 
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
     return !self.isBuilding && indexPath.row < self.tags.count;
 }
 
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
+- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
+{
     return !self.isBuilding && indexPath.row < self.tags.count;
 }
 
@@ -225,7 +217,7 @@
 commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
 forRowAtIndexPath:(NSIndexPath *)indexPath {
     [self.tags removeObjectAtIndex:indexPath.row];
-    [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     
     if (self.tags.count == 0 && self.isEditing) {
         [self doneEditing:nil];
@@ -240,7 +232,9 @@ moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath
     [self.tags insertObject:movedObject atIndex:destinationIndexPath.row];
 }
 
-- (void)didLoadPath:(RHPath *)path {
+- (void)didLoadPath:(RHPath *)path
+{
+    // FIXME
     [RHAppDelegate.instance.mapViewController.directionsManager displayPath:path];
     
     // Transition to view
@@ -261,6 +255,11 @@ moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath
                     }];
     
     [self.navigationController popToRootViewControllerAnimated:NO];
+}
+
+- (NSManagedObjectContext *)managedObjectContext
+{
+    return [((RHAppDelegate *) [[UIApplication sharedApplication] delegate]) managedObjectContext];
 }
 
 @end
