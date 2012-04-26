@@ -40,8 +40,6 @@
 		9246368C142BAAC700A5E399 /* RHLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9246368B142BAAC700A5E399 /* RHLocation.m */; };
 		92463690142BAB5300A5E399 /* RHBoundaryNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 9246368F142BAB5300A5E399 /* RHBoundaryNode.m */; };
 		92463698142BAE0A00A5E399 /* RHNavigationNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 92463697142BAE0A00A5E399 /* RHNavigationNode.m */; };
-		924DE4D4145E6EC700EEE8C6 /* RHBetaViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 924DE4D2145E6EC700EEE8C6 /* RHBetaViewController.m */; };
-		924DE4D5145E6EC700EEE8C6 /* RHBetaViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 924DE4D3145E6EC700EEE8C6 /* RHBetaViewController.xib */; };
 		924DE4DA145E773800EEE8C6 /* TabBarInfoIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 924DE4D8145E773800EEE8C6 /* TabBarInfoIcon.png */; };
 		924DE4DB145E773800EEE8C6 /* TabBarInfoIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 924DE4D9145E773800EEE8C6 /* TabBarInfoIcon@2x.png */; };
 		924DE4DE145E787D00EEE8C6 /* TabBarBetaIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 924DE4DC145E787D00EEE8C6 /* TabBarBetaIcon.png */; };
@@ -76,8 +74,6 @@
 		9281A36214C68C8D001D9837 /* CJSONScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 9281A35714C68C8D001D9837 /* CJSONScanner.m */; settings = {COMPILER_FLAGS = "-w"; }; };
 		9281A36314C68C8D001D9837 /* CJSONSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9281A35914C68C8D001D9837 /* CJSONSerializer.m */; };
 		928B76E8144CBADA00D2F98D /* TabBarMapIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 928B76E7144CBADA00D2F98D /* TabBarMapIcon@2x.png */; };
-		92A49DDC145F8BA400B6F34E /* RHBetaRegistrationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92A49DDA145F8BA400B6F34E /* RHBetaRegistrationViewController.m */; };
-		92A49DDD145F8BA400B6F34E /* RHBetaRegistrationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92A49DDB145F8BA400B6F34E /* RHBetaRegistrationViewController.xib */; };
 		92ADDE0814E3422400655869 /* RHPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 92ADDE0714E3422400655869 /* RHPath.m */; };
 		92ADDE1114E36CB100655869 /* RHLocationSelectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92ADDE0F14E36CB000655869 /* RHLocationSelectorViewController.m */; };
 		92ADDE1214E36CB100655869 /* RHLocationSelectorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92ADDE1014E36CB000655869 /* RHLocationSelectorViewController.xib */; };
@@ -164,10 +160,6 @@
 		9246368F142BAB5300A5E399 /* RHBoundaryNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHBoundaryNode.m; sourceTree = "<group>"; };
 		92463696142BAE0900A5E399 /* RHNavigationNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHNavigationNode.h; sourceTree = "<group>"; };
 		92463697142BAE0A00A5E399 /* RHNavigationNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHNavigationNode.m; sourceTree = "<group>"; };
-		924DE4D1145E6EC700EEE8C6 /* RHBetaViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHBetaViewController.h; sourceTree = "<group>"; };
-		924DE4D2145E6EC700EEE8C6 /* RHBetaViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHBetaViewController.m; sourceTree = "<group>"; };
-		924DE4D3145E6EC700EEE8C6 /* RHBetaViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RHBetaViewController.xib; sourceTree = "<group>"; };
-		924DE4D7145E70CE00EEE8C6 /* RHBeta.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHBeta.h; sourceTree = "<group>"; };
 		924DE4D8145E773800EEE8C6 /* TabBarInfoIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TabBarInfoIcon.png; sourceTree = "<group>"; };
 		924DE4D9145E773800EEE8C6 /* TabBarInfoIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TabBarInfoIcon@2x.png"; sourceTree = "<group>"; };
 		924DE4DC145E787D00EEE8C6 /* TabBarBetaIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TabBarBetaIcon.png; sourceTree = "<group>"; };
@@ -226,9 +218,6 @@
 		9281A35A14C68C8D001D9837 /* JSONRepresentation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONRepresentation.h; sourceTree = "<group>"; };
 		928B76E7144CBADA00D2F98D /* TabBarMapIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TabBarMapIcon@2x.png"; sourceTree = "<group>"; };
 		929488F9142CD65500820A9C /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
-		92A49DD9145F8BA400B6F34E /* RHBetaRegistrationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHBetaRegistrationViewController.h; sourceTree = "<group>"; };
-		92A49DDA145F8BA400B6F34E /* RHBetaRegistrationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHBetaRegistrationViewController.m; sourceTree = "<group>"; };
-		92A49DDB145F8BA400B6F34E /* RHBetaRegistrationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RHBetaRegistrationViewController.xib; sourceTree = "<group>"; };
 		92ADDE0614E3422400655869 /* RHPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHPath.h; sourceTree = "<group>"; };
 		92ADDE0714E3422400655869 /* RHPath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHPath.m; sourceTree = "<group>"; };
 		92ADDE0E14E36CB000655869 /* RHLocationSelectorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHLocationSelectorViewController.h; sourceTree = "<group>"; };
@@ -436,7 +425,6 @@
 		9265FEAE1409AB5D00AE406E /* RHITMobile */ = {
 			isa = PBXGroup;
 			children = (
-				924DE4D7145E70CE00EEE8C6 /* RHBeta.h */,
 				92ECC4C4141434D30073C4C3 /* RHConstants.h */,
 				9265FEB71409AB5D00AE406E /* RHAppDelegate.h */,
 				9265FEB81409AB5D00AE406E /* RHAppDelegate.m */,
@@ -567,12 +555,6 @@
 				92312435144FB8470074791E /* RHLocationDetailViewController.h */,
 				92312436144FB8470074791E /* RHLocationDetailViewController.m */,
 				92312437144FB8470074791E /* RHLocationDetailViewController.xib */,
-				924DE4D1145E6EC700EEE8C6 /* RHBetaViewController.h */,
-				924DE4D2145E6EC700EEE8C6 /* RHBetaViewController.m */,
-				924DE4D3145E6EC700EEE8C6 /* RHBetaViewController.xib */,
-				92A49DD9145F8BA400B6F34E /* RHBetaRegistrationViewController.h */,
-				92A49DDA145F8BA400B6F34E /* RHBetaRegistrationViewController.m */,
-				92A49DDB145F8BA400B6F34E /* RHBetaRegistrationViewController.xib */,
 				924DE4E0145E79A800EEE8C6 /* RHCampusServicesViewController.h */,
 				924DE4E1145E79A800EEE8C6 /* RHCampusServicesViewController.m */,
 				924DE4E5145E79DF00EEE8C6 /* RHDirectoryViewController.h */,
@@ -665,13 +647,11 @@
 				92ADEE2F14599D9500060A3F /* QuickListToolbarIcon@2x.png in Resources */,
 				92ADEE321459BC5E00060A3F /* TabBarDirectoryIcon.png in Resources */,
 				92ADEE331459BC5E00060A3F /* TabBarDirectoryIcon@2x.png in Resources */,
-				924DE4D5145E6EC700EEE8C6 /* RHBetaViewController.xib in Resources */,
 				924DE4DA145E773800EEE8C6 /* TabBarInfoIcon.png in Resources */,
 				924DE4DB145E773800EEE8C6 /* TabBarInfoIcon@2x.png in Resources */,
 				924DE4DE145E787D00EEE8C6 /* TabBarBetaIcon.png in Resources */,
 				924DE4DF145E787D00EEE8C6 /* TabBarBetaIcon@2x.png in Resources */,
 				924DE4E9145E79DF00EEE8C6 /* RHDirectoryViewController.xib in Resources */,
-				92A49DDD145F8BA400B6F34E /* RHBetaRegistrationViewController.xib in Resources */,
 				922F44A514985AE800D5C2C3 /* TabBarToursIcon.png in Resources */,
 				922F44A614985AE800D5C2C3 /* TabBarToursIcon@2x.png in Resources */,
 				92D3672914B60DE000EE0504 /* RHPersonDetailViewController.xib in Resources */,
@@ -706,10 +686,8 @@
 				9236CEA6144F33C400D0FB59 /* RHPinAnnotationView.m in Sources */,
 				92312438144FB8470074791E /* RHLocationDetailViewController.m in Sources */,
 				92ADEE291459026600060A3F /* RHLocationLink.m in Sources */,
-				924DE4D4145E6EC700EEE8C6 /* RHBetaViewController.m in Sources */,
 				924DE4E3145E79A800EEE8C6 /* RHCampusServicesViewController.m in Sources */,
 				924DE4E8145E79DF00EEE8C6 /* RHDirectoryViewController.m in Sources */,
-				92A49DDC145F8BA400B6F34E /* RHBetaRegistrationViewController.m in Sources */,
 				92F20F6D1464383200603500 /* RHWebViewController.m in Sources */,
 				92E1AA7F1487115F0005BF34 /* RHWebRequestMaker.m in Sources */,
 				925465AA1495C69C00C12B81 /* RHWrappedCoordinate.m in Sources */,
