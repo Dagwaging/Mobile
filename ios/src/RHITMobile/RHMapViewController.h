@@ -48,6 +48,8 @@
     NSMutableArray *directionsPins_;
 }
 
++ (id)instance;
+
 /// Map view that is visible to the user.
 @property (nonatomic, strong) IBOutlet MKMapView *mapView;
 
@@ -74,10 +76,6 @@
 - (void)focusMapViewToTemporaryAnnotation:(RHAnnotation *)annotation;
 
 - (void)focusMapViewToLocation:(RHLocation *)location;
-
-- (IBAction)debugZoomIn:(id)sender;
-
-- (IBAction)debugZoomOut:(id)sender;
 
 - (IBAction)displayQuickList:(id)sender;
 

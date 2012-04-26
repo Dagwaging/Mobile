@@ -61,7 +61,6 @@
 		9265FEB91409AB5D00AE406E /* RHAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9265FEB81409AB5D00AE406E /* RHAppDelegate.m */; };
 		9265FEBF1409AB5D00AE406E /* RHMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9265FEBE1409AB5D00AE406E /* RHMapViewController.m */; };
 		9265FEC21409AB5D00AE406E /* RHSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9265FEC11409AB5D00AE406E /* RHSearchViewController.m */; };
-		9265FEC51409AB5D00AE406E /* RHMapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9265FEC31409AB5D00AE406E /* RHMapViewController.xib */; };
 		9265FEC81409AB5D00AE406E /* RHSearchViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9265FEC61409AB5D00AE406E /* RHSearchViewController.xib */; };
 		926C495115487DBE008FFA62 /* RHMainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 926C495015487DBE008FFA62 /* RHMainStoryboard.storyboard */; };
 		926D397F143D2CE400223121 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 926D397E143D2CE400223121 /* Settings.bundle */; };
@@ -102,7 +101,6 @@
 		92F5F21C14DFC3E400324ACE /* RHTourTag.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F5F21B14DFC3E400324ACE /* RHTourTag.m */; };
 		92F5F21F14DFC3F900324ACE /* RHTourTagCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F5F21E14DFC3F900324ACE /* RHTourTagCategory.m */; };
 		92FFAC5714E0E5F700240458 /* RHTagsBasketViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92FFAC5514E0E5F700240458 /* RHTagsBasketViewController.m */; };
-		92FFAC5814E0E5F700240458 /* RHTagsBasketViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92FFAC5614E0E5F700240458 /* RHTagsBasketViewController.xib */; };
 		92FFAC5D14E0F2C100240458 /* RHTagSelectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92FFAC5B14E0F2C000240458 /* RHTagSelectionViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -198,7 +196,6 @@
 		9265FEBE1409AB5D00AE406E /* RHMapViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RHMapViewController.m; sourceTree = "<group>"; };
 		9265FEC01409AB5D00AE406E /* RHSearchViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RHSearchViewController.h; sourceTree = "<group>"; };
 		9265FEC11409AB5D00AE406E /* RHSearchViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RHSearchViewController.m; sourceTree = "<group>"; };
-		9265FEC41409AB5D00AE406E /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/RHMapViewController.xib; sourceTree = "<group>"; };
 		9265FEC71409AB5D00AE406E /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/RHSearchViewController.xib; sourceTree = "<group>"; };
 		9265FECF1409AB5D00AE406E /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		926C495015487DBE008FFA62 /* RHMainStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = RHMainStoryboard.storyboard; sourceTree = "<group>"; };
@@ -274,7 +271,6 @@
 		92F5F21E14DFC3F900324ACE /* RHTourTagCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHTourTagCategory.m; sourceTree = "<group>"; };
 		92FFAC5414E0E5F700240458 /* RHTagsBasketViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHTagsBasketViewController.h; sourceTree = "<group>"; };
 		92FFAC5514E0E5F700240458 /* RHTagsBasketViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHTagsBasketViewController.m; sourceTree = "<group>"; };
-		92FFAC5614E0E5F700240458 /* RHTagsBasketViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RHTagsBasketViewController.xib; sourceTree = "<group>"; };
 		92FFAC5A14E0F2C000240458 /* RHTagSelectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHTagSelectionViewController.h; sourceTree = "<group>"; };
 		92FFAC5B14E0F2C000240458 /* RHTagSelectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHTagSelectionViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -559,7 +555,6 @@
 			children = (
 				9265FEBD1409AB5D00AE406E /* RHMapViewController.h */,
 				9265FEBE1409AB5D00AE406E /* RHMapViewController.m */,
-				9265FEC31409AB5D00AE406E /* RHMapViewController.xib */,
 				9265FEC01409AB5D00AE406E /* RHSearchViewController.h */,
 				9265FEC11409AB5D00AE406E /* RHSearchViewController.m */,
 				9265FEC61409AB5D00AE406E /* RHSearchViewController.xib */,
@@ -589,7 +584,6 @@
 				92D3672714B60DE000EE0504 /* RHPersonDetailViewController.xib */,
 				92FFAC5414E0E5F700240458 /* RHTagsBasketViewController.h */,
 				92FFAC5514E0E5F700240458 /* RHTagsBasketViewController.m */,
-				92FFAC5614E0E5F700240458 /* RHTagsBasketViewController.xib */,
 				92FFAC5A14E0F2C000240458 /* RHTagSelectionViewController.h */,
 				92FFAC5B14E0F2C000240458 /* RHTagSelectionViewController.m */,
 				92ADDE0E14E36CB000655869 /* RHLocationSelectorViewController.h */,
@@ -651,7 +645,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				9265FEB31409AB5D00AE406E /* InfoPlist.strings in Resources */,
-				9265FEC51409AB5D00AE406E /* RHMapViewController.xib in Resources */,
 				9265FEC81409AB5D00AE406E /* RHSearchViewController.xib in Resources */,
 				922603581409C9480065F705 /* LaunchIcon@2x.png in Resources */,
 				9226035A1409C9680065F705 /* LaunchIcon.png in Resources */,
@@ -677,7 +670,6 @@
 				922F44A514985AE800D5C2C3 /* TabBarToursIcon.png in Resources */,
 				922F44A614985AE800D5C2C3 /* TabBarToursIcon@2x.png in Resources */,
 				92D3672914B60DE000EE0504 /* RHPersonDetailViewController.xib in Resources */,
-				92FFAC5814E0E5F700240458 /* RHTagsBasketViewController.xib in Resources */,
 				92ADDE1214E36CB100655869 /* RHLocationSelectorViewController.xib in Resources */,
 				926C495115487DBE008FFA62 /* RHMainStoryboard.storyboard in Resources */,
 			);
@@ -763,14 +755,6 @@
 				9265FEB21409AB5D00AE406E /* en */,
 			);
 			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		9265FEC31409AB5D00AE406E /* RHMapViewController.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				9265FEC41409AB5D00AE406E /* en */,
-			);
-			name = RHMapViewController.xib;
 			sourceTree = "<group>";
 		};
 		9265FEC61409AB5D00AE406E /* RHSearchViewController.xib */ = {

@@ -76,8 +76,7 @@
 
 - (IBAction)displayCurrentLocationOnMap:(id)sender {
     [self.navigationController popToRootViewControllerAnimated:YES];
-    RHAppDelegate *appDelegate = (RHAppDelegate *) [UIApplication sharedApplication].delegate;
-    [appDelegate.mapViewController focusMapViewToLocation:self.location];
+    [RHMapViewController.instance focusMapViewToLocation:self.location];
 }
 
 - (IBAction)getDirectionsToCurrentLocation:(id)sender {

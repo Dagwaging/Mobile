@@ -106,7 +106,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 }
 
 - (void)didLoadPath:(RHPath *)path {
-    RHMapViewController *mapViewController = [(RHAppDelegate *)[[UIApplication sharedApplication] delegate] mapViewController];
+    RHMapViewController *mapViewController = [RHMapViewController instance];[(RHAppDelegate *)[[UIApplication sharedApplication] delegate] prefetchLocationNames];
     [self.navigationController popToRootViewControllerAnimated:YES];
     [mapViewController.directionsManager displayPath:path];
 }

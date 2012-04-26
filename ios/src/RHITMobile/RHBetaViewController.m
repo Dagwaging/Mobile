@@ -383,10 +383,10 @@ didDismissWithButtonIndex:(NSInteger)buttonIndex {
 #pragma mark - Private Methods
 
 - (IBAction)switchInstallationType:(id)sender {
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"Are You Sure?" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:@"Switch Build Types" otherButtonTitles:nil];
-    
-    RHAppDelegate *appDelegate = (RHAppDelegate *) [UIApplication sharedApplication].delegate;
-    [actionSheet showFromTabBar:appDelegate.tabBarController.tabBar];
+//    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"Are You Sure?" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:@"Switch Build Types" otherButtonTitles:nil];
+//    
+//    RHAppDelegate *appDelegate = (RHAppDelegate *) [UIApplication sharedApplication].delegate;
+    //[actionSheet showFromTabBar:appDelegate.tabBarController.tabBar];
 }
 
 - (IBAction)checkForUpdates:(id)sender {

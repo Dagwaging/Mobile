@@ -30,14 +30,6 @@
 #import "RHLoadersWrapper.h"
 
 
-#pragma mark Private Category Declaration
-@interface RHAppDelegate ()
-
-#pragma mark - Private Method Signatures
-- (void)setupDefaults;
-
-@end
-
 #pragma mark - Implementation
 
 @implementation RHAppDelegate
@@ -45,146 +37,17 @@
 #pragma mark - General Properties
 
 @synthesize window = _window;
-@synthesize tabBarController = _tabBarController;
-@synthesize mapNavigationViewController;
-@synthesize directoryNavigationViewController;
-@synthesize infoNavigationViewController;
-@synthesize infoViewController;
-@synthesize mapViewController;
 @synthesize managedObjectModel;
 @synthesize managedObjectContext;
 @synthesize persistentStoreCoordinator;
 @synthesize locationNames;
-@synthesize toursNavigationViewController;
-
-#pragma mark - Static Methods
-static RHAppDelegate *instance_;
-
-+ (RHAppDelegate *)instance {
-    return instance_;
-}
 
 #pragma mark - UIAppDelegate Methods
 
 - (BOOL)application:(UIApplication *)application 
 didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Set the instance_ variable if not already set to allow singleton access
-    if (instance_ == nil) {
-        instance_ = self; 
-    }
-    
     [RHLoadersWrapper updateAllStoredData];
-//    
-//    // Add tab bar controller to window
-//    self.window.rootViewController = self.tabBarController;
-//    
-//    // Create and initialize the application's map view controller
-//    self.mapViewController = [[RHMapViewController alloc]
-//                              initWithNibName:kRHMapViewControllerNibName bundle:nil];
-//    [self.mapNavigationViewController pushViewController:mapViewController
-//                                                animated:NO];
-//    self.mapViewController.navigationItem.title = @"Map";
-//    UIImage *quickListIcon = [UIImage imageNamed:@"quicklist-toolbar-icon.png"];
-//    UIBarButtonItem *mapLeftItem = [[UIBarButtonItem alloc] 
-//                                    initWithImage:quickListIcon
-//                                    style:UIBarButtonItemStylePlain
-//                                    target:self.mapViewController
-//                                    action:@selector(displayQuickList:)];
-//    self.mapViewController.navigationItem.leftBarButtonItem = mapLeftItem; 
-//    
-//    UIBarButtonItem *mapRightItem = [UIBarButtonItem alloc]; 
-//    mapRightItem = [mapRightItem
-//                    initWithBarButtonSystemItem:UIBarButtonSystemItemSearch
-//                    target:mapViewController
-//                    action:@selector(displaySearch:)];
-//    
-//    self.mapViewController.navigationItem.rightBarButtonItem = mapRightItem;
-//    
-//    // Create and initialize the root info view controller
-//    self.infoViewController = [[RHCampusServicesViewController alloc] initWithNibName:kRHCampusServicesViewControllerNibName
-//                                                                               bundle:nil];
-//    
-//    [self.infoNavigationViewController pushViewController:self.infoViewController
-//                                                 animated:NO];
-//    
-//    self.infoViewController.navigationItem.title = @"Campus Info";
-//    
-//    // Create and initialize the root directory view controller
-//    RHDirectoryViewController *directoryController = [RHDirectoryViewController
-//                                                      alloc];
-//    directoryController = [directoryController initWithNibName:kRHDirectoryViewControllerNibName
-//                                                        bundle:nil];
-//    
-//    [self.directoryNavigationViewController
-//     pushViewController:directoryController
-//     animated:NO];
-//    
-//    directoryController.navigationItem.title = @"Directory";
-//    
-//    // Create and initialize the root directory view controller
-//    RHToursViewController *toursController = [RHToursViewController
-//                                              alloc];
-//    toursController = [toursController initWithNibName:kRHToursViewControllerNibName
-//                                                bundle:nil];
-//    
-//    [self.toursNavigationViewController
-//     pushViewController:toursController
-//     animated:NO];
-//    
-//    toursController.navigationItem.title = @"Tours";
-//    
-//    // If this is a beta build, create and initizliaze the beta controller
-//#ifdef RHITMobile_RHBeta
-//    RHBetaViewController *beta = [[RHBetaViewController alloc]
-//                                  initWithNibName:kRHBetaViewControllerNibName
-//                                  bundle:nil];
-//    UINavigationController *nav = [[UINavigationController alloc]
-//                                   initWithRootViewController:beta];
-//    UIImage *betaImage = [UIImage imageNamed:@"tab-bar-beta-icon.png"];
-//    nav.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Beta"
-//                                                   image:betaImage
-//                                                     tag:0];
-//    
-//    
-//    NSArray *newControllers = [self.tabBarController.viewControllers 
-//                               arrayByAddingObject:nav];
-//    self.tabBarController.viewControllers = newControllers;
-//    
-//#endif
-//    
-//    // Register ourselves for other managed object context save operations
-//    NSNotificationCenter *notificationCenter = [NSNotificationCenter
-//                                                defaultCenter];
-//    [notificationCenter addObserver:self
-//                           selector:@selector(managedContextDidSave:)
-//                               name:NSManagedObjectContextDidSaveNotification 
-//                             object:nil];
-    
-    // Finish setup and kick off defaults syncing
     [self.window makeKeyAndVisible];
-    //[self setupDefaults];
-    //    
-    //    // Kick off a locations update
-    //    RHTopLocationsRequester *locationsRequester = [[RHTopLocationsRequester alloc] initWithDelegate:self.mapViewController persistantStoreCoordinator:self.persistentStoreCoordinator];
-    //    
-    //    [locationsRequester updateTopLevelLocations];
-    //    
-    //    // Kick off a campus services update
-    //    RHCampusServicesRequester *campusServicesRequester = [[RHCampusServicesRequester alloc] 
-    //                                                          initWithPersistantStoreCoordinator:self.persistentStoreCoordinator
-    //                                                          delegate:self.infoViewController];
-    //    [campusServicesRequester updateCampusServices];
-    //    
-    //    // Kick off a tags update
-    //    RHTagsRequester *tagsRequester = [[RHTagsRequester alloc] initWithDelegate:nil persistantStoreCoordinator:self.persistentStoreCoordinator];
-    //    
-    //    [tagsRequester updateTags];
-    
-    // If this is a beta build, kick off initial beta setup
-//#ifdef RHITMobile_RHBeta
-//    [beta performInitialSetup];
-//#endif
-    
     return YES;
 }
 
@@ -328,33 +191,6 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
                                                 YES) lastObject];
 }
 
-- (void)clearDatabase {
-    NSArray *stores = [persistentStoreCoordinator persistentStores];
-    NSPersistentStore *store = [stores objectAtIndex:0];
-    
-    // Delete existing database
-    NSError *error = nil;
-    NSURL *storeURL = store.URL;
-    [persistentStoreCoordinator removePersistentStore:store
-                                                error:&error];
-    [[NSFileManager defaultManager] removeItemAtPath:storeURL.path
-                                               error:&error];
-    
-    // Create new database
-    NSString *path = [self.applicationDocumentsDirectory
-                      stringByAppendingPathComponent:@"RHITMobile.sqlite"];
-    NSURL *storeUrl = [NSURL fileURLWithPath:path];
-    error = nil;
-    
-    if(![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType
-                                                 configuration:nil
-                                                           URL:storeUrl
-                                                       options:nil
-                                                         error:&error]) {
-        /* Error for store creation should be handled in here */
-    }
-}
-
 - (void)managedContextDidSave:(NSNotification *)notification {
     if ([NSThread isMainThread]) {
         [self.managedObjectContext
@@ -364,46 +200,6 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
                                withObject:notification
                             waitUntilDone:YES];
     }
-}
-
-#pragma mark - Additional Methods
-
--(void)setupDefaults {
-    // Get the plist location from the settings bundle
-    NSString *settingsPath = [[[NSBundle mainBundle] bundlePath]
-                              stringByAppendingPathComponent:@"Settings.bundle"];
-    NSString *plistPath = [settingsPath
-                           stringByAppendingPathComponent:@"Root.plist"];
-    
-    // Get the preference specifiers array which contains the settings
-    NSDictionary *settingsDictionary = [NSDictionary
-                                        dictionaryWithContentsOfFile:plistPath];
-    NSArray *preferencesArray = [settingsDictionary
-                                 objectForKey:@"PreferenceSpecifiers"];
-    
-    // Use the shared defaults object
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    
-    // For each preference item, set its default if there is no value set
-    for(NSDictionary *item in preferencesArray) {
-        
-        // Get the item key, if there is no key then we can skip it
-        NSString *key = [item objectForKey:@"Key"];
-        if (key) {
-            
-            // Check to see if the value and default value are set
-            // If a default value exists and the value is not set, use the
-            // default
-            id value = [defaults objectForKey:key];
-            id defaultValue = [item objectForKey:@"DefaultValue"];
-            if(defaultValue && !value) {
-                [defaults setObject:defaultValue forKey:key];
-            }
-        }
-    }
-    
-    // Write the changes to disk
-    [defaults synchronize];
 }
 
 @end

@@ -74,7 +74,7 @@
 
 - (NSDictionary *)autocompleteData {
     if (self.searchType == RHSearchViewControllerTypeLocation) {
-        return RHAppDelegate.instance.locationNames;
+        return [(RHAppDelegate *)[[UIApplication sharedApplication] delegate] locationNames];
     }
     
     return nil;

@@ -146,8 +146,7 @@
                                   fromLocationWithId:[NSNumber numberWithInt:111] // TODO
                                          forDuration:self.duration
                                         successBlock:^(RHPath *path) {
-                                            //[self didLoadPath:path];
-                                            NSLog(@"Tour successful");
+                                            [self didLoadPath:path];
                                         } failureBlock:^(NSError *error) {
                                             [[[UIAlertView alloc] initWithTitle:@"Error"
                                                                         message:@"Something went wrong building the tour. We're really sorry."
@@ -234,14 +233,10 @@ moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath
 
 - (void)didLoadPath:(RHPath *)path
 {
-    // FIXME
-    [RHAppDelegate.instance.mapViewController.directionsManager displayPath:path];
-    
-    // Transition to view
-    UITabBarController *tabBarController = RHAppDelegate.instance.tabBarController;
+    UITabBarController *tabBarController = (UITabBarController *) self.parentViewController.parentViewController;
     
     UIView *fromView = tabBarController.selectedViewController.view;
-    UIView *toView = [[tabBarController.viewControllers objectAtIndex:0] view];
+    UIView *toView = [[tabBarController.viewControllers objectAtIndex:1] view];
     
     // Transition using a page curl.
     [UIView transitionFromView:fromView 
@@ -250,7 +245,10 @@ moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath
                        options:UIViewAnimationOptionTransitionCurlDown
                     completion:^(BOOL finished) {
                         if (finished) {
-                            tabBarController.selectedIndex = 0;
+                            tabBarController.selectedIndex = 1;
+                            [[NSOperationQueue mainQueue] addOperationWithBlock:^(void) {
+                                [[[RHMapViewController instance] directionsManager] displayPath:path];
+                            }];
                         }
                     }];
     

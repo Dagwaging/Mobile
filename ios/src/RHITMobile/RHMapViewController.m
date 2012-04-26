@@ -37,8 +37,6 @@
 #import "RHSimplePointAnnotation.h"
 
 
-#pragma mark Private Method Declarations
-
 @interface RHMapViewController()
 
 @property (nonatomic, strong) RHLocationOverlay *currentOverlay;
@@ -52,13 +50,9 @@
 @end
 
 
-#pragma mark -
-#pragma mark Implementation
-
 @implementation RHMapViewController
 
-#pragma mark -
-#pragma mark Generic Properties
+static RHMapViewController* _instance;
 
 @synthesize mapView;
 @synthesize fetchedResultsController;
@@ -70,16 +64,20 @@
 @synthesize directionsPicker;
 @synthesize displayingDirections = displayingDirections_;
 @synthesize directionsManager = directionsManager_;
-
-// Private properties
 @synthesize currentOverlay;
 @synthesize locationsDisplayed;
 
-#pragma mark -
-#pragma mark General Methods
++ (id)instance
+{
+    return _instance;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    if (_instance == nil) {
+        _instance = self;
+    }
     
     self.managedObjectContext = [(RHAppDelegate *)
                                  [[UIApplication sharedApplication]
@@ -156,20 +154,7 @@
     [self focusMapViewToAnnotation:annotation];
 }
 
-#pragma mark -
-#pragma mark IBActions
-
-- (IBAction)debugZoomIn:(id)sender {
-    [self.mapView setCenterCoordinate:self.mapView.region.center
-                            zoomLevel:self.mapView.zoomLevel + 1
-                             animated:YES];
-}
-
-- (IBAction)debugZoomOut:(id)sender {
-    [self.mapView setCenterCoordinate:self.mapView.region.center
-                            zoomLevel:self.mapView.zoomLevel - 1
-                             animated:YES];
-}
+#pragma mark - IBActions
 
 - (IBAction)displaySearch:(id)sender {
     RHSearchViewController *search = [RHSearchViewController alloc];
@@ -482,7 +467,7 @@
                                   initWithCapacity:results.count];
     [self populateMapWithLocations:(NSSet *)results];
     
-    [[RHAppDelegate instance] prefetchLocationNames];
+    [(RHAppDelegate *)[[UIApplication sharedApplication] delegate] prefetchLocationNames];
 }
 
 - (void)populateMapWithLocations:(NSSet *)locations {
