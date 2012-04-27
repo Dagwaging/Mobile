@@ -76,6 +76,35 @@ namespace TestClient.RHIT.Private {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="AuthFault", Namespace="http://schemas.datacontract.org/2004/07/RHITMobile.Secure")]
+    [System.SerializableAttribute()]
+    public partial class AuthFault : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="User", Namespace="http://schemas.datacontract.org/2004/07/RHITMobile.Secure.Data")]
     [System.SerializableAttribute()]
     public partial class User : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
@@ -314,35 +343,6 @@ namespace TestClient.RHIT.Private {
                     this.YearField = value;
                     this.RaisePropertyChanged("Year");
                 }
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="AuthFault", Namespace="http://schemas.datacontract.org/2004/07/RHITMobile.Secure")]
-    [System.SerializableAttribute()]
-    public partial class AuthFault : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
-        [System.NonSerializedAttribute()]
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
-        [global::System.ComponentModel.BrowsableAttribute(false)]
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
-            get {
-                return this.extensionDataField;
-            }
-            set {
-                this.extensionDataField = value;
             }
         }
         
@@ -881,6 +881,9 @@ namespace TestClient.RHIT.Private {
         private System.DateTime LastUpdateTimeField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int ParseErrorsField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private int RequestCountField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -961,6 +964,19 @@ namespace TestClient.RHIT.Private {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
+        public int ParseErrors {
+            get {
+                return this.ParseErrorsField;
+            }
+            set {
+                if ((this.ParseErrorsField.Equals(value) != true)) {
+                    this.ParseErrorsField = value;
+                    this.RaisePropertyChanged("ParseErrors");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
         public int RequestCount {
             get {
                 return this.RequestCountField;
@@ -1006,6 +1022,10 @@ namespace TestClient.RHIT.Private {
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://mobileprivate.rose-hulman.edu/IWebService/Logout")]
         void Logout(string authToken);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://mobileprivate.rose-hulman.edu/IWebService/GetTerms", ReplyAction="http://mobileprivate.rose-hulman.edu/IWebService/GetTermsResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(TestClient.RHIT.Private.AuthFault), Action="http://mobileprivate.rose-hulman.edu/IWebService/GetTermsAuthFaultFault", Name="AuthFault", Namespace="http://schemas.datacontract.org/2004/07/RHITMobile.Secure")]
+        int[] GetTerms(string authToken);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://mobileprivate.rose-hulman.edu/IWebService/GetUser", ReplyAction="http://mobileprivate.rose-hulman.edu/IWebService/GetUserResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(TestClient.RHIT.Private.AuthFault), Action="http://mobileprivate.rose-hulman.edu/IWebService/GetUserAuthFaultFault", Name="AuthFault", Namespace="http://schemas.datacontract.org/2004/07/RHITMobile.Secure")]
         TestClient.RHIT.Private.User GetUser(string authToken, string username);
@@ -1020,7 +1040,7 @@ namespace TestClient.RHIT.Private {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://mobileprivate.rose-hulman.edu/IWebService/SearchCourses", ReplyAction="http://mobileprivate.rose-hulman.edu/IWebService/SearchCoursesResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(TestClient.RHIT.Private.AuthFault), Action="http://mobileprivate.rose-hulman.edu/IWebService/SearchCoursesAuthFaultFault", Name="AuthFault", Namespace="http://schemas.datacontract.org/2004/07/RHITMobile.Secure")]
-        TestClient.RHIT.Private.Course[] SearchCourses(string authToken, string search);
+        TestClient.RHIT.Private.Course[] SearchCourses(string authToken, int term, string search);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://mobileprivate.rose-hulman.edu/IWebService/GetCourseEnrollment", ReplyAction="http://mobileprivate.rose-hulman.edu/IWebService/GetCourseEnrollmentResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(TestClient.RHIT.Private.AuthFault), Action="http://mobileprivate.rose-hulman.edu/IWebService/GetCourseEnrollmentAuthFaultFaul" +
@@ -1029,12 +1049,12 @@ namespace TestClient.RHIT.Private {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://mobileprivate.rose-hulman.edu/IWebService/GetUserEnrollment", ReplyAction="http://mobileprivate.rose-hulman.edu/IWebService/GetUserEnrollmentResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(TestClient.RHIT.Private.AuthFault), Action="http://mobileprivate.rose-hulman.edu/IWebService/GetUserEnrollmentAuthFaultFault", Name="AuthFault", Namespace="http://schemas.datacontract.org/2004/07/RHITMobile.Secure")]
-        TestClient.RHIT.Private.UserEnrollment[] GetUserEnrollment(string authToken, string username);
+        TestClient.RHIT.Private.UserEnrollment[] GetUserEnrollment(string authToken, int term, string username);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://mobileprivate.rose-hulman.edu/IWebService/GetInstructorSchedule", ReplyAction="http://mobileprivate.rose-hulman.edu/IWebService/GetInstructorScheduleResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(TestClient.RHIT.Private.AuthFault), Action="http://mobileprivate.rose-hulman.edu/IWebService/GetInstructorScheduleAuthFaultFa" +
             "ult", Name="AuthFault", Namespace="http://schemas.datacontract.org/2004/07/RHITMobile.Secure")]
-        TestClient.RHIT.Private.UserEnrollment[] GetInstructorSchedule(string authToken, string username);
+        TestClient.RHIT.Private.UserEnrollment[] GetInstructorSchedule(string authToken, int term, string username);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://mobileprivate.rose-hulman.edu/IWebService/GetCourseSchedule", ReplyAction="http://mobileprivate.rose-hulman.edu/IWebService/GetCourseScheduleResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(TestClient.RHIT.Private.AuthFault), Action="http://mobileprivate.rose-hulman.edu/IWebService/GetCourseScheduleAuthFaultFault", Name="AuthFault", Namespace="http://schemas.datacontract.org/2004/07/RHITMobile.Secure")]
@@ -1042,7 +1062,7 @@ namespace TestClient.RHIT.Private {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://mobileprivate.rose-hulman.edu/IWebService/GetRoomSchedule", ReplyAction="http://mobileprivate.rose-hulman.edu/IWebService/GetRoomScheduleResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(TestClient.RHIT.Private.AuthFault), Action="http://mobileprivate.rose-hulman.edu/IWebService/GetRoomScheduleAuthFaultFault", Name="AuthFault", Namespace="http://schemas.datacontract.org/2004/07/RHITMobile.Secure")]
-        TestClient.RHIT.Private.RoomSchedule[] GetRoomSchedule(string authToken, string room);
+        TestClient.RHIT.Private.RoomSchedule[] GetRoomSchedule(string authToken, int term, string room);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://mobileprivate.rose-hulman.edu/IWebService/RequestUpdate", ReplyAction="http://mobileprivate.rose-hulman.edu/IWebService/RequestUpdateResponse")]
         bool RequestUpdate();
@@ -1086,6 +1106,10 @@ namespace TestClient.RHIT.Private {
             base.Channel.Logout(authToken);
         }
         
+        public int[] GetTerms(string authToken) {
+            return base.Channel.GetTerms(authToken);
+        }
+        
         public TestClient.RHIT.Private.User GetUser(string authToken, string username) {
             return base.Channel.GetUser(authToken, username);
         }
@@ -1098,28 +1122,28 @@ namespace TestClient.RHIT.Private {
             return base.Channel.GetCourse(authToken, term, crn);
         }
         
-        public TestClient.RHIT.Private.Course[] SearchCourses(string authToken, string search) {
-            return base.Channel.SearchCourses(authToken, search);
+        public TestClient.RHIT.Private.Course[] SearchCourses(string authToken, int term, string search) {
+            return base.Channel.SearchCourses(authToken, term, search);
         }
         
         public string[] GetCourseEnrollment(string authToken, int term, int crn) {
             return base.Channel.GetCourseEnrollment(authToken, term, crn);
         }
         
-        public TestClient.RHIT.Private.UserEnrollment[] GetUserEnrollment(string authToken, string username) {
-            return base.Channel.GetUserEnrollment(authToken, username);
+        public TestClient.RHIT.Private.UserEnrollment[] GetUserEnrollment(string authToken, int term, string username) {
+            return base.Channel.GetUserEnrollment(authToken, term, username);
         }
         
-        public TestClient.RHIT.Private.UserEnrollment[] GetInstructorSchedule(string authToken, string username) {
-            return base.Channel.GetInstructorSchedule(authToken, username);
+        public TestClient.RHIT.Private.UserEnrollment[] GetInstructorSchedule(string authToken, int term, string username) {
+            return base.Channel.GetInstructorSchedule(authToken, term, username);
         }
         
         public TestClient.RHIT.Private.CourseTime[] GetCourseSchedule(string authToken, int term, int crn) {
             return base.Channel.GetCourseSchedule(authToken, term, crn);
         }
         
-        public TestClient.RHIT.Private.RoomSchedule[] GetRoomSchedule(string authToken, string room) {
-            return base.Channel.GetRoomSchedule(authToken, room);
+        public TestClient.RHIT.Private.RoomSchedule[] GetRoomSchedule(string authToken, int term, string room) {
+            return base.Channel.GetRoomSchedule(authToken, term, room);
         }
         
         public bool RequestUpdate() {

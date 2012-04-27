@@ -26,8 +26,8 @@
     <MetadataFile FileName="mobileprivate.rose-hulman.edu.xsd" MetadataType="Schema" ID="714b7e7f-6a73-4561-a311-45b52cb1e0e1" SourceId="1" SourceUrl="net.tcp://localhost:8000/RhitPrivate/mex" />
     <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="603e94de-78cb-4c75-b1ca-261b1785c64e" SourceId="1" SourceUrl="net.tcp://localhost:8000/RhitPrivate/mex" />
     <MetadataFile FileName="RHITMobile.Secure.xsd" MetadataType="Schema" ID="18106d21-c266-4900-9de5-8b95adc11abe" SourceId="1" SourceUrl="net.tcp://localhost:8000/RhitPrivate/mex" />
-    <MetadataFile FileName="RHITMobile.Secure.Data.xsd" MetadataType="Schema" ID="124081cb-3282-4dde-a120-1466894a9a5b" SourceId="1" SourceUrl="net.tcp://localhost:8000/RhitPrivate/mex" />
     <MetadataFile FileName="Arrays.xsd" MetadataType="Schema" ID="ae2c4a8d-ac06-41a5-adb5-a42ee3a63296" SourceId="1" SourceUrl="net.tcp://localhost:8000/RhitPrivate/mex" />
+    <MetadataFile FileName="RHITMobile.Secure.Data.xsd" MetadataType="Schema" ID="124081cb-3282-4dde-a120-1466894a9a5b" SourceId="1" SourceUrl="net.tcp://localhost:8000/RhitPrivate/mex" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

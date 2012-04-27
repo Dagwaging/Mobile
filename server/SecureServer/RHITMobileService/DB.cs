@@ -82,12 +82,22 @@ namespace RHITMobile.Secure
             AffectedRows += adapter.AddUserEnrollment(_switchLock.WriteSwitch, enrollment);
         }
         
+        public int[] GetTerms()
+        {
+            using (SwitchLock switchLock = AcquireReadSwitch())
+            {
+                var adapter = new spGetTermsTableAdapter();
+                var table = adapter.GetData(switchLock.Switch);
+                return table.Terms;
+            }
+        }
+        
         public User GetUser(String username)
         {
             using (SwitchLock switchLock = AcquireReadSwitch())
             {
-                GetUserTableAdapter adapter = new GetUserTableAdapter();
-                Banner.GetUserDataTable table = adapter.GetData(switchLock.Switch, username);
+                var adapter = new spGetUserTableAdapter();
+                var table = adapter.GetData(switchLock.Switch, username);
                 return table.User;
             }
         }
@@ -96,8 +106,8 @@ namespace RHITMobile.Secure
         {
             using (SwitchLock switchLock = AcquireReadSwitch())
             {
-                SearchUsersTableAdapter adapter = new SearchUsersTableAdapter();
-                Banner.SearchUsersDataTable table = adapter.GetData(switchLock.Switch, search);
+                var adapter = new spSearchUsersTableAdapter();
+                var table = adapter.GetData(switchLock.Switch, search);
                 return table.Users;
             }
         }
@@ -106,18 +116,18 @@ namespace RHITMobile.Secure
         {
             using (SwitchLock switchLock = AcquireReadSwitch())
             {
-                GetCourseTableAdapter adapter = new GetCourseTableAdapter();
-                Banner.GetCourseDataTable table = adapter.GetData(switchLock.Switch, term, crn);
+                var adapter = new spGetCourseTableAdapter();
+                var table = adapter.GetData(switchLock.Switch, term, crn);
                 return table.Course;
             }
         }
 
-        public Course[] SearchCourses(String search)
+        public Course[] SearchCourses(int term, String search)
         {
             using (SwitchLock switchLock = AcquireReadSwitch())
             {
-                SearchCoursesTableAdapter adapter = new SearchCoursesTableAdapter();
-                Banner.SearchCoursesDataTable table = adapter.GetData(switchLock.Switch, search);
+                var adapter = new spSearchCoursesTableAdapter();
+                var table = adapter.GetData(switchLock.Switch, term, search);
                 return table.Courses;
             }
         }
@@ -126,28 +136,28 @@ namespace RHITMobile.Secure
         {
             using (SwitchLock switchLock = AcquireReadSwitch())
             {
-                GetCourseEnrollmentTableAdapter adapter = new GetCourseEnrollmentTableAdapter();
-                Banner.GetCourseEnrollmentDataTable table = adapter.GetData(switchLock.Switch, term, crn);
+                var adapter = new spGetCourseEnrollmentTableAdapter();
+                var table = adapter.GetData(switchLock.Switch, term, crn);
                 return table.Enrollment;
             }
         }
 
-        public UserEnrollment[] GetUserEnrollment(string username)
+        public UserEnrollment[] GetUserEnrollment(int term, string username)
         {
             using (SwitchLock switchLock = AcquireReadSwitch())
             {
-                GetUserEnrollmentTableAdapter adapter = new GetUserEnrollmentTableAdapter();
-                Banner.GetUserEnrollmentDataTable table = adapter.GetData(switchLock.Switch, username);
+                var adapter = new spGetUserEnrollmentTableAdapter();
+                var table = adapter.GetData(switchLock.Switch, term, username);
                 return table.Enrollment;
             }
         }
 
-        public UserEnrollment[] GetInstructorSchedule(string username)
+        public UserEnrollment[] GetInstructorSchedule(int term, string username)
         {
             using (SwitchLock switchLock = AcquireReadSwitch())
             {
-                GetInstructorScheduleTableAdapter adapter = new GetInstructorScheduleTableAdapter();
-                Banner.GetInstructorScheduleDataTable table = adapter.GetData(switchLock.Switch, username);
+                var adapter = new spGetInstructorScheduleTableAdapter();
+                var table = adapter.GetData(switchLock.Switch, term, username);
                 return table.Schedule;
             }
         }
@@ -156,18 +166,18 @@ namespace RHITMobile.Secure
         {
             using (SwitchLock switchLock = AcquireReadSwitch())
             {
-                GetCourseScheduleTableAdapter adapter = new GetCourseScheduleTableAdapter();
-                Banner.GetCourseScheduleDataTable table = adapter.GetData(switchLock.Switch, term, crn);
+                var adapter = new spGetCourseScheduleTableAdapter();
+                var table = adapter.GetData(switchLock.Switch, term, crn);
                 return table.Schedule;
             }
         }
         
-        public RoomSchedule[] GetRoomSchedule(string room)
+        public RoomSchedule[] GetRoomSchedule(int term, string room)
         {
             using (SwitchLock switchLock = AcquireReadSwitch())
             {
-                GetRoomScheduleTableAdapter adapter = new GetRoomScheduleTableAdapter();
-                Banner.GetRoomScheduleDataTable table = adapter.GetData(switchLock.Switch, room);
+                var adapter = new spGetRoomScheduleTableAdapter();
+                var table = adapter.GetData(switchLock.Switch, term, room);
                 return table.Schedule;
             }
         }

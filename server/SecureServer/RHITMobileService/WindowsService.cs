@@ -20,6 +20,8 @@ namespace RHITMobile.Secure
 
         public static WindowsService Instance { get; private set; }
 
+        public Logger Logger { get; private set; }
+
         public WindowsService()
         {
             InitializeComponent();
@@ -31,10 +33,12 @@ namespace RHITMobile.Secure
         {
             Cleanup();
 
+            Logger = new EventLogger(EventLog);
+
             ServiceHost = new ServiceHost(typeof(WebService));
             ServiceHost.Open();
 
-            DataMonitor = new DataMonitor(new EventLogger(EventLog));
+            DataMonitor = new DataMonitor(Logger);
             if (!DataMonitor.Start())
             {
                 ExitCode = 1;

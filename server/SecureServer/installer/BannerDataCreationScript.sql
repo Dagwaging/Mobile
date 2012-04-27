@@ -214,6 +214,30 @@ GO
 
 -- Stored procedure creation
 
+/****** Object:  StoredProcedure [dbo].[spGetTerms]    Script Date: 04/18/2012 13:55:05 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE PROCEDURE [dbo].[spGetTerms]
+	@switch bit
+AS
+BEGIN
+	SELECT DISTINCT term
+	FROM Course
+	WHERE switch = @switch
+	ORDER BY term
+END
+
+GO
+
 /****** Object:  StoredProcedure [dbo].[spDeleteData]    Script Date: 04/10/2012 20:03:58 ******/
 SET ANSI_NULLS ON
 GO
@@ -328,7 +352,7 @@ END
 
 GO
 
-/****** Object:  StoredProcedure [dbo].[spGetInstructorSchedule]    Script Date: 04/18/2012 13:55:05 ******/
+/****** Object:  StoredProcedure [dbo].[spGetInstructorSchedule]    Script Date: 04/23/2012 13:26:25 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -342,19 +366,20 @@ GO
 -- =============================================
 CREATE PROCEDURE [dbo].[spGetInstructorSchedule]
 	@switch bit,
+	@term int,
 	@username varchar(50)
 AS
 BEGIN
-	SELECT e.term, e.crn
+	SELECT c.term, c.crn
 	FROM [User] u
-		JOIN [Course] e ON e.switch = @switch AND e.instructor = u.id
+		JOIN [Course] c ON c.switch = @switch AND c.instructor = u.id AND c.term = @term
 	WHERE u.switch = @switch
 		AND u.username = @username
 END
 
 GO
 
-/****** Object:  StoredProcedure [dbo].[spGetRoomSchedule]    Script Date: 04/10/2012 20:04:46 ******/
+/****** Object:  StoredProcedure [dbo].[spGetRoomSchedule]    Script Date: 04/23/2012 13:28:24 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -368,12 +393,14 @@ GO
 -- =============================================
 CREATE PROCEDURE [dbo].[spGetRoomSchedule]
 	@switch bit,
-	@room varchar(20)
+	@term int,
+	@room varchar(50)
 AS
 BEGIN
 	SELECT term, crn, [day], startperiod, endperiod
 	FROM CourseSchedule
 	WHERE switch = @switch
+		AND term = @term
 		AND room = @room
 END
 
@@ -411,7 +438,7 @@ END
 
 GO
 
-/****** Object:  StoredProcedure [dbo].[spGetUserEnrollment]    Script Date: 04/10/2012 20:05:06 ******/
+/****** Object:  StoredProcedure [dbo].[spGetUserEnrollment]    Script Date: 04/23/2012 13:31:17 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -425,12 +452,13 @@ GO
 -- =============================================
 CREATE PROCEDURE [dbo].[spGetUserEnrollment]
 	@switch bit,
+	@term int,
 	@username varchar(50)
 AS
 BEGIN
 	SELECT e.term, e.crn
 	FROM [User] u
-		JOIN [Enrollment] e ON e.switch = @switch AND e.student = u.id
+		JOIN [Enrollment] e ON e.switch = @switch AND e.student = u.id AND e.term = @term
 	WHERE u.switch = @switch
 		AND u.username = @username
 END
@@ -578,7 +606,7 @@ END
 
 GO
 
-/****** Object:  StoredProcedure [dbo].[spSearchCourses]    Script Date: 04/10/2012 20:06:41 ******/
+/****** Object:  StoredProcedure [dbo].[spSearchCourses]    Script Date: 04/23/2012 13:33:44 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -592,6 +620,7 @@ GO
 -- =============================================
 CREATE PROCEDURE [dbo].[spSearchCourses]
 	@switch bit,
+	@term int,
 	@search varchar(50)
 AS
 BEGIN
@@ -599,6 +628,7 @@ BEGIN
 	FROM [Course] c
 		LEFT JOIN [User] u ON u.switch = @switch AND c.instructor = u.id
 	WHERE c.switch = @switch
+		AND c.term = @term
 		AND (c.course LIKE '%' + @search + '%'
 			OR c.title LIKE '%' + @search + '%')
 END

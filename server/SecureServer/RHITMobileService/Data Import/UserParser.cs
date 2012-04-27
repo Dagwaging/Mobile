@@ -8,8 +8,8 @@ namespace RHITMobile.Secure.Data_Import
 {
     public class UserCsvParser : BannerCsvParser<User>
     {
-        public UserCsvParser(String path)
-            : base(path)
+        public UserCsvParser(Logger log, String path)
+            : base(log, path)
         { }
 
         protected override User convertRecord(String[] fields)
