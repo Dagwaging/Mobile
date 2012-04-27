@@ -383,8 +383,38 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="1nM-ab-kqe">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="DepartureUseGPSCell" id="S6g-9H-PNX">
                                         <rect key="frame" x="0.0" y="22" width="328" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="0.0" y="0.0" width="328" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="U5m-6z-OSa">
+                                                    <rect key="frame" x="235" y="3" width="73" height="37"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                                    <state key="normal" title="Depart">
+                                                        <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </state>
+                                                    <state key="highlighted">
+                                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </state>
+                                                </button>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Use GPS" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="5aY-XU-akP">
+                                                    <rect key="frame" x="20" y="10" width="85" height="24"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                                    <color key="textColor" red="0.01006578575" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                    </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="DepartureLocationCell" id="1nM-ab-kqe">
+                                        <rect key="frame" x="0.0" y="66" width="328" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="0.0" y="0.0" width="328" height="43"/>
@@ -420,8 +450,8 @@
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="uvb-F2-v7c" style="IBUITableViewCellStyleDefault" id="Yms-53-WMx">
-                                        <rect key="frame" x="0.0" y="66" width="328" height="44"/>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="DepartureMoreResultsCell" textLabel="uvb-F2-v7c" style="IBUITableViewCellStyleDefault" id="Yms-53-WMx">
+                                        <rect key="frame" x="0.0" y="110" width="328" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="0.0" y="0.0" width="328" height="43"/>
@@ -859,7 +889,7 @@
                     </view>
                     <navigationItem key="navigationItem" title="Person Detail" id="vL6-8W-NlX"/>
                     <connections>
-                        <segue destination="XMR-2S-RTn" kind="push" id="y3f-IZ-DZ1"/>
+                        <segue destination="XMR-2S-RTn" kind="push" identifier="PersonToScheduleSegue" id="y3f-IZ-DZ1"/>
                     </connections>
                 </viewController>
             </objects>
@@ -892,7 +922,7 @@
                     </view>
                     <navigationItem key="navigationItem" title="Course Detail" id="0sU-df-nLy"/>
                     <connections>
-                        <segue destination="XMR-2S-RTn" kind="push" id="uyb-Ee-cUn"/>
+                        <segue destination="XMR-2S-RTn" kind="push" identifier="CourseToScheduleSegue" id="uyb-Ee-cUn"/>
                     </connections>
                 </viewController>
             </objects>
@@ -949,7 +979,7 @@
                     <connections>
                         <outlet property="directionsManager" destination="fLK-Co-io7" id="f3Z-MI-woR"/>
                         <outlet property="mapView" destination="KzR-di-kgo" id="5wP-bl-GRH"/>
-                        <segue destination="Che-o7-hf4" kind="push" id="qYV-lP-wVf"/>
+                        <segue destination="Che-o7-hf4" kind="push" identifier="MapToDetailSegue" id="qYV-lP-wVf"/>
                     </connections>
                 </viewController>
                 <customObject id="fLK-Co-io7" customClass="RHMapDirectionsManager">
@@ -1100,18 +1130,30 @@
             </objects>
             <point key="canvasLocation" x="1760" y="769"/>
         </scene>
-        <!--View Controller - Location Detail-->
+        <!--Location Detail View Controller - Location Detail-->
         <scene sceneID="NYz-xj-lOc">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="g24-hM-uaX" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <viewController id="Che-o7-hf4" sceneMemberID="viewController">
+                <viewController id="Che-o7-hf4" customClass="RHLocationDetailViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Dfi-22-MFA">
                         <rect key="frame" x="0.0" y="64" width="320" height="367"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="Hq3-x0-o79">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="367"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="Che-o7-hf4" id="Op4-7T-qly"/>
+                                    <outlet property="delegate" destination="Che-o7-hf4" id="YmM-Gq-Fel"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" title="Location Detail" id="uWu-wN-yAw"/>
                     <connections>
+                        <outlet property="tableView" destination="Hq3-x0-o79" id="z0d-H7-QPU"/>
                         <segue destination="PEQ-TC-uqa" kind="modal" id="2F7-6q-jLx"/>
                         <segue destination="cL7-9t-cpY" kind="push" id="DF5-2J-qmf"/>
                     </connections>
@@ -1150,6 +1192,14 @@
         <class className="RHCampusServicesViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/RHCampusServicesViewController.h"/>
         </class>
+        <class className="RHLocationDetailViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHLocationDetailViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="displayCurrentLocationOnMap:"/>
+                <relationship kind="action" name="getDirectionsToCurrentLocation:"/>
+                <relationship kind="outlet" name="tableView" candidateClass="UITableView"/>
+            </relationships>
+        </class>
         <class className="RHMapDirectionsManager" superclassName="NSObject">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/RHMapDirectionsManager.h"/>
             <relationships>
@@ -1165,9 +1215,6 @@
             <relationships>
                 <relationship kind="action" name="discloseLocationDetails:"/>
                 <relationship kind="action" name="displaySearch:"/>
-                <relationship kind="action" name="exitDirections:"/>
-                <relationship kind="action" name="nextDirection:"/>
-                <relationship kind="action" name="prevDirection:"/>
                 <relationship kind="outlet" name="backgroundView" candidateClass="UIView"/>
                 <relationship kind="outlet" name="directionsLabel" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="directionsManager" candidateClass="RHMapDirectionsManager"/>
@@ -1182,12 +1229,6 @@
                 <relationship kind="action" name="goToLocation:"/>
                 <relationship kind="outlet" name="pickerView" candidateClass="UIPickerView"/>
                 <relationship kind="outlet" name="tableView" candidateClass="UITableView"/>
-            </relationships>
-        </class>
-        <class className="RHTagSelectionViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHTagSelectionViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="donePressed:"/>
             </relationships>
         </class>
         <class className="RHTagsBasketViewController" superclassName="UITableViewController">

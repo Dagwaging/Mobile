@@ -38,6 +38,7 @@
 
 
 #define kQuickListSegueIdentifier @"MapToQuickListSegue"
+#define kDetailSegue @"MapToDetailSegue"
 
 
 @interface RHMapViewController()
@@ -58,7 +59,6 @@
 static RHMapViewController* _instance;
 
 @synthesize mapView;
-@synthesize fetchedResultsController;
 @synthesize managedObjectContext;
 @synthesize quickListAnnotations;
 @synthesize temporaryAnnotations;
@@ -118,19 +118,6 @@ static RHMapViewController* _instance;
     return (io == UIInterfaceOrientationPortrait);
 }
 
-- (void) didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-    
-    // Release any cached data, images, etc. that aren't in use.
-}
-
-- (void) viewDidUnload {
-    [super viewDidUnload];
-    self.mapView = nil;
-}
-
-
 - (void)focusMapViewToTemporaryAnnotation:(RHAnnotation *)annotation {
     RHAnnotation *currentAnnotation = [self.mapView.selectedAnnotations objectAtIndex:0];
     if (currentAnnotation != nil) {
@@ -170,9 +157,8 @@ static RHMapViewController* _instance;
 - (IBAction)discloseLocationDetails:(id)sender {
     MKAnnotationView *view = (MKAnnotationView *) ((UIView *) sender).superview.superview;
     RHAnnotation *annotation = (RHAnnotation *) view.annotation;
-    RHLocationDetailViewController *detailViewController = [[RHLocationDetailViewController alloc] initWithNibName:kRHLocationDetailViewControllerNibName bundle:nil];
-    detailViewController.location = annotation.location;
-    [self.navigationController pushViewController:detailViewController animated:YES];
+    
+    [self performSegueWithIdentifier:kDetailSegue sender:annotation.location];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -180,11 +166,13 @@ static RHMapViewController* _instance;
     if ([segue.identifier isEqualToString:kQuickListSegueIdentifier]) {
         RHQuickListViewController *quickList = segue.destinationViewController;
         quickList.mapViewController = self;
+    } else if ([segue.identifier isEqualToString:kDetailSegue]) {
+        RHLocationDetailViewController *detailView = segue.destinationViewController;
+        detailView.location = sender;
     }
 }
 
-# pragma mark -
-# pragma mark MKMapViewDelegate Methods
+# pragma mark - MKMapViewDelegate Methods
 
 - (MKAnnotationView *)mapView:(MKMapView *)mapView
             viewForAnnotation:(id <MKAnnotation>)inAnnotation {

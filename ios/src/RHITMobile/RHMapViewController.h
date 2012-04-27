@@ -24,9 +24,6 @@
 #import "RHAnnotationViewDelegate.h"
 #import "RHLoader.h"
 
-#define kRHMapViewControllerNibName @"RHMapViewController"
-
-
 @class RHRestHandler;
 @class RHAnnotation;
 @class RHLocation;
@@ -53,9 +50,6 @@
 /// Map view that is visible to the user.
 @property (nonatomic, strong) IBOutlet MKMapView *mapView;
 
-/// Core Data fetched results controller.
-@property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
-
 /// Core Data managed object context. 
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
 
@@ -80,15 +74,5 @@
 - (IBAction)displaySearch:(id)sender;
 
 - (IBAction)discloseLocationDetails:(id)sender;
-
-- (IBAction)nextDirection:(id)sender;
-
-- (IBAction)prevDirection:(id)sender;
-
-- (IBAction)exitDirections:(id)sender;
-
-- (void)displayPath:(MKPolyline *)path;
-
-- (void)displayDirections:(RHPath *)directions;
 
 @end
