@@ -1020,7 +1020,7 @@
                     </connections>
                 </viewController>
             </objects>
-            <point key="canvasLocation" x="3192" y="-340"/>
+            <point key="canvasLocation" x="3331" y="567"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="c8g-Vy-7iM">
@@ -1143,6 +1143,97 @@
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="367"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <prototypes>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="LocationDetailLocationCell" textLabel="erm-9d-oIb" style="IBUITableViewCellStyleDefault" id="mge-NW-tgI">
+                                        <rect key="frame" x="0.0" y="46" width="320" height="45"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="10" y="1" width="280" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Location Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="erm-9d-oIb">
+                                                    <rect key="frame" x="10" y="0.0" width="260" height="43"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                        <connections>
+                                            <segue destination="Che-o7-hf4" kind="push" identifier="LocationDetailToLocationDetailSegue" id="hyE-RE-uXj"/>
+                                        </connections>
+                                    </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="LocationDetailLinkCell" textLabel="Z8R-8d-oZX" detailTextLabel="AXW-c7-EDs" style="IBUITableViewCellStyleSubtitle" id="1jB-dk-oDT">
+                                        <rect key="frame" x="0.0" y="91" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="10" y="0.0" width="280" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Web Link" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Z8R-8d-oZX">
+                                                    <rect key="frame" x="10" y="2" width="80" height="22"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
+                                                    <color key="textColor" red="0.01006578575" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Link URL" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="AXW-c7-EDs">
+                                                    <rect key="frame" x="10" y="24" width="58" height="18"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <color key="textColor" red="0.50196078431372548" green="0.50196078431372548" blue="0.50196078431372548" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                        <connections>
+                                            <segue destination="cL7-9t-cpY" kind="push" identifier="LocationDetailToWebSegue" id="PKp-tb-ZTW"/>
+                                        </connections>
+                                    </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="LocationDetailTextCell" textLabel="zeE-Ba-UJ5" style="IBUITableViewCellStyleDefault" id="mZq-xV-9KX">
+                                        <rect key="frame" x="0.0" y="135" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="10" y="0.0" width="300" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="General Text" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="zeE-Ba-UJ5">
+                                                    <rect key="frame" x="10" y="0.0" width="280" height="43"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                    </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="LocationDetailLoadingCell" id="YoT-xj-Pti">
+                                        <rect key="frame" x="0.0" y="179" width="320" height="45"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="10" y="0.0" width="300" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Loading..." lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="ixu-dl-3rN">
+                                                    <rect key="frame" x="20" y="11" width="81" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </label>
+                                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" animating="YES" style="gray" id="VRc-tt-DY7">
+                                                    <rect key="frame" x="252" y="11" width="20" height="20"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                </activityIndicatorView>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                    </tableViewCell>
+                                </prototypes>
                                 <connections>
                                     <outlet property="dataSource" destination="Che-o7-hf4" id="Op4-7T-qly"/>
                                     <outlet property="delegate" destination="Che-o7-hf4" id="YmM-Gq-Fel"/>
@@ -1154,8 +1245,7 @@
                     <navigationItem key="navigationItem" title="Location Detail" id="uWu-wN-yAw"/>
                     <connections>
                         <outlet property="tableView" destination="Hq3-x0-o79" id="z0d-H7-QPU"/>
-                        <segue destination="PEQ-TC-uqa" kind="modal" id="2F7-6q-jLx"/>
-                        <segue destination="cL7-9t-cpY" kind="push" id="DF5-2J-qmf"/>
+                        <segue destination="PEQ-TC-uqa" kind="modal" identifier="LocationDetailToDepartureSegue" id="2F7-6q-jLx"/>
                     </connections>
                 </viewController>
             </objects>
@@ -1188,76 +1278,6 @@
         <image name="TabBarMapIcon.png" width="30" height="30"/>
         <image name="TabBarToursIcon.png" width="30" height="30"/>
     </resources>
-    <classes>
-        <class className="RHCampusServicesViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHCampusServicesViewController.h"/>
-        </class>
-        <class className="RHLocationDetailViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHLocationDetailViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="displayCurrentLocationOnMap:"/>
-                <relationship kind="action" name="getDirectionsToCurrentLocation:"/>
-                <relationship kind="outlet" name="tableView" candidateClass="UITableView"/>
-            </relationships>
-        </class>
-        <class className="RHMapDirectionsManager" superclassName="NSObject">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHMapDirectionsManager.h"/>
-            <relationships>
-                <relationship kind="action" name="exitDirections:"/>
-                <relationship kind="action" name="nextStep:"/>
-                <relationship kind="action" name="previousStep:"/>
-                <relationship kind="outlet" name="mapView" candidateClass="MKMapView"/>
-                <relationship kind="outlet" name="mapViewController" candidateClass="RHMapViewController"/>
-            </relationships>
-        </class>
-        <class className="RHMapViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHMapViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="discloseLocationDetails:"/>
-                <relationship kind="action" name="displaySearch:"/>
-                <relationship kind="outlet" name="backgroundView" candidateClass="UIView"/>
-                <relationship kind="outlet" name="directionsLabel" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="directionsManager" candidateClass="RHMapDirectionsManager"/>
-                <relationship kind="outlet" name="directionsPicker" candidateClass="UIPickerView"/>
-                <relationship kind="outlet" name="mapView" candidateClass="MKMapView"/>
-            </relationships>
-        </class>
-        <class className="RHQuickListViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHQuickListViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="cancel:"/>
-                <relationship kind="action" name="goToLocation:"/>
-                <relationship kind="outlet" name="pickerView" candidateClass="UIPickerView"/>
-                <relationship kind="outlet" name="tableView" candidateClass="UITableView"/>
-            </relationships>
-        </class>
-        <class className="RHTagsBasketViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHTagsBasketViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="buildTour:"/>
-                <relationship kind="action" name="doneEditing:"/>
-            </relationships>
-        </class>
-        <class className="RHToursViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHToursViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="durationSliderMoved:"/>
-                <relationship kind="action" name="locationTypeChanged:"/>
-                <relationship kind="action" name="tourTypeChanged:"/>
-                <relationship kind="outlet" name="durationLabel" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="durationSlider" candidateClass="UISlider"/>
-                <relationship kind="outlet" name="locationControl" candidateClass="UISegmentedControl"/>
-                <relationship kind="outlet" name="locationLabel" candidateClass="UILabel"/>
-            </relationships>
-        </class>
-        <class className="RHWebViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHWebViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="openInSafari"/>
-                <relationship kind="outlet" name="webView" candidateClass="UIWebView"/>
-            </relationships>
-        </class>
-    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
@@ -1265,7 +1285,7 @@
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="qYV-lP-wVf"/>
-        <segue reference="DF5-2J-qmf"/>
+        <segue reference="PKp-tb-ZTW"/>
         <segue reference="2F7-6q-jLx"/>
         <segue reference="yqD-yp-46p"/>
         <segue reference="yrH-Av-Jeg"/>

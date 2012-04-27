@@ -241,10 +241,10 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     id resultObject = [self objectFromResult:result];
     
     if (self.searchType == RHSearchViewControllerTypeLocation) {
-        RHLocationDetailViewController *details = [[RHLocationDetailViewController alloc] initWithNibName:kRHLocationDetailViewControllerNibName bundle:nil];
-        details.location = (RHLocation *) resultObject;
-        
-        [self.navigationController pushViewController:details animated:YES];
+//        RHLocationDetailViewController *details = [[RHLocationDetailViewController alloc] initWithNibName:kRHLocationDetailViewControllerNibName bundle:nil];
+//        details.location = (RHLocation *) resultObject;
+//        
+//        [self.navigationController pushViewController:details animated:YES];
     } else {
         
     }

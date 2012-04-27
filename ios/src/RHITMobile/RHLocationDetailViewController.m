@@ -26,7 +26,9 @@
 #import "RHMapViewController.h"
 #import "RHWebViewController.h"
 #import "RHWrappedCoordinate.h"
+#import "RHMapDirectionsManager.h"
 #import "RHLocationSelectorViewController.h"
+
 
 #define kAltNamesLabel @"Also Known As"
 #define kAboutLabel @"About"
@@ -34,12 +36,14 @@
 #define kParentLabel @"Where It Is"
 #define kEnclosedLabel @"What's Inside"
 
-#define kAltNameCellKey @"AltNameCell"
-#define kLinkCellKey @"LinkCell"
-#define kAboutCellKey @"AboutCell"
-#define kParentCellKey @"ParentCell"
-#define kEnclosedLocadingCellKey @"EnclosedLoadingCell"
-#define kEnclosedCellKey @"EnclosedCell"
+#define kTextCell @"LocationDetailTextCell"
+#define kLocationCell @"LocationDetailLocationCell"
+#define kLinkCell @"LocationDetailLinkCell"
+#define kLoadingCell @"LocationDetailLoadingCell"
+
+#define kDirectionsSegue @"LocationDetailToDepartureSegue"
+#define kLocationSegue @"LocationDetailToLocationDetailSegue"
+#define kWebSegue @"LocationDetailToWebSegue"
 
 
 @interface RHLocationDetailViewController ()
@@ -79,13 +83,9 @@
     [RHMapViewController.instance focusMapViewToLocation:self.location];
 }
 
-- (IBAction)getDirectionsToCurrentLocation:(id)sender {
-    RHLocationSelectorViewController *locationSelector = [[RHLocationSelectorViewController alloc] initWithNibName:kRHLocationSelectorViewControllerNibName bundle:nil];
-    locationSelector.searchType = RHSearchViewControllerTypeLocation;
-    locationSelector.context = [(RHAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
-    locationSelector.toLocation = self.location;
-    
-    [self.navigationController pushViewController:locationSelector animated:YES];
+- (IBAction)getDirectionsToCurrentLocation:(id)sender
+{
+    [self performSegueWithIdentifier:kDirectionsSegue sender:self];
 }
 
 #pragma mark - View lifecycle
@@ -120,6 +120,34 @@
     return (io == UIInterfaceOrientationPortrait);
 }
 
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString:kLocationSegue]) {
+        
+        RHLocationDetailViewController *detailController = segue.destinationViewController;
+        
+        if (self.tableView.indexPathForSelectedRow.section == [self.sections indexOfObject:kParentLabel]) {
+            detailController.location = self.location.parent;
+        } else {
+            detailController.location = [self.enclosedLocations objectAtIndex:self.tableView.indexPathForSelectedRow.row];
+        }
+        
+    } else if ([segue.identifier isEqualToString:kWebSegue]) {
+        
+        RHLocationLink *link = [self.links objectAtIndex:self.tableView.indexPathForSelectedRow.row];
+        
+        NSURL *url = [NSURL URLWithString:link.url];
+        
+        RHWebViewController *webViewController = segue.destinationViewController;
+        
+        webViewController.url = url;
+        webViewController.title = link.name;
+        
+    } else if ([segue.identifier isEqualToString:kDirectionsSegue]) {
+        
+    }
+}
+
 #pragma mark - Property Methods
 
 - (void)setLocation:(RHLocation *)location {
@@ -137,7 +165,7 @@
     [request setPredicate:predicate];
     
     NSArray *results = [location.managedObjectContext executeFetchRequest:request
-                                                           error:nil];
+                                                                    error:nil];
     
     if (results.count > 0) {
         location = [results objectAtIndex:0];
@@ -166,17 +194,9 @@
         [self.sections addObject:kEnclosedLabel];
         self.enclosedLocations = [location.enclosedLocations.allObjects
                                   sortedArrayUsingComparator: ^(id l1, id l2) {
-            return [[l1 name] caseInsensitiveCompare:[l2 name]];
-        }];
+                                      return [[l1 name] caseInsensitiveCompare:[l2 name]];
+                                  }];
     }
-    
-//    if (location.retrievalStatus != RHLocationRetrievalStatusFull) {
-//        [self performSelector:@selector(setLocation:)
-//                   withObject:location
-//                   afterDelay:1.0];
-//    } else {
-//        [self.tableView reloadData];
-//    }
     
     [self.tableView reloadData];
     
@@ -196,16 +216,16 @@ viewForFooterInSection:(NSInteger)section {
         UIButton *mapButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
         mapButton.frame = CGRectMake(10.0, 10.0, 145.0, 44.0);
         [mapButton addTarget:self
-                         action:@selector(displayCurrentLocationOnMap:)
-               forControlEvents:UIControlEventTouchUpInside];
+                      action:@selector(displayCurrentLocationOnMap:)
+            forControlEvents:UIControlEventTouchUpInside];
         
         [mapButton setTitle:@"Go to Map" forState:UIControlStateNormal];
         
         UIButton *directionsButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
         directionsButton.frame = CGRectMake(165.0, 10.0, 145.0, 44.0);
         [directionsButton addTarget:self
-                         action:@selector(getDirectionsToCurrentLocation:)
-               forControlEvents:UIControlEventTouchUpInside];
+                             action:@selector(getDirectionsToCurrentLocation:)
+                   forControlEvents:UIControlEventTouchUpInside];
         
         [directionsButton setTitle:@"Get Directions" forState:UIControlStateNormal];
         
@@ -217,7 +237,7 @@ viewForFooterInSection:(NSInteger)section {
     return nil;
 }
 
--(CGFloat)tableView:(UITableView *)tableView
+- (CGFloat)tableView:(UITableView *)tableView
 heightForFooterInSection:(NSInteger)section {
     NSString *sectionLabel = [self.sections objectAtIndex:section];
     
@@ -248,115 +268,46 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 }
 
 #pragma mark - UITableViewDataSource Methods
-        
+
 - (UITableViewCell *)tableView:(UITableView *)inTableView
          cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    NSString *sectionLabel = [self.sections objectAtIndex:[indexPath
-                                                           indexAtPosition:0]];
+    NSString *sectionLabel = [self.sections objectAtIndex:[indexPath section]];
     UITableViewCell *cell = nil;
     
     if (sectionLabel == kAboutLabel) {
-        static NSString *cellIdentifier = kAboutCellKey;
         
-        cell = [inTableView dequeueReusableCellWithIdentifier:cellIdentifier];
-        
-        if (cell == nil) {
-            cell = [[UITableViewCell alloc]
-                     initWithStyle:UITableViewCellStyleDefault
-                     reuseIdentifier:cellIdentifier];
-            cell.textLabel.font = [UIFont systemFontOfSize:[UIFont
-                                                            systemFontSize]];
-            cell.textLabel.numberOfLines = 0;
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        }
-        
+        cell = [inTableView dequeueReusableCellWithIdentifier:kTextCell];
         cell.textLabel.text = self.location.quickDescription;
         
     } else if (sectionLabel == kParentLabel) {
-        static NSString *cellIdentifier = kParentCellKey;
         
-        cell = [inTableView dequeueReusableCellWithIdentifier:cellIdentifier];
-        
-        if (cell == nil) {
-            cell = [[UITableViewCell alloc]
-                     initWithStyle:UITableViewCellStyleDefault
-                     reuseIdentifier:cellIdentifier];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        }
-        
+        cell = [inTableView dequeueReusableCellWithIdentifier:kLocationCell];
         cell.textLabel.text = self.location.parent.name;
         
-    } else if (sectionLabel == kEnclosedLabel && self.location.retrievalStatus == RHLocationRetrievalStatusFull) {
-        static NSString *cellIdentifier = kEnclosedCellKey;
+    } else if (sectionLabel == kEnclosedLabel &&
+               self.location.retrievalStatus == RHLocationRetrievalStatusFull) {
         
-        cell = [inTableView dequeueReusableCellWithIdentifier:cellIdentifier];
-        
-        if (cell == nil) {
-            cell = [[UITableViewCell alloc]
-                     initWithStyle:UITableViewCellStyleDefault
-                     reuseIdentifier:cellIdentifier];
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        }
-        
-        RHLocation *child = (RHLocation *) [self.enclosedLocations
-                                            objectAtIndex:[indexPath
-                                                           indexAtPosition:1]];
-        
+        cell = [inTableView dequeueReusableCellWithIdentifier:kLocationCell];
+        RHLocation *child = [self.enclosedLocations objectAtIndex:indexPath.row];
         cell.textLabel.text = child.name;
         
-    } else if (sectionLabel == kEnclosedLabel && self.location.retrievalStatus != RHLocationRetrievalStatusFull) {
-        static NSString *cellIdentifier = kEnclosedLocadingCellKey;
+    } else if (sectionLabel == kEnclosedLabel &&
+               self.location.retrievalStatus != RHLocationRetrievalStatusFull) {
         
-        cell = [inTableView dequeueReusableCellWithIdentifier:cellIdentifier];
-        
-        if (cell == nil) {
-            cell = [[UITableViewCell alloc]
-                     initWithStyle:UITableViewCellStyleDefault
-                     reuseIdentifier:cellIdentifier];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.textLabel.font = [UIFont systemFontOfSize:UIFont.systemFontSize];
-            UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-            cell.accessoryView = activityIndicator;
-            [activityIndicator startAnimating];
-        }
-        
-        cell.textLabel.text = @"Loading...";
+        cell = [inTableView dequeueReusableCellWithIdentifier:kLoadingCell];
         
     } else if (sectionLabel == kAltNamesLabel) {
-        static NSString *cellIdentifier = kAltNameCellKey;
         
-        cell = [inTableView dequeueReusableCellWithIdentifier:cellIdentifier];
+        cell = [inTableView dequeueReusableCellWithIdentifier:kTextCell];
+        cell.textLabel.text = [self.location.alternateNames objectAtIndex:indexPath.row];
         
-        if (cell == nil) {
-            cell = [[UITableViewCell alloc]
-                     initWithStyle:UITableViewCellStyleDefault
-                     reuseIdentifier:cellIdentifier];
-            cell.textLabel.font = [UIFont systemFontOfSize:[UIFont
-                                                            systemFontSize]];
-            cell.textLabel.numberOfLines = 5;
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        }
-        
-        cell.textLabel.text = [self.location.alternateNames
-                               objectAtIndex:[indexPath
-                                              indexAtPosition:1]];
     } else if (sectionLabel == kLinksLabel) {
-        static NSString *cellIdentifier = kLinkCellKey;
         
-        cell = [inTableView dequeueReusableCellWithIdentifier:cellIdentifier];
-        
-        if (cell == nil) {
-            cell = [[UITableViewCell alloc]
-                     initWithStyle:UITableViewCellStyleDefault
-                     reuseIdentifier:cellIdentifier];
-            cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
-        }
-        
-        RHLocationLink *link = [self.links objectAtIndex:[indexPath indexAtPosition:1]];
-        
+        cell = [inTableView dequeueReusableCellWithIdentifier:kLinkCell];
+        RHLocationLink *link = [self.links objectAtIndex:indexPath.row];
         cell.textLabel.text = link.name;
+        cell.detailTextLabel.text = link.url;
     }
     
     return cell;
@@ -385,57 +336,9 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 }
 
 - (void)tableView:(UITableView *)inTableView
-didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSString *sectionLabel = [self.sections objectAtIndex:[indexPath indexAtPosition:0]];
-    
-    if (sectionLabel == kEnclosedLabel) {
-        RHLocation *child = [self.enclosedLocations objectAtIndex:[indexPath indexAtPosition:1]];
-        
-        [inTableView deselectRowAtIndexPath:indexPath animated:YES];
-        
-        RHLocationDetailViewController *detailViewController = [[RHLocationDetailViewController alloc] initWithNibName:kRHLocationDetailViewControllerNibName bundle:nil];
-        detailViewController.location = child;
-        [self.navigationController pushViewController:detailViewController animated:YES];
-    } else if (sectionLabel == kParentLabel) {
-        [inTableView deselectRowAtIndexPath:indexPath animated:YES];
-        
-        RHLocationDetailViewController *detailViewController = [[RHLocationDetailViewController alloc] initWithNibName:kRHLocationDetailViewControllerNibName bundle:nil];
-        detailViewController.location = self.location.parent;
-        [self.navigationController pushViewController:detailViewController animated:YES];
-    } else if (sectionLabel == kLinksLabel) {
-        [inTableView deselectRowAtIndexPath:indexPath animated:YES];
-        
-        RHLocationLink *link = [self.links objectAtIndex:[indexPath indexAtPosition:1]];
-        
-        NSURL *url = [NSURL URLWithString:link.url];
-        
-        RHWebViewController *webViewController = [[RHWebViewController alloc] initWithNibName:@"" bundle:nil];
-        
-        
-        webViewController.url = url;
-        webViewController.title = link.name;
-        
-        [self.navigationController pushViewController:webViewController animated:YES];
-
-    }
-}
-
-- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
-    NSString *sectionLabel = [self.sections objectAtIndex:[indexPath indexAtPosition:0]];
-    
-    if (sectionLabel == kLinksLabel) {
-        RHLocationLink *link = [self.links objectAtIndex:[indexPath indexAtPosition:1]];
-        
-        NSURL *url = [NSURL URLWithString:link.url];
-        
-        RHWebViewController *webViewController = [[RHWebViewController alloc] initWithNibName:@"" bundle:nil];
-        
-        webViewController.url = url;
-        webViewController.title = link.name;
-        
-        [self.navigationController pushViewController:webViewController animated:YES];
-
-    }
+didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -451,7 +354,7 @@ titleForHeaderInSection:(NSInteger)section {
 
 - (void)didFinishLoadingDirections:(NSArray *)directions {
     [self.navigationController popToRootViewControllerAnimated:YES];
-    //[RHAppDelegate.instance.mapViewController displayDirections:directions]; 
+    // TODO display directions
 }
 
 @end
