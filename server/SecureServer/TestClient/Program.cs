@@ -35,7 +35,7 @@ namespace TestClient
                 Console.WriteLine("Using term {0}", term);
             }
 
-            int option;
+            int option = 1;
             do
             {
                 Console.WriteLine("1. Get server status");
@@ -44,30 +44,45 @@ namespace TestClient
                 Console.WriteLine("4. Lookup User");
                 Console.WriteLine("5. Search Courses");
                 Console.WriteLine("6. Lookup Course");
+                Console.WriteLine("8. Set Term");
                 Console.WriteLine("9. Quit");
                 Console.Write("> ");
-                option = int.Parse(Console.ReadLine());
 
-                switch (option)
+                try
                 {
-                    case 1:
-                        ServerStatus();
-                        break;
-                    case 2:
-                        RequestUpdate();
-                        break;
-                    case 3:
-                        SearchUser();
-                        break;
-                    case 4:
-                        LookupUser();
-                        break;
-                    case 5:
-                        SearchCourses();
-                        break;
-                    case 6:
-                        LookupCourse();
-                        break;
+                    option = int.Parse(Console.ReadLine());
+                    switch (option)
+                    {
+                        case 1:
+                            ServerStatus();
+                            break;
+                        case 2:
+                            RequestUpdate();
+                            break;
+                        case 3:
+                            SearchUser();
+                            break;
+                        case 4:
+                            LookupUser();
+                            break;
+                        case 5:
+                            SearchCourses();
+                            break;
+                        case 8:
+                            SetTerm();
+                            break;
+                        case 6:
+                            LookupCourse();
+                            break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error while handling request: {0}", ex.ToString());
+
+                    service = new WebServiceClient();
+                    auth = service.Login(username, password);
+                    token = auth.Token;
                 }
 
             } while (option != 9);
@@ -157,6 +172,12 @@ namespace TestClient
             Console.WriteLine("Schedule:");
             foreach (var meeting in schedule)
                 Console.WriteLine("- {0} from {1} to {2} in {3}", meeting.Day, meeting.StartPeriod, meeting.EndPeriod, meeting.Room);
+        }
+
+        static void SetTerm()
+        {
+            Console.WriteLine("Term: ");
+            term = int.Parse(Console.ReadLine());
         }
 
         static void PrintCourse(Course course)
