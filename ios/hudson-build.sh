@@ -51,6 +51,16 @@ sed -i -e "s/VERSION/${VERSION}${BUILD_TYPE}${BUILD_NUMBER}/g" upgrade.html.in
 mv upgrade.html.in ../upgrade.html
 
 # Build Doxygen documentation
-cd ../../
-sed -i -e "s/DEVELOPMENT_BUILD/v${VERSION}${BUILD_TYPE}${BUILD_NUMBER}/" ios/Doxyfile
-/Applications/Doxygen.app/Contents/Resources/doxygen ios/Doxyfile
+#cd ../../
+#sed -i -e "s/DEVELOPMENT_BUILD/v${VERSION}${BUILD_TYPE}${BUILD_NUMBER}/" ios/Doxyfile
+#/Applications/Doxygen.app/Contents/Resources/doxygen ios/Doxyfile
+
+# Generate docs
+appledoc --project-name "Rose-Hulman Mobile" \
+         --project-company "Rose-Hulman Institute of Technology" \
+	     --company-id edu.rosehulman \
+	     --ignore .m \
+         --output ../doc \
+	     --keep-intermediate-files \
+	     --exit-threshold 2 \
+	     ./RHITMobile
