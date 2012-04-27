@@ -56,11 +56,11 @@ mv upgrade.html.in ../upgrade.html
 #/Applications/Doxygen.app/Contents/Resources/doxygen ios/Doxyfile
 
 # Generate docs
-appledoc --project-name "Rose-Hulman Mobile" \
-         --project-company "Rose-Hulman Institute of Technology" \
-	     --company-id edu.rosehulman \
-	     --ignore .m \
-         --output ../doc \
-	     --keep-intermediate-files \
-	     --exit-threshold 2 \
-	     ./RHITMobile
+/usr/local/bin/appledoc --project-name "Rose-Hulman Mobile" \
+                        --project-company "Rose-Hulman Institute of Technology" \
+	                    --company-id edu.rosehulman \
+	                    --ignore .m \
+                        --output ../doc \
+	                    --keep-intermediate-files \
+	                    --exit-threshold 2 \
+	                    ./RHITMobile
