@@ -44,7 +44,7 @@ namespace RHITMobile {
                 double version;
                 if (Double.TryParse(query["version"], out version)) {
                     if (version >= Program.TagsVersion) {
-                        throw new UpToDateException("Version is up to date.");
+                        throw new UpToDateException(currentThread, "Version is up to date.");
                     }
                 }
             }
@@ -95,7 +95,7 @@ namespace RHITMobile {
             var currentThread = TM.CurrentThread;
 
             if (!(state is List<int>))
-                throw new BadRequestException("Need to specify at least one tag.");
+                throw new BadRequestException(currentThread, "Need to specify at least one tag.");
 
             yield return TM.Await(currentThread, ToursHandler.GetTaggedLocations(TM, (List<int>)state));
 
@@ -118,7 +118,7 @@ namespace RHITMobile {
             var currentThread = TM.CurrentThread;
             IntRedirect = TourFinder.GetFinder(value);
             if (IntRedirect == null)
-                throw new BadRequestException("Invalid Tours ID.");
+                throw new BadRequestException(currentThread, "Invalid Tours ID.");
             yield return TM.Return(currentThread, false);
         }
     }
@@ -134,7 +134,7 @@ namespace RHITMobile {
                 new SqlParameter("@location", value));
             var table = TM.GetResult<DataTable>(currentThread);
             if (table.Rows.Count == 0)
-                throw new BadRequestException("Cannot depart from this location.");
+                throw new BadRequestException(currentThread, "Cannot depart from this location.");
             yield return TM.Return(currentThread, new TourFinder(table.Rows[0]));
         }
     }
@@ -160,7 +160,7 @@ namespace RHITMobile {
 
             var tourFinder = (TourFinder)state;
             if (!tourFinder.Tags.Any())
-                throw new BadRequestException("Need to specify at least one tag.");
+                throw new BadRequestException(currentThread, "Need to specify at least one tag.");
 
             yield return TM.Await(currentThread, ToursHandler.GetTaggedLocations(TM, tourFinder.Tags));
             tourFinder.Locations = TM.GetResult<IOrderedEnumerable<LocationRank>>(currentThread).ToList();

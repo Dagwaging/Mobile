@@ -31,18 +31,18 @@ namespace RHITMobile {
 
             string token = headers["Auth-Token"];
             if (token == null)
-                throw new BadRequestException("An authentication token is required for this request.");
+                throw new UnauthorizedException(currentThread, "An authentication token is required for this request.");
 
             Guid id = new Guid();
             try {
                 id = new Guid(token);
             } catch (Exception e) {
-                throw new BadRequestException(e.Message);
+                throw new UnauthorizedException(currentThread, "Authentication token is invalid.");
             }
             if (!AdminHandler.Logins.ContainsKey(id))
-                throw new BadRequestException("Authentication token is invalid.");
+                throw new UnauthorizedException(currentThread, "Authentication token is invalid.");
             if (AdminHandler.Logins[id].Expiration < DateTime.Now)
-                throw new BadRequestException("Authentication token has expired.");
+                throw new UnauthorizedException(currentThread, "Authentication token has expired.");
 
             yield return TM.Return(currentThread, AdminHandler.Logins[id]);
         }
@@ -96,7 +96,7 @@ namespace RHITMobile {
                 AdminHandler.Logins[id] = loginData;
                 yield return TM.Return(currentThread, new SAuthenticationResponse(loginData.Expiration, id));
             } else {
-                throw new BadRequestException("SQL authentication failed.");
+                throw new BadRequestException(currentThread, "SQL authentication failed.");
             }
         }
 
@@ -142,7 +142,7 @@ namespace RHITMobile {
                 AdminHandler.Logins[id] = loginData;
                 yield return TM.Return(currentThread, new JsonResponse(new SAuthenticationResponse(loginData.Expiration, id)));
             } else {
-                throw new BadRequestException("SQL authentication failed.");
+                throw new BadRequestException(currentThread, "SQL authentication failed.");
             }
         }
     }
@@ -206,7 +206,7 @@ namespace RHITMobile {
                     response.Table.Add(rowList);
                 }
             } catch (Exception e) {
-                throw new BadRequestException(e.Message);
+                throw new BadRequestException(currentThread, e.Message);
             }
 
             yield return TM.Return(currentThread, new JsonResponse(response));

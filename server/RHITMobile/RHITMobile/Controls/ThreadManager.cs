@@ -109,8 +109,10 @@ namespace RHITMobile {
         public object GetResult(ThreadInfo currentThread) {
             foreach (var continuation in _results) {
                 if (continuation.Thread == currentThread.Thread) {
-                    if (continuation.Result is Exception) {
-                        throw continuation.Result as Exception;
+                    if (continuation.Result is ServerHandledException) {
+                        throw (continuation.Result as ServerHandledException).WithThread(currentThread);
+                    } else if (continuation.Result is Exception) {
+                        throw new ExceptionThrownException<Exception>(currentThread, continuation.Result as Exception);
                     }
                     return continuation.Result;
                 }
@@ -151,7 +153,7 @@ namespace RHITMobile {
         /// <param name="a1">Result as type T1</param>
         /// <param name="a2">Result as type T2</param>
         /// <returns>True if result is of type T1, otherwise false</returns>
-        public bool GetResult<T1, T2>(ThreadInfo currentThread, out T1 a1, out T2 a2) {
+        /*public bool GetResult<T1, T2>(ThreadInfo currentThread, out T1 a1, out T2 a2) {
             foreach (var continuation in _results) {
                 if (continuation.Thread == currentThread.Thread) {
                     if (continuation.Result is Exception) {
@@ -168,7 +170,7 @@ namespace RHITMobile {
                 }
             }
             throw new ArgumentException("Thread does not have a result.");
-        }
+        }*/
         #endregion
 
         #region Enqueue, Await, and Return
@@ -203,6 +205,9 @@ namespace RHITMobile {
             CurrentThread = new ThreadInfo(threadId, currentThread.Priority);
             try {
                 thread.MoveNext();
+            } catch (ServerHandledException ex) {
+                Return(ex.CurrentThread);
+                return currentThread.WithResult(ex);
             } catch (Exception ex) {
                 return currentThread.WithResult(ex);
             }
@@ -302,6 +307,11 @@ namespace RHITMobile {
                 try {
                     // Advance the thread
                     thread.Iterator.MoveNext();
+                } catch (ServerHandledException ex) {
+                    Return(ex.CurrentThread);
+                    _results[processor] = new ThreadInfo(thread.Caller, continueThread.Priority, ex);
+                    threadId = thread.Caller;
+                    continue;
                 } catch (Exception ex) {
                     // If an exception was thrown, return to the caller
                     _results[processor] = new ThreadInfo(thread.Caller, continueThread.Priority, ex);

@@ -66,19 +66,20 @@ namespace RHITMobile {
         protected virtual IEnumerable<ThreadInfo> HandleFloatPath(ThreadManager TM, double value, object state) {
             var currentThread = TM.CurrentThread;
             if (FloatRedirect == null)
-                throw new BadRequestException("Invalid path: /{0}", value);
+                throw new BadRequestException(currentThread, "Invalid path: /{0}", value);
             yield return TM.Return(currentThread, value);
         }
 
         protected virtual IEnumerable<ThreadInfo> HandleUnknownPath(ThreadManager TM, string path, object state) {
             var currentThread = TM.CurrentThread;
             if (UnknownRedirect == null)
-                throw new BadRequestException("Invalid path: /{0}", path);
+                throw new BadRequestException(currentThread, "Invalid path: /{0}", path);
             yield return TM.Return(currentThread, path);
         }
 
         protected virtual IEnumerable<ThreadInfo> HandleNoPath(ThreadManager TM, Dictionary<string, string> query, object state) {
-            throw new BadRequestException("Invalid end of path.");
+            var currentThread = TM.CurrentThread;
+            throw new BadRequestException(currentThread, "Invalid end of path.");
         }
 
         public virtual IEnumerable<ThreadInfo> VerifyHeaders(ThreadManager TM, NameValueCollection headers, object state) {

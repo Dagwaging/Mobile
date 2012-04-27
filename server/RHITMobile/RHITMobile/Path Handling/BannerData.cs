@@ -5,6 +5,7 @@ using System.Text;
 using RHITMobile.RhitPrivate;
 using System.Collections.Specialized;
 using System.Net;
+using System.ServiceModel;
 
 namespace RHITMobile {
     public class BannerHandler : SecurePathHandler {
@@ -14,8 +15,6 @@ namespace RHITMobile {
             Redirects.Add("course", new BannerCourseHandler());
             Redirects.Add("room", new BannerRoomHandler());
         }
-
-        public static readonly IWebService Service = new WebServiceClient();
 
         public static readonly Queue<BannerRequestRecord> RequestQueue = new Queue<BannerRequestRecord>();
         public static readonly Dictionary<string, List<BannerRequestRecord>> RequestDictionary = new Dictionary<string, List<BannerRequestRecord>>();
@@ -31,11 +30,11 @@ namespace RHITMobile {
             }
         }
 
-        public static void VerifyUser(string username) {
+        public static void VerifyUser(ThreadInfo currentThread, string username) {
             CleanQueue();
             if (BlockedUsers.Contains(username)) {
                 if (RequestDictionary[username].Sum(r => r.SecureServerRequests) >= Program.MaxDailySecureServerCalls) {
-                    throw new BadRequestException("Number of secure server calls has exceeded the daily limit for user '{0}'.", username);
+                    throw new BadRequestException(currentThread, "Number of secure server calls has exceeded the daily limit for user '{0}'.", username);
                 } else {
                     BlockedUsers.Remove(username);
                 }
@@ -111,25 +110,26 @@ namespace RHITMobile {
             var currentThread = TM.CurrentThread;
 
             if (headers["Auth-Token"] == null) {
-                throw new BadRequestException("An authentication token is required for this request.");
+                throw new UnauthorizedException(currentThread, "An authentication token is required for this request.");
             } else {
                 string token = headers["Auth-Token"];
                 if (AuthenticatedUsers.ContainsKey(token))
-                    VerifyUser(AuthenticatedUsers[token].Username);
+                    VerifyUser(currentThread, AuthenticatedUsers[token].Username);
                 else
-                    VerifyUser(token);
+                    VerifyUser(currentThread, token);
                 yield return TM.Return(currentThread, token);
             }
         }
 
         public static IEnumerable<ThreadInfo> GetCourses(ThreadManager TM, Dictionary<string, string> query, string token, IEnumerable<KeyValuePair<int, int>> termsCrns) {
             var currentThread = TM.CurrentThread;
+            var service = new WebServiceClient();
             int requests = 0;
 
             var courses = new List<Course>();
             foreach (var termCrn in termsCrns) {
                 requests++;
-                yield return TM.StartNewThread(currentThread, () => BannerHandler.Service.GetCourse(token, termCrn.Key, termCrn.Value));
+                yield return TM.StartNewThread(currentThread, () => service.GetCourse(token, termCrn.Key, termCrn.Value));
                 var course = TM.GetResult<Course>(currentThread);
                 if (course != null) {
                     courses.Add(course);
@@ -143,6 +143,7 @@ namespace RHITMobile {
 
         public static IEnumerable<ThreadInfo> GetCourses(ThreadManager TM, Dictionary<string, string> query, string token, IEnumerable<Course> courses) {
             var currentThread = TM.CurrentThread;
+            var service = new WebServiceClient();
             int requests = 0;
 
             bool getEnrolled = false;
@@ -159,7 +160,7 @@ namespace RHITMobile {
 
                 if (course.Instructor != null) {
                     requests++;
-                    yield return TM.StartNewThread(currentThread, () => Service.GetUser(token, course.Instructor));
+                    yield return TM.StartNewThread(currentThread, () => service.GetUser(token, course.Instructor));
                     var instructor = TM.GetResult<User>(currentThread);
                     if (instructor != null)
                         scourse.Instructor = new ShortUser(instructor);
@@ -168,12 +169,12 @@ namespace RHITMobile {
                 if (getEnrolled) {
                     scourse.Students = new List<ShortUser>();
                     requests++;
-                    yield return TM.StartNewThread(currentThread, () => Service.GetCourseEnrollment(token, course.Term, course.CRN));
+                    yield return TM.StartNewThread(currentThread, () => service.GetCourseEnrollment(token, course.Term, course.CRN));
                     var students = TM.GetResult<string[]>(currentThread);
                     if (students != null) {
                         foreach (var username in students) {
                             requests++;
-                            yield return TM.StartNewThread(currentThread, () => BannerHandler.Service.GetUser(token, username));
+                            yield return TM.StartNewThread(currentThread, () => service.GetUser(token, username));
                             var student = TM.GetResult<User>(currentThread);
                             if (student != null)
                                 scourse.Students.Add(new ShortUser(student));
@@ -183,7 +184,7 @@ namespace RHITMobile {
 
                 if (getSchedule) {
                     requests++;
-                    yield return TM.StartNewThread(currentThread, () => Service.GetCourseSchedule(token, course.Term, course.CRN));
+                    yield return TM.StartNewThread(currentThread, () => service.GetCourseSchedule(token, course.Term, course.CRN));
                     var times = TM.GetResult<CourseTime[]>(currentThread);
                     if (times != null) {
                         scourse.Schedule = times.Select(time => new CourseMeeting(time)).ToList();
@@ -203,18 +204,19 @@ namespace RHITMobile {
     public class BannerAuthenticateHandler : SecurePathHandler {
         public override IEnumerable<ThreadInfo> VerifyHeaders(ThreadManager TM, NameValueCollection headers, object state) {
             var currentThread = TM.CurrentThread;
+            var service = new WebServiceClient();
 
             string username = headers["Login-Username"];
             string password = headers["Login-Password"];
 
-            BannerHandler.VerifyUser(username);
+            BannerHandler.VerifyUser(currentThread, username);
 
-            yield return TM.StartNewThread(currentThread, () => BannerHandler.Service.Login(username, password));
+            yield return TM.StartNewThread(currentThread, () => service.Login(username, password));
             var response = TM.GetResult<AuthenticationResponse>(currentThread);
             BannerHandler.LogAuthentication(username, response);
 
             if (response == null)
-                throw new BadRequestException("Login failed: username and/or password is incorrect.");
+                throw new BadRequestException(currentThread, "Login failed: username and/or password is incorrect.");
             else
                 yield return TM.Return(currentThread, new SAuthenticationResponse(response.Expiration, response.Token));
         }
@@ -240,21 +242,30 @@ namespace RHITMobile {
     public class BannerUserDataHandler : SecurePathHandler {
         protected override IEnumerable<ThreadInfo> HandleNoPath(ThreadManager TM, Dictionary<string, string> query, object state) {
             var currentThread = TM.CurrentThread;
+            var service = new WebServiceClient();
             int requests = 0;
 
             var requestData = (BannerRequestData)state;
             requests++;
-            yield return TM.StartNewThread(currentThread, () => BannerHandler.Service.GetUser(requestData.Token, requestData.Id));
-            var user = TM.GetResult<User>(currentThread);
+            yield return TM.StartNewThread(currentThread, () => service.GetUser(requestData.Token, requestData.Id));
+            User user;
+            try {
+                user = TM.GetResult<User>(currentThread);
+            } catch (ServerHandledException ex) {
+                if (ex.InnerException is FaultException<AuthFault>)
+                    throw new UnauthorizedException(currentThread, "Authentication token is invalid.");
+                else
+                    throw ex;
+            }
             if (user == null)
-                throw new BadRequestException("Cannot find a user with username '{0}'.", requestData.Id);
+                throw new BadRequestException(currentThread, "Cannot find a user with username '{0}'.", requestData.Id);
 
             UserDataResponse response;
             if (user.Advisor == null) {
                 response = new UserDataResponse(user);
             } else {
                 requests++;
-                yield return TM.StartNewThread(currentThread, () => BannerHandler.Service.GetUser(requestData.Token, user.Advisor));
+                yield return TM.StartNewThread(currentThread, () => service.GetUser(requestData.Token, user.Advisor));
                 var advisor = TM.GetResult<User>(currentThread);
                 if (advisor == null)
                     response = new UserDataResponse(user);
@@ -270,12 +281,13 @@ namespace RHITMobile {
     public class BannerUserSearchHandler : SecurePathHandler {
         protected override IEnumerable<ThreadInfo> HandleNoPath(ThreadManager TM, Dictionary<string, string> query, object state) {
             var currentThread = TM.CurrentThread;
+            var service = new WebServiceClient();
 
             var requestData = (BannerRequestData)state;
-            yield return TM.StartNewThread(currentThread, () => BannerHandler.Service.SearchUsers(requestData.Token, requestData.Id));
+            yield return TM.StartNewThread(currentThread, () => service.SearchUsers(requestData.Token, requestData.Id));
             var users = TM.GetResult<User[]>(currentThread);
             if (users == null)
-                throw new BadRequestException("Could not find a user from search '{0}'.", requestData.Id);
+                throw new BadRequestException(currentThread, "Could not find a user from search '{0}'.", requestData.Id);
 
             BannerHandler.LogRequest(requestData.Token, "Searching users", 1);
             yield return TM.Return(currentThread, new JsonResponse(new UsersResponse(users)));
@@ -285,12 +297,13 @@ namespace RHITMobile {
     public class BannerUserScheduleHandler : SecurePathHandler {
         protected override IEnumerable<ThreadInfo> HandleNoPath(ThreadManager TM, Dictionary<string, string> query, object state) {
             var currentThread = TM.CurrentThread;
+            var service = new WebServiceClient();
 
             var requestData = (BannerRequestData)state;
-            yield return TM.StartNewThread(currentThread, () => BannerHandler.Service.GetUserEnrollment(requestData.Token, requestData.Id));
+            yield return TM.StartNewThread(currentThread, () => service.GetUserEnrollment(requestData.Token, requestData.Id));
             var enrollments = TM.GetResult<UserEnrollment[]>(currentThread);
             if (enrollments == null)
-                throw new BadRequestException("Cannot find a user with username '{0}'.", requestData.Id);
+                throw new BadRequestException(currentThread, "Cannot find a user with username '{0}'.", requestData.Id);
 
             BannerHandler.LogRequest(requestData.Token, "Getting user schedule", 1);
             yield return TM.Await(currentThread, BannerHandler.GetCourses(TM, query, requestData.Token, 
@@ -313,12 +326,13 @@ namespace RHITMobile {
     public class BannerCourseSearchHandler : SecurePathHandler {
         protected override IEnumerable<ThreadInfo> HandleNoPath(ThreadManager TM, Dictionary<string, string> query, object state) {
             var currentThread = TM.CurrentThread;
+            var service = new WebServiceClient();
 
             var requestData = (BannerRequestData)state;
-            yield return TM.StartNewThread(currentThread, () => BannerHandler.Service.SearchCourses(requestData.Token, requestData.Id));
+            yield return TM.StartNewThread(currentThread, () => service.SearchCourses(requestData.Token, requestData.Id));
             var courses = TM.GetResult<Course[]>(currentThread);
             if (courses == null)
-                throw new BadRequestException("Could not find a course from search '{0}'.", requestData.Id);
+                throw new BadRequestException(currentThread, "Could not find a course from search '{0}'.", requestData.Id);
 
             BannerHandler.LogRequest(requestData.Token, "Searching courses", 1);
             yield return TM.Await(currentThread, BannerHandler.GetCourses(TM, query, requestData.Token, courses));
@@ -353,12 +367,13 @@ namespace RHITMobile {
     public class BannerCourseDataTermCrnHandler : SecurePathHandler {
         protected override IEnumerable<ThreadInfo> HandleNoPath(ThreadManager TM, Dictionary<string, string> query, object state) {
             var currentThread = TM.CurrentThread;
+            var service = new WebServiceClient();
 
             var requestData = (BannerTermCrnData)state;
-            yield return TM.StartNewThread(currentThread, () => BannerHandler.Service.GetCourse(requestData.Token, requestData.Term, requestData.Crn));
+            yield return TM.StartNewThread(currentThread, () => service.GetCourse(requestData.Token, requestData.Term, requestData.Crn));
             var course = TM.GetResult<Course>(currentThread);
             if (course == null)
-                throw new BadRequestException("Could not find a course from term {0} with CRN {1}.", requestData.Term, requestData.Crn);
+                throw new BadRequestException(currentThread, "Could not find a course from term {0} with CRN {1}.", requestData.Term, requestData.Crn);
 
             BannerHandler.LogRequest(requestData.Token, "Getting course data", 1);
             yield return TM.Await(currentThread, BannerHandler.GetCourses(TM, query, requestData.Token, new List<Course>() { course }));
@@ -379,12 +394,13 @@ namespace RHITMobile {
     public class BannerRoomScheduleHandler : SecurePathHandler {
         protected override IEnumerable<ThreadInfo> HandleNoPath(ThreadManager TM, Dictionary<string, string> query, object state) {
             var currentThread = TM.CurrentThread;
+            var service = new WebServiceClient();
 
             var requestData = (BannerRequestData)state;
-            yield return TM.StartNewThread(currentThread, () => BannerHandler.Service.GetRoomSchedule(requestData.Token, requestData.Id));
+            yield return TM.StartNewThread(currentThread, () => service.GetRoomSchedule(requestData.Token, requestData.Id));
             var schedule = TM.GetResult<RoomSchedule[]>(currentThread);
             if (schedule == null)
-                throw new BadRequestException("Could not find a course that uses room '{0}'.", requestData.Id);
+                throw new BadRequestException(currentThread, "Could not find a course that uses room '{0}'.", requestData.Id);
 
             bool getSchedule = false;
             if (query.ContainsKey("getschedule"))
