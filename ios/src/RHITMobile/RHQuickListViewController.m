@@ -22,6 +22,11 @@
 #import "RHAnnotation.h"
 #import "RHLocation.h"
 
+
+#define kNameCellIdentifier @"LocationNameCell"
+#define kDetailCellIdentifier @"LocationDetailCell"
+
+
 @interface RHQuickListViewController() {
 @private
     NSUInteger currentSelection_;
@@ -124,20 +129,13 @@ numberOfRowsInComponent:(NSInteger)component {
 
 - (UITableViewCell *)tableView:(UITableView *)inTableView
          cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *cellIdentifier = @"RHCell";
-    UITableViewCell *cell = [tableView
-                             dequeueReusableCellWithIdentifier:cellIdentifier];
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc]
-                initWithStyle:UITableViewCellStyleDefault
-                reuseIdentifier:cellIdentifier];
-    }
+    UITableViewCell *cell;
     
     if (indexPath.row == 0) {
+        cell = [tableView dequeueReusableCellWithIdentifier:kNameCellIdentifier];
         cell.textLabel.text = self.currentAnnotation.location.name;
     } else {
-        cell.textLabel.numberOfLines = 4;
-        cell.textLabel.font = [UIFont systemFontOfSize:[UIFont systemFontSize]];
+        cell = [tableView dequeueReusableCellWithIdentifier:kDetailCellIdentifier];
         cell.textLabel.text = self.currentAnnotation.location.quickDescription;
     }
     

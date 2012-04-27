@@ -192,11 +192,11 @@
             </objects>
             <point key="canvasLocation" x="1234" y="1937"/>
         </scene>
-        <!--View Controller-->
+        <!--Quick List View Controller-->
         <scene sceneID="ant-bh-QC9">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ah9-SZ-5pD" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <viewController id="faw-re-yeI" sceneMemberID="viewController">
+                <viewController id="faw-re-yeI" customClass="RHQuickListViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="USj-4W-zT4">
                         <rect key="frame" x="0.0" y="20" width="320" height="460"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -205,12 +205,82 @@
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <items>
-                                    <navigationItem title="Popular Locations" id="TjH-kG-GHf"/>
+                                    <navigationItem title="Popular Locations" id="TjH-kG-GHf">
+                                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="KUi-6V-DK5">
+                                            <connections>
+                                                <action selector="cancel:" destination="faw-re-yeI" id="ARq-NG-ILO"/>
+                                            </connections>
+                                        </barButtonItem>
+                                        <barButtonItem key="rightBarButtonItem" title="Go" style="done" id="6lc-G9-zul">
+                                            <connections>
+                                                <action selector="goToLocation:" destination="faw-re-yeI" id="wRp-er-0XB"/>
+                                            </connections>
+                                        </barButtonItem>
+                                    </navigationItem>
                                 </items>
                             </navigationBar>
+                            <pickerView contentMode="scaleToFill" id="Qfp-lJ-IGk">
+                                <rect key="frame" x="0.0" y="244" width="320" height="216"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="faw-re-yeI" id="rbj-XS-DIk"/>
+                                    <outlet property="delegate" destination="faw-re-yeI" id="Tsr-tk-Z6x"/>
+                                </connections>
+                            </pickerView>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="iur-3s-nj0">
+                                <rect key="frame" x="0.0" y="44" width="320" height="192"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <prototypes>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="LocationNameCell" textLabel="hux-Ej-oip" style="IBUITableViewCellStyleDefault" id="NWP-Zf-a0C">
+                                        <rect key="frame" x="0.0" y="46" width="320" height="45"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="10" y="1" width="300" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Location Name" lineBreakMode="tailTruncation" numberOfLines="8" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="hux-Ej-oip">
+                                                    <rect key="frame" x="10" y="0.0" width="280" height="43"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                    </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="LocationDetailCell" textLabel="9In-Xo-eXd" style="IBUITableViewCellStyleDefault" id="08H-ka-NVW">
+                                        <rect key="frame" x="0.0" y="91" width="320" height="45"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="10" y="0.0" width="300" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Location description" lineBreakMode="tailTruncation" numberOfLines="8" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="9In-Xo-eXd">
+                                                    <rect key="frame" x="10" y="0.0" width="280" height="43"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                    </tableViewCell>
+                                </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="faw-re-yeI" id="uX6-dq-0UV"/>
+                                    <outlet property="delegate" destination="faw-re-yeI" id="G6H-yt-Mfd"/>
+                                </connections>
+                            </tableView>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                     </view>
+                    <connections>
+                        <outlet property="pickerView" destination="Qfp-lJ-IGk" id="OfK-Ye-dWB"/>
+                        <outlet property="tableView" destination="iur-3s-nj0" id="5h5-VK-HXe"/>
+                    </connections>
                 </viewController>
             </objects>
             <point key="canvasLocation" x="1760" y="1352"/>
@@ -593,15 +663,15 @@
                             </tableViewSection>
                             <tableViewSection id="JFj-Ev-nSK">
                                 <cells>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="D5J-BP-6bW" style="IBUITableViewCellStyleDefault" id="v1v-6K-CsW">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="D5J-BP-6bW" style="IBUITableViewCellStyleDefault" id="v1v-6K-CsW">
                                         <rect key="frame" x="0.0" y="142" width="320" height="46"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="10" y="1" width="280" height="43"/>
+                                            <rect key="frame" x="10" y="1" width="300" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Log In" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="D5J-BP-6bW">
-                                                    <rect key="frame" x="10" y="0.0" width="260" height="43"/>
+                                                    <rect key="frame" x="10" y="0.0" width="280" height="43"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -866,14 +936,13 @@
                     <navigationItem key="navigationItem" title="Campus Map" id="eTK-ey-1V2">
                         <barButtonItem key="leftBarButtonItem" image="QuickListToolbarIcon.png" id="jf7-H7-vSP">
                             <connections>
-                                <action selector="displayQuickList:" destination="lZy-MH-GyN" id="V4R-0A-5dF"/>
-                                <segue destination="faw-re-yeI" kind="modal" id="tRS-zW-GoK"/>
+                                <segue destination="faw-re-yeI" kind="modal" identifier="MapToQuickListSegue" id="tRS-zW-GoK"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="search" id="JWa-75-1K0">
                             <connections>
                                 <action selector="displaySearch:" destination="lZy-MH-GyN" id="Yfe-zy-q84"/>
-                                <segue destination="5JX-Ue-11A" kind="push" id="Pnc-jj-hcs"/>
+                                <segue destination="5JX-Ue-11A" kind="push" identifier="MapToSearchSegue" id="Pnc-jj-hcs"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -921,7 +990,7 @@
                     </connections>
                 </viewController>
             </objects>
-            <point key="canvasLocation" x="1760" y="-447"/>
+            <point key="canvasLocation" x="3192" y="-340"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="c8g-Vy-7iM">
@@ -1003,10 +1072,10 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
-                            <searchBar contentMode="redraw" id="9wk-fR-FQe">
+                            <searchBar contentMode="redraw" showsCancelButton="YES" id="9wk-fR-FQe">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no"/>
                                 <connections>
                                     <outlet property="delegate" destination="5JX-Ue-11A" id="anY-gk-Ydt"/>
                                 </connections>
@@ -1044,6 +1113,7 @@
                     <navigationItem key="navigationItem" title="Location Detail" id="uWu-wN-yAw"/>
                     <connections>
                         <segue destination="PEQ-TC-uqa" kind="modal" id="2F7-6q-jLx"/>
+                        <segue destination="cL7-9t-cpY" kind="push" id="DF5-2J-qmf"/>
                     </connections>
                 </viewController>
             </objects>
@@ -1094,7 +1164,6 @@
             <source key="sourceIdentifier" type="project" relativePath="./Classes/RHMapViewController.h"/>
             <relationships>
                 <relationship kind="action" name="discloseLocationDetails:"/>
-                <relationship kind="action" name="displayQuickList:"/>
                 <relationship kind="action" name="displaySearch:"/>
                 <relationship kind="action" name="exitDirections:"/>
                 <relationship kind="action" name="nextDirection:"/>
@@ -1104,6 +1173,15 @@
                 <relationship kind="outlet" name="directionsManager" candidateClass="RHMapDirectionsManager"/>
                 <relationship kind="outlet" name="directionsPicker" candidateClass="UIPickerView"/>
                 <relationship kind="outlet" name="mapView" candidateClass="MKMapView"/>
+            </relationships>
+        </class>
+        <class className="RHQuickListViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHQuickListViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="cancel:"/>
+                <relationship kind="action" name="goToLocation:"/>
+                <relationship kind="outlet" name="pickerView" candidateClass="UIPickerView"/>
+                <relationship kind="outlet" name="tableView" candidateClass="UITableView"/>
             </relationships>
         </class>
         <class className="RHTagSelectionViewController" superclassName="UITableViewController">
@@ -1145,7 +1223,8 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="MCR-we-qWz"/>
+        <segue reference="qYV-lP-wVf"/>
+        <segue reference="DF5-2J-qmf"/>
         <segue reference="2F7-6q-jLx"/>
         <segue reference="yqD-yp-46p"/>
         <segue reference="yrH-Av-Jeg"/>

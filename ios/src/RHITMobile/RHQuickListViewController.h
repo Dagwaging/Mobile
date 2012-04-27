@@ -19,8 +19,6 @@
 
 #import <UIKit/UIKit.h>
 
-#define kRHQuickListViewControllerNibName @"RHQuickListViewController"
-
 @class RHMapViewController;
 @class RHAnnotation;
 

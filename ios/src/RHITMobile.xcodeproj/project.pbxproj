@@ -26,7 +26,6 @@
 		9233415314DB10E9004C1ACC /* RHLocationsSearchRequester.m in Sources */ = {isa = PBXBuildFile; fileRef = 9233415214DB10E6004C1ACC /* RHLocationsSearchRequester.m */; };
 		9233DD0F141BAA3500B9A549 /* RHAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9233DD0E141BAA3500B9A549 /* RHAnnotation.m */; };
 		9236CE9F144E3CBC00D0FB59 /* RHQuickListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9236CE9D144E3CBC00D0FB59 /* RHQuickListViewController.m */; };
-		9236CEA1144E3CBC00D0FB59 /* RHQuickListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9236CE9E144E3CBC00D0FB59 /* RHQuickListViewController.xib */; };
 		9236CEA6144F33C400D0FB59 /* RHPinAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9236CEA5144F33C400D0FB59 /* RHPinAnnotationView.m */; };
 		923919451545EA8400D3C611 /* RHJSONRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 923919441545EA8400D3C611 /* RHJSONRequest.m */; };
 		92391950154600F100D3C611 /* RHLocationsLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9239194F154600F100D3C611 /* RHLocationsLoader.m */; };
@@ -135,7 +134,6 @@
 		9233DD0E141BAA3500B9A549 /* RHAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHAnnotation.m; sourceTree = "<group>"; };
 		9236CE9C144E3CBC00D0FB59 /* RHQuickListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHQuickListViewController.h; sourceTree = "<group>"; };
 		9236CE9D144E3CBC00D0FB59 /* RHQuickListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHQuickListViewController.m; sourceTree = "<group>"; };
-		9236CE9E144E3CBC00D0FB59 /* RHQuickListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RHQuickListViewController.xib; sourceTree = "<group>"; };
 		9236CEA4144F33C300D0FB59 /* RHPinAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHPinAnnotationView.h; sourceTree = "<group>"; };
 		9236CEA5144F33C400D0FB59 /* RHPinAnnotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHPinAnnotationView.m; sourceTree = "<group>"; };
 		923919431545EA8400D3C611 /* RHJSONRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHJSONRequest.h; sourceTree = "<group>"; };
@@ -551,7 +549,6 @@
 				9265FEC61409AB5D00AE406E /* RHSearchViewController.xib */,
 				9236CE9C144E3CBC00D0FB59 /* RHQuickListViewController.h */,
 				9236CE9D144E3CBC00D0FB59 /* RHQuickListViewController.m */,
-				9236CE9E144E3CBC00D0FB59 /* RHQuickListViewController.xib */,
 				92312435144FB8470074791E /* RHLocationDetailViewController.h */,
 				92312436144FB8470074791E /* RHLocationDetailViewController.m */,
 				92312437144FB8470074791E /* RHLocationDetailViewController.xib */,
@@ -641,7 +638,6 @@
 				9218208F144113B900A66923 /* Default.png in Resources */,
 				928B76E8144CBADA00D2F98D /* TabBarMapIcon@2x.png in Resources */,
 				926088A8144D2ADB0002D50E /* RHITMobileValues.plist in Resources */,
-				9236CEA1144E3CBC00D0FB59 /* RHQuickListViewController.xib in Resources */,
 				9231243A144FB8470074791E /* RHLocationDetailViewController.xib in Resources */,
 				92ADEE2E14599D9500060A3F /* QuickListToolbarIcon.png in Resources */,
 				92ADEE2F14599D9500060A3F /* QuickListToolbarIcon@2x.png in Resources */,

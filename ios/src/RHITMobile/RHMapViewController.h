@@ -77,8 +77,6 @@
 
 - (void)focusMapViewToLocation:(RHLocation *)location;
 
-- (IBAction)displayQuickList:(id)sender;
-
 - (IBAction)displaySearch:(id)sender;
 
 - (IBAction)discloseLocationDetails:(id)sender;

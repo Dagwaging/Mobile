@@ -37,6 +37,9 @@
 #import "RHSimplePointAnnotation.h"
 
 
+#define kQuickListSegueIdentifier @"MapToQuickListSegue"
+
+
 @interface RHMapViewController()
 
 @property (nonatomic, strong) RHLocationOverlay *currentOverlay;
@@ -164,19 +167,20 @@ static RHMapViewController* _instance;
     [self.navigationController pushViewController:search animated:YES];
 }
 
-- (IBAction)displayQuickList:(id)sender {
-    RHQuickListViewController *quickList = [RHQuickListViewController alloc];
-    quickList = [quickList initWithNibName:kRHQuickListViewControllerNibName bundle:nil];
-    quickList.mapViewController = self;
-    [self presentModalViewController:quickList animated:YES];
-}
-
 - (IBAction)discloseLocationDetails:(id)sender {
     MKAnnotationView *view = (MKAnnotationView *) ((UIView *) sender).superview.superview;
     RHAnnotation *annotation = (RHAnnotation *) view.annotation;
     RHLocationDetailViewController *detailViewController = [[RHLocationDetailViewController alloc] initWithNibName:kRHLocationDetailViewControllerNibName bundle:nil];
     detailViewController.location = annotation.location;
     [self.navigationController pushViewController:detailViewController animated:YES];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString:kQuickListSegueIdentifier]) {
+        RHQuickListViewController *quickList = segue.destinationViewController;
+        quickList.mapViewController = self;
+    }
 }
 
 # pragma mark -
@@ -319,16 +323,6 @@ static RHMapViewController* _instance;
            [annotation mapView:self.mapView didChangeZoomLevel:newZoomLevel];
         }
     }
-}
-
-#pragma mark - RHLocationsRequesterDelegate Methods
-
-- (void)didFinishUpdatingTopLevelLocations {
-    [self loadStoredLocations];
-}
-
-- (void)didFinishUpdatingInternalLocations {
-    // We don't care about this right now
 }
 
 #pragma mark - RHAnnotationView Delegate Methods
@@ -491,129 +485,6 @@ static RHMapViewController* _instance;
             [self.mapView addAnnotation:annotation];
         }
     }
-}
-
-- (void)displayPath:(MKPolyline *)path {
-    if (self.mapView.selectedAnnotations.count > 0) {
-        [self.mapView deselectAnnotation:[self.mapView.selectedAnnotations objectAtIndex:0] animated:NO];
-    }
-    self.backgroundView.hidden = NO;
-    self.directionsLabel.hidden = NO;
-    self.directionsPicker.hidden = NO;
-    self.mapView.frame = CGRectMake(0, 0, 320, 155);
-    
-    [self clearAllDynamicMapArtifacts];
-    [self.mapView addOverlay:path];
-    [self.mapView setCenterCoordinate:self.mapView.centerCoordinate zoomLevel:15 animated:YES];
-}
-
-- (void)displayDirections:(RHPath *)directions {
-    if (self.displayingDirections) {
-        [self exitDirections:nil];
-    }
-    
-    if (self.mapView.selectedAnnotations.count > 0) {
-        [self.mapView deselectAnnotation:[self.mapView.selectedAnnotations objectAtIndex:0] animated:NO];
-        [self clearAllDynamicMapArtifacts];
-    }
-    RHPathStep *start = [directions.steps objectAtIndex:0];
-    [self.mapView setCenterCoordinate:start.coordinate zoomLevel:17 animated:YES];
-    
-    RHPathStep *firstStep = [directions.steps objectAtIndex:0];
-    if ((id) firstStep.detail == [NSNull null]) {
-        directionsStatus_.text = @"";
-    } else  {
-        directionsStatus_.text = firstStep.detail;
-    }
-    
-    CLLocationCoordinate2D coords[directions.steps.count];
-    
-    directionsPins_ = [NSMutableArray arrayWithCapacity:directions.steps.count];
-    
-    RHPathStep *last = [directions.steps objectAtIndex:(directions.steps.count - 1)];
-    
-    RHSimplePointAnnotation *lastAnnotation = [[RHSimplePointAnnotation alloc] init];
-    lastAnnotation.coordinate = last.coordinate;
-    lastAnnotation.color = RHSimplePointAnnotationColorRed;
-    [self.mapView addAnnotation:lastAnnotation];
-    
-    [directionsPins_ addObject:lastAnnotation];
-    
-    currentDirectionAnnotation_ = [[RHSimplePointAnnotation alloc] init];
-    currentDirectionAnnotation_.coordinate = start.coordinate;
-    currentDirectionAnnotation_.color = RHSimplePointAnnotationColorGreen;
-    [self.mapView addAnnotation:currentDirectionAnnotation_];
-
-    
-    for (RHPathStep *lineItem in directions.steps) {
-        coords[[directions.steps indexOfObject:lineItem]] = lineItem.coordinate;
-        
-        if (lineItem.flagged) {
-            RHSimplePointAnnotation *annotation = [[RHSimplePointAnnotation alloc] init];
-            annotation.coordinate = lineItem.coordinate;
-            [self.mapView addAnnotation:annotation];
-            
-            [directionsPins_ addObject:annotation];
-        }
-    }
-    
-    MKPolyline *line = [MKPolyline polylineWithCoordinates:coords
-                                                     count:directions.steps.count];
-    
-    [self.mapView addOverlay:line];
-    
-    currentDirections_ = directions.steps;
-    
-    currentDirectionIndex_ = 0;
-}
-
-- (void)nextDirection:(id)sender {
-    if (currentDirectionIndex_ < currentDirections_.count - 1) {
-        currentDirectionIndex_ ++;
-        RHPathStep *direction = [currentDirections_ objectAtIndex:currentDirectionIndex_];
-        if (![direction.detail isKindOfClass:[NSNull class]]) {
-            directionsStatus_.text = direction.detail;
-        }
-        currentDirectionAnnotation_.coordinate = direction.coordinate;
-        [self.mapView setCenterCoordinate:direction.coordinate animated:YES];
-    }
-}
-
-- (void)prevDirection:(id)sender {
-    if (currentDirectionIndex_ > 0) {
-        currentDirectionIndex_ --;
-        RHPathStep *direction = [currentDirections_ objectAtIndex:currentDirectionIndex_];
-        if (![direction.detail isKindOfClass:[NSNull class]]) {
-            directionsStatus_.text = direction.detail;
-        }
-        currentDirectionAnnotation_.coordinate = direction.coordinate;
-        [self.mapView setCenterCoordinate:direction.coordinate animated:YES];
-    }
-}
-
-- (void)exitDirections:(id)sender {
-    [self.mapView removeOverlays:self.mapView.overlays];
-    [self.mapView removeAnnotation:currentDirectionAnnotation_];
-    [self.mapView removeAnnotations:directionsPins_];
-    
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationDuration:0.25];
-    
-    CGRect mapFrame = self.mapView.frame;
-    mapFrame.size.height = mapFrame.size.height + 40;
-    self.mapView.frame = mapFrame;
-    
-    CGRect frame = directionsStatusBar_.frame;
-    frame.origin.y = -50;
-    directionsStatusBar_.frame = frame;
-    
-    CGRect toolbarFrame = directionsControls_.frame;
-    toolbarFrame.origin.y = self.mapView.frame.size.height;
-    directionsControls_.frame = toolbarFrame;
-    
-    [UIView commitAnimations];
-    
-    self.displayingDirections = NO;
 }
 
 #pragma mark - Loader Delegate Methods
