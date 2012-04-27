@@ -11,7 +11,7 @@ namespace RHITMobile {
             var currentThread = TM.CurrentThread;
 
             if (!isSSL)
-                throw new BadRequestException("SSL required for this request.");
+                throw new BadRequestException(currentThread, "SSL required for this request.");
 
             yield return TM.Await(currentThread, VerifyHeaders(TM, headers, state));
 

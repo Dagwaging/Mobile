@@ -24,7 +24,6 @@ namespace RHITMobile {
             } catch {
                 // If could not get the version, default it to 0.0
                 Console.WriteLine("Could not get version.");
-                return;
             }
 
             var TM = new ThreadManager();

@@ -21,7 +21,7 @@ namespace RHITMobile {
             var currentThread = TM.CurrentThread;
             IntRedirect = DirectionsFinder.GetFinder(value);
             if (IntRedirect == null)
-                throw new BadRequestException("Invalid Directions ID.");
+                throw new BadRequestException(currentThread, "Invalid Directions ID.");
             yield return TM.Return(currentThread, -1);
         }
     }
@@ -37,7 +37,7 @@ namespace RHITMobile {
                 new SqlParameter("@location", value));
             var table = TM.GetResult<DataTable>(currentThread);
             if (table.Rows.Count == 0)
-                throw new BadRequestException("Cannot depart from this location.");
+                throw new BadRequestException(currentThread, "Cannot depart from this location.");
 
             yield return TM.Return(currentThread, new DirectionsFinder(table.Rows[0]));
         }

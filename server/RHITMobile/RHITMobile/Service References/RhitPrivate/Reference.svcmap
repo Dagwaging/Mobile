@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="c3b53eae-ed36-4de7-b263-592eeec841de" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="6bc86697-eebb-45f5-bfcb-72dd36afb70c" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
   <ClientOptions>
     <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
     <EnableDataBinding>true</EnableDataBinding>
@@ -18,16 +18,16 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="net.tcp://localhost:8000/RhitPrivate/mex" Protocol="mex" SourceId="1" />
+    <MetadataSource Address="net.tcp://mobilewin.csse.rose-hulman.edu:8000/RhitPrivate/mex" Protocol="mex" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="mobileprivate.rose-hulman.edu.wsdl" MetadataType="Wsdl" ID="b7628327-87a4-4ca5-a13d-19cfbc51f699" SourceId="1" SourceUrl="net.tcp://localhost:8000/RhitPrivate/mex" />
-    <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="a49a5bfa-3f73-4fd2-ae7a-c4c79256ee9c" SourceId="1" SourceUrl="net.tcp://localhost:8000/RhitPrivate/mex" />
-    <MetadataFile FileName="mobileprivate.rose-hulman.edu.xsd" MetadataType="Schema" ID="02959dc7-431b-496c-9e35-5c30d902c6de" SourceId="1" SourceUrl="net.tcp://localhost:8000/RhitPrivate/mex" />
-    <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="94c6fee3-71ac-4efc-89bf-9911e6caeebb" SourceId="1" SourceUrl="net.tcp://localhost:8000/RhitPrivate/mex" />
-    <MetadataFile FileName="RHITMobile.Secure.xsd" MetadataType="Schema" ID="b01ea819-63b4-41f8-8f75-39480e621c1c" SourceId="1" SourceUrl="net.tcp://localhost:8000/RhitPrivate/mex" />
-    <MetadataFile FileName="RHITMobile.Secure.Data.xsd" MetadataType="Schema" ID="75059fe9-af37-47a5-9ce1-2a59c1aae17f" SourceId="1" SourceUrl="net.tcp://localhost:8000/RhitPrivate/mex" />
-    <MetadataFile FileName="Arrays.xsd" MetadataType="Schema" ID="c92becc4-e189-4bfd-adc9-2de7b99f6b6e" SourceId="1" SourceUrl="net.tcp://localhost:8000/RhitPrivate/mex" />
+    <MetadataFile FileName="mobileprivate.rose-hulman.edu.wsdl" MetadataType="Wsdl" ID="a0bb91a5-8832-432d-878d-b924bacf3439" SourceId="1" SourceUrl="net.tcp://mobilewin.csse.rose-hulman.edu:8000/RhitPrivate/mex" />
+    <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="5c167b11-5249-4100-aa08-7d923f136623" SourceId="1" SourceUrl="net.tcp://mobilewin.csse.rose-hulman.edu:8000/RhitPrivate/mex" />
+    <MetadataFile FileName="mobileprivate.rose-hulman.edu.xsd" MetadataType="Schema" ID="cac54973-187f-4efc-a699-5f06051b8743" SourceId="1" SourceUrl="net.tcp://mobilewin.csse.rose-hulman.edu:8000/RhitPrivate/mex" />
+    <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="a71a902d-2b9f-44ef-9691-68e5d6cba081" SourceId="1" SourceUrl="net.tcp://mobilewin.csse.rose-hulman.edu:8000/RhitPrivate/mex" />
+    <MetadataFile FileName="RHITMobile.Secure.xsd" MetadataType="Schema" ID="c4f0af33-a995-4190-ab60-b3a438615fcc" SourceId="1" SourceUrl="net.tcp://mobilewin.csse.rose-hulman.edu:8000/RhitPrivate/mex" />
+    <MetadataFile FileName="RHITMobile.Secure.Data.xsd" MetadataType="Schema" ID="fa40182c-b02d-454b-b005-feaf041ee256" SourceId="1" SourceUrl="net.tcp://mobilewin.csse.rose-hulman.edu:8000/RhitPrivate/mex" />
+    <MetadataFile FileName="Arrays.xsd" MetadataType="Schema" ID="76002d85-d416-4e45-a610-61c1077bb6a3" SourceId="1" SourceUrl="net.tcp://mobilewin.csse.rose-hulman.edu:8000/RhitPrivate/mex" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
