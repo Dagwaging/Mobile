@@ -38,7 +38,7 @@ xcrun -sdk iphoneos PackageApplication "build/Release-iphoneos/RHITMobile.app" \
 sed -i -e "s/BUILD_NUMBER/${BUILD_NUMBER}/g" app-manifest.plist.in
 sed -i -e "s/VERSION/${VERSION}${BUILD_TYPE}${BUILD_NUMBER}/g" app-manifest.plist.in
 sed -i -e "s/IPA_NAME/RHITMobile.ipa/g" app-manifest.plist.in
-cp app-manifest.plist.in ../app-manifest-beta.plist
+cp app-manifest.plist.in ../app-manifest.plist
 
 # Create download page
 sed -i -e "s/BUILD_NUMBER/${BUILD_NUMBER}/g" download.html.in
