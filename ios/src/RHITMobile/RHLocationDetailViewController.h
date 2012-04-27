@@ -20,10 +20,7 @@
 
 #import <UIKit/UIKit.h>
 
-#define kRHLocationDetailViewControllerNibName @"RHLocationDetailViewController"
-
 @class RHLocation;
-@class RHDirectionsRequester;
 
 /// \ingroup views
 @interface RHLocationDetailViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
