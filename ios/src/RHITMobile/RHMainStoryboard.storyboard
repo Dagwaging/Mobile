@@ -638,11 +638,11 @@
             </objects>
             <point key="canvasLocation" x="1261" y="-340"/>
         </scene>
-        <!--Table View Controller - Kerberos Login-->
+        <!--Login View Controller - Kerberos Login-->
         <scene sceneID="iyo-yD-4RP">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YIO-5C-upX" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <tableViewController id="vZy-L9-H0P" sceneMemberID="viewController">
+                <tableViewController id="vZy-L9-H0P" customClass="RHLoginViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="D31-yo-jfH">
                         <rect key="frame" x="0.0" y="64" width="320" height="367"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -734,6 +734,8 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="Kerberos Login" id="5xP-I0-r93"/>
                     <connections>
+                        <outlet property="passwordField" destination="RAZ-Yn-o2Y" id="EBh-B3-TsP"/>
+                        <outlet property="usernameField" destination="oD4-vi-Tg3" id="qer-Gd-nv1"/>
                         <segue destination="8UY-H8-Zzk" kind="push" identifier="LoginToDirectorySearchSegue" id="alt-z1-lH5"/>
                     </connections>
                 </tableViewController>
@@ -1320,6 +1322,14 @@
             <relationships>
                 <relationship kind="outlet" name="searchBar" candidateClass="UISearchBar"/>
                 <relationship kind="outlet" name="tableView" candidateClass="UITableView"/>
+            </relationships>
+        </class>
+        <class className="RHLoginViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHLoginViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="login:"/>
+                <relationship kind="outlet" name="passwordField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="usernameField" candidateClass="UITextField"/>
             </relationships>
         </class>
         <class className="RHMapDirectionsManager" superclassName="NSObject">
