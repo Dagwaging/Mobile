@@ -723,9 +723,6 @@
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
-                                        <connections>
-                                            <segue destination="8UY-H8-Zzk" kind="push" id="YtH-Ai-5e5"/>
-                                        </connections>
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
@@ -736,6 +733,9 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Kerberos Login" id="5xP-I0-r93"/>
+                    <connections>
+                        <segue destination="8UY-H8-Zzk" kind="push" identifier="LoginToDirectorySearchSegue" id="alt-z1-lH5"/>
+                    </connections>
                 </tableViewController>
             </objects>
             <point key="canvasLocation" x="1294" y="392"/>
@@ -754,7 +754,7 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="XUZ-9n-EWR" detailTextLabel="tuF-zq-hDe" style="IBUITableViewCellStyleSubtitle" id="wAx-4s-UJP">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="DirectoryStudentCell" textLabel="XUZ-9n-EWR" detailTextLabel="tuF-zq-hDe" style="IBUITableViewCellStyleSubtitle" id="wAx-4s-UJP">
                                         <rect key="frame" x="0.0" y="22" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -782,7 +782,7 @@
                                             <segue destination="v7t-e7-3IW" kind="push" id="ZxZ-A9-oGf"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="Fe1-ol-2CJ" detailTextLabel="REH-AP-o60" style="IBUITableViewCellStyleSubtitle" id="nWi-kU-Q8p">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="DirectoryFacultyCell" textLabel="Fe1-ol-2CJ" detailTextLabel="REH-AP-o60" style="IBUITableViewCellStyleSubtitle" id="nWi-kU-Q8p">
                                         <rect key="frame" x="0.0" y="66" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -810,7 +810,7 @@
                                             <segue destination="v7t-e7-3IW" kind="push" id="oOw-Ur-NNb"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="uAK-7P-rZV" detailTextLabel="qrg-r6-p17" style="IBUITableViewCellStyleSubtitle" id="UJJ-wM-7wH">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="DirectoryCourseCell" textLabel="uAK-7P-rZV" detailTextLabel="qrg-r6-p17" style="IBUITableViewCellStyleSubtitle" id="UJJ-wM-7wH">
                                         <rect key="frame" x="0.0" y="110" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -838,7 +838,7 @@
                                             <segue destination="MWk-2g-HMV" kind="push" id="omQ-HR-Hp2"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="bfW-HY-kxg" style="IBUITableViewCellStyleDefault" id="1Iz-yR-3RG">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="DirectoryMoreCell" textLabel="bfW-HY-kxg" style="IBUITableViewCellStyleDefault" id="1Iz-yR-3RG">
                                         <rect key="frame" x="0.0" y="154" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
