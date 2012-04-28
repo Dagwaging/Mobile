@@ -354,11 +354,11 @@
             </objects>
             <point key="canvasLocation" x="1760" y="1937"/>
         </scene>
-        <!--View Controller-->
+        <!--Departure Location Selection View Controller View Controller-->
         <scene sceneID="Onp-82-1W8">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jxl-4g-RdU" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <viewController id="PEQ-TC-uqa" sceneMemberID="viewController">
+                <viewController id="PEQ-TC-uqa" customClass="RHDepartureLocationSelectionViewControllerViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="hqg-ko-OuG">
                         <rect key="frame" x="0.0" y="20" width="320" height="460"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -367,13 +367,19 @@
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <items>
-                                    <navigationItem title="Departure Location" id="1jm-D6-gC7"/>
+                                    <navigationItem title="Departure Location" id="1jm-D6-gC7">
+                                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="ar2-1n-VMW">
+                                            <connections>
+                                                <action selector="cancelSelection:" destination="PEQ-TC-uqa" id="XUp-QP-Eqz"/>
+                                            </connections>
+                                        </barButtonItem>
+                                    </navigationItem>
                                 </items>
                             </navigationBar>
-                            <searchBar contentMode="redraw" id="q11-Ys-s0c">
+                            <searchBar contentMode="redraw" showsCancelButton="YES" id="q11-Ys-s0c">
                                 <rect key="frame" x="0.0" y="44" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no"/>
                                 <connections>
                                     <outlet property="delegate" destination="PEQ-TC-uqa" id="YeU-3r-fIU"/>
                                 </connections>
@@ -383,7 +389,7 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="DepartureUseGPSCell" id="S6g-9H-PNX">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="DepartureUseGPSCell" id="S6g-9H-PNX">
                                         <rect key="frame" x="0.0" y="22" width="328" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -401,6 +407,9 @@
                                                     <state key="highlighted">
                                                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     </state>
+                                                    <connections>
+                                                        <action selector="departGPS:" destination="PEQ-TC-uqa" eventType="touchUpInside" id="zXV-Jl-wzK"/>
+                                                    </connections>
                                                 </button>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Use GPS" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="5aY-XU-akP">
                                                     <rect key="frame" x="20" y="10" width="85" height="24"/>
@@ -413,22 +422,22 @@
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="DepartureLocationCell" id="1nM-ab-kqe">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="DepartureLocationCell" id="1nM-ab-kqe" customClass="RHDepartureLocationCell">
                                         <rect key="frame" x="0.0" y="66" width="328" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="0.0" y="0.0" width="328" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="EZ6-pw-j4f">
-                                                    <rect key="frame" x="20" y="3" width="42" height="21"/>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="18" adjustsFontSizeToFit="NO" id="EZ6-pw-j4f">
+                                                    <rect key="frame" x="20" y="3" width="207" height="21"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="21m-SR-XkE">
-                                                    <rect key="frame" x="20" y="20" width="42" height="21"/>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsFontSizeToFit="NO" id="21m-SR-XkE">
+                                                    <rect key="frame" x="20" y="20" width="207" height="21"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
@@ -445,12 +454,19 @@
                                                     <state key="highlighted">
                                                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     </state>
+                                                    <connections>
+                                                        <action selector="departLocation:" destination="PEQ-TC-uqa" eventType="touchUpInside" id="UUB-w3-Cru"/>
+                                                    </connections>
                                                 </button>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
+                                        <connections>
+                                            <outlet property="locationDetailLabel" destination="21m-SR-XkE" id="bhd-q9-xZz"/>
+                                            <outlet property="locationNameLabel" destination="EZ6-pw-j4f" id="VzU-Cu-CjU"/>
+                                        </connections>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="DepartureMoreResultsCell" textLabel="uvb-F2-v7c" style="IBUITableViewCellStyleDefault" id="Yms-53-WMx">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="DepartureMoreCell" textLabel="uvb-F2-v7c" style="IBUITableViewCellStyleDefault" id="Yms-53-WMx">
                                         <rect key="frame" x="0.0" y="110" width="328" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -469,10 +485,18 @@
                                         </view>
                                     </tableViewCell>
                                 </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="PEQ-TC-uqa" id="1Tx-zJ-0mS"/>
+                                    <outlet property="delegate" destination="PEQ-TC-uqa" id="MNK-m5-htA"/>
+                                </connections>
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
+                    <connections>
+                        <outlet property="searchBar" destination="q11-Ys-s0c" id="LjF-X0-l4r"/>
+                        <outlet property="tableView" destination="6AF-ZZ-8gJ" id="fF6-Q2-S4V"/>
+                    </connections>
                 </viewController>
             </objects>
             <point key="canvasLocation" x="2648" y="1642"/>
@@ -1097,7 +1121,7 @@
                             <searchBar contentMode="redraw" showsCancelButton="YES" id="9wk-fR-FQe">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no"/>
                                 <connections>
                                     <outlet property="delegate" destination="5JX-Ue-11A" id="anY-gk-Ydt"/>
                                 </connections>
@@ -1262,88 +1286,6 @@
         <image name="TabBarMapIcon.png" width="30" height="30"/>
         <image name="TabBarToursIcon.png" width="30" height="30"/>
     </resources>
-    <classes>
-        <class className="RHCampusServicesViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHCampusServicesViewController.h"/>
-        </class>
-        <class className="RHLocationDetailViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHLocationDetailViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="displayCurrentLocationOnMap:"/>
-                <relationship kind="action" name="getDirectionsToCurrentLocation:"/>
-                <relationship kind="outlet" name="tableView" candidateClass="UITableView"/>
-            </relationships>
-        </class>
-        <class className="RHLocationSearchViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHLocationSearchViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="searchBar" candidateClass="UISearchBar"/>
-                <relationship kind="outlet" name="tableView" candidateClass="UITableView"/>
-            </relationships>
-        </class>
-        <class className="RHMapDirectionsManager" superclassName="NSObject">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHMapDirectionsManager.h"/>
-            <relationships>
-                <relationship kind="action" name="exitDirections:"/>
-                <relationship kind="action" name="nextStep:"/>
-                <relationship kind="action" name="previousStep:"/>
-                <relationship kind="outlet" name="mapView" candidateClass="MKMapView"/>
-                <relationship kind="outlet" name="mapViewController" candidateClass="RHMapViewController"/>
-            </relationships>
-        </class>
-        <class className="RHMapViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHMapViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="discloseLocationDetails:"/>
-                <relationship kind="outlet" name="backgroundView" candidateClass="UIView"/>
-                <relationship kind="outlet" name="directionsLabel" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="directionsManager" candidateClass="RHMapDirectionsManager"/>
-                <relationship kind="outlet" name="directionsPicker" candidateClass="UIPickerView"/>
-                <relationship kind="outlet" name="mapView" candidateClass="MKMapView"/>
-            </relationships>
-        </class>
-        <class className="RHQuickListViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHQuickListViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="cancel:"/>
-                <relationship kind="action" name="goToLocation:"/>
-                <relationship kind="outlet" name="pickerView" candidateClass="UIPickerView"/>
-                <relationship kind="outlet" name="tableView" candidateClass="UITableView"/>
-            </relationships>
-        </class>
-        <class className="RHTagSelectionViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHTagSelectionViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="donePressed:"/>
-            </relationships>
-        </class>
-        <class className="RHTagsBasketViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHTagsBasketViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="buildTour:"/>
-                <relationship kind="action" name="doneEditing:"/>
-            </relationships>
-        </class>
-        <class className="RHToursViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHToursViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="durationSliderMoved:"/>
-                <relationship kind="action" name="locationTypeChanged:"/>
-                <relationship kind="action" name="tourTypeChanged:"/>
-                <relationship kind="outlet" name="durationLabel" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="durationSlider" candidateClass="UISlider"/>
-                <relationship kind="outlet" name="locationControl" candidateClass="UISegmentedControl"/>
-                <relationship kind="outlet" name="locationLabel" candidateClass="UILabel"/>
-            </relationships>
-        </class>
-        <class className="RHWebViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHWebViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="openInSafari"/>
-                <relationship kind="outlet" name="webView" candidateClass="UIWebView"/>
-            </relationships>
-        </class>
-    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

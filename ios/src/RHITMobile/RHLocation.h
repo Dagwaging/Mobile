@@ -62,6 +62,10 @@ typedef enum _RHLocationRetrievalStatus {
 
 @property (nonatomic, strong) NSString *altNames;
 
+@property (nonatomic, strong) NSNumber *departable;
+
+@property (nonatomic, assign) BOOL departableValue;
+
 @property (nonatomic, strong) NSArray *alternateNames;
 
 @property (nonatomic, strong) NSNumber *displayTypeNumber;

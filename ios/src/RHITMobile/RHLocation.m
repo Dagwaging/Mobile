@@ -30,6 +30,7 @@
 
 @dynamic serverIdentifier;
 @dynamic name;
+@dynamic departable;
 @dynamic links;
 @dynamic altNames;
 @dynamic displayTypeNumber;
@@ -60,6 +61,16 @@
 
 - (RHLocationRetrievalStatus)retrievalStatus {
     return (RHLocationRetrievalStatus) self.retrievalStatusNumber.intValue;
+}
+
+- (BOOL)departableValue
+{
+    return self.departable.boolValue;
+}
+
+- (void)setDepartableValue:(BOOL)departableValue
+{
+    self.departable = [NSNumber numberWithBool:departableValue];
 }
 
 - (NSString *)heirarchy

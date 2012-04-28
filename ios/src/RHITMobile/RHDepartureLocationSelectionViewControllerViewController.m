@@ -1,5 +1,5 @@
 //
-//  RHLocationSearchViewController.m
+//  RHDepartureLocationSelectionViewControllerViewController.m
 //  Rose-Hulman Mobile
 //
 //  Copyright 2012 Rose-Hulman Institute of Technology
@@ -17,75 +17,48 @@
 //  limitations under the License.
 //
 
-#import "RHLocationSearchViewController.h"
-#import "RHAppDelegate.h"
+#import "RHDepartureLocationSelectionViewControllerViewController.h"
 #import "RHLocation.h"
-#import "RHLocationDetailViewController.h"
 #import "RHLocationSearchRequest.h"
 
 
-#define kLocationCellIdentifier @"LocationSearchLocationCell"
-#define kMoreCellIdentifier @"DepartureMoreCell"
+#define kGPSCellIdentifier @"DepartureUseGPSCell"
+#define kDepartureLocationCellIdentifier @"DepartureLocationCell"
+#define kMoreResultsCellIdentifier @"DepartureMoreCell"
 
-#define kSegueIdentifier @"LocationSearchToDetailSegue"
 
+@implementation RHDepartureLocationCell
 
-@interface RHLocationSearchViewController ()
+@synthesize locationNameLabel = _locationNameLabel;
+@synthesize locationDetailLabel = _locationDetailLabel;
 
 @end
 
 
-@implementation RHLocationSearchViewController
+@interface RHDepartureLocationSelectionViewControllerViewController ()
 
-@synthesize tableView = _tableView;
-@synthesize searchBar = _searchBar;
-@synthesize localResults = _localResults;
-@synthesize serverResults = _serverResults;
+- (IBAction)departLocation:(id)sender;
 
-#pragma mark - View Lifecycle
+- (IBAction)departGPS:(id)sender;
 
-- (void)viewDidLoad
-{
-    _searching = NO;
-    _searchTermChanged = NO;
-    _firstAppearance = YES;
-}
+- (IBAction)cancelSelection:(id)sender;
 
-- (void)viewDidAppear:(BOOL)animated
-{
-    if (_firstAppearance) {
-        [self.searchBar becomeFirstResponder];
-        _firstAppearance = NO;
-    }
-}
+@end
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
-}
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    if ([segue.identifier isEqualToString:kSegueIdentifier]) {
-        RHLocationDetailViewController *locationDetail = segue.destinationViewController;
-        NSIndexPath *indexPath = self.tableView.indexPathForSelectedRow;
-        locationDetail.location = indexPath.row < self.localResults.count ? [self.localResults objectAtIndex:indexPath.row] : [self.serverResults objectAtIndex:(indexPath.row - self.localResults.count)];
-    }
-}
+@implementation RHDepartureLocationSelectionViewControllerViewController
+
+@synthesize locationChosenBlock = _locationChosenBlock;
+@synthesize gpsChosenBlock = _gpsChosenBlock;
 
 #pragma mark - Private Methods
-
-- (NSManagedObjectContext *)managedObjectContext
-{
-    return [(RHAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
-}
 
 - (void)performLocalSearch
 {
     NSString *searchTerm = self.searchBar.text;
     
     NSFetchRequest *fetchRequst = [NSFetchRequest fetchRequestWithEntityName:kRHLocationEntityName];
-    fetchRequst.predicate = [NSPredicate predicateWithFormat:@"name BEGINSWITH[cd] %@", searchTerm];
+    fetchRequst.predicate = [NSPredicate predicateWithFormat:@"departable == YES AND name BEGINSWITH[cd] %@", searchTerm];
     
     self.localResults = [self.managedObjectContext executeFetchRequest:fetchRequst error:nil];
     
@@ -107,7 +80,7 @@
     [self.searchBar resignFirstResponder];
     
     // Hide the "More Results..." cell
-    int moreCellIndex = self.localResults.count + self.serverResults.count;
+    int moreCellIndex = self.localResults.count + self.serverResults.count + 1;
     NSIndexPath *moreCellPath = [NSIndexPath indexPathForRow:moreCellIndex inSection:0];
     [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:moreCellPath]withRowAnimation:UITableViewRowAnimationAutomatic];
     
@@ -119,7 +92,7 @@
     [activityIndicator startAnimating];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
     
-    [RHLocationSearchRequest makeLocationSearchRequestWithSearchTerm:searchTerm limitToDepartable:NO successBlock:^(NSArray *results) {
+    [RHLocationSearchRequest makeLocationSearchRequestWithSearchTerm:searchTerm limitToDepartable:YES successBlock:^(NSArray *results) {
         
         _searching = NO;
         
@@ -143,7 +116,7 @@
             NSMutableArray *indexPaths = [NSMutableArray arrayWithCapacity:self.serverResults.count];
             
             for (int i = self.localResults.count; i < self.localResults.count + self.serverResults.count; i ++) {
-                [indexPaths addObject:[NSIndexPath indexPathForRow:i inSection:0]];
+                [indexPaths addObject:[NSIndexPath indexPathForRow:i + 1 inSection:0]];
             }
             
             [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
@@ -163,25 +136,33 @@
     }];
 }
 
+- (void)departLocation:(id)sender
+{
+    // TODO: Execute stored block
+}
+
+- (void)departGPS:(id)sender
+{
+    // TODO: Execute stored block
+}
+
+- (void)cancelSelection:(id)sender
+{
+    [self dismissModalViewControllerAnimated:YES];
+}
+
 #pragma mark - Table View Delegate Methods
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    if (indexPath.row == self.localResults.count + self.serverResults.count) {
+    if (indexPath.row == self.localResults.count + self.serverResults.count + 1) {
         [self performServerSearch];
     }
 }
 
 #pragma mark - Table View Data Source Methods
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    int numResults = self.localResults.count + self.serverResults.count;
-    
-    return !_searching && _searchTermChanged ? numResults + 1 : numResults;
-}
 
 - (UITableViewCell *)tableView:(UITableView *)tableView
          cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -190,45 +171,28 @@
     
     int totalResults = self.localResults.count + self.serverResults.count;
     
-    if (indexPath.row == totalResults) {
-        cell = [tableView dequeueReusableCellWithIdentifier:kMoreCellIdentifier];
+    if (indexPath.row == 0) {
+        cell = [tableView dequeueReusableCellWithIdentifier:kGPSCellIdentifier];
+    } else if (indexPath.row == totalResults + 1) {
+        cell = [tableView dequeueReusableCellWithIdentifier:kMoreResultsCellIdentifier];
     } else {
-        cell = [tableView dequeueReusableCellWithIdentifier:kLocationCellIdentifier];
+        cell = [tableView dequeueReusableCellWithIdentifier:kDepartureLocationCellIdentifier];
         
-        RHLocation *location = indexPath.row < self.localResults.count ? [self.localResults objectAtIndex:indexPath.row] : [self.serverResults objectAtIndex:(indexPath.row - self.localResults.count)];
+        RHDepartureLocationCell *departureCell = (RHDepartureLocationCell *) cell;
         
-        cell.textLabel.text = location.name;
-        cell.detailTextLabel.text = location.heirarchy;
+        RHLocation *location = indexPath.row < self.localResults.count + 1 ? [self.localResults objectAtIndex:indexPath.row - 1] : [self.serverResults objectAtIndex:(indexPath.row - self.localResults.count - 1)];
+        
+        departureCell.locationNameLabel.text = location.name;
+        departureCell.locationDetailLabel.text = location.heirarchy;
     }
     
     return cell;
 }
 
-#pragma mark - Search Bar Delegate Methods
-
-- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
+- (NSInteger)tableView:(UITableView *)tableView
+ numberOfRowsInSection:(NSInteger)section
 {
-    [self performServerSearch];
-}
-
-- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
-{
-    _searchTermChanged = YES;
-    
-    self.serverResults = nil;
-    
-    if (searchText.length > 0) {
-        [self performLocalSearch];
-    } else {
-        self.localResults = nil;
-        _searchTermChanged = NO;
-        [self.tableView reloadData];
-    }
-}
-
-- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
-{
-    [searchBar resignFirstResponder];
+    return [super tableView:tableView numberOfRowsInSection:section] + 1;
 }
 
 @end

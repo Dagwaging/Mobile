@@ -36,6 +36,7 @@
 #define kLinkNameKey @"Name"
 #define KLinkURLKey @"Url"
 #define kDescriptionKey @"Description"
+#define kDepartableKey @"IsDepartable"
 #define kDisplayTypeKey @"Type"
 #define kDisplayTypeNormal @"NL"
 #define kDisplayTypePointOfInterest @"PI"
@@ -398,7 +399,9 @@ static RHLocationsLoader *_instance;
         location.displayType = RHLocationDisplayTypePointOfInterest;
     } else if ([displayType isEqualToString:kDisplayTypeQuickList]) {
         location.displayType = RHLocationDisplayTypeQuickList;
-    } 
+    }
+    
+    location.departable = [jsonResponse objectForKey:kDepartableKey];
     
     NSDictionary *mapArea = [jsonResponse objectForKey:kMapAreaKey];
     

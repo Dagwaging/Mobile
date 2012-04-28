@@ -19,6 +19,25 @@
 
 #import <UIKit/UIKit.h>
 
-@interface RHLocationSearchViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate>
+
+@interface RHLocationSearchViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate> {
+    BOOL _searching;
+    BOOL _searchTermChanged;
+    BOOL _firstAppearance;
+}
+
+@property (nonatomic, strong) IBOutlet UITableView *tableView;
+
+@property (nonatomic, strong) IBOutlet UISearchBar *searchBar;
+
+@property (nonatomic, strong) NSArray *localResults;
+
+@property (nonatomic, strong) NSArray *serverResults;
+
+@property (nonatomic, readonly) NSManagedObjectContext *managedObjectContext;
+
+- (void)performLocalSearch;
+
+- (void)performServerSearch;
 
 @end

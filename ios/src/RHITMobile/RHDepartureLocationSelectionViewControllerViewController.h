@@ -1,5 +1,5 @@
 //
-//  RHPerson.h
+//  RHDepartureLocationSelectionViewControllerViewController.h
 //  Rose-Hulman Mobile
 //
 //  Copyright 2012 Rose-Hulman Institute of Technology
@@ -17,24 +17,25 @@
 //  limitations under the License.
 //
 
-#import <Foundation/Foundation.h>
-#import <CoreData/CoreData.h>
-
-#define kRHPersonEntityName @"RHPerson"
+#import "RHLocationSearchViewController.h"
 
 
-@class RHLocation;
+@class RHLocation, RHWrappedCoordinate;
 
-@interface RHPerson : NSManagedObject
 
-@property (nonatomic, strong) NSString * firstName;
-@property (nonatomic, strong) NSString * lastName;
-@property (nonatomic, strong) NSString * middleName;
-@property (nonatomic, strong) NSNumber * role;
-@property (nonatomic, strong) NSString * emailAddress;
-@property (nonatomic, strong) NSString * campusMailbox;
-@property (nonatomic, strong) NSString * position;
-@property (nonatomic, strong) NSString * phoneNumber;
-@property (nonatomic, strong) RHLocation *location;
+@interface RHDepartureLocationCell : UITableViewCell
+
+@property (nonatomic, strong) IBOutlet UILabel *locationNameLabel;
+
+@property (nonatomic, strong) IBOutlet UILabel *locationDetailLabel;
+
+@end
+
+
+@interface RHDepartureLocationSelectionViewControllerViewController : RHLocationSearchViewController
+
+@property (nonatomic, assign) void(^locationChosenBlock)(RHLocation *);
+
+@property (nonatomic, assign) void(^gpsChosenBlock)(RHWrappedCoordinate *);
 
 @end
