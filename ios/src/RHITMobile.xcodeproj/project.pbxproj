@@ -271,29 +271,9 @@
 			name = "Server Communication";
 			sourceTree = "<group>";
 		};
-		9226030B1409AC820065F705 /* Images */ = {
+		920D6DC6154C9BDE006F6E9E /* Persisted */ = {
 			isa = PBXGroup;
 			children = (
-				924E754C140ACC9A001DFC4C /* TabBarMapIcon.png */,
-				928B76E7144CBADA00D2F98D /* TabBarMapIcon@2x.png */,
-				92ADEE301459BC5E00060A3F /* TabBarDirectoryIcon.png */,
-				92ADEE311459BC5E00060A3F /* TabBarDirectoryIcon@2x.png */,
-				924DE4D8145E773800EEE8C6 /* TabBarInfoIcon.png */,
-				924DE4D9145E773800EEE8C6 /* TabBarInfoIcon@2x.png */,
-				922F44A314985AE800D5C2C3 /* TabBarToursIcon.png */,
-				922F44A414985AE800D5C2C3 /* TabBarToursIcon@2x.png */,
-				924DE4DC145E787D00EEE8C6 /* TabBarBetaIcon.png */,
-				924DE4DD145E787D00EEE8C6 /* TabBarBetaIcon@2x.png */,
-				92ADEE2C14599D9500060A3F /* QuickListToolbarIcon.png */,
-				92ADEE2D14599D9500060A3F /* QuickListToolbarIcon@2x.png */,
-			);
-			name = Images;
-			sourceTree = "<group>";
-		};
-		9226030C1409AE640065F705 /* Model (CoreData) */ = {
-			isa = PBXGroup;
-			children = (
-				923C841A14298DD500DFE415 /* RHDataModel.xcdatamodeld */,
 				92F5F21414DFC3C000324ACE /* RHTourItem.h */,
 				92F5F21514DFC3C000324ACE /* RHTourItem.m */,
 				92F5F21D14DFC3F900324ACE /* RHTourTagCategory.h */,
@@ -317,7 +297,49 @@
 				9246368A142BAAC700A5E399 /* RHLocation.h */,
 				9246368B142BAAC700A5E399 /* RHLocation.m */,
 			);
-			name = "Model (CoreData)";
+			name = Persisted;
+			sourceTree = "<group>";
+		};
+		920D6DC7154C9BE3006F6E9E /* Unpersisted */ = {
+			isa = PBXGroup;
+			children = (
+				925465A81495C69B00C12B81 /* RHWrappedCoordinate.h */,
+				925465A91495C69C00C12B81 /* RHWrappedCoordinate.m */,
+				92F1B8B31496F67900F7FFD8 /* RHPathStep.h */,
+				92F1B8B41496F67900F7FFD8 /* RHPathStep.m */,
+				92ADDE0614E3422400655869 /* RHPath.h */,
+				92ADDE0714E3422400655869 /* RHPath.m */,
+			);
+			name = Unpersisted;
+			sourceTree = "<group>";
+		};
+		9226030B1409AC820065F705 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				924E754C140ACC9A001DFC4C /* TabBarMapIcon.png */,
+				928B76E7144CBADA00D2F98D /* TabBarMapIcon@2x.png */,
+				92ADEE301459BC5E00060A3F /* TabBarDirectoryIcon.png */,
+				92ADEE311459BC5E00060A3F /* TabBarDirectoryIcon@2x.png */,
+				924DE4D8145E773800EEE8C6 /* TabBarInfoIcon.png */,
+				924DE4D9145E773800EEE8C6 /* TabBarInfoIcon@2x.png */,
+				922F44A314985AE800D5C2C3 /* TabBarToursIcon.png */,
+				922F44A414985AE800D5C2C3 /* TabBarToursIcon@2x.png */,
+				924DE4DC145E787D00EEE8C6 /* TabBarBetaIcon.png */,
+				924DE4DD145E787D00EEE8C6 /* TabBarBetaIcon@2x.png */,
+				92ADEE2C14599D9500060A3F /* QuickListToolbarIcon.png */,
+				92ADEE2D14599D9500060A3F /* QuickListToolbarIcon@2x.png */,
+			);
+			name = Images;
+			sourceTree = "<group>";
+		};
+		9226030C1409AE640065F705 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				923C841A14298DD500DFE415 /* RHDataModel.xcdatamodeld */,
+				920D6DC6154C9BDE006F6E9E /* Persisted */,
+				920D6DC7154C9BE3006F6E9E /* Unpersisted */,
+			);
+			name = Model;
 			sourceTree = "<group>";
 		};
 		923919401545E9FC00D3C611 /* Loaders */ = {
@@ -403,8 +425,7 @@
 				92948907142D3ED400820A9C /* Map Customization */,
 				920656F314303CB200D50293 /* Server Communication */,
 				92ECC4C3141430510073C4C3 /* View Controllers */,
-				9226030C1409AE640065F705 /* Model (CoreData) */,
-				92ADDE0414E33A0C00655869 /* Unpersisted Models */,
+				9226030C1409AE640065F705 /* Model */,
 				9265FEAF1409AB5D00AE406E /* Supporting Files */,
 			);
 			path = RHITMobile;
@@ -497,19 +518,6 @@
 				921F3C5C14EA22F700EDD02A /* RHMapDirectionsManager.m */,
 			);
 			name = "Map Customization";
-			sourceTree = "<group>";
-		};
-		92ADDE0414E33A0C00655869 /* Unpersisted Models */ = {
-			isa = PBXGroup;
-			children = (
-				925465A81495C69B00C12B81 /* RHWrappedCoordinate.h */,
-				925465A91495C69C00C12B81 /* RHWrappedCoordinate.m */,
-				92F1B8B31496F67900F7FFD8 /* RHPathStep.h */,
-				92F1B8B41496F67900F7FFD8 /* RHPathStep.m */,
-				92ADDE0614E3422400655869 /* RHPath.h */,
-				92ADDE0714E3422400655869 /* RHPath.m */,
-			);
-			name = "Unpersisted Models";
 			sourceTree = "<group>";
 		};
 		92ECC4C3141430510073C4C3 /* View Controllers */ = {
