@@ -1,5 +1,5 @@
 //
-//  RHDepartureLocationSelectionViewControllerViewController.h
+//  RHDepartureLocationSelectionViewController.h
 //  Rose-Hulman Mobile
 //
 //  Copyright 2012 Rose-Hulman Institute of Technology
@@ -36,7 +36,7 @@
 @end
 
 
-@interface RHDepartureLocationSelectionViewControllerViewController : RHLocationSearchViewController <CLLocationManagerDelegate>
+@interface RHDepartureLocationSelectionViewController : RHLocationSearchViewController <CLLocationManagerDelegate>
 
 @property (nonatomic, assign) void(^locationChosenBlock)(RHLocation *);
 

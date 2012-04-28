@@ -22,6 +22,7 @@
 #import "RHLocation.h"
 #import "RHLocationLink.h"
 #import "RHAppDelegate.h"
+#import "RHDepartureLocationSelectionViewController.h"
 #import "RHLocationsLoader.h"
 #import "RHMapViewController.h"
 #import "RHWebViewController.h"

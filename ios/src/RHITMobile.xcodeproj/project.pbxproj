@@ -10,7 +10,7 @@
 		9201A4651432E96000069863 /* RHLocationOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 9201A4641432E96000069863 /* RHLocationOverlay.m */; };
 		9208547F142BA28100BE55B8 /* RHNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 9208547E142BA28100BE55B8 /* RHNode.m */; };
 		92085493142BA3C300BE55B8 /* RHLabelNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 92085492142BA3C300BE55B8 /* RHLabelNode.m */; };
-		920D6DC1154C4FF6006F6E9E /* RHDepartureLocationSelectionViewControllerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 920D6DC0154C4FF6006F6E9E /* RHDepartureLocationSelectionViewControllerViewController.m */; };
+		920D6DC1154C4FF6006F6E9E /* RHDepartureLocationSelectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 920D6DC0154C4FF6006F6E9E /* RHDepartureLocationSelectionViewController.m */; };
 		920D6DC5154C6CB2006F6E9E /* RHLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 920D6DC4154C6CB2006F6E9E /* RHLoginViewController.m */; };
 		920FAF8714BEAA1800BC4614 /* RHServiceItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 920FAF8614BEAA1800BC4614 /* RHServiceItem.m */; };
 		920FAF8A14BEAA2300BC4614 /* RHServiceCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 920FAF8914BEAA2300BC4614 /* RHServiceCategory.m */; };
@@ -100,8 +100,8 @@
 		9208547E142BA28100BE55B8 /* RHNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHNode.m; sourceTree = "<group>"; };
 		92085491142BA3C300BE55B8 /* RHLabelNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHLabelNode.h; sourceTree = "<group>"; };
 		92085492142BA3C300BE55B8 /* RHLabelNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHLabelNode.m; sourceTree = "<group>"; };
-		920D6DBF154C4FF6006F6E9E /* RHDepartureLocationSelectionViewControllerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHDepartureLocationSelectionViewControllerViewController.h; sourceTree = "<group>"; };
-		920D6DC0154C4FF6006F6E9E /* RHDepartureLocationSelectionViewControllerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHDepartureLocationSelectionViewControllerViewController.m; sourceTree = "<group>"; };
+		920D6DBF154C4FF6006F6E9E /* RHDepartureLocationSelectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHDepartureLocationSelectionViewController.h; sourceTree = "<group>"; };
+		920D6DC0154C4FF6006F6E9E /* RHDepartureLocationSelectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHDepartureLocationSelectionViewController.m; sourceTree = "<group>"; };
 		920D6DC2154C544E006F6E9E /* RHDataModel 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "RHDataModel 4.xcdatamodel"; sourceTree = "<group>"; };
 		920D6DC3154C6CB2006F6E9E /* RHLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHLoginViewController.h; sourceTree = "<group>"; };
 		920D6DC4154C6CB2006F6E9E /* RHLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHLoginViewController.m; sourceTree = "<group>"; };
@@ -527,8 +527,8 @@
 				9267C2551549AC700002F2D9 /* RHLocationSearchViewController.m */,
 				92312435144FB8470074791E /* RHLocationDetailViewController.h */,
 				92312436144FB8470074791E /* RHLocationDetailViewController.m */,
-				920D6DBF154C4FF6006F6E9E /* RHDepartureLocationSelectionViewControllerViewController.h */,
-				920D6DC0154C4FF6006F6E9E /* RHDepartureLocationSelectionViewControllerViewController.m */,
+				920D6DBF154C4FF6006F6E9E /* RHDepartureLocationSelectionViewController.h */,
+				920D6DC0154C4FF6006F6E9E /* RHDepartureLocationSelectionViewController.m */,
 				920D6DC3154C6CB2006F6E9E /* RHLoginViewController.h */,
 				920D6DC4154C6CB2006F6E9E /* RHLoginViewController.m */,
 				92D3672514B60DE000EE0504 /* RHPersonDetailViewController.h */,
@@ -680,7 +680,7 @@
 				921628191547A9A10017646C /* RHPathRequest.m in Sources */,
 				9267C2561549AC700002F2D9 /* RHLocationSearchViewController.m in Sources */,
 				9245A410154BB0D2001FEF93 /* RHLocationSearchRequest.m in Sources */,
-				920D6DC1154C4FF6006F6E9E /* RHDepartureLocationSelectionViewControllerViewController.m in Sources */,
+				920D6DC1154C4FF6006F6E9E /* RHDepartureLocationSelectionViewController.m in Sources */,
 				920D6DC5154C6CB2006F6E9E /* RHLoginViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

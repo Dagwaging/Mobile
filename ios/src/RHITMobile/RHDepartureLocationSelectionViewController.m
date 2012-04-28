@@ -1,5 +1,5 @@
 //
-//  RHDepartureLocationSelectionViewControllerViewController.m
+//  RHDepartureLocationSelectionViewController.m
 //  Rose-Hulman Mobile
 //
 //  Copyright 2012 Rose-Hulman Institute of Technology
@@ -17,7 +17,7 @@
 //  limitations under the License.
 //
 
-#import "RHDepartureLocationSelectionViewControllerViewController.h"
+#import "RHDepartureLocationSelectionViewController.h"
 #import "RHLocation.h"
 #import "RHLocationSearchRequest.h"
 
@@ -36,7 +36,7 @@
 @end
 
 
-@interface RHDepartureLocationSelectionViewControllerViewController () {
+@interface RHDepartureLocationSelectionViewController () {
 @private
     BOOL _locationSearching;
 }
@@ -54,7 +54,7 @@
 @end
 
 
-@implementation RHDepartureLocationSelectionViewControllerViewController
+@implementation RHDepartureLocationSelectionViewController
 
 @synthesize locationChosenBlock = _locationChosenBlock;
 @synthesize gpsChosenBlock = _gpsChosenBlock;

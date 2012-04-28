@@ -354,11 +354,11 @@
             </objects>
             <point key="canvasLocation" x="1760" y="1937"/>
         </scene>
-        <!--Departure Location Selection View Controller View Controller-->
+        <!--Departure Location Selection View Controller-->
         <scene sceneID="Onp-82-1W8">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jxl-4g-RdU" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <viewController id="PEQ-TC-uqa" customClass="RHDepartureLocationSelectionViewControllerViewController" sceneMemberID="viewController">
+                <viewController id="PEQ-TC-uqa" customClass="RHDepartureLocationSelectionViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="hqg-ko-OuG">
                         <rect key="frame" x="0.0" y="20" width="320" height="460"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -1298,15 +1298,6 @@
             <relationships>
                 <relationship kind="outlet" name="locationDetailLabel" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="locationNameLabel" candidateClass="UILabel"/>
-            </relationships>
-        </class>
-        <class className="RHDepartureLocationSelectionViewControllerViewController" superclassName="RHLocationSearchViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHDepartureLocationSelectionViewControllerViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="cancelSelection:"/>
-                <relationship kind="action" name="departGPS:"/>
-                <relationship kind="action" name="departLocation:"/>
-                <relationship kind="outlet" name="navigationItem" candidateClass="UINavigationItem"/>
             </relationships>
         </class>
         <class className="RHLocationDetailViewController" superclassName="UIViewController">
