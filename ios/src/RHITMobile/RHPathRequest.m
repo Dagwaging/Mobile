@@ -108,6 +108,32 @@
 }
 
 + (void)makeOnCampusTourRequestWithTagIds:(NSArray *)tags
+                       fromGPSCoordinages:(CLLocation *)location
+                               toLocation:(NSNumber *)endLocationServerId
+                              forDuration:(NSNumber *)duration
+                             successBlock:(void (^)(RHPath *))successBlock
+                             failureBlock:(void (^)(NSError *))failureBlock
+{
+    NSMutableDictionary *urlArgs = [NSMutableDictionary dictionaryWithCapacity:2];
+    [urlArgs setObject:kURLTrue forKey:kWaitKey];
+    [urlArgs setObject:duration.description forKey:kLengthKey];
+    
+    NSString *fullPath = [NSString stringWithFormat:kOnCampusTourByGPSPath, location.coordinate.latitude, location.coordinate.longitude, endLocationServerId];
+    
+    [RHJSONRequest makeRequestWithPath:fullPath urlArgs:urlArgs successBlock:^(NSDictionary *jsonDict) {
+        
+        NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+        
+        [queue addOperationWithBlock:^(void) {
+            [self processJSONPathResponse:jsonDict successBlock:successBlock failureBlock:failureBlock];
+        }];
+        
+    } failureBlock:^(NSError *error) {
+        failureBlock(error);
+    }];
+}
+
++ (void)makeOnCampusTourRequestWithTagIds:(NSArray *)tags
                        fromLocationWithId:(NSNumber *)startLocationServerId
                               forDuration:(NSNumber *)duration
                              successBlock:(void (^)(RHPath *))successBlock
@@ -135,6 +161,29 @@
                           failureBlock:^(NSError *error) {
                               failureBlock(error);
                           }];
+}
+
++ (void)makeDirectionsRequestFromGPSCoordinates:(CLLocation *)location
+                                     toLocation:(NSNumber *)endLocationServerId
+                                   successBlock:(void (^)(RHPath *))successBlock
+                                   failureBlock:(void (^)(NSError *))failureBlock
+{
+    NSDictionary *urlArgs = [NSDictionary dictionaryWithObject:kURLTrue forKey:kWaitKey];
+    
+    NSString *fullpath = [NSString stringWithFormat:kDirectionsByGPSPath, location.coordinate.latitude, location.coordinate.longitude, endLocationServerId];
+    
+    [RHJSONRequest makeRequestWithPath:fullpath urlArgs:urlArgs successBlock:^(NSDictionary *jsonResponse) {
+        
+        NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+        [queue addOperationWithBlock:^(void) {
+            [self processJSONPathResponse:jsonResponse successBlock:successBlock failureBlock:failureBlock];
+        }];
+        
+        [queue waitUntilAllOperationsAreFinished];
+        
+    } failureBlock:^(NSError *error) {
+        failureBlock(error);
+    }];
 }
 
 + (void)makeDirectionsRequestFromLocationWithId:(NSNumber *)startLocationServerId

@@ -18,6 +18,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreLocation/CoreLocation.h>
 
 
 @class RHPath;
@@ -29,7 +30,13 @@
                               successBlock:(void (^)(RHPath *))successBlock
                               failureBlock:(void (^)(NSError *))failureBlock;
 
-// TODO: GPS Tour
+
++ (void)makeOnCampusTourRequestWithTagIds:(NSArray *)tags
+                       fromGPSCoordinages:(CLLocation *)location
+                               toLocation:(NSNumber *)endLocationServerId
+                              forDuration:(NSNumber *)duration
+                             successBlock:(void (^)(RHPath *))successBlock
+                             failureBlock:(void (^)(NSError *))failureBlock;
 
 + (void)makeOnCampusTourRequestWithTagIds:(NSArray *)tags
                        fromLocationWithId:(NSNumber *)startLocationServerId
@@ -37,7 +44,10 @@
                              successBlock:(void (^)(RHPath *))successBlock
                              failureBlock:(void (^)(NSError *))failureBlock;
 
-// TODO: GPS Directions
++ (void)makeDirectionsRequestFromGPSCoordinates:(CLLocation *)location
+                                     toLocation:(NSNumber *)endLocationServerId
+                                   successBlock:(void (^)(RHPath *))successBlock
+                                   failureBlock:(void (^)(NSError *))failureBlock;
 
 + (void)makeDirectionsRequestFromLocationWithId:(NSNumber *)startLocationServerId
                                      toLocation:(NSNumber *)endLocationServerId
