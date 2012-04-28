@@ -55,10 +55,6 @@
 /// NSManagedObjectContext objects for database interactions.
 @property (nonatomic, strong, readonly) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
-@property (nonatomic, strong) NSDictionary *locationNames;
-
-- (void)prefetchLocationNames;
-
 /// Callback notifying the application delegate of managed object contexts
 /// performing save operations on secondary threads. This method triggers a
 /// merge and update operation on the main thread's NSManagedObjectContext so

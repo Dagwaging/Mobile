@@ -62,6 +62,15 @@
     return (RHLocationRetrievalStatus) self.retrievalStatusNumber.intValue;
 }
 
+- (NSString *)heirarchy
+{
+    if (self.parent == nil) {
+        return self.name;
+    } else {
+        return [NSString stringWithFormat:@"%@ \u2192 %@", self.parent.heirarchy, self.name];
+    }
+}
+
 - (void)setRetrievalStatus:(RHLocationRetrievalStatus)retrievalStatus {
     self.retrievalStatusNumber = [NSNumber numberWithInt:retrievalStatus];
 }

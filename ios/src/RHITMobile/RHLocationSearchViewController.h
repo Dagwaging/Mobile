@@ -19,6 +19,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface RHLocationSearchViewController : UIViewController
+@interface RHLocationSearchViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate>
 
 @end

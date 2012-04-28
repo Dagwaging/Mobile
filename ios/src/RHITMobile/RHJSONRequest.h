@@ -1,5 +1,5 @@
 //
-//  RHGenericRequest.h
+//  RHJSONRequest.h
 //  Rose-Hulman Mobile
 //
 //  Copyright 2012 Rose-Hulman Institute of Technology

@@ -56,6 +56,8 @@ typedef enum _RHLocationRetrievalStatus {
 /// Human-readable name for this RHLocation.
 @property (nonatomic, strong) NSString *name;
 
+@property (nonatomic, readonly) NSString *heirarchy;
+
 @property (nonatomic, strong) NSSet *links;
 
 @property (nonatomic, strong) NSString *altNames;

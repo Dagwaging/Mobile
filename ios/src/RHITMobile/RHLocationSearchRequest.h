@@ -1,5 +1,5 @@
 //
-//  RHLocationSelectorViewController.h
+//  RHLocationSearchRequest.h
 //  Rose-Hulman Mobile
 //
 //  Copyright 2012 Rose-Hulman Institute of Technology
@@ -17,17 +17,13 @@
 //  limitations under the License.
 //
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 
-#import "RHSearchViewController.h"
+@interface RHLocationSearchRequest : NSObject
 
-#define kRHLocationSelectorViewControllerNibName @"RHSearchViewController"
-
-@class RHLocation;
-
-
-@interface RHLocationSelectorViewController : RHSearchViewController
-
-@property (nonatomic, strong) RHLocation *toLocation;
++ (void)makeLocationSearchRequestWithSearchTerm:(NSString *)searchTerm
+                              limitToDepartable:(BOOL)limitToDepartable
+                                   successBlock:(void (^)(NSArray *))successBlock
+                                   failureBlock:(void (^)(NSError *))failureBlock;
 
 @end

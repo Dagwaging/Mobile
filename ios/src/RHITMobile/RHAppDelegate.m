@@ -19,7 +19,6 @@
 
 #import "RHAppDelegate.h"
 #import "RHMapViewController.h"
-#import "RHSearchViewController.h"
 #import "RHCampusServicesViewController.h"
 #import "RHLocation.h"
 #import "RHToursViewController.h"
@@ -37,7 +36,6 @@
 @synthesize managedObjectModel;
 @synthesize managedObjectContext;
 @synthesize persistentStoreCoordinator;
-@synthesize locationNames;
 
 #pragma mark - UIAppDelegate Methods
 
@@ -92,32 +90,6 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
      Save data if appropriate.
      See also applicationDidEnterBackground:.
      */
-}
-
-#pragma mark - General Methods
-
-
-- (void)prefetchLocationNames {
-    if ([NSThread isMainThread]) {
-        [self performSelectorInBackground:@selector(prefetchLocationNames)
-                               withObject:nil];
-    } else {
-        NSFetchRequest *request = [NSFetchRequest
-                                   fetchRequestWithEntityName:kRHLocationEntityName];
-        NSArray *fetchResults = [managedObjectContext
-                                 executeFetchRequest:request
-                                 error:nil];
-        NSMutableDictionary *names = [NSMutableDictionary
-                                      dictionaryWithCapacity:fetchResults.count];
-        
-        for (RHLocation *location in fetchResults) {
-            if (location.name != nil) {
-                [names setObject:location.objectID forKey:location.name];
-            }
-        }
-        
-        self.locationNames = names;
-    }
 }
 
 #pragma mark - Property Methods

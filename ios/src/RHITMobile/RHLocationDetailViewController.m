@@ -27,7 +27,6 @@
 #import "RHWebViewController.h"
 #import "RHWrappedCoordinate.h"
 #import "RHMapDirectionsManager.h"
-#import "RHLocationSelectorViewController.h"
 
 
 #define kAltNamesLabel @"Also Known As"

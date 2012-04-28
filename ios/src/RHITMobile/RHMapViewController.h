@@ -71,8 +71,6 @@
 
 - (void)focusMapViewToLocation:(RHLocation *)location;
 
-- (IBAction)displaySearch:(id)sender;
-
 - (IBAction)discloseLocationDetails:(id)sender;
 
 @end

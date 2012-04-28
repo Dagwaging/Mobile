@@ -473,19 +473,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
-                    <connections>
-                        <outlet property="searchDisplayController" destination="9DZ-HH-AFe" id="0EX-Ya-ZPB"/>
-                    </connections>
                 </viewController>
-                <searchDisplayController id="9DZ-HH-AFe">
-                    <connections>
-                        <outlet property="delegate" destination="PEQ-TC-uqa" id="8dL-L9-Kcg"/>
-                        <outlet property="searchBar" destination="q11-Ys-s0c" id="E6j-Xt-ci9"/>
-                        <outlet property="searchContentsController" destination="PEQ-TC-uqa" id="0pk-3P-1no"/>
-                        <outlet property="searchResultsDataSource" destination="PEQ-TC-uqa" id="ijC-QB-0OJ"/>
-                        <outlet property="searchResultsDelegate" destination="PEQ-TC-uqa" id="KPt-OU-4Iy"/>
-                    </connections>
-                </searchDisplayController>
             </objects>
             <point key="canvasLocation" x="2648" y="1642"/>
         </scene>
@@ -972,7 +960,7 @@
                         <barButtonItem key="rightBarButtonItem" systemItem="search" id="JWa-75-1K0">
                             <connections>
                                 <action selector="displaySearch:" destination="lZy-MH-GyN" id="Yfe-zy-q84"/>
-                                <segue destination="5JX-Ue-11A" kind="push" identifier="MapToSearchSegue" id="Pnc-jj-hcs"/>
+                                <segue destination="5JX-Ue-11A" kind="push" id="9Ko-B0-zp5"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -1040,11 +1028,11 @@
             </objects>
             <point key="canvasLocation" x="2322" y="2289"/>
         </scene>
-        <!--View Controller - Search Locations-->
+        <!--Location Search View Controller - Search Locations-->
         <scene sceneID="HPN-V0-DeD">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9Ht-DB-NZM" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <viewController id="5JX-Ue-11A" sceneMemberID="viewController">
+                <viewController id="5JX-Ue-11A" customClass="RHLocationSearchViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="vbk-os-OkD">
                         <rect key="frame" x="0.0" y="64" width="320" height="367"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -1054,7 +1042,7 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="dts-1U-YAf" detailTextLabel="bH5-kO-jwg" style="IBUITableViewCellStyleSubtitle" id="8N5-jT-ZWb">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="LocationSearchLocationCell" textLabel="dts-1U-YAf" detailTextLabel="bH5-kO-jwg" style="IBUITableViewCellStyleSubtitle" id="8N5-jT-ZWb">
                                         <rect key="frame" x="0.0" y="22" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -1068,7 +1056,7 @@
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                 </label>
-                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Location &quot;Path&quot;" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="bH5-kO-jwg">
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Location &quot;Path&quot;" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="bH5-kO-jwg">
                                                     <rect key="frame" x="10" y="24" width="96" height="18"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -1079,10 +1067,10 @@
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
                                         <connections>
-                                            <segue destination="Che-o7-hf4" kind="push" id="MCR-we-qWz"/>
+                                            <segue destination="Che-o7-hf4" kind="push" identifier="LocationSearchToDetailSegue" id="MCR-we-qWz"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="Cu5-U7-VIh" style="IBUITableViewCellStyleDefault" id="UdM-5y-HXw">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="LocationSearchMoreCell" textLabel="Cu5-U7-VIh" style="IBUITableViewCellStyleDefault" id="UdM-5y-HXw">
                                         <rect key="frame" x="0.0" y="66" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -1101,6 +1089,10 @@
                                         </view>
                                     </tableViewCell>
                                 </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="5JX-Ue-11A" id="fD2-1y-Cqt"/>
+                                    <outlet property="delegate" destination="5JX-Ue-11A" id="2wr-zN-E4c"/>
+                                </connections>
                             </tableView>
                             <searchBar contentMode="redraw" showsCancelButton="YES" id="9wk-fR-FQe">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -1115,18 +1107,10 @@
                     </view>
                     <navigationItem key="navigationItem" title="Search Locations" id="U7U-AF-ahD"/>
                     <connections>
-                        <outlet property="searchDisplayController" destination="hMU-Cr-Hw3" id="Nyf-oR-a7q"/>
+                        <outlet property="searchBar" destination="9wk-fR-FQe" id="C1R-4D-mE4"/>
+                        <outlet property="tableView" destination="Bx7-Uc-U47" id="ITy-6A-hJY"/>
                     </connections>
                 </viewController>
-                <searchDisplayController id="hMU-Cr-Hw3">
-                    <connections>
-                        <outlet property="delegate" destination="5JX-Ue-11A" id="eb4-L1-e69"/>
-                        <outlet property="searchBar" destination="9wk-fR-FQe" id="HqI-03-a5W"/>
-                        <outlet property="searchContentsController" destination="5JX-Ue-11A" id="til-7z-bud"/>
-                        <outlet property="searchResultsDataSource" destination="5JX-Ue-11A" id="Qrm-Cm-Yx4"/>
-                        <outlet property="searchResultsDelegate" destination="5JX-Ue-11A" id="nwa-w4-mSH"/>
-                    </connections>
-                </searchDisplayController>
             </objects>
             <point key="canvasLocation" x="1760" y="769"/>
         </scene>
@@ -1200,7 +1184,7 @@
                                             <rect key="frame" x="10" y="0.0" width="300" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="General Text" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="zeE-Ba-UJ5">
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="General Text" lineBreakMode="tailTruncation" numberOfLines="15" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="zeE-Ba-UJ5">
                                                     <rect key="frame" x="10" y="0.0" width="280" height="43"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -1278,18 +1262,100 @@
         <image name="TabBarMapIcon.png" width="30" height="30"/>
         <image name="TabBarToursIcon.png" width="30" height="30"/>
     </resources>
+    <classes>
+        <class className="RHCampusServicesViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHCampusServicesViewController.h"/>
+        </class>
+        <class className="RHLocationDetailViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHLocationDetailViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="displayCurrentLocationOnMap:"/>
+                <relationship kind="action" name="getDirectionsToCurrentLocation:"/>
+                <relationship kind="outlet" name="tableView" candidateClass="UITableView"/>
+            </relationships>
+        </class>
+        <class className="RHLocationSearchViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHLocationSearchViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="searchBar" candidateClass="UISearchBar"/>
+                <relationship kind="outlet" name="tableView" candidateClass="UITableView"/>
+            </relationships>
+        </class>
+        <class className="RHMapDirectionsManager" superclassName="NSObject">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHMapDirectionsManager.h"/>
+            <relationships>
+                <relationship kind="action" name="exitDirections:"/>
+                <relationship kind="action" name="nextStep:"/>
+                <relationship kind="action" name="previousStep:"/>
+                <relationship kind="outlet" name="mapView" candidateClass="MKMapView"/>
+                <relationship kind="outlet" name="mapViewController" candidateClass="RHMapViewController"/>
+            </relationships>
+        </class>
+        <class className="RHMapViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHMapViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="discloseLocationDetails:"/>
+                <relationship kind="outlet" name="backgroundView" candidateClass="UIView"/>
+                <relationship kind="outlet" name="directionsLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="directionsManager" candidateClass="RHMapDirectionsManager"/>
+                <relationship kind="outlet" name="directionsPicker" candidateClass="UIPickerView"/>
+                <relationship kind="outlet" name="mapView" candidateClass="MKMapView"/>
+            </relationships>
+        </class>
+        <class className="RHQuickListViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHQuickListViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="cancel:"/>
+                <relationship kind="action" name="goToLocation:"/>
+                <relationship kind="outlet" name="pickerView" candidateClass="UIPickerView"/>
+                <relationship kind="outlet" name="tableView" candidateClass="UITableView"/>
+            </relationships>
+        </class>
+        <class className="RHTagSelectionViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHTagSelectionViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="donePressed:"/>
+            </relationships>
+        </class>
+        <class className="RHTagsBasketViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHTagsBasketViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="buildTour:"/>
+                <relationship kind="action" name="doneEditing:"/>
+            </relationships>
+        </class>
+        <class className="RHToursViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHToursViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="durationSliderMoved:"/>
+                <relationship kind="action" name="locationTypeChanged:"/>
+                <relationship kind="action" name="tourTypeChanged:"/>
+                <relationship kind="outlet" name="durationLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="durationSlider" candidateClass="UISlider"/>
+                <relationship kind="outlet" name="locationControl" candidateClass="UISegmentedControl"/>
+                <relationship kind="outlet" name="locationLabel" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="RHWebViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHWebViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="openInSafari"/>
+                <relationship kind="outlet" name="webView" candidateClass="UIWebView"/>
+            </relationships>
+        </class>
+    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="qYV-lP-wVf"/>
+        <segue reference="yrH-Av-Jeg"/>
+        <segue reference="MCR-we-qWz"/>
         <segue reference="PKp-tb-ZTW"/>
         <segue reference="2F7-6q-jLx"/>
-        <segue reference="yqD-yp-46p"/>
-        <segue reference="yrH-Av-Jeg"/>
         <segue reference="ZxZ-A9-oGf"/>
         <segue reference="uyb-Ee-cUn"/>
+        <segue reference="yqD-yp-46p"/>
     </inferredMetricsTieBreakers>
 </document>

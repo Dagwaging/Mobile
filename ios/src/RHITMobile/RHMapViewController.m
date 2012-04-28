@@ -31,7 +31,6 @@
 #import "RHQuickListViewController.h"
 #import "RHPinAnnotationView.h"
 #import "RHLocationDetailViewController.h"
-#import "RHSearchViewController.h"
 #import "RHPath.h"
 #import "RHPathStep.h"
 #import "RHSimplePointAnnotation.h"
@@ -145,14 +144,6 @@ static RHMapViewController* _instance;
 }
 
 #pragma mark - IBActions
-
-- (IBAction)displaySearch:(id)sender {
-    RHSearchViewController *search = [RHSearchViewController alloc];
-    search = [search initWithNibName:kRHSearchViewControllerNibName bundle:nil];
-    search.searchType = RHSearchViewControllerTypeLocation;
-    search.context = self.managedObjectContext;
-    [self.navigationController pushViewController:search animated:YES];
-}
 
 - (IBAction)discloseLocationDetails:(id)sender {
     MKAnnotationView *view = (MKAnnotationView *) ((UIView *) sender).superview.superview;
@@ -448,8 +439,6 @@ static RHMapViewController* _instance;
     self.quickListAnnotations = [[NSMutableArray alloc]
                                   initWithCapacity:results.count];
     [self populateMapWithLocations:(NSSet *)results];
-    
-    [(RHAppDelegate *)[[UIApplication sharedApplication] delegate] prefetchLocationNames];
 }
 
 - (void)populateMapWithLocations:(NSSet *)locations {
