@@ -24,10 +24,11 @@
 #import "RHAppDelegate.h"
 #import "RHDepartureLocationSelectionViewController.h"
 #import "RHLocationsLoader.h"
+#import "RHMapDirectionsManager.h"
 #import "RHMapViewController.h"
+#import "RHPathRequest.h"
 #import "RHWebViewController.h"
 #import "RHWrappedCoordinate.h"
-#import "RHMapDirectionsManager.h"
 
 
 #define kAltNamesLabel @"Also Known As"
@@ -145,6 +146,36 @@
         
     } else if ([segue.identifier isEqualToString:kDirectionsSegue]) {
         
+        RHDepartureLocationSelectionViewController *departureSelection = segue.destinationViewController;
+        
+        departureSelection.gpsChosenBlock = ^(CLLocation *location) {
+            // TODO
+        };
+        
+        departureSelection.locationChosenBlock = ^(RHLocation *location) {
+            
+            self.navigationItem.title = @"Getting Directions";
+            
+            UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+            [activityIndicator startAnimating];
+            self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
+            
+            [RHPathRequest makeDirectionsRequestFromLocationWithId:location.serverIdentifier toLocation:self.location.serverIdentifier successBlock:^(RHPath *path) {
+                
+                [self.navigationController popToRootViewControllerAnimated:YES];
+                [[RHMapViewController.instance directionsManager] displayPath:path];
+                
+                self.navigationItem.title = self.location.name;
+                self.navigationItem.rightBarButtonItem = nil;
+                
+            } failureBlock:^(NSError *error) {
+                [[[UIAlertView alloc] initWithTitle:@"Error" message:@"Something went wrong getting your directions. We're really sorry." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+                
+                self.navigationItem.title = self.location.name;
+                self.navigationItem.rightBarButtonItem = nil;
+                
+            }];
+        };
     }
 }
 

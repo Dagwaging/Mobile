@@ -38,8 +38,8 @@
 
 @interface RHDepartureLocationSelectionViewController : RHLocationSearchViewController <CLLocationManagerDelegate>
 
-@property (nonatomic, assign) void(^locationChosenBlock)(RHLocation *);
+@property (nonatomic, copy) void(^locationChosenBlock)(RHLocation *);
 
-@property (nonatomic, assign) void(^gpsChosenBlock)(CLLocation *);
+@property (nonatomic, copy) void(^gpsChosenBlock)(CLLocation *);
 
 @end

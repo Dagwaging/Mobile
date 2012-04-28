@@ -43,7 +43,7 @@
 
 @property (nonatomic, strong) IBOutlet UINavigationItem *navigationItem;
 
-- (IBAction)departLocation:(id)sender;
+- (IBAction)departLocation:(id)sender forEvent:(UIEvent *)event;
 
 - (IBAction)departGPS:(id)sender;
 
@@ -154,12 +154,14 @@
     }];
 }
 
-- (void)departLocation:(id)sender
+- (void)departLocation:(id)sender forEvent:(UIEvent *)event
 {
-    RHDepartureLocationCell *cell = (RHDepartureLocationCell *) sender;
+    int locationIndex = [[self.tableView indexPathForRowAtPoint:[[[event touchesForView:sender] anyObject] locationInView:self.tableView]] row] - 1;
+    
+    RHLocation *location = locationIndex < self.localResults.count ? [self.localResults objectAtIndex:locationIndex] : [self.serverResults objectAtIndex:locationIndex - self.localResults.count];
     
     if (_locationChosenBlock != NULL) {
-        _locationChosenBlock(cell.location);
+        _locationChosenBlock(location);
     }
     
     [self dismissModalViewControllerAnimated:YES];
