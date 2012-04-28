@@ -29,19 +29,27 @@
 
 @implementation RHDepartureLocationCell
 
+@synthesize location = _location;
 @synthesize locationNameLabel = _locationNameLabel;
 @synthesize locationDetailLabel = _locationDetailLabel;
 
 @end
 
 
-@interface RHDepartureLocationSelectionViewControllerViewController ()
+@interface RHDepartureLocationSelectionViewControllerViewController () {
+@private
+    BOOL _locationSearching;
+}
+
+@property (nonatomic, strong) IBOutlet UINavigationItem *navigationItem;
 
 - (IBAction)departLocation:(id)sender;
 
 - (IBAction)departGPS:(id)sender;
 
 - (IBAction)cancelSelection:(id)sender;
+
+- (void)departGPSWithLocation:(CLLocation *)location;
 
 @end
 
@@ -50,6 +58,16 @@
 
 @synthesize locationChosenBlock = _locationChosenBlock;
 @synthesize gpsChosenBlock = _gpsChosenBlock;
+@synthesize navigationItem;
+
+#pragma mark - View Lifecycle
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    _locationSearching = NO;
+}
 
 #pragma mark - Private Methods
 
@@ -138,12 +156,54 @@
 
 - (void)departLocation:(id)sender
 {
-    // TODO: Execute stored block
+    RHDepartureLocationCell *cell = (RHDepartureLocationCell *) sender;
+    
+    if (_locationChosenBlock != NULL) {
+        _locationChosenBlock(cell.location);
+    }
+    
+    [self dismissModalViewControllerAnimated:YES];
 }
 
 - (void)departGPS:(id)sender
 {
-    // TODO: Execute stored block
+    if (_locationSearching) {
+        return;
+    }
+    
+    CLLocationManager *locationManager = [[CLLocationManager alloc] init];
+    locationManager.delegate = self;
+    
+    if (CLLocationManager.authorizationStatus != kCLAuthorizationStatusAuthorized) {
+        [[[UIAlertView alloc] initWithTitle:@"Error" message:@"This app is not authorized to use location services. Please allow location services for this app to use GPS directions." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+    } else if (!CLLocationManager.locationServicesEnabled) {
+        [[[UIAlertView alloc] initWithTitle:@"Error" message:@"Location services are currently unavailable. Try again when location services are restored." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+    } else {
+        
+        if (locationManager.location == nil) {
+            self.navigationItem.title = @"Locating...";
+            
+            // Put an activity indicator in the navigation bar
+            UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+            [activityIndicator startAnimating];
+            self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
+            
+            [locationManager startUpdatingLocation];
+            
+            _locationSearching = YES;
+        } else {
+            [self departGPSWithLocation:locationManager.location];
+        }
+    }
+}
+
+- (void)departGPSWithLocation:(CLLocation *)location
+{
+    if (_gpsChosenBlock != NULL) {
+        _gpsChosenBlock(location);
+    }
+    
+    [self dismissModalViewControllerAnimated:YES];
 }
 
 - (void)cancelSelection:(id)sender
@@ -182,6 +242,7 @@
         
         RHLocation *location = indexPath.row < self.localResults.count + 1 ? [self.localResults objectAtIndex:indexPath.row - 1] : [self.serverResults objectAtIndex:(indexPath.row - self.localResults.count - 1)];
         
+        departureCell.location = location;
         departureCell.locationNameLabel.text = location.name;
         departureCell.locationDetailLabel.text = location.heirarchy;
     }
@@ -193,6 +254,18 @@
  numberOfRowsInSection:(NSInteger)section
 {
     return [super tableView:tableView numberOfRowsInSection:section] + 1;
+}
+
+#pragma mark - Location Manager Delegate Methods
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation
+{
+    if (_locationSearching) {
+        _locationSearching = NO;
+        self.navigationItem.title = @"Departure Location";
+        self.navigationItem.rightBarButtonItem = nil;
+        [self departGPSWithLocation:newLocation];
+    }
 }
 
 @end

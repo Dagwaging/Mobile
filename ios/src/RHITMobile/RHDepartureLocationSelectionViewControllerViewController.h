@@ -17,13 +17,17 @@
 //  limitations under the License.
 //
 
+#import <CoreLocation/CoreLocation.h>
+
 #import "RHLocationSearchViewController.h"
 
 
-@class RHLocation, RHWrappedCoordinate;
+@class RHLocation;
 
 
 @interface RHDepartureLocationCell : UITableViewCell
+
+@property (nonatomic, strong) RHLocation *location;
 
 @property (nonatomic, strong) IBOutlet UILabel *locationNameLabel;
 
@@ -32,10 +36,10 @@
 @end
 
 
-@interface RHDepartureLocationSelectionViewControllerViewController : RHLocationSearchViewController
+@interface RHDepartureLocationSelectionViewControllerViewController : RHLocationSearchViewController <CLLocationManagerDelegate>
 
 @property (nonatomic, assign) void(^locationChosenBlock)(RHLocation *);
 
-@property (nonatomic, assign) void(^gpsChosenBlock)(RHWrappedCoordinate *);
+@property (nonatomic, assign) void(^gpsChosenBlock)(CLLocation *);
 
 @end
