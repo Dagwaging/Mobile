@@ -20,6 +20,7 @@
 #import "RHPathRequest.h"
 #import "RHAppDelegate.h"
 #import "RHJSONRequest.h"
+#import "RHLabelNode.h"
 #import "RHLocation.h"
 #import "RHPath.h"
 #import "RHPathStep.h"
@@ -37,6 +38,7 @@
 #define kURLTrue @"true"
 #define kURLFalse @"false"
 
+#define kLocationIdsKey @"LocationIds"
 #define kDoneKey @"Done"
 #define kRequestIDKey @"RequestId"
 #define kDistanceKey @"Dist"
@@ -75,6 +77,10 @@
                    successBlock:(void (^)(RHPath *))successBlock
                    failureBlock:(void (^)(NSError *))failureBlock;
 
++ (void)processJSONVirtualPathResponse:(NSDictionary *)response
+                          successBlock:(void (^)(RHPath *))successBlock
+                          failureBlock:(void (^)(NSError *))failureBlock;
+
 + (NSManagedObjectContext *)createThreadSafeManagedObjectContext;
 
 @end
@@ -96,9 +102,9 @@
                               
                               NSOperationQueue *queue = [[NSOperationQueue alloc] init];
                               [queue addOperationWithBlock:^(void) {
-                                  [self processJSONPathResponse:jsonDict
-                                                   successBlock:successBlock
-                                                   failureBlock:failureBlock];
+                                  [self processJSONVirtualPathResponse:jsonDict
+                                                          successBlock:successBlock
+                                                          failureBlock:failureBlock];
                               }];
                               
                               [queue waitUntilAllOperationsAreFinished];
@@ -228,6 +234,61 @@
     return result;
 }
 
++ (void)processJSONVirtualPathResponse:(NSDictionary *)response
+                          successBlock:(void (^)(RHPath *))successBlock
+                          failureBlock:(void (^)(NSError *))failureBlock
+{
+    RHPath *result = [[RHPath alloc] init];
+    result.turnByTurn = NO;
+    result.distance = [NSNumber numberWithInt:0];
+    result.stairsUp = [NSNumber numberWithInt:0];
+    result.stairsDown = [NSNumber numberWithInt:0];
+    
+    NSArray *locationIds = [response objectForKey:kLocationIdsKey];
+    
+    NSManagedObjectContext *localContext = [self createThreadSafeManagedObjectContext];
+    
+    NSMutableArray *steps = [NSMutableArray arrayWithCapacity:locationIds.count];
+    
+    for (NSNumber *locationId in locationIds) {
+        NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:kRHLocationEntityName];
+        fetchRequest.predicate = [NSPredicate predicateWithFormat:@"serverIdentifier == %@", locationId];
+        
+        NSArray *possibleMatches = [localContext executeFetchRequest:fetchRequest error:nil];
+        
+        if (possibleMatches.count > 0) {
+            RHLocation *location = [possibleMatches objectAtIndex:0];
+            
+            RHPathStep *nextStep = [[RHPathStep alloc] init];
+            
+            nextStep.locationID = location.objectID;
+            nextStep.action = RHPathStepActionNoAction;
+            nextStep.detail = location.name;
+            nextStep.flagged = YES;
+            nextStep.coordinate = location.labelLocation.coordinate;
+            nextStep.altitude = [NSNumber numberWithInt:0];
+            nextStep.outside = NO;
+            
+            [steps addObject:nextStep];
+        }
+    }
+    
+    if (steps.count == 0) {
+        // Call the success callback on the main thread to finish up
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^(void) {
+            failureBlock([[NSError alloc] init]);
+        }];
+        return;
+    }
+    
+    result.steps = steps;
+    
+    // Call the success callback on the main thread to finish up
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^(void) {
+        successBlock(result);
+    }];
+}
+
 + (void)processJSONPathResponse:(NSDictionary *)response
                    successBlock:(void (^)(RHPath *))successBlock
                    failureBlock:(void (^)(NSError *))failureBlock
@@ -335,6 +396,8 @@
     
     // Add the steps array to our path
     path.steps = newSteps;
+    
+    path.turnByTurn = YES;
     
     // Call the success callback on the main thread to finish up
     [[NSOperationQueue mainQueue] addOperationWithBlock:^(void) {

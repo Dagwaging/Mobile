@@ -30,4 +30,6 @@
 
 @property (nonatomic, strong) NSArray *steps;
 
+@property (nonatomic, assign) BOOL turnByTurn;
+
 @end

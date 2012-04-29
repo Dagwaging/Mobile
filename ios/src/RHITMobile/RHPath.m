@@ -25,5 +25,6 @@
 @synthesize stairsUp = stairsUp_;
 @synthesize stairsDown = stairsDown_;
 @synthesize steps = steps_;
+@synthesize turnByTurn = _turnByTurn;
 
 @end

@@ -101,7 +101,7 @@
             step = [self.currentPath.steps objectAtIndex:currentStepIndex_];
         }
         
-        if (currentStepIndex_ == self.currentPath.steps.count - 1) {
+        if (currentStepIndex_ == self.currentPath.steps.count - 1 && self.currentPath.turnByTurn) {
             RHLocation *firstLocation = (RHLocation *) [self.managedObjectContext
                                                         objectWithID:step.locationID];
             directionsStatus_.text = [NSString stringWithFormat:@"Arrive at %@", firstLocation.name];
@@ -134,7 +134,7 @@
             step = [self.currentPath.steps objectAtIndex:currentStepIndex_];
         }
         
-        if (currentStepIndex_ == 0) {
+        if (currentStepIndex_ == 0 && self.currentPath.turnByTurn) {
             RHLocation *firstLocation = (RHLocation *) [self.managedObjectContext
                                                         objectWithID:step.locationID];
             directionsStatus_.text = [NSString stringWithFormat:@"Depart %@", firstLocation.name];
@@ -148,7 +148,7 @@
 
         currentStepAnnotation_.coordinate = step.coordinate;
         
-        if (step.flagged && (id) step.locationID != [NSNull null] && currentStepIndex_ > 0) {
+        if (step.flagged && (id) step.locationID != [NSNull null]) {
             RHLocation *thisLocation = (RHLocation *) [self.managedObjectContext objectWithID:step.locationID];
             [self.mapViewController focusMapViewToLocation:thisLocation];
         } else {
@@ -298,12 +298,20 @@
         }
     }
     
-    MKPolyline *line = [MKPolyline polylineWithCoordinates:coords
-                                                     count:self.currentPath.steps.count];
-    
-    [self.mapView addOverlay:line];
-    
+    if (self.currentPath.turnByTurn) {
+        MKPolyline *line = [MKPolyline polylineWithCoordinates:coords
+                                                         count:self.currentPath.steps.count];
+        
+        [self.mapView addOverlay:line];
+    }
+
     currentStepIndex_ = 0;
+    
+    if (!self.currentPath.turnByTurn) {
+        RHPathStep *step = [self.currentPath.steps objectAtIndex:0];
+        RHLocation *thisLocation = (RHLocation *) [self.managedObjectContext objectWithID:step.locationID];
+        [self.mapViewController focusMapViewToLocation:thisLocation];
+    }
 }
 
 - (void)hideDirections:(BOOL)animated {

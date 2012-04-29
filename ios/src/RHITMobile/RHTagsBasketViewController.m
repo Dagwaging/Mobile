@@ -124,6 +124,16 @@
         
         departureSelection.gpsChosenBlock = ^(CLLocation *location) {
             
+            self.navigationItem.title = @"Building Tour";
+            
+            UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+            self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
+            [activityIndicator startAnimating];
+            
+            self.isBuilding = YES;
+            NSIndexPath *finalIndexPath = [NSIndexPath indexPathForRow:self.tags.count inSection:0];
+            [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:finalIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+            
             [RHPathRequest makeOnCampusTourRequestWithTagIds:tagIds fromGPSCoordinages:location forDuration:self.duration successBlock:^(RHPath *path) {
                 
                 [self didLoadPath:path];
@@ -138,6 +148,16 @@
         };
         
         departureSelection.locationChosenBlock = ^(RHLocation *location) {
+            
+            self.navigationItem.title = @"Building Tour";
+            
+            UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+            self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
+            [activityIndicator startAnimating];
+            
+            self.isBuilding = YES;
+            NSIndexPath *finalIndexPath = [NSIndexPath indexPathForRow:self.tags.count inSection:0];
+            [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:finalIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
             
             [RHPathRequest makeOnCampusTourRequestWithTagIds:tagIds fromLocationWithId:location.serverIdentifier forDuration:self.duration successBlock:^(RHPath *path) {
                 
@@ -168,22 +188,22 @@
 
 - (void)buildTour:(id)sender
 {
-    self.navigationItem.title = @"Building Tour";
-    
-    UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
-    [activityIndicator startAnimating];
-    
-    self.isBuilding = YES;
-    NSIndexPath *finalIndexPath = [NSIndexPath indexPathForRow:self.tags.count inSection:0];
-    [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:finalIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-    
     if (self.onCampus) {
         
         [self performSegueWithIdentifier:kDepartureLocationSegueIdentifier sender:self];
         return;
         
     } else {
+        
+        self.navigationItem.title = @"Building Tour";
+        
+        UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
+        [activityIndicator startAnimating];
+        
+        self.isBuilding = YES;
+        NSIndexPath *finalIndexPath = [NSIndexPath indexPathForRow:self.tags.count inSection:0];
+        [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:finalIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
         
         NSMutableArray *tagIds = [[NSMutableArray alloc] initWithCapacity:self.tags.count];
         
