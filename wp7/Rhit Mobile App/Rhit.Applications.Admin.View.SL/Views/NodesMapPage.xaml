@@ -142,16 +142,20 @@
         </DataTemplate>
 
         <DataTemplate x:Key="PathTemplate1">
-            <map:MapPolyline Background="White" Locations="{Binding Nodes, Mode=TwoWay}" Stroke="White" StrokeThickness="5" />
+            <map:MapPolyline Background="White" Locations="{Binding Nodes, Mode=TwoWay}" Stroke="White" StrokeThickness="5"
+                             cmds:CommandManager.Command="{Binding PathClickCommand, ElementName='ViewModel'}"
+                             cmds:CommandManager.CommandEventName="MouseLeftButtonUp"
+                             cmds:CommandManager.CommandParameter="{Binding Id}" />
         </DataTemplate>
         <DataTemplate x:Key="PathTemplate2">
-            <map:MapPolyline Background="Black" Locations="{Binding Nodes, Mode=TwoWay}" Stroke="Black" StrokeThickness="3" />
+            <map:MapPolyline Background="Black" Locations="{Binding Nodes, Mode=TwoWay}" Stroke="Black" StrokeThickness="3"
+                             cmds:CommandManager.Command="{Binding PathClickCommand, ElementName='ViewModel'}"
+                             cmds:CommandManager.CommandEventName="MouseLeftButtonUp"
+                             cmds:CommandManager.CommandParameter="{Binding Id}" />
         </DataTemplate>
         <DataTemplate x:Key="PathTemplate3">
-            <map:MapPolyline Background="Green" Locations="{Binding Nodes, Mode=TwoWay}" Stroke="Green" StrokeThickness="3" Visibility="{Binding CanSelect, Converter={StaticResource VisibilityConverter}}" />
-        </DataTemplate>
-        <DataTemplate x:Key="PathTemplate4">
-            <map:MapPolyline Background="Red" Locations="{Binding Nodes, Mode=TwoWay}" Stroke="Red" StrokeThickness="3" Visibility="{Binding IsSelected, Converter={StaticResource VisibilityConverter}}" />
+            <map:MapPolyline Background="Red" Locations="{Binding Nodes, Mode=TwoWay}" Stroke="Red" StrokeThickness="3" 
+                             Visibility="{Binding IsSelected, Converter={StaticResource VisibilityConverter}}" />
         </DataTemplate>
     </navigation:Page.Resources>
 
@@ -177,7 +181,6 @@
                     <map:MapItemsControl ItemsSource="{Binding Paths.Paths}" ItemTemplate="{StaticResource PathTemplate1}" />
                     <map:MapItemsControl ItemsSource="{Binding Paths.Paths}" ItemTemplate="{StaticResource PathTemplate2}" />
                     <map:MapItemsControl ItemsSource="{Binding Paths.Paths}" ItemTemplate="{StaticResource PathTemplate3}" />
-                    <map:MapItemsControl ItemsSource="{Binding Paths.Paths}" ItemTemplate="{StaticResource PathTemplate4}" />
                     <map:MapItemsControl ItemsSource="{Binding Paths.Nodes}" ItemTemplate="{StaticResource NodeTemplate}" />
                     <map:MapItemsControl ItemsSource="{Binding Locations, ElementName=ViewLocations}" ItemTemplate="{StaticResource NodeLocationTemplate}" />
                 </map:MapLayer>
@@ -262,41 +265,189 @@
                 <Style TargetType="TextBox">
                     <Setter Property="Margin" Value="5" />
                     <Setter Property="VerticalAlignment" Value="Center" />
+                    <Setter Property="MinWidth" Value="100" />
                 </Style>
                 <Style TargetType="CheckBox">
                     <Setter Property="Margin" Value="5" />
                     <Setter Property="VerticalAlignment" Value="Center" />
                 </Style>
+                <Style TargetType="ComboBox">
+                    <Setter Property="Margin" Value="5" />
+                    <Setter Property="MinWidth" Value="150" />
+                    <Setter Property="HorizontalAlignment" Value="Left" />
+                </Style>
+                <Style TargetType="Button">
+                    <Setter Property="HorizontalAlignment" Value="Right" />
+                    <Setter Property="VerticalAlignment" Value="Bottom" />
+                </Style>
             </Grid.Resources>
+            
             <toolkit:Expander>
                 <toolkit:Expander.Header>
                     <TextBlock Text="Meta Data" HorizontalAlignment="Left" />
                 </toolkit:Expander.Header>
-                <StackPanel Orientation="Horizontal">
-                <StackPanel DataContext="{Binding Paths.LastNode}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Latitude" />
-                        <TextBox Text="{Binding Center.Latitude}" />
+
+                        <exts:GroupBox Style="{StaticResource GroupBoxStyle}" Header="Node Info">
+                            <StackPanel DataContext="{Binding Paths.LastNode}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+
+                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Latitude" />
+                                    <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Center.Latitude}" />
+
+                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Longitude" />
+                                    <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Center.Longitude}" />
+
+                                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Altitude" />
+                                    <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Center.Altitude}" />
+                                </Grid>
+                                <CheckBox Content="Outside" IsChecked="{Binding IsOutside}" />
+                            </StackPanel>
+                        </exts:GroupBox>
+
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+
+                            <exts:GroupBox Grid.Row="0" Style="{StaticResource GroupBoxStyle}" Header="Direction Info">
+                                <StackPanel>
+                                    <ComboBox ItemsSource="{Binding Paths.Messages}" SelectedItem="{Binding Paths.CurrentDirection.Message, Mode=TwoWay}">
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Message}" />
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                    </ComboBox>
+                                    <Grid>
+                                        <Grid.Resources>
+                                            <Style TargetType="Button">
+                                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                                <Setter Property="VerticalAlignment" Value="Center" />
+                                            </Style>
+                                        </Grid.Resources>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Button Grid.Column="0" Content="Save" cmds:CommandManager.Command="{Binding SaveDirectionCommand}" cmds:CommandManager.CommandEventName="Click" />
+                                        <Button Grid.Column="1" Content="Delete" cmds:CommandManager.Command="{Binding DeleteDirectionCommand}" cmds:CommandManager.CommandEventName="Click" />
+                                    </Grid>
+                                    
+                                </StackPanel>
+                            </exts:GroupBox>
+
+                            <exts:GroupBox Grid.Row="1" Style="{StaticResource GroupBoxStyle}" Header="Path Info">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+
+                                    <StackPanel Grid.Row="0" DataContext="{Binding Paths.SelectedPath}">
+                                        <CheckBox Content="Elevator" IsChecked="{Binding IsElevator, Mode=TwoWay}" />
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="Stairs:" />
+                                            <TextBox Text="{Binding StairCount, Mode=TwoWay, TargetNullValue='0'}" />
+                                        </StackPanel>
+                                    </StackPanel>
+
+                                    <Button Grid.Row="1" Content="Save Path" cmds:CommandManager.Command="{Binding PathSaveCommand}" cmds:CommandManager.CommandEventName="Click" cmds:CommandManager.CommandParameter="{Binding Paths.SelectedPath.Id}" />
+                                </Grid>
+                            </exts:GroupBox>
+
+                        </Grid>
+
+                        <exts:GroupBox Style="{StaticResource GroupBoxStyle}" Header="Direction Messages">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+
+                                <StackPanel Grid.Row="0">
+                                    <ComboBox x:Name="MessageComboBox" ItemsSource="{Binding Paths.Messages}" SelectedIndex="0">
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Message}" />
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                    </ComboBox>
+
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+
+                                        <TextBlock Grid.Row="0" Grid.Column="0" Text="Message: " />
+                                        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding SelectedItem.Message, ElementName=MessageComboBox, Mode=TwoWay}" />
+
+                                        <TextBlock Grid.Row="1" Grid.Column="0" Text="Reverse Message: " />
+                                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding SelectedItem.ReverseMessage, ElementName=MessageComboBox, Mode=TwoWay}" />
+
+                                        <TextBlock Grid.Row="2" Grid.Column="0" Text="Action: " />
+                                        <ComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding Paths.Actions}" SelectedItem="{Binding SelectedItem.Action, ElementName=MessageComboBox, Mode=TwoWay, TargetNullValue='None'}" />
+
+                                        <TextBlock Grid.Row="3" Grid.Column="0" Text="Reverse Action: " />
+                                        <ComboBox Grid.Row="3" Grid.Column="1" ItemsSource="{Binding Paths.Actions}" SelectedItem="{Binding SelectedItem.ReverseAction, ElementName=MessageComboBox, Mode=TwoWay, TargetNullValue='None'}" />
+
+                                        <TextBlock Grid.Row="4" Grid.Column="0" Text="Message Offset: " />
+                                        <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding SelectedItem.Offset, ElementName=MessageComboBox, Mode=TwoWay}" />
+                                    </Grid>
+                                </StackPanel>
+
+                                <Grid Grid.Row="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.Resources>
+                                        <Style TargetType="Button">
+                                            <Setter Property="HorizontalAlignment" Value="Center" />
+                                            <Setter Property="VerticalAlignment" Value="Bottom" />
+                                        </Style>
+                                    </Grid.Resources>
+                                    <Button Grid.Column="0" Content="Add Message" cmds:CommandManager.Command="{Binding AddMessageCommand}" cmds:CommandManager.CommandEventName="Click" />
+                                    <Button Grid.Column="1" Content="Delete Message" cmds:CommandManager.Command="{Binding DeleteMessageCommand}" cmds:CommandManager.CommandEventName="Click" cmds:CommandManager.CommandParameter="{Binding SelectedItem.Id, ElementName=MessageComboBox}" />
+                                    <Button Grid.Column="2" Content="Save Message" cmds:CommandManager.Command="{Binding SaveMessageCommand}" cmds:CommandManager.CommandEventName="Click" cmds:CommandManager.CommandParameter="{Binding SelectedItem.Id, ElementName=MessageComboBox}" />
+                                </Grid>
+                            </Grid>
+
+                        </exts:GroupBox>
+
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Longitude" />
-                        <TextBox Text="{Binding Center.Longitude}" />
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Altitude" />
-                        <TextBox Text="{Binding Center.Altitude}" />
-                    </StackPanel>
-                    <CheckBox Content="Outside" IsChecked="{Binding IsOutside}" />
-                </StackPanel>
-                <StackPanel>
-                        <TextBlock Text="Message:" />
-                        <TextBlock Text="{Binding Paths.CurrentMessage.Message}" />
-                        <TextBlock Text="{Binding Paths.CurrentMessage.ReverseMessage}" />
-                    </StackPanel>
-            </StackPanel>
+
+                    <Button Grid.Column="1" Content="Clear Seleted" cmds:CommandManager.Command="{Binding ClearSelectedCommand}" cmds:CommandManager.CommandEventName="Click" />
+
+                </Grid>
+                
             </toolkit:Expander>
         </Grid>
-
     </Grid>
 
 </navigation:Page>

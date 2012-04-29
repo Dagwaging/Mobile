@@ -20,24 +20,41 @@ using Rhit.Applications.ViewModels.Utilities;
 namespace Rhit.Applications.ViewModels.Controllers {
     public class Path : DependencyObject {
         public Path(Path_DC model, SimpleNode node1, SimpleNode node2) {
-            
             Nodes = new LocationCollection();
             
             Node1 = node1;
             Node2 = node2;
             Nodes.Add(Node1.Center);
             Nodes.Add(Node2.Center);
+
             Node1.Moved += new EventHandler(Node_CenterChanged);
             Node2.Moved += new EventHandler(Node_CenterChanged);
-            Id = model.Id;
-            IsElevator = model.Elevator;
-            StairCount = model.Stairs;
+
+            TryUpdateModel(model);
+
             if(Node1.IsOutside || Node2.IsOutside)
                 IsOutside = true;
             else IsOutside = false;
 
             Node1.AddPathBinding(this);
             Node2.AddPathBinding(this);
+        }
+
+        internal bool TryUpdateModel(Path_DC model) {
+            if(Model != null) {
+                if(model.Id != Model.Id) return false;
+                if(model.Node1 != Model.Node1) return false;
+                if(model.Node2 != Model.Node2) return false;
+            }
+
+            Model = model;
+
+            Id = Model.Id;
+            IsElevator = Model.Elevator;
+            StairCount = Model.Stairs;
+            Partition = Model.Partition;
+
+            return true;
         }
 
         private void Node_CenterChanged(object sender, EventArgs e) {
@@ -49,6 +66,18 @@ namespace Rhit.Applications.ViewModels.Controllers {
         public LocationCollection Nodes { get; private set; }
 
         public int Id { get; private set; }
+
+        private Path_DC Model { get; set; }
+
+        #region Partition
+        public int Partition {
+            get { return (int) GetValue(PartitionProperty); }
+            set { SetValue(PartitionProperty, value); }
+        }
+
+        public static readonly DependencyProperty PartitionProperty =
+           DependencyProperty.Register("Partition", typeof(int), typeof(Path), new PropertyMetadata(0));
+        #endregion
 
         #region IsOutside
         public bool IsOutside {
@@ -88,16 +117,6 @@ namespace Rhit.Applications.ViewModels.Controllers {
 
         public static readonly DependencyProperty IsSelectedProperty =
            DependencyProperty.Register("IsSelected", typeof(bool), typeof(Path), new PropertyMetadata(false));
-        #endregion
-
-        #region CanSelect
-        public bool CanSelect {
-            get { return (bool) GetValue(CanSelectProperty); }
-            set { SetValue(CanSelectProperty, value); }
-        }
-
-        public static readonly DependencyProperty CanSelectProperty =
-           DependencyProperty.Register("CanSelect", typeof(bool), typeof(Path), new PropertyMetadata(false));
         #endregion
 
         #region Node1
@@ -315,17 +334,36 @@ namespace Rhit.Applications.ViewModels.Controllers {
 
     public class DirectionMessage : DependencyObject {
         public DirectionMessage(DirectionMessage_DC model) {
-            Id = model.Id;
-            Message = model.Message1;
-            ReverseMessage = model.Message2;
-            Offset = model.Offset;
+            TryUpdateModel(model);
         }
 
         public DirectionMessage() {
             Id = -1;
-            Message = ReverseMessage = "No Message Found";
+            Message = "No Message Found";
+            ReverseMessage = "No Message Found";
             Offset = 0;
+            Action = null;
+            ReverseAction = null;
         }
+
+        internal bool TryUpdateModel(DirectionMessage_DC model) {
+            if(Model != null)
+                if(model.Id != Model.Id) return false;
+            if(Id < 0) return false;
+
+            Model = model;
+
+            Id = Model.Id;
+            Message = Model.Message1;
+            ReverseMessage = Model.Message2;
+            Offset = Model.Offset;
+            Action = Model.Action1;
+            ReverseAction = Model.Action2;
+
+            return true;
+        }
+
+        private DirectionMessage_DC Model { get; set; }
 
         public int Id { get; private set; }
 
@@ -358,18 +396,79 @@ namespace Rhit.Applications.ViewModels.Controllers {
         public static readonly DependencyProperty ReverseMessageProperty =
            DependencyProperty.Register("ReverseMessage", typeof(string), typeof(DirectionMessage), new PropertyMetadata(""));
         #endregion
+
+        #region Action
+        public string Action {
+            get { return (string) GetValue(ActionProperty); }
+            set { SetValue(ActionProperty, value); }
+        }
+
+        public static readonly DependencyProperty ActionProperty =
+           DependencyProperty.Register("Action", typeof(string), typeof(DirectionMessage),
+           new PropertyMetadata("", new PropertyChangedCallback(OnActionChanged)));
+
+        private static void OnActionChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
+            string value = e.NewValue as string;
+            if(value == "Null" || value == "None") {
+                (d as DirectionMessage).Action = null;
+            }
+        }
+        #endregion
+
+        #region ReverseAction
+        public string ReverseAction {
+            get { return (string) GetValue(ReverseActionProperty); }
+            set { SetValue(ReverseActionProperty, value); }
+        }
+
+        public static readonly DependencyProperty ReverseActionProperty =
+           DependencyProperty.Register("ReverseAction", typeof(string), typeof(DirectionMessage),
+           new PropertyMetadata("", new PropertyChangedCallback(OnReverseActionChanged)));
+
+        private static void OnReverseActionChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
+            string value = e.NewValue as string;
+            if(value == "Null" || value == "None") {
+                (d as DirectionMessage).ReverseAction = null;
+            }
+        }
+        #endregion
     }
 
     public class Direction : DependencyObject {
         public Direction(Direction_DC model) {
             Paths = new ObservableCollection<Path>();
-            Id = model.Id;
-            foreach(int id in model.Paths)
-                Paths.Add(NodesController.Instance.GetPath(id));
-            Message = NodesController.Instance.GetMessage(model.Message);
+            TryUpdateModel(model);
+            
+        }
+
+        public Direction() {
+            Paths = new ObservableCollection<Path>();
+            Id = -1;
+            Message = new DirectionMessage();
+            Within = 100;
         }
 
         public int Id { get; private set; }
+
+        internal bool TryUpdateModel(Direction_DC model) {
+            if(Model != null)
+                if(model.Id != Model.Id) return false;
+            if(Id < 0) return false;
+
+            Model = model;
+
+            Id = Model.Id;
+            if(Model.Paths != null) {
+                foreach(int id in Model.Paths)
+                    Paths.Add(NodesController.Instance.GetPath(id));
+            }
+            Message = NodesController.Instance.GetMessage(Model.MessageId);
+            Within = Model.Within;
+            
+            return true;
+        }
+
+        private Direction_DC Model { get; set; }
 
         public ObservableCollection<Path> Paths { get; private set; }
 
@@ -382,35 +481,110 @@ namespace Rhit.Applications.ViewModels.Controllers {
         public static readonly DependencyProperty MessageProperty =
            DependencyProperty.Register("Message", typeof(DirectionMessage), typeof(Direction), new PropertyMetadata(null));
         #endregion
+
+        #region Within
+        public int Within {
+            get { return (int) GetValue(WithinProperty); }
+            set { SetValue(WithinProperty, value); }
+        }
+
+        public static readonly DependencyProperty WithinProperty =
+           DependencyProperty.Register("Within", typeof(int), typeof(Direction), new PropertyMetadata(null));
+        #endregion
     }
 
     public class NodesController : DependencyObject {
         private NodesController() {
+            Actions = new List<string>() { "UE", "DE", "GS", "CS", "FP", "L1", "L2", "R1", "R2", "L3", "R3", "EN", "EX", "US", "DS", "None", };
             AllNodes = new List<SimpleNode>();
             AllPaths = new List<Path>();
             AllDirections = new List<Direction>();
+            SelectedPaths = new List<Path>();
+            SelectedNodes = new List<SimpleNode>();
+
+            DirectionDictionary = new Dictionary<int, Direction>();
             Paths = new ObservableCollection<Path>();
             Nodes = new ObservableCollection<SimpleNode>();
+            Messages = new ObservableCollection<DirectionMessage>();
+
             DataCollector.Instance.PathDataReturned += new PathDataEventHandler(PathDataReturned);
+            
             NodeDictionary = new Dictionary<int, SimpleNode>();
             PathDictionary = new Dictionary<int, Path>();
             MessageDictionary = new Dictionary<int, DirectionMessage>();
-            SelectedPaths = new List<Path>();
-            NullMessage = new DirectionMessage();
-            CurrentMessage = NullMessage;
-            SelectedNodes = new List<SimpleNode>();
+            
+            NullDirection = new Direction();
+            CurrentDirection = NullDirection;
+            Messages.Add(NullDirection.Message);
+            MessageDictionary[NullDirection.Message.Id] = NullDirection.Message;
 
             DataCollector.Instance.NodeCreated += new NodeEventHandler(Instance_NodeCreated);
             DataCollector.Instance.NodeUpdated += new NodeEventHandler(Instance_NodeUpdated);
             DataCollector.Instance.NodeDeleted += new IdentificationEventHandler(Instance_NodeDeleted);
+
             DataCollector.Instance.PathCreated += new PathEventHandler(Instance_PathCreated);
+            DataCollector.Instance.PathUpdated += new PathEventHandler(Instance_PathUpdated);
             DataCollector.Instance.PathDeleted += new IdentificationEventHandler(Instance_PathDeleted);
+
+            DataCollector.Instance.DirectionCreated += new DirectionEventHandler(Instance_DirectionCreated);
+            DataCollector.Instance.DirectionUpdated += new DirectionEventHandler(Instance_DirectionUpdated);
+            DataCollector.Instance.DirectionDeleted += new IdentificationEventHandler(Instance_DirectionDeleted);
+
+            DataCollector.Instance.DirectionMessageCreated += new DirectionMessageEventHandler(Instance_DirectionMessageCreated);
+            DataCollector.Instance.DirectionMessageUpdated += new DirectionMessageEventHandler(Instance_DirectionMessageUpdated);
+            DataCollector.Instance.DirectionMessageDeleted += new IdentificationEventHandler(Instance_DirectionMessageDeleted);
+
             State = BehaviorState.Default;
+
+            GetPathData();
         }
 
-        private void Instance_NodeUpdated(object sender, NodeEventArgs e) {
-            if(!NodeDictionary.ContainsKey(e.Node.Id)) return;
-                NodeDictionary[e.Node.Id].UpdateModel(e.Node);
+        private void Instance_DirectionDeleted(object sender, IdentificationEventArgs e) {
+            if(e.Id < 0) return;
+            if(!DirectionDictionary.ContainsKey(e.Id)) return;
+            Direction direction = DirectionDictionary[e.Id];
+
+            DirectionDictionary.Remove(direction.Id);
+            AllDirections.Remove(direction);
+        }
+
+        private void Instance_DirectionUpdated(object sender, DirectionEventArgs e) {
+            if(!DirectionDictionary.ContainsKey(e.Direction.Id)) return;
+            DirectionDictionary[e.Direction.Id].TryUpdateModel(e.Direction);
+        }
+
+        private void Instance_DirectionCreated(object sender, DirectionEventArgs e) {
+            Direction direction = new Direction(e.Direction);
+
+            DirectionDictionary[direction.Id] = direction;
+            AllDirections.Add(direction);
+        }
+
+        private void Instance_DirectionMessageDeleted(object sender, IdentificationEventArgs e) {
+            if(e.Id < 0) return;
+            if(!MessageDictionary.ContainsKey(e.Id)) return;
+            DirectionMessage msg = MessageDictionary[e.Id];
+            
+            MessageDictionary.Remove(msg.Id);
+            Messages.Remove(msg);
+        }
+
+        private void Instance_DirectionMessageUpdated(object sender, DirectionMessageEventArgs e) {
+            if(!MessageDictionary.ContainsKey(e.DirectionMessage.Id)) return;
+            MessageDictionary[e.DirectionMessage.Id].TryUpdateModel(e.DirectionMessage);
+        }
+
+        private void Instance_DirectionMessageCreated(object sender, DirectionMessageEventArgs e) {
+            DirectionMessage msg = new DirectionMessage(e.DirectionMessage);
+
+            MessageDictionary[msg.Id] = msg;
+            Messages.Add(msg);
+        }
+
+
+        private void Instance_PathUpdated(object sender, PathEventArgs e) {
+            if(!PathDictionary.ContainsKey(e.Path.Id)) return;
+            PathDictionary[e.Path.Id].TryUpdateModel(e.Path);
         }
 
         private void Instance_PathDeleted(object sender, IdentificationEventArgs e) {
@@ -431,6 +605,7 @@ namespace Rhit.Applications.ViewModels.Controllers {
                 Paths.Add(path);
         }
 
+
         private void Instance_NodeDeleted(object sender, IdentificationEventArgs e) {
             if(!NodeDictionary.ContainsKey(e.Id)) return;
             SimpleNode node = NodeDictionary[e.Id];
@@ -444,6 +619,11 @@ namespace Rhit.Applications.ViewModels.Controllers {
                 _node.RemoveAdjacentNode(node);
         }
 
+        private void Instance_NodeUpdated(object sender, NodeEventArgs e) {
+            if(!NodeDictionary.ContainsKey(e.Node.Id)) return;
+            NodeDictionary[e.Node.Id].UpdateModel(e.Node);
+        }
+
         private void Instance_NodeCreated(object sender, NodeEventArgs e) {
             SimpleNode _node = new SimpleNode(e.Node);
             _node.Selected += new EventHandler(Node_Selected);
@@ -451,6 +631,25 @@ namespace Rhit.Applications.ViewModels.Controllers {
             NodeDictionary[_node.Id] = _node;
             AllNodes.Add(_node);
             if(_node.IsOutside) Nodes.Add(_node);
+        }
+        
+        internal void SelectPath(int id) {
+            if(State != BehaviorState.Default) return;
+            if(SelectedNodes.Count > 0) return;
+            if(!PathDictionary.ContainsKey(id)) return;
+            
+            Path path = PathDictionary[id];
+            if(SelectedPath != null) SelectedPath.IsSelected = false;
+            SelectedPath = path;
+            SelectedPath.IsSelected = true;
+        }
+
+        internal void SavePath(int id) {
+            if(State != BehaviorState.Default) return;
+            if(!PathDictionary.ContainsKey(id)) return;
+            Path path = PathDictionary[id];
+            DataCollector.Instance.UpdatePath(id, path.Node1.Id, path.Node2.Id, path.IsElevator, path.StairCount, path.Partition);
+            RestoreToDefault();
         }
 
         #region Singleton Instance
@@ -464,22 +663,7 @@ namespace Rhit.Applications.ViewModels.Controllers {
         }
         #endregion
 
-        private void Clear() {
-            AllNodes.Clear();
-            AllPaths.Clear();
-            AllDirections.Clear();
-            Paths.Clear();
-            Nodes.Clear();
-            NodeDictionary.Clear();
-            PathDictionary.Clear();
-            MessageDictionary.Clear();
-            SelectedNodes.Clear();
-            State = BehaviorState.Default;
-        }
-
         private void PathDataReturned(object sender, PathDataEventArgs e) {
-            Clear();
-
             foreach(Node_DC node in e.Nodes) {
                 SimpleNode _node = new SimpleNode(node);
                 _node.Selected += new EventHandler(Node_Selected);
@@ -509,9 +693,13 @@ namespace Rhit.Applications.ViewModels.Controllers {
             foreach(DirectionMessage_DC msg in e.Messages) {
                 DirectionMessage _msg = new DirectionMessage(msg);
                 MessageDictionary[_msg.Id] = _msg;
+                Messages.Add(_msg);
             }
-            foreach(Direction_DC direction in e.Directions)
-                AllDirections.Add(new Direction(direction));
+            foreach(Direction_DC direction in e.Directions) {
+                Direction _direction = new Direction(direction);
+                AllDirections.Add(_direction);
+                DirectionDictionary[_direction.Id] = _direction;
+            }
         }
 
         private void Node_Moved(object sender, EventArgs e) {
@@ -529,6 +717,8 @@ namespace Rhit.Applications.ViewModels.Controllers {
                 Nodes.Add(path.Node2);
         }
 
+        private Dictionary<int, Direction> DirectionDictionary { get; set; }
+
         private Dictionary<int, SimpleNode> NodeDictionary { get; set; }
 
         private Dictionary<int, Path> PathDictionary { get; set; }
@@ -541,6 +731,8 @@ namespace Rhit.Applications.ViewModels.Controllers {
 
         private List<Path> AllPaths { get; set; }
 
+        public List<string> Actions { get; set; }
+
         private List<Direction> AllDirections { get; set; }
 
         public ObservableCollection<Path> Paths { get; protected set; }
@@ -549,18 +741,30 @@ namespace Rhit.Applications.ViewModels.Controllers {
 
         public ObservableCollection<SimpleNode> Nodes { get; protected set; }
 
+        public ObservableCollection<DirectionMessage> Messages { get; protected set; }
+
         private List<Path> SelectedPaths { get; set; }
 
         private List<SimpleNode> SelectedNodes { get; set; }
 
-        #region CurrentMessage
-        public DirectionMessage CurrentMessage {
-            get { return (DirectionMessage) GetValue(CurrentMessageProperty); }
-            set { SetValue(CurrentMessageProperty, value); }
+        #region SelectedPath
+        public Path SelectedPath {
+            get { return (Path) GetValue(SelectedPathProperty); }
+            set { SetValue(SelectedPathProperty, value); }
         }
 
-        public static readonly DependencyProperty CurrentMessageProperty =
-           DependencyProperty.Register("CurrentMessage", typeof(DirectionMessage), typeof(NodesController), new PropertyMetadata(null));
+        public static readonly DependencyProperty SelectedPathProperty =
+           DependencyProperty.Register("SelectedPath", typeof(Path), typeof(NodesController), new PropertyMetadata(null));
+        #endregion
+
+        #region CurrentDirection
+        public Direction CurrentDirection {
+            get { return (Direction) GetValue(CurrentDirectionProperty); }
+            set { SetValue(CurrentDirectionProperty, value); }
+        }
+
+        public static readonly DependencyProperty CurrentDirectionProperty =
+           DependencyProperty.Register("CurrentDirection", typeof(Direction), typeof(NodesController), new PropertyMetadata(null));
         #endregion
 
         #region LastNode
@@ -573,7 +777,27 @@ namespace Rhit.Applications.ViewModels.Controllers {
            DependencyProperty.Register("LastNode", typeof(SimpleNode), typeof(NodesController), new PropertyMetadata(null));
         #endregion
 
-        public DirectionMessage NullMessage { get; set; }
+        internal void SaveDirection() {
+            if(State != BehaviorState.Default) return;
+            if(SelectedPaths.Count <= 0) return;
+            if(CurrentDirection == NullDirection) {
+                IList<int> paths = new List<int>();
+                foreach(Path path in SelectedPaths) paths.Add(path.Id);
+                DataCollector.Instance.CreateDirection(CurrentDirection.Id, paths, CurrentDirection.Within);
+            } else {
+                DataCollector.Instance.UpdateDirection(CurrentDirection.Id, CurrentDirection.Message.Id, CurrentDirection.Within);
+            }
+            RestoreToDefault();
+        }
+
+        internal void DeleteDirection() {
+            if(State != BehaviorState.Default) return;
+            if(CurrentDirection == NullDirection) return;
+            DataCollector.Instance.DeleteDirection(CurrentDirection.Id);
+            RestoreToDefault();
+        }
+
+        public Direction NullDirection { get; set; }
 
         private void Node_Unselected(object sender, EventArgs e) {
             SimpleNode node = sender as SimpleNode;
@@ -598,7 +822,7 @@ namespace Rhit.Applications.ViewModels.Controllers {
                 LastNode.IsEndNode = multipleEndNodes;
             }
             LastNode = node;
-            CurrentMessage = MessageSearch();
+            CurrentDirection = DirectionSearch();
         }
 
         private void CalculateSelectableNodes() {
@@ -635,6 +859,10 @@ namespace Rhit.Applications.ViewModels.Controllers {
 
                 case BehaviorState.Default:
                 default:
+                    if(SelectedPath != null) {
+                        SelectedPath.IsSelected = false;
+                        SelectedPath = null;
+                    }
                     ProccessSelectedNode(node);
                     CalculateSelectableNodes();
                     break;
@@ -662,7 +890,7 @@ namespace Rhit.Applications.ViewModels.Controllers {
             return true;
         }
 
-        public DirectionMessage MessageSearch() {
+        public Direction DirectionSearch() {
             bool isMatch;
             foreach(Direction direction in AllDirections) {
                 isMatch = true;
@@ -674,7 +902,7 @@ namespace Rhit.Applications.ViewModels.Controllers {
                         break;
                     }
                 }
-                if(isMatch) return direction.Message;
+                if(isMatch) return direction;
                 isMatch = true;
                 for(int i = 0, j = SelectedPaths.Count - 1; i < SelectedPaths.Count; i++, j--) {
                     if(direction.Paths[i] != SelectedPaths[j]) {
@@ -682,9 +910,9 @@ namespace Rhit.Applications.ViewModels.Controllers {
                         break;
                     }
                 }
-                if(isMatch) return direction.Message;
+                if(isMatch) return direction;
             }
-            return NullMessage;
+            return NullDirection;
         }
 
         protected enum BehaviorState { Default, DeletingNode, CreatingPath, DeletingPath, MovingNodes, };
@@ -698,6 +926,7 @@ namespace Rhit.Applications.ViewModels.Controllers {
 
         public void RestoreToDefault() {
             State = BehaviorState.Default;
+            SelectedPath = null;
             SelectedPaths.Clear();
             SelectedNodes.Clear();
             LastNode = null;
@@ -706,9 +935,9 @@ namespace Rhit.Applications.ViewModels.Controllers {
                 node.CanSelect = true;
             }
             foreach(Path path in AllPaths) {
-                path.CanSelect = false;
                 path.IsSelected = false;
             }
+            CurrentDirection = NullDirection;
         }
 
         public Path GetPath(int id) {
@@ -753,6 +982,12 @@ namespace Rhit.Applications.ViewModels.Controllers {
                 }
             }
             RestoreToDefault();
+        }
+
+        internal void SaveDirectionMessage(int id) {
+            if(!MessageDictionary.ContainsKey(id)) return;
+            DirectionMessage msg = MessageDictionary[id];
+            DataCollector.Instance.UpdateDirectionMessage(msg.Id, msg.Offset, msg.Message, msg.ReverseMessage, msg.Action, msg.ReverseAction);
         }
     }
 }

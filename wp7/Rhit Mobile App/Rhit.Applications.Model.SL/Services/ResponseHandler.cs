@@ -21,16 +21,37 @@ namespace Rhit.Applications.Models.Services {
 
         private static ResponseType ConvertType(RequestType request) {
             switch(request) {
-                case RequestType.NodeUpdate:
-                    return ResponseType.NodeUpdate;
-                case RequestType.PathDeletion:
-                    return ResponseType.PathDeletion;
-                case RequestType.PathCreation:
-                    return ResponseType.PathCreation;
-                case RequestType.NodeDeletion:
-                    return ResponseType.NodeDeletion;
+                case RequestType.DirectionPathAddition:
+                    return ResponseType.DirectionPathAddition;
+                case RequestType.DirectionCreation:
+                    return ResponseType.DirectionCreation;
+                case RequestType.DirectionUpdate:
+                    return ResponseType.DirectionUpdate;
+                case RequestType.DirectionDeletion:
+                    return ResponseType.DirectionDeletion;
+
+                case RequestType.DirectionMessageCreation:
+                    return ResponseType.DirectionMessageCreation;
+                case RequestType.DirectionMessageUpdate:
+                    return ResponseType.DirectionMessageUpdate;
+                case RequestType.DirectionMessageDeletion:
+                    return ResponseType.DirectionMessageDeletion;
+                
                 case RequestType.NodeCreation:
                     return ResponseType.NodeCreation;
+                case RequestType.NodeUpdate:
+                    return ResponseType.NodeUpdate;
+                case RequestType.NodeDeletion:
+                    return ResponseType.NodeDeletion;
+
+                case RequestType.PathCreation:
+                    return ResponseType.PathCreation;
+                case RequestType.PathUpdate:
+                    return ResponseType.PathUpdate;
+                case RequestType.PathDeletion:
+                    return ResponseType.PathDeletion;
+                
+
                 case RequestType.AllLocations:
                     return ResponseType.AllLocations;
                 case RequestType.CampusServices:
@@ -124,7 +145,7 @@ namespace Rhit.Applications.Models.Services {
                 Error = exception,
             };
 
-            response.Close();
+            if(response != null) response.Close();
 
             Connection.Dispatcher.BeginInvoke(new Action(() => OnResponse(args)));
         }

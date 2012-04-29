@@ -59,6 +59,7 @@
   <ItemGroup>
     <Compile Include="Controls\DraggablePushpin.cs" />
     <Compile Include="Controls\DraggableShape.cs" />
+    <Compile Include="Controls\GroupBox.cs" />
     <Compile Include="Controls\StyledMapPolygon.cs" />
     <Compile Include="Maps\MapSettings.cs" />
     <Compile Include="Maps\Modes\BaseMode.cs" />

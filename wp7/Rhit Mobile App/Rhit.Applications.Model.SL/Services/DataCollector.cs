@@ -15,6 +15,36 @@ using Microsoft.Maps.MapControl;
 namespace Rhit.Applications.Models.Services {
     public class DataCollector {
         #region Events
+        #region LoginResultsReturned
+        public event AuthenticationEventHandler LoginResultsReturned;
+        protected virtual void OnLoginResultsReturned(ServiceEventArgs e, string token, DateTime expiration) {
+            AuthenticationEventArgs args = new AuthenticationEventArgs(e) {
+                Token = token,
+                Expiration = expiration,
+            };
+            if(LoginResultsReturned != null) LoginResultsReturned(this, args);
+        }
+        #endregion
+
+        #region VersionUpdate
+        public event VersionEventHandler VersionUpdate;
+        protected virtual void OnVersionUpdate(ServiceEventArgs e, double serverVersion, double servicesVersion) {
+            VersionEventArgs args = new VersionEventArgs(e) {
+                ServerVersion = serverVersion,
+                ServicesVersion = servicesVersion,
+            };
+            if(VersionUpdate != null) VersionUpdate(this, args);
+        }
+        #endregion
+
+        #region ServerErrorReturned
+        public event ServiceEventHandler ServerErrorReturned;
+        protected virtual void OnServerErrorReturned(ServiceEventArgs args) {
+            if(ServerErrorReturned != null) ServerErrorReturned(this, args);
+        }
+        #endregion
+
+        #region Campus Services Events
         #region CampusServicesReturned
         public event CampusServicesEventHandler CampusServicesReturned;
         protected virtual void OnCampusServicesReturned(ServiceEventArgs e, CampusServicesCategory_DC root) {
@@ -33,7 +63,9 @@ namespace Rhit.Applications.Models.Services {
             if (CampusServicesUpdateReturned != null) CampusServicesUpdateReturned(this, args);
         }
         #endregion
+        #endregion
 
+        #region Tour Related Events
         #region ToursReturned
         public event DirectionsEventHandler ToursReturned;
         protected virtual void OnToursReturned(ServiceEventArgs e, IList<DirectionPath_DC> paths) {
@@ -41,16 +73,6 @@ namespace Rhit.Applications.Models.Services {
                 Paths = paths,
             };
             if(ToursReturned != null) ToursReturned(this, args);
-        }
-        #endregion
-
-        #region DirectionsReturned
-        public event DirectionsEventHandler DirectionsReturned;
-        protected virtual void OnDirectionsReturned(ServiceEventArgs e, IList<DirectionPath_DC> paths) {
-            DirectionsEventArgs args = new DirectionsEventArgs(e) {
-                Paths = paths,
-            };
-            if(DirectionsReturned != null) DirectionsReturned(this, args);
         }
         #endregion
 
@@ -63,18 +85,19 @@ namespace Rhit.Applications.Models.Services {
             if(TagsReturned != null) TagsReturned(this, args);
         }
         #endregion
+        #endregion
 
-        #region VersionUpdate
-        public event VersionEventHandler VersionUpdate;
-        protected virtual void OnVersionUpdate(ServiceEventArgs e, double serverVersion, double servicesVersion) {
-            VersionEventArgs args = new VersionEventArgs(e) {
-                ServerVersion = serverVersion,
-                ServicesVersion = servicesVersion,
+        #region DirectionsReturned
+        public event DirectionsEventHandler DirectionsReturned;
+        protected virtual void OnDirectionsReturned(ServiceEventArgs e, IList<DirectionPath_DC> paths) {
+            DirectionsEventArgs args = new DirectionsEventArgs(e) {
+                Paths = paths,
             };
-            if(VersionUpdate != null) VersionUpdate(this, args);
+            if(DirectionsReturned != null) DirectionsReturned(this, args);
         }
         #endregion
 
+        #region Location Events
         #region LocationUpdate
         public event LocationEventHandler LocationUpdate;
         protected virtual void OnLocationUpdate(ServiceEventArgs e, LocationData location) {
@@ -114,23 +137,6 @@ namespace Rhit.Applications.Models.Services {
             if(LocationDeleted != null) LocationDeleted(this, args);
         }
         #endregion
-
-        #region LoginResultsReturned
-        public event AuthenticationEventHandler LoginResultsReturned;
-        protected virtual void OnLoginResultsReturned(ServiceEventArgs e, string token, DateTime expiration) {
-            AuthenticationEventArgs args = new AuthenticationEventArgs(e) {
-                Token = token,
-                Expiration = expiration,
-            };
-            if(LoginResultsReturned != null) LoginResultsReturned(this, args);
-        }
-        #endregion
-
-        #region ServerErrorReturned
-        public event ServiceEventHandler ServerErrorReturned;
-        protected virtual void OnServerErrorReturned(ServiceEventArgs args) {
-            if(ServerErrorReturned != null) ServerErrorReturned(this, args);
-        }
         #endregion
 
         #region PathDataReturned
@@ -140,6 +146,7 @@ namespace Rhit.Applications.Models.Services {
         }
         #endregion
 
+        #region Node Events
         #region NodeCreated
         public event NodeEventHandler NodeCreated;
         protected virtual void OnNodeCreated(ServiceEventArgs e) {
@@ -147,16 +154,6 @@ namespace Rhit.Applications.Models.Services {
                 Node = ServerObject.ParseNode(e.ResponseObject),
             };
             if(NodeCreated != null) NodeCreated(this, args);
-        }
-        #endregion
-
-        #region PathCreated
-        public event PathEventHandler PathCreated;
-        protected virtual void OnPathCreated(ServiceEventArgs e) {
-            PathEventArgs args = new PathEventArgs(e) {
-                Path = ServerObject.ParsePath(e.ResponseObject),
-            };
-            if(PathCreated != null) PathCreated(this, args);
         }
         #endregion
 
@@ -180,6 +177,28 @@ namespace Rhit.Applications.Models.Services {
             if(NodeDeleted != null) NodeDeleted(this, args);
         }
         #endregion
+        #endregion
+
+        #region Path Events
+        #region PathCreated
+        public event PathEventHandler PathCreated;
+        protected virtual void OnPathCreated(ServiceEventArgs e) {
+            PathEventArgs args = new PathEventArgs(e) {
+                Path = ServerObject.ParsePath(e.ResponseObject),
+            };
+            if(PathCreated != null) PathCreated(this, args);
+        }
+        #endregion
+
+        #region PathUpdated
+        public event PathEventHandler PathUpdated;
+        protected virtual void OnPathUpdated(ServiceEventArgs e) {
+            PathEventArgs args = new PathEventArgs(e) {
+                Path = ServerObject.ParsePath(e.ResponseObject),
+            };
+            if(PathUpdated != null) PathUpdated(this, args);
+        }
+        #endregion
 
         #region PathDeleted
         public event IdentificationEventHandler PathDeleted;
@@ -191,7 +210,73 @@ namespace Rhit.Applications.Models.Services {
             if(PathDeleted != null) PathDeleted(this, args);
         }
         #endregion
-        
+        #endregion
+
+        #region Direction Events
+        #region DirectionCreated
+        public event DirectionEventHandler DirectionCreated;
+        protected virtual void OnDirectionCreated(ServiceEventArgs e) {
+            DirectionEventArgs args = new DirectionEventArgs(e) {
+                Direction = ServerObject.ParseDirection(e.ResponseObject),
+            };
+            if(DirectionCreated != null) DirectionCreated(this, args);
+        }
+        #endregion
+
+        #region DirectionUpdated
+        public event DirectionEventHandler DirectionUpdated;
+        protected virtual void OnDirectionUpdated(ServiceEventArgs e) {
+            DirectionEventArgs args = new DirectionEventArgs(e) {
+                Direction = ServerObject.ParseDirection(e.ResponseObject),
+            };
+            if(DirectionUpdated != null) DirectionUpdated(this, args);
+        }
+        #endregion
+
+        #region DirectionDeleted
+        public event IdentificationEventHandler DirectionDeleted;
+        protected virtual void OnDirectionDeleted(ServiceEventArgs e) {
+            int id = (int) e.Request.UserMetaData["DirectionId"];
+            IdentificationEventArgs args = new IdentificationEventArgs(e) {
+                Id = id,
+            };
+            if(DirectionDeleted != null) DirectionDeleted(this, args);
+        }
+        #endregion
+        #endregion
+
+        #region DirectionMessage Events
+        #region DirectionMessageCreated
+        public event DirectionMessageEventHandler DirectionMessageCreated;
+        protected virtual void OnDirectionMessageCreated(ServiceEventArgs e) {
+            DirectionMessageEventArgs args = new DirectionMessageEventArgs(e) {
+                DirectionMessage = ServerObject.ParseDirectionMessage(e.ResponseObject),
+            };
+            if(DirectionMessageCreated != null) DirectionMessageCreated(this, args);
+        }
+        #endregion
+
+        #region DirectionMessageUpdated
+        public event DirectionMessageEventHandler DirectionMessageUpdated;
+        protected virtual void OnDirectionMessageUpdated(ServiceEventArgs e) {
+            DirectionMessageEventArgs args = new DirectionMessageEventArgs(e) {
+                DirectionMessage = ServerObject.ParseDirectionMessage(e.ResponseObject),
+            };
+            if(DirectionMessageUpdated != null) DirectionMessageUpdated(this, args);
+        }
+        #endregion
+
+        #region DirectionMessageDeleted
+        public event IdentificationEventHandler DirectionMessageDeleted;
+        protected virtual void OnDirectionMessageDeleted(ServiceEventArgs e) {
+            int id = (int) e.Request.UserMetaData["DirectionMessageId"];
+            IdentificationEventArgs args = new IdentificationEventArgs(e) {
+                Id = id,
+            };
+            if(DirectionMessageDeleted != null) DirectionMessageDeleted(this, args);
+        }
+        #endregion
+        #endregion
         #endregion
 
         private DataCollector() {
@@ -227,6 +312,8 @@ namespace Rhit.Applications.Models.Services {
             ServicesVersion = version;
             OnVersionUpdate(args, 0, version);
         }
+
+        private IList<int> PathIds { get; set; }
 
         private void ResponseReceived(object sender, ServiceEventArgs eventArgs) {
 
@@ -294,22 +381,53 @@ namespace Rhit.Applications.Models.Services {
                 case ResponseType.ConnectionError:
                     OnServerErrorReturned(eventArgs);
                     break;
+
                 case ResponseType.NodeCreation:
                     OnNodeCreated(eventArgs);
+                    break;
+                case ResponseType.NodeUpdate:
+                    OnNodeUpdated(eventArgs);
                     break;
                 case ResponseType.NodeDeletion:
                     OnNodeDeleted(eventArgs);
                     break;
+
                 case ResponseType.PathCreation:
                     OnPathCreated(eventArgs);
                     break;
-
+                case ResponseType.PathUpdate:
+                    OnPathUpdated(eventArgs);
+                    break;
                 case ResponseType.PathDeletion:
                     OnPathDeleted(eventArgs);
                     break;
 
-                case ResponseType.NodeUpdate:
-                    OnNodeUpdated(eventArgs);
+                case ResponseType.DirectionMessageCreation:
+                    OnDirectionMessageCreated(eventArgs);
+                    break;
+                case ResponseType.DirectionMessageUpdate:
+                    OnDirectionMessageUpdated(eventArgs);
+                    break;
+                case ResponseType.DirectionMessageDeletion:
+                    OnDirectionMessageDeleted(eventArgs);
+                    break;
+
+                case ResponseType.DirectionCreation:
+                    if(PathIds == null || PathIds.Count <= 0) break;
+                    AddDirectionPaths(int.Parse(eventArgs.ResponseObject.Table[0][0]), PathIds);
+                    PathIds.Clear();
+                    break;
+
+                case ResponseType.DirectionUpdate:
+                    OnDirectionUpdated(eventArgs);
+                    break;
+                case ResponseType.DirectionDeletion:
+                    OnDirectionDeleted(eventArgs);
+                    break;
+                case ResponseType.DirectionPathAddition:
+                    //TODO: Finish this
+                    //Need to spGetDirection
+                    // and spGetDirectionPaths
                     break;
             }
         }
@@ -362,6 +480,8 @@ namespace Rhit.Applications.Models.Services {
 
         private void HandleChangeLocationResponse(ServiceEventArgs eventArgs) {
             var dict = eventArgs.Request.UserMetaData;
+
+            //TODO: Why am i doing this?
             if(dict.ContainsKey("LocationId")) GetLocation((int) dict["LocationId"]);
             if(dict.ContainsKey("OldLocationId")) GetLocation((int) dict["OldLocationId"]);
             if(dict.ContainsKey("NewLocationId")) GetLocation((int) dict["NewLocationId"]);
@@ -406,6 +526,30 @@ namespace Rhit.Applications.Models.Services {
         #endregion
 
         #region Request Methods
+
+        public void Login(string username, string password) {
+            RequestPart request = new RequestBuilder(BaseAddress).Admin.Authenticate(username, password);
+            Connection.MakeRequest(request, RequestType.Login);
+        }
+
+        #region Version Requests
+        public void GetVersion() {
+            RequestPart request = new RequestBuilder(BaseAddress).Version;
+            Connection.MakeRequest(request, RequestType.Version);
+        }
+
+        public void IncreaseServerVersion() {
+            RequestPart request = new RequestBuilder(BaseAddress).Admin.UpdateVersion(Connection.ServiceTokenGuid, Version + 0.001);
+            Connection.MakeRequest(request, RequestType.IncrementVersion);
+        }
+
+        public void IncreaseServicesVersion() {
+            RequestPart request = new RequestBuilder(BaseAddress).Admin.UpdateServicesVersion(Connection.ServiceTokenGuid, ServicesVersion + 0.001);
+            Connection.MakeRequest(request, RequestType.IncrementVersion);
+        }
+        #endregion
+
+        #region Tour Related Requests
         public void GetTags() {
             RequestPart request = new RequestBuilder(BaseAddress).Tours.Tags;
             Connection.MakeRequest(request, RequestType.Tags);
@@ -420,12 +564,9 @@ namespace Rhit.Applications.Models.Services {
             RequestPart request = new RequestBuilder(BaseAddress).Directions.ToursTest;
             Connection.MakeRequest(request, RequestType.Tours);
         }
+        #endregion
 
-        public void Login(string username, string password) {
-            RequestPart request = new RequestBuilder(BaseAddress).Admin.Authenticate(username, password);
-            Connection.MakeRequest(request, RequestType.Login);
-        }
-
+        #region Direction Requests
         public void GetDirections(LocationData from, LocationData to) {
             GetDirections(from.Id, to.Id);
         }
@@ -439,12 +580,9 @@ namespace Rhit.Applications.Models.Services {
             RequestPart request = new RequestBuilder(BaseAddress).Directions.Test;
             Connection.MakeRequest(request, RequestType.Directions);
         }
+        #endregion
 
-        public void GetVersion() {
-            RequestPart request = new RequestBuilder(BaseAddress).Version;
-            Connection.MakeRequest(request, RequestType.Version);
-        }
-
+        #region Location Requests
         public void GetAllLocations() { GetAllLocations(true); }
 
         public void GetAllLocations(bool withDescription) {
@@ -469,155 +607,11 @@ namespace Rhit.Applications.Models.Services {
             Connection.MakeRequest(request, RequestType.Location);
         }
 
-        public void GetCampusServices() {
-            RequestPart request = new RequestBuilder(BaseAddress).Services;
-            Connection.MakeRequest(request, RequestType.CampusServices);
-        }
-
-        public void SaveCampusServiceCategory(CampusServicesCategory_DC category, String newCategoryName, String parentCategoryName)
-        {
-            String name = Uri.EscapeDataString(category.Name);
-            String newName = Uri.EscapeDataString(newCategoryName);
-            String newParent = Uri.EscapeDataString(parentCategoryName == null ? "\0" : parentCategoryName);
-
-            RequestPart request = new RequestBuilder(BaseAddress).Admin.StoredProcedure(Connection.ServiceTokenGuid, "spUpdateCampusServiceCategory")
-                .AddQueryParameter("name", name)
-                .AddQueryParameter("newname", newName)
-                .AddQueryParameter("newparent", newParent);
-
-            Connection.MakeRequest(request, RequestType.CampusServicesUpdate);
-        }
-
-        public void SaveCampusServiceLink(Link_DC link, String newLinkName, String newLinkURL, String categoryName)
-        {
-            String category = Uri.EscapeDataString(categoryName == null ? "\0" : categoryName);
-            String name = Uri.EscapeDataString(link.Name);
-            String newCategory = category;
-            String newName = Uri.EscapeDataString(newLinkName);
-            String newURL = Uri.EscapeDataString(newLinkURL);
-
-            RequestPart request = new RequestBuilder(BaseAddress).Admin.StoredProcedure(Connection.ServiceTokenGuid, "spUpdateCampusServiceLink")
-                .AddQueryParameter("category", category)
-                .AddQueryParameter("name", name)
-                .AddQueryParameter("newcategory", newCategory)
-                .AddQueryParameter("newname", newName)
-                .AddQueryParameter("newurl", newURL);
-
-            Connection.MakeRequest(request, RequestType.CampusServicesUpdate);
-        }
-
-        public void DeleteCampusServiceCategory(CampusServicesCategory_DC category, String parentCategoryName)
-        {
-            RequestPart request = new RequestBuilder(BaseAddress).Admin.StoredProcedure(Connection.ServiceTokenGuid, "spDeleteCampusServiceCategory");
-
-            String name = Uri.EscapeDataString(category.Name);
-
-            request = request.AddQueryParameter("name", name);
-
-            Connection.MakeRequest(request, RequestType.CampusServicesUpdate);
-        }
-
-        public void DeleteCampuServiceLink(Link_DC link, String categoryName)
-        {
-            RequestPart request = new RequestBuilder(BaseAddress).Admin.StoredProcedure(Connection.ServiceTokenGuid, "spDeleteCampusServiceLink");
-
-            String name = Uri.EscapeDataString(link.Name);
-            String category = Uri.EscapeDataString(categoryName == null ? "\0" : categoryName);
-
-            request = request.AddQueryParameter("name", name);
-            request = request.AddQueryParameter("category", category);
-
-            Connection.MakeRequest(request, RequestType.CampusServicesUpdate);
-        }
-
-        public void AddCampusServiceCategory(String name, CampusServicesCategory_DC parent)
-        {
-            RequestPart request = new RequestBuilder(BaseAddress).Admin.StoredProcedure(Connection.ServiceTokenGuid, "spAddCampusServiceCategory");
-
-            String escapedName = Uri.EscapeDataString(name);
-            String parentName = Uri.EscapeDataString(parent == null || parent.Name == null ? "\0" : parent.Name);
-
-            request = request.AddQueryParameter("name", escapedName);
-            request = request.AddQueryParameter("parent", parentName);
-
-            Connection.MakeRequest(request, RequestType.CampusServicesUpdate);
-        }
-
-        public void AddCampusServiceLink(String name, CampusServicesCategory_DC parent)
-        {
-            RequestPart request = new RequestBuilder(BaseAddress).Admin.StoredProcedure(Connection.ServiceTokenGuid, "spAddCampusServiceLink");
-
-            String url = Uri.EscapeDataString("http://www.rose-hulman.edu/");
-            String escapedName = Uri.EscapeDataString(name);
-            String parentName = Uri.EscapeDataString(parent == null || parent.Name == null ? "\0" : parent.Name);
-
-            request = request.AddQueryParameter("name", escapedName);
-            request = request.AddQueryParameter("url", url);
-            request = request.AddQueryParameter("category", parentName);
-
-            Connection.MakeRequest(request, RequestType.CampusServicesUpdate);
-        }
-
         public void GetChildLocations(LocationData parent) { GetChildLocations(parent.Id); }
 
         public void GetChildLocations(int parentId) {
             RequestPart request = new RequestBuilder(BaseAddress).Locations.Data.Within(parentId);
             Connection.MakeRequest(request, RequestType.InternalLocations);
-        }
-
-        public void GetPathData() {
-            RequestPart request = new RequestBuilder(BaseAddress).Admin.PathData(Connection.ServiceTokenGuid);
-            Connection.MakeRequest(request, RequestType.PathData);
-        }
-
-        public void CreateNode(double latitude, double longitude, double altitude, bool outside, int? locationId) {
-            RequestPart request = new RequestBuilder(BaseAddress).Admin.StoredProcedure(Connection.ServiceTokenGuid, "spAddNode");
-            request = request.AddQueryParameter("lat", latitude);
-            request = request.AddQueryParameter("lon", longitude);
-            request = request.AddQueryParameter("altitude", altitude);
-            request = request.AddQueryParameter("outside", outside);
-            request = request.AddQueryParameter("location", (object) locationId ?? "%00");
-            Connection.MakeRequest(request, RequestType.NodeCreation);
-        }
-
-        public void UpdateNode(int id, double latitude, double longitude, double altitude, bool outside, int? locationId) {
-            RequestPart request = new RequestBuilder(BaseAddress).Admin.StoredProcedure(Connection.ServiceTokenGuid, "spUpdateNode");
-            request = request.AddQueryParameter("id", id);
-            request = request.AddQueryParameter("lat", latitude);
-            request = request.AddQueryParameter("lon", longitude);
-            request = request.AddQueryParameter("altitude", altitude);
-            request = request.AddQueryParameter("outside", outside);
-            request = request.AddQueryParameter("location", (object) locationId ?? "%00");
-            Connection.MakeRequest(request, RequestType.NodeUpdate);
-        }
-
-        public void CreatePath(int node1, int node2, bool elevator, int stairs, int partition) {
-            RequestPart request = new RequestBuilder(BaseAddress).Admin.StoredProcedure(Connection.ServiceTokenGuid, "spAddPath");
-
-            request = request.AddQueryParameter("elevator", elevator);
-            request = request.AddQueryParameter("node1", node1);
-            request = request.AddQueryParameter("node2", node2);
-            request = request.AddQueryParameter("partition", partition);
-            request = request.AddQueryParameter("stairs", stairs);
-            Connection.MakeRequest(request, RequestType.PathCreation);
-        }
-
-        public void DeletePath(int id) {
-            RequestPart request = new RequestBuilder(BaseAddress).Admin.StoredProcedure(Connection.ServiceTokenGuid, "spDeletePath");
-            request = request.AddQueryParameter("id", id);
-
-            Dictionary<string, object> metadata = new Dictionary<string, object>();
-            metadata["PathId"] = id;
-            Connection.MakeMetaDataRequest(request, RequestType.PathDeletion, metadata);
-        }
-
-        public void DeleteNode(int id) {
-            RequestPart request = new RequestBuilder(BaseAddress).Admin.StoredProcedure(Connection.ServiceTokenGuid, "spDeleteNode");
-            request = request.AddQueryParameter("id", id);
-            
-            Dictionary<string, object> metadata = new Dictionary<string, object>();
-            metadata["NodeId"] = id;
-            Connection.MakeMetaDataRequest(request, RequestType.NodeDeletion, metadata);
         }
 
         public void CreateLocation(int id, int parentId, string name, double latitude, double longitude, int floor) {
@@ -725,17 +719,248 @@ namespace Rhit.Applications.Models.Services {
 
             Connection.MakeLocationChangeRequest(requests, RequestType.LocationUpdate, oldId, newId);
         }
+        #endregion
 
-        public void IncreaseServerVersion() {
-            RequestPart request = new RequestBuilder(BaseAddress).Admin.UpdateVersion(Connection.ServiceTokenGuid, Version+0.001);
-            Connection.MakeRequest(request, RequestType.IncrementVersion);
+        #region Campus Services Requests
+        public void GetCampusServices() {
+            RequestPart request = new RequestBuilder(BaseAddress).Services;
+            Connection.MakeRequest(request, RequestType.CampusServices);
         }
 
-        public void IncreaseServicesVersion()
+        public void SaveCampusServiceCategory(CampusServicesCategory_DC category, String newCategoryName, String parentCategoryName)
         {
-            RequestPart request = new RequestBuilder(BaseAddress).Admin.UpdateServicesVersion(Connection.ServiceTokenGuid, ServicesVersion + 0.001);
-            Connection.MakeRequest(request, RequestType.IncrementVersion);
+            String name = Uri.EscapeDataString(category.Name);
+            String newName = Uri.EscapeDataString(newCategoryName);
+            String newParent = Uri.EscapeDataString(parentCategoryName == null ? "\0" : parentCategoryName);
+
+            RequestPart request = new RequestBuilder(BaseAddress).Admin.StoredProcedure(Connection.ServiceTokenGuid, "spUpdateCampusServiceCategory")
+                .AddQueryParameter("name", name)
+                .AddQueryParameter("newname", newName)
+                .AddQueryParameter("newparent", newParent);
+
+            Connection.MakeRequest(request, RequestType.CampusServicesUpdate);
         }
+
+        public void SaveCampusServiceLink(Link_DC link, String newLinkName, String newLinkURL, String categoryName)
+        {
+            String category = Uri.EscapeDataString(categoryName == null ? "\0" : categoryName);
+            String name = Uri.EscapeDataString(link.Name);
+            String newCategory = category;
+            String newName = Uri.EscapeDataString(newLinkName);
+            String newURL = Uri.EscapeDataString(newLinkURL);
+
+            RequestPart request = new RequestBuilder(BaseAddress).Admin.StoredProcedure(Connection.ServiceTokenGuid, "spUpdateCampusServiceLink")
+                .AddQueryParameter("category", category)
+                .AddQueryParameter("name", name)
+                .AddQueryParameter("newcategory", newCategory)
+                .AddQueryParameter("newname", newName)
+                .AddQueryParameter("newurl", newURL);
+
+            Connection.MakeRequest(request, RequestType.CampusServicesUpdate);
+        }
+
+
+        public void DeleteCampusServiceCategory(CampusServicesCategory_DC category, String parentCategoryName) {
+            RequestPart request = new RequestBuilder(BaseAddress).Admin.StoredProcedure(Connection.ServiceTokenGuid, "spDeleteCampusServiceCategory");
+
+            String name = Uri.EscapeDataString(category.Name);
+
+            request = request.AddQueryParameter("name", name);
+
+            Connection.MakeRequest(request, RequestType.CampusServicesUpdate);
+        }
+
+        public void DeleteCampuServiceLink(Link_DC link, String categoryName) {
+            RequestPart request = new RequestBuilder(BaseAddress).Admin.StoredProcedure(Connection.ServiceTokenGuid, "spDeleteCampusServiceLink");
+
+            String name = Uri.EscapeDataString(link.Name);
+            String category = Uri.EscapeDataString(categoryName == null ? "\0" : categoryName);
+
+            request = request.AddQueryParameter("name", name);
+            request = request.AddQueryParameter("category", category);
+
+            Connection.MakeRequest(request, RequestType.CampusServicesUpdate);
+        }
+
+        public void AddCampusServiceCategory(String name, CampusServicesCategory_DC parent) {
+            RequestPart request = new RequestBuilder(BaseAddress).Admin.StoredProcedure(Connection.ServiceTokenGuid, "spAddCampusServiceCategory");
+
+            String escapedName = Uri.EscapeDataString(name);
+            String parentName = Uri.EscapeDataString(parent == null || parent.Name == null ? "\0" : parent.Name);
+
+            request = request.AddQueryParameter("name", escapedName);
+            request = request.AddQueryParameter("parent", parentName);
+
+            Connection.MakeRequest(request, RequestType.CampusServicesUpdate);
+        }
+
+        public void AddCampusServiceLink(String name, CampusServicesCategory_DC parent) {
+            RequestPart request = new RequestBuilder(BaseAddress).Admin.StoredProcedure(Connection.ServiceTokenGuid, "spAddCampusServiceLink");
+
+            String url = Uri.EscapeDataString("http://www.rose-hulman.edu/");
+            String escapedName = Uri.EscapeDataString(name);
+            String parentName = Uri.EscapeDataString(parent == null || parent.Name == null ? "\0" : parent.Name);
+
+            request = request.AddQueryParameter("name", escapedName);
+            request = request.AddQueryParameter("url", url);
+            request = request.AddQueryParameter("category", parentName);
+
+            Connection.MakeRequest(request, RequestType.CampusServicesUpdate);
+        }
+        #endregion
+
+        public void GetPathData() {
+            RequestPart request = new RequestBuilder(BaseAddress).Admin.PathData(Connection.ServiceTokenGuid);
+            Connection.MakeRequest(request, RequestType.PathData);
+        }
+        
+        #region Node Requests
+        public void CreateNode(double latitude, double longitude, double altitude, bool outside, int? locationId) {
+            RequestPart request = new RequestBuilder(BaseAddress).Admin.StoredProcedure(Connection.ServiceTokenGuid, "spAddNode");
+            request = request.AddQueryParameter("lat", latitude);
+            request = request.AddQueryParameter("lon", longitude);
+            request = request.AddQueryParameter("altitude", altitude);
+            request = request.AddQueryParameter("outside", outside);
+            request = request.AddQueryParameter("location", (object) locationId ?? "%00");
+            Connection.MakeRequest(request, RequestType.NodeCreation);
+        }
+
+        public void UpdateNode(int id, double latitude, double longitude, double altitude, bool outside, int? locationId) {
+            RequestPart request = new RequestBuilder(BaseAddress).Admin.StoredProcedure(Connection.ServiceTokenGuid, "spUpdateNode");
+            request = request.AddQueryParameter("id", id);
+            request = request.AddQueryParameter("lat", latitude);
+            request = request.AddQueryParameter("lon", longitude);
+            request = request.AddQueryParameter("altitude", altitude);
+            request = request.AddQueryParameter("outside", outside);
+            request = request.AddQueryParameter("location", (object) locationId ?? "%00");
+            Connection.MakeRequest(request, RequestType.NodeUpdate);
+        }
+
+        public void DeleteNode(int id) {
+            RequestPart request = new RequestBuilder(BaseAddress).Admin.StoredProcedure(Connection.ServiceTokenGuid, "spDeleteNode");
+            request = request.AddQueryParameter("id", id);
+
+            Dictionary<string, object> metadata = new Dictionary<string, object>();
+            metadata["NodeId"] = id;
+            Connection.MakeMetaDataRequest(request, RequestType.NodeDeletion, metadata);
+        }
+        #endregion
+
+        #region Path Requests
+        public void CreatePath(int node1, int node2, bool elevator, int stairs, int partition) {
+            RequestPart request = new RequestBuilder(BaseAddress).Admin.StoredProcedure(Connection.ServiceTokenGuid, "spAddPath");
+
+            request = request.AddQueryParameter("elevator", elevator);
+            request = request.AddQueryParameter("node1", node1);
+            request = request.AddQueryParameter("node2", node2);
+            request = request.AddQueryParameter("partition", partition);
+            request = request.AddQueryParameter("stairs", stairs);
+
+            Connection.MakeRequest(request, RequestType.PathCreation);
+        }
+
+
+        public void UpdatePath(int id, int node1, int node2, bool elevator, int stairs, int partition) {
+            RequestPart request = new RequestBuilder(BaseAddress).Admin.StoredProcedure(Connection.ServiceTokenGuid, "spUpdatePath");
+
+            request = request.AddQueryParameter("id", id);
+            request = request.AddQueryParameter("elevator", elevator);
+            request = request.AddQueryParameter("node1", node1);
+            request = request.AddQueryParameter("node2", node2);
+            request = request.AddQueryParameter("partition", partition);
+            request = request.AddQueryParameter("stairs", stairs);
+
+            Dictionary<string, object> metadata = new Dictionary<string, object>();
+            metadata["PathId"] = id;
+            Connection.MakeRequest(request, RequestType.PathUpdate);
+        }
+
+        public void DeletePath(int id) {
+            RequestPart request = new RequestBuilder(BaseAddress).Admin.StoredProcedure(Connection.ServiceTokenGuid, "spDeletePath");
+            request = request.AddQueryParameter("id", id);
+
+            Dictionary<string, object> metadata = new Dictionary<string, object>();
+            metadata["PathId"] = id;
+            Connection.MakeMetaDataRequest(request, RequestType.PathDeletion, metadata);
+        }
+        #endregion
+
+        #region Direction Requests
+        public void CreateDirection(int message, IList<int> paths, int within) {
+            RequestPart request = new RequestBuilder(BaseAddress).Admin.StoredProcedure(Connection.ServiceTokenGuid, "spAddDirection");
+            request = request.AddQueryParameter("message", message);
+            request = request.AddQueryParameter("within", within);
+
+            PathIds = paths;
+
+            Connection.MakeRequest(request, RequestType.DirectionCreation);
+        }
+
+        public void AddDirectionPaths(int id, IList<int> paths) {
+            List<RequestPart> requests = new List<RequestPart>();
+            RequestPart request;
+            foreach(int path in paths) {
+                request = new RequestBuilder(BaseAddress).Admin.StoredProcedure(Connection.ServiceTokenGuid, "spAddDirectionPath");
+                request = request.AddQueryParameter("direction", id);
+                request = request.AddQueryParameter("path", path);
+                requests.Add(request);
+            }
+
+            Connection.MakeRequests(requests, RequestType.DirectionPathAddition);
+        }
+
+        public void UpdateDirection(int id, int message, int within) {
+            RequestPart request = new RequestBuilder(BaseAddress).Admin.StoredProcedure(Connection.ServiceTokenGuid, "spUpdateDirection");
+            request = request.AddQueryParameter("id", id);
+            request = request.AddQueryParameter("message", message);
+            request = request.AddQueryParameter("within", within);
+
+            Dictionary<string, object> metadata = new Dictionary<string, object>();
+            metadata["DirectionId"] = id;
+            Connection.MakeMetaDataRequest(request, RequestType.DirectionUpdate, metadata);
+        }
+
+        public void DeleteDirection(int id) {
+            RequestPart request = new RequestBuilder(BaseAddress).Admin.StoredProcedure(Connection.ServiceTokenGuid, "spDeleteDirection");
+            request = request.AddQueryParameter("id", id);
+
+            Dictionary<string, object> metadata = new Dictionary<string, object>();
+            metadata["DirectionId"] = id;
+            Connection.MakeMetaDataRequest(request, RequestType.DirectionDeletion, metadata);
+        }
+        #endregion
+
+        #region DirectionMessage Requests
+        public void AddBlankDirectionMessage() {
+            RequestPart request = new RequestBuilder(BaseAddress).Admin.StoredProcedure(Connection.ServiceTokenGuid, "spAddDirectionMessage");
+            request = request.AddQueryParameter("nodeoffset", 1);
+            request = request.AddQueryParameter("message1", "New Direction Message");
+            request = request.AddQueryParameter("message2", "New Direction Message");
+            request = request.AddQueryParameter("action1", "%00");
+            request = request.AddQueryParameter("action2", "%00");
+            Connection.MakeRequest(request, RequestType.DirectionMessageCreation);
+        }
+
+        public void UpdateDirectionMessage(int id, int offset, string message1, string message2, string action1, string action2) {
+            RequestPart request = new RequestBuilder(BaseAddress).Admin.StoredProcedure(Connection.ServiceTokenGuid, "spUpdateDirectionMessage");
+            request = request.AddQueryParameter("id", id);
+            request = request.AddQueryParameter("nodeoffset", offset);
+            request = request.AddQueryParameter("message1", message1);
+            request = request.AddQueryParameter("message2", message2);
+            request = request.AddQueryParameter("action1", action1);
+            request = request.AddQueryParameter("action2", action2);
+            Connection.MakeRequest(request, RequestType.DirectionMessageUpdate);
+        }
+
+        public void DeleteDirectionMessage(int id) {
+            RequestPart request = new RequestBuilder(BaseAddress).Admin.StoredProcedure(Connection.ServiceTokenGuid, "spDeleteDirectionMessage");
+            request = request.AddQueryParameter("id", id);
+
+            Dictionary<string, object> metadata = new Dictionary<string, object>();
+            metadata["DirectionMessageId"] = id;
+            Connection.MakeMetaDataRequest(request, RequestType.DirectionMessageDeletion, metadata);
+        }
+        #endregion
         #endregion
     }
 }

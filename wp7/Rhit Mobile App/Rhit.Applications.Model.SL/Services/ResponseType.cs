@@ -1,9 +1,23 @@
 ﻿
 namespace Rhit.Applications.Models.Services {
     public enum ResponseType {
+        DirectionPathAddition,
+        DirectionCreation,
+        DirectionUpdate,
+        DirectionDeletion,
+        
+        DirectionMessageCreation,
+        DirectionMessageUpdate,
+        DirectionMessageDeletion,
+
+        PathCreation,
+        PathUpdate,
+        PathDeletion,
+
+        NodeCreation,
         NodeUpdate,
         NodeDeletion,
-        NodeCreation,
+        
         AllLocations,
         CampusServices,
         CampusServicesUpdate,
@@ -26,7 +40,5 @@ namespace Rhit.Applications.Models.Services {
         Tags,
         Tours,
         Version,
-        PathCreation,
-        PathDeletion,
     }
 }

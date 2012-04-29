@@ -152,6 +152,25 @@ namespace Rhit.Applications.Models {
                 Partition = int.Parse(instance.Table[0][5]),
             };
         }
+
+        internal static DirectionMessage_DC ParseDirectionMessage(ServerObject instance) {
+            return new DirectionMessage_DC() {
+                Id = int.Parse(instance.Table[0][0]),
+                Message1 = instance.Table[0][1],
+                Message2 = instance.Table[0][2],
+                Action1 = instance.Table[0][3],
+                Action2 = instance.Table[0][4],
+                Offset = int.Parse(instance.Table[0][5]),
+            };
+        }
+
+        internal static Direction_DC ParseDirection(ServerObject instance) {
+            return new Direction_DC() {
+                Id = int.Parse(instance.Table[0][0]),
+                MessageId = int.Parse(instance.Table[0][1]),
+                Within = int.Parse(instance.Table[0][3]),
+            };
+        }
     }
 
     #region TagsCategory - Data Contract
@@ -392,7 +411,7 @@ namespace Rhit.Applications.Models {
         public int Id { get; set; }
 
         [DataMember(Name = "Message")]
-        public int Message { get; set; }
+        public int MessageId { get; set; }
 
         [DataMember(Name = "Paths")]
         public List<int> Paths { get; set; }

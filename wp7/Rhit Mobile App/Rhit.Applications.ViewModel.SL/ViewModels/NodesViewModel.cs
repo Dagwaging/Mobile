@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Windows;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Windows.Input;
 using Microsoft.Maps.MapControl;
 using Rhit.Applications.Models.Services;
 using Rhit.Applications.Mvvm.Commands;
 using Rhit.Applications.ViewModels.Controllers;
-using Rhit.Applications.ViewModels.Providers;
-using Rhit.Applications.ViewModels.Utilities;
 
 namespace Rhit.Applications.ViewModels {
     public class NodesViewModel : TaskedViewModel {
@@ -15,20 +12,33 @@ namespace Rhit.Applications.ViewModels {
 
          protected override void Initialize() {
              base.Initialize();
+             if(DesignerProperties.IsInDesignTool) return;
 
              State = BehaviorState.Default;
              Paths = NodesController.Instance;
-             Paths.GetPathData();
          }
 
         protected override void InitializeCommands() {
             base.InitializeCommands();
 
+            
+            ClearSelectedCommand = new RelayCommand(p => ClearSelected());
+
+            SaveDirectionCommand = new RelayCommand(p => SaveDirection());
+            DeleteDirectionCommand = new RelayCommand(p => DeleteDirection());
+
             AddNodeCommand = new RelayCommand(p => AddNode());
+            MoveNodesCommand = new RelayCommand(p => MoveNodes());
             DeleteNodeCommand = new RelayCommand(p => DeleteNode());
+
+            PathClickCommand = new RelayCommand(p => HandlePathClick(p));
+            PathSaveCommand = new RelayCommand(p => HandlePathSave(p));
             AddPathCommand = new RelayCommand(p => AddPath());
             DeletePathCommand = new RelayCommand(p => DeletePath());
-            MoveNodesCommand = new RelayCommand(p => MoveNodes());
+            
+            AddMessageCommand = new RelayCommand(p => AddMessage());
+            SaveMessageCommand = new RelayCommand(p => SaveMessage(p));
+            DeleteMessageCommand = new RelayCommand(p => DeleteMessage(p));
         }
 
         protected override void Save() {
@@ -71,6 +81,32 @@ namespace Rhit.Applications.ViewModels {
             State = BehaviorState.Default;
         }
 
+        #region ClearSelected Command/Method
+        public ICommand ClearSelectedCommand { get; private set; }
+
+        private void ClearSelected() {
+            Paths.RestoreToDefault();
+        }
+        #endregion
+
+
+        #region SaveDirection Command/Method
+        public ICommand SaveDirectionCommand { get; private set; }
+
+        private void SaveDirection() {
+            Paths.SaveDirection();
+        }
+        #endregion
+
+        #region DeleteDirection Command/Method
+        public ICommand DeleteDirectionCommand { get; private set; }
+
+        private void DeleteDirection() {
+            Paths.DeleteDirection();
+        }
+        #endregion
+
+
         #region Add Node Command/Method
         public ICommand AddNodeCommand { get; private set; }
 
@@ -103,6 +139,7 @@ namespace Rhit.Applications.ViewModels {
         }
         #endregion
 
+
         #region Add Path Command/Method
         public ICommand AddPathCommand { get; private set; }
 
@@ -120,6 +157,55 @@ namespace Rhit.Applications.ViewModels {
             State = BehaviorState.DeletingPath;
             ShowSave = false;
             Paths.DeleteNextPath();
+        }
+        #endregion
+
+        #region Path Click Command/Method
+        public ICommand PathClickCommand { get; private set; }
+
+        private void HandlePathClick(object p) {
+            if(!(p is int)) return;
+            int id = (int) p;
+            Paths.SelectPath(id);
+        }
+        #endregion
+
+        #region Path Save Command/Method
+        public ICommand PathSaveCommand { get; private set; }
+
+        private void HandlePathSave(object p) {
+            if(!(p is int)) return;
+            int id = (int) p;
+            Paths.SavePath(id);
+        }
+        #endregion
+
+
+        #region AddMessage Command/Method
+        public ICommand AddMessageCommand { get; private set; }
+
+        private void AddMessage() {
+            DataCollector.Instance.AddBlankDirectionMessage();
+        }
+        #endregion
+
+        #region SaveMessage Command/Method
+        public ICommand SaveMessageCommand { get; private set; }
+
+        private void SaveMessage(object p) {
+            if(!(p is int)) return;
+            int id = (int) p;
+            Paths.SaveDirectionMessage(id);
+        }
+        #endregion
+
+        #region DeleteMessage Command/Method
+        public ICommand DeleteMessageCommand { get; private set; }
+
+        private void DeleteMessage(object p) {
+            if(!(p is int)) return;
+            int id = (int) p;
+            DataCollector.Instance.DeleteDirectionMessage(id);
         }
         #endregion
 

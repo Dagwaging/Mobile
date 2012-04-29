@@ -185,7 +185,7 @@
                 </Border>
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                     <TextBlock Text="[" />
-                    <TextBlock Text="{Binding Paths.CurrentMessage.Message}" />
+                    <TextBlock Text="{Binding Paths.CurrentDirection.Message.Message}" />
                     <TextBlock Text="]" />
                 </StackPanel>
             </StackPanel>
