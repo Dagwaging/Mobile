@@ -33,7 +33,6 @@
 
 + (void)makeOnCampusTourRequestWithTagIds:(NSArray *)tags
                        fromGPSCoordinages:(CLLocation *)location
-                               toLocation:(NSNumber *)endLocationServerId
                               forDuration:(NSNumber *)duration
                              successBlock:(void (^)(RHPath *))successBlock
                              failureBlock:(void (^)(NSError *))failureBlock;

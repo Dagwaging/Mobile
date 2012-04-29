@@ -19,6 +19,8 @@
 
 #import "RHTagsBasketViewController.h"
 #import "RHAppDelegate.h"
+#import "RHDepartureLocationSelectionViewController.h"
+#import "RHLocation.h"
 #import "RHMapViewController.h"
 #import "RHMapDirectionsManager.h"
 #import "RHPathRequest.h"
@@ -26,7 +28,8 @@
 #import "RHTourTagCategory.h"
 #import "RHTourTag.h"
 
-#define kSegueIdentifier @"TagsBasketToTagSelectionSegue"
+#define kTagSelectionSegueIdentifier @"TagsBasketToTagSelectionSegue"
+#define kDepartureLocationSegueIdentifier @"TagsBasketToLocationSelectionSegue"
 #define kTagCellReuseIdentifier @"TagsBasketTagCell"
 #define kAddCellReuseIdentifier @"TagsBasketAddCell"
 
@@ -52,7 +55,6 @@
 @synthesize isEditing = isEditing_;
 @synthesize isBuilding = isBuilding_;
 @synthesize duration = _duration;
-@synthesize useGPS = _useGPS;
 @synthesize onCampus = _onCampus;
 
 #pragma mark - View lifecycle
@@ -97,7 +99,7 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([segue.identifier isEqualToString:kSegueIdentifier]) {
+    if ([segue.identifier isEqualToString:kTagSelectionSegueIdentifier]) {
         UINavigationController *navCon = segue.destinationViewController;
         RHTagSelectionViewController *selectionController = [navCon.viewControllers objectAtIndex:0];
         
@@ -109,6 +111,46 @@
         selectionController.category = [results objectAtIndex:0];
         selectionController.selectedTags = self.tags;
         selectionController.deselectedTags = self.unusedTags;
+        
+    } else if ([segue.identifier isEqualToString:kDepartureLocationSegueIdentifier]) {
+        
+        RHDepartureLocationSelectionViewController *departureSelection = segue.destinationViewController;
+        
+        NSMutableArray *tagIds = [[NSMutableArray alloc] initWithCapacity:self.tags.count];
+        
+        for (RHTourTag *tag in self.tags) {
+            [tagIds addObject:tag.serverIdentifier];
+        }
+        
+        departureSelection.gpsChosenBlock = ^(CLLocation *location) {
+            
+            [RHPathRequest makeOnCampusTourRequestWithTagIds:tagIds fromGPSCoordinages:location forDuration:self.duration successBlock:^(RHPath *path) {
+                
+                [self didLoadPath:path];
+                
+            } failureBlock:^(NSError *error) {
+                
+                [[[UIAlertView alloc] initWithTitle:@"Error" message:@"Something went wrong getting your tour. We're really sorry." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+                
+                [self.navigationController popViewControllerAnimated:YES];
+                
+            }];
+        };
+        
+        departureSelection.locationChosenBlock = ^(RHLocation *location) {
+            
+            [RHPathRequest makeOnCampusTourRequestWithTagIds:tagIds fromLocationWithId:location.serverIdentifier forDuration:self.duration successBlock:^(RHPath *path) {
+                
+                [self didLoadPath:path];
+                
+            } failureBlock:^(NSError *error) {
+                
+                [[[UIAlertView alloc] initWithTitle:@"Error" message:@"Something went wrong getting your tour. We're really sorry." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+                
+                [self.navigationController popViewControllerAnimated:YES];
+                
+            }];
+        }; 
     }
 }
 
@@ -136,25 +178,28 @@
     NSIndexPath *finalIndexPath = [NSIndexPath indexPathForRow:self.tags.count inSection:0];
     [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:finalIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     
-    NSMutableArray *tagIds = [[NSMutableArray alloc] initWithCapacity:self.tags.count];
-    
-    for (RHTourTag *tag in self.tags) {
-        [tagIds addObject:tag.serverIdentifier];
+    if (self.onCampus) {
+        
+        [self performSegueWithIdentifier:kDepartureLocationSegueIdentifier sender:self];
+        return;
+        
+    } else {
+        
+        NSMutableArray *tagIds = [[NSMutableArray alloc] initWithCapacity:self.tags.count];
+        
+        for (RHTourTag *tag in self.tags) {
+            [tagIds addObject:tag.serverIdentifier];
+        }
+        
+        [RHPathRequest makeOffCampusTourRequestWithTagIds:tagIds successBlock:^(RHPath *path) {
+            [self didLoadPath:path];
+        } failureBlock:^(NSError *error) {
+            
+            [[[UIAlertView alloc] initWithTitle:@"Error" message:@"Something went wrong getting your tour. We're really sorry." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+            [self.navigationController popViewControllerAnimated:YES];
+            
+        }];
     }
-    
-    [RHPathRequest makeOnCampusTourRequestWithTagIds:tagIds
-                                  fromLocationWithId:[NSNumber numberWithInt:111] // TODO
-                                         forDuration:self.duration
-                                        successBlock:^(RHPath *path) {
-                                            [self didLoadPath:path];
-                                        } failureBlock:^(NSError *error) {
-                                            [[[UIAlertView alloc] initWithTitle:@"Error"
-                                                                        message:@"Something went wrong building the tour. We're really sorry."
-                                                                       delegate:nil
-                                                              cancelButtonTitle:@"OK"
-                                                              otherButtonTitles: nil] show];
-                                            [self.navigationController popViewControllerAnimated:YES];
-                                        }];
 }
 
 #pragma mark - UITableViewDelegate Methods

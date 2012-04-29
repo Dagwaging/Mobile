@@ -36,8 +36,6 @@
 
 @property (nonatomic, strong) NSNumber *duration;
 
-@property (nonatomic, assign) BOOL useGPS;
-
 @property (nonatomic, assign) BOOL onCampus;
 
 @end
@@ -50,7 +48,6 @@
 @synthesize locationControl = locationControl_;
 @synthesize durationSlider = durationSlider_;
 @synthesize duration = _duration;
-@synthesize useGPS = _useGPS;
 @synthesize onCampus = _onCampus;
 
 #pragma mark - View lifecycle
@@ -60,7 +57,6 @@
     [super viewDidLoad];
     self.duration = [NSNumber numberWithInt:30];
     self.onCampus = YES;
-    self.useGPS = YES;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -74,21 +70,14 @@
     if ([segue.identifier isEqualToString:kSegueIdentifier]) {
         RHTagsBasketViewController *tagsBasketController = segue.destinationViewController;
         tagsBasketController.duration = self.duration;
-        tagsBasketController.useGPS = self.useGPS;
         tagsBasketController.onCampus = self.onCampus;
     }
 }
 
 - (void)tourTypeChanged:(id)sender
 {
-    UISegmentedControl *tourControl = (UISegmentedControl *) sender;
-    self.onCampus = tourControl.selectedSegmentIndex == 0;
-}
-
-- (void)locationTypeChanged:(id)sender
-{
-    UISegmentedControl *locationControl = (UISegmentedControl *) sender;
-    self.useGPS = locationControl.selectedSegmentIndex == 0;
+    UISwitch *tourTypeSwitch = sender;
+    self.onCampus = tourTypeSwitch.isOn;
 }
 
 - (void)durationSliderMoved:(id)sender

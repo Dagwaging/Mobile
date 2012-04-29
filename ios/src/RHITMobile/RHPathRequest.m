@@ -24,6 +24,7 @@
 #import "RHPath.h"
 #import "RHPathStep.h"
 
+
 #define kOffCampusTourPath @"/tours/offcampus%@"
 #define kOnCampusTourByGPSPath @"/tours/oncampus/fromgps/%f/%f%@"
 #define kOnCampusTourByLocationPath @"/tours/oncampus/fromloc/%d%@"
@@ -109,7 +110,6 @@
 
 + (void)makeOnCampusTourRequestWithTagIds:(NSArray *)tags
                        fromGPSCoordinages:(CLLocation *)location
-                               toLocation:(NSNumber *)endLocationServerId
                               forDuration:(NSNumber *)duration
                              successBlock:(void (^)(RHPath *))successBlock
                              failureBlock:(void (^)(NSError *))failureBlock
@@ -118,7 +118,9 @@
     [urlArgs setObject:kURLTrue forKey:kWaitKey];
     [urlArgs setObject:duration.description forKey:kLengthKey];
     
-    NSString *fullPath = [NSString stringWithFormat:kOnCampusTourByGPSPath, location.coordinate.latitude, location.coordinate.longitude, endLocationServerId];
+    NSLog(@"%f", location.coordinate.latitude);
+    
+    NSString *fullPath = [NSString stringWithFormat:kOnCampusTourByGPSPath, location.coordinate.latitude, location.coordinate.longitude, [self pathComponentFromTags:tags]];
     
     [RHJSONRequest makeRequestWithPath:fullPath urlArgs:urlArgs successBlock:^(NSDictionary *jsonDict) {
         

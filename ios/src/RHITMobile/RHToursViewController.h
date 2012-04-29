@@ -36,8 +36,6 @@
 
 - (IBAction)tourTypeChanged:(id)sender;
 
-- (IBAction)locationTypeChanged:(id)sender;
-
 - (IBAction)durationSliderMoved:(id)sender;
 
 @end

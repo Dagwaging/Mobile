@@ -149,7 +149,28 @@
         RHDepartureLocationSelectionViewController *departureSelection = segue.destinationViewController;
         
         departureSelection.gpsChosenBlock = ^(CLLocation *location) {
-            // TODO
+            self.navigationItem.title = @"Getting Directions";
+            
+            UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+            [activityIndicator startAnimating];
+            self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
+            
+            [RHPathRequest makeDirectionsRequestFromGPSCoordinates:location toLocation:self.location.serverIdentifier successBlock:^(RHPath *path) {
+                
+                [self.navigationController popToRootViewControllerAnimated:YES];
+                [[RHMapViewController.instance directionsManager] displayPath:path];
+                
+                self.navigationItem.title = self.location.name;
+                self.navigationItem.rightBarButtonItem = nil;
+                
+            } failureBlock:^(NSError *error) {
+                
+                [[[UIAlertView alloc] initWithTitle:@"Error" message:@"Something went wrong getting your directions. We're really sorry." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+                
+                self.navigationItem.title = self.location.name;
+                self.navigationItem.rightBarButtonItem = nil;
+                
+            }];
         };
         
         departureSelection.locationChosenBlock = ^(RHLocation *location) {

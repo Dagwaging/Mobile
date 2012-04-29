@@ -26,8 +26,6 @@
 
 @property (nonatomic, assign) BOOL onCampus;
 
-@property (nonatomic, assign) BOOL useGPS;
-
 - (IBAction)doneEditing:(id)sender;
 
 - (IBAction)buildTour:(id)sender;
