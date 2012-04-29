@@ -28,10 +28,6 @@
 
 @property (nonatomic, strong) IBOutlet UILabel *durationLabel;
 
-@property (nonatomic, strong) IBOutlet UILabel *locationLabel;
-
-@property (nonatomic, strong) IBOutlet UISegmentedControl *locationControl;
-
 @property (nonatomic, strong) IBOutlet UISlider *durationSlider;
 
 - (IBAction)tourTypeChanged:(id)sender;

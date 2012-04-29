@@ -44,8 +44,6 @@
 @implementation RHToursViewController
 
 @synthesize durationLabel = durationLabel_;
-@synthesize locationLabel = locationLabel_;
-@synthesize locationControl = locationControl_;
 @synthesize durationSlider = durationSlider_;
 @synthesize duration = _duration;
 @synthesize onCampus = _onCampus;
@@ -78,6 +76,8 @@
 {
     UISwitch *tourTypeSwitch = sender;
     self.onCampus = tourTypeSwitch.isOn;
+    
+    self.durationSlider.enabled = self.onCampus;
 }
 
 - (void)durationSliderMoved:(id)sender
