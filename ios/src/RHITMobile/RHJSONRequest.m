@@ -142,7 +142,7 @@ static int _numRequests = 0;
             allArgs = [allArgs stringByAppendingString:@"&"];
         }
         
-        NSString *encodedKey = (__bridge NSString *)CFURLCreateStringByAddingPercentEscapes(NULL,(__bridge CFStringRef)key, NULL, (CFStringRef)@"!*'();:@&=+$,/?%#[]",kCFStringEncodingUTF8 );
+        NSString *encodedKey = (__bridge NSString *)CFURLCreateStringByAddingPercentEscapes(NULL,(__bridge CFStringRef)key, NULL, (CFStringRef)@"!*'();:@&=$,/?%#[]",kCFStringEncodingUTF8 );
         NSString *encodedValue = (__bridge NSString *)CFURLCreateStringByAddingPercentEscapes(NULL,(__bridge CFStringRef)[urlArgs objectForKey:key], NULL, (CFStringRef)@"!*'();:@&=+$,/?%#[]",kCFStringEncodingUTF8 );
         
         allArgs = [allArgs stringByAppendingFormat:@"%@=%@", encodedKey, encodedValue];
