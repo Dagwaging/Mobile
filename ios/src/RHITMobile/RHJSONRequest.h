@@ -31,4 +31,10 @@
                                          urlArgs:(NSDictionary *)urlArgs
                                            error:(NSError *__strong*)error;
 
++ (void)makeRequestWithPath:(NSString *)path
+                    headers:(NSDictionary *)headers
+                    urlArgs:(NSDictionary *)urlArgs
+               successBlock:(void (^)(NSDictionary *))successBlock
+               failureBlock:(void (^)(NSError *))failureBlock;
+
 @end

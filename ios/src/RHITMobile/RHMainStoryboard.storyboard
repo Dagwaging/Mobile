@@ -711,6 +711,7 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="Kerberos Login" id="5xP-I0-r93"/>
                     <connections>
+                        <outlet property="actionButtonText" destination="D5J-BP-6bW" id="Us4-fM-r4r"/>
                         <outlet property="passwordField" destination="RAZ-Yn-o2Y" id="EBh-B3-TsP"/>
                         <outlet property="usernameField" destination="oD4-vi-Tg3" id="qer-Gd-nv1"/>
                         <segue destination="8UY-H8-Zzk" kind="push" identifier="LoginToDirectorySearchSegue" id="alt-z1-lH5"/>
@@ -1304,6 +1305,7 @@
         <class className="RHLoginViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/RHLoginViewController.h"/>
             <relationships>
+                <relationship kind="outlet" name="actionButtonText" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="passwordField" candidateClass="UITextField"/>
                 <relationship kind="outlet" name="usernameField" candidateClass="UITextField"/>
             </relationships>
@@ -1358,8 +1360,6 @@
                 <relationship kind="action" name="tourTypeChanged:"/>
                 <relationship kind="outlet" name="durationLabel" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="durationSlider" candidateClass="UISlider"/>
-                <relationship kind="outlet" name="locationControl" candidateClass="UISegmentedControl"/>
-                <relationship kind="outlet" name="locationLabel" candidateClass="UILabel"/>
             </relationships>
         </class>
         <class className="RHWebViewController" superclassName="UIViewController">

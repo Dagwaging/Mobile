@@ -26,8 +26,13 @@
 #define kInternalLocationsPath @"/locations/data/within/%d"
 #define kCampusServicesPath @"/services"
 #define kTourTagsPath @"/tours/tags"
+#define kBannerLoginPath @"/banner/authenticate"
 
 #define kVersionKey @"version"
+
+#define kUsernameHeader @"Login-Username"
+#define kPasswordHeader @"Login-Password"
+#define kAuthTokenHeader @"Auth-Token"
 
 
 @implementation RHLoaderRequestsWrapper
@@ -95,6 +100,25 @@
     return [RHJSONRequest makeSynchronousRequestWithPath:kTourTagsPath
                                                  urlArgs:urlArgs
                                                    error:error];
+}
+
+#pragma mark - AuthenticationLoader Requests
+
++ (void)makeAuthenticationRequestWithUsername:(NSString *)username
+                                     password:(NSString *)password
+                                 successBlock:(void (^)(NSDictionary *))successBlock 
+                                 failureBlock:(void (^)(NSError *))failureBlock
+{
+    NSDictionary *headers = [NSMutableDictionary dictionary];
+    [headers setValue:username forKey:kUsernameHeader];
+    [headers setValue:password forKey:kPasswordHeader];
+    
+    [RHJSONRequest makeRequestWithPath:kBannerLoginPath
+                               headers:headers
+                               urlArgs:nil
+                          successBlock:successBlock
+                          failureBlock:failureBlock];
+    
 }
 
 @end

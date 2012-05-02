@@ -82,6 +82,35 @@ static int _numRequests = 0;
     rhRequest.connection = connection;
 }
 
++ (void)makeRequestWithPath:(NSString *)path
+                    headers:(NSDictionary *)headers
+                    urlArgs:(NSDictionary *)urlArgs
+               successBlock:(void (^)(NSDictionary *))successBlock 
+               failureBlock:(void (^)(NSError *))failureBlock
+{
+    NSURL *requestUrl = [RHJSONRequest finalURLWithPath:path urlArgs:urlArgs];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:requestUrl];
+    
+    for (NSString *headerKey in headers.keyEnumerator) {
+        [request setValue:[headers objectForKey:headerKey] forHTTPHeaderField:headerKey];
+    }
+    
+#ifdef RHITMobile_RHNetworkDebug
+    NSLog(@"Making request: %@", requestUrl.absoluteString);
+#endif
+    
+    RHJSONRequest *rhRequest = [[RHJSONRequest alloc] initWithSuccessBlock:successBlock failureBlock:failureBlock];
+    
+    @synchronized ([RHJSONRequest class]) {
+        _numRequests ++;
+    }
+    
+    [RHJSONRequest updateNotificationStatus];
+    
+    NSURLConnection *connection = [NSURLConnection connectionWithRequest:request delegate:rhRequest];
+    rhRequest.connection = connection;
+}
+
 + (NSDictionary *)makeSynchronousRequestWithPath:(NSString *)path
                                          urlArgs:(NSDictionary *)urlArgs
                                            error:(NSError *__strong *)error
@@ -196,6 +225,20 @@ static int _numRequests = 0;
     NSLog(@"Error from NSURLConnection: %@", error);
 #endif
     _failureBlock(error);
+}
+
+- (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)protectionSpace {
+#ifdef RHITMobile_RHNetworkDebug
+    NSLog(@"Answering can authenticate");
+#endif
+    return [protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust];
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
+#ifdef RHITMobile_RHNetworkDebug
+    NSLog(@"Ignoring cert warnings");
+#endif
+    [challenge.sender continueWithoutCredentialForAuthenticationChallenge:challenge];
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection

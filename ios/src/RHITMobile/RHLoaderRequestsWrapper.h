@@ -36,4 +36,9 @@
 + (NSDictionary *)makeSynchronousTourTagsRequestWithWithVersion:(NSNumber *)version
                                                           error:(NSError *__strong*)error;
 
++ (void)makeAuthenticationRequestWithUsername:(NSString *)username
+                                     password:(NSString *)password
+                                 successBlock:(void (^)(NSDictionary *))successBlock
+                                 failureBlock:(void (^)(NSError *))failureBlock;
+
 @end

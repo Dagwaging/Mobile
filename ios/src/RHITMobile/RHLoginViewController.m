@@ -18,15 +18,27 @@
 //
 
 #import "RHLoginViewController.h"
+#import "RHAuthenticationLoader.h"
 
 
-@interface RHLoginViewController ()
+#define kSegueIdentifier @"LoginToDirectorySearchSegue"
+
+
+@interface RHLoginViewController () {
+@private
+    BOOL _loggingIn;
+    BOOL _loggedIn;
+}
 
 @property (nonatomic, strong) IBOutlet UITextField *usernameField;
 
 @property (nonatomic, strong) IBOutlet UITextField *passwordField;
 
+@property (nonatomic, strong) IBOutlet UILabel *actionButtonText;
+
 - (void)login;
+
+- (void)logout;
 
 @end
 
@@ -35,6 +47,7 @@
 
 @synthesize usernameField = _usernameField;
 @synthesize passwordField = _passwordField;
+@synthesize actionButtonText = _actionButtonText;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -48,12 +61,36 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
- 
+    
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    
+    _loggingIn = NO;
+    _loggedIn = NO;
+    
+    if ([RHAuthenticationLoader.instance hasCredentials]) {
+        [RHAuthenticationLoader.instance attemptReauthenticationWithSuccessBlock:^{
+            
+            self.navigationItem.title = @"Kerberos Login";
+            self.navigationItem.rightBarButtonItem = nil;
+            
+            self.usernameField.text = [RHAuthenticationLoader.instance username];
+            self.passwordField.text = @"aaaaaaaaaaaaaaa";
+            
+            self.actionButtonText.text = @"Log Out";
+            
+            _loggingIn = NO;
+            _loggedIn = YES;
+            
+            [self performSegueWithIdentifier:kSegueIdentifier sender:nil];
+            
+        } failureBlock:^(NSError *error) {
+            NSLog(@"Error: %@", error);
+        }];
+    }
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -76,8 +113,64 @@
 
 - (void)login
 {
+    if (_loggingIn) {
+        return;
+    }
+    
+    if (_loggedIn) {
+        [self logout];
+        return;
+    }
+    
+    _loggingIn = YES;
+    
     [self.usernameField resignFirstResponder];
     [self.passwordField resignFirstResponder];
+    
+    self.navigationItem.title = @"Logging in";
+    
+    UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
+    [activityIndicator startAnimating];
+    
+    [RHAuthenticationLoader.instance authenticateWithUsername:self.usernameField.text password:self.passwordField.text successBlock:^{
+        
+        self.navigationItem.title = @"Kerberos Login";
+        self.navigationItem.rightBarButtonItem = nil;
+        
+        self.passwordField.text = @"aaaaaaaaaaaaaaa";
+        
+        self.actionButtonText.text = @"Log Out";
+        
+        _loggingIn = NO;
+        _loggedIn = YES;
+        
+        [self performSegueWithIdentifier:kSegueIdentifier sender:nil];
+        
+    } failureBlock:^(NSError *error) {
+        [[[UIAlertView alloc] initWithTitle:@"Login Failed" message:@"Username or password incorrect" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+        
+        self.navigationItem.title = @"Kerberos Login";
+        self.navigationItem.rightBarButtonItem = nil;
+        
+        self.usernameField.text = @"";
+        self.passwordField.text = @"";
+        
+        _loggedIn = NO;
+        _loggingIn = NO;
+        
+        NSLog(@"Failed: %@", error);
+    }];
+}
+
+- (void)logout {
+    self.actionButtonText.text = @"Log In";
+    self.usernameField.text = @"";
+    self.passwordField.text = @"";
+    
+    [RHAuthenticationLoader.instance clearCredentials];
+    
+    _loggedIn = NO;
 }
 
 @end
