@@ -62,4 +62,24 @@
     return nil;
 }
 
+#pragma mark - Search Bar Delegate Methods
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
+{
+    [searchBar resignFirstResponder];
+}
+
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
+{
+    [searchBar resignFirstResponder];
+    
+    if (searchBar.selectedScopeButtonIndex == 0) {
+        // People
+    } else if (searchBar.selectedScopeButtonIndex == 1) {
+        // Courses
+    } else if (searchBar.selectedScopeButtonIndex == 2) {
+        // Rooms
+    }
+}
+
 @end

@@ -79,6 +79,10 @@
 		92ADEE321459BC5E00060A3F /* TabBarDirectoryIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 92ADEE301459BC5E00060A3F /* TabBarDirectoryIcon.png */; };
 		92ADEE331459BC5E00060A3F /* TabBarDirectoryIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 92ADEE311459BC5E00060A3F /* TabBarDirectoryIcon@2x.png */; };
 		92B34D7D15477F520047B1BC /* RHLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 92B34D7C15477F520047B1BC /* RHLoader.m */; };
+		92B629BE1551E48F000948CC /* RHPerson.m in Sources */ = {isa = PBXBuildFile; fileRef = 92B629BD1551E48F000948CC /* RHPerson.m */; };
+		92B629C11551E4A1000948CC /* RHCourse.m in Sources */ = {isa = PBXBuildFile; fileRef = 92B629C01551E4A1000948CC /* RHCourse.m */; };
+		92B629C71551E679000948CC /* RHUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 92B629C61551E678000948CC /* RHUser.m */; };
+		92B629CA1551EA5C000948CC /* RHCourseMeeting.m in Sources */ = {isa = PBXBuildFile; fileRef = 92B629C91551EA5C000948CC /* RHCourseMeeting.m */; };
 		92CEFC2314BEAA830085CEDB /* RHServiceLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 92CEFC2214BEAA830085CEDB /* RHServiceLink.m */; };
 		92D3672814B60DE000EE0504 /* RHPersonDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92D3672614B60DE000EE0504 /* RHPersonDetailViewController.m */; };
 		92D3672914B60DE000EE0504 /* RHPersonDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92D3672714B60DE000EE0504 /* RHPersonDetailViewController.xib */; };
@@ -221,6 +225,15 @@
 		92ADEE311459BC5E00060A3F /* TabBarDirectoryIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TabBarDirectoryIcon@2x.png"; sourceTree = "<group>"; };
 		92B34D7B15477F520047B1BC /* RHLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHLoader.h; sourceTree = "<group>"; };
 		92B34D7C15477F520047B1BC /* RHLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHLoader.m; sourceTree = "<group>"; };
+		92B629BB1551E47F000948CC /* RHDirectorySearchResult.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RHDirectorySearchResult.h; sourceTree = "<group>"; };
+		92B629BC1551E48F000948CC /* RHPerson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHPerson.h; sourceTree = "<group>"; };
+		92B629BD1551E48F000948CC /* RHPerson.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHPerson.m; sourceTree = "<group>"; };
+		92B629BF1551E4A1000948CC /* RHCourse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHCourse.h; sourceTree = "<group>"; };
+		92B629C01551E4A1000948CC /* RHCourse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHCourse.m; sourceTree = "<group>"; };
+		92B629C51551E678000948CC /* RHUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHUser.h; sourceTree = "<group>"; };
+		92B629C61551E678000948CC /* RHUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHUser.m; sourceTree = "<group>"; };
+		92B629C81551EA5C000948CC /* RHCourseMeeting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHCourseMeeting.h; sourceTree = "<group>"; };
+		92B629C91551EA5C000948CC /* RHCourseMeeting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHCourseMeeting.m; sourceTree = "<group>"; };
 		92CEFC2114BEAA830085CEDB /* RHServiceLink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHServiceLink.h; sourceTree = "<group>"; };
 		92CEFC2214BEAA830085CEDB /* RHServiceLink.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHServiceLink.m; sourceTree = "<group>"; };
 		92D3672514B60DE000EE0504 /* RHPersonDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHPersonDetailViewController.h; sourceTree = "<group>"; };
@@ -312,6 +325,7 @@
 		920D6DC7154C9BE3006F6E9E /* Unpersisted */ = {
 			isa = PBXGroup;
 			children = (
+				92B629B61551E422000948CC /* Directory */,
 				925465A81495C69B00C12B81 /* RHWrappedCoordinate.h */,
 				925465A91495C69C00C12B81 /* RHWrappedCoordinate.m */,
 				92F1B8B31496F67900F7FFD8 /* RHPathStep.h */,
@@ -532,6 +546,22 @@
 			name = "Map Customization";
 			sourceTree = "<group>";
 		};
+		92B629B61551E422000948CC /* Directory */ = {
+			isa = PBXGroup;
+			children = (
+				92B629BB1551E47F000948CC /* RHDirectorySearchResult.h */,
+				92B629C51551E678000948CC /* RHUser.h */,
+				92B629C61551E678000948CC /* RHUser.m */,
+				92B629BC1551E48F000948CC /* RHPerson.h */,
+				92B629BD1551E48F000948CC /* RHPerson.m */,
+				92B629BF1551E4A1000948CC /* RHCourse.h */,
+				92B629C01551E4A1000948CC /* RHCourse.m */,
+				92B629C81551EA5C000948CC /* RHCourseMeeting.h */,
+				92B629C91551EA5C000948CC /* RHCourseMeeting.m */,
+			);
+			name = Directory;
+			sourceTree = "<group>";
+		};
 		92ECC4C3141430510073C4C3 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -706,6 +736,10 @@
 				920D6DC5154C6CB2006F6E9E /* RHLoginViewController.m in Sources */,
 				92A2BA19155115DA001ADC41 /* RHAuthenticationLoader.m in Sources */,
 				92A2BA231551290B001ADC41 /* RHDirectorySearchViewController.m in Sources */,
+				92B629BE1551E48F000948CC /* RHPerson.m in Sources */,
+				92B629C11551E4A1000948CC /* RHCourse.m in Sources */,
+				92B629C71551E679000948CC /* RHUser.m in Sources */,
+				92B629CA1551EA5C000948CC /* RHCourseMeeting.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
