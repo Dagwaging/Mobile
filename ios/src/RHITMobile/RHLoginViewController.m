@@ -40,6 +40,8 @@
 
 - (void)logout;
 
+- (IBAction)segueToSearch:(id)sender;
+
 @end
 
 
@@ -72,10 +74,17 @@
     _loggedIn = NO;
     
     if ([RHAuthenticationLoader.instance hasCredentials]) {
+        
+        self.navigationItem.title = @"Logging in";
+        
+        UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
+        [activityIndicator startAnimating];
+        
         [RHAuthenticationLoader.instance attemptReauthenticationWithSuccessBlock:^{
             
             self.navigationItem.title = @"Kerberos Login";
-            self.navigationItem.rightBarButtonItem = nil;
+            self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Directory" style:UIBarButtonItemStyleBordered target:self action:@selector(segueToSearch:)];
             
             self.usernameField.text = [RHAuthenticationLoader.instance username];
             self.passwordField.text = @"aaaaaaaaaaaaaaa";
@@ -136,7 +145,8 @@
     [RHAuthenticationLoader.instance authenticateWithUsername:self.usernameField.text password:self.passwordField.text successBlock:^{
         
         self.navigationItem.title = @"Kerberos Login";
-        self.navigationItem.rightBarButtonItem = nil;
+        
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Directory" style:UIBarButtonItemStyleBordered target:self action:@selector(segueToSearch:)];
         
         self.passwordField.text = @"aaaaaaaaaaaaaaa";
         
@@ -168,9 +178,27 @@
     self.usernameField.text = @"";
     self.passwordField.text = @"";
     
+    self.navigationItem.rightBarButtonItem = nil;
+    
     [RHAuthenticationLoader.instance clearCredentials];
     
     _loggedIn = NO;
+}
+
+- (void)segueToSearch:(id)sender
+{
+    [self performSegueWithIdentifier:kSegueIdentifier sender:nil];
+}
+
+#pragma mark - Text Field Delegate Methods
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    if (textField == self.usernameField) {
+        [self.passwordField becomeFirstResponder];
+    } else {
+        [self.passwordField resignFirstResponder];
+    }
+    return NO;
 }
 
 @end

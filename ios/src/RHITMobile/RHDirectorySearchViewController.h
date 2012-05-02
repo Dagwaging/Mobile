@@ -1,5 +1,5 @@
 //
-//  RHLoginViewController.h
+//  RHDirectorySearchViewController.h
 //  Rose-Hulman Mobile
 //
 //  Copyright 2012 Rose-Hulman Institute of Technology
@@ -19,6 +19,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface RHLoginViewController : UITableViewController <UITextFieldDelegate>
+@interface RHDirectorySearchViewController : UIViewController <UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource>
 
 @end

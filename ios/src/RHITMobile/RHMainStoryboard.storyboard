@@ -646,6 +646,9 @@
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="alphabet" returnKeyType="next"/>
+                                                    <connections>
+                                                        <outlet property="delegate" destination="vZy-L9-H0P" id="aM6-86-Tvb"/>
+                                                    </connections>
                                                 </textField>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -674,6 +677,9 @@
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done" secureTextEntry="YES"/>
+                                                    <connections>
+                                                        <outlet property="delegate" destination="vZy-L9-H0P" id="sJ2-wM-De7"/>
+                                                    </connections>
                                                 </textField>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -720,11 +726,11 @@
             </objects>
             <point key="canvasLocation" x="1294" y="392"/>
         </scene>
-        <!--View Controller - Directory Search-->
+        <!--Directory Search View Controller - Directory Search-->
         <scene sceneID="2qq-c6-i5c">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7MY-Qi-mvF" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <viewController id="8UY-H8-Zzk" sceneMemberID="viewController">
+                <viewController id="8UY-H8-Zzk" customClass="RHDirectorySearchViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Uyw-WC-bzP">
                         <rect key="frame" x="0.0" y="64" width="320" height="367"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -734,15 +740,15 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="DirectoryStudentCell" textLabel="XUZ-9n-EWR" detailTextLabel="tuF-zq-hDe" style="IBUITableViewCellStyleSubtitle" id="wAx-4s-UJP">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="DirectoryResultCell" textLabel="XUZ-9n-EWR" detailTextLabel="tuF-zq-hDe" style="IBUITableViewCellStyleSubtitle" id="wAx-4s-UJP">
                                         <rect key="frame" x="0.0" y="22" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="0.0" y="0.0" width="300" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Student Search Result" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="XUZ-9n-EWR">
-                                                    <rect key="frame" x="10" y="2" width="193" height="22"/>
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Search Result" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="XUZ-9n-EWR">
+                                                    <rect key="frame" x="10" y="2" width="121" height="22"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -762,80 +768,6 @@
                                             <segue destination="v7t-e7-3IW" kind="push" id="ZxZ-A9-oGf"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="DirectoryFacultyCell" textLabel="Fe1-ol-2CJ" detailTextLabel="REH-AP-o60" style="IBUITableViewCellStyleSubtitle" id="nWi-kU-Q8p">
-                                        <rect key="frame" x="0.0" y="66" width="320" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="300" height="43"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Faculty Search Result" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Fe1-ol-2CJ">
-                                                    <rect key="frame" x="10" y="2" width="189" height="22"/>
-                                                    <autoresizingMask key="autoresizingMask"/>
-                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                    <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                </label>
-                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Details" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="REH-AP-o60">
-                                                    <rect key="frame" x="10" y="24" width="43" height="18"/>
-                                                    <autoresizingMask key="autoresizingMask"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <color key="textColor" red="0.50196078431372548" green="0.50196078431372548" blue="0.50196078431372548" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                </label>
-                                            </subviews>
-                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        </view>
-                                        <connections>
-                                            <segue destination="v7t-e7-3IW" kind="push" id="oOw-Ur-NNb"/>
-                                        </connections>
-                                    </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="DirectoryCourseCell" textLabel="uAK-7P-rZV" detailTextLabel="qrg-r6-p17" style="IBUITableViewCellStyleSubtitle" id="UJJ-wM-7wH">
-                                        <rect key="frame" x="0.0" y="110" width="320" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="300" height="43"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Course Search Result" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="uAK-7P-rZV">
-                                                    <rect key="frame" x="10" y="2" width="188" height="22"/>
-                                                    <autoresizingMask key="autoresizingMask"/>
-                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                    <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                </label>
-                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Details" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="qrg-r6-p17">
-                                                    <rect key="frame" x="10" y="24" width="43" height="18"/>
-                                                    <autoresizingMask key="autoresizingMask"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <color key="textColor" red="0.50196078430000002" green="0.50196078430000002" blue="0.50196078430000002" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                </label>
-                                            </subviews>
-                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        </view>
-                                        <connections>
-                                            <segue destination="MWk-2g-HMV" kind="push" id="omQ-HR-Hp2"/>
-                                        </connections>
-                                    </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="DirectoryMoreCell" textLabel="bfW-HY-kxg" style="IBUITableViewCellStyleDefault" id="1Iz-yR-3RG">
-                                        <rect key="frame" x="0.0" y="154" width="320" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="More Results..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="bfW-HY-kxg">
-                                                    <rect key="frame" x="10" y="0.0" width="300" height="43"/>
-                                                    <autoresizingMask key="autoresizingMask"/>
-                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
-                                                    <color key="textColor" red="0.01006578575" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                </label>
-                                            </subviews>
-                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        </view>
-                                    </tableViewCell>
                                 </prototypes>
                             </tableView>
                             <searchBar contentMode="redraw" showsCancelButton="YES" showsScopeBar="YES" id="BUW-gN-b5y">
@@ -845,6 +777,7 @@
                                 <scopeButtonTitles>
                                     <string>People</string>
                                     <string>Courses</string>
+                                    <string>Rooms</string>
                                 </scopeButtonTitles>
                                 <connections>
                                     <outlet property="delegate" destination="8UY-H8-Zzk" id="9r2-n0-ABo"/>
@@ -854,19 +787,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" title="Directory Search" id="SWB-2a-3ga"/>
-                    <connections>
-                        <outlet property="searchDisplayController" destination="0DV-Rp-kWy" id="s1C-BF-GJq"/>
-                    </connections>
                 </viewController>
-                <searchDisplayController id="0DV-Rp-kWy">
-                    <connections>
-                        <outlet property="delegate" destination="8UY-H8-Zzk" id="SGD-hj-u3m"/>
-                        <outlet property="searchBar" destination="BUW-gN-b5y" id="bT9-iB-F7W"/>
-                        <outlet property="searchContentsController" destination="8UY-H8-Zzk" id="jHd-Ms-npp"/>
-                        <outlet property="searchResultsDataSource" destination="8UY-H8-Zzk" id="bYr-aF-gxJ"/>
-                        <outlet property="searchResultsDelegate" destination="8UY-H8-Zzk" id="eWb-0H-oYM"/>
-                    </connections>
-                </searchDisplayController>
             </objects>
             <point key="canvasLocation" x="1760" y="174"/>
         </scene>
@@ -902,24 +823,6 @@
                 </viewController>
             </objects>
             <point key="canvasLocation" x="2814" y="-70"/>
-        </scene>
-        <!--View Controller - Course Detail-->
-        <scene sceneID="7DA-LS-jDF">
-            <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="MqM-1F-AfY" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <viewController id="MWk-2g-HMV" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="fZn-fA-K4t">
-                        <rect key="frame" x="0.0" y="64" width="320" height="367"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                    </view>
-                    <navigationItem key="navigationItem" title="Course Detail" id="0sU-df-nLy"/>
-                    <connections>
-                        <segue destination="XMR-2S-RTn" kind="push" identifier="CourseToScheduleSegue" id="uyb-Ee-cUn"/>
-                    </connections>
-                </viewController>
-            </objects>
-            <point key="canvasLocation" x="2278" y="280"/>
         </scene>
         <!--Navigation Controller - Map-->
         <scene sceneID="ms2-P5-oXj">
@@ -1287,6 +1190,9 @@
                 <relationship kind="outlet" name="navigationItem" candidateClass="UINavigationItem"/>
             </relationships>
         </class>
+        <class className="RHDirectorySearchViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHDirectorySearchViewController.h"/>
+        </class>
         <class className="RHLocationDetailViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/RHLocationDetailViewController.h"/>
             <relationships>
@@ -1376,12 +1282,10 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="7gL-rw-0R5"/>
-        <segue reference="yqD-yp-46p"/>
+        <segue reference="yrH-Av-Jeg"/>
         <segue reference="MCR-we-qWz"/>
         <segue reference="PKp-tb-ZTW"/>
-        <segue reference="yrH-Av-Jeg"/>
-        <segue reference="ZxZ-A9-oGf"/>
-        <segue reference="uyb-Ee-cUn"/>
+        <segue reference="7gL-rw-0R5"/>
+        <segue reference="yqD-yp-46p"/>
     </inferredMetricsTieBreakers>
 </document>
