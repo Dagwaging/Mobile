@@ -24,6 +24,8 @@
 
 - (void)loaderDidUpdateUnderlyingData;
 
+- (void)loaderDidFailToUpdateUnderlyingData:(NSError *)error;
+
 @end
 
 

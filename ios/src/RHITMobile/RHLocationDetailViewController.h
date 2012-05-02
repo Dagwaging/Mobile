@@ -20,10 +20,12 @@
 
 #import <UIKit/UIKit.h>
 
+#import "RHLocationsLoader.h"
+
 @class RHLocation;
 
 /// \ingroup views
-@interface RHLocationDetailViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
+@interface RHLocationDetailViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, RHLocationsLoaderSpecificLocationDelegate>
 
 @property (nonatomic, strong) RHLocation *location;
 @property (nonatomic, strong) NSArray *enclosedLocations;

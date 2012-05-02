@@ -41,7 +41,18 @@
 
 - (BOOL)application:(UIApplication *)application 
 didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
+    // Register ourselves for other managed object context save operations
+    NSNotificationCenter *notificationCenter = [NSNotificationCenter
+                                                defaultCenter];
+    [notificationCenter addObserver:self
+                           selector:@selector(managedContextDidSave:)
+                               name:NSManagedObjectContextDidSaveNotification 
+                             object:nil];
+    
+    // Kick off all data update
     [RHLoadersWrapper updateAllStoredData];
+    
     [self.window makeKeyAndVisible];
     return YES;
 }

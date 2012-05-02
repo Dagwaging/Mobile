@@ -23,6 +23,15 @@
 #import "RHLoader.h"
 
 
+@protocol RHLocationsLoaderSpecificLocationDelegate <NSObject>
+
+- (void)loaderDidFinishUpdatingLocationWithID:(NSManagedObjectID *)locationID;
+
+- (void)loaderDidFailToUpdateLocation:(NSError *)error;
+
+@end
+
+
 @interface RHLocationsLoader : RHLoader
 
 + (id)instance;
@@ -31,13 +40,16 @@
 
 - (void)updateLocations:(NSNumber *)version;
 
-- (void)registerCallbackForTopLevelLocations:(void (^)(void))callback;
+- (void)addDelegateForTopLevelLocations:(NSObject<RHLoaderDelegate> *)delegate;
 
-- (void)registerCallbackForAllInternalLocations:(void (^)(void))callback;
+- (void)removeDelegateForTopLevelLocations:(NSObject<RHLoaderDelegate> *)delegate;
 
-- (void)registerCallbackForLocationWithId:(NSNumber *)locationId
-                                 callback:(void (^)(void))callback;
+- (void)addDelegateForAllInternalLocations:(NSObject<RHLoaderDelegate> *)delegate;
 
-// TODO: failure callbacks
+- (void)removeDelegateForAllInternalLocations:(NSObject<RHLoaderDelegate> *)delegate;
+
+- (void)addDelegate:(NSObject<RHLocationsLoaderSpecificLocationDelegate> *)delegate forLocationWithServerID:(NSNumber *)serverID;
+
+- (void)removeDelegate:(NSObject<RHLocationsLoaderSpecificLocationDelegate> *)delegate forLocationWithServerID:(NSNumber *)serverID;
 
 @end

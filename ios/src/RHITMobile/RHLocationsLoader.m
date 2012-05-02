@@ -50,14 +50,13 @@
 #define kParentKey @"Parent"
 
 
-@interface RHLocationsLoader () {
-@private
-    BOOL _currentlyUpdating;
-    void (^_topLocationsCallback)(void);
-    void (^_allInternalLocationsCallback)(void);
-    void (^_internalLocationCallback)(void);
-    int _internalLocationCallbackIdentifier;
-}
+@interface RHLocationsLoader ()
+
+@property (nonatomic, strong) NSMutableSet *topLevelDelegates;
+
+@property (nonatomic, strong) NSMutableSet *allInternalDelegates;
+
+@property (nonatomic, strong) NSMutableDictionary *individualLocationDelegates;
 
 - (RHLocation *)locationFromJSONResponse:(NSDictionary *)jsonResponse
                   inManagedObjectContext:(NSManagedObjectContext *)localContext;
@@ -71,6 +70,11 @@
 
 @implementation RHLocationsLoader
 
+@synthesize currentlyUpdating = _currentlyUpdating;
+@synthesize topLevelDelegates = _topLevelDelegates;
+@synthesize allInternalDelegates = _allInternalDelegates;
+@synthesize individualLocationDelegates = _individualLocationDelegates;
+
 static RHLocationsLoader *_instance;
 
 + (void)initialize
@@ -83,27 +87,45 @@ static RHLocationsLoader *_instance;
     }
 }
 
-- (id)init
-{
-    if (self = [super init]) {
-        _currentlyUpdating = NO;
-        _topLocationsCallback = NULL;
-        _allInternalLocationsCallback = NULL;
-        _internalLocationCallback = NULL;
-        _internalLocationCallbackIdentifier = -1;
-    }
-    
-    return self;
-}
-
 + (id)instance
 {
     return _instance;
 }
 
-- (BOOL)currentlyUpdating
+- (id)init
 {
-    return _currentlyUpdating;
+    if (self = [super init]) {
+        _currentlyUpdating = NO;
+    }
+    
+    return self;
+}
+
+- (NSMutableSet *)topLevelDelegates
+{
+    if (_topLevelDelegates == nil) {
+        _topLevelDelegates = [NSMutableSet set];
+    }
+    
+    return _topLevelDelegates;
+}
+
+- (NSMutableSet *)allInternalDelegates
+{
+    if (_allInternalDelegates == nil) {
+        _allInternalDelegates = [NSMutableSet set];
+    }
+    
+    return _allInternalDelegates;
+}
+
+- (NSMutableDictionary *)individualLocationDelegates
+{
+    if (_individualLocationDelegates == nil) {
+        _individualLocationDelegates = [NSMutableDictionary dictionary];
+    }
+    
+    return _individualLocationDelegates;
 }
 
 - (void)updateLocations:(NSNumber *)version
@@ -175,12 +197,12 @@ static RHLocationsLoader *_instance;
     currentError = nil;
     [localContext save:&currentError];
     
-    // Callback on main thread
-    if (_topLocationsCallback != NULL) {
+    // Delegate callbacks on main thread
+    for (NSObject<RHLoaderDelegate> *delegate in self.topLevelDelegates) {
 #ifdef RHITMobile_RHLoaderDebug
-        NSLog(@"Top level locations callback found. Calling.");
+        NSLog(@"Top level locations delegate found: %@. Notifying of update.", delegate);
 #endif
-        [[NSOperationQueue mainQueue] addOperationWithBlock:_topLocationsCallback];
+        [delegate performSelectorOnMainThread:@selector(loaderDidUpdateUnderlyingData) withObject:nil waitUntilDone:NO];
     }
     
     if (currentError) {
@@ -262,12 +284,14 @@ static RHLocationsLoader *_instance;
                 return;
             }
             
-            // Callback if applicable
-            if (_internalLocationCallback != NULL && _internalLocationCallbackIdentifier == parentId) {
+            // Delegate callbacks on main thread
+            for (NSObject<RHLocationsLoaderSpecificLocationDelegate> *delegate in [self.individualLocationDelegates objectForKey:parent.serverIdentifier]) {
 #ifdef RHITMobile_RHLoaderDebug
-                NSLog(@"Internal location callback found. Calling.");
+                NSLog(@"Internal location delegate found for %@: %@. Notifying of update.", parent.name, delegate);
 #endif
-                [[NSOperationQueue mainQueue] addOperationWithBlock:_internalLocationCallback];
+                [NSOperationQueue.mainQueue addOperationWithBlock:^{
+                    [delegate loaderDidFinishUpdatingLocationWithID:parent.objectID];
+                }];
             }
             
             locationsPopulated ++;
@@ -313,37 +337,100 @@ static RHLocationsLoader *_instance;
     NSLog(@"Notifying delegates and performing callbacks");
 #endif
     
-    // Notify delegates
-    for (NSObject<RHLoaderDelegate> *delegate in self.delegates) {
-        [delegate performSelectorOnMainThread:@selector(loaderDidUpdateUnderlyingData)
-                                   withObject:nil
-                                waitUntilDone:NO];
+    // Final callback on main thread
+    for (NSObject<RHLoaderDelegate> *delegate in self.allInternalDelegates) {
+#ifdef RHITMobile_RHLoaderDebug
+        NSLog(@"All internal locations delegate found: %@. Notifying of update.", delegate);
+#endif
+        [delegate performSelectorOnMainThread:@selector(loaderDidUpdateUnderlyingData) withObject:nil waitUntilDone:NO];
+    }
+}
+
+- (void)addDelegate:(NSObject<RHLoaderDelegate> *)delegate {
+    [self addDelegateForAllInternalLocations:delegate];
+}
+
+- (void)removeDelegate:(NSObject<RHLoaderDelegate> *)delegate {
+    [self removeDelegateForAllInternalLocations:delegate];
+}
+
+- (void)addDelegateForTopLevelLocations:(NSObject<RHLoaderDelegate> *)delegate
+{
+#ifdef RHITMobile_RHLoaderDebug
+    NSLog(@"Adding top level locations delegate: %@", delegate);
+#endif
+    [self.topLevelDelegates addObject:delegate];
+}
+
+- (void)removeDelegateForTopLevelLocations:(NSObject<RHLoaderDelegate> *)delegate
+{
+#ifdef RHITMobile_RHLoaderDebug
+    NSLog(@"Removing top level locations delegate: %@", delegate);
+#endif
+    [self.topLevelDelegates removeObject:delegate];
+#ifdef RHITMobile_RHLoaderDebug
+    NSLog(@"After removal: %@", self.topLevelDelegates);
+#endif
+}
+
+- (void)addDelegateForAllInternalLocations:(NSObject<RHLoaderDelegate> *)delegate
+{
+#ifdef RHITMobile_RHLoaderDebug
+    NSLog(@"Adding all internal locations delegate: %@", delegate);
+#endif
+    [self.allInternalDelegates addObject:delegate];
+}
+
+- (void)removeDelegateForAllInternalLocations:(NSObject<RHLoaderDelegate> *)delegate
+{
+#ifdef RHITMobile_RHLoaderDebug
+    NSLog(@"Removing all internal locations delegate: %@", delegate);
+#endif
+    [self.allInternalDelegates removeObject:delegate];
+#ifdef RHITMobile_RHLoaderDebug
+    NSLog(@"After removal: %@", self.allInternalDelegates);
+#endif
+}
+
+- (void)addDelegate:(NSObject<RHLocationsLoaderSpecificLocationDelegate> *)delegate forLocationWithServerID:(NSNumber *)serverID
+{
+#ifdef RHITMobile_RHLoaderDebug
+    NSLog(@"Adding internal location delegate for location %@: %@", serverID, delegate);
+#endif
+    NSArray *delegates = [self.individualLocationDelegates objectForKey:serverID];
+    
+    if (delegates == nil) {
+#ifdef RHITMobile_RHLoaderDebug
+        NSLog(@"Creating new array for delegate");
+#endif
+        delegates = [NSArray array];
     }
     
-    // Callback
-    if (_allInternalLocationsCallback != NULL) {
+    [self.individualLocationDelegates setObject:[delegates arrayByAddingObject:delegate]
+                                         forKey:serverID];
+}
+
+- (void)removeDelegate:(NSObject<RHLocationsLoaderSpecificLocationDelegate> *)delegate forLocationWithServerID:(NSNumber *)serverID
+{
 #ifdef RHITMobile_RHLoaderDebug
-        NSLog(@"All internal locations callback found. Calling.");
+    NSLog(@"Removing internal location delegate for location %@: %@", serverID, delegate);
 #endif
-        [[NSOperationQueue mainQueue] addOperationWithBlock:_allInternalLocationsCallback];
+    NSArray *delegates = [self.individualLocationDelegates objectForKey:serverID];
+    
+    if (delegates == nil) {
+#ifdef RHITMobile_RHLoaderDebug
+        NSLog(@"No delegates for that location found anyway");
+#endif
+        return;
     }
-}
-
-- (void)registerCallbackForTopLevelLocations:(void (^)(void))callback
-{
-    _topLocationsCallback = callback;
-}
-
-- (void)registerCallbackForLocationWithId:(NSNumber *)locationId
-                                 callback:(void (^)(void))callback
-{
-    _internalLocationCallback = callback;
-    _internalLocationCallbackIdentifier = locationId.intValue;
-}
-
-- (void)registerCallbackForAllInternalLocations:(void (^)(void))callback
-{
-    _allInternalLocationsCallback = callback;
+    
+    NSMutableArray *mutableDelegates = [NSMutableArray arrayWithArray:delegates];
+    [mutableDelegates removeObject:delegate];
+    
+    [self.individualLocationDelegates setObject:mutableDelegates forKey:serverID];
+#ifdef RHITMobile_RHLoaderDebug
+    NSLog(@"After removal: %@", mutableDelegates);
+#endif
 }
 
 - (NSManagedObjectContext *)createThreadSafeManagedObjectContext
@@ -366,7 +453,7 @@ static RHLocationsLoader *_instance;
     
     if (possibleDuplicates.count > 0) {
 #ifdef RHITMobile_RHLoaderDebug
-        NSLog(@"Prevented duplicate location: %d", , serverIdentifier.intValue);
+        NSLog(@"Prevented duplicate location: %d", serverIdentifier.intValue);
 #endif
         return nil;
     }

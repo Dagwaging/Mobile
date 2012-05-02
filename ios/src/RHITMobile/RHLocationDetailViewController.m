@@ -93,19 +93,16 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     self.navigationItem.title = self.location.name;
-    // Do any additional setup after loading the view from its nib.
+    
+    [RHLocationsLoader.instance addDelegate:self forLocationWithServerID:self.location.serverIdentifier];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     self.location = self.location;
     [self.tableView reloadData];
-    
-    if (self.location.retrievalStatus != RHLocationRetrievalStatusFull) {
-        [RHLocationsLoader.instance registerCallbackForLocationWithId:self.location.serverIdentifier callback:^(void) {
-            [self setLocation:self.location];
-        }];
-    }
+
 }
 
 - (void)viewDidUnload
@@ -113,6 +110,8 @@
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
+    
+    [RHLocationsLoader.instance removeDelegate:self forLocationWithServerID:self.location.serverIdentifier];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)io
@@ -203,25 +202,6 @@
 #pragma mark - Property Methods
 
 - (void)setLocation:(RHLocation *)location {
-    // Describe the type of entity we'd like to retrieve
-    NSEntityDescription *entityDescription;
-    entityDescription = [NSEntityDescription
-                         entityForName:kRHLocationEntityName
-                         inManagedObjectContext:location.managedObjectContext];
-    
-    NSFetchRequest *request = [[NSFetchRequest alloc] init];
-    [request setEntity:entityDescription];
-    
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:
-                              @"serverIdentifier == %@", location.serverIdentifier];
-    [request setPredicate:predicate];
-    
-    NSArray *results = [location.managedObjectContext executeFetchRequest:request
-                                                                    error:nil];
-    
-    if (results.count > 0) {
-        location = [results objectAtIndex:0];
-    }
     
     // Initialize sections
     self.sections = [[NSMutableArray alloc] initWithCapacity:10];
@@ -407,6 +387,19 @@ titleForHeaderInSection:(NSInteger)section {
 - (void)didFinishLoadingDirections:(NSArray *)directions {
     [self.navigationController popToRootViewControllerAnimated:YES];
     // TODO display directions
+}
+
+#pragma mark - Locations Loader Individual Location Delegate Methods
+
+- (void)loaderDidFinishUpdatingLocationWithID:(NSManagedObjectID *)locationID
+{
+    NSManagedObjectContext *context = [(RHAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+    self.location = (RHLocation *)[context objectWithID:locationID];
+}
+
+- (void)loaderDidFailToUpdateLocation:(NSError *)error
+{
+    // TODO
 }
 
 @end

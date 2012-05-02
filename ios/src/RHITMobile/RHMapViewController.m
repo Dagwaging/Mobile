@@ -98,16 +98,7 @@ static RHMapViewController* _instance;
                              animated:NO];
     
     // Add ourself as a delegate in case the locations change out from under us
-    [RHLocationsLoader.instance addDelegate:self];
-    
-    // If a top-level update is happening right now, register a callback for when it's done
-    if ([RHLocationsLoader.instance currentlyUpdating]) {
-        __block RHMapViewController *blockSelf = self;
-        
-        [RHLocationsLoader.instance registerCallbackForTopLevelLocations:^(void) {
-            [blockSelf loadStoredLocations];
-        }];
-    }
+    [RHLocationsLoader.instance addDelegateForTopLevelLocations:self];
     
     [self loadStoredLocations];
 }
@@ -469,6 +460,12 @@ static RHMapViewController* _instance;
 - (void)loaderDidUpdateUnderlyingData
 {
     [self loadStoredLocations];
+}
+
+- (void)loaderDidFailToUpdateUnderlyingData:(NSError *)error
+{
+    NSLog(@"FAILURE: %@", error);
+    // TODO
 }
 
 @end
