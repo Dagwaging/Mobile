@@ -132,6 +132,11 @@
     [self loadRootServiceCategories];
 }
 
+- (void)loaderDidFailToUpdateUnderlyingData:(NSError *)error
+{
+    // TODO
+}
+
 #pragma mark - Private Methods
 
 - (NSManagedObjectContext *)managedObjectContext{
