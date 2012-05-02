@@ -25,6 +25,8 @@
 
 @interface RHCourse : NSObject <RHDirectorySearchResult>
 
++ (id)courseFromJSONDictionary:(NSDictionary *)jsonData;
+
 @property (nonatomic, strong) NSNumber *crn;
 
 @property (nonatomic, strong) NSString *name;

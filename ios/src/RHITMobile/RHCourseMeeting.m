@@ -26,4 +26,9 @@
 @synthesize startPeriod = _startPeriod;
 @synthesize endPeriod = _endPeriod;
 
++ (id)courseMeetingFromJSONDictionary:(NSDictionary *)jsonData
+{
+    return nil;
+}
+
 @end

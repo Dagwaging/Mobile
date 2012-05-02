@@ -25,6 +25,11 @@
 @synthesize summary = _summary;
 @synthesize username = _username;
 
++ (id)userFromJSONDictionary:(NSDictionary *)jsonData
+{
+    return nil;
+}
+
 - (NSString *)title
 {
     return self.fullName;

@@ -21,6 +21,8 @@
 
 @interface RHCourseMeeting : NSObject
 
++ (id)courseMeetingFromJSONDictionary:(NSDictionary *)jsonData;
+
 @property (nonatomic, strong) NSString *day;
 @property (nonatomic, strong) NSString *room;
 @property (nonatomic, strong) NSNumber *startPeriod;

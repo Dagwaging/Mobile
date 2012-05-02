@@ -23,6 +23,8 @@
 
 @interface RHUser : NSObject <RHDirectorySearchResult>
 
++ (id)userFromJSONDictionary:(NSDictionary *)jsonData;
+
 @property (nonatomic, strong) NSString *fullName;
 
 @property (nonatomic, strong) NSString *summary;

@@ -36,6 +36,11 @@
 @synthesize students = _students;
 @synthesize meetings = _meetings;
 
++ (id)courseFromJSONDictionary:(NSDictionary *)jsonData
+{
+    return nil;
+}
+
 - (NSString *)title
 {
     return self.courseNumber;
