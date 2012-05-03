@@ -30,6 +30,7 @@
 #define kUserSearchPath @"/banner/user/search/%@"
 #define kCourseSearchPath @"/banner/course/search/%@/%@"
 #define kPersonDataPath @"/banner/user/data/%@"
+#define kCourseDataPath @"/banner/course/data/%@/%@"
 
 #define kUsersKey @"Users"
 #define kCoursesKey @"Courses"
@@ -94,6 +95,21 @@
     [RHJSONRequest makeRequestWithPath:fullPath headers:[self makeAuthTokenHeaders] urlArgs:nil successBlock:^(NSDictionary *jsonData) {
         
         successBlock([RHPerson personFromJSONDictionary:jsonData]);
+        
+    } failureBlock:failureBlock];
+}
+
++ (void)makeCourseDetailRequestForCourse:(RHCourse *)course
+                            successBlock:(void (^)(RHCourse *))successBlock
+                            failureBlock:(void (^)(NSError *))failureBlock
+{
+    NSString *fullPath = [NSString stringWithFormat:kCourseDataPath, course.term, course.crn];
+    
+    [RHJSONRequest makeRequestWithPath:fullPath headers:[self makeAuthTokenHeaders] urlArgs:nil successBlock:^(NSDictionary *jsonDict) {
+        
+        NSArray *courses = [jsonDict objectForKey:kCoursesKey];
+        
+        successBlock([RHCourse courseFromJSONDictionary:[courses objectAtIndex:0]]);
         
     } failureBlock:failureBlock];
 }

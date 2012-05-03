@@ -97,6 +97,8 @@
         
         self.advisorLabel.text = person.advisor.fullName;
         
+        _loaded = YES;
+        
         [self.tableView reloadData];
         
     } failureBlock:^(NSError *error) {

@@ -19,7 +19,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class RHUser, RHPerson;
+@class RHUser, RHPerson, RHCourse;
 
 @interface RHDirectoryRequestsWrapper : NSObject
 
@@ -35,5 +35,10 @@
 + (void)makePersonDetailRequestForUser:(RHUser *)user
                           successBlock:(void (^)(RHPerson *))successBlock
                           failureBlock:(void (^)(NSError *))failureBlock;
+
++ (void)makeCourseDetailRequestForCourse:(RHCourse *)course
+                            successBlock:(void (^)(RHCourse *))successBlock
+                            failureBlock:(void (^)(NSError *))failureBlock;
+
 
 @end

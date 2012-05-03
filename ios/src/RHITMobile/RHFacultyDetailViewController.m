@@ -64,6 +64,14 @@
 {
     [super viewDidLoad];
     
+    _loaded = NO;
+    
+    self.navigationItem.title = @"Loading...";
+    
+    UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
+    [activityIndicator startAnimating];
+    
     [RHDirectoryRequestsWrapper makePersonDetailRequestForUser:self.user successBlock:^(RHPerson *person) {
         
         self.person = person;
@@ -76,6 +84,8 @@
         self.emailAddressLabel.text = person.emailAddress;
         self.telephoneNumberLabel.text = person.phoneNumber;
         self.locationLabel.text = person.location;
+        
+        _loaded = YES;
         
         [self.tableView reloadData];
         

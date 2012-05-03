@@ -18,12 +18,40 @@
 //
 
 #import "RHCourseDetailViewController.h"
+#import "RHCourse.h"
+#import "RHDirectoryRequestsWrapper.h"
+#import "RHUser.h"
 
-@interface RHCourseDetailViewController ()
+@interface RHCourseDetailViewController () {
+    @private
+    BOOL _loaded;
+}
+
+@property (nonatomic, strong) IBOutlet UILabel *nameLabel;
+@property (nonatomic, strong) IBOutlet UILabel *commentsLabel;
+@property (nonatomic, strong) IBOutlet UILabel *creditHoursLabel;
+@property (nonatomic, strong) IBOutlet UILabel *instructorLabel;
+@property (nonatomic, strong) IBOutlet UILabel *finalLabel;
+@property (nonatomic, strong) IBOutlet UILabel *enrolledLabel;
+@property (nonatomic, strong) IBOutlet UILabel *maxEnrolledLabel;
+@property (nonatomic, strong) IBOutlet UILabel *crnLabel;
+
+@property (nonatomic, strong) RHCourse *course;
 
 @end
 
 @implementation RHCourseDetailViewController
+
+@synthesize sourceCourse = _sourceCourse;
+@synthesize nameLabel = _nameLabel;
+@synthesize commentsLabel = _commentsLabel;
+@synthesize creditHoursLabel = _creditHoursLabel;
+@synthesize instructorLabel = _instructorLabel;
+@synthesize finalLabel = _finalLabel;
+@synthesize enrolledLabel = _enrolledLabel;
+@synthesize maxEnrolledLabel = _maxEnrolledLabel;
+@synthesize crnLabel = _crnLabel;
+@synthesize course = _course;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -37,6 +65,38 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    _loaded = NO;
+    
+    self.navigationItem.title = @"Loading...";
+    
+    UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
+    [activityIndicator startAnimating];
+    
+    [RHDirectoryRequestsWrapper makeCourseDetailRequestForCourse:self.sourceCourse successBlock:^(RHCourse *course) {
+        
+        self.course = course;
+        
+        self.navigationItem.title = course.courseNumber;
+        self.navigationItem.rightBarButtonItem = nil;
+        
+        self.nameLabel.text = course.name;
+        self.commentsLabel.text = course.comments;
+        self.creditHoursLabel.text = course.credits.description;
+        self.instructorLabel.text = course.instructor.fullName;
+        self.finalLabel.text = course.finalRoom; // TODO
+        self.enrolledLabel.text = course.enrolled.description;
+        self.maxEnrolledLabel.text = course.maxEnrolled.description;
+        self.crnLabel.text = course.crn.description;
+        
+        _loaded = YES;
+        
+        [self.tableView reloadData];
+        
+    } failureBlock:^(NSError *error) {
+        [self.navigationController popViewControllerAnimated:YES];
+    }];
 
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -61,6 +121,8 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
     // Navigation logic may go here. Create and push another view controller.
     /*
      <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];

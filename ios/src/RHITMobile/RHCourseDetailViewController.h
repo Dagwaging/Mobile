@@ -19,6 +19,10 @@
 
 #import <UIKit/UIKit.h>
 
+@class RHCourse;
+
 @interface RHCourseDetailViewController : UITableViewController
+
+@property (nonatomic, strong) RHCourse *sourceCourse;
 
 @end

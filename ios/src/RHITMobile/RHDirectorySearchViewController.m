@@ -20,6 +20,7 @@
 #import "RHDirectorySearchViewController.h"
 #import "RHAuthenticationLoader.h"
 #import "RHCourse.h"
+#import "RHCourseDetailViewController.h"
 #import "RHDirectoryRequestsWrapper.h"
 #import "RHDirectorySearchResult.h"
 #import "RHFacultyDetailViewController.h"
@@ -93,6 +94,9 @@
     } else if ([segue.identifier isEqualToString:kFacultySegueIdentifier]) {
         RHFacultyDetailViewController *facultyDetail = segue.destinationViewController;
         facultyDetail.user = [self.results objectAtIndex:[[self.tableView indexPathForCell:sender] row]];
+    } else if ([segue.identifier isEqualToString:kCourseSegueIdentifier]) {
+        RHCourseDetailViewController *courseDetail = segue.destinationViewController;
+        courseDetail.sourceCourse = [self.results objectAtIndex:[[self.tableView indexPathForCell:sender] row]];
     }
 }
 
