@@ -618,6 +618,7 @@
 				9265FEA01409AB5D00AE406E /* Sources */,
 				9265FEA11409AB5D00AE406E /* Frameworks */,
 				9265FEA21409AB5D00AE406E /* Resources */,
+				92D881511552EAAA00B87DB7 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -683,6 +684,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		92D881511552EAAA00B87DB7 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/bin/appledoc \\\n    --project-name \"Rose-Hulman Mobile\" \\\n    --project-company \"Rose-Hulman Institute of Technology\" \\\n    --company-id edu.rosehulman \\\n    --ignore .m \\\n    --exit-threshold 2 \\\n    $SOURCE_ROOT";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		9265FEA01409AB5D00AE406E /* Sources */ = {
