@@ -83,6 +83,7 @@
 		92B629C11551E4A1000948CC /* RHCourse.m in Sources */ = {isa = PBXBuildFile; fileRef = 92B629C01551E4A1000948CC /* RHCourse.m */; };
 		92B629C71551E679000948CC /* RHUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 92B629C61551E678000948CC /* RHUser.m */; };
 		92B629CA1551EA5C000948CC /* RHCourseMeeting.m in Sources */ = {isa = PBXBuildFile; fileRef = 92B629C91551EA5C000948CC /* RHCourseMeeting.m */; };
+		92B629CD15522EA4000948CC /* RHDirectoryRequestsWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 92B629CC15522EA4000948CC /* RHDirectoryRequestsWrapper.m */; };
 		92CEFC2314BEAA830085CEDB /* RHServiceLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 92CEFC2214BEAA830085CEDB /* RHServiceLink.m */; };
 		92D3672814B60DE000EE0504 /* RHPersonDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92D3672614B60DE000EE0504 /* RHPersonDetailViewController.m */; };
 		92D3672914B60DE000EE0504 /* RHPersonDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92D3672714B60DE000EE0504 /* RHPersonDetailViewController.xib */; };
@@ -234,6 +235,8 @@
 		92B629C61551E678000948CC /* RHUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHUser.m; sourceTree = "<group>"; };
 		92B629C81551EA5C000948CC /* RHCourseMeeting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHCourseMeeting.h; sourceTree = "<group>"; };
 		92B629C91551EA5C000948CC /* RHCourseMeeting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHCourseMeeting.m; sourceTree = "<group>"; };
+		92B629CB15522EA4000948CC /* RHDirectoryRequestsWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHDirectoryRequestsWrapper.h; sourceTree = "<group>"; };
+		92B629CC15522EA4000948CC /* RHDirectoryRequestsWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHDirectoryRequestsWrapper.m; sourceTree = "<group>"; };
 		92CEFC2114BEAA830085CEDB /* RHServiceLink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHServiceLink.h; sourceTree = "<group>"; };
 		92CEFC2214BEAA830085CEDB /* RHServiceLink.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHServiceLink.m; sourceTree = "<group>"; };
 		92D3672514B60DE000EE0504 /* RHPersonDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHPersonDetailViewController.h; sourceTree = "<group>"; };
@@ -397,6 +400,8 @@
 				921628181547A9A10017646C /* RHPathRequest.m */,
 				9245A40E154BB0D2001FEF93 /* RHLocationSearchRequest.h */,
 				9245A40F154BB0D2001FEF93 /* RHLocationSearchRequest.m */,
+				92B629CB15522EA4000948CC /* RHDirectoryRequestsWrapper.h */,
+				92B629CC15522EA4000948CC /* RHDirectoryRequestsWrapper.m */,
 			);
 			name = Requests;
 			sourceTree = "<group>";
@@ -740,6 +745,7 @@
 				92B629C11551E4A1000948CC /* RHCourse.m in Sources */,
 				92B629C71551E679000948CC /* RHUser.m in Sources */,
 				92B629CA1551EA5C000948CC /* RHCourseMeeting.m in Sources */,
+				92B629CD15522EA4000948CC /* RHDirectoryRequestsWrapper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
