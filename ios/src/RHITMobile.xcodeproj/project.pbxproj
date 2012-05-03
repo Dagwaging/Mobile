@@ -85,8 +85,6 @@
 		92B629CA1551EA5C000948CC /* RHCourseMeeting.m in Sources */ = {isa = PBXBuildFile; fileRef = 92B629C91551EA5C000948CC /* RHCourseMeeting.m */; };
 		92B629CD15522EA4000948CC /* RHDirectoryRequestsWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 92B629CC15522EA4000948CC /* RHDirectoryRequestsWrapper.m */; };
 		92CEFC2314BEAA830085CEDB /* RHServiceLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 92CEFC2214BEAA830085CEDB /* RHServiceLink.m */; };
-		92D3672814B60DE000EE0504 /* RHPersonDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92D3672614B60DE000EE0504 /* RHPersonDetailViewController.m */; };
-		92D3672914B60DE000EE0504 /* RHPersonDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92D3672714B60DE000EE0504 /* RHPersonDetailViewController.xib */; };
 		92D881491552461F00B87DB7 /* RHStudentDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92D881481552461F00B87DB7 /* RHStudentDetailViewController.m */; };
 		92DFEACA141FD4E500889314 /* MKMapView+ZoomLevel.m in Sources */ = {isa = PBXBuildFile; fileRef = 92DFEAC9141FD4E500889314 /* MKMapView+ZoomLevel.m */; };
 		92DFEAD01420245F00889314 /* RHAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 92DFEACF1420245F00889314 /* RHAnnotationView.m */; };
@@ -240,9 +238,6 @@
 		92B629CC15522EA4000948CC /* RHDirectoryRequestsWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHDirectoryRequestsWrapper.m; sourceTree = "<group>"; };
 		92CEFC2114BEAA830085CEDB /* RHServiceLink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHServiceLink.h; sourceTree = "<group>"; };
 		92CEFC2214BEAA830085CEDB /* RHServiceLink.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHServiceLink.m; sourceTree = "<group>"; };
-		92D3672514B60DE000EE0504 /* RHPersonDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHPersonDetailViewController.h; sourceTree = "<group>"; };
-		92D3672614B60DE000EE0504 /* RHPersonDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHPersonDetailViewController.m; sourceTree = "<group>"; };
-		92D3672714B60DE000EE0504 /* RHPersonDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RHPersonDetailViewController.xib; sourceTree = "<group>"; };
 		92D881471552461F00B87DB7 /* RHStudentDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHStudentDetailViewController.h; sourceTree = "<group>"; };
 		92D881481552461F00B87DB7 /* RHStudentDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHStudentDetailViewController.m; sourceTree = "<group>"; };
 		92DFEAC8141FD4E500889314 /* MKMapView+ZoomLevel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MKMapView+ZoomLevel.h"; sourceTree = "<group>"; };
@@ -593,9 +588,6 @@
 				92A2BA221551290B001ADC41 /* RHDirectorySearchViewController.m */,
 				92D881471552461F00B87DB7 /* RHStudentDetailViewController.h */,
 				92D881481552461F00B87DB7 /* RHStudentDetailViewController.m */,
-				92D3672514B60DE000EE0504 /* RHPersonDetailViewController.h */,
-				92D3672614B60DE000EE0504 /* RHPersonDetailViewController.m */,
-				92D3672714B60DE000EE0504 /* RHPersonDetailViewController.xib */,
 				925465AB1495EB7E00C12B81 /* RHToursViewController.h */,
 				925465AC1495EB7E00C12B81 /* RHToursViewController.m */,
 				92FFAC5414E0E5F700240458 /* RHTagsBasketViewController.h */,
@@ -676,7 +668,6 @@
 				924DE4DF145E787D00EEE8C6 /* TabBarBetaIcon@2x.png in Resources */,
 				922F44A514985AE800D5C2C3 /* TabBarToursIcon.png in Resources */,
 				922F44A614985AE800D5C2C3 /* TabBarToursIcon@2x.png in Resources */,
-				92D3672914B60DE000EE0504 /* RHPersonDetailViewController.xib in Resources */,
 				926C495115487DBE008FFA62 /* RHMainStoryboard.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -711,7 +702,6 @@
 				925465AE1495EB7F00C12B81 /* RHToursViewController.m in Sources */,
 				92F1B8B51496F67900F7FFD8 /* RHPathStep.m in Sources */,
 				92F1B8B914972AE600F7FFD8 /* RHSimplePointAnnotation.m in Sources */,
-				92D3672814B60DE000EE0504 /* RHPersonDetailViewController.m in Sources */,
 				920FAF8714BEAA1800BC4614 /* RHServiceItem.m in Sources */,
 				920FAF8A14BEAA2300BC4614 /* RHServiceCategory.m in Sources */,
 				92CEFC2314BEAA830085CEDB /* RHServiceLink.m in Sources */,
