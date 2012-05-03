@@ -19,6 +19,10 @@
 
 #import <UIKit/UIKit.h>
 
+@class RHUser;
+
 @interface RHFacultyDetailViewController : UITableViewController
+
+@property (nonatomic, strong) RHUser *user;
 
 @end

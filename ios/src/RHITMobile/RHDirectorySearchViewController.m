@@ -22,6 +22,7 @@
 #import "RHCourse.h"
 #import "RHDirectoryRequestsWrapper.h"
 #import "RHDirectorySearchResult.h"
+#import "RHFacultyDetailViewController.h"
 #import "RHStudentDetailViewController.h"
 #import "RHUser.h"
 
@@ -31,6 +32,8 @@
 #define kNoResultsCell @"DirectoryNoResultsCell"
 
 #define kStudentSegueIdentifier @"DirectorySearchToStudentDetailSegue"
+#define kFacultySegueIdentifier @"DirectorySearchToFacultyDetailSegue"
+#define kCourseSegueIdentifier @"DirectorySearchToCourseDetailSegue"
 
 @interface RHDirectorySearchViewController () {
 @private
@@ -87,6 +90,9 @@
     if ([segue.identifier isEqualToString:kStudentSegueIdentifier]) {
         RHStudentDetailViewController *studentDetail = segue.destinationViewController;
         studentDetail.user = [self.results objectAtIndex:[[self.tableView indexPathForCell:sender] row]];
+    } else if ([segue.identifier isEqualToString:kFacultySegueIdentifier]) {
+        RHFacultyDetailViewController *facultyDetail = segue.destinationViewController;
+        facultyDetail.user = [self.results objectAtIndex:[[self.tableView indexPathForCell:sender] row]];
     }
 }
 

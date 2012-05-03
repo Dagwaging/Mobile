@@ -793,7 +793,7 @@
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
                                         <connections>
-                                            <segue destination="tOY-xQ-XuH" kind="push" id="nVD-ZV-PyM"/>
+                                            <segue destination="tOY-xQ-XuH" kind="push" identifier="DirectorySearchToFacultyDetailSegue" id="nVD-ZV-PyM"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="DirectoryCourseResultCell" textLabel="2dt-rs-R2x" detailTextLabel="sw7-Qj-jZg" style="IBUITableViewCellStyleSubtitle" id="MIA-30-NWZ">
@@ -821,7 +821,7 @@
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
                                         <connections>
-                                            <segue destination="CSA-4K-zoi" kind="push" id="5Vq-Qf-5bp"/>
+                                            <segue destination="CSA-4K-zoi" kind="push" identifier="DirectorySearchToCourseDetailSegue" id="5Vq-Qf-5bp"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="DirectoryNoResultsCell" textLabel="xnt-Ne-P1Y" style="IBUITableViewCellStyleDefault" id="TSp-Db-If8">
@@ -1112,14 +1112,14 @@
                         <sections>
                             <tableViewSection id="Yh9-WU-g0I">
                                 <cells>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="kMa-cE-qtW" style="IBUITableViewCellStyleDefault" id="boD-ZR-6cP">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="kMa-cE-qtW" style="IBUITableViewCellStyleDefault" id="boD-ZR-6cP">
                                         <rect key="frame" x="0.0" y="10" width="320" height="46"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="10" y="1" width="300" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Department" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="kMa-cE-qtW">
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="kMa-cE-qtW">
                                                     <rect key="frame" x="10" y="0.0" width="280" height="43"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
@@ -1134,7 +1134,7 @@
                             </tableViewSection>
                             <tableViewSection headerTitle="Contact" id="zPw-us-ZXH">
                                 <cells>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="jqn-yt-y4D" detailTextLabel="Cra-KX-dIo" style="IBUITableViewCellStyleValue2" id="prV-LN-ySd">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="jqn-yt-y4D" detailTextLabel="Cra-KX-dIo" style="IBUITableViewCellStyleValue2" id="prV-LN-ySd">
                                         <rect key="frame" x="0.0" y="102" width="320" height="45"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -1142,13 +1142,13 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="CM" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="jqn-yt-y4D">
-                                                    <rect key="frame" x="10" y="15" width="67" height="15"/>
+                                                    <rect key="frame" x="10" y="14" width="67" height="15"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
                                                     <color key="textColor" red="0.32156862745098042" green="0.40000000000000002" blue="0.56862745098039214" alpha="1" colorSpace="calibratedRGB"/>
                                                     <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                 </label>
-                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="CM Number" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Cra-KX-dIo">
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Cra-KX-dIo">
                                                     <rect key="frame" x="83" y="12" width="85" height="19"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
@@ -1167,13 +1167,13 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Email" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Lzc-Np-uSa">
-                                                    <rect key="frame" x="10" y="15" width="67" height="15"/>
+                                                    <rect key="frame" x="10" y="14" width="67" height="15"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
                                                     <color key="textColor" red="0.32156862745098042" green="0.40000000000000002" blue="0.56862745098039214" alpha="1" colorSpace="calibratedRGB"/>
                                                     <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                 </label>
-                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Email Address" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="S3d-kH-akp">
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="S3d-kH-akp">
                                                     <rect key="frame" x="83" y="12" width="105" height="19"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
@@ -1192,13 +1192,13 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Telephone" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Ylw-vx-Dbb">
-                                                    <rect key="frame" x="10" y="15" width="67" height="15"/>
+                                                    <rect key="frame" x="10" y="14" width="67" height="15"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
                                                     <color key="textColor" red="0.32156862745098042" green="0.40000000000000002" blue="0.56862745098039214" alpha="1" colorSpace="calibratedRGB"/>
                                                     <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                 </label>
-                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Telephone Number" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Axk-Eu-ElQ">
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Axk-Eu-ElQ">
                                                     <rect key="frame" x="83" y="12" width="136" height="19"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
@@ -1235,14 +1235,14 @@
                             </tableViewSection>
                             <tableViewSection headerTitle="Location" id="Jie-tJ-X4h">
                                 <cells>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="71c-Uv-GQM" style="IBUITableViewCellStyleDefault" id="cKa-h2-u02">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="71c-Uv-GQM" style="IBUITableViewCellStyleDefault" id="cKa-h2-u02">
                                         <rect key="frame" x="0.0" y="348" width="320" height="46"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="10" y="1" width="300" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Location" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="71c-Uv-GQM">
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="71c-Uv-GQM">
                                                     <rect key="frame" x="10" y="0.0" width="280" height="43"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
@@ -1262,6 +1262,13 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Faculty/Staff Details" id="LCa-z2-OEW"/>
+                    <connections>
+                        <outlet property="campusMailboxLabel" destination="Cra-KX-dIo" id="34q-Dv-6pn"/>
+                        <outlet property="departmentLabel" destination="kMa-cE-qtW" id="31S-cO-eO9"/>
+                        <outlet property="emailAddressLabel" destination="S3d-kH-akp" id="IOe-ci-rJQ"/>
+                        <outlet property="locationLabel" destination="71c-Uv-GQM" id="DGc-DY-ltB"/>
+                        <outlet property="telephoneNumberLabel" destination="Axk-Eu-ElQ" id="fr0-Hf-VAR"/>
+                    </connections>
                 </tableViewController>
             </objects>
             <point key="canvasLocation" x="2244" y="-29"/>
@@ -1917,6 +1924,13 @@
         </class>
         <class className="RHFacultyDetailViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/RHFacultyDetailViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="campusMailboxLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="departmentLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="emailAddressLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="locationLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="telephoneNumberLabel" candidateClass="UILabel"/>
+            </relationships>
         </class>
         <class className="RHLocationDetailViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/RHLocationDetailViewController.h"/>

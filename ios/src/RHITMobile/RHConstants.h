@@ -213,10 +213,10 @@
 //#define RHITMobile_RHLoaderDebug
 
 // Network debugging
-#define RHITMobile_RHNetworkDebug
+//#define RHITMobile_RHNetworkDebug
 
 // JSON response debugging
-#define RHITMobile_RHJSONDebug
+//#define RHITMobile_RHJSONDebug
 
 #define kRHCampusCenterLatitude 39.483011
 #define kRHCampusCenterLongitude -87.325623
