@@ -123,7 +123,6 @@ namespace Rhit.Applications.ViewModels {
 
         private void MoveNodes() {
             State = BehaviorState.MovingNodes;
-            Paths.RestoreToDefault();
             ShowSave = true;
             Paths.AllowMovement();
         }

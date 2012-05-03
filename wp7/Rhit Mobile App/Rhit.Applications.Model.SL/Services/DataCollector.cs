@@ -412,11 +412,6 @@ namespace Rhit.Applications.Models.Services {
                     OnDirectionMessageDeleted(eventArgs);
                     break;
 
-                case ResponseType.DirectionCreation:
-                    if(PathIds == null || PathIds.Count <= 0) break;
-                    AddDirectionPaths(int.Parse(eventArgs.ResponseObject.Table[0][0]), PathIds);
-                    PathIds.Clear();
-                    break;
 
                 case ResponseType.DirectionUpdate:
                     OnDirectionUpdated(eventArgs);
@@ -424,10 +419,19 @@ namespace Rhit.Applications.Models.Services {
                 case ResponseType.DirectionDeletion:
                     OnDirectionDeleted(eventArgs);
                     break;
+
+
+                case ResponseType.DirectionCreation:
+                    if(PathIds == null || PathIds.Count <= 0) {
+                        OnDirectionCreated(eventArgs);
+                        break;
+                    }
+                    AddDirectionPaths(int.Parse(eventArgs.ResponseObject.Table[0][0]), PathIds);
+                    PathIds.Clear();
+                    break;
+
                 case ResponseType.DirectionPathAddition:
-                    //TODO: Finish this
-                    //Need to spGetDirection
-                    // and spGetDirectionPaths
+                    OnDirectionCreated(eventArgs);
                     break;
             }
         }
@@ -886,11 +890,13 @@ namespace Rhit.Applications.Models.Services {
         #endregion
 
         #region Direction Requests
-        public void CreateDirection(int message, IList<int> paths, int within) {
+        public void CreateDirection(int message, IList<int> paths, int? within) {
             RequestPart request = new RequestBuilder(BaseAddress).Admin.StoredProcedure(Connection.ServiceTokenGuid, "spAddDirection");
+            request = request.AddQueryParameter("startpath", paths[0]);
             request = request.AddQueryParameter("message", message);
-            request = request.AddQueryParameter("within", within);
+            request = request.AddQueryParameter("within", (object) within ?? "%00");
 
+            paths.RemoveAt(0);
             PathIds = paths;
 
             Connection.MakeRequest(request, RequestType.DirectionCreation);
@@ -909,11 +915,11 @@ namespace Rhit.Applications.Models.Services {
             Connection.MakeRequests(requests, RequestType.DirectionPathAddition);
         }
 
-        public void UpdateDirection(int id, int message, int within) {
+        public void UpdateDirection(int id, int message, int? within) {
             RequestPart request = new RequestBuilder(BaseAddress).Admin.StoredProcedure(Connection.ServiceTokenGuid, "spUpdateDirection");
             request = request.AddQueryParameter("id", id);
             request = request.AddQueryParameter("message", message);
-            request = request.AddQueryParameter("within", within);
+            request = request.AddQueryParameter("within", (object) within ?? "%00");
 
             Dictionary<string, object> metadata = new Dictionary<string, object>();
             metadata["DirectionId"] = id;
@@ -927,6 +933,16 @@ namespace Rhit.Applications.Models.Services {
             Dictionary<string, object> metadata = new Dictionary<string, object>();
             metadata["DirectionId"] = id;
             Connection.MakeMetaDataRequest(request, RequestType.DirectionDeletion, metadata);
+        }
+
+        public void GetDirection(int id) {
+            RequestPart request = new RequestBuilder(BaseAddress).Admin.StoredProcedure(Connection.ServiceTokenGuid, "spGetDirectionRow");
+            request = request.AddQueryParameter("id", id);
+
+        }
+
+        public void GetDirectionPaths(int id) {
+
         }
         #endregion
 

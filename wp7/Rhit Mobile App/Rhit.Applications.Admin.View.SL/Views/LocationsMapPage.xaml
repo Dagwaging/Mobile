@@ -1,8 +1,26 @@
-﻿<navigation:Page x:Class="Rhit.Applications.Views.LocationsMapPage" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:cmds="clr-namespace:Rhit.Applications.Mvvm.Commands;assembly=Rhit.Applications.Mvvm.SL" xmlns:converter="clr-namespace:Rhit.Applications.Views.Converters" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:i="http://schemas.microsoft.com/expression/2010/interactions" xmlns:it="http://schemas.microsoft.com/expression/2010/interactivity" xmlns:map="clr-namespace:Microsoft.Maps.MapControl;assembly=Microsoft.Maps.MapControl" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:my="clr-namespace:Rhit.Applications.Views" xmlns:navi="clr-namespace:Microsoft.Maps.MapControl.Navigation;assembly=Microsoft.Maps.MapControl" xmlns:navigation="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Navigation" xmlns:sdk="http://schemas.microsoft.com/winfx/2006/xaml/presentation/sdk" xmlns:sys="clr-namespace:System;assembly=mscorlib" xmlns:toolkit="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit" xmlns:exts="clr-namespace:Rhit.Applications.Extentions.Controls;assembly=Rhit.Applications.Extentions.SL" xmlns:util="clr-namespace:Rhit.Applications.Views.Utilities" xmlns:vm="clr-namespace:Rhit.Applications.ViewModels;assembly=Rhit.Applications.ViewModels.SL" Title="MapPage" d:DesignHeight="480" d:DesignWidth="640" Style="{StaticResource PageStyle}" mc:Ignorable="d">
+﻿<navigation:Page
+    x:Class="Rhit.Applications.Views.LocationsMapPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cmds="clr-namespace:Rhit.Applications.Mvvm.Commands;assembly=Rhit.Applications.Mvvm.SL"
+    xmlns:converter="clr-namespace:Rhit.Applications.Views.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactions"
+    xmlns:it="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:map="clr-namespace:Microsoft.Maps.MapControl;assembly=Microsoft.Maps.MapControl"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:my="clr-namespace:Rhit.Applications.Views"
+    xmlns:navi="clr-namespace:Microsoft.Maps.MapControl.Navigation;assembly=Microsoft.Maps.MapControl"
+    xmlns:navigation="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Navigation"
+    xmlns:sdk="http://schemas.microsoft.com/winfx/2006/xaml/presentation/sdk"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    xmlns:toolkit="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit"
+    xmlns:exts="clr-namespace:Rhit.Applications.Extentions.Controls;assembly=Rhit.Applications.Extentions.SL"
+    xmlns:util="clr-namespace:Rhit.Applications.Views.Utilities"
+    xmlns:vm="clr-namespace:Rhit.Applications.ViewModels;assembly=Rhit.Applications.ViewModels.SL"
+    Title="MapPage" d:DesignHeight="480" d:DesignWidth="640" Style="{StaticResource PageStyle}" mc:Ignorable="d">
 
     <navigation:Page.Resources>
-
-
         <converter:ObjectToBoolConverter x:Key="ObjectBoolConverter" />
         <converter:ObjectToBoolConverter x:Key="RObjectBoolConverter" Reverse="True" />
 

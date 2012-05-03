@@ -328,7 +328,7 @@
 
                             <exts:GroupBox Grid.Row="0" Style="{StaticResource GroupBoxStyle}" Header="Direction Info">
                                 <StackPanel>
-                                    <ComboBox ItemsSource="{Binding Paths.Messages}" SelectedItem="{Binding Paths.CurrentDirection.Message, Mode=TwoWay}">
+                                    <ComboBox ItemsSource="{Binding Paths.AllMessages}" SelectedItem="{Binding Paths.CurrentMessage, Mode=TwoWay}">
                                         <ComboBox.ItemTemplate>
                                             <DataTemplate>
                                                 <TextBlock Text="{Binding Message}" />
@@ -364,7 +364,7 @@
                                         <CheckBox Content="Elevator" IsChecked="{Binding IsElevator, Mode=TwoWay}" />
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Text="Stairs:" />
-                                            <TextBox Text="{Binding StairCount, Mode=TwoWay, TargetNullValue='0'}" />
+                                            <TextBox Text="{Binding StairCount, Mode=TwoWay, FallbackValue='0'}" />
                                         </StackPanel>
                                     </StackPanel>
 
@@ -410,10 +410,10 @@
                                         <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding SelectedItem.ReverseMessage, ElementName=MessageComboBox, Mode=TwoWay}" />
 
                                         <TextBlock Grid.Row="2" Grid.Column="0" Text="Action: " />
-                                        <ComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding Paths.Actions}" SelectedItem="{Binding SelectedItem.Action, ElementName=MessageComboBox, Mode=TwoWay, TargetNullValue='None'}" />
+                                        <ComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding Paths.AllActions}" SelectedItem="{Binding SelectedItem.Action, ElementName=MessageComboBox, Mode=TwoWay, TargetNullValue='None'}" />
 
                                         <TextBlock Grid.Row="3" Grid.Column="0" Text="Reverse Action: " />
-                                        <ComboBox Grid.Row="3" Grid.Column="1" ItemsSource="{Binding Paths.Actions}" SelectedItem="{Binding SelectedItem.ReverseAction, ElementName=MessageComboBox, Mode=TwoWay, TargetNullValue='None'}" />
+                                        <ComboBox Grid.Row="3" Grid.Column="1" ItemsSource="{Binding Paths.AllActions}" SelectedItem="{Binding SelectedItem.ReverseAction, ElementName=MessageComboBox, Mode=TwoWay, TargetNullValue='None'}" />
 
                                         <TextBlock Grid.Row="4" Grid.Column="0" Text="Message Offset: " />
                                         <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding SelectedItem.Offset, ElementName=MessageComboBox, Mode=TwoWay}" />
