@@ -22,12 +22,15 @@
 #import "RHCourse.h"
 #import "RHDirectoryRequestsWrapper.h"
 #import "RHDirectorySearchResult.h"
+#import "RHStudentDetailViewController.h"
 #import "RHUser.h"
 
 #define kStudentCell @"DirectoryStudentResultCell"
 #define kFacultyCell @"DirectoryFacultyResultCell"
 #define kCourseCell @"DirectoryCourseResultCell"
 #define kNoResultsCell @"DirectoryNoResultsCell"
+
+#define kStudentSegueIdentifier @"DirectorySearchToStudentDetailSegue"
 
 @interface RHDirectorySearchViewController () {
 @private
@@ -77,6 +80,14 @@
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString:kStudentSegueIdentifier]) {
+        RHStudentDetailViewController *studentDetail = segue.destinationViewController;
+        studentDetail.user = [self.results objectAtIndex:[[self.tableView indexPathForCell:sender] row]];
+    }
 }
 
 - (NSArray *)results

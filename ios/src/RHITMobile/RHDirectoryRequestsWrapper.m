@@ -21,6 +21,7 @@
 #import "RHAuthenticationLoader.h"
 #import "RHCourse.h"
 #import "RHJSONRequest.h"
+#import "RHPerson.h"
 #import "RHUser.h"
 
 
@@ -28,6 +29,7 @@
 
 #define kUserSearchPath @"/banner/user/search/%@"
 #define kCourseSearchPath @"/banner/course/search/%@/%@"
+#define kPersonDataPath @"/banner/user/data/%@"
 
 #define kUsersKey @"Users"
 #define kCoursesKey @"Courses"
@@ -79,6 +81,19 @@
         }
         
         successBlock(results);
+        
+    } failureBlock:failureBlock];
+}
+
++ (void)makePersonDetailRequestForUser:(RHUser *)user
+                          successBlock:(void (^)(RHPerson *))successBlock
+                          failureBlock:(void (^)(NSError *))failureBlock
+{
+    NSString *fullPath = [NSString stringWithFormat:kPersonDataPath, user.username];
+    
+    [RHJSONRequest makeRequestWithPath:fullPath headers:[self makeAuthTokenHeaders] urlArgs:nil successBlock:^(NSDictionary *jsonData) {
+        
+        successBlock([RHPerson personFromJSONDictionary:jsonData]);
         
     } failureBlock:failureBlock];
 }

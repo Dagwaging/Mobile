@@ -19,6 +19,8 @@
 
 #import <Foundation/Foundation.h>
 
+@class RHUser, RHPerson;
+
 @interface RHDirectoryRequestsWrapper : NSObject
 
 + (void)makeUserSearchRequestForSearchTerm:(NSString *)searchTerm
@@ -29,5 +31,9 @@
                                         term:(NSString *)term
                                 successBlock:(void (^)(NSArray *))successBlock
                                 failureBlock:(void (^)(NSError *))failureBlock;
+
++ (void)makePersonDetailRequestForUser:(RHUser *)user
+                          successBlock:(void (^)(RHPerson *))successBlock
+                          failureBlock:(void (^)(NSError *))failureBlock;
 
 @end

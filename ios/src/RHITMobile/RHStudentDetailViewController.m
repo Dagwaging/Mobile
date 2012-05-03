@@ -18,12 +18,44 @@
 //
 
 #import "RHStudentDetailViewController.h"
+#import "RHDirectoryRequestsWrapper.h"
+#import "RHPerson.h"
+#import "RHUser.h"
 
-@interface RHStudentDetailViewController ()
+@interface RHStudentDetailViewController () {
+    @private
+    BOOL _loaded;
+}
+
+@property (nonatomic, strong) IBOutlet UILabel *standingLabel;
+
+@property (nonatomic, strong) IBOutlet UILabel *majorsLabel;
+
+@property (nonatomic, strong) IBOutlet UILabel *campusMailboxLabel;
+
+@property (nonatomic, strong) IBOutlet UILabel *emailAddressLabel;
+
+@property (nonatomic, strong) IBOutlet UILabel *telephoneNumberLabel;
+
+@property (nonatomic, strong) IBOutlet UILabel *locationLabel;
+
+@property (nonatomic, strong) IBOutlet UILabel *advisorLabel;
+
+@property (nonatomic, strong) RHPerson *person;
 
 @end
 
 @implementation RHStudentDetailViewController
+
+@synthesize user = _user;
+@synthesize standingLabel = _standingLabel;
+@synthesize majorsLabel = _majorsLabel;
+@synthesize campusMailboxLabel = _campusMailboxLabel;
+@synthesize emailAddressLabel = _emailAddressLabel;
+@synthesize telephoneNumberLabel = _telephoneNumberLabel;
+@synthesize locationLabel = _locationLabel;
+@synthesize advisorLabel = _advisorLabel;
+@synthesize person = _person;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -37,6 +69,36 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    _loaded = NO;
+    
+    self.navigationItem.title = @"Loading...";
+    
+    UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
+    [activityIndicator startAnimating];
+    
+    [RHDirectoryRequestsWrapper makePersonDetailRequestForUser:self.user successBlock:^(RHPerson *person) {
+        
+        self.person = person;
+        
+        self.navigationItem.title = person.userAccount.fullName;
+        self.navigationItem.rightBarButtonItem = nil;
+        
+        self.standingLabel.text = person.userAccount.summary;
+        self.majorsLabel.text = person.majors;
+        self.campusMailboxLabel.text = person.campusMailbox.description;
+        self.emailAddressLabel.text = person.emailAddress;
+        self.telephoneNumberLabel.text = person.phoneNumber;
+        self.locationLabel.text = person.location;
+        
+        self.advisorLabel.text = person.advisor.fullName;
+        
+        [self.tableView reloadData];
+        
+    } failureBlock:^(NSError *error) {
+        [self.navigationController popViewControllerAnimated:YES];
+    }];
 
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -61,6 +123,8 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
     // Navigation logic may go here. Create and push another view controller.
     /*
      <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
