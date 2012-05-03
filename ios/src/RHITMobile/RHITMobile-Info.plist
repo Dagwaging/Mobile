@@ -12,8 +12,6 @@
 	<string>LaunchIcon.png</string>
 	<key>CFBundleIconFiles</key>
 	<array>
-		<string>launch-icon-small.png</string>
-		<string>launch-icon-large.png</string>
 		<string>LaunchIcon.png</string>
 		<string>LaunchIcon@2x.png</string>
 	</array>
@@ -23,8 +21,6 @@
 		<dict>
 			<key>CFBundleIconFiles</key>
 			<array>
-				<string>launch-icon-small.png</string>
-				<string>launch-icon-large.png</string>
 				<string>LaunchIcon.png</string>
 				<string>LaunchIcon@2x.png</string>
 			</array>
