@@ -697,7 +697,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [ -f /usr/local/bin/appledoc ]; then\n\n    /usr/local/bin/appledoc \\\n        --project-name \"Rose-Hulman Mobile\" \\\n        --project-company \"Rose-Hulman Institute of Technology\" \\\n        --company-id edu.rosehulman \\\n        --ignore .m \\\n        --exit-threshold 2 \\\n        $SOURCE_ROOT\nelse\n\n    echo \"AppleDoc not installed to /usr/local/bin. Install AppleDoc before building: <https://github.com/tomaz/appledoc>\"\n    exit 1\n\nfi";
+			shellScript = "if [ -f /usr/local/bin/appledoc ]; then\n\n    /usr/local/bin/appledoc \\\n        --project-name \"Rose-Hulman Mobile\" \\\n        --project-company \"Rose-Hulman Institute of Technology\" \\\n        --company-id edu.rosehulman \\\n        --ignore .m \\\n        --ignore $SOURCE_ROOT/TouchJSON \\\n        --exit-threshold 2 \\\n        $SOURCE_ROOT\nelse\n\n    echo \"AppleDoc not installed to /usr/local/bin. Install AppleDoc before building: <https://github.com/tomaz/appledoc>\"\n    exit 1\n\nfi";
 		};
 /* End PBXShellScriptBuildPhase section */
 
