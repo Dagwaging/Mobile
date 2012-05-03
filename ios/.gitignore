@@ -4,8 +4,9 @@
 .Spotlight-V100
 .Trashes
 
-## Doxygen Stuff
+## AppleDoc Stuff
 doc/
+docset-installed.txt
 
 ## Xcode Stuff
 build/
