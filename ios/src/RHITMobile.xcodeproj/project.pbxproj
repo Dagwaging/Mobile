@@ -86,6 +86,8 @@
 		92B629CD15522EA4000948CC /* RHDirectoryRequestsWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 92B629CC15522EA4000948CC /* RHDirectoryRequestsWrapper.m */; };
 		92CEFC2314BEAA830085CEDB /* RHServiceLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 92CEFC2214BEAA830085CEDB /* RHServiceLink.m */; };
 		92D881491552461F00B87DB7 /* RHStudentDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92D881481552461F00B87DB7 /* RHStudentDetailViewController.m */; };
+		92D8814D1552623400B87DB7 /* RHFacultyDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92D8814C1552623400B87DB7 /* RHFacultyDetailViewController.m */; };
+		92D881501552624800B87DB7 /* RHCourseDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92D8814F1552624800B87DB7 /* RHCourseDetailViewController.m */; };
 		92DFEACA141FD4E500889314 /* MKMapView+ZoomLevel.m in Sources */ = {isa = PBXBuildFile; fileRef = 92DFEAC9141FD4E500889314 /* MKMapView+ZoomLevel.m */; };
 		92DFEAD01420245F00889314 /* RHAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 92DFEACF1420245F00889314 /* RHAnnotationView.m */; };
 		92DFEAD414203C6400889314 /* RHMapLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 92DFEAD314203C6400889314 /* RHMapLabel.m */; };
@@ -240,6 +242,10 @@
 		92CEFC2214BEAA830085CEDB /* RHServiceLink.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHServiceLink.m; sourceTree = "<group>"; };
 		92D881471552461F00B87DB7 /* RHStudentDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHStudentDetailViewController.h; sourceTree = "<group>"; };
 		92D881481552461F00B87DB7 /* RHStudentDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHStudentDetailViewController.m; sourceTree = "<group>"; };
+		92D8814B1552623400B87DB7 /* RHFacultyDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHFacultyDetailViewController.h; sourceTree = "<group>"; };
+		92D8814C1552623400B87DB7 /* RHFacultyDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHFacultyDetailViewController.m; sourceTree = "<group>"; };
+		92D8814E1552624800B87DB7 /* RHCourseDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHCourseDetailViewController.h; sourceTree = "<group>"; };
+		92D8814F1552624800B87DB7 /* RHCourseDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHCourseDetailViewController.m; sourceTree = "<group>"; };
 		92DFEAC8141FD4E500889314 /* MKMapView+ZoomLevel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MKMapView+ZoomLevel.h"; sourceTree = "<group>"; };
 		92DFEAC9141FD4E500889314 /* MKMapView+ZoomLevel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MKMapView+ZoomLevel.m"; sourceTree = "<group>"; };
 		92DFEACC141FEF9100889314 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
@@ -588,6 +594,10 @@
 				92A2BA221551290B001ADC41 /* RHDirectorySearchViewController.m */,
 				92D881471552461F00B87DB7 /* RHStudentDetailViewController.h */,
 				92D881481552461F00B87DB7 /* RHStudentDetailViewController.m */,
+				92D8814B1552623400B87DB7 /* RHFacultyDetailViewController.h */,
+				92D8814C1552623400B87DB7 /* RHFacultyDetailViewController.m */,
+				92D8814E1552624800B87DB7 /* RHCourseDetailViewController.h */,
+				92D8814F1552624800B87DB7 /* RHCourseDetailViewController.m */,
 				925465AB1495EB7E00C12B81 /* RHToursViewController.h */,
 				925465AC1495EB7E00C12B81 /* RHToursViewController.m */,
 				92FFAC5414E0E5F700240458 /* RHTagsBasketViewController.h */,
@@ -742,6 +752,8 @@
 				92B629CA1551EA5C000948CC /* RHCourseMeeting.m in Sources */,
 				92B629CD15522EA4000948CC /* RHDirectoryRequestsWrapper.m in Sources */,
 				92D881491552461F00B87DB7 /* RHStudentDetailViewController.m in Sources */,
+				92D8814D1552623400B87DB7 /* RHFacultyDetailViewController.m in Sources */,
+				92D881501552624800B87DB7 /* RHCourseDetailViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
