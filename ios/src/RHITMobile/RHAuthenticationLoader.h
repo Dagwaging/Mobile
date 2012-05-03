@@ -25,9 +25,15 @@
 
 @property (nonatomic, readonly) NSString *username;
 
+@property (nonatomic, strong, readonly) NSString *authToken;
+
 - (BOOL)hasCredentials;
 
+- (BOOL)hasAuthToken;
+
 - (void)clearCredentials;
+
+- (void)clearAuthToken;
 
 - (void)attemptReauthenticationWithSuccessBlock:(void (^)(void))successBlock
                                    failureBlock:(void (^)(NSError *))failureBlock;

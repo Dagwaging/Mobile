@@ -77,6 +77,9 @@
         
         self.navigationItem.title = @"Logging in";
         
+        self.usernameField.text = [RHAuthenticationLoader.instance username];
+        self.passwordField.text = @"aaaaaaaaaaaaaaa";
+        
         UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
         [activityIndicator startAnimating];
@@ -97,7 +100,20 @@
             [self performSegueWithIdentifier:kSegueIdentifier sender:nil];
             
         } failureBlock:^(NSError *error) {
-            NSLog(@"Error: %@", error);
+            
+            [[[UIAlertView alloc] initWithTitle:@"Login Failed" message:@"Username or password incorrect" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+            
+            self.navigationItem.title = @"Kerberos Login";
+            self.navigationItem.rightBarButtonItem = nil;
+            
+            self.usernameField.text = @"";
+            self.passwordField.text = @"";
+            
+            _loggedIn = NO;
+            _loggingIn = NO;
+            
+            NSLog(@"Failed: %@", error);
+            
         }];
     }
 }
@@ -181,6 +197,7 @@
     self.navigationItem.rightBarButtonItem = nil;
     
     [RHAuthenticationLoader.instance clearCredentials];
+    [RHAuthenticationLoader.instance clearAuthToken];
     
     _loggedIn = NO;
 }

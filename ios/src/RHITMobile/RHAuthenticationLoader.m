@@ -31,17 +31,22 @@
 #define kKeychainIdentifier @"RoseHulmanMobile"
 #define kKeychainUsernameKey @"KerberosUsername"
 #define kKeychainPasswordKey @"KerberosPassword"
-#define kKeychainAuthTokenKey @"ServerAuthToken"
 
 @interface RHAuthenticationLoader ()
 
+@property (nonatomic, readwrite, strong) NSString *authToken;
+
 + (void)saveToKeyChain:(NSString *)service data:(id)data;
+
 + (id)loadFromKeyChain:(NSString *)service;
+
 + (void)deleteFromKeyChain:(NSString *)service;
 
 @end
 
 @implementation RHAuthenticationLoader
+
+@synthesize authToken = _authToken;
 
 static RHAuthenticationLoader *_instance;
 
@@ -77,6 +82,11 @@ static RHAuthenticationLoader *_instance;
     return username.length > 0 && password.length > 0;
 }
 
+- (BOOL)hasAuthToken
+{
+    return self.authToken.length > 0;
+}
+
 - (NSString *)username
 {
     return [RHAuthenticationLoader loadFromKeyChain:kKeychainUsernameKey];
@@ -86,7 +96,13 @@ static RHAuthenticationLoader *_instance;
 {
     [RHAuthenticationLoader deleteFromKeyChain:kKeychainUsernameKey];
     [RHAuthenticationLoader deleteFromKeyChain:kKeychainPasswordKey];
-    [RHAuthenticationLoader deleteFromKeyChain:kKeychainAuthTokenKey];
+    
+    self.authToken = nil;
+}
+
+- (void)clearAuthToken
+{
+    self.authToken = nil;
 }
 
 - (void)attemptReauthenticationWithSuccessBlock:(void (^)(void))successBlock
@@ -113,11 +129,10 @@ static RHAuthenticationLoader *_instance;
 {
     [RHLoaderRequestsWrapper makeAuthenticationRequestWithUsername:username password:password successBlock:^(NSDictionary *jsonDict) {
         
-        NSString *authToken = [jsonDict objectForKey:kAuthTokenKey];
+        self.authToken = [jsonDict objectForKey:kAuthTokenKey];
         
         [RHAuthenticationLoader saveToKeyChain:kKeychainUsernameKey data:username];
         [RHAuthenticationLoader saveToKeyChain:kKeychainPasswordKey data:password];
-        [RHAuthenticationLoader saveToKeyChain:kAuthTokenKey data:authToken];
         
         successBlock();
         
