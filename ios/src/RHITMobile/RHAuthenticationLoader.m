@@ -35,17 +35,25 @@
 
 @property (nonatomic, readwrite, strong) NSString *authToken;
 
+@property (nonatomic, strong, readwrite) NSString *currentTerm;
+
+@property (nonatomic, strong, readwrite) NSDictionary *validTerms;
+
 + (void)saveToKeyChain:(NSString *)service data:(id)data;
 
 + (id)loadFromKeyChain:(NSString *)service;
 
 + (void)deleteFromKeyChain:(NSString *)service;
 
+- (void)storeValuesFromJSONResponse:(NSDictionary *)jsonData;
+
 @end
 
 @implementation RHAuthenticationLoader
 
 @synthesize authToken = _authToken;
+@synthesize currentTerm = _currentTerm;
+@synthesize validTerms = _validTerms;
 
 static RHAuthenticationLoader *_instance;
 
@@ -112,9 +120,7 @@ static RHAuthenticationLoader *_instance;
     
     [RHLoaderRequestsWrapper makeAuthenticationRequestWithUsername:username password:password successBlock:^(NSDictionary *jsonDict) {
         
-        NSString *authToken = [jsonDict objectForKey:kAuthTokenKey];
-
-        self.authToken = authToken;
+        [self storeValuesFromJSONResponse:jsonDict];
         
         successBlock();
         
@@ -128,7 +134,7 @@ static RHAuthenticationLoader *_instance;
 {
     [RHLoaderRequestsWrapper makeAuthenticationRequestWithUsername:username password:password successBlock:^(NSDictionary *jsonDict) {
         
-        self.authToken = [jsonDict objectForKey:kAuthTokenKey];
+        [self storeValuesFromJSONResponse:jsonDict];
         
         [RHAuthenticationLoader saveToKeyChain:kKeychainUsernameKey data:username];
         [RHAuthenticationLoader saveToKeyChain:kKeychainPasswordKey data:password];
@@ -136,6 +142,22 @@ static RHAuthenticationLoader *_instance;
         successBlock();
         
     } failureBlock:failureBlock];
+}
+
+- (void)storeValuesFromJSONResponse:(NSDictionary *)jsonData
+{
+    self.authToken = [jsonData objectForKey:kAuthTokenKey];
+    self.currentTerm = [jsonData objectForKey:kCurrentTermKey];
+    
+    NSMutableDictionary *terms = [NSMutableDictionary dictionary];
+    
+    if ((id) [jsonData objectForKey:kTermsKey] != [NSNull null]) {
+        for (NSDictionary *termDict in [jsonData objectForKey:kTermsKey]) {
+            [terms setObject:[termDict objectForKey:kTermNameKey] forKey:[termDict objectForKey:kTermIDKey]];
+        }
+    }
+    
+    self.validTerms = terms;
 }
 
 #pragma mark - Private Keychain Methods

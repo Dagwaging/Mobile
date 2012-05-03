@@ -18,6 +18,7 @@
 //
 
 #import "RHDirectorySearchViewController.h"
+#import "RHAuthenticationLoader.h"
 #import "RHCourse.h"
 #import "RHDirectoryRequestsWrapper.h"
 #import "RHDirectorySearchResult.h"
@@ -179,7 +180,7 @@
     } else if (searchBar.selectedScopeButtonIndex == 1) {
         // Courses
         
-        [RHDirectoryRequestsWrapper makeCourseSearchRequestForSearchTerm:searchBar.text term:@"201230" successBlock:^(NSArray *results) {
+        [RHDirectoryRequestsWrapper makeCourseSearchRequestForSearchTerm:searchBar.text term:[RHAuthenticationLoader.instance currentTerm] successBlock:^(NSArray *results) {
             
             // Update underlying results
             self.results = results;

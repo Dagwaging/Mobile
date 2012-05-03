@@ -27,6 +27,10 @@
 
 @property (nonatomic, strong, readonly) NSString *authToken;
 
+@property (nonatomic, strong, readonly) NSString *currentTerm;
+
+@property (nonatomic, strong, readonly) NSDictionary *validTerms;
+
 - (BOOL)hasCredentials;
 
 - (BOOL)hasAuthToken;
