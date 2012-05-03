@@ -5,7 +5,7 @@
 .Trashes
 
 ## Doxygen Stuff
-doc/*
+doc/
 
 ## Xcode Stuff
 build/
