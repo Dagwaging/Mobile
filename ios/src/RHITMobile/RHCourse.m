@@ -70,20 +70,26 @@
     course.finalHour = [jsonData objectForKey:kFinalHourKey];
     course.finalRoom = [jsonData objectForKey:kFinalRoomkey];
     
-    course.instructor = [RHUser userFromJSONDictionary:[jsonData objectForKey:kInstructorKey]];
+    if ((id) [jsonData objectForKey:kInstructorKey] != [NSNull null]) {
+        course.instructor = [RHUser userFromJSONDictionary:[jsonData objectForKey:kInstructorKey]];
+    }
     
     NSMutableArray *students = [NSMutableArray array];
     
-    for (NSDictionary *studentDict in [jsonData objectForKey:kStudentsKey]) {
-        [students addObject:[RHUser userFromJSONDictionary:studentDict]];
+    if ((id) [jsonData objectForKey:kStudentsKey] != [NSNull null]) {
+        for (NSDictionary *studentDict in [jsonData objectForKey:kStudentsKey]) {
+            [students addObject:[RHUser userFromJSONDictionary:studentDict]];
+        }
     }
     
     course.students = students;
     
     NSMutableArray *meetings = [NSMutableArray array];
     
-    for (NSDictionary *meetingDict in [jsonData objectForKey:kScheduleKey]) {
-        [meetings addObject:[RHCourseMeeting courseMeetingFromJSONDictionary:meetingDict]];
+    if ((id) [jsonData objectForKey:kScheduleKey] != [NSNull null]) {
+        for (NSDictionary *meetingDict in [jsonData objectForKey:kScheduleKey]) {
+            [meetings addObject:[RHCourseMeeting courseMeetingFromJSONDictionary:meetingDict]];
+        }
     }
     
     course.meetings = meetings;

@@ -28,7 +28,6 @@
 #define kTermIDKey @"Id"
 #define kTermNameKey @"Name"
 
-#define kKeychainIdentifier @"RoseHulmanMobile"
 #define kKeychainUsernameKey @"KerberosUsername"
 #define kKeychainPasswordKey @"KerberosPassword"
 
@@ -115,7 +114,7 @@ static RHAuthenticationLoader *_instance;
         
         NSString *authToken = [jsonDict objectForKey:kAuthTokenKey];
 
-        [RHAuthenticationLoader saveToKeyChain:kAuthTokenKey data:authToken];
+        self.authToken = authToken;
         
         successBlock();
         

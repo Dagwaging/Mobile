@@ -18,12 +18,35 @@
 //
 
 #import "RHDirectorySearchViewController.h"
+#import "RHCourse.h"
+#import "RHDirectoryRequestsWrapper.h"
+#import "RHDirectorySearchResult.h"
+#import "RHUser.h"
 
-@interface RHDirectorySearchViewController ()
+#define kPersonCell @"DirectoryPersonResultCell"
+#define kCourseCell @"DirectoryCourseResultCell"
+#define kNoResultsCell @"DirectoryNoResultsCell"
+
+@interface RHDirectorySearchViewController () {
+@private
+    BOOL _hasSearched;
+    BOOL _searching;
+}
+
+@property (nonatomic, strong) IBOutlet UITableView *tableView;
+
+@property (nonatomic, strong) NSArray *results;
+
+- (void)markSearching;
+
+- (void)markNotSearching;
 
 @end
 
 @implementation RHDirectorySearchViewController
+
+@synthesize tableView = _tableView;
+@synthesize results = _results;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -38,6 +61,9 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+    
+    _searching = NO;
+    _hasSearched = NO;
 }
 
 - (void)viewDidUnload
@@ -51,15 +77,41 @@
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
+- (NSArray *)results
+{
+    if (_results == nil) {
+        _results = [NSArray array];
+    }
+    
+    return _results;
+}
+
 #pragma mark - Table View Data Source Methods
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 0;
+    return self.results.count == 0 && !_searching && _hasSearched ? 1 : self.results.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return nil;
+    if (self.results.count == 0) {
+        return [tableView dequeueReusableCellWithIdentifier:kNoResultsCell];
+    }
+    
+    UITableViewCell *cell;
+    
+    NSObject<RHDirectorySearchResult> *result = [self.results objectAtIndex:indexPath.row];
+    
+    if ([result isKindOfClass:[RHUser class]]) {
+        cell = [tableView dequeueReusableCellWithIdentifier:kPersonCell];
+    } else {
+        cell = [tableView dequeueReusableCellWithIdentifier:kCourseCell];
+    }
+    
+    cell.textLabel.text = result.title;
+    cell.detailTextLabel.text = result.subtitle;
+    
+    return cell;
 }
 
 #pragma mark - Search Bar Delegate Methods
@@ -73,13 +125,107 @@
 {
     [searchBar resignFirstResponder];
     
+    [self markSearching];
+    
+    int oldResultsSize = self.results.count;
+    
+    // Clear underlying results
+    self.results = [NSArray array];
+    
+    if (oldResultsSize == 0 && _hasSearched) {
+        // Animate deletion of "no results" cell
+        [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+    } else if (oldResultsSize > 0) {
+        // Animate deletion of old rows
+        NSMutableArray *allIndexPaths = [NSMutableArray array];
+        
+        for (int i = 0; i < oldResultsSize; i ++) {
+            [allIndexPaths addObject:[NSIndexPath indexPathForRow:i inSection:0]];
+        }
+        
+        [self.tableView deleteRowsAtIndexPaths:allIndexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+    }
+    
+    _hasSearched = YES;
+    
     if (searchBar.selectedScopeButtonIndex == 0) {
         // People
+        [RHDirectoryRequestsWrapper makeUserSearchRequestForSearchTerm:searchBar.text successBlock:^(NSArray *results) {
+            
+            // Update underlying results
+            self.results = results;
+            
+            [self markNotSearching];
+            
+            if (results.count > 0) {
+                // Animate insertion of new rows
+                NSMutableArray *newIndexPaths = [NSMutableArray array];
+                
+                for (int i = 0; i < results.count; i ++) {
+                    [newIndexPaths addObject:[NSIndexPath indexPathForRow:i inSection:0]];
+                }
+                
+                [self.tableView insertRowsAtIndexPaths:newIndexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+            } else {
+                // Animate insertion of "no results" cell
+                [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+            }
+            
+        } failureBlock:^(NSError *error) {
+            [self markNotSearching];
+            NSLog(@"Error: %@", error);
+        }];
+        
     } else if (searchBar.selectedScopeButtonIndex == 1) {
         // Courses
-    } else if (searchBar.selectedScopeButtonIndex == 2) {
-        // Rooms
+        
+        [RHDirectoryRequestsWrapper makeCourseSearchRequestForSearchTerm:searchBar.text term:@"201230" successBlock:^(NSArray *results) {
+            
+            // Update underlying results
+            self.results = results;
+            
+            [self markNotSearching];
+            
+            if (results.count > 0) {
+                // Animate insertion of new rows
+                NSMutableArray *newIndexPaths = [NSMutableArray array];
+                
+                for (int i = 0; i < results.count; i ++) {
+                    [newIndexPaths addObject:[NSIndexPath indexPathForRow:i inSection:0]];
+                }
+                
+                [self.tableView insertRowsAtIndexPaths:newIndexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+            } else {
+                // Animate insertion of "no results" cell
+                [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+            }
+            
+        } failureBlock:^(NSError *error) {
+            [self markNotSearching];
+            NSLog(@"Error: %@", error);
+        }];
     }
+}
+
+#pragma mark - Private Methods
+
+- (void)markSearching
+{
+    _searching = YES;
+    
+    self.navigationItem.title = @"Searching";
+    
+    UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
+    [activityIndicator startAnimating];
+}
+
+- (void)markNotSearching
+{
+    _searching = NO;
+    
+    self.navigationItem.rightBarButtonItem = nil;
+    self.navigationItem.title = @"Directory Search";
 }
 
 @end
