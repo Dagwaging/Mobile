@@ -24,7 +24,8 @@
 #import "RHDirectorySearchResult.h"
 #import "RHUser.h"
 
-#define kPersonCell @"DirectoryPersonResultCell"
+#define kStudentCell @"DirectoryStudentResultCell"
+#define kFacultyCell @"DirectoryFacultyResultCell"
 #define kCourseCell @"DirectoryCourseResultCell"
 #define kNoResultsCell @"DirectoryNoResultsCell"
 
@@ -87,6 +88,13 @@
     return _results;
 }
 
+#pragma mark - Table View Delegate Methods
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
 #pragma mark - Table View Data Source Methods
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -103,8 +111,10 @@
     
     NSObject<RHDirectorySearchResult> *result = [self.results objectAtIndex:indexPath.row];
     
-    if ([result isKindOfClass:[RHUser class]]) {
-        cell = [tableView dequeueReusableCellWithIdentifier:kPersonCell];
+    if ([result isKindOfClass:[RHUser class]] && [(RHUser *)result type] == RHUserTypeStudent) {
+        cell = [tableView dequeueReusableCellWithIdentifier:kStudentCell];
+    } else if ([result isKindOfClass:[RHUser class]]){
+        cell = [tableView dequeueReusableCellWithIdentifier:kFacultyCell];
     } else {
         cell = [tableView dequeueReusableCellWithIdentifier:kCourseCell];
     }

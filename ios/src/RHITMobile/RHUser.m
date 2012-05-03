@@ -28,6 +28,7 @@
 @synthesize fullName = _fullName;
 @synthesize summary = _summary;
 @synthesize username = _username;
+@synthesize type = _type;
 
 + (id)userFromJSONDictionary:(NSDictionary *)jsonData
 {
@@ -36,6 +37,12 @@
     user.fullName = [jsonData objectForKey:kFullNameKey];
     user.summary = [jsonData objectForKey:kSubtitleKey];
     user.username = [jsonData objectForKey:kUsernameKey];
+    
+    if ([user.summary rangeOfString:@"Student"].location == NSNotFound) {
+        user.type = RHUserTypeFacultyOrStaff;
+    } else {
+        user.type = RHUserTypeStudent;
+    }
     
     return user;
 }

@@ -1,5 +1,5 @@
 //
-//  RHUser.h
+//  RHStudentDetailViewController.h
 //  Rose-Hulman Mobile
 //
 //  Copyright 2012 Rose-Hulman Institute of Technology
@@ -17,27 +17,8 @@
 //  limitations under the License.
 //
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
-#import "RHDirectorySearchResult.h"
-
-
-typedef enum {
-    RHUserTypeStudent = 0,
-    RHUserTypeFacultyOrStaff
-} RHUserType;
-
-
-@interface RHUser : NSObject <RHDirectorySearchResult>
-
-+ (id)userFromJSONDictionary:(NSDictionary *)jsonData;
-
-@property (nonatomic, strong) NSString *fullName;
-
-@property (nonatomic, strong) NSString *summary;
-
-@property (nonatomic, strong) NSString *username;
-
-@property (nonatomic, assign) RHUserType type;
+@interface RHStudentDetailViewController : UITableViewController
 
 @end
