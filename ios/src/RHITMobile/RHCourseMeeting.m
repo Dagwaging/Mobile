@@ -28,7 +28,14 @@
 
 + (id)courseMeetingFromJSONDictionary:(NSDictionary *)jsonData
 {
-    return nil;
+    RHCourseMeeting *courseMeeting = [[RHCourseMeeting alloc] init];
+    
+    courseMeeting.day = [jsonData objectForKey:kDayKey];
+    courseMeeting.room = [jsonData objectForKey:kRoomKey];
+    courseMeeting.startPeriod = [jsonData objectForKey:kStartPeriodKey];
+    courseMeeting.endPeriod = [jsonData objectForKey:kEndPeriodKey];
+    
+    return courseMeeting;
 }
 
 @end

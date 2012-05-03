@@ -19,6 +19,11 @@
 
 #import <Foundation/Foundation.h>
 
+#define kDayKey @"Day"
+#define kEndPeriodKey @"EndPeriod"
+#define kStartPeriodKey @"StartPeriod"
+#define kRoomKey @"Room"
+
 @interface RHCourseMeeting : NSObject
 
 + (id)courseMeetingFromJSONDictionary:(NSDictionary *)jsonData;

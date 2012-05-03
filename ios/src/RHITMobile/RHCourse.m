@@ -18,6 +18,24 @@
 //
 
 #import "RHCourse.h"
+#import "RHCourseMeeting.h"
+#import "RHUser.h"
+
+
+#define kCommentsKey @"Comments"
+#define kCourseNumberKey @"CourseNumber"
+#define kCreditsKey @"Credits"
+#define kCRNKey @"CRN"
+#define kEnrolledKey @"Enrolled"
+#define kFinalDayKey @"FinalDay"
+#define kFinalHourKey @"FinalHour"
+#define kFinalRoomkey @"FinalRoom"
+#define kInstructorKey @"Instructor"
+#define kMaxEnrolledKey @"MaxEnrolled"
+#define kScheduleKey @"Schedule"
+#define kStudentsKey @"Students"
+#define kTermKey @"Term"
+#define kTitleKey @"Title"
 
 @implementation RHCourse
 
@@ -38,7 +56,39 @@
 
 + (id)courseFromJSONDictionary:(NSDictionary *)jsonData
 {
-    return nil;
+    RHCourse *course = [[RHCourse alloc] init];
+    
+    course.crn = [jsonData objectForKey:kCRNKey];
+    course.name = [jsonData objectForKey:kTitleKey];
+    course.courseNumber = [jsonData objectForKey:kCourseNumberKey];
+    course.comments = [jsonData objectForKey:kCommentsKey];
+    course.credits = [jsonData objectForKey:kCreditsKey];
+    course.term = [jsonData objectForKey:kTermKey];
+    course.enrolled = [jsonData objectForKey:kEnrolledKey];
+    course.maxEnrolled = [jsonData objectForKey:kMaxEnrolledKey];
+    course.finalDay = [jsonData objectForKey:kFinalDayKey];
+    course.finalHour = [jsonData objectForKey:kFinalHourKey];
+    course.finalRoom = [jsonData objectForKey:kFinalRoomkey];
+    
+    course.instructor = [RHUser userFromJSONDictionary:[jsonData objectForKey:kInstructorKey]];
+    
+    NSMutableArray *students = [NSMutableArray array];
+    
+    for (NSDictionary *studentDict in [jsonData objectForKey:kStudentsKey]) {
+        [students addObject:[RHUser userFromJSONDictionary:studentDict]];
+    }
+    
+    course.students = students;
+    
+    NSMutableArray *meetings = [NSMutableArray array];
+    
+    for (NSDictionary *meetingDict in [jsonData objectForKey:kScheduleKey]) {
+        [meetings addObject:[RHCourseMeeting courseMeetingFromJSONDictionary:meetingDict]];
+    }
+    
+    course.meetings = meetings;
+    
+    return course;
 }
 
 - (NSString *)title

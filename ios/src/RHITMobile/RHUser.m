@@ -19,6 +19,10 @@
 
 #import "RHUser.h"
 
+#define kFullNameKey @"FullName"
+#define kSubtitleKey @"Subtitle"
+#define kUsernameKey @"Username"
+
 @implementation RHUser
 
 @synthesize fullName = _fullName;
@@ -27,7 +31,13 @@
 
 + (id)userFromJSONDictionary:(NSDictionary *)jsonData
 {
-    return nil;
+    RHUser *user = [[RHUser alloc] init];
+    
+    user.fullName = [jsonData objectForKey:kFullNameKey];
+    user.summary = [jsonData objectForKey:kSubtitleKey];
+    user.username = [jsonData objectForKey:kUsernameKey];
+    
+    return user;
 }
 
 - (NSString *)title

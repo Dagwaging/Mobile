@@ -18,6 +18,22 @@
 //
 
 #import "RHPerson.h"
+#import "RHUser.h"
+
+#define kAdvisorKey @"Advisor"
+#define kGradeKey @"Class"
+#define kCampusMailboxKey @"CM"
+#define kDepartmentKey @"Department"
+#define kEmailAddressKey @"Email"
+#define kFirstNameKey @"FirstName"
+#define kLastNameKey @"LastName"
+#define kMajorsKey @"Majors"
+#define kMiddleNameKey @"MiddleName"
+#define kLocationKey @"Office"
+#define kTelephoneNumberKey @"Telephone"
+#define kUserKey @"User"
+#define kYearKey @"Year"
+
 
 @implementation RHPerson
 
@@ -42,17 +58,43 @@
 
 + (id)personFromJSONDictionary:(NSDictionary *)jsonData
 {
-    return nil;
+    RHPerson *person = [[RHPerson alloc] init];
+    
+    person.firstName = [jsonData objectForKey:kFirstNameKey];
+    person.middleName = [jsonData objectForKey:kMiddleNameKey];
+    person.lastName = [jsonData objectForKey:kLastNameKey];
+    
+    person.campusMailbox = [jsonData objectForKey:kCampusMailboxKey];
+    person.location = [jsonData objectForKey:kLocationKey];
+    person.phoneNumber = [jsonData objectForKey:kTelephoneNumberKey];
+    person.emailAddress = [jsonData objectForKey:kEmailAddressKey];
+    
+    person.userAccount = [RHUser userFromJSONDictionary:[jsonData objectForKey:kUserKey]];
+    
+    if ((id)[jsonData objectForKey:kAdvisorKey] == [NSNull null]) {
+        // Faculty/Staff
+        person.type = RHPersonTypeFacultyOrStaff;
+        person.department = [jsonData objectForKey:kDepartmentKey];
+    } else {
+        // Student
+        person.type = RHPersonTypeStudent;
+        person.grade = [jsonData objectForKey:kGradeKey];
+        person.year = [jsonData objectForKey:kYearKey];
+        person.majors = [jsonData objectForKey:kMajorsKey];
+        person.advisor = [RHUser userFromJSONDictionary:[jsonData objectForKey:kAdvisorKey]];
+    }
+    
+    return person;
 }
 
 - (NSString *)title
 {
-    return @"TODO";
+    return self.userAccount.title;
 }
 
 - (NSString *)subtitle
 {
-    return @"TODO";
+    return self.userAccount.subtitle;
 }
 
 @end
