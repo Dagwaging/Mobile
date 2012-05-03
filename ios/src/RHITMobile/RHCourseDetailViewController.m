@@ -20,7 +20,10 @@
 #import "RHCourseDetailViewController.h"
 #import "RHCourse.h"
 #import "RHDirectoryRequestsWrapper.h"
+#import "RHFacultyDetailViewController.h"
 #import "RHUser.h"
+
+#define kInstructorSegueIdentifier @"CourseDetailToFacultyDetailSegue"
 
 @interface RHCourseDetailViewController () {
     @private
@@ -115,6 +118,14 @@
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString:kInstructorSegueIdentifier]) {
+        RHFacultyDetailViewController *facultyDetail = segue.destinationViewController;
+        facultyDetail.user = self.course.instructor;
+    }
 }
 
 #pragma mark - Table view delegate

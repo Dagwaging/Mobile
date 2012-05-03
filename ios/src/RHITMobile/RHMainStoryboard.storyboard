@@ -1101,7 +1101,7 @@
                     </connections>
                 </tableViewController>
             </objects>
-            <point key="canvasLocation" x="2244" y="-652"/>
+            <point key="canvasLocation" x="2290" y="-224"/>
         </scene>
         <!--Faculty Detail View Controller - Faculty/Staff Details-->
         <scene sceneID="aNl-rq-9Fq">
@@ -1274,7 +1274,7 @@
                     </connections>
                 </tableViewController>
             </objects>
-            <point key="canvasLocation" x="2244" y="-29"/>
+            <point key="canvasLocation" x="2934" y="37"/>
         </scene>
         <!--Course Detail View Controller - Course Details-->
         <scene sceneID="yYv-zS-a2e">
@@ -1384,6 +1384,9 @@
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
+                                        <connections>
+                                            <segue destination="tOY-xQ-XuH" kind="push" identifier="CourseDetailToFacultyDetailSegue" id="PEZ-cd-bH8"/>
+                                        </connections>
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
@@ -1558,7 +1561,7 @@
                     </connections>
                 </tableViewController>
             </objects>
-            <point key="canvasLocation" x="2244" y="529"/>
+            <point key="canvasLocation" x="2312" y="427"/>
         </scene>
         <!--Navigation Controller - Map-->
         <scene sceneID="ms2-P5-oXj">
@@ -2059,7 +2062,7 @@
     <inferredMetricsTieBreakers>
         <segue reference="7gL-rw-0R5"/>
         <segue reference="yqD-yp-46p"/>
-        <segue reference="nVD-ZV-PyM"/>
+        <segue reference="Off-mb-XoW"/>
         <segue reference="yrH-Av-Jeg"/>
         <segue reference="MCR-we-qWz"/>
         <segue reference="PKp-tb-ZTW"/>
