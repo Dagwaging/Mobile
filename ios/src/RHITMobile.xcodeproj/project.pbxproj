@@ -77,6 +77,7 @@
 		92AAA86D15539DE600593997 /* RHScheduleTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92AAA86C15539DE600593997 /* RHScheduleTableViewController.m */; };
 		92AAA87015539E0900593997 /* RHTermSelectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92AAA86F15539E0900593997 /* RHTermSelectionViewController.m */; };
 		92AAA87315539E2100593997 /* RHMeetingDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92AAA87215539E2100593997 /* RHMeetingDetailViewController.m */; };
+		92AAA8761553AC2C00593997 /* RHSchedule.m in Sources */ = {isa = PBXBuildFile; fileRef = 92AAA8751553AC2C00593997 /* RHSchedule.m */; };
 		92ADDE0814E3422400655869 /* RHPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 92ADDE0714E3422400655869 /* RHPath.m */; };
 		92ADEE291459026600060A3F /* RHLocationLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 92ADEE281459026600060A3F /* RHLocationLink.m */; };
 		92ADEE2E14599D9500060A3F /* QuickListToolbarIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 92ADEE2C14599D9500060A3F /* QuickListToolbarIcon.png */; };
@@ -232,6 +233,8 @@
 		92AAA86F15539E0900593997 /* RHTermSelectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHTermSelectionViewController.m; sourceTree = "<group>"; };
 		92AAA87115539E2100593997 /* RHMeetingDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHMeetingDetailViewController.h; sourceTree = "<group>"; };
 		92AAA87215539E2100593997 /* RHMeetingDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHMeetingDetailViewController.m; sourceTree = "<group>"; };
+		92AAA8741553AC2C00593997 /* RHSchedule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHSchedule.h; sourceTree = "<group>"; };
+		92AAA8751553AC2C00593997 /* RHSchedule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHSchedule.m; sourceTree = "<group>"; };
 		92ADDE0614E3422400655869 /* RHPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHPath.h; sourceTree = "<group>"; };
 		92ADDE0714E3422400655869 /* RHPath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHPath.m; sourceTree = "<group>"; };
 		92ADEE271459026600060A3F /* RHLocationLink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHLocationLink.h; sourceTree = "<group>"; };
@@ -578,6 +581,8 @@
 				92B629C61551E678000948CC /* RHUser.m */,
 				92B629BC1551E48F000948CC /* RHPerson.h */,
 				92B629BD1551E48F000948CC /* RHPerson.m */,
+				92AAA8741553AC2C00593997 /* RHSchedule.h */,
+				92AAA8751553AC2C00593997 /* RHSchedule.m */,
 				92B629BF1551E4A1000948CC /* RHCourse.h */,
 				92B629C01551E4A1000948CC /* RHCourse.m */,
 				92B629C81551EA5C000948CC /* RHCourseMeeting.h */,
@@ -801,6 +806,7 @@
 				92AAA86D15539DE600593997 /* RHScheduleTableViewController.m in Sources */,
 				92AAA87015539E0900593997 /* RHTermSelectionViewController.m in Sources */,
 				92AAA87315539E2100593997 /* RHMeetingDetailViewController.m in Sources */,
+				92AAA8761553AC2C00593997 /* RHSchedule.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
