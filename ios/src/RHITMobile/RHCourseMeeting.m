@@ -36,10 +36,10 @@
 {
     RHCourseMeeting *courseMeeting = [[RHCourseMeeting alloc] init];
     
-    courseMeeting.day = [jsonData objectForKey:kDayKey];
-    courseMeeting.room = [jsonData objectForKey:kRoomKey];
-    courseMeeting.startPeriod = [jsonData objectForKey:kStartPeriodKey];
-    courseMeeting.endPeriod = [jsonData objectForKey:kEndPeriodKey];
+    courseMeeting.day = (id)[jsonData objectForKey:kDayKey] == [NSNull null] ? @"" : [jsonData objectForKey:kDayKey];
+    courseMeeting.room = (id)[jsonData objectForKey:kRoomKey] == [NSNull null] ? @"" : [jsonData objectForKey:kRoomKey];
+    courseMeeting.startPeriod = (id)[jsonData objectForKey:kStartPeriodKey] == [NSNull null] ? [NSNumber numberWithInt:-1] : [jsonData objectForKey:kStartPeriodKey];
+    courseMeeting.endPeriod = (id)[jsonData objectForKey:kEndPeriodKey] == [NSNull null] ? [NSNumber numberWithInt:-1] : [jsonData objectForKey:kEndPeriodKey];
     
     return courseMeeting;
 }

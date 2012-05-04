@@ -34,9 +34,9 @@
 {
     RHUser *user = [[RHUser alloc] init];
     
-    user.fullName = [jsonData objectForKey:kFullNameKey];
-    user.summary = [jsonData objectForKey:kSubtitleKey];
-    user.username = [jsonData objectForKey:kUsernameKey];
+    user.fullName = (id)[jsonData objectForKey:kFullNameKey] == [NSNull null] ? @"" : [jsonData objectForKey:kFullNameKey];
+    user.summary = (id)[jsonData objectForKey:kSubtitleKey] == [NSNull null] ? @"" : [jsonData objectForKey:kSubtitleKey];
+    user.username = (id)[jsonData objectForKey:kUsernameKey] == [NSNull null] ? @"" : [jsonData objectForKey:kUsernameKey];
     
     if ([user.summary rangeOfString:@"Student"].location == NSNotFound) {
         user.type = RHUserTypeFacultyOrStaff;

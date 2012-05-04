@@ -60,27 +60,27 @@
 {
     RHPerson *person = [[RHPerson alloc] init];
     
-    person.firstName = [jsonData objectForKey:kFirstNameKey];
-    person.middleName = [jsonData objectForKey:kMiddleNameKey];
-    person.lastName = [jsonData objectForKey:kLastNameKey];
+    person.firstName = (id)[jsonData objectForKey:kFirstNameKey] == [NSNull null] ? @"" : [jsonData objectForKey:kFirstNameKey];
+    person.middleName = (id)[jsonData objectForKey:kMiddleNameKey] == [NSNull null] ? @"" : [jsonData objectForKey:kMiddleNameKey];
+    person.lastName = (id)[jsonData objectForKey:kLastNameKey] == [NSNull null] ? @"" : [jsonData objectForKey:kLastNameKey];
     
-    person.campusMailbox = [jsonData objectForKey:kCampusMailboxKey];
-    person.location = [jsonData objectForKey:kLocationKey];
-    person.phoneNumber = [jsonData objectForKey:kTelephoneNumberKey];
-    person.emailAddress = [jsonData objectForKey:kEmailAddressKey];
+    person.campusMailbox = (id)[jsonData objectForKey:kCampusMailboxKey] == [NSNull null] ? [NSNumber numberWithInt:-1] : [jsonData objectForKey:kCampusMailboxKey];
+    person.location = (id)[jsonData objectForKey:kLocationKey] == [NSNull null] ? @"" : [jsonData objectForKey:kLocationKey];
+    person.phoneNumber = (id)[jsonData objectForKey:kTelephoneNumberKey] == [NSNull null] ? @"" : [jsonData objectForKey:kTelephoneNumberKey];
+    person.emailAddress = (id)[jsonData objectForKey:kEmailAddressKey] == [NSNull null] ? @"" : [jsonData objectForKey:kEmailAddressKey];
     
     person.userAccount = [RHUser userFromJSONDictionary:[jsonData objectForKey:kUserKey]];
     
     if ((id)[jsonData objectForKey:kAdvisorKey] == [NSNull null]) {
         // Faculty/Staff
         person.type = RHPersonTypeFacultyOrStaff;
-        person.department = [jsonData objectForKey:kDepartmentKey];
+        person.department = (id)[jsonData objectForKey:kDepartmentKey] == [NSNull null] ? @"" : [jsonData objectForKey:kDepartmentKey];
     } else {
         // Student
         person.type = RHPersonTypeStudent;
-        person.grade = [jsonData objectForKey:kGradeKey];
-        person.year = [jsonData objectForKey:kYearKey];
-        person.majors = [jsonData objectForKey:kMajorsKey];
+        person.grade = (id)[jsonData objectForKey:kGradeKey] == [NSNull null] ? @"" : [jsonData objectForKey:kGradeKey];
+        person.year = (id)[jsonData objectForKey:kYearKey] == [NSNull null] ? @"" : [jsonData objectForKey:kYearKey];
+        person.majors = (id)[jsonData objectForKey:kMajorsKey] == [NSNull null] ? @"" : [jsonData objectForKey:kMajorsKey];
         person.advisor = [RHUser userFromJSONDictionary:[jsonData objectForKey:kAdvisorKey]];
     }
     

@@ -58,17 +58,17 @@
 {
     RHCourse *course = [[RHCourse alloc] init];
     
-    course.crn = [jsonData objectForKey:kCRNKey];
-    course.name = [jsonData objectForKey:kTitleKey];
-    course.courseNumber = [jsonData objectForKey:kCourseNumberKey];
-    course.comments = [jsonData objectForKey:kCommentsKey];
-    course.credits = [jsonData objectForKey:kCreditsKey];
-    course.term = [jsonData objectForKey:kTermKey];
-    course.enrolled = [jsonData objectForKey:kEnrolledKey];
-    course.maxEnrolled = [jsonData objectForKey:kMaxEnrolledKey];
-    course.finalDay = [jsonData objectForKey:kFinalDayKey];
-    course.finalHour = [jsonData objectForKey:kFinalHourKey];
-    course.finalRoom = [jsonData objectForKey:kFinalRoomkey];
+    course.crn = (id)[jsonData objectForKey:kCRNKey] == [NSNull null] ? [NSNumber numberWithInt:-1] : [jsonData objectForKey:kCRNKey];
+    course.name = (id)[jsonData objectForKey:kTitleKey] == [NSNull null] ? @"" : [jsonData objectForKey:kTitleKey];
+    course.courseNumber = (id)[jsonData objectForKey:kCourseNumberKey] == [NSNull null] ? @"" : [jsonData objectForKey:kCourseNumberKey];
+    course.comments = (id)[jsonData objectForKey:kCommentsKey] == [NSNull null] ? @"" : [jsonData objectForKey:kCommentsKey];
+    course.credits = (id)[jsonData objectForKey:kCreditsKey] == [NSNull null] ? [NSNumber numberWithInt:-1] : [jsonData objectForKey:kCreditsKey];
+    course.term = (id)[jsonData objectForKey:kTermKey] == [NSNull null] ? [NSNumber numberWithInt:-1] : [jsonData objectForKey:kTermKey];
+    course.enrolled = (id)[jsonData objectForKey:kEnrolledKey] == [NSNull null] ? [NSNumber numberWithInt:-1] : [jsonData objectForKey:kEnrolledKey];
+    course.maxEnrolled = (id)[jsonData objectForKey:kMaxEnrolledKey] == [NSNull null] ? [NSNumber numberWithInt:-1] : [jsonData objectForKey:kMaxEnrolledKey];
+    course.finalDay = (id)[jsonData objectForKey:kFinalDayKey] == [NSNull null] ? @"" : [jsonData objectForKey:kFinalDayKey];
+    course.finalHour = (id)[jsonData objectForKey:kFinalHourKey] == [NSNull null] ? [NSNumber numberWithInt:-1] : [jsonData objectForKey:kFinalHourKey];
+    course.finalRoom = (id)[jsonData objectForKey:kFinalRoomkey] == [NSNull null] ? @"" : [jsonData objectForKey:kFinalRoomkey];
     
     if ((id) [jsonData objectForKey:kInstructorKey] != [NSNull null]) {
         course.instructor = [RHUser userFromJSONDictionary:[jsonData objectForKey:kInstructorKey]];
