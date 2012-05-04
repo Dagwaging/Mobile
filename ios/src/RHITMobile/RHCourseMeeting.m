@@ -19,12 +19,18 @@
 
 #import "RHCourseMeeting.h"
 
+#define kDayKey @"Day"
+#define kEndPeriodKey @"EndPeriod"
+#define kStartPeriodKey @"StartPeriod"
+#define kRoomKey @"Room"
+
 @implementation RHCourseMeeting
 
 @synthesize day = _day;
 @synthesize room = _room;
 @synthesize startPeriod = _startPeriod;
 @synthesize endPeriod = _endPeriod;
+@synthesize course = _course;
 
 + (id)courseMeetingFromJSONDictionary:(NSDictionary *)jsonData
 {

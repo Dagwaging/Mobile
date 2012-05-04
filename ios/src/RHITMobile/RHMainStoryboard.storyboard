@@ -1034,7 +1034,7 @@
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
                                         <connections>
-                                            <segue destination="wUn-qz-5H3" kind="push" id="TdE-K4-AUe"/>
+                                            <segue destination="wUn-qz-5H3" kind="push" identifier="StudentDetailToScheduleSegue" id="TdE-K4-AUe"/>
                                         </connections>
                                     </tableViewCell>
                                 </cells>
@@ -1316,6 +1316,7 @@
                     <connections>
                         <outlet property="pageControl" destination="HYD-5J-Vsw" id="r1w-ar-WBh"/>
                         <outlet property="scrollView" destination="hwD-Do-cvw" id="YSg-KB-EaG"/>
+                        <segue destination="LsE-Ff-eAq" kind="push" identifier="ScheduleToCourseMeetingDetailSegue" id="Cv5-9q-jSP"/>
                     </connections>
                 </viewController>
             </objects>
@@ -1351,17 +1352,17 @@
             </objects>
             <point key="canvasLocation" x="3844" y="-787"/>
         </scene>
-        <!--Table View Controller-->
+        <!--Schedule Table View Controller-->
         <scene sceneID="P80-9x-TLl">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xPZ-EA-CVR" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <tableViewController storyboardIdentifier="DayScheduleViewController" id="d7F-AQ-u1y" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="DayScheduleViewController" id="d7F-AQ-u1y" customClass="RHScheduleTableViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="73" sectionHeaderHeight="22" sectionFooterHeight="22" id="YU9-pO-Wm4">
                         <rect key="frame" x="0.0" y="64" width="320" height="372"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ScheduleClassPeriodCell" rowHeight="73" id="5ig-xO-xzc">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ScheduleClassPeriodCell" rowHeight="73" id="5ig-xO-xzc" customClass="RHScheduleTableViewCell">
                                 <rect key="frame" x="0.0" y="22" width="320" height="73"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -1369,21 +1370,21 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="1" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="8XH-oH-lPx">
-                                            <rect key="frame" x="20" y="14" width="24" height="43"/>
+                                            <rect key="frame" x="20" y="14" width="43" height="43"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="36"/>
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                             <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </label>
-                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Course Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="Uy5-bR-b3R">
-                                            <rect key="frame" x="52" y="15" width="248" height="21"/>
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Course Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsFontSizeToFit="NO" id="Uy5-bR-b3R">
+                                            <rect key="frame" x="71" y="15" width="229" height="21"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                             <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </label>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Time" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="74W-SE-oyF">
-                                            <rect key="frame" x="52" y="35" width="248" height="21"/>
+                                            <rect key="frame" x="71" y="35" width="229" height="21"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -1393,10 +1394,12 @@
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
                                 <connections>
-                                    <segue destination="LsE-Ff-eAq" kind="push" id="FDx-gv-Jse"/>
+                                    <outlet property="courseNameLabel" destination="Uy5-bR-b3R" id="Vz0-KV-ou3"/>
+                                    <outlet property="periodLabel" destination="8XH-oH-lPx" id="1YC-09-qjj"/>
+                                    <outlet property="timesLabel" destination="74W-SE-oyF" id="rmf-za-OOD"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ScheduleNoClassPeriodCell" rowHeight="73" id="swg-MY-UIc">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ScheduleNoClassPeriodCell" rowHeight="73" id="swg-MY-UIc" customClass="RHScheduleTableViewCell">
                                 <rect key="frame" x="0.0" y="95" width="320" height="73"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -1404,14 +1407,14 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="2" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="cJm-NI-8tU">
-                                            <rect key="frame" x="20" y="14" width="24" height="43"/>
+                                            <rect key="frame" x="20" y="14" width="43" height="43"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="36"/>
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                             <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </label>
-                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="No Class" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="cmR-Ii-OaP">
-                                            <rect key="frame" x="62" y="20" width="197" height="32"/>
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="No Class" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="cmR-Ii-OaP">
+                                            <rect key="frame" x="71" y="20" width="188" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="22"/>
                                             <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
@@ -1420,6 +1423,9 @@
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
+                                <connections>
+                                    <outlet property="periodLabel" destination="cJm-NI-8tU" id="xpC-fM-Dc1"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -1439,7 +1445,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nss-TZ-gL6" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <tableViewController id="LsE-Ff-eAq" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="3JK-n3-Hac">
-                        <rect key="frame" x="0.0" y="64" width="320" height="372"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="367"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -2188,6 +2194,172 @@
         <image name="TabBarMapIcon.png" width="30" height="30"/>
         <image name="TabBarToursIcon.png" width="30" height="30"/>
     </resources>
+    <classes>
+        <class className="RHCampusServicesViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHCampusServicesViewController.h"/>
+        </class>
+        <class className="RHCourseDetailViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHCourseDetailViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="commentsLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="creditHoursLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="crnLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="enrolledLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="finalLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="instructorLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="maxEnrolledLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="nameLabel" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="RHDepartureLocationCell" superclassName="UITableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHDepartureLocationCell.h"/>
+            <relationships>
+                <relationship kind="outlet" name="locationDetailLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="locationNameLabel" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="RHDepartureLocationSelectionViewController" superclassName="RHLocationSearchViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHDepartureLocationSelectionViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="cancelSelection:"/>
+                <relationship kind="action" name="departGPS:"/>
+                <relationship kind="action" name="departLocation:forEvent:"/>
+                <relationship kind="outlet" name="navigationItem" candidateClass="UINavigationItem"/>
+            </relationships>
+        </class>
+        <class className="RHDirectorySearchViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHDirectorySearchViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="tableView" candidateClass="UITableView"/>
+            </relationships>
+        </class>
+        <class className="RHFacultyDetailViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHFacultyDetailViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="campusMailboxLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="departmentLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="emailAddressLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="locationLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="telephoneNumberLabel" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="RHLocationDetailViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHLocationDetailViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="displayCurrentLocationOnMap:"/>
+                <relationship kind="action" name="getDirectionsToCurrentLocation:"/>
+                <relationship kind="outlet" name="tableView" candidateClass="UITableView"/>
+            </relationships>
+        </class>
+        <class className="RHLocationSearchViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHLocationSearchViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="searchBar" candidateClass="UISearchBar"/>
+                <relationship kind="outlet" name="tableView" candidateClass="UITableView"/>
+            </relationships>
+        </class>
+        <class className="RHLoginViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHLoginViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="segueToSearch:"/>
+                <relationship kind="outlet" name="actionButtonText" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="passwordField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="usernameField" candidateClass="UITextField"/>
+            </relationships>
+        </class>
+        <class className="RHMapDirectionsManager" superclassName="NSObject">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHMapDirectionsManager.h"/>
+            <relationships>
+                <relationship kind="action" name="exitDirections:"/>
+                <relationship kind="action" name="nextStep:"/>
+                <relationship kind="action" name="previousStep:"/>
+                <relationship kind="outlet" name="mapView" candidateClass="MKMapView"/>
+                <relationship kind="outlet" name="mapViewController" candidateClass="RHMapViewController"/>
+            </relationships>
+        </class>
+        <class className="RHMapViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHMapViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="discloseLocationDetails:"/>
+                <relationship kind="outlet" name="backgroundView" candidateClass="UIView"/>
+                <relationship kind="outlet" name="directionsLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="directionsManager" candidateClass="RHMapDirectionsManager"/>
+                <relationship kind="outlet" name="directionsPicker" candidateClass="UIPickerView"/>
+                <relationship kind="outlet" name="mapView" candidateClass="MKMapView"/>
+            </relationships>
+        </class>
+        <class className="RHQuickListViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHQuickListViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="cancel:"/>
+                <relationship kind="action" name="goToLocation:"/>
+                <relationship kind="outlet" name="pickerView" candidateClass="UIPickerView"/>
+                <relationship kind="outlet" name="tableView" candidateClass="UITableView"/>
+            </relationships>
+        </class>
+        <class className="RHRosterViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHRosterViewController.h"/>
+        </class>
+        <class className="RHScheduleTableViewCell" superclassName="UITableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHScheduleTableViewCell.h"/>
+            <relationships>
+                <relationship kind="outlet" name="courseNameLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="periodLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="timesLabel" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="RHScheduleTableViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHScheduleTableViewController.h"/>
+        </class>
+        <class className="RHScheduleViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHScheduleViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="pageControl" candidateClass="UIPageControl"/>
+                <relationship kind="outlet" name="scrollView" candidateClass="UIScrollView"/>
+            </relationships>
+        </class>
+        <class className="RHStudentDetailViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHStudentDetailViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="advisorLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="campusMailboxLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="emailAddressLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="locationLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="majorsLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="standingLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="telephoneNumberLabel" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="RHTagSelectionViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHTagSelectionViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="donePressed:"/>
+            </relationships>
+        </class>
+        <class className="RHTagsBasketViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHTagsBasketViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="buildTour:"/>
+                <relationship kind="action" name="doneEditing:"/>
+            </relationships>
+        </class>
+        <class className="RHToursViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHToursViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="durationSliderMoved:"/>
+                <relationship kind="action" name="tourTypeChanged:"/>
+                <relationship kind="outlet" name="durationLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="durationSlider" candidateClass="UISlider"/>
+            </relationships>
+        </class>
+        <class className="RHWebViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHWebViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="openInSafari"/>
+                <relationship kind="outlet" name="webView" candidateClass="UIWebView"/>
+            </relationships>
+        </class>
+    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

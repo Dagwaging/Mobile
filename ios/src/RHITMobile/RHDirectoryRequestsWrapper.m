@@ -33,6 +33,7 @@
 #define kUserSearchPath @"/banner/user/search/%@"
 #define kCourseSearchPath @"/banner/course/search/%@/%@"
 #define kPersonDataPath @"/banner/user/data/%@"
+#define kPersonSchedulePath @"/banner/user/schedule/%@/%@"
 #define kCourseDataPath @"/banner/course/data/%@/%@"
 
 #define kUsersKey @"Users"
@@ -118,6 +119,30 @@
         NSArray *courses = [jsonDict objectForKey:kCoursesKey];
         
         successBlock([RHCourse courseFromJSONDictionary:[courses objectAtIndex:0]]);
+        
+    } failureBlock:failureBlock];
+}
+
++ (void)makeScheduleRequestForUser:(RHUser *)user
+                      successBlock:(void (^)(NSArray *))successBlock
+                      failureBlock:(void (^)(NSError *))failureBlock
+{
+    NSMutableDictionary *urlArgs = [NSMutableDictionary dictionaryWithCapacity:2];
+    
+    [urlArgs setObject:@"true" forKey:kEnrolledURLKey];
+    [urlArgs setObject:@"true" forKey:kScheduleURLKey];
+    
+    NSString *fullPath = [NSString stringWithFormat:kPersonSchedulePath, [RHAuthenticationLoader.instance currentTerm], user.username];
+    
+    [RHJSONRequest makeRequestWithPath:fullPath headers:[self makeAuthTokenHeaders] urlArgs:urlArgs successBlock:^(NSDictionary *jsonDict) {
+        
+        NSMutableArray *courses = [NSMutableArray array];
+        
+        for (NSDictionary *courseDict in [jsonDict objectForKey:kCoursesKey]) {
+            [courses addObject:[RHCourse courseFromJSONDictionary:courseDict]];
+        }
+        
+        successBlock(courses);
         
     } failureBlock:failureBlock];
 }

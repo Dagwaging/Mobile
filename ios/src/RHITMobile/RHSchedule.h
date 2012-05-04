@@ -53,7 +53,9 @@
 
 /**
  * The course meeting wrapped by this schedule entry. Though this course meeting may
- * span multiple class periods, this schedule entry specifically maps it to one.
+ * span multiple class periods, this schedule entry specifically maps it to one. This value
+ * may be `nil`, in which case this entry is serving as a placeholder for a period
+ * with no course meetings.
  */
 @property (nonatomic, strong) RHCourseMeeting *courseMeeting;
 

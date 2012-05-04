@@ -21,30 +21,28 @@
 #import "RHDirectoryRequestsWrapper.h"
 #import "RHFacultyDetailViewController.h"
 #import "RHPerson.h"
+#import "RHSchedule.h"
+#import "RHScheduleViewController.h"
 #import "RHUser.h"
 
 #define kAdvisorSegueIdentifier @"StudentDetailToFacultyDetailSegue"
+#define kScheduleSegueIdentifier @"StudentDetailToScheduleSegue"
 
 @interface RHStudentDetailViewController () {
-    @private
+@private
     BOOL _loaded;
 }
 
 @property (nonatomic, strong) IBOutlet UILabel *standingLabel;
-
 @property (nonatomic, strong) IBOutlet UILabel *majorsLabel;
-
 @property (nonatomic, strong) IBOutlet UILabel *campusMailboxLabel;
-
 @property (nonatomic, strong) IBOutlet UILabel *emailAddressLabel;
-
 @property (nonatomic, strong) IBOutlet UILabel *telephoneNumberLabel;
-
 @property (nonatomic, strong) IBOutlet UILabel *locationLabel;
-
 @property (nonatomic, strong) IBOutlet UILabel *advisorLabel;
 
 @property (nonatomic, strong) RHPerson *person;
+@property (nonatomic, strong) NSArray *courses;
 
 @end
 
@@ -59,6 +57,7 @@
 @synthesize locationLabel = _locationLabel;
 @synthesize advisorLabel = _advisorLabel;
 @synthesize person = _person;
+@synthesize courses = _courses;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -86,7 +85,7 @@
         self.person = person;
         
         self.navigationItem.title = person.userAccount.fullName;
-        self.navigationItem.rightBarButtonItem = nil;
+        
         
         self.standingLabel.text = person.userAccount.summary;
         self.majorsLabel.text = person.majors;
@@ -97,26 +96,20 @@
         
         self.advisorLabel.text = person.advisor.fullName;
         
-        _loaded = YES;
+        [RHDirectoryRequestsWrapper makeScheduleRequestForUser:person.userAccount successBlock:^(NSArray *courses) {
+            self.navigationItem.rightBarButtonItem = nil;
+            self.courses = courses;
+            
+            _loaded = YES;
+        } failureBlock:^(NSError *error) {
+            [self.navigationController popViewControllerAnimated:YES];
+        }];
         
         [self.tableView reloadData];
         
     } failureBlock:^(NSError *error) {
         [self.navigationController popViewControllerAnimated:YES];
     }];
-
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
- 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-}
-
-- (void)viewDidUnload
-{
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -129,6 +122,10 @@
     if ([segue.identifier isEqualToString:kAdvisorSegueIdentifier]) {
         RHFacultyDetailViewController *facultyDetail = segue.destinationViewController;
         facultyDetail.user = self.person.advisor;
+    } else if ([segue.identifier isEqualToString:kScheduleSegueIdentifier]) {
+        RHScheduleViewController *schedule = segue.destinationViewController;
+        while (!_loaded);
+        schedule.schedule = [[RHSchedule alloc] initWithCourses:self.courses];
     }
 }
 
@@ -137,14 +134,6 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
-    // Navigation logic may go here. Create and push another view controller.
-    /*
-     <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-     // ...
-     // Pass the selected object to the new view controller.
-     [self.navigationController pushViewController:detailViewController animated:YES];
-     */
 }
 
 @end

@@ -88,7 +88,9 @@
     
     if ((id) [jsonData objectForKey:kScheduleKey] != [NSNull null]) {
         for (NSDictionary *meetingDict in [jsonData objectForKey:kScheduleKey]) {
-            [meetings addObject:[RHCourseMeeting courseMeetingFromJSONDictionary:meetingDict]];
+            RHCourseMeeting *meeting = [RHCourseMeeting courseMeetingFromJSONDictionary:meetingDict];
+            meeting.course = course;
+            [meetings addObject:meeting];
         }
     }
     

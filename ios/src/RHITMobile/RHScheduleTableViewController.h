@@ -19,6 +19,18 @@
 
 #import <UIKit/UIKit.h>
 
+@class RHCourseMeeting;
+
+@protocol RHScheduleTableViewControllerDelegate <NSObject>
+
+- (void)didSelectCourseMeeting:(RHCourseMeeting *)meeting;
+
+@end
+
 @interface RHScheduleTableViewController : UITableViewController
+
+@property (nonatomic, strong) NSArray *scheduleEntries;
+
+@property (nonatomic, strong) NSObject<RHScheduleTableViewControllerDelegate> *delegate;
 
 @end

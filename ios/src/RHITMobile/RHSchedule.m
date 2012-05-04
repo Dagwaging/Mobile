@@ -21,6 +21,12 @@
 #import "RHCourse.h"
 #import "RHCourseMeeting.h"
 
+@interface RHScheduleEntry ()
+
+- (NSComparisonResult)compare:(RHScheduleEntry *)other;
+
+@end
+
 
 @implementation RHScheduleEntry
 
@@ -35,6 +41,11 @@
     }
     
     return self;
+}
+
+- (NSComparisonResult)compare:(RHScheduleEntry *)other
+{
+    return [self.period compare:other.period];
 }
 
 @end
@@ -65,7 +76,7 @@
     
     // Add any course meetings to our returned entries, creating separate
     // schedule entries for each period.
-    for (RHCourse *course in self.courses) {
+    for (RHCourse *course in self.courses.copy) {
         for (RHCourseMeeting *meeting in course.meetings) {
             
             NSInteger meetingDay = [dayInitials indexOfObject:meeting.day];
@@ -79,9 +90,39 @@
     }
     
     // Sort the entries by period for displaying
-    [entries sortUsingSelector:@selector(period)];
+    [entries sortUsingSelector:@selector(compare:)];
     
-    return entries;
+    // Insert empty entries for any missing periods
+    NSMutableArray *fullEntries = [NSMutableArray array];
+    int currentIndex = 0;
+    
+    for (int currentPeriod = 1; currentPeriod <= 10; currentPeriod ++) {
+        RHScheduleEntry *entry;
+        
+        if (currentIndex < entries.count) {
+            entry = [entries objectAtIndex:currentIndex];
+        }
+        
+        if (entry != nil && entry.period.intValue == currentPeriod) {
+            while (entry.period.intValue == currentPeriod) {
+                [fullEntries addObject:entry];
+                
+                currentIndex ++;
+                
+                if (currentIndex < entries.count) {
+                    entry = [entries objectAtIndex:currentIndex];
+                } else {
+                    break;
+                }
+            }
+        } else {
+            RHScheduleEntry *emptyEntry = [[RHScheduleEntry alloc] initWithPeriod:[NSNumber numberWithInt:currentPeriod] meeting:nil];
+            [fullEntries addObject:emptyEntry];
+        }
+    }
+    
+    
+    return fullEntries;
 }
 
 @end

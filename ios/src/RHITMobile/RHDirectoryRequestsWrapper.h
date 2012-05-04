@@ -40,5 +40,8 @@
                             successBlock:(void (^)(RHCourse *))successBlock
                             failureBlock:(void (^)(NSError *))failureBlock;
 
++ (void)makeScheduleRequestForUser:(RHUser *)user
+                      successBlock:(void (^)(NSArray *))successBlock
+                      failureBlock:(void (^)(NSError *))failureBlock;
 
 @end

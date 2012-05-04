@@ -18,39 +18,37 @@
 //
 
 #import "RHScheduleTableViewController.h"
+#import "RHCourse.h"
+#import "RHCourseMeeting.h"
+#import "RHSchedule.h"
 
-@interface RHScheduleTableViewController ()
+
+#define kClassPeriodCellIdentifier @"ScheduleClassPeriodCell"
+#define kNoClassPeriodCellIdentifier @"ScheduleNoClassPeriodCell"
+
+
+@interface RHScheduleTableViewCell : UITableViewCell
+
+@property (nonatomic, strong) IBOutlet UILabel *periodLabel;
+@property (nonatomic, strong) IBOutlet UILabel *courseNameLabel;
+@property (nonatomic, strong) IBOutlet UILabel *timesLabel;
 
 @end
 
+
+@implementation RHScheduleTableViewCell
+
+@synthesize periodLabel = _periodLabel;
+@synthesize courseNameLabel = _courseNameLabel;
+@synthesize timesLabel = _timesLabel;
+
+@end
+
+
 @implementation RHScheduleTableViewController
 
-- (id)initWithStyle:(UITableViewStyle)style
-{
-    self = [super initWithStyle:style];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
- 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-}
-
-- (void)viewDidUnload
-{
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
-}
+@synthesize scheduleEntries = _scheduleEntries;
+@synthesize delegate = _delegate;
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
@@ -61,78 +59,49 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-#warning Potentially incomplete method implementation.
-    // Return the number of sections.
-    return 0;
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-#warning Incomplete method implementation.
-    // Return the number of rows in the section.
-    return 0;
+    return self.scheduleEntries.count;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *)tableView:(UITableView *)tableView
+         cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    NSArray *times = [NSArray arrayWithObjects:@"8:05 AM - 8:55 AM", @"9:00 AM - 9:50 AM", @"9:55 AM - 10:45 AM", @"10:50 AM - 11:40 AM", @"11:45 AM - 12:35 PM", @"12:40 PM - 1:30 PM", @"1:35 PM - 2:25 PM", @"2:30 PM - 3:20 PM", @"3:25 PM - 4:15 PM", @"4:20 PM - 5:10 PM", nil];
     
-    // Configure the cell...
+    RHScheduleEntry *entry = [self.scheduleEntries objectAtIndex:indexPath.row];
+    
+    if (entry.courseMeeting == nil) {
+        RHScheduleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kNoClassPeriodCellIdentifier];
+        
+        cell.periodLabel.text = entry.period.description;
+        
+        return cell;
+    }
+    
+    RHScheduleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kClassPeriodCellIdentifier];
+    
+    cell.courseNameLabel.text = [NSString stringWithFormat:@"%@ in %@", entry.courseMeeting.course.courseNumber, entry.courseMeeting.room];
+    cell.periodLabel.text = entry.period.description;
+    cell.timesLabel.text = [times objectAtIndex:entry.period.intValue - 1];
     
     return cell;
 }
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
 
 #pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Navigation logic may go here. Create and push another view controller.
-    /*
-     <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-     // ...
-     // Pass the selected object to the new view controller.
-     [self.navigationController pushViewController:detailViewController animated:YES];
-     */
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    RHScheduleEntry *entry = [self.scheduleEntries objectAtIndex:indexPath.row];
+    
+    if (entry.courseMeeting != nil && self.delegate != nil) {
+        [self.delegate didSelectCourseMeeting:entry.courseMeeting];
+    }
 }
 
 @end

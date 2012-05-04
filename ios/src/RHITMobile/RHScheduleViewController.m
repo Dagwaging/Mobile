@@ -18,11 +18,13 @@
 //
 
 #import "RHScheduleViewController.h"
+#import "RHSchedule.h"
 #import "RHScheduleTableViewController.h"
 
 #define kNumberOfDays 6
 
 #define kDayScheduleViewControllerIdentifier @"DayScheduleViewController"
+#define kCourseMeetingSegueIdentifier @"ScheduleToCourseMeetingDetailSegue"
 
 
 @interface RHScheduleViewController () {
@@ -43,6 +45,7 @@
 
 @implementation RHScheduleViewController
 
+@synthesize schedule = _schedule;
 @synthesize scrollView = _scrollView;
 @synthesize pageControl = _pageControl;
 @synthesize viewControllers = _viewControllers;
@@ -112,6 +115,11 @@ static NSString *_dayNames[] = { @"Monday", @"Tuesday", @"Wednesday", @"Thursday
     // Switch the indicator when more than 50% of the previous/next page is visible
     CGFloat pageWidth = self.scrollView.frame.size.width;
     int dayIndex = floor((self.scrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
+    
+    if (dayIndex < 0 || dayIndex >= kNumberOfDays) {
+        return;
+    }
+    
     self.pageControl.currentPage = dayIndex;
     
     [self loadScrollViewWithDayIndex:dayIndex - 1];
@@ -161,8 +169,16 @@ static NSString *_dayNames[] = { @"Monday", @"Tuesday", @"Wednesday", @"Thursday
         controller.view.frame = frame;
         [self.scrollView addSubview:controller.view];
         
-        // TODO: Initialize view controller
+        controller.scheduleEntries = [self.schedule scheduleEntriesForDayIndex:[NSNumber numberWithInt:dayIndex]];
+        controller.delegate = self;
     }
+}
+
+#pragma mark - Schedule table view controller delegate
+
+- (void)didSelectCourseMeeting:(RHCourseMeeting *)meeting
+{
+    [self performSegueWithIdentifier:kCourseMeetingSegueIdentifier sender:meeting];
 }
 
 @end
