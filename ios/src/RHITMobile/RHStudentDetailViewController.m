@@ -136,4 +136,21 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
+-(void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.row == 1) {
+        // Email
+        NSURL *emailURL = [NSURL URLWithString:[NSString stringWithFormat:@"mailto:%@", self.person.emailAddress]];
+        if ([[UIApplication sharedApplication] canOpenURL:emailURL]) {
+            [[UIApplication sharedApplication] openURL:emailURL];
+        }
+    } else if (indexPath.row == 2) {
+        // Phone
+        NSURL *phoneURL = [NSURL URLWithString:[NSString stringWithFormat:@"tel://%@", self.person.phoneNumber]];
+        if ([[UIApplication sharedApplication] canOpenURL:phoneURL]) {
+            [[UIApplication sharedApplication] openURL:phoneURL];
+        }
+    }
+}
+
 @end

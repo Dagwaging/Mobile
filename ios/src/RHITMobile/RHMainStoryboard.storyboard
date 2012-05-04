@@ -962,11 +962,11 @@
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="gUi-4f-MKw" detailTextLabel="KM1-7v-zxH" style="IBUITableViewCellStyleValue2" id="Qhp-8a-ztF">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" accessoryType="detailDisclosureButton" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="gUi-4f-MKw" detailTextLabel="KM1-7v-zxH" style="IBUITableViewCellStyleValue2" id="Qhp-8a-ztF">
                                         <rect key="frame" x="0.0" y="227" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="10" y="0.0" width="300" height="43"/>
+                                            <rect key="frame" x="10" y="0.0" width="267" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Email" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="gUi-4f-MKw">
@@ -987,11 +987,11 @@
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="9UC-E6-KTZ" detailTextLabel="E0I-Eq-1Zc" style="IBUITableViewCellStyleValue2" id="uEm-0t-YzD">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" accessoryType="detailDisclosureButton" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="9UC-E6-KTZ" detailTextLabel="E0I-Eq-1Zc" style="IBUITableViewCellStyleValue2" id="uEm-0t-YzD">
                                         <rect key="frame" x="0.0" y="271" width="320" height="45"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="10" y="0.0" width="300" height="43"/>
+                                            <rect key="frame" x="10" y="0.0" width="267" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Telephone" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="9UC-E6-KTZ">
@@ -1165,11 +1165,11 @@
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="Lzc-Np-uSa" detailTextLabel="S3d-kH-akp" style="IBUITableViewCellStyleValue2" id="8DI-BQ-qfg">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" accessoryType="detailDisclosureButton" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="Lzc-Np-uSa" detailTextLabel="S3d-kH-akp" style="IBUITableViewCellStyleValue2" id="8DI-BQ-qfg">
                                         <rect key="frame" x="0.0" y="147" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="10" y="0.0" width="300" height="43"/>
+                                            <rect key="frame" x="10" y="0.0" width="267" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Email" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Lzc-Np-uSa">
@@ -1190,11 +1190,11 @@
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="Ylw-vx-Dbb" detailTextLabel="Axk-Eu-ElQ" style="IBUITableViewCellStyleValue2" id="YTa-hE-jhF">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" accessoryType="detailDisclosureButton" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="Ylw-vx-Dbb" detailTextLabel="Axk-Eu-ElQ" style="IBUITableViewCellStyleValue2" id="YTa-hE-jhF">
                                         <rect key="frame" x="0.0" y="191" width="320" height="45"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="10" y="0.0" width="300" height="43"/>
+                                            <rect key="frame" x="10" y="0.0" width="267" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Telephone" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Ylw-vx-Dbb">
@@ -2243,6 +2243,180 @@
         <image name="TabBarMapIcon.png" width="30" height="30"/>
         <image name="TabBarToursIcon.png" width="30" height="30"/>
     </resources>
+    <classes>
+        <class className="RHCampusServicesViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHCampusServicesViewController.h"/>
+        </class>
+        <class className="RHCourseDetailViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHCourseDetailViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="commentsLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="creditHoursLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="crnLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="enrolledLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="finalLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="instructorLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="maxEnrolledLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="nameLabel" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="RHDepartureLocationCell" superclassName="UITableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHDepartureLocationCell.h"/>
+            <relationships>
+                <relationship kind="outlet" name="locationDetailLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="locationNameLabel" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="RHDepartureLocationSelectionViewController" superclassName="RHLocationSearchViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHDepartureLocationSelectionViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="cancelSelection:"/>
+                <relationship kind="action" name="departGPS:"/>
+                <relationship kind="action" name="departLocation:forEvent:"/>
+                <relationship kind="outlet" name="navigationItem" candidateClass="UINavigationItem"/>
+            </relationships>
+        </class>
+        <class className="RHDirectorySearchViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHDirectorySearchViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="tableView" candidateClass="UITableView"/>
+            </relationships>
+        </class>
+        <class className="RHFacultyDetailViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHFacultyDetailViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="campusMailboxLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="departmentLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="emailAddressLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="locationLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="telephoneNumberLabel" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="RHLocationDetailViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHLocationDetailViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="displayCurrentLocationOnMap:"/>
+                <relationship kind="action" name="getDirectionsToCurrentLocation:"/>
+                <relationship kind="outlet" name="tableView" candidateClass="UITableView"/>
+            </relationships>
+        </class>
+        <class className="RHLocationSearchViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHLocationSearchViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="searchBar" candidateClass="UISearchBar"/>
+                <relationship kind="outlet" name="tableView" candidateClass="UITableView"/>
+            </relationships>
+        </class>
+        <class className="RHLoginViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHLoginViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="segueToSearch:"/>
+                <relationship kind="outlet" name="actionButtonText" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="passwordField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="usernameField" candidateClass="UITextField"/>
+            </relationships>
+        </class>
+        <class className="RHMapDirectionsManager" superclassName="NSObject">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHMapDirectionsManager.h"/>
+            <relationships>
+                <relationship kind="action" name="exitDirections:"/>
+                <relationship kind="action" name="nextStep:"/>
+                <relationship kind="action" name="previousStep:"/>
+                <relationship kind="outlet" name="mapView" candidateClass="MKMapView"/>
+                <relationship kind="outlet" name="mapViewController" candidateClass="RHMapViewController"/>
+            </relationships>
+        </class>
+        <class className="RHMapViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHMapViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="discloseLocationDetails:"/>
+                <relationship kind="outlet" name="backgroundView" candidateClass="UIView"/>
+                <relationship kind="outlet" name="directionsLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="directionsManager" candidateClass="RHMapDirectionsManager"/>
+                <relationship kind="outlet" name="directionsPicker" candidateClass="UIPickerView"/>
+                <relationship kind="outlet" name="mapView" candidateClass="MKMapView"/>
+            </relationships>
+        </class>
+        <class className="RHMeetingDetailViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHMeetingDetailViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="courseNameLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="locationLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="periodsLabel" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="RHQuickListViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHQuickListViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="cancel:"/>
+                <relationship kind="action" name="goToLocation:"/>
+                <relationship kind="outlet" name="pickerView" candidateClass="UIPickerView"/>
+                <relationship kind="outlet" name="tableView" candidateClass="UITableView"/>
+            </relationships>
+        </class>
+        <class className="RHRosterViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHRosterViewController.h"/>
+        </class>
+        <class className="RHScheduleTableViewCell" superclassName="UITableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHScheduleTableViewCell.h"/>
+            <relationships>
+                <relationship kind="outlet" name="courseNameLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="periodLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="timesLabel" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="RHScheduleTableViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHScheduleTableViewController.h"/>
+        </class>
+        <class className="RHScheduleViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHScheduleViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="pageControl" candidateClass="UIPageControl"/>
+                <relationship kind="outlet" name="scrollView" candidateClass="UIScrollView"/>
+            </relationships>
+        </class>
+        <class className="RHStudentDetailViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHStudentDetailViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="advisorLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="campusMailboxLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="emailAddressLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="locationLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="majorsLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="standingLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="telephoneNumberLabel" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="RHTagSelectionViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHTagSelectionViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="donePressed:"/>
+            </relationships>
+        </class>
+        <class className="RHTagsBasketViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHTagsBasketViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="buildTour:"/>
+                <relationship kind="action" name="doneEditing:"/>
+            </relationships>
+        </class>
+        <class className="RHToursViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHToursViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="durationSliderMoved:"/>
+                <relationship kind="action" name="tourTypeChanged:"/>
+                <relationship kind="outlet" name="durationLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="durationSlider" candidateClass="UISlider"/>
+            </relationships>
+        </class>
+        <class className="RHWebViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RHWebViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="openInSafari"/>
+                <relationship kind="outlet" name="webView" candidateClass="UIWebView"/>
+            </relationships>
+        </class>
+    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
