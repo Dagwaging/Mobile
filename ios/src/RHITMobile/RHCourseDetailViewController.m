@@ -21,9 +21,11 @@
 #import "RHCourse.h"
 #import "RHDirectoryRequestsWrapper.h"
 #import "RHFacultyDetailViewController.h"
+#import "RHRosterViewController.h"
 #import "RHUser.h"
 
 #define kInstructorSegueIdentifier @"CourseDetailToFacultyDetailSegue"
+#define kRosterSegueIdentifier @"CourseDetailToRosterSegue"
 
 @interface RHCourseDetailViewController () {
     @private
@@ -55,15 +57,6 @@
 @synthesize maxEnrolledLabel = _maxEnrolledLabel;
 @synthesize crnLabel = _crnLabel;
 @synthesize course = _course;
-
-- (id)initWithStyle:(UITableViewStyle)style
-{
-    self = [super initWithStyle:style];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
 
 - (void)viewDidLoad
 {
@@ -100,19 +93,6 @@
     } failureBlock:^(NSError *error) {
         [self.navigationController popViewControllerAnimated:YES];
     }];
-
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
- 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-}
-
-- (void)viewDidUnload
-{
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -125,6 +105,9 @@
     if ([segue.identifier isEqualToString:kInstructorSegueIdentifier]) {
         RHFacultyDetailViewController *facultyDetail = segue.destinationViewController;
         facultyDetail.user = self.course.instructor;
+    } else if ([segue.identifier isEqualToString:kRosterSegueIdentifier]) {
+        RHRosterViewController *roster = segue.destinationViewController;
+        roster.course = self.course;
     }
 }
 
@@ -133,14 +116,6 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
-    // Navigation logic may go here. Create and push another view controller.
-    /*
-     <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-     // ...
-     // Pass the selected object to the new view controller.
-     [self.navigationController pushViewController:detailViewController animated:YES];
-     */
 }
 
 @end
