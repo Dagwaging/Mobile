@@ -20,7 +20,11 @@
 #import "RHFacultyDetailViewController.h"
 #import "RHDirectoryRequestsWrapper.h"
 #import "RHPerson.h"
+#import "RHSchedule.h"
+#import "RHScheduleViewController.h"
 #import "RHUser.h"
+
+#define kScheduleSegueIdentifier @"FacultyDetailToScheduleSegue"
 
 @interface RHFacultyDetailViewController () {
     @private
@@ -39,6 +43,8 @@
 
 @property (nonatomic, strong) RHPerson *person;
 
+@property (nonatomic, strong) NSArray *courses;
+
 @end
 
 @implementation RHFacultyDetailViewController
@@ -50,6 +56,7 @@
 @synthesize telephoneNumberLabel = _telephoneNumberLabel;
 @synthesize locationLabel = _locationLabel;
 @synthesize person = _person;
+@synthesize courses = _courses;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -77,7 +84,6 @@
         self.person = person;
         
         self.navigationItem.title = person.userAccount.fullName;
-        self.navigationItem.rightBarButtonItem = nil;
         
         self.departmentLabel.text = person.department;
         self.campusMailboxLabel.text = person.campusMailbox.description;
@@ -85,7 +91,14 @@
         self.telephoneNumberLabel.text = person.phoneNumber;
         self.locationLabel.text = person.location;
         
-        _loaded = YES;
+        [RHDirectoryRequestsWrapper makeScheduleRequestForUser:person.userAccount successBlock:^(NSArray *courses) {
+            self.navigationItem.rightBarButtonItem = nil;
+            self.courses = courses;
+            
+            _loaded = YES;
+        } failureBlock:^(NSError *error) {
+            [self.navigationController popViewControllerAnimated:YES];
+        }];
         
         [self.tableView reloadData];
         
@@ -110,6 +123,15 @@
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString:kScheduleSegueIdentifier]) {
+        RHScheduleViewController *scheduleView = segue.destinationViewController;
+        while (!_loaded);
+        scheduleView.schedule = [[RHSchedule alloc] initWithCourses:self.courses];
+    }
 }
 
 #pragma mark - Table view delegate

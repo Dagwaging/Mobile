@@ -59,6 +59,8 @@ static NSString *_dayNames[] = { @"Monday", @"Tuesday", @"Wednesday", @"Thursday
 {
     [super viewDidLoad];
     
+    self.navigationItem.rightBarButtonItem = nil;
+    
     // Initialize view controllers with null values
     NSMutableArray *controllers = [[NSMutableArray alloc] init];
     for (unsigned i = 0; i < kNumberOfDays; i++)
