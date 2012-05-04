@@ -19,6 +19,13 @@
 
 #import <UIKit/UIKit.h>
 
-@interface RHScheduleViewController : UIViewController
+/**
+ * The view controller that wraps the scrollable day schedule tables,
+ * providing a scroll view, a page control, and a navigation bar button item
+ * for changing the current term (when applicable). The code in this class is
+ * based heavily on Apple's **PageControl** sample (available at
+ * <https://developer.apple.com/library/ios/samplecode/PageControl>)
+ */
+@interface RHScheduleViewController : UIViewController <UIScrollViewDelegate>
 
 @end
