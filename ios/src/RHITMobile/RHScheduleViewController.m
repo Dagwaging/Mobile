@@ -18,6 +18,7 @@
 //
 
 #import "RHScheduleViewController.h"
+#import "RHMeetingDetailViewController.h"
 #import "RHSchedule.h"
 #import "RHScheduleTableViewController.h"
 
@@ -94,6 +95,14 @@ static NSString *_dayNames[] = { @"Monday", @"Tuesday", @"Wednesday", @"Thursday
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString:kCourseMeetingSegueIdentifier]) {
+        RHMeetingDetailViewController *meetingDetail = segue.destinationViewController;
+        meetingDetail.meeting = sender;
+    }
 }
 
 #pragma mark - IBActions

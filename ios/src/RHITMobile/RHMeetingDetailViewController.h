@@ -19,6 +19,10 @@
 
 #import <UIKit/UIKit.h>
 
+@class RHCourseMeeting;
+
 @interface RHMeetingDetailViewController : UITableViewController
+
+@property (nonatomic, strong) RHCourseMeeting *meeting;
 
 @end

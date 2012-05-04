@@ -18,12 +18,28 @@
 //
 
 #import "RHMeetingDetailViewController.h"
+#import "RHCourse.h"
+#import "RHCourseDetailViewController.h"
+#import "RHCourseMeeting.h"
+
+#define kCourseSegueIdentifier @"MeetingDetailToCourseDegailSegue"
 
 @interface RHMeetingDetailViewController ()
+
+@property (nonatomic, strong) IBOutlet UILabel *courseNameLabel;
+
+@property (nonatomic, strong) IBOutlet UILabel *locationLabel;
+
+@property (nonatomic, strong) IBOutlet UILabel *periodsLabel;
 
 @end
 
 @implementation RHMeetingDetailViewController
+
+@synthesize meeting = _meeting;
+@synthesize courseNameLabel = _courseNameLabel;
+@synthesize locationLabel = _locationLabel;
+@synthesize periodsLabel = _periodsLabel;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -37,12 +53,16 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
- 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    
+    self.courseNameLabel.text = [NSString stringWithFormat:@"%@: %@", self.meeting.course.courseNumber, self.meeting.course.name];
+    
+    self.locationLabel.text = self.meeting.room;
+    
+    if (self.meeting.startPeriod.intValue == self.meeting.endPeriod.intValue) {
+        self.periodsLabel.text = self.meeting.startPeriod.description;
+    } else {
+        self.periodsLabel.text = [NSString stringWithFormat:@"%d-%d", self.meeting.startPeriod.intValue, self.meeting.endPeriod.intValue];
+    }
 }
 
 - (void)viewDidUnload
@@ -50,6 +70,14 @@
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString:kCourseSegueIdentifier]) {
+        RHCourseDetailViewController *courseDetail = segue.destinationViewController;
+        courseDetail.sourceCourse = self.meeting.course;
+    }
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
