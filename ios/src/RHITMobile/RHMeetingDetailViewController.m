@@ -56,6 +56,8 @@
     
     self.courseNameLabel.text = [NSString stringWithFormat:@"%@: %@", self.meeting.course.courseNumber, self.meeting.course.name];
     
+    self.navigationItem.title = self.meeting.course.courseNumber;
+    
     self.locationLabel.text = self.meeting.room;
     
     if (self.meeting.startPeriod.intValue == self.meeting.endPeriod.intValue) {

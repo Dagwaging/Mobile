@@ -22,10 +22,13 @@
 #import "RHDirectoryRequestsWrapper.h"
 #import "RHFacultyDetailViewController.h"
 #import "RHRosterViewController.h"
+#import "RHSchedule.h"
+#import "RHScheduleViewController.h"
 #import "RHUser.h"
 
 #define kInstructorSegueIdentifier @"CourseDetailToFacultyDetailSegue"
 #define kRosterSegueIdentifier @"CourseDetailToRosterSegue"
+#define kScheduleSegueIdentifier @"CourseDetailToScheduleSegue"
 
 @interface RHCourseDetailViewController () {
     @private
@@ -108,6 +111,9 @@
     } else if ([segue.identifier isEqualToString:kRosterSegueIdentifier]) {
         RHRosterViewController *roster = segue.destinationViewController;
         roster.course = self.course;
+    } else if ([segue.identifier isEqualToString:kScheduleSegueIdentifier]) {
+        RHScheduleViewController *schedule = segue.destinationViewController;
+        schedule.schedule = [[RHSchedule alloc] initWithCourses:[NSArray arrayWithObject:self.course]];
     }
 }
 
