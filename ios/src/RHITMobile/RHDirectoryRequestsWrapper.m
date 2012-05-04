@@ -27,6 +27,9 @@
 
 #define kAuthTokenHeader @"Auth-Token"
 
+#define kEnrolledURLKey @"getenrolled"
+#define kScheduleURLKey @"getschedule"
+
 #define kUserSearchPath @"/banner/user/search/%@"
 #define kCourseSearchPath @"/banner/course/search/%@/%@"
 #define kPersonDataPath @"/banner/user/data/%@"
@@ -103,9 +106,14 @@
                             successBlock:(void (^)(RHCourse *))successBlock
                             failureBlock:(void (^)(NSError *))failureBlock
 {
+    NSMutableDictionary *urlArgs = [NSMutableDictionary dictionaryWithCapacity:2];
+    
+    [urlArgs setObject:@"true" forKey:kEnrolledURLKey];
+    [urlArgs setObject:@"true" forKey:kScheduleURLKey];
+    
     NSString *fullPath = [NSString stringWithFormat:kCourseDataPath, course.term, course.crn];
     
-    [RHJSONRequest makeRequestWithPath:fullPath headers:[self makeAuthTokenHeaders] urlArgs:nil successBlock:^(NSDictionary *jsonDict) {
+    [RHJSONRequest makeRequestWithPath:fullPath headers:[self makeAuthTokenHeaders] urlArgs:urlArgs successBlock:^(NSDictionary *jsonDict) {
         
         NSArray *courses = [jsonDict objectForKey:kCoursesKey];
         
