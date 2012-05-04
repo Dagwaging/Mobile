@@ -70,12 +70,25 @@ static NSString *_dayNames[] = { @"Monday", @"Tuesday", @"Wednesday", @"Thursday
     self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width * kNumberOfDays, self.scrollView.frame.size.height);
     self.scrollView.scrollsToTop = NO;
     
-    // Configure page control
-    self.pageControl.currentPage = 0;
+    // Get the current day of the week
+    NSDateFormatter* theDateFormatter = [[NSDateFormatter alloc] init];
+    [theDateFormatter setFormatterBehavior:NSDateFormatterBehavior10_4];
+    [theDateFormatter setDateFormat:@"EEEE"];
+    NSString *weekDay =  [theDateFormatter stringFromDate:[NSDate date]];
     
-    // Load initial views
-    [self loadScrollViewWithDayIndex:0];
-    [self loadScrollViewWithDayIndex:1];
+    int dateIndex;
+    
+    if ([weekDay isEqualToString:@"Tuesday"]) dateIndex = 1;
+    else if ([weekDay isEqualToString:@"Wednesday"]) dateIndex = 2;
+    else if ([weekDay isEqualToString:@"Thursday"]) dateIndex = 3;
+    else if ([weekDay isEqualToString:@"Friday"]) dateIndex = 4;
+    else if ([weekDay isEqualToString:@"Saturday"]) dateIndex = 5;
+    else dateIndex = 0;
+    
+    // Configure page control
+    self.pageControl.currentPage = dateIndex;
+    
+    [self changePage:self];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
