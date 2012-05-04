@@ -84,7 +84,7 @@
         self.commentsLabel.text = course.comments;
         self.creditHoursLabel.text = course.credits.description;
         self.instructorLabel.text = course.instructor.fullName;
-        self.finalLabel.text = course.finalRoom; // TODO
+        self.finalLabel.text = [NSString stringWithFormat:@"%@ on %@ period %@", course.finalRoom, course.finalDay, course.finalHour];
         self.enrolledLabel.text = course.enrolled.description;
         self.maxEnrolledLabel.text = course.maxEnrolled.description;
         self.crnLabel.text = course.crn.description;
