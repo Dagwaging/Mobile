@@ -233,8 +233,8 @@ namespace RHITMobile.Secure
                         else
                             user.Mailbox = -1;
 
-                        if (!row.IsyearNull())
-                            user.Major = row.year;
+                        if (!row.IsmajorsNull())
+                            user.Major = row.majors;
 
                         if (!row.Is_classNull())
                             user.Class = row._class;
@@ -289,8 +289,8 @@ namespace RHITMobile.Secure
                     else
                         user.Mailbox = -1;
 
-                    if (!row.IsyearNull())
-                        user.Major = row.year;
+                    if (!row.IsmajorsNull())
+                        user.Major = row.majors;
 
                     if (!row.Is_classNull())
                         user.Class = row._class;
