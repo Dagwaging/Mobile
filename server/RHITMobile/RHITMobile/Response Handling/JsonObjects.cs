@@ -180,12 +180,15 @@ namespace RHITMobile {
         public HyperLink(DataRow row) {
             Name = (string)row["name"];
             Url = (string)row["url"];
+            Type = (string)row["type"];
         }
 
         [DataMember]
         public string Name { get; set; }
         [DataMember]
         public string Url { get; set; }
+        [DataMember]
+        public string Type { get; set; }
     }
     #endregion
 
@@ -554,13 +557,13 @@ namespace RHITMobile {
 
     #region Admin Interface
     [DataContract]
-    public class SAuthenticationResponse : JsonObject {
-        public SAuthenticationResponse(DateTime expiration, Guid id) {
+    public class SAdminAuthResponse : JsonObject {
+        public SAdminAuthResponse(DateTime expiration, Guid id) {
             Expiration = expiration;
             Token = id.ToString();
         }
 
-        public SAuthenticationResponse(DateTime expiration, string token) {
+        public SAdminAuthResponse(DateTime expiration, string token) {
             Expiration = expiration;
             Token = token;
         }
@@ -723,10 +726,10 @@ namespace RHITMobile {
     public class DirectionMessage : JsonObject {
         public DirectionMessage(DataRow row) {
             Id = (int)row["id"];
-            Message1 = (string)row["message1"];
-            Message2 = (string)row["message2"];
-            Action1 = (string)row["action1"];
-            Action2 = (string)row["action2"];
+            Message1 = row.IsNull("message1") ? null : (string)row["message1"];
+            Message2 = row.IsNull("message2") ? null : (string)row["message2"];
+            Action1 = row.IsNull("action1") ? null : (string)row["action1"];
+            Action2 = row.IsNull("action2") ? null : (string)row["action2"];
             NodeOffset = (int)row["nodeoffset"];
         }
 
@@ -745,7 +748,33 @@ namespace RHITMobile {
     }
     #endregion
 
-    #region UserDataResponse, UsersResponse, & CoursesResponse
+    #region UserDataResponse, UsersResponse, CoursesResponse, & BannerAuthResponse
+    [DataContract]
+    public class BannerAuthResponse : JsonObject {
+        public BannerAuthResponse(DateTime expiration, Guid id, int term, List<Term> terms) {
+            Expiration = expiration;
+            Token = id.ToString();
+            CurrentTerm = term;
+            Terms = terms;
+        }
+
+        public BannerAuthResponse(DateTime expiration, string token, int term, List<Term> terms) {
+            Expiration = expiration;
+            Token = token;
+            CurrentTerm = term;
+            Terms = terms;
+        }
+
+        [DataMember]
+        public DateTime Expiration { get; set; }
+        [DataMember]
+        public string Token { get; set; }
+        [DataMember]
+        public int CurrentTerm { get; set; }
+        [DataMember]
+        public List<Term> Terms { get; set; }
+    }
+
     [DataContract]
     public class UserDataResponse : JsonObject {
         public UserDataResponse(User user) {
@@ -894,7 +923,7 @@ namespace RHITMobile {
         public ShortUser(User user) {
             Username = user.Username;
 
-            if (user.MiddleName == null)
+            if (String.IsNullOrWhiteSpace(user.MiddleName))
                 FullName = String.Format("{0} {1}", user.FirstName, user.LastName);
             else
                 FullName = String.Format("{0} {1} {2}", user.FirstName, user.MiddleName, user.LastName);
@@ -929,6 +958,39 @@ namespace RHITMobile {
         public string Subtitle { get; set; }
         [DataMember]
         public string Username { get; set; }
+    }
+
+    [DataContract]
+    public class Term {
+        public Term(int id) {
+            Id = id;
+            string quarter;
+            switch (id % 100) {
+                case 10: quarter = "Fall"; break;
+                case 20: quarter = "Winter"; break;
+                case 30: quarter = "Spring"; break;
+                case 40: quarter = "Summer"; break;
+                default: quarter = "Unknown"; break;
+            }
+            Name = String.Format("{0} Quarter - {1:0000}-{2:00}", quarter, id / 100 - 1, (id / 100) % 100);
+        }
+
+        [DataMember]
+        public int Id { get; set; }
+        [DataMember]
+        public string Name { get; set; }
+    }
+    #endregion
+
+    #region FoldersResponse
+    [DataContract]
+    public class FoldersResponse : JsonObject {
+        public FoldersResponse(List<string> folders) {
+            Folders = folders;
+        }
+
+        [DataMember]
+        public List<string> Folders { get; set; }
     }
     #endregion
 

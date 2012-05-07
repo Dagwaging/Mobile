@@ -7,6 +7,7 @@ using System.Net;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.Security.Cryptography.X509Certificates;
+using System.IO;
 
 namespace RHITMobile {
     public static class WebController {
@@ -194,33 +195,40 @@ namespace RHITMobile {
             }
 
             if (result == null) {
-                yield return TM.Await(currentThread, _handler.HandlePath(TM, isSSL, path, query, context.Request.Headers, new object()));
+                yield return TM.Await(currentThread, _handler.HandlePath(TM, isSSL, path, query, context.Request.Headers, context, new object()));
                 try {
                     result = TM.GetResult<JsonResponse>(currentThread);
                 } catch (UpToDateException e) {
                     result = new JsonResponse(HttpStatusCode.NoContent, e.Message);
                 } catch (BadRequestException e) {
                     result = new JsonResponse(HttpStatusCode.BadRequest, e.Message);
+                } catch (UnauthorizedException e) {
+                    result = new JsonResponse(HttpStatusCode.Unauthorized, e.Message);
                 } catch (Exception) {
                     result = new JsonResponse(HttpStatusCode.InternalServerError);
                 }
             }
 
-            var encoding = new ASCIIEncoding();
-            byte[] b;
-            if (result.Json != null) {
-                b = encoding.GetBytes(result.Json.Serialize());
-            } else {
-                b = encoding.GetBytes(result.Message);
+            byte[] b = new byte[0];
+            if (result != null) {
+                var encoding = new ASCIIEncoding();
+                if (result.Json != null) {
+                    b = encoding.GetBytes(result.Json.Serialize());
+                } else {
+                    b = encoding.GetBytes(result.Message);
+                }
             }
 
             if (requestNum < 10)
                 RequestsBeingHandled[requestNum] = false;
 
             try {
-                context.Response.OutputStream.Write(b, 0, b.Length);
-                context.Response.StatusCode = (int)result.StatusCode;
-                context.Response.Close();
+                if (result != null) {
+                    context.Response.StatusCode = (int)result.StatusCode;
+                    context.Response.ContentLength64 = b.Length;
+                    context.Response.OutputStream.Write(b, 0, b.Length);
+                    context.Response.Close();
+                }
 
                 if (requestNum < 10) {
                     for (int j = 0; j < 10; j++)
@@ -285,6 +293,7 @@ namespace RHITMobile {
             Redirects.Add("admin", new AdminHandler());
             Redirects.Add("services", new ServicesHandler());
             Redirects.Add("banner", new BannerHandler());
+            Redirects.Add("download", new FileHostDownloadHandler());
             Redirects.Add("clientaccesspolicy.xml", new ClientAccessPolicyHandler());
         }
 
@@ -324,17 +333,47 @@ namespace RHITMobile {
         public string Message { get; set; }
     }
 
-    public class BadRequestException : Exception {
-        public BadRequestException(string message) : base(message) { }
+    public class ServerHandledException : Exception {
+        public ThreadInfo CurrentThread { get; set; }
 
-        public BadRequestException(string message, params object[] obj)
-            : base(String.Format(message, obj)) { }
+        public ServerHandledException(ThreadInfo currentThread, string message) : base(message) {
+            CurrentThread = currentThread;
+        }
+
+        public ServerHandledException(ThreadInfo currentThread, Exception exception)
+        : base("An exception was thrown.  See inner exception.", exception) {
+            CurrentThread = currentThread;
+        }
+
+        public ServerHandledException WithThread(ThreadInfo currentThread) {
+            CurrentThread = currentThread;
+            return this;
+        }
     }
 
-    public class UpToDateException : Exception {
-        public UpToDateException(string message) : base(message) { }
+    public class BadRequestException : ServerHandledException {
+        public BadRequestException(ThreadInfo currentThread, string message) : base(currentThread, message) { }
 
-        public UpToDateException(string message, params object[] obj)
-            : base(String.Format(message, obj)) { }
+        public BadRequestException(ThreadInfo currentThread, string message, params object[] obj)
+            : base(currentThread, String.Format(message, obj)) { }
+    }
+
+    public class UpToDateException : ServerHandledException {
+        public UpToDateException(ThreadInfo currentThread, string message) : base(currentThread, message) { }
+
+        public UpToDateException(ThreadInfo currentThread, string message, params object[] obj)
+            : base(currentThread, String.Format(message, obj)) { }
+    }
+
+    public class UnauthorizedException : ServerHandledException {
+        public UnauthorizedException(ThreadInfo currentThread, string message) : base(currentThread, message) { }
+
+        public UnauthorizedException(ThreadInfo currentThread, string message, params object[] obj)
+            : base(currentThread, String.Format(message, obj)) { }
+    }
+
+    public class ExceptionThrownException<E> : ServerHandledException
+    where E : Exception {
+        public ExceptionThrownException(ThreadInfo currentThread, E exception) : base(currentThread, exception) { }
     }
 }

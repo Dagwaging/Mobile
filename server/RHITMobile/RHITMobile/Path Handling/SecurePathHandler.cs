@@ -7,15 +7,15 @@ using System.Collections.Specialized;
 
 namespace RHITMobile {
     public class SecurePathHandler : PathHandler {
-        public override IEnumerable<ThreadInfo> HandlePath(ThreadManager TM, bool isSSL, IEnumerable<string> path, Dictionary<string, string> query, NameValueCollection headers, object state) {
+        public override IEnumerable<ThreadInfo> HandlePath(ThreadManager TM, bool isSSL, IEnumerable<string> path, Dictionary<string, string> query, NameValueCollection headers, HttpListenerContext context, object state) {
             var currentThread = TM.CurrentThread;
 
             if (!isSSL)
-                throw new BadRequestException("SSL required for this request.");
+                throw new BadRequestException(currentThread, "SSL required for this request.");
 
-            yield return TM.Await(currentThread, VerifyHeaders(TM, headers, state));
+            //yield return TM.Await(currentThread, VerifyHeaders(TM, headers, state));
 
-            yield return TM.Await(currentThread, base.HandlePath(TM, true, path, query, headers, TM.GetResult(currentThread)));
+            yield return TM.Await(currentThread, base.HandlePath(TM, true, path, query, headers, context, state));
 
             yield return TM.Return(currentThread);
         }

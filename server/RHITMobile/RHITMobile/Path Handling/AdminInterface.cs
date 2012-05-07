@@ -17,6 +17,7 @@ namespace RHITMobile {
             Redirects.Add("updateversion", new AdminUpdateVersionHandler());
             Redirects.Add("scriptdb", new DatabaseScripter());
             Redirects.Add("pathdata", new AdminPathDataHandler());
+            Redirects.Add("filehost", new FileHostHandler());
             UnknownRedirect = new AdminTokenHandler(); //TODO: Remove
         }
 
@@ -31,18 +32,18 @@ namespace RHITMobile {
 
             string token = headers["Auth-Token"];
             if (token == null)
-                throw new BadRequestException("An authentication token is required for this request.");
+                throw new UnauthorizedException(currentThread, "An authentication token is required for this request.");
 
             Guid id = new Guid();
             try {
                 id = new Guid(token);
             } catch (Exception e) {
-                throw new BadRequestException(e.Message);
+                throw new UnauthorizedException(currentThread, "Authentication token is invalid.");
             }
             if (!AdminHandler.Logins.ContainsKey(id))
-                throw new BadRequestException("Authentication token is invalid.");
+                throw new UnauthorizedException(currentThread, "Authentication token is invalid.");
             if (AdminHandler.Logins[id].Expiration < DateTime.Now)
-                throw new BadRequestException("Authentication token has expired.");
+                throw new UnauthorizedException(currentThread, "Authentication token has expired.");
 
             yield return TM.Return(currentThread, AdminHandler.Logins[id]);
         }
@@ -94,15 +95,15 @@ namespace RHITMobile {
                     id = Guid.NewGuid();
                 var loginData = new SqlLoginData(username, password);
                 AdminHandler.Logins[id] = loginData;
-                yield return TM.Return(currentThread, new SAuthenticationResponse(loginData.Expiration, id));
+                yield return TM.Return(currentThread, new SAdminAuthResponse(loginData.Expiration, id));
             } else {
-                throw new BadRequestException("SQL authentication failed.");
+                throw new BadRequestException(currentThread, "SQL authentication failed.");
             }
         }
 
         protected override IEnumerable<ThreadInfo> HandleNoPath(ThreadManager TM, Dictionary<string, string> query, object state) {
             var currentThread = TM.CurrentThread;
-            yield return TM.Return(currentThread, new JsonResponse((SAuthenticationResponse)state));
+            yield return TM.Return(currentThread, new JsonResponse((SAdminAuthResponse)state));
         }
     }
 
@@ -140,9 +141,9 @@ namespace RHITMobile {
                 while (AdminHandler.Logins.ContainsKey(id))
                     id = Guid.NewGuid();
                 AdminHandler.Logins[id] = loginData;
-                yield return TM.Return(currentThread, new JsonResponse(new SAuthenticationResponse(loginData.Expiration, id)));
+                yield return TM.Return(currentThread, new JsonResponse(new SAdminAuthResponse(loginData.Expiration, id)));
             } else {
-                throw new BadRequestException("SQL authentication failed.");
+                throw new BadRequestException(currentThread, "SQL authentication failed.");
             }
         }
     }
@@ -153,6 +154,7 @@ namespace RHITMobile {
             Redirects.Add("updateversion", new AdminUpdateVersionHandler());
             Redirects.Add("scriptdb", new DatabaseScripter());
             Redirects.Add("pathdata", new AdminPathDataHandler());
+            Redirects.Add("filehost", new FileHostHandler());
         }
 
         public override IEnumerable<ThreadInfo> VerifyHeaders(ThreadManager TM, NameValueCollection headers, object state) {
@@ -206,7 +208,7 @@ namespace RHITMobile {
                     response.Table.Add(rowList);
                 }
             } catch (Exception e) {
-                throw new BadRequestException(e.Message);
+                throw new BadRequestException(currentThread, e.Message);
             }
 
             yield return TM.Return(currentThread, new JsonResponse(response));

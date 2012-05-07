@@ -53,6 +53,14 @@ namespace RHITMobile {
             Valid = false;
         }
 
+        public DirectionsFinder(Node start) {
+            _id = _directions.Insert(this);
+            Start = start;
+            Paths = new List<DirectionPath>();
+            _maxDist = Double.MaxValue;
+            Valid = false;
+        }
+
         public DirectionsFinder(Node start, DirectionsSettings settings, double maxDist) {
             _id = -1;
             Start = start;

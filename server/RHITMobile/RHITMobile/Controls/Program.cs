@@ -24,7 +24,6 @@ namespace RHITMobile {
             } catch {
                 // If could not get the version, default it to 0.0
                 Console.WriteLine("Could not get version.");
-                return;
             }
 
             var TM = new ThreadManager();
@@ -193,6 +192,7 @@ namespace RHITMobile {
         public const double StairRatio = StairHeight / StairLength;
         public static double StairAngle = Math.Asin(StairRatio); // radians
         public const int MaxDailySecureServerCalls = 25000;
+        public const string FileHostPath = @"C:\FileHost";
 
         public static double UseStairsStairMultiplier = (Math.Sqrt(1 + MaxSlopeRatio * MaxSlopeRatio) * StairRatio - Math.Sqrt(1 + StairRatio * StairRatio) * MaxSlopeRatio) * StairHeight / (MaxSlopeRatio * StairRatio);
     }

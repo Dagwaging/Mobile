@@ -39,6 +39,12 @@ namespace RHITMobile {
             Tags = new List<int>();
         }
 
+        public TourFinder(Node start) {
+            _id = _tours.Insert(this);
+            _start = start;
+            Tags = new List<int>();
+        }
+
         public List<int> Tags { get; set; }
         public List<LocationRank> Locations { get; set; }
 

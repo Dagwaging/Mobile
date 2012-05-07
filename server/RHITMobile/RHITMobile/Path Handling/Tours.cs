@@ -44,7 +44,7 @@ namespace RHITMobile {
                 double version;
                 if (Double.TryParse(query["version"], out version)) {
                     if (version >= Program.TagsVersion) {
-                        throw new UpToDateException("Version is up to date.");
+                        throw new UpToDateException(currentThread, "Version is up to date.");
                     }
                 }
             }
@@ -95,7 +95,7 @@ namespace RHITMobile {
             var currentThread = TM.CurrentThread;
 
             if (!(state is List<int>))
-                throw new BadRequestException("Need to specify at least one tag.");
+                throw new BadRequestException(currentThread, "Need to specify at least one tag.");
 
             yield return TM.Await(currentThread, ToursHandler.GetTaggedLocations(TM, (List<int>)state));
 
@@ -118,7 +118,7 @@ namespace RHITMobile {
             var currentThread = TM.CurrentThread;
             IntRedirect = TourFinder.GetFinder(value);
             if (IntRedirect == null)
-                throw new BadRequestException("Invalid Tours ID.");
+                throw new BadRequestException(currentThread, "Invalid Tours ID.");
             yield return TM.Return(currentThread, false);
         }
     }
@@ -134,12 +134,51 @@ namespace RHITMobile {
                 new SqlParameter("@location", value));
             var table = TM.GetResult<DataTable>(currentThread);
             if (table.Rows.Count == 0)
-                throw new BadRequestException("Cannot depart from this location.");
+                throw new BadRequestException(currentThread, "Cannot depart from this location.");
             yield return TM.Return(currentThread, new TourFinder(table.Rows[0]));
         }
     }
 
     public class ToursFromGpsHandler : PathHandler {
+        public ToursFromGpsHandler() {
+            FloatRedirect = new ToursFromGpsLatHandler();
+        }
+
+        protected override IEnumerable<ThreadInfo> HandleFloatPath(ThreadManager TM, double value, object state) {
+            var currentThread = TM.CurrentThread;
+            yield return TM.Return(currentThread, value);
+        }
+    }
+
+    public class ToursFromGpsLatHandler : PathHandler {
+        public ToursFromGpsLatHandler() {
+            FloatRedirect = new ToursOnCampusTagsHandler();
+        }
+
+        protected override IEnumerable<ThreadInfo> HandleFloatPath(ThreadManager TM, double lon, object state) {
+            var currentThread = TM.CurrentThread;
+            float lat = (float)state;
+
+            yield return TM.MakeDbCall(currentThread, Program.ConnectionString, "spGetOutsideNodesNearLat",
+                new SqlParameter("@lat", lat));
+            var table = TM.GetResult<DataTable>(currentThread);
+            if (table.Rows.Count == 0)
+                throw new BadRequestException(currentThread, "No outside nodes are in the system.");
+
+            Node closestNode = null;
+            double closestDist = Double.MaxValue;
+            foreach (DataRow row in table.Rows) {
+                var node = new Node(row);
+                if (node.HDistanceTo(lat, node.Lon) >= closestDist) break;
+                double dist = node.HDistanceTo(lat, lon);
+                if (dist < closestDist) {
+                    closestDist = dist;
+                    closestNode = node;
+                }
+            }
+
+            yield return TM.Return(currentThread, new TourFinder(closestNode));
+        }
     }
 
     public class ToursOnCampusTagsHandler : PathHandler {
@@ -160,12 +199,12 @@ namespace RHITMobile {
 
             var tourFinder = (TourFinder)state;
             if (!tourFinder.Tags.Any())
-                throw new BadRequestException("Need to specify at least one tag.");
+                throw new BadRequestException(currentThread, "Need to specify at least one tag.");
 
             yield return TM.Await(currentThread, ToursHandler.GetTaggedLocations(TM, tourFinder.Tags));
             tourFinder.Locations = TM.GetResult<IOrderedEnumerable<LocationRank>>(currentThread).ToList();
 
-            yield return TM.Await(currentThread, tourFinder.HandlePath(TM, false, new List<string>(), query, null, true));
+            yield return TM.Await(currentThread, tourFinder.HandlePath(TM, false, new List<string>(), query, null, null, true));
             yield return TM.Return(currentThread);
         }
     }
