@@ -415,6 +415,9 @@ Dir::mkdir dir
         student.pick_courses
     end
 
+    # Refresh aggregate user list
+    $all_people = $all_students + $all_faculty
+
     # Write .usr file
     $all_people.shuffle!
     File.open File.join(dir, "#{term}.usr"), 'w' do |user_file|
