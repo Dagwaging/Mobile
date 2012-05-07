@@ -21,6 +21,26 @@ namespace RHITMobile.Secure.Data_Import
             this.inputPath = inputPath;
         }
 
+        private String[] GetUserPaths()
+        {
+            String[] filepaths = Directory.GetFiles(inputPath, "*.usr");
+
+            //map term codes to filepaths
+            var termMap = new Dictionary<int, String>();
+            foreach (String filepath in filepaths)
+            {
+                using (UserCsvParser parser = new UserCsvParser(log, filepath))
+                {
+                    termMap[parser.TermCode] = filepath;
+                }
+            }
+
+            //sort the filepaths from most recent to oldest
+            int[] terms = termMap.Keys.ToArray();
+            Array.Sort(terms);
+            return terms.Reverse().Select(termCode => termMap[termCode]).ToArray();
+        }
+
         public void ImportData()
         {
             DateTime startTime = DateTime.Now;
@@ -33,65 +53,62 @@ namespace RHITMobile.Secure.Data_Import
                 db.ClearData();
 
                 {
-                    List<User> users = new List<User>();
-                    Dictionary<int, String> termUserMap = new Dictionary<int, String>();
-                    String[] userpaths = Directory.GetFiles(inputPath, "*.usr");
-                    foreach (String path in userpaths)
+                    foreach (String userpath in GetUserPaths())
                     {
-                        using (UserCsvParser parser = new UserCsvParser(log, path))
+                        List<User> users = new List<User>();
+                        using (UserCsvParser parser = new UserCsvParser(log, userpath))
                         {
-                            termUserMap.Add(parser.TermCode, path);
-                        }
-                    }
-                    String userpath = termUserMap[termUserMap.Keys.Max()];
-                    using (UserCsvParser parser = new UserCsvParser(log, userpath))
-                    {
-                        int errors = 0;
-                        foreach (User user in parser)
-                        {
-                            idToUsername.Add(user.ID, user.Username);
-                            try
+                            int errors = 0;
+                            foreach (User user in parser)
                             {
-                                db.AddUser(user);
-                                users.Add(user);
-                            }
-                            catch (Exception e)
-                            {
-                                if (errors < ERRORS_MAX)
-                                    log.Error(string.Format("Error importing user (line {0})", parser.LineNumber), e);
-                                errors++;
-                            }
-                        }
-                        if (errors > 0)
-                        {
-                            log.Error(string.Format("Failed to import {0} users", errors));
-                            ParseErrors += errors;
-                        }
+                                //skip users already imported in a newer data file
+                                if (idToUsername.ContainsKey(user.ID))
+                                    continue;
 
-                        errors = 0;
-                        foreach (User user in users)
-                        {
-                            if (user.Advisor != null && user.Advisor != "")
-                            {
+                                idToUsername.Add(user.ID, user.Username);
                                 try
                                 {
-                                    db.SetAdvisor(user);
+                                    db.AddUser(user);
+                                    users.Add(user);
                                 }
                                 catch (Exception e)
                                 {
                                     if (errors < ERRORS_MAX)
-                                        log.Error(string.Format("Error setting user's advisor (user {0})", user.Username), e);
+                                        log.Error(string.Format("Error importing user (line {0})", parser.LineNumber), e);
                                     errors++;
                                 }
                             }
+                            if (errors > 0)
+                            {
+                                log.Error(string.Format("Failed to import {0} users", errors));
+                                ParseErrors += errors;
+                            }
+
+                            errors = 0;
+                            foreach (User user in users)
+                            {
+                                if (!string.IsNullOrEmpty(user.Advisor))
+                                {
+                                    try
+                                    {
+                                        db.SetAdvisor(user);
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        if (errors < ERRORS_MAX)
+                                            log.Error(string.Format("Error setting user's advisor (user {0})", user.Username), e);
+                                        errors++;
+                                    }
+                                }
+                            }
+                            if (errors > 0)
+                            {
+                                log.Error(string.Format("Failed to set {0} user's advisor", errors));
+                                ParseErrors += errors;
+                            }
+                            ParseErrors += parser.ParseErrors;
+                            log.Info("Read " + users.Count + " user entries for term " + parser.TermCode);
                         }
-                        if (errors > 0)
-                        {
-                            log.Error(string.Format("Failed to set {0} user's advisor", errors));
-                            ParseErrors += errors;
-                        }
-                        ParseErrors += parser.ParseErrors;
-                        log.Info("Read " + users.Count + " user entries for term " + parser.TermCode);
                     }
                 }
                 {
