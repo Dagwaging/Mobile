@@ -396,7 +396,7 @@ Dir::mkdir dir
 
 ['201110', '201120', '201130', '201210', '201220', '201230'].each do |term|
     # Replace faculty members
-    $all_faculty.drop rand(20)
+    $all_faculty = $all_faculty.drop rand(20)
     scales[:replace_faculty].times { Faculty.new }
 
     # Create all new courses
@@ -406,7 +406,7 @@ Dir::mkdir dir
     scales[:courses].times { Course.new }
 
     # Replace students
-    $all_students.drop rand(500)
+    $all_students = $all_students.drop rand(500)
     scales[:replace_students].times { Student.new }
 
     # Check for missing advisor and register for courses
