@@ -136,5 +136,12 @@ namespace RHITMobile.Secure.Data_Import
 
             return result;
         }
+
+        public string optionalField(string field)
+        {
+            if (string.IsNullOrWhiteSpace(field))
+                return null;
+            return field;
+        }
     }
 }
