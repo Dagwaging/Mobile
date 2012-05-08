@@ -132,6 +132,9 @@
     <Compile Include="Views\FloorNumberWindow.xaml.cs">
       <DependentUpon>FloorNumberWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\GpsMapPage.xaml.cs">
+      <DependentUpon>GpsMapPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>
     </Compile>
@@ -227,6 +230,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\FloorNumberWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\GpsMapPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

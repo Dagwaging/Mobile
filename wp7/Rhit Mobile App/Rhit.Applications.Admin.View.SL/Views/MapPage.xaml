@@ -30,6 +30,8 @@
                     <HyperlinkButton Style="{StaticResource CustomButtonStyle}" NavigateUri="/LocationsMapPage" TargetName="MapContentFrame" Content="Locations" Background="{StaticResource HighLightColorBrush}" />
                     <Rectangle Style="{StaticResource DividerStyle}" />
                     <HyperlinkButton Style="{StaticResource CustomButtonStyle}" NavigateUri="/NodesMapPage" TargetName="MapContentFrame" Content="Nodes" />
+                    <Rectangle Style="{StaticResource DividerStyle}" />
+                    <HyperlinkButton Style="{StaticResource CustomButtonStyle}" NavigateUri="/GpsMapPage" TargetName="MapContentFrame" Content="GPS" />
                 </StackPanel>
             </Border>
         </Grid>

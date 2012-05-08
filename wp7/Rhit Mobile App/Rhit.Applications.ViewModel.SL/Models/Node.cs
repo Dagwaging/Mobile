@@ -18,13 +18,12 @@ namespace Rhit.Applications.ViewModels.Models {
         }
 
         public Node(Node_DC model) {
-            Model = model;
             PathBindingDictionary = new Dictionary<Node, Path>();
             InitializeCommands();
-            Center = new Location(Model.Latitude, Model.Longitude, Model.Altitude);
-            IsOutside = Model.Outside;
-            Location = LocationsController.Instance.GetLocation(model.Location);
+
+            Model = model;
             Id = Model.Id;
+            Revert();
         }
 
         #region Selected Event
@@ -52,6 +51,7 @@ namespace Rhit.Applications.ViewModels.Models {
             CurrentState = State.Default | State.CanSelect;
             CanMove = false;
             Center = new Location(Model.Latitude, Model.Longitude, Model.Altitude);
+            Location = LocationsController.Instance.GetLocation(Model.Location);
             IsOutside = Model.Outside;
             OnMove();
         }
