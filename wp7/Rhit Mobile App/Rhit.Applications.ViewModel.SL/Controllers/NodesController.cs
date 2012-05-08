@@ -124,10 +124,10 @@ namespace Rhit.Applications.ViewModels.Controllers {
         }
 
         private void Instance_DirectionCreated(object sender, DirectionEventArgs e) {
-            Direction direction = new Direction(e.Direction);
+            //Direction direction = new Direction(e.Direction);
 
-            DirectionDictionary[direction.Id] = direction;
-            AllDirections.Add(direction);
+            //DirectionDictionary[direction.Id] = direction;
+            //AllDirections.Add(direction);
 
             GetPathData();
         }

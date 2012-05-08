@@ -218,7 +218,7 @@ namespace Rhit.Applications.Models.Services {
         public event DirectionEventHandler DirectionCreated;
         protected virtual void OnDirectionCreated(ServiceEventArgs e) {
             DirectionEventArgs args = new DirectionEventArgs(e) {
-                Direction = ServerObject.ParseDirection(e.ResponseObject),
+                //Direction = ServerObject.ParseDirection(e.ResponseObject),
             };
             if(DirectionCreated != null) DirectionCreated(this, args);
         }
