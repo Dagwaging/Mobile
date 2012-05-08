@@ -25,7 +25,7 @@ namespace Rhit.Applications.Extentions.Maps {
 #else
         protected override Range<double> GetZoomRange(Location center) {
 #endif
-            // The allowable zoom levels - 14 to 21.
+            // The allowable zoom levels - 14 to 25.
             return new Range<double>(14, 25);
         }
 

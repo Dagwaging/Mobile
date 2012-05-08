@@ -121,6 +121,11 @@ namespace Rhit.Applications.Models {
         public List<Path_DC> Paths { get; set; }
         #endregion
 
+        [DataMember(Name = "Folders")]
+        public List<string> Folders { get; set; }
+
+
+
         public static Node_DC ParseNode(ServerObject instance) {
             //""Columns\":[\"id\",\"lat\",\"lon\",\"altitude\",\"outside\",\"location\"],\
             //"Table\":[[\"1083\",\"39.4840212214018\",\"-87.3248627936401\",\"0\",\"True\",null]]}"

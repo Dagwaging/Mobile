@@ -1,139 +1,133 @@
-﻿<navigation:Page x:Class="Rhit.Applications.Views.HomePage" 
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+﻿<navigation:Page x:Class="Rhit.Applications.Views.HomePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:navigation="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Navigation"
     xmlns:vm="clr-namespace:Rhit.Applications.ViewModels;assembly=Rhit.Applications.ViewModels.SL"
-    xmlns:cmds="clr-namespace:Rhit.Applications.Mvvm.Commands;assembly=Rhit.Applications.Mvvm.SL"
-    mc:Ignorable="d" d:DesignWidth="640" d:DesignHeight="480"
-    Title="Home"
-    Style="{StaticResource PageStyle}">
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Home" mc:Ignorable="d" d:DesignWidth="640" d:DesignHeight="480">
 
     <navigation:Page.Resources>
-        <vm:HomeViewModel x:Name="ViewModel"/>
+        <vm:HomeViewModel x:Name="ViewModel" />
 
-        <Style x:Key="BoldText" TargetType="TextBlock">
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="Foreground" Value="{StaticResource BodyTextColorBrush}"/>
-            <Setter Property="FontSize" Value="12"/>
-            <Setter Property="TextWrapping" Value="Wrap"/>
-            <Setter Property="Margin" Value="0,2,0,2"/>
-            <Setter Property="HorizontalAlignment" Value="Left"/>
-        </Style>
-
-        <Style TargetType="TextBlock">
-            <Setter Property="Foreground" Value="{StaticResource BodyTextColorBrush}"/>
-            <Setter Property="FontSize" Value="12"/>
-            <Setter Property="TextWrapping" Value="Wrap"/>
-            <Setter Property="Margin" Value="0,2,0,2"/>
-            <Setter Property="HorizontalAlignment" Value="Left"/>
-        </Style>
-
+        <Style BasedOn="{StaticResource WrappedTextStyle}" TargetType="TextBlock" />
+        <Style BasedOn="{StaticResource RoundedBorderStyle}" TargetType="Border" />
     </navigation:Page.Resources>
 
-    <Grid x:Name="LayoutRoot">
-        <ScrollViewer Style="{StaticResource PageScrollViewerStyle}" HorizontalScrollBarVisibility="Disabled" Margin="0" Padding="20,0">
+    <Grid>
+        <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
             <StackPanel>
-                <TextBlock Style="{StaticResource HeaderTextStyle}" Text="Home" HorizontalAlignment="Center"/>
-
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
-                    
-                    <Border BorderBrush="Black" BorderThickness="2" CornerRadius="15" Background="LightGray" Margin="1">
-                        <StackPanel Grid.Row="0" Grid.Column="0" Margin="5">
-                            <TextBlock Text="About" FontWeight="Bold"/>
-                            <TextBlock Text="Created by me..."/>
+
+                    <Border Grid.Column="0" Grid.Row="0">
+                        <StackPanel>
+                            <TextBlock FontWeight="Bold" Text="About" />
+                            <TextBlock Text="Created by me..." />
+                            <!--<Button Content="Load" Click="Button_Click" />
+                            <Button Content="check folders" Click="Button_Click_1" />-->
                         </StackPanel>
                     </Border>
 
-                    <StackPanel Grid.Row="2" Grid.ColumnSpan="2">
-                        <Border BorderBrush="Black" BorderThickness="2" CornerRadius="15" Background="LightGray" Margin="1">
-                            <StackPanel Margin="10,5,5,8">
-                                <TextBlock Text="Location ID Format" Style="{StaticResource BoldText}" Margin="30,0,0,0"/>
-                                <TextBlock Text="When adding a location, you must specify an ID number.  This number is always going to be 7 digits long, with the following format:" />
-                                <TextBlock Margin="60,10" FontFamily="Courier New" Text="MMSFRRA"/>
-                                <TextBlock Text=" • MM is the ID of the map area that the location is contained within.  The current list of map area ID's is listed below.  If the map area does not exist yet, pick an unused 2-digit number."/>
+                    <Border Grid.ColumnSpan="2" Grid.Row="2">
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource BoldWrappedTextStyle}" Text="Location ID Format" />
+                            <TextBlock>
+                                When adding a location, you must specify an ID number. 
+                                This number is always going to be 7 digits long, with the following format:
+                            </TextBlock>
+                            <TextBlock Style="{StaticResource CodeWrappedTextStyle}" Margin="60,10" Text="MMSFRRA" />
+                            <TextBlock>
+                                 • MM is the ID of the map area that the location is contained within.
+                                The current list of map area ID's is listed below.
+                                If the map area does not exist yet, pick an unused 2-digit number.
+                            </TextBlock>
 
-                                <Grid Margin="40,0" HorizontalAlignment="Left">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                    </Grid.RowDefinitions>
+                            <Grid Style="{StaticResource TableStyle}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
 
-                                    <Grid.Resources>
-                                        <Style TargetType="TextBlock">
-                                            <Setter Property="Margin" Value="6,3"/>
-                                            <Setter Property="FontFamily" Value="Courier New"/>
-                                        </Style>
-                                    </Grid.Resources>
+                                <Grid.Resources>
+                                    <Style BasedOn="{StaticResource CodeWrappedTextStyle}" TargetType="TextBlock" />
+                                    <Style x:Key="CenteredCodeStyle" BasedOn="{StaticResource CodeWrappedTextStyle}" TargetType="TextBlock">
+                                        <Setter Property="HorizontalAlignment" Value="Center" />
+                                    </Style>
+                                </Grid.Resources>
 
-                                    <TextBlock Grid.Row="0" Grid.Column="0" FontWeight="Bold" HorizontalAlignment="Center" Text="ID"/>
-                                    <TextBlock Grid.Row="0" Grid.Column="1" FontWeight="Bold" Text="Map Area"/>
-                                    <TextBlock Grid.Row="1" Grid.Column="0" TextAlignment="Center"  Text="11"/>
-                                    <TextBlock Grid.Row="1" Grid.Column="1"  Text="Olin Hall"/>
-                                    <TextBlock Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center"  Text="12"/>
-                                    <TextBlock Grid.Row="2" Grid.Column="1"  Text="Hadley Hall"/>
-                                    <TextBlock Grid.Row="3" Grid.Column="0" HorizontalAlignment="Center"  Text="13"/>
-                                    <TextBlock Grid.Row="3" Grid.Column="1"  Text="Moench Hall"/>
-                                    <TextBlock Grid.Row="4" Grid.Column="0" HorizontalAlignment="Center"  Text="14"/>
-                                    <TextBlock Grid.Row="4" Grid.Column="1"  Text="Crapo Hall"/>
-                                    <TextBlock Grid.Row="5" Grid.Column="0" HorizontalAlignment="Center"  Text="15"/>
-                                    <TextBlock Grid.Row="5" Grid.Column="1"  Text="Myers Hall"/>
-                                    <TextBlock Grid.Row="6" Grid.Column="0" HorizontalAlignment="Center"  Text="16"/>
-                                    <TextBlock Grid.Row="6" Grid.Column="1"  Text="Rotz Mechanical Engineering Lab"/>
-                                    <TextBlock Grid.Row="7" Grid.Column="0" HorizontalAlignment="Center"  Text="17"/>
-                                    <TextBlock Grid.Row="7" Grid.Column="1"  Text="Logan Library"/>
-                                </Grid>
-                                <TextBlock>
-                                    • S is the section of the location.
-                                    If the location has no room number, this should be 0.
-                                    Otherwise, it should be between 1-9, and represent the preceding letter in the room number.
-                                    For map areas with only one section (e.g. Crapo with G), this value will be 1.
-                                    For map areas with more than one section, this value will be mapped to letters (e.g. A=1, B=2, etc.).
-                                    Lower levels count as the same sections as upper levels (e.g. A=AL).
-                                </TextBlock>
-                                <TextBlock>
-                                    • F is the floor number.
-                                    For locations with room numbers, this value is the first digit in the room number for upper levels.
-                                    For lower levels, this value is 10 minus the floor (e.g. AL201 would have 8).
-                                    Locations that are not floor-specific should have this value as 0.
-                                </TextBlock>
-                                <TextBlock Text="• RR is the last two digits in the location's room number."/>
-                                <TextBlock>
-                                    • A is the partition of the room.
-                                    If the location does not have a partition, this value is 0 (e.g. A200 would have 0),
-                                    while each partition is mapped to 1-9 (e.g. A200C would have 3).
-                                </TextBlock>
-                                <TextBlock Text="• If a location does not have a room number, RRA can be used to make this location distinguishable."/>
-                            </StackPanel>
-                        </Border>
-                    </StackPanel>
+                                <TextBlock Style="{StaticResource CenteredCodeStyle}" Grid.Column="0" Grid.Row="0" FontWeight="Bold" Text="ID" />
+                                <TextBlock Style="{StaticResource CenteredCodeStyle}" Grid.Column="0" Grid.Row="1" Text="11" />
+                                <TextBlock Style="{StaticResource CenteredCodeStyle}" Grid.Column="0" Grid.Row="2" Text="12" />
+                                <TextBlock Style="{StaticResource CenteredCodeStyle}" Grid.Column="0" Grid.Row="3" Text="13" />
+                                <TextBlock Style="{StaticResource CenteredCodeStyle}" Grid.Column="0" Grid.Row="4" Text="14" />
+                                <TextBlock Style="{StaticResource CenteredCodeStyle}" Grid.Column="0" Grid.Row="5" Text="15" />
+                                <TextBlock Style="{StaticResource CenteredCodeStyle}" Grid.Column="0" Grid.Row="6" Text="16" />
+                                <TextBlock Style="{StaticResource CenteredCodeStyle}" Grid.Column="0" Grid.Row="7" Text="17" />
 
-                    <Border Grid.Column="1"  BorderBrush="Black" BorderThickness="2" CornerRadius="15" Background="LightGray" Margin="1">
-                        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top" Margin="5">
-                            <TextBlock Text="{Binding Version}" HorizontalAlignment="Center" FontWeight="Bold"/>
-                            <Button Margin="5" cmds:CommandManager.Command="{Binding IncreaseVersionCommand}" cmds:CommandManager.CommandEventName="Click">
-                                <StackPanel HorizontalAlignment="Center">
-                                    <TextBlock Text="Increase" HorizontalAlignment="Center"/>
-                                    <TextBlock Text="Server Data" HorizontalAlignment="Center"/>
-                                    <TextBlock Text="Version" HorizontalAlignment="Center"/>
+                                <TextBlock Style="{StaticResource CenteredCodeStyle}" Grid.Column="1" Grid.Row="0" FontWeight="Bold" Text="Map Area" />
+                                <TextBlock Grid.Column="1" Grid.Row="1" Text="Olin Hall" />
+                                <TextBlock Grid.Column="1" Grid.Row="2" Text="Hadley Hall" />
+                                <TextBlock Grid.Column="1" Grid.Row="3" Text="Moench Hall" />
+                                <TextBlock Grid.Column="1" Grid.Row="4" Text="Crapo Hall" />
+                                <TextBlock Grid.Column="1" Grid.Row="5" Text="Myers Hall" />
+                                <TextBlock Grid.Column="1" Grid.Row="6" Text="Rotz Mechanical Engineering Lab" />
+                                <TextBlock Grid.Column="1" Grid.Row="7" Text="Logan Library" />
+                            </Grid>
+                            <TextBlock>
+                                • S is the section of the location.
+                                If the location has no room number, this should be 0.
+                                Otherwise, it should be between 1-9, and represent the preceding letter in the room number.
+                                For map areas with only one section (e.g. Crapo with G), this value will be 1.
+                                For map areas with more than one section, this value will be mapped to letters (e.g. A=1, B=2, etc.).
+                                Lower levels count as the same sections as upper levels (e.g. A=AL).
+                            </TextBlock>
+                            <TextBlock>
+                                • F is the floor number.
+                                For locations with room numbers, this value is the first digit in the room number for upper levels.
+                                For lower levels, this value is 10 minus the floor (e.g. AL201 would have 8).
+                                Locations that are not floor-specific should have this value as 0.
+                            </TextBlock>
+                            <TextBlock>
+                                • RR is the last two digits in the location's room number.
+                            </TextBlock>
+                            <TextBlock>
+                                • A is the partition of the room.
+                                If the location does not have a partition, this value is 0 (e.g. A200 would have 0),
+                                while each partition is mapped to 1-9 (e.g. A200C would have 3).
+                            </TextBlock>
+                            <TextBlock>
+                                 • If a location does not have a room number,
+                                RRA can be used to make this location distinguishable.
+                            </TextBlock>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Grid.Column="1" Margin="1">
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource CenteredTextSyle}" Text="{Binding Version, FallbackValue='0.0'}" />
+                            <Button Command="{Binding IncreaseVersionCommand}">
+                                <StackPanel>
+                                    <TextBlock HorizontalAlignment="Center" Text="Increase" />
+                                    <TextBlock HorizontalAlignment="Center" Text="Server Data" />
+                                    <TextBlock HorizontalAlignment="Center" Text="Version" />
                                 </StackPanel>
                             </Button>
                         </StackPanel>

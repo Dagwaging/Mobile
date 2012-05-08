@@ -20,15 +20,15 @@ namespace Rhit.Applications.Views.Views {
             //TODO: Try not to have to do this
             //ViewModel.SetMode(MyMap);
 
-            DraggablePushpin.ParentMap = MyMap;
+            DraggablePushpin.ParentMap = NodeMap;
 
-            MyMap.MouseClick += ViewLocations.Map_Click;
+            NodeMap.MouseClick += ViewLocations.Map_Click;
 
-            MyMap.MouseClick += Calibrator.Map_Click;
+            NodeMap.MouseClick += Calibrator.Map_Click;
 
-            RhitMapExtender.Attach(MyMap);
-            MyMap.MouseClick += new EventHandler<MapMouseEventArgs>(Map_MouseClick);
-            MyMap.MapForeground.TemplateApplied += new EventHandler(MapForeground_TemplateApplied);
+            RhitMapExtender.Attach(NodeMap);
+            NodeMap.MouseClick += new EventHandler<MapMouseEventArgs>(Map_MouseClick);
+            NodeMap.MapForeground.TemplateApplied += new EventHandler(MapForeground_TemplateApplied);
 
             DataContext = ViewModel;
             //TaskModes.CurrentTaskMode = PathTasks;
@@ -64,7 +64,7 @@ namespace Rhit.Applications.Views.Views {
             System.Windows.Data.Binding binding = new System.Windows.Data.Binding("Settings.CurrentMode");
             binding.Mode = System.Windows.Data.BindingMode.TwoWay;
             lb.SetBinding(ListBox.SelectedValueProperty, binding);
-            lb.Style = (Style) this.Resources["NavigationBarList"];
+            lb.Style = (Style) App.Current.Resources["MapNavigationBarStyle"];
             children.Add(lb);
 
             children.Add(new CommandSeparator());
@@ -75,7 +75,7 @@ namespace Rhit.Applications.Views.Views {
             binding = new System.Windows.Data.Binding("Settings.CurrentSource");
             binding.Mode = System.Windows.Data.BindingMode.TwoWay;
             lb.SetBinding(ListBox.SelectedValueProperty, binding);
-            lb.Style = (Style) this.Resources["NavigationBarList"];
+            lb.Style = (Style) App.Current.Resources["MapNavigationBarStyle"];
             children.Add(lb);
 
         }
@@ -95,8 +95,8 @@ namespace Rhit.Applications.Views.Views {
 
         // Executes when the user navigates away from this page.
         protected override void OnNavigatedFrom(NavigationEventArgs e) {
-            MapLayout.Children.Remove(MyMap);
-            MyMap.Children.Clear();
+            MapLayout.Children.Remove(NodeMap);
+            NodeMap.Children.Clear();
         }
         #endregion
     }

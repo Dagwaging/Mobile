@@ -18,64 +18,15 @@
     xmlns:exts="clr-namespace:Rhit.Applications.Extentions.Controls;assembly=Rhit.Applications.Extentions.SL"
     xmlns:util="clr-namespace:Rhit.Applications.Views.Utilities" 
     xmlns:vm="clr-namespace:Rhit.Applications.ViewModels;assembly=Rhit.Applications.ViewModels.SL"
-    Title="MapPage" d:DesignHeight="480" d:DesignWidth="640" Style="{StaticResource PageStyle}" mc:Ignorable="d">
+    Title="MapPage" d:DesignHeight="480" d:DesignWidth="640" mc:Ignorable="d">
     
     <navigation:Page.Resources>
-
-        <converter:ObjectToBoolConverter x:Key="ObjectBoolConverter" />
-        <converter:ObjectToBoolConverter x:Key="RObjectBoolConverter" Reverse="True" />
-
         <util:CalibrationHandler x:Name="Calibrator" />
         <util:LocationsProvider x:Name="ViewLocations" />
         <util:LocalImageLoader x:Name="ImageLoader" />
         <vm:NodesViewModel x:Name="ViewModel" />
 
         <vm:MapModelInitializer x:Name="Initializer" BitmapProvider="{StaticResource ImageLoader}" BuildingMappingProvider="{StaticResource Calibrator}" LocationsProvider="{StaticResource ViewLocations}" ViewModelInstance="{StaticResource ViewModel}" />
-
-        <Style x:Key="NavigationBarList" TargetType="ListBox">
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="BorderBrush" Value="Transparent" />
-            <Setter Property="ItemTemplate">
-                <Setter.Value>
-                    <DataTemplate>
-                        <TextBlock Margin="5,0" FontWeight="Bold" Foreground="White" Text="{Binding Label}" />
-                    </DataTemplate>
-                </Setter.Value>
-            </Setter>
-            <Setter Property="ItemsPanel">
-                <Setter.Value>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal" />
-                    </ItemsPanelTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <Style x:Key="ExpanderStyle" TargetType="toolkit:Expander">
-            <Setter Property="BorderBrush" Value="Black" />
-            <Setter Property="BorderThickness" Value="3" />
-            <Setter Property="ExpandDirection" Value="Left" />
-            <Setter Property="MinHeight" Value="100" />
-            <Setter Property="VerticalAlignment" Value="Top" />
-            <Setter Property="Background">
-                <Setter.Value>
-                    <SolidColorBrush Opacity="0.8" Color="Gray" />
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <Style x:Key="ExpanderHeaderStyle" TargetType="TextBlock">
-            <Setter Property="FontWeight" Value="Bold" />
-            <Setter Property="HorizontalAlignment" Value="Center" />
-            <Setter Property="VerticalAlignment" Value="Top" />
-            <Setter Property="RenderTransformOrigin" Value="0.5,0.5" />
-            <Setter Property="Margin" Value="-7,20,-7,0" />
-            <Setter Property="RenderTransform">
-                <Setter.Value>
-                    <RotateTransform Angle="90" />
-                </Setter.Value>
-            </Setter>
-        </Style>
 
         <util:TaskContainer x:Name="PathTasks" CanceledCommand="{Binding CancelCommand, ElementName=ViewModel}" CompletedCommand="{Binding SaveCommand, ElementName=ViewModel}">
             <util:TaskContainer.Tasks>
@@ -116,47 +67,6 @@
             </util:TaskContainer.Tasks>
         </util:TaskContainer>
 
-        <ControlTemplate x:Key="DirectionsPushpinTemplate" TargetType="exts:DraggablePushpin">
-            <Grid>
-                <Ellipse Fill="{TemplateBinding Background}" Width="16" Height="16" Stroke="White" StrokeThickness="1" />
-                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" />
-            </Grid>
-        </ControlTemplate>
-
-        <DataTemplate x:Key="NodeTemplate">
-            <exts:DraggablePushpin CanChange="{Binding CanMove}" Location="{Binding Center, Mode=TwoWay}" Tag="{Binding Id}" Background="Black" PositionOrigin="Center" Template="{StaticResource DirectionsPushpinTemplate}" cmds:CommandManager.Command="{Binding ClickCommand}" cmds:CommandManager.CommandEventName="MouseLeftButtonUp">
-                <Grid>
-                    <Ellipse Fill="Green" Width="16" Height="16" Stroke="White" StrokeThickness="1" Visibility="{Binding IsSelected, Converter={StaticResource VisibilityConverter}}" />
-                    <Ellipse Fill="Blue" Width="16" Height="16" Stroke="White" StrokeThickness="1" Visibility="{Binding CanSelect, Converter={StaticResource VisibilityConverter}}" />
-                    <Ellipse Fill="Red" Width="16" Height="16" Stroke="White" StrokeThickness="1" Visibility="{Binding IsEndNode, Converter={StaticResource VisibilityConverter}}" />
-                </Grid>
-            </exts:DraggablePushpin>
-        </DataTemplate>
-
-        <DataTemplate x:Key="NodeLocationTemplate">
-            <exts:DraggablePushpin CanChange="True" Location="{Binding Location, Mode=TwoWay}" Background="Black" PositionOrigin="Center" Template="{StaticResource DirectionsPushpinTemplate}" cmds:CommandManager.Command="{Binding ClickCommand}" cmds:CommandManager.CommandEventName="MouseLeftButtonDown">
-                <Grid>
-                    <Ellipse Fill="Red" Width="16" Height="16" Stroke="White" StrokeThickness="1" />
-                </Grid>
-            </exts:DraggablePushpin>
-        </DataTemplate>
-
-        <DataTemplate x:Key="PathTemplate1">
-            <map:MapPolyline Background="White" Locations="{Binding Nodes, Mode=TwoWay}" Stroke="White" StrokeThickness="5"
-                             cmds:CommandManager.Command="{Binding PathClickCommand, ElementName='ViewModel'}"
-                             cmds:CommandManager.CommandEventName="MouseLeftButtonUp"
-                             cmds:CommandManager.CommandParameter="{Binding Id}" />
-        </DataTemplate>
-        <DataTemplate x:Key="PathTemplate2">
-            <map:MapPolyline Background="Black" Locations="{Binding Nodes, Mode=TwoWay}" Stroke="Black" StrokeThickness="3"
-                             cmds:CommandManager.Command="{Binding PathClickCommand, ElementName='ViewModel'}"
-                             cmds:CommandManager.CommandEventName="MouseLeftButtonUp"
-                             cmds:CommandManager.CommandParameter="{Binding Id}" />
-        </DataTemplate>
-        <DataTemplate x:Key="PathTemplate3">
-            <map:MapPolyline Background="Red" Locations="{Binding Nodes, Mode=TwoWay}" Stroke="Red" StrokeThickness="3" 
-                             Visibility="{Binding IsSelected, Converter={StaticResource VisibilityConverter}}" />
-        </DataTemplate>
     </navigation:Page.Resources>
 
     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
@@ -176,11 +86,11 @@
                 <ColumnDefinition Width="{Binding Image.Loaded, Converter={StaticResource GridLengthConverter}}" />
             </Grid.ColumnDefinitions>
 
-            <map:Map x:Name="MyMap" Grid.Row="0" Grid.Column="0" Center="{Binding Center, Mode=TwoWay}" CopyrightVisibility="Collapsed" ZoomLevel="{Binding ZoomLevel, Mode=TwoWay}" CredentialsProvider="AthZ1tu5ROM0PUWcIYFSxC1oQALFR-g0aoFIuL9tlbeGJ9Z6qKIRYoB_jGpct8Yu">
+            <map:Map x:Name="NodeMap" Grid.Row="0" Grid.Column="0" Center="{Binding Center, Mode=TwoWay}" CopyrightVisibility="Collapsed" ZoomLevel="{Binding ZoomLevel, Mode=TwoWay}" CredentialsProvider="AthZ1tu5ROM0PUWcIYFSxC1oQALFR-g0aoFIuL9tlbeGJ9Z6qKIRYoB_jGpct8Yu">
                 <map:MapLayer>
-                    <map:MapItemsControl ItemsSource="{Binding Paths.Paths}" ItemTemplate="{StaticResource PathTemplate1}" />
-                    <map:MapItemsControl ItemsSource="{Binding Paths.Paths}" ItemTemplate="{StaticResource PathTemplate2}" />
-                    <map:MapItemsControl ItemsSource="{Binding Paths.Paths}" ItemTemplate="{StaticResource PathTemplate3}" />
+                    <map:MapItemsControl ItemsSource="{Binding Paths.Paths}" ItemTemplate="{StaticResource WhitePathTemplate}" />
+                    <map:MapItemsControl ItemsSource="{Binding Paths.Paths}" ItemTemplate="{StaticResource BlackPathTemplate}" />
+                    <map:MapItemsControl ItemsSource="{Binding Paths.Paths}" ItemTemplate="{StaticResource RedPathTemplate}" />
                     <map:MapItemsControl ItemsSource="{Binding Paths.Nodes}" ItemTemplate="{StaticResource NodeTemplate}" />
                     <map:MapItemsControl ItemsSource="{Binding Locations, ElementName=ViewLocations}" ItemTemplate="{StaticResource NodeLocationTemplate}" />
                 </map:MapLayer>
@@ -212,8 +122,6 @@
                                 </DataTemplate>
                             </StackPanel.Resources>
                             <TextBlock FontWeight="Bold" Text="Tasks" HorizontalAlignment="Center" />
-                            <!--<ItemsControl ItemsSource="{Binding CurrentTaskMode.Tasks, ElementName=TaskModes}" ItemTemplate="{StaticResource TaskTemplate}" />-->
-                            <!--<ItemsControl DataContext="{Binding CurrentTaskMode, ElementName=TaskModes}" ItemsSource="{Binding Tasks}" ItemTemplate="{StaticResource TaskTemplate}" />-->
                             <ItemsControl DataContext="{Binding ElementName=PathTasks}" ItemsSource="{Binding Tasks}" ItemTemplate="{StaticResource TaskTemplate}" />
                         </StackPanel>
                     </Border>

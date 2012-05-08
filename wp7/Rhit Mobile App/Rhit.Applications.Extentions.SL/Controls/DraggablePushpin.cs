@@ -7,10 +7,25 @@ using Microsoft.Maps.MapControl.Core;
 
 namespace Rhit.Applications.Extentions.Controls {
     public class DraggablePushpin : Pushpin {
-        private bool isDragging = false;
-        private EventHandler<MapMouseDragEventArgs> ParentMapMousePanHandler;
-        private MouseButtonEventHandler ParentMapMouseLeftButtonUpHandler;
-        private MouseEventHandler ParentMapMouseMoveHandler;
+        public DraggablePushpin() : base() {
+            IsDragging = false;
+        }
+
+        public static MapBase ParentMap { get; set; }
+
+        protected bool IsDragging { get; set; }
+
+        public static T FindVisualParent<T>(DependencyObject obj) where T : DependencyObject {
+            DependencyObject parent = VisualTreeHelper.GetParent(obj);
+            while(parent != null) {
+                T typed = parent as T;
+                if(typed != null) {
+                    return typed;
+                }
+                parent = VisualTreeHelper.GetParent(parent);
+            }
+            return null;
+        }
 
         private void AddEventHandlers() {
             // Check to see if this is the event handlers have been attached yet and if not, attach them.
@@ -36,36 +51,28 @@ namespace Rhit.Applications.Extentions.Controls {
 
         }
 
-        public static MapBase ParentMap { get; set; }
-
-        public static T FindVisualParent<T>(DependencyObject obj) where T : DependencyObject {
-            DependencyObject parent = VisualTreeHelper.GetParent(obj);
-            while(parent != null) {
-                T typed = parent as T;
-                if(typed != null) {
-                    return typed;
-                }
-                parent = VisualTreeHelper.GetParent(parent);
-            }
-            return null;
-        }
-
         #region Event Handlers
+        protected EventHandler<MapMouseDragEventArgs> ParentMapMousePanHandler { get; set; }
+
+        protected MouseButtonEventHandler ParentMapMouseLeftButtonUpHandler { get; set; }
+
+        protected MouseEventHandler ParentMapMouseMoveHandler { get; set; }
+
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e) {
             if(!CanChange) return;
             AddEventHandlers();
-            isDragging = true;
+            IsDragging = true;
             base.OnMouseLeftButtonDown(e);
         }
 
         private void ParentMap_MousePan(object sender, MapMouseDragEventArgs e) {
             if(!CanChange) return;
-            if(isDragging) e.Handled = true;
+            if(IsDragging) e.Handled = true;
         }
 
         private void ParentMap_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
-            if(isDragging) VirtualLocation = Location;
-            isDragging = false;
+            if(IsDragging) VirtualLocation = Location;
+            IsDragging = false;
         }
 
         private void ParentMap_MouseMove(object sender, MouseEventArgs e) {
@@ -73,7 +80,7 @@ namespace Rhit.Applications.Extentions.Controls {
             Map map = sender as Microsoft.Maps.MapControl.Map;
             MapLayer parentLayer = FindVisualParent<MapLayer>(this);
 
-            if(isDragging) {
+            if(IsDragging) {
                 Point mouseMapPosition = e.GetPosition(map);
                 Location mouseGeocode = map.ViewportPointToLocation(mouseMapPosition);
                 Location = mouseGeocode;
@@ -82,7 +89,7 @@ namespace Rhit.Applications.Extentions.Controls {
         }
         #endregion
 
-        #region VirtualLocation
+        #region public Location VirtualLocation
         public Location VirtualLocation {
             get { return (Location) GetValue(VirtualLocationProperty); }
             set { SetValue(VirtualLocationProperty, value); }
@@ -97,7 +104,7 @@ namespace Rhit.Applications.Extentions.Controls {
         }
         #endregion
 
-        #region CanChange
+        #region public bool CanChange
         public bool CanChange {
             get { return (bool) GetValue(CanChangeProperty); }
             set { SetValue(CanChangeProperty, value); }

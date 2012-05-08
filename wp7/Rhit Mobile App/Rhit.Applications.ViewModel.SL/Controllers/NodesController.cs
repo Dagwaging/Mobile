@@ -1,527 +1,13 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows;
 using Rhit.Applications.Models;
 using Rhit.Applications.Models.Events;
 using Rhit.Applications.Models.Services;
-using System.Collections.Generic;
-using Rhit.Applications.Mvvm.Commands;
-using System.Windows.Input;
-
-#if WINDOWS_PHONE
-using Microsoft.Phone.Controls.Maps;
-using Microsoft.Phone.Controls.Maps.Platform;
-using System.Device.Location;
-#else
-using Microsoft.Maps.MapControl;
-using System;
-using Rhit.Applications.ViewModels.Utilities;
-#endif
+using Rhit.Applications.ViewModels.Models;
 
 namespace Rhit.Applications.ViewModels.Controllers {
-    public class Path : DependencyObject {
-        //Note: Always assumes nodes are constant
-        //Note: IsOutside is only calculated once (it cant be calculate again since it makes actual inside nodes, outside nodes)
-        public Path(Path_DC model, SimpleNode node1, SimpleNode node2) {
-            Nodes = new LocationCollection();
-            
-            Node1 = node1;
-            Node2 = node2;
-            Nodes.Add(Node1.Center);
-            Nodes.Add(Node2.Center);
-
-            Node1.Moved += new EventHandler(Node_CenterChanged);
-            Node2.Moved += new EventHandler(Node_CenterChanged);
-
-            TryUpdateModel(model);
-
-            ComputeIsOutside();
-
-            Node1.AddPathBinding(this);
-            Node2.AddPathBinding(this);
-        }
-
-        internal bool TryUpdateModel(Path_DC model) {
-            if(Model != null) {
-                if(model.Id != Model.Id) return false;
-                if(model.Node1 != Model.Node1) return false;
-                if(model.Node2 != Model.Node2) return false;
-            }
-
-            Model = model;
-            Revert();
-
-            return true;
-        }
-
-        internal void Revert() {
-            Id = Model.Id;
-            IsElevator = Model.Elevator;
-            StairCount = Model.Stairs;
-            Partition = Model.Partition;
-            IsSelected = false;
-        }
-
-        internal void ComputeIsOutside() {
-            if(Node1.IsOutside || Node2.IsOutside) {
-                IsOutside = true;
-                Node1.IsOutside = true;
-                Node2.IsOutside = true;
-            } else IsOutside = false;
-        }
-
-        private void Node_CenterChanged(object sender, EventArgs e) {
-            Nodes.Clear();
-            Nodes.Add(Node1.Center);
-            Nodes.Add(Node2.Center);
-        }
-
-        public LocationCollection Nodes { get; private set; }
-
-        public int Id { get; private set; }
-
-        private Path_DC Model { get; set; }
-
-        #region Partition
-        public int Partition {
-            get { return (int) GetValue(PartitionProperty); }
-            set { SetValue(PartitionProperty, value); }
-        }
-
-        public static readonly DependencyProperty PartitionProperty =
-           DependencyProperty.Register("Partition", typeof(int), typeof(Path), new PropertyMetadata(0));
-        #endregion
-
-        #region IsOutside
-        public bool IsOutside {
-            get { return (bool) GetValue(IsOutsideProperty); }
-            set { SetValue(IsOutsideProperty, value); }
-        }
-
-        public static readonly DependencyProperty IsOutsideProperty =
-           DependencyProperty.Register("IsOutside", typeof(bool), typeof(Path), new PropertyMetadata(true));
-        #endregion
-
-        #region StairCount
-        public int StairCount {
-            get { return (int) GetValue(StairCountProperty); }
-            set { SetValue(StairCountProperty, value); }
-        }
-
-        public static readonly DependencyProperty StairCountProperty =
-           DependencyProperty.Register("StairCount", typeof(int), typeof(Path), new PropertyMetadata(0));
-        #endregion
-
-        #region IsElevator
-        public bool IsElevator {
-            get { return (bool) GetValue(IsElevatorProperty); }
-            set { SetValue(IsElevatorProperty, value); }
-        }
-
-        public static readonly DependencyProperty IsElevatorProperty =
-           DependencyProperty.Register("IsElevator", typeof(bool), typeof(Path), new PropertyMetadata(false));
-        #endregion
-
-        #region IsSelected
-        public bool IsSelected {
-            get { return (bool) GetValue(IsSelectedProperty); }
-            set { SetValue(IsSelectedProperty, value); }
-        }
-
-        public static readonly DependencyProperty IsSelectedProperty =
-           DependencyProperty.Register("IsSelected", typeof(bool), typeof(Path), new PropertyMetadata(false));
-        #endregion
-
-        #region Node1
-        public SimpleNode Node1 {
-            get { return (SimpleNode) GetValue(Node1Property); }
-            set { SetValue(Node1Property, value); }
-        }
-
-        public static readonly DependencyProperty Node1Property =
-           DependencyProperty.Register("Node1", typeof(SimpleNode), typeof(Path), new PropertyMetadata(null));
-        #endregion
-
-        #region Node2
-        public SimpleNode Node2 {
-            get { return (SimpleNode) GetValue(Node2Property); }
-            set { SetValue(Node2Property, value); }
-        }
-
-        public static readonly DependencyProperty Node2Property =
-           DependencyProperty.Register("Node2", typeof(SimpleNode), typeof(Path), new PropertyMetadata(null));
-        #endregion
-
-        public bool Contains(SimpleNode node) {
-            if(node == Node1 || node == Node2) return true;
-            return false;
-        }
-    }
-
-    public class SimpleNode : DependencyObject {
-        public SimpleNode(Node_DC model) {
-            Model = model;
-            PathBindingDictionary = new Dictionary<SimpleNode, Path>();
-            InitializeCommands();
-            Center = new Location(Model.Latitude, Model.Longitude, Model.Altitude);
-            IsOutside = Model.Outside;
-            Location = LocationsController.Instance.GetLocation(model.Location);
-            Id = Model.Id;
-        }
-
-        #region Selected Event
-        public event EventHandler Selected;
-        protected virtual void OnSelected() {
-            if(Selected != null) Selected(this, new EventArgs());
-        }
-        #endregion
-
-        #region Unselected Event
-        public event EventHandler Unselected;
-        protected virtual void OnUnselected() {
-            if(Unselected != null) Unselected(this, new EventArgs());
-        }
-        #endregion
-
-        #region Moved Event
-        public event EventHandler Moved;
-        protected virtual void OnMove() {
-            if(Moved != null) Moved(this, new EventArgs());
-        }
-        #endregion
-
-        internal void Revert() {
-            CanSelect = false;
-            IsEndNode = false;
-            IsSelected = false;
-            CanMove = false;
-            Center = new Location(Model.Latitude, Model.Longitude, Model.Altitude);
-            IsOutside = Model.Outside;
-            OnMove();
-        }
-
-        internal bool UpdateModel(Node_DC model) {
-            if(model.Id != Model.Id) return false;
-
-            Model = model;
-            Revert();
-
-            return true;
-        }
-
-        private Dictionary<SimpleNode, Path> PathBindingDictionary { get; set; }
-
-        public void AddPathBinding(Path path) {
-            SimpleNode other;
-            if(path.Node1 == this) other = path.Node2;
-            else if(path.Node2 == this) other = path.Node1;
-            else return;
-
-            PathBindingDictionary[other] = path;
-        }
-
-        public int Id { get; private set; }
-
-        private void InitializeCommands() {
-            ClickCommand = new RelayCommand(p => OnClick());
-        }
-
-        #region Click Command/Method
-        public ICommand ClickCommand { get; private set; }
-
-        private void OnClick() {
-            if(CanSelect) {
-                //The node is currently not selected and the user can select it
-                IsSelected = true;
-                OnSelected();
-            }
-            //TODO: Implement unselect functionality
-        }
-        #endregion
-
-        #region Center
-        public Location Center {
-            get { return (Location) GetValue(CenterProperty); }
-            set { SetValue(CenterProperty, value); }
-        }
-
-        public static readonly DependencyProperty CenterProperty =
-           DependencyProperty.Register("Center", typeof(Location), typeof(SimpleNode), new PropertyMetadata(new Location(), new PropertyChangedCallback(OnCenterPropertyChanged)));
-
-        private static void OnCenterPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
-            SimpleNode node = d as SimpleNode;
-            if(node.Center.Latitude == node.Model.Latitude)
-                if(node.Center.Longitude == node.Model.Longitude)
-                    if(node.Center.Altitude == node.Model.Altitude)
-                        return;
-            node.OnMove();
-        }
-        #endregion
-
-        #region Location
-        public LocationData Location {
-            get { return (LocationData) GetValue(LocationProperty); }
-            set { SetValue(LocationProperty, value); }
-        }
-
-        public static readonly DependencyProperty LocationProperty =
-           DependencyProperty.Register("Location", typeof(LocationData), typeof(SimpleNode), new PropertyMetadata(null));
-        #endregion
-
-        #region IsSelected
-        public bool IsSelected {
-            get { return (bool) GetValue(IsSelectedProperty); }
-            set { SetValue(IsSelectedProperty, value); }
-        }
-
-        public static readonly DependencyProperty IsSelectedProperty =
-           DependencyProperty.Register("IsSelected", typeof(bool), typeof(SimpleNode), new PropertyMetadata(false));
-        #endregion
-
-        #region CanSelect
-        public bool CanSelect {
-            get { return (bool) GetValue(CanSelectProperty); }
-            set { SetValue(CanSelectProperty, value); }
-        }
-
-        public static readonly DependencyProperty CanSelectProperty =
-           DependencyProperty.Register("CanSelect", typeof(bool), typeof(SimpleNode), new PropertyMetadata(true));
-        #endregion
-
-        #region IsEndNode
-        public bool IsEndNode {
-            get { return (bool) GetValue(IsEndNodeProperty); }
-            set { SetValue(IsEndNodeProperty, value); }
-        }
-
-        public static readonly DependencyProperty IsEndNodeProperty =
-           DependencyProperty.Register("IsEndNode", typeof(bool), typeof(SimpleNode), new PropertyMetadata(false));
-        #endregion
-
-        #region IsOutside
-        public bool IsOutside {
-            get { return (bool) GetValue(IsOutsideProperty); }
-            set { SetValue(IsOutsideProperty, value); }
-        }
-
-        public static readonly DependencyProperty IsOutsideProperty =
-           DependencyProperty.Register("IsOutside", typeof(bool), typeof(SimpleNode), new PropertyMetadata(true));
-        #endregion
-
-        #region CanMove
-        public bool CanMove {
-            get { return (bool) GetValue(CanMoveProperty); }
-            set { SetValue(CanMoveProperty, value); }
-        }
-
-        public static readonly DependencyProperty CanMoveProperty =
-           DependencyProperty.Register("CanMove", typeof(bool), typeof(SimpleNode), new PropertyMetadata(false));
-        #endregion
-
-        internal ICollection<SimpleNode> GetAdjacentNodes() {
-            return PathBindingDictionary.Keys;
-        }
-
-        internal Path GetPath(SimpleNode node) {
-            if(PathBindingDictionary.ContainsKey(node))
-                return PathBindingDictionary[node];
-            return null;
-        }
-
-        protected Node_DC Model { get; private set; }
-
-        internal bool HasChanges() {
-            if(IsOutside != Model.Outside) return true;
-            if(Center.Latitude != Model.Latitude) return true;
-            if(Center.Longitude != Model.Longitude) return true;
-            if(Center.Altitude != Model.Altitude) return true;
-            if(Location.Id != Model.Location) return true;
-            return false;
-        }
-
-        internal void RemoveAdjacentNode(SimpleNode node) {
-            if(PathBindingDictionary.ContainsKey(node))
-                PathBindingDictionary.Remove(node);
-        }
-    }
-
-    public class DirectionMessage : DependencyObject {
-        public DirectionMessage(DirectionMessage_DC model) {
-            TryUpdateModel(model);
-        }
-
-        public DirectionMessage() {
-            Id = -1;
-            Message = "No Message Found";
-            ReverseMessage = "No Message Found";
-            Offset = 0;
-            Action = null;
-            ReverseAction = null;
-        }
-
-        internal void Revert() {
-            if(Model == null) return;
-
-            Id = Model.Id;
-            Message = Model.Message1;
-            ReverseMessage = Model.Message2;
-            Offset = Model.Offset;
-            Action = Model.Action1;
-            ReverseAction = Model.Action2;
-        }
-
-        internal bool TryUpdateModel(DirectionMessage_DC model) {
-            if(Model != null)
-                if(model.Id != Model.Id) return false;
-            if(Id < 0) return false;
-
-            Model = model;
-            Revert();
-
-            return true;
-        }
-
-        private DirectionMessage_DC Model { get; set; }
-
-        public int Id { get; private set; }
-
-        #region Offset
-        public int Offset {
-            get { return (int) GetValue(OffsetProperty); }
-            set { SetValue(OffsetProperty, value); }
-        }
-
-        public static readonly DependencyProperty OffsetProperty =
-           DependencyProperty.Register("Offset", typeof(int), typeof(DirectionMessage), new PropertyMetadata(0));
-        #endregion
-
-        #region Message
-        public string Message {
-            get { return (string) GetValue(MessageProperty); }
-            set { SetValue(MessageProperty, value); }
-        }
-
-        public static readonly DependencyProperty MessageProperty =
-           DependencyProperty.Register("Message", typeof(string), typeof(DirectionMessage), new PropertyMetadata(""));
-        #endregion
-
-        #region ReverseMessage
-        public string ReverseMessage {
-            get { return (string) GetValue(ReverseMessageProperty); }
-            set { SetValue(ReverseMessageProperty, value); }
-        }
-
-        public static readonly DependencyProperty ReverseMessageProperty =
-           DependencyProperty.Register("ReverseMessage", typeof(string), typeof(DirectionMessage), new PropertyMetadata(""));
-        #endregion
-
-        #region Action
-        public string Action {
-            get { return (string) GetValue(ActionProperty); }
-            set { SetValue(ActionProperty, value); }
-        }
-
-        public static readonly DependencyProperty ActionProperty =
-           DependencyProperty.Register("Action", typeof(string), typeof(DirectionMessage),
-           new PropertyMetadata("", new PropertyChangedCallback(OnActionChanged)));
-
-        private static void OnActionChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
-            string value = e.NewValue as string;
-            if(value == "Null" || value == "None") {
-                (d as DirectionMessage).Action = null;
-            }
-        }
-        #endregion
-
-        #region ReverseAction
-        public string ReverseAction {
-            get { return (string) GetValue(ReverseActionProperty); }
-            set { SetValue(ReverseActionProperty, value); }
-        }
-
-        public static readonly DependencyProperty ReverseActionProperty =
-           DependencyProperty.Register("ReverseAction", typeof(string), typeof(DirectionMessage),
-           new PropertyMetadata("", new PropertyChangedCallback(OnReverseActionChanged)));
-
-        private static void OnReverseActionChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
-            string value = e.NewValue as string;
-            if(value == "Null" || value == "None") {
-                (d as DirectionMessage).ReverseAction = null;
-            }
-        }
-        #endregion
-
-    }
-
-    public class Direction : DependencyObject {
-        public Direction(Direction_DC model) {
-            Paths = new ObservableCollection<Path>();
-            TryUpdateModel(model);
-            
-        }
-
-        public Direction(DirectionMessage directionMessage) {
-            Paths = new ObservableCollection<Path>();
-            Id = -1;
-            Message = directionMessage;
-            Within = null;
-        }
-
-        public int Id { get; private set; }
-
-        internal void Revert() {
-            if(Model == null) return;
-
-            Id = Model.Id;
-            Paths.Clear();
-            if(Model.Paths != null) {
-                foreach(int id in Model.Paths)
-                    Paths.Add(NodesController.Instance.GetPath(id));
-            }
-            Message = NodesController.Instance.GetMessage(Model.MessageId);
-            Within = Model.Within;
-        }
-
-        internal bool TryUpdateModel(Direction_DC model) {
-            if(Model != null)
-                if(model.Id != Model.Id) return false;
-            if(Id < 0) return false;
-
-            Model = model;
-            Revert();
-
-            return true;
-        }
-
-        private Direction_DC Model { get; set; }
-
-        public ObservableCollection<Path> Paths { get; private set; }
-
-        public bool IsBlank() {
-            if(Id < 0) return true;
-            return false;
-        }
-
-        #region Message
-        public DirectionMessage Message {
-            get { return (DirectionMessage) GetValue(MessageProperty); }
-            set { SetValue(MessageProperty, value); }
-        }
-
-        public static readonly DependencyProperty MessageProperty =
-           DependencyProperty.Register("Message", typeof(DirectionMessage), typeof(Direction), new PropertyMetadata(null));
-        #endregion
-
-        #region Within
-        public int? Within {
-            get { return (int?) GetValue(WithinProperty); }
-            set { SetValue(WithinProperty, value); }
-        }
-
-        public static readonly DependencyProperty WithinProperty =
-           DependencyProperty.Register("Within", typeof(int?), typeof(Direction), new PropertyMetadata(null));
-        #endregion
-    }
-
     public class NodesController : DependencyObject {
         protected enum BehaviorState { Default, DeletingNode, CreatingPath, DeletingPath, MovingNodes, };
 
@@ -538,9 +24,9 @@ namespace Rhit.Applications.ViewModels.Controllers {
         private void InitializeCollections() {
             AllActions = new List<string>() { "UE", "DE", "GS", "CS", "FP", "L1", "L2", "R1", "R2", "L3", "R3", "EN", "EX", "US", "DS", "None", };
 
-            AllNodes = new List<SimpleNode>();
-            SelectedNodes = new List<SimpleNode>();
-            Nodes = new ObservableCollection<SimpleNode>();
+            AllNodes = new List<Node>();
+            SelectedNodes = new List<Node>();
+            Nodes = new ObservableCollection<Node>();
 
             AllPaths = new List<Path>();
             SelectedPaths = new List<Path>();
@@ -553,7 +39,7 @@ namespace Rhit.Applications.ViewModels.Controllers {
         }
 
         private void InitializeDictionaries() {
-            NodeDictionary = new Dictionary<int, SimpleNode>();
+            NodeDictionary = new Dictionary<int, Node>();
             PathDictionary = new Dictionary<int, Path>();
             DirectionDictionary = new Dictionary<int, Direction>();
             DirectionMessageDictionary = new Dictionary<int, DirectionMessage>();
@@ -613,7 +99,7 @@ namespace Rhit.Applications.ViewModels.Controllers {
             ProccessNodes(e.Nodes);
             ProccessPaths(e.Paths);
 
-            foreach(SimpleNode node in AllNodes)
+            foreach(Node node in AllNodes)
                 if(node.IsOutside) Nodes.Add(node);
 
             ProccessDirectionMessages(e.Messages);
@@ -699,21 +185,21 @@ namespace Rhit.Applications.ViewModels.Controllers {
 
         private void Instance_NodeDeleted(object sender, IdentificationEventArgs e) {
             if(!NodeDictionary.ContainsKey(e.Id)) return;
-            SimpleNode node = NodeDictionary[e.Id];
-            if(node.IsSelected || node.IsEndNode) {
+            Node node = NodeDictionary[e.Id];
+            if(node.CurrentState.HasFlag(Node.State.Selected)) {
                 RestoreToDefault();
             }
             NodeDictionary.Remove(node.Id);
             AllNodes.Remove(node);
             Nodes.Remove(node);
-            foreach(SimpleNode _node in node.GetAdjacentNodes())
+            foreach(Node _node in node.GetAdjacentNodes())
                 _node.RemoveAdjacentNode(node);
             RestoreToDefault();
         }
 
         private void Instance_NodeUpdated(object sender, NodeEventArgs e) {
             if(!NodeDictionary.ContainsKey(e.Node.Id)) return;
-            SimpleNode node = NodeDictionary[e.Node.Id];
+            Node node = NodeDictionary[e.Node.Id];
             node.UpdateModel(e.Node);
 
             if(node.IsOutside && !Nodes.Contains(node)) Nodes.Add(node);
@@ -721,7 +207,7 @@ namespace Rhit.Applications.ViewModels.Controllers {
         }
 
         private void Instance_NodeCreated(object sender, NodeEventArgs e) {
-            SimpleNode node = new SimpleNode(e.Node);
+            Node node = new Node(e.Node);
             node.Selected += new EventHandler(Node_Selected);
             node.Unselected += new EventHandler(Node_Unselected);
             NodeDictionary[node.Id] = node;
@@ -732,7 +218,7 @@ namespace Rhit.Applications.ViewModels.Controllers {
         #endregion
 
         #region Dictionaries
-        private Dictionary<int, SimpleNode> NodeDictionary { get; set; }
+        private Dictionary<int, Node> NodeDictionary { get; set; }
 
         private Dictionary<int, Path> PathDictionary { get; set; }
 
@@ -744,11 +230,11 @@ namespace Rhit.Applications.ViewModels.Controllers {
         #region Collections
         public List<string> AllActions { get; set; }
 
-        private List<SimpleNode> AllNodes { get; set; }
+        private List<Node> AllNodes { get; set; }
         
-        private List<SimpleNode> SelectedNodes { get; set; }
+        private List<Node> SelectedNodes { get; set; }
 
-        public ObservableCollection<SimpleNode> Nodes { get; protected set; }
+        public ObservableCollection<Node> Nodes { get; protected set; }
 
         private List<Path> AllPaths { get; set; }
 
@@ -766,7 +252,7 @@ namespace Rhit.Applications.ViewModels.Controllers {
         #region Data Proccessing Methods
         private void ProccessNodes(IEnumerable<Node_DC> nodes) {
             foreach(Node_DC model in nodes) {
-                SimpleNode node = new SimpleNode(model);
+                Node node = new Node(model);
                 node.Selected += new EventHandler(Node_Selected);
                 node.Unselected += new EventHandler(Node_Unselected);
                 node.Moved += new EventHandler(Node_Moved);
@@ -832,6 +318,27 @@ namespace Rhit.Applications.ViewModels.Controllers {
         private DirectionMessage BlankMessage { get; set; }
 
 
+
+        internal bool DeletePath() {
+            if(SelectedNodes.Count < 2) return false;
+            Path path = SelectedNodes[0].GetPath(SelectedNodes[1]);
+            if(path == null) return false;
+            DataCollector.Instance.DeletePath(path.Id);
+            RestoreToDefault();
+            return true;
+        }
+
+        internal void SelectPath(int id) {
+            if(State != BehaviorState.Default) return;
+            if(SelectedNodes.Count > 0) return;
+            if(!PathDictionary.ContainsKey(id)) return;
+
+            Path path = PathDictionary[id];
+            if(SelectedPath != null) SelectedPath.IsSelected = false;
+            SelectedPath = path;
+            SelectedPath.IsSelected = true;
+        }
+
         internal void SavePath(int id) {
             if(State != BehaviorState.Default) return;
             if(!PathDictionary.ContainsKey(id)) return;
@@ -839,6 +346,16 @@ namespace Rhit.Applications.ViewModels.Controllers {
             DataCollector.Instance.UpdatePath(id, path.Node1.Id, path.Node2.Id, path.IsElevator, path.StairCount, path.Partition);
             RestoreToDefault();
         }
+
+        internal bool CreatePath() {
+            if(SelectedNodes.Count < 2) return false;
+            DataCollector.Instance.CreatePath(SelectedNodes[0].Id, SelectedNodes[1].Id, false, 0, 100);
+            RestoreToDefault();
+            return true;
+        }
+
+
+
 
         internal void SaveDirection() {
             if(State != BehaviorState.Default) return;
@@ -860,51 +377,23 @@ namespace Rhit.Applications.ViewModels.Controllers {
             RestoreToDefault();
         }
 
-        internal bool DeletePath() {
-            if(SelectedNodes.Count < 2) return false;
-            Path path = SelectedNodes[0].GetPath(SelectedNodes[1]);
-            if(path == null) return false;
-            DataCollector.Instance.DeletePath(path.Id);
-            RestoreToDefault();
-            return true;
-        }
 
-        internal bool CreatePath() {
-            if(SelectedNodes.Count < 2) return false;
-            DataCollector.Instance.CreatePath(SelectedNodes[0].Id, SelectedNodes[1].Id, false, 0, 100);
-            RestoreToDefault();
-            return true;
-        }
+
 
         internal bool DeleteNode() {
             if(SelectedNodes.Count < 1) return false;
-            SimpleNode node = SelectedNodes[0];
+            Node node = SelectedNodes[0];
             DataCollector.Instance.DeleteNode(node.Id);
             RestoreToDefault();
             return true;
         }
 
-
-
-
-        internal void SelectPath(int id) {
-            if(State != BehaviorState.Default) return;
-            if(SelectedNodes.Count > 0) return;
-            if(!PathDictionary.ContainsKey(id)) return;
-            
-            Path path = PathDictionary[id];
-            if(SelectedPath != null) SelectedPath.IsSelected = false;
-            SelectedPath = path;
-            SelectedPath.IsSelected = true;
-        }
-
-        
-
         private void Node_Moved(object sender, EventArgs e) {
-            SimpleNode node = sender as SimpleNode;
+            Node node = sender as Node;
             if(State == BehaviorState.MovingNodes) {
                 if(!SelectedNodes.Contains(node)) SelectedNodes.Add(node);
-                if(!node.IsSelected) node.IsSelected = true;
+                if(!node.CurrentState.HasFlag(Node.State.Selected))
+                    node.CurrentState |= Node.State.Selected;
             }
         }
 
@@ -953,13 +442,13 @@ namespace Rhit.Applications.ViewModels.Controllers {
         #endregion
 
         #region LastNode
-        public SimpleNode LastNode {
-            get { return (SimpleNode) GetValue(LastNodeProperty); }
+        public Node LastNode {
+            get { return (Node) GetValue(LastNodeProperty); }
             set { SetValue(LastNodeProperty, value); }
         }
 
         public static readonly DependencyProperty LastNodeProperty =
-           DependencyProperty.Register("LastNode", typeof(SimpleNode), typeof(NodesController), new PropertyMetadata(null));
+           DependencyProperty.Register("LastNode", typeof(Node), typeof(NodesController), new PropertyMetadata(null));
         #endregion
 
         internal Direction GetBlankDirection() {
@@ -973,18 +462,17 @@ namespace Rhit.Applications.ViewModels.Controllers {
         
 
         private void Node_Unselected(object sender, EventArgs e) {
-            SimpleNode node = sender as SimpleNode;
+            Node node = sender as Node;
 
         }
 
-        private void ProccessSelectedNode(SimpleNode node) {
+        private void ProccessSelectedNode(Node node) {
             ProccessSelectedNode(node, false);
         }
 
-        private void ProccessSelectedNode(SimpleNode node, bool multipleEndNodes) {
+        private void ProccessSelectedNode(Node node, bool multipleEndNodes) {
             SelectedNodes.Add(node);
-            node.IsSelected = true;
-            node.IsEndNode = true;
+            node.CurrentState = Node.State.Selected | Node.State.EndNode;
 
             if(LastNode != null) {
                 Path path = LastNode.GetPath(node);
@@ -992,7 +480,8 @@ namespace Rhit.Applications.ViewModels.Controllers {
                     SelectedPaths.Add(path);
                     path.IsSelected = true;
                 }
-                LastNode.IsEndNode = multipleEndNodes;
+                if(!multipleEndNodes && LastNode.CurrentState.HasFlag(Node.State.EndNode))
+                    LastNode.CurrentState ^= Node.State.EndNode;
             }
             LastNode = node;
             CurrentDirection = DirectionSearch();
@@ -1000,18 +489,24 @@ namespace Rhit.Applications.ViewModels.Controllers {
         }
 
         private void CalculateSelectableNodes() {
-            foreach(SimpleNode other in AllNodes)
-                other.CanSelect = false;
-            foreach(SimpleNode other in LastNode.GetAdjacentNodes())
-                other.CanSelect = true;
+            foreach(Node other in AllNodes) {
+                if(other.CurrentState.HasFlag(Node.State.CanSelect))
+                    other.CurrentState ^= Node.State.CanSelect;
+            }
+            foreach(Node other in LastNode.GetAdjacentNodes()) {
+                if(!other.CurrentState.HasFlag(Node.State.CanSelect))
+                    other.CurrentState ^= Node.State.CanSelect;
+            }
+
         }
 
         private void Node_Selected(object sender, EventArgs e) {
-            SimpleNode node = sender as SimpleNode;
+            Node node = sender as Node;
             switch(State) {
                 case BehaviorState.MovingNodes:
                     if(!SelectedNodes.Contains(node)) SelectedNodes.Add(node);
-                    if(!node.IsSelected) node.IsSelected = true;
+                    if(!node.CurrentState.HasFlag(Node.State.Selected))
+                        node.CurrentState ^= Node.State.Selected;
                     break;
 
                 case BehaviorState.DeletingNode:
@@ -1086,9 +581,10 @@ namespace Rhit.Applications.ViewModels.Controllers {
             SelectedNodes.Clear();
             LastNode = null;
             
-            foreach(SimpleNode node in AllNodes) {
+            foreach(Node node in AllNodes) {
                 node.Revert();
-                node.CanSelect = true;
+                if(!node.CurrentState.HasFlag(Node.State.CanSelect))
+                    node.CurrentState ^= Node.State.CanSelect;
             }
             foreach(Path path in AllPaths) {
                 path.Revert();
@@ -1128,16 +624,17 @@ namespace Rhit.Applications.ViewModels.Controllers {
 
         internal void AllowMovement(bool canMove) {
             if(canMove) {
-                foreach(SimpleNode node in Nodes) {
+                foreach(Node node in Nodes) {
                     node.CanMove = true;
-                    node.CanSelect = false;
+                    if(node.CurrentState.HasFlag(Node.State.CanSelect))
+                        node.CurrentState ^= Node.State.CanSelect;
                 }
                 State = BehaviorState.MovingNodes;
             } else RestoreToDefault();
         }
 
         internal void SaveNodes() {
-            foreach(SimpleNode node in Nodes) {
+            foreach(Node node in Nodes) {
                 if(node.HasChanges()) {
                     int? locationId;
                     if(node.Location == null) locationId = null;

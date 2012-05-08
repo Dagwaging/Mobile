@@ -6,6 +6,7 @@ using Rhit.Applications.Models.Services.Requests;
 using System.Windows;
 using System.Threading;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Rhit.Applications.Models.Services {
     public static class Connection {
@@ -49,25 +50,30 @@ namespace Rhit.Applications.Models.Services {
             return MakeRequest(request);
         }
 
-        public static IAsyncResult MakeRequests(IList<RequestPart> requests, RequestType type) {
+        public static IAsyncResult MakeRequests(IEnumerable<RequestPart> requests, RequestType type) {
             ServiceRequest request = new ServiceRequest(type);
             foreach(RequestPart req in requests) request.AddRequest(req);
             return MakeRequest(request);
         }
 
-        public static IAsyncResult MakeLocationRequests(IList<RequestPart> requests, RequestType type, int locationId) {
+        public static IAsyncResult MakeLocationRequests(IEnumerable<RequestPart> requests, RequestType type, int locationId) {
             ServiceRequest request = new ServiceRequest(type);
             foreach(RequestPart req in requests) request.AddRequest(req);
             request.UserMetaData["LocationId"] = locationId;
             return MakeRequest(request);
         }
 
-        public static IAsyncResult MakeLocationChangeRequest(IList<RequestPart> requests, RequestType type, int oldId, int newId) {
+        public static IAsyncResult MakeLocationChangeRequest(IEnumerable<RequestPart> requests, RequestType type, int oldId, int newId) {
             ServiceRequest request = new ServiceRequest(type);
             foreach(RequestPart req in requests) request.AddRequest(req);
             request.UserMetaData["OldLocationId"] = oldId;
             request.UserMetaData["NewLocationId"] = newId;
             return MakeRequest(request);
+        }
+
+        internal static void MakeAttachmentRequest(RequestPart requestPart, RequestType type, FileInfo file) {
+            ServiceRequest request = new ServiceRequest(requestPart, type);
+            request.AddFile(file, ResponseHandler.RequestCallback);
         }
     }
 }

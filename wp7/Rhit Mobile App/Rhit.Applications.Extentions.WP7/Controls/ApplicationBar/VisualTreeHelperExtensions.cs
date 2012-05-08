@@ -79,7 +79,7 @@ namespace Rhit.Applications.Extentions.Controls {
         /// <param name="searchAncestors">Whether or not to look up the tree</param>
         /// <returns>The group, if found</returns>
         public static VisualStateGroup GetVisualStateGroup(this FrameworkElement root, string groupName, bool searchAncestors) {
-            IList groups = VisualStateManager.GetVisualStateGroups(root);
+            IEnumerable groups = VisualStateManager.GetVisualStateGroups(root);
             foreach(object o in groups) {
                 VisualStateGroup group = o as VisualStateGroup;
                 if(group != null && group.Name == groupName)
@@ -105,7 +105,7 @@ namespace Rhit.Applications.Extentions.Controls {
             if(root == null)
                 return null;
 
-            IList groups = VisualStateManager.GetVisualStateGroups(root);
+            IEnumerable groups = VisualStateManager.GetVisualStateGroups(root);
             return groups.Cast<VisualStateGroup>().FirstOrDefault(group => group.Name == name);
         }
 

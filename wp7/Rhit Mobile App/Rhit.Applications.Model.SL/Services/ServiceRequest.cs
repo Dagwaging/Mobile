@@ -2,6 +2,8 @@
 using System.Net;
 using Rhit.Applications.Models.Services.Requests;
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
 
 namespace Rhit.Applications.Models.Services {
     public class ServiceRequest {
@@ -29,7 +31,7 @@ namespace Rhit.Applications.Models.Services {
                 _request = (HttpWebRequest) WebRequest.Create(request.ToString());
             } catch(Exception e) { throw e; }
             _request.Method = "POST";
-            _request.ContentType = "application/json; charset=utf-8";
+            //_request.ContentType = "application/json; charset=utf-8";
             Requests.Enqueue(_request);
         }
 
@@ -63,5 +65,27 @@ namespace Rhit.Applications.Models.Services {
         }
 
         public Dictionary<string, object> UserMetaData { get; private set; }
+
+        private Action<AsyncServiceResult> tempcallback { get; set; }
+
+        internal void AddFile(FileInfo file, Action<AsyncServiceResult> callback) {
+            var request = Requests.Peek();
+            MyFile = file;
+            tempcallback = callback;
+            var something = request.BeginGetRequestStream(new AsyncCallback(WriteFile), request);
+        }
+
+        private FileInfo MyFile { get; set; }
+
+        private void WriteFile(IAsyncResult result) {
+            HttpWebRequest request = (HttpWebRequest) result.AsyncState;
+            Stream postStream = request.EndGetRequestStream(result);
+            FileStream stream = MyFile.OpenRead();
+
+            stream.CopyTo(postStream);
+            stream.Close();
+            postStream.Close();
+            Send(tempcallback);
+        }
     }
 }

@@ -1,36 +1,38 @@
-﻿<navigation:Page x:Class="Rhit.Applications.Views.LoginPage" 
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+﻿<navigation:Page x:Class="Rhit.Applications.Views.LoginPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:cmds="clr-namespace:Rhit.Applications.Mvvm.Commands;assembly=Rhit.Applications.Mvvm.SL"
-    xmlns:util="clr-namespace:Rhit.Applications.Mvvm.Utilities;assembly=Rhit.Applications.Mvvm.SL"
     xmlns:navigation="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Navigation"
-    mc:Ignorable="d"
-    d:DesignWidth="640" d:DesignHeight="480"
-    Title="LoginPage">
+    xmlns:sdk="http://schemas.microsoft.com/winfx/2006/xaml/presentation/sdk"
+    xmlns:util="clr-namespace:Rhit.Applications.Mvvm.Utilities;assembly=Rhit.Applications.Mvvm.SL"
+    Title="Login" mc:Ignorable="d" d:DesignWidth="640" d:DesignHeight="480">
 
-    <Grid x:Name="LayoutRoot">
-     
-            <StackPanel VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,30,0,0">
-                <TextBlock Text="{Binding LoginStatus, FallbackValue='Log In to Access Data'}" FontWeight="Bold" FontSize="12"/>
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Text="User Name:" Margin="5" VerticalAlignment="Center" FontWeight="Bold" Grid.Row="0" Grid.Column="0"/>
-                    <TextBox Name="UserNameBox" Text="{Binding UserName, Mode=TwoWay}" util:BindingUtility.UpdateSourceOnChange="True" MinWidth="200" Grid.Row="0" Grid.Column="1" Background="LightGray" Margin="5" KeyUp="TextBox_KeyUp"/>
+    <Grid>
+        <StackPanel Margin="0,30,0,0" HorizontalAlignment="Center" VerticalAlignment="Top">
 
-                    <TextBlock Text="Password:" Margin="5" VerticalAlignment="Center" FontWeight="Bold" Grid.Row="1" Grid.Column="0"/>
-                    <PasswordBox Password="{Binding Password, Mode=TwoWay}" util:BindingUtility.UpdateSourceOnChange="True" MinWidth="200" Grid.Row="1" Grid.Column="1" Background="LightGray" Margin="5" KeyUp="TextBox_KeyUp"/>
-                </Grid>
-                <Button Content="Log In" HorizontalAlignment="Right" MinWidth="60" Margin="5" cmds:CommandManager.Command="{Binding LoginCommand}" cmds:CommandManager.CommandEventName="Click"/>
-            </StackPanel>
- 
+            <TextBlock Style="{StaticResource LargeTextStyle}" Text="{Binding LoginStatus, FallbackValue='Log In to Access Data'}" />
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <sdk:Label Style="{StaticResource LabelStyle}" Grid.Column="0" Grid.Row="0" Content="User Name:" />
+
+                <TextBox Style="{StaticResource TextBoxStyle}" x:Name="UserNameBox" Grid.Column="1" Grid.Row="0" KeyUp="TextBox_KeyUp" Text="{Binding UserName, Mode=TwoWay}" util:BindingUtility.UpdateSourceOnChange="True" />
+
+                <sdk:Label Style="{StaticResource LabelStyle}" Grid.Column="0" Grid.Row="1" Content="Password:" />
+
+                <PasswordBox Style="{StaticResource TextBoxStyle}" Grid.Column="1" Grid.Row="1" KeyUp="TextBox_KeyUp" Password="{Binding Password, Mode=TwoWay}" util:BindingUtility.UpdateSourceOnChange="True" />
+            </Grid>
+
+            <Button Style="{StaticResource ButtonStyle}" Command="{Binding LoginCommand}" Content="Log In" />
+
+        </StackPanel>
     </Grid>
 </navigation:Page>

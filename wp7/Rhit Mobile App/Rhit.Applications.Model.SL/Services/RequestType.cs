@@ -1,6 +1,10 @@
 ﻿
 namespace Rhit.Applications.Models.Services {
     public enum RequestType {
+        FileAddition,
+        FileDeletion,
+        Files,
+
         DirectionPathAddition,
         DirectionCreation,
         DirectionUpdate,

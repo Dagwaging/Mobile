@@ -64,6 +64,7 @@
     <Compile Include="Maps\MapSettings.cs" />
     <Compile Include="Maps\Modes\BaseMode.cs" />
     <Compile Include="Maps\Modes\BingMode.cs" />
+    <Compile Include="Maps\Modes\RoseMode.cs" />
     <Compile Include="Maps\Modes\EmptyMode.cs" />
     <Compile Include="Maps\Modes\GoogleMode.cs" />
     <Compile Include="Maps\Modes\MapnikMode.cs" />

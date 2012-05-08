@@ -7,6 +7,7 @@ namespace Rhit.Applications.Models.Events {
         public LocationEventArgs(ServiceEventArgs baseArgs) : base() {
             Copy(baseArgs);
         }
+
         public LocationData Location { get; set; }
     }
 }

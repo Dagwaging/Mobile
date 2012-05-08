@@ -15,6 +15,7 @@ namespace Rhit.Applications.Extentions.Maps {
                 new GoogleMode(),
                 new MapnikMode(),
                 new OsmaMode(),
+                new RoseMode(),
             };
             CurrentMode = Modes[2];
         }

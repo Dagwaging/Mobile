@@ -7,7 +7,7 @@ namespace Rhit.Applications.Extentions.Maps.Sources {
         /// </summary>
         public RoseOverlay() {
             Label = "Floor Plans";
-            UriFormat = "http://dl.dropbox.com/u/26625851/{0}.png";
+            UriFormat = "http://mobilewin.csse.rose-hulman.edu:5600/download/White Chapel/{0}.png";
         }
 
         /// <summary>

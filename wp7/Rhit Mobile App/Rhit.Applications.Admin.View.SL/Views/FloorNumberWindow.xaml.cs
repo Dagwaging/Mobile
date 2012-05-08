@@ -1,23 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
 
 namespace Rhit.Applications.Views {
     public partial class FloorNumberWindow : ChildWindow {
         public FloorNumberWindow() {
             InitializeComponent();
+
             DataContext = this;
-            FloorNumberBox.Focus();
         }
 
+        #region public string FloorNumber
         private string floorNumber;
         public string FloorNumber {
             get { return floorNumber; }
@@ -32,14 +26,7 @@ namespace Rhit.Applications.Views {
                 
             }
         }
-
-        private void OKButton_Click(object sender, RoutedEventArgs e) {
-            this.DialogResult = true;
-        }
-
-        private void CancelButton_Click(object sender, RoutedEventArgs e) {
-            this.DialogResult = false;
-        }
+        #endregion
 
         public int GetFloorNumber() {
             int intValue = 0;
@@ -47,8 +34,16 @@ namespace Rhit.Applications.Views {
             return intValue;
         }
 
+        private void OKButton_Click(object sender, RoutedEventArgs e) {
+            DialogResult = true;
+        }
+
+        private void CancelButton_Click(object sender, RoutedEventArgs e) {
+            DialogResult = false;
+        }
+        
         private void TextBox_KeyUp(object sender, KeyEventArgs e) {
-            if(e.Key == Key.Enter) this.DialogResult = true;
+            if(e.Key == Key.Enter) DialogResult = true;
         }
     }
 }

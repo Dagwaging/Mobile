@@ -10,6 +10,7 @@ using System;
 using System.Device.Location;
 #else
 using Microsoft.Maps.MapControl;
+using System.IO;
 #endif
 
 namespace Rhit.Applications.Models.Services {
@@ -68,7 +69,7 @@ namespace Rhit.Applications.Models.Services {
         #region Tour Related Events
         #region ToursReturned
         public event DirectionsEventHandler ToursReturned;
-        protected virtual void OnToursReturned(ServiceEventArgs e, IList<DirectionPath_DC> paths) {
+        protected virtual void OnToursReturned(ServiceEventArgs e, IEnumerable<DirectionPath_DC> paths) {
             DirectionsEventArgs args = new DirectionsEventArgs(e) {
                 Paths = paths,
             };
@@ -89,7 +90,7 @@ namespace Rhit.Applications.Models.Services {
 
         #region DirectionsReturned
         public event DirectionsEventHandler DirectionsReturned;
-        protected virtual void OnDirectionsReturned(ServiceEventArgs e, IList<DirectionPath_DC> paths) {
+        protected virtual void OnDirectionsReturned(ServiceEventArgs e, IEnumerable<DirectionPath_DC> paths) {
             DirectionsEventArgs args = new DirectionsEventArgs(e) {
                 Paths = paths,
             };
@@ -277,6 +278,16 @@ namespace Rhit.Applications.Models.Services {
         }
         #endregion
         #endregion
+
+        #region FolderNamesReceived
+        public event FolderNamesEventHandler FolderNamesReceived;
+        protected virtual void OnFolderNamesReceived(ServiceEventArgs e) {
+            FolderNamesEventArgs args = new FolderNamesEventArgs(e) {
+                FolderNames = e.ResponseObject.Folders,
+            };
+            if(FolderNamesReceived != null) FolderNamesReceived(this, args);
+        }
+        #endregion
         #endregion
 
         private DataCollector() {
@@ -318,6 +329,14 @@ namespace Rhit.Applications.Models.Services {
         private void ResponseReceived(object sender, ServiceEventArgs eventArgs) {
 
             switch(eventArgs.Type) {
+                case ResponseType.Files:
+
+                    break;
+                case ResponseType.FileAddition:
+                case ResponseType.FileDeletion:
+                    GetFolders();
+                    break;
+
                 case ResponseType.AllLocations:
                 case ResponseType.TopLocations:
                 case ResponseType.InternalLocations:
@@ -652,7 +671,7 @@ namespace Rhit.Applications.Models.Services {
         }
 
 #if !WINDOWS_PHONE
-        public void ChangeLocationCorners(int id, IList<Location> newCorners) {
+        public void ChangeLocationCorners(int id, IEnumerable<Location> newCorners) {
             IList<GeoCoordinate> _list = new List<GeoCoordinate>();
             foreach(Location location in newCorners)
                 _list.Add(new GeoCoordinate(location));
@@ -660,7 +679,7 @@ namespace Rhit.Applications.Models.Services {
         }
 #endif
 
-        public void ChangeLocationCorners(int id, IList<GeoCoordinate> newCorners) {
+        public void ChangeLocationCorners(int id, IEnumerable<GeoCoordinate> newCorners) {
             List<RequestPart> requests = new List<RequestPart>();
 
             RequestPart request = new RequestBuilder(BaseAddress).Admin.StoredProcedure(Connection.ServiceTokenGuid, "spDeleteMapAreaCorners");
@@ -678,7 +697,7 @@ namespace Rhit.Applications.Models.Services {
             Connection.MakeLocationRequests(requests, RequestType.ChangeCorners, id);
         }
 
-        public void ChangeLocation(int oldId, int newId, string name, int floor, int parentId, string description, bool labelOnHybrid, int minZoom, LocationType type, IList<ILink> links, IList<string> altNames) {
+        public void ChangeLocation(int oldId, int newId, string name, int floor, int parentId, string description, bool labelOnHybrid, int minZoom, LocationType type, IEnumerable<ILink> links, IEnumerable<string> altNames) {
             List<RequestPart> requests = new List<RequestPart>();
             RequestPart request;
 
@@ -850,6 +869,23 @@ namespace Rhit.Applications.Models.Services {
         }
         #endregion
 
+        #region File/Folder Requests
+        public void DeleteFolder(string folderName) {
+            RequestPart request = new RequestBuilder(BaseAddress).Admin.FileHost(Connection.ServiceTokenGuid).Remove(folderName);
+            Connection.MakeRequest(request, RequestType.FileDeletion);
+        }
+
+        public void UploadFile(FileInfo file) {
+            RequestPart request = new RequestBuilder(BaseAddress).Admin.FileHost(Connection.ServiceTokenGuid).Upload(file.Name);
+            Connection.MakeAttachmentRequest(request, RequestType.FileAddition, file);
+        }
+
+        public void GetFolders() {
+            RequestPart request = new RequestBuilder(BaseAddress).Admin.FileHost(Connection.ServiceTokenGuid).Folders;
+            Connection.MakeRequest(request, RequestType.Files);
+        }
+        #endregion
+
         #region Path Requests
         public void CreatePath(int node1, int node2, bool elevator, int stairs, int partition) {
             RequestPart request = new RequestBuilder(BaseAddress).Admin.StoredProcedure(Connection.ServiceTokenGuid, "spAddPath");
@@ -902,7 +938,7 @@ namespace Rhit.Applications.Models.Services {
             Connection.MakeRequest(request, RequestType.DirectionCreation);
         }
 
-        public void AddDirectionPaths(int id, IList<int> paths) {
+        public void AddDirectionPaths(int id, IEnumerable<int> paths) {
             List<RequestPart> requests = new List<RequestPart>();
             RequestPart request;
             foreach(int path in paths) {

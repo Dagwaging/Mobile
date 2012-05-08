@@ -83,13 +83,13 @@ namespace Rhit.Applications.ViewModels.Utilities {
         #endregion
 
         #region Center
-        public Location Center {
-            get { return (Location) GetValue(CenterProperty); }
+        public override GeoCoordinate Center {
+            get { return (GeoCoordinate) GetValue(CenterProperty); }
             set { SetValue(CenterProperty, value); }
         }
 
         public static readonly DependencyProperty CenterProperty =
-            DependencyProperty.Register("Center", typeof(Location), typeof(SimpleRhitLocation), new PropertyMetadata(new Location(), new PropertyChangedCallback(OnPropertyChanged)));
+            DependencyProperty.Register("Center", typeof(GeoCoordinate), typeof(SimpleRhitLocation), new PropertyMetadata(new GeoCoordinate(), new PropertyChangedCallback(OnPropertyChanged)));
         #endregion
 
         #region HasChanged

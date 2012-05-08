@@ -109,6 +109,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
+    <Compile Include="Converters\NodeStateToColorConverter.cs" />
     <Compile Include="Utilities\LocalImageLoader.cs" />
     <Compile Include="Converters\BoolToGridSizeConverter.cs" />
     <Compile Include="Converters\ObjectToBoolConverter.cs" />
@@ -189,9 +190,33 @@
     <Content Include="Binaries\Microsoft.Maps.MapControl.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Assets\Pushpin.xaml">
+    <Page Include="Assets\Brushes.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Assets\Converters.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Assets\Customized Button.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Assets\Customized Pushpins.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Assets\MapTemplates.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Assets\More.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Assets\Templates.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\DataPage.xaml">
       <Generator>MSBuild:Compile</Generator>

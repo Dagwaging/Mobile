@@ -64,6 +64,10 @@
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\PathsController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
+    <Compile Include="Models\Direction.cs" />
+    <Compile Include="Models\DirectionMessage.cs" />
+    <Compile Include="Models\Node.cs" />
+    <Compile Include="Models\Path.cs" />
     <Compile Include="Utilities\ServiceCategoryNode.cs" />
     <Compile Include="Utilities\ServiceLinkNode.cs" />
     <Compile Include="Utilities\ServiceNode.cs" />

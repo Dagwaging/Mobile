@@ -28,6 +28,10 @@ namespace Rhit.Applications.Models.Services.Requests {
             return new StoredProcedureRequestPart(FullUrl, token, spName);
         }
 
+        public FileHostRequestPart FileHost(Guid token) {
+            return new FileHostRequestPart(FullUrl, token);
+        }
+
         [Obsolete("Not a valid request end point")]
         public override string ToString() {
             return base.ToString();
@@ -91,6 +95,72 @@ namespace Rhit.Applications.Models.Services.Requests {
 
         public override string ToString() {
             return String.Format(FullUrl, "");
+        }
+    }
+
+    public class FileHostRequestPart : RequestPart {
+        public FileHostRequestPart(string baseUrl, Guid token)
+            : base(baseUrl) {
+            Token = token;
+            PartUrl = "/{1}/filehost/{0}";
+        }
+
+        protected override string FullUrl {
+            get { return String.Format(String.Format(BaseUrl, PartUrl), "{0}", Token); }
+        }
+
+        public Guid Token { get; set; }
+
+        public UploadRequestPart Upload(string folder) {
+            return new UploadRequestPart(FullUrl, folder);
+        }
+
+        public DeleteFolderRequestPart Remove(string folder) {
+            return new DeleteFolderRequestPart(FullUrl, folder);
+        }
+
+        public FoldersRequestPart Folders {
+            get { return new FoldersRequestPart(FullUrl); }
+        }
+
+        [Obsolete("Not a valid request end point")]
+        public override string ToString() {
+            return base.ToString();
+        }
+    }
+
+    public class UploadRequestPart : RequestPart {
+        public UploadRequestPart(string baseUrl, string folder)
+            : base(baseUrl) {
+            PartUrl = "/upload/{0}{1}";
+            Folder = folder;
+        }
+
+        public string Folder { get; set; }
+
+        protected override string FullUrl {
+            get { return String.Format(String.Format(BaseUrl, PartUrl), Folder, "{0}"); }
+        }
+    }
+
+    public class FoldersRequestPart : RequestPart {
+        public FoldersRequestPart(string baseUrl)
+            : base(baseUrl) {
+            PartUrl = "/folders{0}";
+        }
+    }
+
+    public class DeleteFolderRequestPart : RequestPart {
+        public DeleteFolderRequestPart(string baseUrl, string folder)
+            : base(baseUrl) {
+            PartUrl = "/remove/{0}{1}";
+            Folder = folder;
+        }
+
+        public string Folder { get; set; }
+
+        protected override string FullUrl {
+            get { return String.Format(String.Format(BaseUrl, PartUrl), Folder, "{0}"); }
         }
     }
 

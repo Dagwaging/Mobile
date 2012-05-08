@@ -21,6 +21,13 @@ namespace Rhit.Applications.Models.Services {
 
         private static ResponseType ConvertType(RequestType request) {
             switch(request) {
+                case RequestType.FileAddition:
+                    return ResponseType.FileAddition;
+                case RequestType.FileDeletion:
+                    return ResponseType.FileDeletion;
+                case RequestType.Files:
+                    return ResponseType.Files;
+
                 case RequestType.DirectionPathAddition:
                     return ResponseType.DirectionPathAddition;
                 case RequestType.DirectionCreation:

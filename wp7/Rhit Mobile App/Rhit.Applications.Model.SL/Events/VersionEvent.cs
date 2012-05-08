@@ -7,7 +7,9 @@ namespace Rhit.Applications.Models.Events {
         public VersionEventArgs(ServiceEventArgs baseArgs) : base() {
             Copy(baseArgs);
         }
+
         public double ServerVersion { get; set; }
+
         public double ServicesVersion { get; set; }
     }
 }

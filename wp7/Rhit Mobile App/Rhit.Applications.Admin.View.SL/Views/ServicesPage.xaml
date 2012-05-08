@@ -1,27 +1,26 @@
 ﻿<navigation:Page x:Class="Rhit.Applications.Views.Views.ServicesPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cmds="clr-namespace:Rhit.Applications.Mvvm.Commands;assembly=Rhit.Applications.Mvvm.SL"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:navigation="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Navigation"
     xmlns:sdk="http://schemas.microsoft.com/winfx/2006/xaml/presentation/sdk"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:cmds="clr-namespace:Rhit.Applications.Mvvm.Commands;assembly=Rhit.Applications.Mvvm.SL"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d" d:DesignWidth="1025" d:DesignHeight="476"
-    Title="Campus Services" >
-    
+    Title="Campus Services" mc:Ignorable="d" d:DesignWidth="640" d:DesignHeight="480">
+
     <navigation:Page.Resources>
-        <Style TargetType="Button">
-            <Setter Property="Margin" Value="5" />
-            <Setter Property="Padding" Value="18,5" />
-            <Setter Property="VerticalAlignment" Value="Center" />
-        </Style>
+        <Style BasedOn="{StaticResource ButtonStyle}" TargetType="Button" />
+
+        <Style BasedOn="{StaticResource LabelStyle}" TargetType="sdk:Label" />
+
+        <Style BasedOn="{StaticResource TextBoxStyle}" TargetType="TextBox" />
     </navigation:Page.Resources>
 
-    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-        <Grid MinWidth="700">
+    <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
+        <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" MinWidth="100" MaxWidth="300" />
-                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="Auto" MaxWidth="400" MinWidth="100" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
             <Grid>
@@ -32,22 +31,23 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
-                <Button Content="Refresh All" Height="Auto" HorizontalAlignment="Stretch" Margin="5" Name="button1" VerticalAlignment="Top" Width="Auto" cmds:CommandManager.Command="{Binding RefreshCommand}" cmds:CommandManager.CommandEventName="Click" />
+                <StackPanel>
+                    <StackPanel.Resources>
+                        <Style BasedOn="{StaticResource ButtonStyle}" TargetType="Button">
+                            <Setter Property="HorizontalAlignment" Value="Stretch" />
+                        </Style>
+                    </StackPanel.Resources>
 
-                <Button Content="Add Root Category" Grid.Row="1" cmds:CommandManager.Command="{Binding AddRootCategoryCommand}" cmds:CommandManager.CommandEventName="Click" />
+                    <Button Grid.Row="0" Command="{Binding RefreshCommand}" Content="Refresh All" />
+                    <Button Grid.Row="1" Command="{Binding AddRootCategoryCommand}" Content="Add Root Category" />
+                </StackPanel>
 
-                <sdk:TreeView ItemsSource="{Binding Services.ServicesTree}" ItemTemplate="{StaticResource ServicesTreeTemplate}" SelectedItemChanged="TreeView_SelectedItemChanged" Grid.Row="2"/>
+                <sdk:TreeView Grid.Row="2" ItemsSource="{Binding Services.ServicesTree}" ItemTemplate="{StaticResource ServicesTreeTemplate}" SelectedItemChanged="TreeView_SelectedItemChanged" />
 
-                <Grid Grid.Row="3">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-
-                    <Button Content="Add Category" IsEnabled="{Binding CanAddChildItems}" cmds:CommandManager.Command="{Binding AddCategoryCommand}" cmds:CommandManager.CommandEventName="Click" />
-                    <Button Content="Add Service" IsEnabled="{Binding CanAddChildItems}" Grid.Column="1" cmds:CommandManager.Command="{Binding AddServiceCommand}" cmds:CommandManager.CommandEventName="Click" />
-                </Grid>
-
+                <StackPanel Grid.Row="3" Orientation="Horizontal">
+                    <Button Command="{Binding AddCategoryCommand}" Content="Add Category" IsEnabled="{Binding CanAddChildItems}" />
+                    <Button Grid.Column="1" Command="{Binding AddServiceCommand}" Content="Add Service" IsEnabled="{Binding CanAddChildItems}" cmds:CommandManager.CommandEventName="Click" />
+                </StackPanel>
             </Grid>
 
             <Grid Grid.Column="1" Grid.Row="1">
@@ -55,24 +55,25 @@
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                <StackPanel Margin="12" Visibility="{Binding AllFieldsVisibility}">
-                    <sdk:Label Grid.Column="1" Content="{Binding CurrentHeading,  FallbackValue='Record Type'}" FontWeight="Bold" FontSize="18" Margin="12,0,0,12" />
 
-                    <sdk:Label VerticalAlignment="Center" Content="Name" FontSize="14" />
-                    <TextBox VerticalAlignment="Center" Text="{Binding CurrentName, Mode=TwoWay}"/>
+                <StackPanel Visibility="{Binding AllFieldsVisibility}">
+                    <sdk:Label Grid.Column="1" Content="{Binding CurrentHeading,  FallbackValue='Record Type'}" HorizontalAlignment="Center" />
 
-                    <sdk:Label Margin="0,12,0,0" VerticalAlignment="Center" FontSize="14" Content="URL of Web Page" Visibility="{Binding LinkFieldsVisibility}"/>
-                    <TextBox VerticalAlignment="Center" Text="{Binding CurrentURL, Mode=TwoWay}" Visibility="{Binding LinkFieldsVisibility}" />
+                    <sdk:Label Content="Name" />
+                    <TextBox HorizontalAlignment="Stretch" Text="{Binding CurrentName, Mode=TwoWay}" VerticalAlignment="Center" />
 
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                        <Button Content="Save" cmds:CommandManager.Command="{Binding SaveCurrentCommand}" cmds:CommandManager.CommandEventName="Click"/>
+                    <sdk:Label Content="URL of Web Page" Visibility="{Binding LinkFieldsVisibility}" />
+                    <TextBox HorizontalAlignment="Stretch" Text="{Binding CurrentURL, Mode=TwoWay}" Visibility="{Binding LinkFieldsVisibility}" />
+
+                    <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                        <Button Content="Save" cmds:CommandManager.Command="{Binding SaveCurrentCommand}" cmds:CommandManager.CommandEventName="Click" />
                         <Button Content="Delete" cmds:CommandManager.Command="{Binding DeleteCurrentCommand}" cmds:CommandManager.CommandEventName="Click" />
                     </StackPanel>
                 </StackPanel>
 
-                <StackPanel  Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Right">
-                    <sdk:Label Content="Increment the services version to push the current changes to phones"/>
-                    <Button Content="{Binding Services.ServicesVersionStatus, Mode=OneWay, FallbackValue='Increment Version'}" cmds:CommandManager.Command="{Binding IncrementVersionCommand}" cmds:CommandManager.CommandEventName="Click" />
+                <StackPanel Grid.Row="1" HorizontalAlignment="Right">
+                    <TextBlock Text="Increment the services version to push the current changes to phones" />
+                    <Button Command="{Binding IncrementVersionCommand}" Content="{Binding Services.ServicesVersionStatus, Mode=OneWay, FallbackValue='Increment Version'}" />
                 </StackPanel>
             </Grid>
         </Grid>

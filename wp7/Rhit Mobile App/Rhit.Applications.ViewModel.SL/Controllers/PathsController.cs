@@ -64,7 +64,7 @@ namespace Rhit.Applications.ViewModels.Controllers {
             ProccessNewNodes(e.Paths);
         }
 
-        private void ProccessNewNodes(IList<DirectionPath_DC> models) {
+        private void ProccessNewNodes(IEnumerable<DirectionPath_DC> models) {
             PathNode lastNode = null;
             PathNode node = null;
             foreach(DirectionPath_DC pathModel in models) {

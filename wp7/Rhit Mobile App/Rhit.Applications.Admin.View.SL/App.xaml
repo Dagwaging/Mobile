@@ -1,14 +1,20 @@
 ﻿<Application x:Class="Rhit.Applications.Views.App"
-  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-  <Application.Resources>
-    <ResourceDictionary>
-      <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="Assets/Styles.xaml"/>
-        <ResourceDictionary Source="Assets/Pushpin.xaml"/>
-      </ResourceDictionary.MergedDictionaries>
-    </ResourceDictionary>
-  </Application.Resources>
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Assets/Brushes.xaml" />
+                <ResourceDictionary Source="Assets/Styles.xaml" />
+                <ResourceDictionary Source="Assets/Customized Pushpins.xaml" />
+                <ResourceDictionary Source="Assets/Customized Button.xaml" />
+                <ResourceDictionary Source="Assets/Converters.xaml" />
+                <ResourceDictionary Source="Assets/Templates.xaml" />
+                <ResourceDictionary Source="Assets/More.xaml" />
+                <ResourceDictionary Source="Assets/MapTemplates.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
 
 </Application>

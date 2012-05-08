@@ -3,6 +3,7 @@ using System.Windows.Input;
 using Rhit.Applications.Models.Events;
 using Rhit.Applications.Models.Services;
 using Rhit.Applications.Mvvm.Commands;
+using System.IO;
 
 namespace Rhit.Applications.ViewModels {
     public class HomeViewModel : DependencyObject {
@@ -34,5 +35,13 @@ namespace Rhit.Applications.ViewModels {
         public static readonly DependencyProperty VersionProperty =
            DependencyProperty.Register("Version", typeof(double), typeof(HomeViewModel), new PropertyMetadata(0.0));
         #endregion
+
+        public void DoSomething() {
+            DataCollector.Instance.GetFolders();
+        }
+
+        public void DoSomethingElse(FileInfo file) {
+            DataCollector.Instance.UploadFile(file);
+        }
     }
 }

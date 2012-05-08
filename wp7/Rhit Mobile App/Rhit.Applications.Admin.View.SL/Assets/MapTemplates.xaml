@@ -1,0 +1,57 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:map="clr-namespace:Microsoft.Maps.MapControl;assembly=Microsoft.Maps.MapControl"
+    xmlns:cmds="clr-namespace:Rhit.Applications.Mvvm.Commands;assembly=Rhit.Applications.Mvvm.SL"
+    xmlns:exts="clr-namespace:Rhit.Applications.Extentions.Controls;assembly=Rhit.Applications.Extentions.SL">
+
+    <Style x:Key="PathStyle" TargetType="map:MapPolyline">
+        <Setter Property="Locations" Value="{Binding Nodes}" />
+        <Setter Property="cmds:CommandManager.Command" Value="{Binding PathClickCommand, ElementName='ViewModel'}" />
+        <Setter Property="cmds:CommandManager.CommandEventName" Value="MouseLeftButtonUp" />
+        <Setter Property="cmds:CommandManager.CommandParameter" Value="{Binding Id}" />
+    </Style>
+
+    <DataTemplate x:Key="WhitePathTemplate">
+        <map:MapPolyline Stroke="White" StrokeThickness="5" Style="{StaticResource PathStyle}" />
+    </DataTemplate>
+
+    <DataTemplate x:Key="BlackPathTemplate">
+        <map:MapPolyline Stroke="Black" StrokeThickness="3" Style="{StaticResource PathStyle}" />
+    </DataTemplate>
+    <DataTemplate x:Key="RedPathTemplate">
+        <map:MapPolyline Stroke="Red" StrokeThickness="3" Style="{StaticResource PathStyle}" Visibility="{Binding IsSelected, Converter={StaticResource VisibilityConverter}}" />
+    </DataTemplate>
+
+    <Style x:Key="EllipseStyle" TargetType="Ellipse">
+        <Setter Property="Width" Value="16" />
+        <Setter Property="Height" Value="16" />
+        <Setter Property="Stroke" Value="White" />
+        <Setter Property="StrokeThickness" Value="1" />
+    </Style>
+
+    <ControlTemplate x:Key="EllipsePushpinTemplate" TargetType="exts:DraggablePushpin">
+        <Grid>
+            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" />
+        </Grid>
+    </ControlTemplate>
+
+    <DataTemplate x:Key="NodeTemplate">
+        <exts:DraggablePushpin CanChange="{Binding CanMove}" Location="{Binding Center, Mode=TwoWay}"
+                               Tag="{Binding Id}" Background="Black" PositionOrigin="Center"
+                               Template="{StaticResource EllipsePushpinTemplate}" cmds:CommandManager.Command="{Binding ClickCommand}" 
+                               cmds:CommandManager.CommandEventName="MouseLeftButtonUp">
+            <Grid>
+                <Ellipse Fill="{Binding CurrentState, Converter={StaticResource NodeStateColorConverter}}" Style="{StaticResource EllipseStyle}"  />
+            </Grid>
+        </exts:DraggablePushpin>
+    </DataTemplate>
+
+    <DataTemplate x:Key="NodeLocationTemplate">
+        <exts:DraggablePushpin CanChange="True" Location="{Binding Location, Mode=TwoWay}" Background="Black" PositionOrigin="Center" Template="{StaticResource EllipsePushpinTemplate}" cmds:CommandManager.Command="{Binding ClickCommand}" cmds:CommandManager.CommandEventName="MouseLeftButtonDown">
+            <Grid>
+                <Ellipse Fill="Red" Style="{StaticResource EllipseStyle}" />
+            </Grid>
+        </exts:DraggablePushpin>
+    </DataTemplate>
+</ResourceDictionary>

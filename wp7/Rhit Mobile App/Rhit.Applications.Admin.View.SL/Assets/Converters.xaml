@@ -1,0 +1,21 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converter="clr-namespace:Rhit.Applications.Views.Converters">
+
+    <converter:NodeStateToColorConverter x:Key="NodeStateColorConverter" />
+    
+    <converter:ObjectToBoolConverter x:Key="ObjectBoolConverter" />
+    <converter:ObjectToBoolConverter x:Key="RObjectBoolConverter" Reverse="True" />
+
+    <converter:ObjectToVisibilityConverter x:Key="ObjectVisibilityConverter" />
+    <converter:ObjectToVisibilityConverter x:Key="RObjectVisibilityConverter" NullValue="Visible" NotNullValue="Collapsed" />
+    
+    <converter:BoolToVisibilityConverter x:Key="VisibilityConverter" />
+    <converter:BoolToVisibilityConverter x:Key="RVisibilityConverter" FalseValue="Visible" TrueValue="Collapsed" />
+    
+    <converter:BoolToGridSizeConverter x:Key="GridLengthConverter" />
+    
+    <converter:RadioButtonConverter x:Key="RadioButtonConverter" />
+
+</ResourceDictionary>

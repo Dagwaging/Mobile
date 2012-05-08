@@ -6,6 +6,7 @@ using Rhit.Applications.ViewModels.Utilities;
 using System.Windows.Input;
 using Rhit.Applications.Mvvm.Commands;
 using Rhit.Applications.Models.Services;
+using Rhit.Applications.Models.Events;
 
 namespace Rhit.Applications.ViewModels {
     public class ServicesViewModel : DependencyObject {
@@ -19,8 +20,8 @@ namespace Rhit.Applications.ViewModels {
             IncrementVersionCommand = new RelayCommand(p => IncrementVersion());
 
             DataCollector.Instance.CampusServicesUpdateReturned += new EventHandler(Instance_CampusServicesUpdateReturned);
-            DataCollector.Instance.VersionUpdate += new Models.Events.VersionEventHandler(Instance_VersionUpdate);
-            DataCollector.Instance.CampusServicesReturned += new Models.Events.CampusServicesEventHandler(Instance_CampusServicesReturned);
+            DataCollector.Instance.VersionUpdate += new VersionEventHandler(Instance_VersionUpdate);
+            DataCollector.Instance.CampusServicesReturned += new CampusServicesEventHandler(Instance_CampusServicesReturned);
 
             AllFieldsVisibility = Visibility.Collapsed;
 
@@ -28,7 +29,7 @@ namespace Rhit.Applications.ViewModels {
             if (Services.ServicesVersionStatus == null) Services.ServicesVersionStatus = "Waiting for version data";
         }
 
-        void Instance_CampusServicesReturned(object sender, Models.Events.CampusServicesEventArgs e)
+        void Instance_CampusServicesReturned(object sender, CampusServicesEventArgs e)
         {
             Services.CampusServicesReturned(sender, e);
 
@@ -38,7 +39,7 @@ namespace Rhit.Applications.ViewModels {
             }
         }
 
-        void Instance_VersionUpdate(object sender, Models.Events.VersionEventArgs e)
+        void Instance_VersionUpdate(object sender, VersionEventArgs e)
         {
             if (e.ServicesVersion == 0) return;
 

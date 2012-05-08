@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Rhit.Applications.Models.Events {
     public delegate void TagsEventHandler(Object sender, TagsEventArgs e);
@@ -8,6 +7,7 @@ namespace Rhit.Applications.Models.Events {
         public TagsEventArgs(ServiceEventArgs baseArgs) : base() {
             Copy(baseArgs);
         }
+
         public TagsCategory_DC TagRoot { get; set; }
     }
 }

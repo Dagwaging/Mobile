@@ -4,19 +4,22 @@
     xmlns:controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls"
     xmlns:util="clr-namespace:Rhit.Applications.Mvvm.Utilities;assembly=Rhit.Applications.Mvvm.SL"
     Width="Auto" Height="Auto" Title="Building Floor Number">
-    <Grid Margin="2">
+    
+    <controls:ChildWindow.Resources>
+        <Style TargetType="TextBlock" BasedOn="{StaticResource StandardMarginStyle}" />
+        <Style TargetType="TextBox" BasedOn="{StaticResource TextBoxStyle}" />
+    </controls:ChildWindow.Resources>
+    
+    <Grid Style="{StaticResource StandardMarginStyle}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="*"/>
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <StackPanel>
-            <TextBlock Margin="5" Text="Enter the corresponding floor number of the loaded image." VerticalAlignment="Center"/>
-            <TextBox x:Name="FloorNumberBox" Margin="5" MinWidth="50" VerticalAlignment="Center" Text="{Binding FloorNumber, Mode=TwoWay, ValidatesOnExceptions=True}" util:BindingUtility.UpdateSourceOnChange="True" HorizontalAlignment="Left" KeyUp="TextBox_KeyUp"/>
+            <TextBlock Text="Enter the corresponding floor number of the loaded image." />
+            <TextBox TabIndex="0" Text="{Binding FloorNumber, Mode=TwoWay, ValidatesOnExceptions=True}" util:BindingUtility.UpdateSourceOnChange="True" KeyUp="TextBox_KeyUp"/>
         </StackPanel>
-        <StackPanel Orientation="Horizontal" Grid.Row="2" FlowDirection="RightToLeft" Margin="0,8,0,0">
-            <!--<Button Content="Cancel" Click="CancelButton_Click" Width="75" Height="23" HorizontalAlignment="Right" Margin="5,0,0,0"/>-->
-            <Button Content="OK" Click="OKButton_Click" Width="75" Height="23" HorizontalAlignment="Right" Margin="0"/>
-        </StackPanel>
+
+        <Button Grid.Row="1" Content="OK" Click="OKButton_Click" Style="{StaticResource ButtonStyle}" />
     </Grid>
 </controls:ChildWindow>

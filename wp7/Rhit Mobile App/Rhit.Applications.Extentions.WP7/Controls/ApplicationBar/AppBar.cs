@@ -79,12 +79,12 @@ namespace Rhit.Applications.Extentions.Controls {
             set { _applicationBar.ForegroundColor = value; }
         }
 
-        public IList Buttons {
+        public IEnumerable Buttons {
             get { return this.Items; }
 
         }
 
-        public IList MenuItems {
+        public IEnumerable MenuItems {
             get { return this.Items; }
         }
 

@@ -1,15 +1,16 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Navigation;
 using Rhit.Applications.ViewModels;
 using Rhit.Applications.ViewModels.Controllers;
-using System;
 
 namespace Rhit.Applications.Views {
     public partial class DataPage : Page {
         public DataPage() {
             InitializeComponent();
+
             ViewModel = new DataViewModel();
             DataContext = ViewModel;
         }
@@ -20,18 +21,11 @@ namespace Rhit.Applications.Views {
             ViewModel.SelectLocation((sender as TreeView).SelectedItem);
         }
 
-        #region Page Navigation
-        // Executes when the user navigates to this page.
         protected override void OnNavigatedTo(NavigationEventArgs e) {
-            if (!LoginController.Instance.IsLoggedIn)
-            {
+            if(!LoginController.Instance.IsLoggedIn) {
                 NavigationService.Navigate(new Uri("/LoginPage", UriKind.Relative));
             }
         }
-
-        // Executes when the user navigates away from this page.
-        protected override void OnNavigatedFrom(NavigationEventArgs e) { }
-        #endregion
 
         private void AltNameGrid_KeyUp(object sender, KeyEventArgs e) {
             if(Keyboard.Modifiers != ModifierKeys.Control || e.Key != Key.Delete) return;

@@ -6,11 +6,9 @@ namespace Rhit.Applications.Views {
     public partial class LocationIdWindow : ChildWindow {
         public LocationIdWindow() {
             InitializeComponent();
+
             DataContext = this;
             IdNumber = "0";
-            this.UpdateLayout();
-            this.MyGrid.UpdateLayout();
-            this.Tree.UpdateLayout();
         }
 
         private void OKButton_Click(object sender, RoutedEventArgs e) {
@@ -25,6 +23,7 @@ namespace Rhit.Applications.Views {
             ViewModel.SetTempLocation((sender as TreeView).SelectedValue);
         }
 
+        #region public string IdNumber
         private string idNumber;
         public string IdNumber {
             get { return idNumber; }
@@ -39,6 +38,7 @@ namespace Rhit.Applications.Views {
 
             }
         }
+        #endregion
 
         public string NewName { get; set; }
 

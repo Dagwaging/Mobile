@@ -1,50 +1,43 @@
-﻿using System.Windows;
+﻿using System;
+using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
 using Rhit.Applications.ViewModels;
-using Rhit.Applications.ViewModels.Utilities;
-using System.Collections.Generic;
 using Rhit.Applications.ViewModels.Controllers;
-using System;
+using Rhit.Applications.ViewModels.Utilities;
 
-namespace Rhit.Applications.Views.Views
-{
-    public partial class ServicesPage : Page
-    {
-        private ServicesViewModel ViewModel { get; set; }
-        private TreeView ServicesTreeView { get; set; }
+namespace Rhit.Applications.Views.Views {
+    public partial class ServicesPage : Page {
+        public ServicesPage() {
+            InitializeComponent();
 
-        public ServicesPage()
-        {
             ViewModel = new ServicesViewModel();
             DataContext = ViewModel;
 
-            ViewModel.UpdateSelectedServiceNode += new ServicesViewModel.UpdateSelectedServiceNodeEventHandler(ViewModel_UpdateSelectedServiceNode);
-
-            InitializeComponent();
+            ViewModel.UpdateSelectedServiceNode += new Rhit.Applications.ViewModels.ServicesViewModel.UpdateSelectedServiceNodeEventHandler(ViewModel_UpdateSelectedServiceNode);
         }
 
-        void ViewModel_UpdateSelectedServiceNode(object sender, ServicesViewModel.SelectedServiceNodeArgs args)
-        {
-            if (ServicesTreeView == null) return;
+        private ServicesViewModel ViewModel { get; set; }
+
+        private TreeView ServicesTreeView { get; set; }
+        
+        private void ViewModel_UpdateSelectedServiceNode(object sender, ServicesViewModel.SelectedServiceNodeArgs args) {
+            if(ServicesTreeView == null) return;
 
             ServicesTreeView.UpdateLayout();
 
             TreeViewItem item = ServicesTreeView.ItemContainerGenerator.ContainerFromItem(args.Selected) as TreeViewItem;
-            if (item != null)
-            {
+            if(item != null) {
                 item.IsSelected = true;
                 item.IsExpanded = true;
-            }
-            else
-            {
+            } else {
                 List<ServiceNode> parentPath = new List<ServiceNode>();
                 ServiceNode targetNode = args.Selected;
                 ServiceNode currentNode = targetNode.Parent;
 
                 // Generate a list of parents to expand in the treeview
-                while (currentNode != null)
-                {
+                while(currentNode != null) {
                     parentPath.Add(currentNode);
                     currentNode = currentNode.Parent;
                 }
@@ -53,23 +46,17 @@ namespace Rhit.Applications.Views.Views
                 parentPath.Reverse();
                 TreeViewItem parentItem = null;
 
-                foreach (ServiceNode node in parentPath)
-                {
+                foreach(ServiceNode node in parentPath) {
                     // If this is the first parent, we'll load it from the treeview directly
-                    if (parentPath.IndexOf(node) == 0)
-                    {
+                    if(parentPath.IndexOf(node) == 0) {
                         parentItem = ServicesTreeView.ItemContainerGenerator.ContainerFromItem(node) as TreeViewItem;
-                    }
-
-                    else
-                    {
+                    } else {
                         // Load the next item from the treeview
                         parentItem = parentItem.ItemContainerGenerator.ContainerFromItem(node) as TreeViewItem;
                     }
 
 
-                    if (parentItem != null)
-                    {
+                    if(parentItem != null) {
                         parentItem.IsExpanded = true;
                         ServicesTreeView.UpdateLayout();
                     }
@@ -77,37 +64,29 @@ namespace Rhit.Applications.Views.Views
 
                 TreeViewItem targetItem;
 
-                if (parentItem == null)
-                {
+                if(parentItem == null) {
                     targetItem = ServicesTreeView.ItemContainerGenerator.ContainerFromItem(targetNode) as TreeViewItem;
-                }
-
-                else
-                {
+                } else {
                     targetItem = parentItem.ItemContainerGenerator.ContainerFromItem(targetNode) as TreeViewItem;
                 }
 
-                if (targetItem != null)
-                {
+                if(targetItem != null) {
                     targetItem.IsSelected = true;
                     targetItem.IsExpanded = true;
                 }
             }
         }
 
-        private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
-        {
+        private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e) {
             ServicesTreeView = sender as TreeView;
             ViewModel.SelectServiceNode(ServicesTreeView.SelectedItem);
         }
 
-        // Executes when the user navigates to this page.
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            if (!LoginController.Instance.IsLoggedIn)
-            {
+        protected override void OnNavigatedTo(NavigationEventArgs e) {
+            if(!LoginController.Instance.IsLoggedIn) {
                 NavigationService.Navigate(new Uri("/LoginPage", UriKind.Relative));
             }
         }
+
     }
 }

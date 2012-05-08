@@ -56,9 +56,9 @@ namespace Rhit.Applications.ViewModels {
             List<string> changes = newLocation.CheckChanges();
             if(changes.Contains("Center")) changes.Remove("Center");
 
-            IList<ILink> links = null;
+            IEnumerable<ILink> links = null;
             if(changes.Contains("Links") && false) {
-                links = (IList<ILink>) newLocation.Links;
+                links = (IEnumerable<ILink>) newLocation.Links;
                 changes.Remove("Links");
             }
 

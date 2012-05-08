@@ -1,35 +1,34 @@
-﻿using System.Windows.Controls;
+﻿using System;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Navigation;
 using Rhit.Applications.ViewModels;
-using System;
 
 namespace Rhit.Applications.Views {
     public partial class LoginPage : Page {
         public LoginPage() {
             InitializeComponent();
 
+            Loaded += new System.Windows.RoutedEventHandler(LoginPage_Loaded);
+
             ViewModel = new LoginViewModel();
-            ViewModel.Authenticated += new System.EventHandler(User_Authenticated);
             DataContext = ViewModel;
-            UserNameBox.Focus();
-        }
-
-        void User_Authenticated(object sender, EventArgs e) {
-            
-            //NavigationService.Navigate(new Uri("/Views/MainPage.xaml", UriKind.Relative));
-
-            (App.Current.RootVisual as MainPage).LinksBorder.Visibility = System.Windows.Visibility.Visible;
-            NavigationService.Navigate(new Uri("/HomePage", UriKind.Relative));
+            ViewModel.Authenticated += new System.EventHandler(User_Authenticated);
         }
 
         private LoginViewModel ViewModel { get; set; }
 
+        private void LoginPage_Loaded(object sender, System.Windows.RoutedEventArgs e) {
+            UserNameBox.Focus();
+        }
+
+        private void User_Authenticated(object sender, EventArgs e) {
+            (App.Current.RootVisual as MainPage).LinksBorder.Visibility = System.Windows.Visibility.Visible;
+            NavigationService.Navigate(new Uri("/HomePage", UriKind.Relative));
+        }
+
         private void TextBox_KeyUp(object sender, KeyEventArgs e) {
             if (e.Key == Key.Enter) ViewModel.Login();
         }
-
-        // Executes when the user navigates to this page.
-        protected override void OnNavigatedTo(NavigationEventArgs e) { }
     }
 }

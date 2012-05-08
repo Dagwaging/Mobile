@@ -10,9 +10,13 @@ namespace Rhit.Applications.Models.Events {
         }
         
         public IEnumerable<Direction_DC> Directions { get; set; }
+
         public IEnumerable<DirectionMessage_DC> Messages { get; set; }
+
         public IEnumerable<Node_DC> Nodes { get; set; }
+
         public IEnumerable<Partition_DC> Partitions { get; set; }
+
         public IEnumerable<Path_DC> Paths { get; set; }
     }
 }

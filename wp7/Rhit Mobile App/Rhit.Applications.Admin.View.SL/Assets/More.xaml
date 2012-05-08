@@ -1,0 +1,55 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:toolkit="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit">
+
+
+
+
+    <DataTemplate x:Key="LabelTemplate">
+        <TextBlock Margin="5,0" FontWeight="Bold" Foreground="White" Text="{Binding Label}" />
+    </DataTemplate>
+
+    <Style x:Key="MapNavigationBarStyle" TargetType="ListBox">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="ItemTemplate" Value="{StaticResource LabelTemplate}" />
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+
+    <Style x:Key="ExpanderStyle" TargetType="toolkit:Expander">
+        <Setter Property="BorderBrush" Value="Black" />
+        <Setter Property="BorderThickness" Value="3" />
+        <Setter Property="ExpandDirection" Value="Left" />
+        <Setter Property="MinHeight" Value="100" />
+        <Setter Property="VerticalAlignment" Value="Top" />
+        <Setter Property="Background">
+            <Setter.Value>
+                <SolidColorBrush Opacity="0.8" Color="Gray" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ExpanderHeaderStyle" TargetType="TextBlock">
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Top" />
+        <Setter Property="RenderTransformOrigin" Value="0.5,0.5" />
+        <Setter Property="Margin" Value="-7,20,-7,0" />
+        <Setter Property="RenderTransform">
+            <Setter.Value>
+                <RotateTransform Angle="90" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+</ResourceDictionary>

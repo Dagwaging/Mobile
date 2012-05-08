@@ -18,12 +18,9 @@
     xmlns:exts="clr-namespace:Rhit.Applications.Extentions.Controls;assembly=Rhit.Applications.Extentions.SL"
     xmlns:util="clr-namespace:Rhit.Applications.Views.Utilities"
     xmlns:vm="clr-namespace:Rhit.Applications.ViewModels;assembly=Rhit.Applications.ViewModels.SL"
-    Title="MapPage" d:DesignHeight="480" d:DesignWidth="640" Style="{StaticResource PageStyle}" mc:Ignorable="d">
+    Title="MapPage" d:DesignHeight="480" d:DesignWidth="640" mc:Ignorable="d">
 
     <navigation:Page.Resources>
-        <converter:ObjectToBoolConverter x:Key="ObjectBoolConverter" />
-        <converter:ObjectToBoolConverter x:Key="RObjectBoolConverter" Reverse="True" />
-
         <util:CalibrationHandler x:Name="Calibrator" />
         <util:LocationsProvider x:Name="ViewLocations" />
         <util:LocalImageLoader x:Name="ImageLoader" />

@@ -1,12 +1,12 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:maps="clr-namespace:Microsoft.Maps.MapControl;assembly=Microsoft.Maps.MapControl"
+    xmlns:map="clr-namespace:Microsoft.Maps.MapControl;assembly=Microsoft.Maps.MapControl"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <ControlTemplate x:Key="CutomPushpinTemplate" TargetType="maps:Pushpin">
+    <ControlTemplate x:Key="CutomPushpinTemplate" TargetType="map:Pushpin">
         <Grid x:Name="ContentGrid" HorizontalAlignment="Center" VerticalAlignment="Center">
             <StackPanel>
                 <Grid MinWidth="35" MinHeight="30" Margin="0">
@@ -18,7 +18,7 @@
         </Grid>
     </ControlTemplate>
     
-    <Style x:Key="CustomPushpinStyle" TargetType="maps:Pushpin">
+    <Style x:Key="CustomPushpinStyle" TargetType="map:Pushpin">
         <Setter Property="Template" Value="{StaticResource CutomPushpinTemplate}" />
         <Setter Property="Height" Value="Auto" />
         <Setter Property="Width" Value="Auto" />
@@ -34,6 +34,10 @@
         <Setter Property="Foreground" Value="White" />
         <Setter Property="Opacity" Value="1.0" />
     </Style>
+
+    <DataTemplate x:Name="CornerPushpinTemplate">
+        <map:Pushpin Location="{Binding}" />
+    </DataTemplate>
 
 </ResourceDictionary>
     
