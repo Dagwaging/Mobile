@@ -20,6 +20,10 @@ namespace Rhit.Applications.Extentions.Maps.Sources {
         }
 
         public bool Equals(BaseTileSource other) {
+            if(this is GoogleSource && !(other is GoogleSource)) return false;
+            if(other is GoogleSource && !(this is GoogleSource)) return false;
+            if(this is BingSource && !(other is BingSource)) return false;
+            if(other is BingSource && !(this is BingSource)) return false;
             return other != null && other.Label.Equals(Label);
         }
 
