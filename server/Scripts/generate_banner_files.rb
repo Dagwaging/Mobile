@@ -40,6 +40,18 @@ def chance_one_in x
     return rand(x) < 1
 end
 
+def rand_str len
+    if chance_one_in 4
+        return (0...len).map{65.+(rand(25)).chr}.join
+    elsif chance_one_in 3
+        return 'TBA'
+    elsif chance_one_in 2
+        return 'TBA/TBA/TBA'
+    else
+        return '&nbsp'
+    end
+end
+
 class Person
     attr_accessor :fname, :lname, :mname, :username,
         :phone_number, :mailbox, :banner_id, :location
@@ -92,9 +104,11 @@ class Student < Person
         majors = ['AB', 'BE', 'CE', 'CHE', 'CHEM', 'CPE',
             'CS', 'EE', 'EMGT', 'EP', 'MA', 'ME', 'OE', 'PH', 'SE']
 
-        if rand(6) < 1
+        if chance_one_in 6
             majors.shuffle!
             @major = "#{majors[0]}/#{majors[1]}"
+        elsif chance_one_in 10
+            @major = rand_str 4
         else
             @major = majors.sample
         end
@@ -102,6 +116,18 @@ class Student < Person
         @year = ['Y1', 'Y2', 'Y3', 'Y4', 'Y5'].sample
         @class_year = ['FR', 'SO', 'JR', 'SR', 'GR'].sample
         @advisor = $all_faculty.sample
+
+        if chance_one_in 50
+            # TODO: Make fake advisor
+        end
+
+        if chance_one_in 100
+            @year = rand_str 3
+        end
+
+        if chance_one_in 100
+            @class_year = rand_str 5
+        end
 
         if chance_one_in 10
             @location = Faker::Address.street_address
@@ -117,6 +143,10 @@ class Student < Person
     end
 
     def gen_username
+        if chance_one_in 50
+            return rand_str 10
+        end
+
         return "#{@lname[0..5].gsub(/[^A-Za-z]/i, '').upcase}" +
                "#{@fname[0..0].gsub(/[^A-Za-z]/i, '').upcase}" + 
                "#{@mname[0..0].gsub(/[^A-Za-z]/i, '').upcase}"
@@ -144,11 +174,11 @@ class Student < Person
 
     def to_ssf_csv
         courses = @courses.map { |course| course.to_ssf_value }
-        return "xxxxxx|#{@banner_id}#{'|' + courses.join('|') if not courses.empty?}"
+        return "#{@banner_id}#{'|' + courses.join('|') if not courses.empty?}"
     end
 
     def to_csv
-        return "xxxxx|#{@banner_id}|#{@username}|" +
+        return "#{@banner_id}|#{@username}|" +
                "#{self.email_address}|#{@mailbox}|#{@major}|" + 
                "#{@class_year}|#{year}|#{@advisor.username}|" + 
                "#{@lname}|#{@fname}|#{@mname}|" +
@@ -172,9 +202,17 @@ class Faculty < Person
             'Mathematics', 'Mechanical Engineering',
             'Physics & Optical Engineering'].sample
 
+        if chance_one_in 100
+            @department = rand_str 20
+        end
+
         halls = ['Moench Hall A', 'Moench Hall B', 'Moench Hall C', 
             'Moench Hall D', 'Moench Hall F', 'Crapo Hall G', 'Olin Hall O', 'HMU ']
         @location = "#{halls.sample}#{rand(200) + 100}"
+
+        if chance_one_in 50
+            @location = rand_str 14
+        end
 
         $all_people << self
         $all_faculty << self
@@ -185,7 +223,7 @@ class Faculty < Person
     end
 
     def to_csv
-        return "xxxxx|#{@banner_id}|#{@username}|" +
+        return "#{@banner_id}|#{@username}|" +
                "#{self.email_address}|#{@mailbox}|&nbsp|" +
                "&nbsp|&nbsp|&nbsp|" +
                "#{@lname}|#{@fname}|#{@mname}|" +
@@ -211,6 +249,10 @@ class Course
             @location = "#{self.rand_days}/#{self.rand_hour}/#{self.rand_room}:#{self.rand_day}/#{self.rand_hour}/#{self.rand_room}"
         elsif chance_one_in 20
             @location = 'TBA/TBA/TBA'
+        elsif chance_one_in 10
+            @location = 'TBA'
+        elsif chance_one_in 10
+            @location = rand_str 20
         else
             @location = "#{self.rand_days}/#{self.rand_hour}/#{self.rand_room}"
         end
@@ -306,6 +348,10 @@ class Course
             start = rand(9) + 1
             finish = start + rand(10 - start) + 1
             return "#{start}-#{finish}"
+        elsif chance_one_in 5
+            start = rand(2300) + 1
+            finish = start + rand(2300 - start) + 1
+            return "#{start}-#{finish}"
         else
             return rand(10) + 1
         end
@@ -350,7 +396,7 @@ Dir::mkdir dir
 
 ['201110', '201120', '201130', '201210', '201220', '201230'].each do |term|
     # Replace faculty members
-    $all_faculty.drop rand(20)
+    $all_faculty = $all_faculty.drop rand(20)
     scales[:replace_faculty].times { Faculty.new }
 
     # Create all new courses
@@ -360,7 +406,7 @@ Dir::mkdir dir
     scales[:courses].times { Course.new }
 
     # Replace students
-    $all_students.drop rand(500)
+    $all_students = $all_students.drop rand(500)
     scales[:replace_students].times { Student.new }
 
     # Check for missing advisor and register for courses
@@ -369,9 +415,13 @@ Dir::mkdir dir
         student.pick_courses
     end
 
+    # Refresh aggregate user list
+    $all_people = $all_students + $all_faculty
+
     # Write .usr file
     $all_people.shuffle!
     File.open File.join(dir, "#{term}.usr"), 'w' do |user_file|
+        user_file.puts term
         $all_people.each do |person|
             user_file.puts person.to_csv
         end
@@ -380,6 +430,7 @@ Dir::mkdir dir
     # Write .cls file
     $all_courses.shuffle!
     File.open File.join(dir, "#{term}.cls"), 'w' do |cls_file|
+        cls_file.puts term
         $all_courses.each do |course|
             cls_file.puts course.to_csv
         end
@@ -387,6 +438,7 @@ Dir::mkdir dir
 
     # Write .ssf file
     File.open File.join(dir, "#{term}.ssf"), 'w' do |ssf_file|
+        ssf_file.puts term
         $all_students.each do |student|
             ssf_file.puts student.to_ssf_csv
         end
