@@ -1,7 +1,13 @@
 package edu.rosehulman.android.directory;
 
-import edu.rosehulman.android.directory.model.TermCode;
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.SharedPreferences;
+import edu.rosehulman.android.directory.auth.AccountAuthenticator;
+import edu.rosehulman.android.directory.model.TermCode;
 
 /**
  * Utility methods to manager the user's login state
@@ -9,19 +15,9 @@ import android.content.SharedPreferences;
 public class User {
 	
 	private static final String PREF_USERNAME = "Username";
-	private static final String PREF_COOKIE = "AuthCookie";
 	private static final String PREF_TERM_CODE = "TermCode";
-	private static final String PREF_TERM_NAME = "TermName";
-	
-	/**
-	 * Retrieve the user's authentication token
-	 * 
-	 * @return The authentication token that can be used in web requests
-	 */
-	public static String getCookie() {
-		return getPrefs().getString(PREF_COOKIE, null);
-	}
-	
+	private static final String PREF_TERM_CODES = "TermCodes";
+
 	/**
 	 * Retrieve the user's username
 	 * 
@@ -31,25 +27,60 @@ public class User {
 		return getPrefs().getString(PREF_USERNAME, null);
 	}
 	
+	public static Account getAccount(AccountManager manager) {
+		String username = getUsername();
+		return findAccount(manager, username);
+	}
+	
+	public static Account findAccount(AccountManager manager, String username) {
+		Account[] accounts = manager.getAccountsByType(AccountAuthenticator.ACCOUNT_TYPE);
+		
+		for (Account account : accounts) {
+			if (account.name.equals(username))
+				return account;
+		}
+		return null;
+	}
+	
 	/**
 	 * Determine if the user has logged in
 	 * 
 	 * @return True if we have an authentication token
 	 */
-	public static boolean isLoggedIn() {
-		return getCookie() != null;
+	public static boolean isLoggedIn(AccountManager manager) {
+		String username = getUsername();
+		
+		if (username == null)
+			return false;
+		
+		Account account = findAccount(manager, username);
+		
+		if (account == null) {
+			//account has been deleted
+			clearLogin();
+		}
+		
+		return account != null;
 	}
 
 	/**
 	 * Set the user's authentication token
 	 * 
 	 * @param username The user's name
+	 * @param terms The available terms
+	 * @param term The current term
 	 * @param token The authentication token that can be used in web requests
 	 */
-	public static void setCookie(String username, String token) {
+	public static void setAccount(String username, String[] terms, String term) {
+		JSONArray array = new JSONArray();
+		for (String t : terms) {
+			array.put(t);
+		}
+
 		getPrefs().edit()
 		.putString(PREF_USERNAME, username)
-		.putString(PREF_COOKIE, token)
+		.putString(PREF_TERM_CODES, array.toString())
+		.putString(PREF_TERM_CODE, term)
 		.commit();
 	}
 
@@ -57,7 +88,11 @@ public class User {
 	 * Clears the user's authentication token
 	 */
 	public static void clearLogin() {
-		getPrefs().edit().remove(PREF_USERNAME).remove(PREF_COOKIE).commit();
+		getPrefs().edit()
+		.remove(PREF_USERNAME)
+		.remove(PREF_TERM_CODE)
+		.remove(PREF_TERM_CODES)
+		.commit();
 	}
 
 	/**
@@ -67,13 +102,33 @@ public class User {
 	 */
 	public static TermCode getTerm() {
 		String code = getPrefs().getString(PREF_TERM_CODE, null);
-		String name = getPrefs().getString(PREF_TERM_NAME, null);
 		
-		if (code == null || name == null) {
-			return TermCodes.generateTerms()[0];
-		}
+		if (code == null)
+			return null;
 		
-		return new TermCode(code, name);
+		return new TermCode(code);
+	}
+	
+	/**
+	 * Gets the available TermCodes
+	 * 
+	 * @return The available TermCodes, or null if none are available
+	 */
+	public static TermCode[] getTerms() {
+		String termCodes = getPrefs().getString(PREF_TERM_CODES, null);
+		if (termCodes == null)
+			return null;
+		
+		try {
+			JSONArray array = new JSONArray(termCodes);
+			TermCode[] res = new TermCode[array.length()];
+			for (int i = 0; i < res.length; i++)
+				res[i] = new TermCode(array.getString(i));
+			return res;
+			
+		} catch (JSONException e) {
+			return null;
+		} 
 	}
 	
 	/**
@@ -87,7 +142,6 @@ public class User {
 		
 		getPrefs().edit()
 		.putString(PREF_TERM_CODE, term.code)
-		.putString(PREF_TERM_NAME, term.name)
 		.commit();
 	}
 	

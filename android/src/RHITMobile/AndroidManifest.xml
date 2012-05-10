@@ -4,13 +4,21 @@
     android:versionCode="0"
     android:versionName="0.1" >
 
-    <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="14" />
+    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="14" />
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.WRITE_CONTACTS" />
+    
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+    
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS" />
 
     <application
         android:icon="@drawable/icon"
@@ -44,11 +52,22 @@
         
         <activity
             android:label="RHIT Mobile Login"
-            android:name=".LoginActivity"  
+            android:name=".auth.LoginActivity"  
             android:exported="true" 
             android:configChanges="keyboardHidden|orientation" 
             android:windowSoftInputMode="stateUnchanged" 
+            android:excludeFromRecents="true"
             android:theme="@style/Theme.Sherlock" >
+        </activity>
+        
+        <activity
+            android:name=".ChooseTypeAndAccountActivity" 
+            android:theme="@style/Theme.Sherlock">
+        </activity>
+        
+        <activity
+            android:name=".ChooseAccountTypeActivity" 
+            android:theme="@style/Theme.Sherlock">
         </activity>
         
         <activity
@@ -169,13 +188,13 @@
         <activity
             android:label="Schedule"
             android:name=".SchedulePersonActivity" 
-            android:theme="@style/Theme.Sherlock.Light.DarkActionBar" >
+            android:theme="@style/Theme.Sherlock.Light" >
         </activity>
         
         <activity
             android:label="Room Schedule"
             android:name=".ScheduleRoomActivity" 
-            android:theme="@style/Theme.Sherlock.Light.DarkActionBar">
+            android:theme="@style/Theme.Sherlock.Light">
         </activity>
         
         <activity
@@ -240,8 +259,19 @@
             android:name=".providers.TourTagsSearchSuggestions" 
             android:authorities="edu.rosehulman.android.directory.providers.TourTagsSearchSuggestions"/>
         
-		<service android:enabled="true" android:name=".DataUpdateService" />        
-        
-    </application>
+		<service android:enabled="true" android:name=".DataUpdateService" />
+
+		<service android:name=".auth.AuthenticationService" android:permission="android.permission.ACCOUNT_MANAGER">
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator" >
+                </action>
+            </intent-filter>
+
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/authenticator" >
+            </meta-data>
+        </service>
+</application>
 
 </manifest>

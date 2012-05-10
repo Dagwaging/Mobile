@@ -2,27 +2,40 @@ package edu.rosehulman.android.directory;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.os.Handler;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.app.LoaderManager.LoaderCallbacks;
+import android.support.v4.content.Loader;
+import android.util.Log;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.Tab;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.Window;
 
-import edu.rosehulman.android.directory.model.PersonScheduleDay;
-import edu.rosehulman.android.directory.model.PersonScheduleItem;
+import edu.rosehulman.android.directory.loaders.AsyncLoaderException;
+import edu.rosehulman.android.directory.loaders.AsyncLoaderResult;
+import edu.rosehulman.android.directory.loaders.InvalidAuthTokenException;
+import edu.rosehulman.android.directory.loaders.LoadUserSchedule;
 import edu.rosehulman.android.directory.model.PersonScheduleWeek;
+import edu.rosehulman.android.directory.model.ScheduleDay;
 import edu.rosehulman.android.directory.model.TermCode;
 
-public class SchedulePersonActivity extends FragmentActivity implements TermCodeProvider.OnTermSetListener {
+public class SchedulePersonActivity extends SherlockFragmentActivity implements TermCodeProvider.OnTermSetListener, AuthenticatedFragment.AuthenticationCallbacks {
 	
 	public static final String EXTRA_PERSON = "Person";
 	public static final String EXTRA_TERM_CODE = "TermCode";
+
+	private static final String STATE_SELECTED = "Selected";
 	
 	public static Intent createIntent(Context context, String person) {
 		Intent intent = new Intent(context, SchedulePersonActivity.class);
@@ -38,14 +51,16 @@ public class SchedulePersonActivity extends FragmentActivity implements TermCode
 		return intent;
 	}
 	
+	private static final int TASK_LOAD_SCHEDULE = 1;
+	
 	private String person;
 	private TermCode term;
-	
-	private TaskManager taskManager = new TaskManager();
 	
 	private PersonScheduleWeek schedule;
 	
 	private Bundle savedInstanceState;
+	
+	private AuthenticatedFragment fragAuth;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -58,11 +73,20 @@ public class SchedulePersonActivity extends FragmentActivity implements TermCode
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         
-		getSupportFragmentManager().beginTransaction().add(new AuthenticatedFragment(), "auth").commit();
-		
+        FragmentManager fragments = getSupportFragmentManager();
+        fragAuth = (AuthenticatedFragment)fragments.findFragmentByTag("auth");
+        if (fragAuth == null) {
+        	fragAuth = new AuthenticatedFragment();
+			getSupportFragmentManager().beginTransaction().add(fragAuth, "auth").commit();
+        }
 		this.savedInstanceState = savedInstanceState;
         
 		handleIntent(getIntent());
+		
+		LoaderManager loaders = getSupportLoaderManager();
+		if (LoadUserSchedule.getInstance(loaders, TASK_LOAD_SCHEDULE) != null) {
+			loaders.initLoader(TASK_LOAD_SCHEDULE, null, mLoadScheduleCallbacks);
+		}
 	}
 	
 	@Override
@@ -71,6 +95,8 @@ public class SchedulePersonActivity extends FragmentActivity implements TermCode
 		setIntent(newIntent);
 		this.savedInstanceState = null;
 		handleIntent(newIntent);
+		setSupportProgressBarIndeterminateVisibility(true);
+		fragAuth.obtainAuthToken();
 	}
 	
 	private void handleIntent(Intent intent) {
@@ -88,36 +114,22 @@ public class SchedulePersonActivity extends FragmentActivity implements TermCode
 		
 		ActionBar actionBar = getSupportActionBar();
 		actionBar.removeAllTabs();
-		
+
 		((FrameLayout)findViewById(R.id.fragment_content)).removeAllViews();
-		
-		if (savedInstanceState != null &&
-				savedInstanceState.containsKey("Schedule")) {
-			processSchedule((PersonScheduleWeek)savedInstanceState.getParcelable("Schedule"));
-			getSupportActionBar().setSelectedNavigationItem(savedInstanceState.getInt("Selected"));
-			setSupportProgressBarIndeterminateVisibility(false);
-		} else {
-			LoadSchedule task = new LoadSchedule();
-			taskManager.addTask(task);
-			task.execute();
-		}
 	}
-	
+
 	@Override
 	public void onSaveInstanceState(Bundle state) {
 		super.onSaveInstanceState(state);
-		
-		if (schedule != null) {
-			state.putParcelable("Schedule", schedule);
-		}
-		
-		state.putInt("Selected", getSupportActionBar().getSelectedNavigationIndex());
+
+		state.putInt(STATE_SELECTED, getSupportActionBar().getSelectedNavigationIndex());
 	}
 	
 	@Override
-	protected void onPause() {
-		super.onPause();
-		taskManager.abortTasks();
+	protected void onResume() {
+		super.onResume();
+		
+		fragAuth.obtainAuthToken();
 	}
     
 	@Override
@@ -152,9 +164,9 @@ public class SchedulePersonActivity extends FragmentActivity implements TermCode
 		startActivity(intent);
 	}
 	
-	private void createTab(String tag, String label) {
+	private void createTab(ScheduleDay day, String tag, String label) {
 		ActionBar actionBar = getSupportActionBar();
-		Bundle args = SchedulePersonFragment.buildArguments(tag, schedule.getDay(tag));
+		Bundle args = SchedulePersonFragment.buildArguments(term, tag, schedule.getDay(day));
 		TabListener<SchedulePersonFragment> l = new TabListener<SchedulePersonFragment>(this, tag, SchedulePersonFragment.class, args);
 		Tab tab = actionBar.newTab()
 				.setText(label)
@@ -164,84 +176,112 @@ public class SchedulePersonActivity extends FragmentActivity implements TermCode
 	}
 	
 	private void processSchedule(PersonScheduleWeek res) {
-		schedule = res;
-		for (String day : res.tags) {
-			createTab(day, day);
+		//cleanup old schedule
+		ActionBar actionBar = getSupportActionBar();
+		actionBar.removeAllTabs();
+		String[] tags = getResources().getStringArray(R.array.schedule_days);
+		if (schedule != null) {
+			FragmentManager fragments = getSupportFragmentManager();
+			FragmentTransaction ft = fragments.beginTransaction();
+			for (ScheduleDay day : ScheduleDay.values()) {
+				if (schedule.hasDay(day)) {
+					String tag = tags[day.ordinal()];
+					Fragment frag = fragments.findFragmentByTag(tag);
+					if (frag != null) {
+						ft.remove(frag);
+					}
+				}
+			}
+			ft.commit();
+			fragments.executePendingTransactions();
 		}
-		getSupportActionBar().setSubtitle(person);
+		
+		//populate new schedule, if there is one
+		schedule = res;
+		if (schedule == null) {
+			actionBar.setSubtitle(null);
+			return;
+		}
+		
+		for (ScheduleDay day : ScheduleDay.values()) {
+			if (schedule.hasDay(day)) {
+				String tag = tags[day.ordinal()];
+				createTab(day, tag, tag);
+			}
+		}
+		actionBar.setSubtitle(person);
+		
+		if (savedInstanceState != null) {
+			int index = savedInstanceState.getInt(STATE_SELECTED);
+			if (index >= 0 && index < actionBar.getTabCount()) {
+				actionBar.setSelectedNavigationItem(index);
+			}
+		}
 	}
 	
-	private class LoadSchedule extends AsyncTask<Void, Void, PersonScheduleWeek> {
-		
-		@Override
-		protected void onPreExecute() {
-			setSupportProgressBarIndeterminateVisibility(true);
-		}
-
-		@Override
-		protected PersonScheduleWeek doInBackground(Void... params) {
-			
-			if ("201210".equals(term.code)) {
-				PersonScheduleItem csse432 = 
-						new PersonScheduleItem("CSSE432", "Computer Networks", 1, 5, 5, "O205");
-				PersonScheduleItem csse404 = 
-						new PersonScheduleItem("CSSE404", "Compiler Construction", 1, 7, 7, "O267");
-
-				return new PersonScheduleWeek(
-						new String[] {"Mon", "Thu", "Fri"}, 
-						new PersonScheduleDay[] {
-								new PersonScheduleDay(new PersonScheduleItem[] {
-										csse432, csse404
-								}),
-								new PersonScheduleDay(new PersonScheduleItem[] {
-										csse432, csse404
-								}),
-								new PersonScheduleDay(new PersonScheduleItem[] {
-										csse432
-								})
-						});
-			}
-			
-			PersonScheduleItem csse432 = 
-					new PersonScheduleItem("CSSE432", "Computer Networks", 1, 5, 5, "O205");
-			PersonScheduleItem csse404 = 
-					new PersonScheduleItem("CSSE404", "Compiler Construction", 1, 7, 7, "O267");
-			PersonScheduleItem csse304 = 
-					new PersonScheduleItem("CSSE304", "Programming Language Concepts", 1, 8, 8, "O257");
-			
-			
-			PersonScheduleItem csse404Wed = 
-					new PersonScheduleItem("CSSE404", "Compiler Construction", 1, 6, 6, "O267");
-			PersonScheduleItem csse499Wed = 
-					new PersonScheduleItem("CSSE499", "Senior Project III", 1, 7, 9, "O201");
-
-			return new PersonScheduleWeek(
-					new String[] {"Mon", "Tue", "Wed", "Thu", "Fri"}, 
-					new PersonScheduleDay[] {
-							new PersonScheduleDay(new PersonScheduleItem[] {
-									csse432, csse404, csse304
-							}),
-							new PersonScheduleDay(new PersonScheduleItem[] {
-									csse432, csse404, csse304
-							}),
-							new PersonScheduleDay(new PersonScheduleItem[] {
-									csse404Wed, csse499Wed
-							}),
-							new PersonScheduleDay(new PersonScheduleItem[] {
-									csse432, csse404, csse304
-							}),
-							new PersonScheduleDay(new PersonScheduleItem[] {
-									csse432, csse304
-							})
-					});
-			
-		}
-		
-		@Override
-		protected void onPostExecute(PersonScheduleWeek res) {
-			setSupportProgressBarIndeterminateVisibility(false);
-			processSchedule(res);
-		}
-		
+	@Override
+	public void onAuthTokenObtained(String authToken) {
+		loadSchedule(authToken);
 	}
+
+	@Override
+	public void onAuthTokenCancelled() {
+		Toast.makeText(this, getString(R.string.authentication_error), Toast.LENGTH_SHORT).show();
+		finish();
+	}
+	
+	private Bundle mArgs;
+	private void loadSchedule(String authToken) {
+		Bundle args = LoadUserSchedule.bundleArgs(authToken, term.code, person);
+		
+		if (mArgs != null) {
+			getSupportLoaderManager().restartLoader(TASK_LOAD_SCHEDULE, args, mLoadScheduleCallbacks);
+		} else {
+			getSupportLoaderManager().initLoader(TASK_LOAD_SCHEDULE, args, mLoadScheduleCallbacks);
+		}
+		
+		mArgs = args;
+	}
+	
+	private LoaderCallbacks<AsyncLoaderResult<PersonScheduleWeek>> mLoadScheduleCallbacks = new LoaderCallbacks<AsyncLoaderResult<PersonScheduleWeek>>() {
+
+		private Handler mHandler = new Handler();
+		
+		@Override
+		public Loader<AsyncLoaderResult<PersonScheduleWeek>> onCreateLoader(int id, Bundle args) {
+			return new LoadUserSchedule(SchedulePersonActivity.this, args);
+		}
+
+		@Override
+		public void onLoadFinished(Loader<AsyncLoaderResult<PersonScheduleWeek>> loader, AsyncLoaderResult<PersonScheduleWeek> data) {
+			Log.d(C.TAG, "Finished LoadUserSchedule");
+			
+			try {
+				final PersonScheduleWeek result = data.getResult();
+				mHandler.post(new Runnable() {
+					@Override
+					public void run() {
+						setSupportProgressBarIndeterminateVisibility(false);
+						processSchedule(result);	
+					}
+				});
+				
+			} catch (InvalidAuthTokenException ex) {
+				LoadUserSchedule scheduleLoader = (LoadUserSchedule)loader;
+				fragAuth.invalidateAuthToken(scheduleLoader.getAuthToken());
+				fragAuth.obtainAuthToken();
+				
+			} catch (AsyncLoaderException ex) {
+				String message = ex.getMessage();
+				if (message != null) {
+					Toast.makeText(SchedulePersonActivity.this, message, Toast.LENGTH_SHORT).show();
+				}
+				finish();
+			}	
+		}
+
+		@Override
+		public void onLoaderReset(Loader<AsyncLoaderResult<PersonScheduleWeek>> loader) {
+		}
+	};
 }

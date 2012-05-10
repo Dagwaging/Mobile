@@ -1,8 +1,15 @@
 package edu.rosehulman.android.directory;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.accounts.AccountManagerCallback;
+import android.accounts.AccountManagerFuture;
+import android.accounts.AuthenticatorException;
+import android.accounts.OperationCanceledException;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -25,6 +32,7 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
 import edu.rosehulman.android.directory.ServiceManager.ServiceRunnable;
+import edu.rosehulman.android.directory.auth.AccountAuthenticator;
 
 public class StartupActivity extends SherlockActivity {
 	
@@ -43,6 +51,7 @@ public class StartupActivity extends SherlockActivity {
 	private GridView tasksView;
 	
 	private static final int REQUEST_STARTUP_CODE = 4;
+	private static final int REQUEST_LOGIN_CODE = 5;
 
 	private ServiceManager<IDataUpdateService> updateService;
 	private boolean updateData = true;
@@ -98,7 +107,7 @@ public class StartupActivity extends SherlockActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		
+
 		//populate the tasks
         updateUI();
 	}
@@ -131,29 +140,71 @@ public class StartupActivity extends SherlockActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    	if (requestCode != REQUEST_STARTUP_CODE)
-    		return;
-    	
-    	switch (resultCode) {
-    		case Activity.RESULT_CANCELED:
-    			//The user declined an update, exit
-    			finish();
-    			break;
-    		case Activity.RESULT_OK:
-    			//We were up to date, continue on happily
-    			updateService.run(new ServiceRunnable<IDataUpdateService>() {
-    				@Override
-    				public void run(IDataUpdateService service) {
-    					service.startUpdate();
-    				}
-    			});
-    			break;	
+    	if (requestCode == REQUEST_STARTUP_CODE) {
+			switch (resultCode) {
+				case Activity.RESULT_CANCELED:
+					//The user declined an update, exit
+					finish();
+					break;
+				case Activity.RESULT_OK:
+					//We were up to date, continue on happily
+					updateService.run(new ServiceRunnable<IDataUpdateService>() {
+						@Override
+						public void run(IDataUpdateService service) {
+							service.startUpdate();
+						}
+					});
+					break;	
+			}
+
+    	} else if (requestCode == REQUEST_LOGIN_CODE) {
+    		if (resultCode != RESULT_OK)
+    			return;
+    		
+			Bundle extras = data.getExtras();
+			String username = extras.getString(AccountManager.KEY_ACCOUNT_NAME);
+
+			validateLogin(username);
     	}
+    }
+    
+    private void validateLogin(final String username) {
+    	final AccountManager manager = AccountManager.get(this);
+		Account account = User.findAccount(manager, username);
+		
+    	manager.getAuthToken(account, AccountAuthenticator.TOKEN_TYPE, null, this, new AccountManagerCallback<Bundle>() {
+			@Override
+			public void run(AccountManagerFuture<Bundle> future) {
+				try {
+					Bundle res = future.getResult();
+
+					String token = res.getString(AccountManager.KEY_AUTHTOKEN);
+					//Date expTime = new Date(res.getLong(AccountAuthenticator.KEY_EXPIRATION_TIME));
+					
+					if (!res.containsKey(AccountAuthenticator.KEY_TERM_CODES) || !res.containsKey(AccountAuthenticator.KEY_TERM_CODE)) {
+						manager.invalidateAuthToken(AccountAuthenticator.ACCOUNT_TYPE, token);
+						validateLogin(username);
+						return;
+					}
+					
+					String[] terms = res.getStringArray(AccountAuthenticator.KEY_TERM_CODES);
+					String term = res.getString(AccountAuthenticator.KEY_TERM_CODE);
+					
+					User.setAccount(username, terms, term);
+					
+					updateUI();
+
+				} catch (OperationCanceledException e) {
+				} catch (AuthenticatorException e) {
+				} catch (IOException e) {
+				}
+
+			}}, null);
     }
     
     @Override
     public boolean onSearchRequested() {
-    	if (User.isLoggedIn()) {
+    	if (User.isLoggedIn(AccountManager.get(this))) {
     		super.onSearchRequested();
     		return true;
     	}
@@ -211,7 +262,7 @@ public class StartupActivity extends SherlockActivity {
 	private void updateUI() {
 		tasks = new ArrayList<Task>();
 		
-		boolean loggedIn = User.isLoggedIn();
+		boolean loggedIn = User.isLoggedIn(AccountManager.get(this));
 		
 		tasks.add(
 			new Task("Campus Map",
@@ -275,8 +326,8 @@ public class StartupActivity extends SherlockActivity {
 					new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					Intent intent = LoginActivity.createIntent(StartupActivity.this);
-					startActivity(intent);
+					Intent intent = ChooseTypeAndAccountActivity.createIntent(StartupActivity.this, new String[] {AccountAuthenticator.ACCOUNT_TYPE});
+					startActivityForResult(intent, REQUEST_LOGIN_CODE);
 				}
 			}));
 		}

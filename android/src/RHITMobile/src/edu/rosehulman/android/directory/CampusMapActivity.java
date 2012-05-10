@@ -18,12 +18,12 @@ import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
@@ -59,6 +59,7 @@ import edu.rosehulman.android.directory.model.LocationIdsResponse;
 import edu.rosehulman.android.directory.model.LocationNamesCollection;
 import edu.rosehulman.android.directory.model.VersionType;
 import edu.rosehulman.android.directory.service.MobileDirectoryService;
+import edu.rosehulman.android.directory.util.ArrayUtil;
 import edu.rosehulman.android.directory.util.BoundingBox;
 import edu.rosehulman.android.directory.util.Point;
 
@@ -151,11 +152,11 @@ public class CampusMapActivity extends SherlockMapActivity {
     private EventOverlay eventLayer;
     private MyLocationOverlay myLocation;
     
-    private Button btnZoomIn;
-    private Button btnZoomOut;
-    private Button btnPrev;
-    private Button btnNext;
-    private Button btnListDirections;
+    private View btnZoomIn;
+    private View btnZoomOut;
+    private View btnPrev;
+    private View btnNext;
+    private View btnListDirections;
     
     private TaskManager taskManager;
     
@@ -176,11 +177,11 @@ public class CampusMapActivity extends SherlockMapActivity {
         taskManager = new TaskManager();
         
         mapView = (MapView)findViewById(R.id.mapview);
-        btnZoomIn = (Button)findViewById(R.id.btnZoomIn);
-        btnZoomOut = (Button)findViewById(R.id.btnZoomOut);
-        btnPrev = (Button)findViewById(R.id.btnPrev);
-        btnNext = (Button)findViewById(R.id.btnNext);
-        btnListDirections = (Button)findViewById(R.id.btnListDirections);
+        btnZoomIn = findViewById(R.id.btnZoomIn);
+        btnZoomOut = findViewById(R.id.btnZoomOut);
+        btnPrev = findViewById(R.id.btnPrev);
+        btnNext = findViewById(R.id.btnNext);
+        btnListDirections = findViewById(R.id.btnListDirections);
         
         overlayManager = new OverlayManager();
         myLocation = new MyLocationOverlay(this, mapView);
@@ -213,7 +214,8 @@ public class CampusMapActivity extends SherlockMapActivity {
         			savedInstanceState.containsKey(STATE_DIRECTIONS) &&
         			savedInstanceState.containsKey(STATE_LOCATIONS)) {
 				Directions directions = savedInstanceState.getParcelable(STATE_DIRECTIONS);
-				Location[] locations = (Location[])savedInstanceState.getParcelableArray(STATE_LOCATIONS);
+				Parcelable[] pLocations = savedInstanceState.getParcelableArray(STATE_LOCATIONS);
+				Location[] locations = ArrayUtil.cast(pLocations, new Location[pLocations.length]);
 				
 				generateDirectionsLayer(directions, locations);
 				if (savedInstanceState.containsKey(STATE_SELECTED_STEP)) {
@@ -241,7 +243,8 @@ public class CampusMapActivity extends SherlockMapActivity {
         			startId >= 0) {
 				//restore on-campus tour
 				Directions directions = savedInstanceState.getParcelable(STATE_DIRECTIONS);
-				Location[] locations = (Location[])savedInstanceState.getParcelableArray(STATE_LOCATIONS);
+				Parcelable[] pLocations = savedInstanceState.getParcelableArray(STATE_LOCATIONS);
+				Location[] locations = ArrayUtil.cast(pLocations, new Location[pLocations.length]);
 				
 				generateDirectionsLayer(directions, locations);
 				if (savedInstanceState.containsKey(STATE_SELECTED_STEP)) {
@@ -251,7 +254,8 @@ public class CampusMapActivity extends SherlockMapActivity {
         			savedInstanceState.containsKey(STATE_LOCATIONS) &&
         			startId == -1) {
 				//restore off-campus tour
-				Location[] locations = (Location[])savedInstanceState.getParcelableArray(STATE_LOCATIONS);
+				Parcelable[] pLocations = savedInstanceState.getParcelableArray(STATE_LOCATIONS);
+				Location[] locations = ArrayUtil.cast(pLocations, new Location[pLocations.length]); 
 				
 				generateOffsiteTourLayer(locations);
 				if (savedInstanceState.containsKey(STATE_SELECTED_STEP)) {
@@ -413,8 +417,12 @@ public class CampusMapActivity extends SherlockMapActivity {
 			}
 		};
         
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+		if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+			locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+		}
+		if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+		}
         
         //enable the location overlay
         myLocation.enableCompass();
