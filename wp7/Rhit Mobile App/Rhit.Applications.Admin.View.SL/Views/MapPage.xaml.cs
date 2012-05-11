@@ -1,11 +1,14 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
+using Rhit.Applications.Extentions.Maps;
+using Rhit.Applications.ViewModels.Controllers;
 
 namespace Rhit.Applications.Views.Views {
     public partial class MapPage : Page {
         public MapPage() {
             InitializeComponent();
+            DataContext = new MapExtender();
         }
 
         // After the Frame navigates, ensure the HyperlinkButton representing the current page is selected
@@ -27,6 +30,18 @@ namespace Rhit.Applications.Views.Views {
             e.Handled = true;
             ChildWindow errorWin = new ErrorWindow(e.Uri);
             errorWin.Show();
+        }
+
+        private void Delete_Click(object sender, RoutedEventArgs e) {
+            MapController.Instance.DeleteCurrentOverlay();
+        }
+
+        private void Upload_Click(object sender, RoutedEventArgs e) {
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Filter = "Zip Files (*.zip)|*.zip";
+            if(dialog.ShowDialog() != true) return;
+
+            MapController.Instance.UploadOverlay(dialog.File);
         }
     }
 }

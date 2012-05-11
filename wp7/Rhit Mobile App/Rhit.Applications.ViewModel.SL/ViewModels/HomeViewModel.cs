@@ -4,12 +4,15 @@ using Rhit.Applications.Models.Events;
 using Rhit.Applications.Models.Services;
 using Rhit.Applications.Mvvm.Commands;
 using System.IO;
+using Rhit.Applications.ViewModels.Controllers;
 
 namespace Rhit.Applications.ViewModels {
     public class HomeViewModel : DependencyObject {
         public HomeViewModel() {
             IncreaseVersionCommand = new RelayCommand(p => IncreaseVersion());
             Version = DataCollector.Version;
+
+            MapController.Instance.UpdateOverlays(); //TODO: Probably doesn't belong here
 
             DataCollector.Instance.VersionUpdate += new VersionEventHandler(VersionUpdate);
         }

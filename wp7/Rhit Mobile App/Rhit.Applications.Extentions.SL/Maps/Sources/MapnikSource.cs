@@ -6,13 +6,13 @@ namespace Rhit.Applications.Extentions.Maps.Sources {
     /// The tile source comes from http://openstreet.org/.
     /// </summary>
     public class MapnikSource : BaseTileSource {
-        #region Private Fields
+
         /// <summary>
         /// Used to define which region the tile is in.
         /// Mapnik splits tile locations into thirds by latitudes.
         /// </summary>
         private readonly static string[] TilePathPrefixes = new[] { "a", "b", "c" };
-        #endregion
+
 
         /// <summary>
         /// Constructor; Defines the base uri format for the tile source.
@@ -22,7 +22,6 @@ namespace Rhit.Applications.Extentions.Maps.Sources {
             UriFormat = "http://{0}.tile.openstreetmap.org/{1}/{2}/{3}.png";
         }
 
-        #region Public Methods
         /// <summary>
         /// Generate the uri for a specific tile.
         /// </summary>
@@ -35,6 +34,6 @@ namespace Rhit.Applications.Extentions.Maps.Sources {
             string url = string.Format(UriFormat, TilePathPrefixes[y % 3], zoomLevel, x, y);
             return new Uri(url);
         }
-        #endregion
+
     }
 }

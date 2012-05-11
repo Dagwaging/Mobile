@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
 using Rhit.Applications.Extentions.Maps.Modes;
+using Rhit.Applications.Extentions.Maps.Overlays;
 using Rhit.Applications.Extentions.Maps.Sources;
 
 namespace Rhit.Applications.Extentions.Maps {
@@ -18,6 +19,8 @@ namespace Rhit.Applications.Extentions.Maps {
                 new RoseMode(),
             };
             CurrentMode = Modes[2];
+            Overlays = new ObservableCollection<BaseTileSource>();
+            Overlays.Add(Overlay.EmptyOverlay);
         }
 
         #region Singleton Instance
@@ -36,6 +39,14 @@ namespace Rhit.Applications.Extentions.Maps {
         protected virtual void OnCurrentSourceChanged() {
             if(CurrentSourceChanged != null)
                 CurrentSourceChanged(this, new EventArgs());
+        }
+        #endregion
+
+        #region CurrentOverlayChanged
+        public event EventHandler CurrentOverlayChanged;
+        protected virtual void OnCurrentOverlayChanged() {
+            if(CurrentOverlayChanged != null)
+                CurrentOverlayChanged(this, new EventArgs());
         }
         #endregion
 
@@ -81,6 +92,21 @@ namespace Rhit.Applications.Extentions.Maps {
         }
         #endregion
 
+        #region CurrentOverlay
+        public BaseTileSource CurrentOverlay {
+            get { return (BaseTileSource) GetValue(CurrentOverlayProperty); }
+            set { SetValue(CurrentOverlayProperty, value); }
+        }
+
+        public static readonly DependencyProperty CurrentOverlayProperty =
+           DependencyProperty.Register("CurrentOverlay", typeof(BaseTileSource), typeof(MapSettings),
+           new PropertyMetadata(null, new PropertyChangedCallback(OnOverlayChanged)));
+
+        private static void OnOverlayChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
+            if(e.NewValue != e.OldValue) (d as MapSettings).OnCurrentOverlayChanged();
+        }
+        #endregion
+
         #region SourceChoices
         public bool SourceChoices {
             get { return (bool) GetValue(SourceChoicesProperty); }
@@ -94,5 +120,18 @@ namespace Rhit.Applications.Extentions.Maps {
         public ObservableCollection<BaseMode> Modes { get; set; }
 
         public ObservableCollection<BaseTileSource> Sources { get; set; }
+
+        public ObservableCollection<BaseTileSource> Overlays { get; set; }
+
+        public void GenerateOverlays(string baseAddress, IEnumerable<string> specifiers) {
+            SourceGenerator genertor = new SourceGenerator(baseAddress);
+            CurrentOverlay = null;
+            Overlays.Clear();
+            Overlays.Add(Overlay.EmptyOverlay);
+            foreach(string specifier in specifiers) {
+                BaseTileSource source = genertor.GenerateSource(specifier);
+                Overlays.Add(source);
+            }
+        }
     }
 }

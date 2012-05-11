@@ -86,7 +86,8 @@
                 <ColumnDefinition Width="{Binding Image.Loaded, Converter={StaticResource GridLengthConverter}}" />
             </Grid.ColumnDefinitions>
 
-            <map:Map x:Name="NodeMap" Grid.Row="0" Grid.Column="0" Center="{Binding Center, Mode=TwoWay}" CopyrightVisibility="Collapsed" ZoomLevel="{Binding ZoomLevel, Mode=TwoWay}" CredentialsProvider="AthZ1tu5ROM0PUWcIYFSxC1oQALFR-g0aoFIuL9tlbeGJ9Z6qKIRYoB_jGpct8Yu">
+            <map:Map x:Name="NodeMap" Grid.Row="0" Grid.Column="0" Center="{Binding Center, Mode=TwoWay}" CopyrightVisibility="Collapsed"
+                     ZoomLevel="{Binding ZoomLevel, Mode=TwoWay}" CredentialsProvider="AthZ1tu5ROM0PUWcIYFSxC1oQALFR-g0aoFIuL9tlbeGJ9Z6qKIRYoB_jGpct8Yu">
                 <map:MapLayer>
                     <map:MapItemsControl ItemsSource="{Binding Paths.Paths}" ItemTemplate="{StaticResource WhitePathTemplate}" />
                     <map:MapItemsControl ItemsSource="{Binding Paths.Paths}" ItemTemplate="{StaticResource BlackPathTemplate}" />

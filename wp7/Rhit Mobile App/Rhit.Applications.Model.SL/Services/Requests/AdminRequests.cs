@@ -102,7 +102,7 @@ namespace Rhit.Applications.Models.Services.Requests {
         public FileHostRequestPart(string baseUrl, Guid token)
             : base(baseUrl) {
             Token = token;
-            PartUrl = "/{1}/filehost/{0}";
+            PartUrl = "/{1}/filehost{0}";
         }
 
         protected override string FullUrl {

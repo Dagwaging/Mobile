@@ -31,8 +31,6 @@
                         <StackPanel>
                             <TextBlock FontWeight="Bold" Text="About" />
                             <TextBlock Text="Created by me..." />
-                            <!--<Button Content="Load" Click="Button_Click" />
-                            <Button Content="check folders" Click="Button_Click_1" />-->
                         </StackPanel>
                     </Border>
 

@@ -15,6 +15,7 @@ namespace Rhit.Applications.ViewModels {
         protected virtual void Initialize() {
             ZoomLevel = 17;
             Center = new GeoCoordinate(39.483433300823, -87.3257801091232); //TODO: No Hard coding
+
         }
 
         #region Center

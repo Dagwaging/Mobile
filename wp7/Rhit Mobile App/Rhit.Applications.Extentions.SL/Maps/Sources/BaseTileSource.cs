@@ -14,7 +14,6 @@ namespace Rhit.Applications.Extentions.Maps.Sources {
         /// </summary>
         public string Label { get; set; }
 
-        #region Public Methods
         public override bool Equals(object obj) {
             return Equals(obj as BaseTileSource);
         }
@@ -45,6 +44,6 @@ namespace Rhit.Applications.Extentions.Maps.Sources {
             }
             return quadKey;
         }
-        #endregion
+
     }
 }

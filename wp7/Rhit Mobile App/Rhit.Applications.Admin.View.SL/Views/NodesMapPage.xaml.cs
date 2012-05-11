@@ -26,7 +26,7 @@ namespace Rhit.Applications.Views.Views {
 
             NodeMap.MouseClick += Calibrator.Map_Click;
 
-            RhitMapExtender.Attach(NodeMap);
+            MapExtender.Attach(NodeMap);
             NodeMap.MouseClick += new EventHandler<MapMouseEventArgs>(Map_MouseClick);
             NodeMap.MapForeground.TemplateApplied += new EventHandler(MapForeground_TemplateApplied);
 
@@ -59,7 +59,7 @@ namespace Rhit.Applications.Views.Views {
             children.Clear();
 
             ListBox lb = new ListBox();
-            lb.DataContext = new RhitMapExtender();
+            lb.DataContext = new MapExtender();
             lb.SetBinding(ListBox.ItemsSourceProperty, new System.Windows.Data.Binding("Settings.Modes"));
             System.Windows.Data.Binding binding = new System.Windows.Data.Binding("Settings.CurrentMode");
             binding.Mode = System.Windows.Data.BindingMode.TwoWay;
@@ -70,7 +70,7 @@ namespace Rhit.Applications.Views.Views {
             children.Add(new CommandSeparator());
 
             lb = new ListBox();
-            lb.DataContext = new RhitMapExtender();
+            lb.DataContext = new MapExtender();
             lb.SetBinding(ListBox.ItemsSourceProperty, new System.Windows.Data.Binding("Settings.Sources"));
             binding = new System.Windows.Data.Binding("Settings.CurrentSource");
             binding.Mode = System.Windows.Data.BindingMode.TwoWay;

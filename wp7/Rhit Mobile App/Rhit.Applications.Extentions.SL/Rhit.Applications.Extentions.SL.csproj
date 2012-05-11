@@ -61,7 +61,9 @@
     <Compile Include="Controls\DraggableShape.cs" />
     <Compile Include="Controls\GroupBox.cs" />
     <Compile Include="Controls\StyledMapPolygon.cs" />
+    <Compile Include="Maps\MapExtender.cs" />
     <Compile Include="Maps\MapSettings.cs" />
+    <Compile Include="Maps\MapTilesBinding.cs" />
     <Compile Include="Maps\Modes\BaseMode.cs" />
     <Compile Include="Maps\Modes\BingMode.cs" />
     <Compile Include="Maps\Modes\RoseMode.cs" />
@@ -69,7 +71,8 @@
     <Compile Include="Maps\Modes\GoogleMode.cs" />
     <Compile Include="Maps\Modes\MapnikMode.cs" />
     <Compile Include="Maps\Modes\OsmaMode.cs" />
-    <Compile Include="Maps\RhitMapExtender.cs" />
+    <Compile Include="Maps\Overlays\Overlay.cs" />
+    <Compile Include="Maps\Overlays\SourceGenerator.cs" />
     <Compile Include="Maps\RhitMapMode.cs" />
     <Compile Include="Maps\Sources\BaseTileSource.cs" />
     <Compile Include="Maps\Sources\BingSource.cs" />

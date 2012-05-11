@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Threading;
-using System.Windows.Browser;
 using Rhit.Applications.Models.Events;
 using Rhit.Applications.Models.Services.Requests;
 using System;
@@ -330,7 +329,7 @@ namespace Rhit.Applications.Models.Services {
 
             switch(eventArgs.Type) {
                 case ResponseType.Files:
-
+                    OnFolderNamesReceived(eventArgs);
                     break;
                 case ResponseType.FileAddition:
                 case ResponseType.FileDeletion:
@@ -876,7 +875,8 @@ namespace Rhit.Applications.Models.Services {
         }
 
         public void UploadFile(FileInfo file) {
-            RequestPart request = new RequestBuilder(BaseAddress).Admin.FileHost(Connection.ServiceTokenGuid).Upload(file.Name);
+            string fileName = Path.GetFileNameWithoutExtension(file.Name);
+            RequestPart request = new RequestBuilder(BaseAddress).Admin.FileHost(Connection.ServiceTokenGuid).Upload(fileName);
             Connection.MakeAttachmentRequest(request, RequestType.FileAddition, file);
         }
 
