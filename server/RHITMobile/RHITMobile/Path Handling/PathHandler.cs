@@ -18,7 +18,6 @@ namespace RHITMobile {
         protected PathHandler FloatRedirect { get; set; }
         protected PathHandler UnknownRedirect { get; set; }
 
-        public virtual IEnumerable<ThreadInfo> HandlePath(ThreadManager TM, bool isSSL, IEnumerable<string> path, Dictionary<string, string> query, NameValueCollection headers, object state) {
         public virtual IEnumerable<ThreadInfo> HandlePath(ThreadManager TM, bool isSSL, IEnumerable<string> path, Dictionary<string, string> query, NameValueCollection headers, HttpListenerContext context, object state) {
             var currentThread = TM.CurrentThread;
 

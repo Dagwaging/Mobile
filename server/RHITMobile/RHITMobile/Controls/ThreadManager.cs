@@ -77,11 +77,6 @@ namespace RHITMobile {
             }
         }
 
-        /// <summary>
-        /// Execution queues for each priority
-        /// </summary>
-        private Dictionary<ThreadPriority, Queue<ThreadInfo>> _queues = new Dictionary<ThreadPriority, Queue<ThreadInfo>>()
-        {
         private Dictionary<ThreadPriority, Queue<ThreadInfo>> _queues = new Dictionary<ThreadPriority, Queue<ThreadInfo>>() {
             { ThreadPriority.Low, new Queue<ThreadInfo>() },
             { ThreadPriority.Normal, new Queue<ThreadInfo>() },
