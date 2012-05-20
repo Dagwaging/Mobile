@@ -28,6 +28,12 @@
         "Entry"
         {
         "MsmKey" = "8:_124A3649F5BF3B9D674834B172613C3C"
+        "OwnerKey" = "8:_84A3B17BCF301E8CB7A603AA7CE26ABD"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_124A3649F5BF3B9D674834B172613C3C"
         "OwnerKey" = "8:_112655F91FEC4A9BA3E0A2DFBD3379B5"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -35,12 +41,6 @@
         {
         "MsmKey" = "8:_124A3649F5BF3B9D674834B172613C3C"
         "OwnerKey" = "8:_C831409660F9724CF2C9F9DA405B423F"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_124A3649F5BF3B9D674834B172613C3C"
-        "OwnerKey" = "8:_84A3B17BCF301E8CB7A603AA7CE26ABD"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -58,19 +58,19 @@
         "Entry"
         {
         "MsmKey" = "8:_18B1514F0BA50EC568F4166FA26663FE"
-        "OwnerKey" = "8:_1B8FBEB8852B5AE5523E247096C83431"
+        "OwnerKey" = "8:_84A3B17BCF301E8CB7A603AA7CE26ABD"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_18B1514F0BA50EC568F4166FA26663FE"
+        "OwnerKey" = "8:_48E6787D0D405F1C3594D0B915AEDDAC"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_18B1514F0BA50EC568F4166FA26663FE"
         "OwnerKey" = "8:_112655F91FEC4A9BA3E0A2DFBD3379B5"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_18B1514F0BA50EC568F4166FA26663FE"
-        "OwnerKey" = "8:_84A3B17BCF301E8CB7A603AA7CE26ABD"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -87,14 +87,8 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_1B8FBEB8852B5AE5523E247096C83431"
+        "MsmKey" = "8:_48E6787D0D405F1C3594D0B915AEDDAC"
         "OwnerKey" = "8:_112655F91FEC4A9BA3E0A2DFBD3379B5"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_46BC724F85804BD188D36BDF15A4402F"
-        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -106,7 +100,25 @@
         "Entry"
         {
         "MsmKey" = "8:_5592E0DDEFBFAA7B7FA6069C5907E48F"
-        "OwnerKey" = "8:_C831409660F9724CF2C9F9DA405B423F"
+        "OwnerKey" = "8:_84A3B17BCF301E8CB7A603AA7CE26ABD"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_5592E0DDEFBFAA7B7FA6069C5907E48F"
+        "OwnerKey" = "8:_48E6787D0D405F1C3594D0B915AEDDAC"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_5592E0DDEFBFAA7B7FA6069C5907E48F"
+        "OwnerKey" = "8:_124A3649F5BF3B9D674834B172613C3C"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_5592E0DDEFBFAA7B7FA6069C5907E48F"
+        "OwnerKey" = "8:_BB20987BF6D75EEECB67BF68FA0A688E"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -118,25 +130,19 @@
         "Entry"
         {
         "MsmKey" = "8:_5592E0DDEFBFAA7B7FA6069C5907E48F"
-        "OwnerKey" = "8:_BB20987BF6D75EEECB67BF68FA0A688E"
+        "OwnerKey" = "8:_C831409660F9724CF2C9F9DA405B423F"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_5592E0DDEFBFAA7B7FA6069C5907E48F"
+        "MsmKey" = "8:_622FDB8090247A0C1B8A56CA2CD84D2A"
+        "OwnerKey" = "8:_112655F91FEC4A9BA3E0A2DFBD3379B5"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_622FDB8090247A0C1B8A56CA2CD84D2A"
         "OwnerKey" = "8:_124A3649F5BF3B9D674834B172613C3C"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_5592E0DDEFBFAA7B7FA6069C5907E48F"
-        "OwnerKey" = "8:_84A3B17BCF301E8CB7A603AA7CE26ABD"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_5592E0DDEFBFAA7B7FA6069C5907E48F"
-        "OwnerKey" = "8:_1B8FBEB8852B5AE5523E247096C83431"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -153,26 +159,14 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_622FDB8090247A0C1B8A56CA2CD84D2A"
+        "MsmKey" = "8:_6282B2305885DAB6736D6683E530CB1F"
         "OwnerKey" = "8:_112655F91FEC4A9BA3E0A2DFBD3379B5"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_622FDB8090247A0C1B8A56CA2CD84D2A"
-        "OwnerKey" = "8:_124A3649F5BF3B9D674834B172613C3C"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_6282B2305885DAB6736D6683E530CB1F"
         "OwnerKey" = "8:_C831409660F9724CF2C9F9DA405B423F"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_6282B2305885DAB6736D6683E530CB1F"
-        "OwnerKey" = "8:_112655F91FEC4A9BA3E0A2DFBD3379B5"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -190,19 +184,13 @@
         "Entry"
         {
         "MsmKey" = "8:_84A3B17BCF301E8CB7A603AA7CE26ABD"
-        "OwnerKey" = "8:_BB20987BF6D75EEECB67BF68FA0A688E"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_84A3B17BCF301E8CB7A603AA7CE26ABD"
         "OwnerKey" = "8:_112655F91FEC4A9BA3E0A2DFBD3379B5"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_8E1EB13E7AFD4A958C508BF70A541FD0"
-        "OwnerKey" = "8:_UNDEFINED"
+        "MsmKey" = "8:_84A3B17BCF301E8CB7A603AA7CE26ABD"
+        "OwnerKey" = "8:_BB20987BF6D75EEECB67BF68FA0A688E"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -214,7 +202,7 @@
         "Entry"
         {
         "MsmKey" = "8:_BB20987BF6D75EEECB67BF68FA0A688E"
-        "OwnerKey" = "8:_1B8FBEB8852B5AE5523E247096C83431"
+        "OwnerKey" = "8:_48E6787D0D405F1C3594D0B915AEDDAC"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -231,20 +219,8 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_EA7EF27235FD4F83ACAD065F92D5C593"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_F15A6AFE529A286A1E82344A06274E1A"
         "OwnerKey" = "8:_84A3B17BCF301E8CB7A603AA7CE26ABD"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_F15A6AFE529A286A1E82344A06274E1A"
-        "OwnerKey" = "8:_112655F91FEC4A9BA3E0A2DFBD3379B5"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -255,26 +231,26 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_5592E0DDEFBFAA7B7FA6069C5907E48F"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
+        "MsmKey" = "8:_F15A6AFE529A286A1E82344A06274E1A"
         "OwnerKey" = "8:_112655F91FEC4A9BA3E0A2DFBD3379B5"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_1B8FBEB8852B5AE5523E247096C83431"
+        "OwnerKey" = "8:_622FDB8090247A0C1B8A56CA2CD84D2A"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_C831409660F9724CF2C9F9DA405B423F"
+        "OwnerKey" = "8:_F15A6AFE529A286A1E82344A06274E1A"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_84A3B17BCF301E8CB7A603AA7CE26ABD"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -286,19 +262,25 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_112655F91FEC4A9BA3E0A2DFBD3379B5"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_48E6787D0D405F1C3594D0B915AEDDAC"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_C831409660F9724CF2C9F9DA405B423F"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_BB20987BF6D75EEECB67BF68FA0A688E"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_84A3B17BCF301E8CB7A603AA7CE26ABD"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_F15A6AFE529A286A1E82344A06274E1A"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -322,7 +304,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_622FDB8090247A0C1B8A56CA2CD84D2A"
+        "OwnerKey" = "8:_5592E0DDEFBFAA7B7FA6069C5907E48F"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -343,6 +325,27 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.0,Profile=Client"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4 Client Profile (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.0,Profile=Client"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
+                    {
+                    "Name" = "8:Windows Installer 3.1"
+                    "ProductCode" = "8:Microsoft.Windows.Installer.3.1"
+                    }
+                }
+            }
         }
         "Release"
         {
@@ -359,15 +362,23 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
     }
     "Deployable"
     {
         "CustomAction"
         {
-            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_068F66BB7E40458B863A5E1FEFFFEEBA"
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_3357A22831D7416BA4947512EB4245E4"
             {
-            "Name" = "8:Primary output from RHITMobileWindowsService (Active)"
+            "Name" = "8:Uninstall Service"
             "Condition" = "8:"
             "Object" = "8:_112655F91FEC4A9BA3E0A2DFBD3379B5"
             "FileType" = "3:2"
@@ -375,13 +386,13 @@
             "Arguments" = "8:"
             "EntryPoint" = "8:"
             "Sequence" = "3:1"
-            "Identifier" = "8:_1B89C0E0_B185_4A0A_A275_CB251AB4886E"
+            "Identifier" = "8:_8596C18C_BCE4_4777_B531_08CD160DC07A"
             "InstallerClass" = "11:TRUE"
             "CustomActionData" = "8:"
             }
-            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_93FD3BDEF3A645DCB59C62367B57FEB7"
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_A3AFCE903C3344EBAF899901E020D010"
             {
-            "Name" = "8:Primary output from RHITMobileWindowsService (Active)"
+            "Name" = "8:Install Service"
             "Condition" = "8:"
             "Object" = "8:_112655F91FEC4A9BA3E0A2DFBD3379B5"
             "FileType" = "3:2"
@@ -389,35 +400,7 @@
             "Arguments" = "8:"
             "EntryPoint" = "8:"
             "Sequence" = "3:1"
-            "Identifier" = "8:_B33AB1E7_C5EE_43DE_A2EB_0E785C29D02F"
-            "InstallerClass" = "11:TRUE"
-            "CustomActionData" = "8:"
-            }
-            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_D1E5755696234F169CF5465A07E64AC7"
-            {
-            "Name" = "8:Primary output from RHITMobileWindowsService (Active)"
-            "Condition" = "8:"
-            "Object" = "8:_112655F91FEC4A9BA3E0A2DFBD3379B5"
-            "FileType" = "3:2"
-            "InstallAction" = "3:2"
-            "Arguments" = "8:"
-            "EntryPoint" = "8:"
-            "Sequence" = "3:1"
-            "Identifier" = "8:_D883C4FA_5CEA_4A77_A092_A12F39A97F2B"
-            "InstallerClass" = "11:TRUE"
-            "CustomActionData" = "8:"
-            }
-            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_E03F51D620D0474E8F0EFDEC0E07B7C7"
-            {
-            "Name" = "8:Primary output from RHITMobileWindowsService (Active)"
-            "Condition" = "8:"
-            "Object" = "8:_112655F91FEC4A9BA3E0A2DFBD3379B5"
-            "FileType" = "3:2"
-            "InstallAction" = "3:3"
-            "Arguments" = "8:"
-            "EntryPoint" = "8:"
-            "Sequence" = "3:1"
-            "Identifier" = "8:_F9DF6504_7ACD_4A65_9E01_820198EA6E7E"
+            "Identifier" = "8:_9F647260_8B60_4840_92CA_EF41434AA5FF"
             "InstallerClass" = "11:TRUE"
             "CustomActionData" = "8:"
             }
@@ -506,14 +489,14 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_1B8FBEB8852B5AE5523E247096C83431"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_48E6787D0D405F1C3594D0B915AEDDAC"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:RHITMobile, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_1B8FBEB8852B5AE5523E247096C83431"
+                    "_48E6787D0D405F1C3594D0B915AEDDAC"
                     {
                     "Name" = "8:RHITMobile.exe"
                     "Attributes" = "3:512"
@@ -535,26 +518,6 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_46BC724F85804BD188D36BDF15A4402F"
-            {
-            "SourcePath" = "8:..\\RHITMobileWindowsService\\uninstall.cmd"
-            "TargetName" = "8:uninstall.cmd"
-            "Tag" = "8:"
-            "Folder" = "8:_BDE6E676A0A64F8CBB162F0A4793D820"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_5592E0DDEFBFAA7B7FA6069C5907E48F"
@@ -712,26 +675,6 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8E1EB13E7AFD4A958C508BF70A541FD0"
-            {
-            "SourcePath" = "8:..\\RHITMobile\\bin\\unzip.exe"
-            "TargetName" = "8:unzip.exe"
-            "Tag" = "8:"
-            "Folder" = "8:_BDE6E676A0A64F8CBB162F0A4793D820"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_BB20987BF6D75EEECB67BF68FA0A688E"
             {
             "AssemblyRegister" = "3:1"
@@ -792,26 +735,6 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_EA7EF27235FD4F83ACAD065F92D5C593"
-            {
-            "SourcePath" = "8:..\\RHITMobileWindowsService\\install.cmd"
-            "TargetName" = "8:install.cmd"
-            "Tag" = "8:"
-            "Folder" = "8:_BDE6E676A0A64F8CBB162F0A4793D820"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_F15A6AFE529A286A1E82344A06274E1A"
@@ -900,22 +823,22 @@
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
-        "ProductName" = "8:RHITMobileInstaller"
+        "ProductName" = "8:Mobile Server"
         "ProductCode" = "8:{538897B0-1492-4192-A89D-548EFA4B6EA6}"
-        "PackageCode" = "8:{4214F5DD-13B2-4BC5-B038-840636C03909}"
+        "PackageCode" = "8:{3DFD132C-96D6-491C-A7E2-BA1A7EC94F22}"
         "UpgradeCode" = "8:{E51C5595-D803-4333-A558-C448EC15ADD6}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
-        "RemovePreviousVersions" = "11:FALSE"
+        "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
-        "InstallAllUsers" = "11:FALSE"
+        "InstallAllUsers" = "11:TRUE"
         "ProductVersion" = "8:1.0.0"
-        "Manufacturer" = "8:Default Company Name"
+        "Manufacturer" = "8:Rose-Hulman"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
-        "Title" = "8:RHITMobileInstaller"
+        "Title" = "8:Mobile Server Installer"
         "Subject" = "8:"
-        "ARPCONTACT" = "8:Default Company Name"
+        "ARPCONTACT" = "8:Rose-Hulman"
         "Keywords" = "8:"
         "ARPCOMMENTS" = "8:"
         "ARPURLINFOABOUT" = "8:"

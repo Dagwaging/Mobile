@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace RHITMobileWindowsService {
     public partial class RHITMobileWindowsService : ServiceBase {
+        public static String SERVICE_NAME = "RHITMobileWindowsService";
         public RHITMobileWindowsService() {
             InitializeComponent();
         }
@@ -26,15 +27,14 @@ namespace RHITMobileWindowsService {
     }
 
     public static class EventWriter {
-        private static string source = "RHITMobileWindowsService"; //Must be the same as the name of the windows service
         private static string log = "Application";
         static EventWriter() {
-            if (!EventLog.SourceExists(source))
-                EventLog.CreateEventSource(source, log);
+            if (!EventLog.SourceExists(RHITMobileWindowsService.SERVICE_NAME))
+                EventLog.CreateEventSource(RHITMobileWindowsService.SERVICE_NAME, log);
         }
 
         public static void write(string msg, EventLogEntryType type) {
-            EventLog.WriteEntry(source, msg, type);
+            EventLog.WriteEntry(RHITMobileWindowsService.SERVICE_NAME, msg, type);
         }
     }
 }

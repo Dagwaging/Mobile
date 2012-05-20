@@ -7,9 +7,9 @@ using System.Configuration.Install;
 using System.ServiceProcess;
 using NetFwTypeLib;
 
-namespace RHITMobile.Secure {
-    [RunInstaller(true)]
-    partial class ProjectInstaller : Installer {
+namespace RHITMobileWindowsService {
+    [RunInstallerAttribute(true)]
+    public class ProjectInstaller : Installer {
         private ServiceProcessInstaller process;
         private ServiceInstaller service;
 
@@ -17,7 +17,7 @@ namespace RHITMobile.Secure {
             process = new ServiceProcessInstaller();
             process.Account = ServiceAccount.NetworkService;
             service = new ServiceInstaller();
-            service.ServiceName = "RHITMobileWindowsService";
+            service.ServiceName = RHITMobileWindowsService.SERVICE_NAME;
             service.StartType = ServiceStartMode.Automatic;
             Installers.Add(process);
             Installers.Add(service);
@@ -29,7 +29,7 @@ namespace RHITMobile.Secure {
 
         public void BeforeUninstall_StopService(object sender, InstallEventArgs e) {
             try {
-                using (var sc = new ServiceController("RHITMobileWindowsService")) {
+                using (var sc = new ServiceController(RHITMobileWindowsService.SERVICE_NAME)) {
                     if (sc.Status != ServiceControllerStatus.Stopped) {
                         sc.Stop();
                         sc.WaitForStatus(ServiceControllerStatus.Stopped, TimeSpan.FromMinutes(1));
@@ -45,12 +45,12 @@ namespace RHITMobile.Secure {
 
             FirewallManager firewall = new FirewallManager();
 
-            firewall.AuthorizeProgram("RHIT Secure Mobile Service", path,
+            firewall.AuthorizeProgram("RHIT Mobile Service", path,
                 NET_FW_SCOPE_.NET_FW_SCOPE_ALL, NET_FW_IP_VERSION_.NET_FW_IP_VERSION_ANY);
         }
 
         public void AfterInstall_StartService(object sender, InstallEventArgs e) {
-            using (var sc = new ServiceController("RHITMobileWindowsService")) {
+            using (var sc = new ServiceController(RHITMobileWindowsService.SERVICE_NAME)) {
                 sc.Start();
                 try {
                     sc.WaitForStatus(ServiceControllerStatus.Running, TimeSpan.FromSeconds(10));
