@@ -5,6 +5,7 @@ using System.Text;
 using RHITMobile.RhitPrivate;
 using System.Collections.Specialized;
 using System.Net;
+
 using System.ServiceModel;
 using RHITMobile.Properties;
 

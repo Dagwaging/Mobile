@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.VisualBasic.FileIO;
 using System.Text.RegularExpressions;
+using System.IO;
 
 namespace RHITMobile.Secure.Data_Import
 {
@@ -16,12 +17,18 @@ namespace RHITMobile.Secure.Data_Import
 
         public int TermCode { get { return termCode; } }
 
-        public BannerCsvParser(String path)
+        public int ParseErrors { get; protected set; }
+
+        public BannerCsvParser(Logger log, String path)
         {
+            Log = log;
             parser = new TextFieldParser(path);
+            parser.HasFieldsEnclosedInQuotes = false;
             parser.SetDelimiters("|");
             termCode = int.Parse(parser.ReadLine());
         }
+        
+        protected Logger Log { get; private set; }
 
         private bool hasMore()
         {
@@ -33,20 +40,33 @@ namespace RHITMobile.Secure.Data_Import
             T res = null;
             do
             {
-                String[] fields = parser.ReadFields();
-                if (fields != null)
+                try
                 {
-                    trim(fields);
+                    LineNumber = parser.LineNumber;
+                    String[] fields = parser.ReadFields();
+                    if (fields != null)
+                    {
+                        trim(fields);
 
-                    try
-                    {
-                        res = convertRecord(fields);
+                        try
+                        {
+                            res = convertRecord(fields);
+                        }
+                        catch (Exception e)
+                        {
+                            //skip the record
+                            if (ParseErrors < 3)
+                                Log.Error(string.Format("Failed to convert record at line {0}", LineNumber), e);
+                            ParseErrors++;
+                        }
                     }
-                    catch (Exception e)
-                    {
-                        //skip the record
-                        Console.WriteLine("Failed to parse record: {0}", e.ToString());
-                    }
+                }
+                catch (Exception e)
+                {
+                    //skip the record
+                    if (ParseErrors < 3)
+                        Log.Error(string.Format("Failed to read record at line {0}", LineNumber), e);
+                    ParseErrors++;
                 }
             } while (res == null && hasMore());
 
@@ -54,6 +74,8 @@ namespace RHITMobile.Secure.Data_Import
         }
 
         protected abstract T convertRecord(String[] fields);
+
+        public long LineNumber { get; private set; }
 
         public T Current
         {
@@ -113,6 +135,13 @@ namespace RHITMobile.Secure.Data_Import
                 return -1;
 
             return result;
+        }
+
+        public string optionalField(string field)
+        {
+            if (string.IsNullOrWhiteSpace(field))
+                return null;
+            return field;
         }
     }
 }

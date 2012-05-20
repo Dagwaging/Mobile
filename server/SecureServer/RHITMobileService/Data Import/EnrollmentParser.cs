@@ -10,8 +10,8 @@ namespace RHITMobile.Secure.Data_Import
     {
         private Dictionary<String, String> idToUsername;
 
-        public EnrollmentCsvParser(String path, Dictionary<String, String> idToUsername)
-            : base(path)
+        public EnrollmentCsvParser(Logger log, String path, Dictionary<String, String> idToUsername)
+            : base(log, path)
         {
             this.idToUsername = idToUsername;
         }

@@ -5,8 +5,8 @@
       <xsd:import namespace="http://mobileprivate.rose-hulman.edu" />
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/RHITMobile.Secure" />
-      <xsd:import namespace="http://schemas.datacontract.org/2004/07/RHITMobile.Secure.Data" />
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/RHITMobile.Secure.Data" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IWebService_Login_InputMessage">
@@ -18,6 +18,15 @@
   <wsdl:message name="IWebService_Logout_InputMessage">
     <wsdl:part name="parameters" element="tns:Logout" />
   </wsdl:message>
+  <wsdl:message name="IWebService_GetTerms_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetTerms" />
+  </wsdl:message>
+  <wsdl:message name="IWebService_GetTerms_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetTermsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IWebService_GetTerms_AuthFaultFault_FaultMessage">
+    <wsdl:part xmlns:q1="http://schemas.datacontract.org/2004/07/RHITMobile.Secure" name="detail" element="q1:AuthFault" />
+  </wsdl:message>
   <wsdl:message name="IWebService_GetUser_InputMessage">
     <wsdl:part name="parameters" element="tns:GetUser" />
   </wsdl:message>
@@ -25,7 +34,7 @@
     <wsdl:part name="parameters" element="tns:GetUserResponse" />
   </wsdl:message>
   <wsdl:message name="IWebService_GetUser_AuthFaultFault_FaultMessage">
-    <wsdl:part xmlns:q1="http://schemas.datacontract.org/2004/07/RHITMobile.Secure" name="detail" element="q1:AuthFault" />
+    <wsdl:part xmlns:q2="http://schemas.datacontract.org/2004/07/RHITMobile.Secure" name="detail" element="q2:AuthFault" />
   </wsdl:message>
   <wsdl:message name="IWebService_SearchUsers_InputMessage">
     <wsdl:part name="parameters" element="tns:SearchUsers" />
@@ -34,7 +43,7 @@
     <wsdl:part name="parameters" element="tns:SearchUsersResponse" />
   </wsdl:message>
   <wsdl:message name="IWebService_SearchUsers_AuthFaultFault_FaultMessage">
-    <wsdl:part xmlns:q2="http://schemas.datacontract.org/2004/07/RHITMobile.Secure" name="detail" element="q2:AuthFault" />
+    <wsdl:part xmlns:q3="http://schemas.datacontract.org/2004/07/RHITMobile.Secure" name="detail" element="q3:AuthFault" />
   </wsdl:message>
   <wsdl:message name="IWebService_GetCourse_InputMessage">
     <wsdl:part name="parameters" element="tns:GetCourse" />
@@ -43,7 +52,7 @@
     <wsdl:part name="parameters" element="tns:GetCourseResponse" />
   </wsdl:message>
   <wsdl:message name="IWebService_GetCourse_AuthFaultFault_FaultMessage">
-    <wsdl:part xmlns:q3="http://schemas.datacontract.org/2004/07/RHITMobile.Secure" name="detail" element="q3:AuthFault" />
+    <wsdl:part xmlns:q4="http://schemas.datacontract.org/2004/07/RHITMobile.Secure" name="detail" element="q4:AuthFault" />
   </wsdl:message>
   <wsdl:message name="IWebService_SearchCourses_InputMessage">
     <wsdl:part name="parameters" element="tns:SearchCourses" />
@@ -52,7 +61,7 @@
     <wsdl:part name="parameters" element="tns:SearchCoursesResponse" />
   </wsdl:message>
   <wsdl:message name="IWebService_SearchCourses_AuthFaultFault_FaultMessage">
-    <wsdl:part xmlns:q4="http://schemas.datacontract.org/2004/07/RHITMobile.Secure" name="detail" element="q4:AuthFault" />
+    <wsdl:part xmlns:q5="http://schemas.datacontract.org/2004/07/RHITMobile.Secure" name="detail" element="q5:AuthFault" />
   </wsdl:message>
   <wsdl:message name="IWebService_GetCourseEnrollment_InputMessage">
     <wsdl:part name="parameters" element="tns:GetCourseEnrollment" />
@@ -61,7 +70,7 @@
     <wsdl:part name="parameters" element="tns:GetCourseEnrollmentResponse" />
   </wsdl:message>
   <wsdl:message name="IWebService_GetCourseEnrollment_AuthFaultFault_FaultMessage">
-    <wsdl:part xmlns:q5="http://schemas.datacontract.org/2004/07/RHITMobile.Secure" name="detail" element="q5:AuthFault" />
+    <wsdl:part xmlns:q6="http://schemas.datacontract.org/2004/07/RHITMobile.Secure" name="detail" element="q6:AuthFault" />
   </wsdl:message>
   <wsdl:message name="IWebService_GetUserEnrollment_InputMessage">
     <wsdl:part name="parameters" element="tns:GetUserEnrollment" />
@@ -70,7 +79,7 @@
     <wsdl:part name="parameters" element="tns:GetUserEnrollmentResponse" />
   </wsdl:message>
   <wsdl:message name="IWebService_GetUserEnrollment_AuthFaultFault_FaultMessage">
-    <wsdl:part xmlns:q6="http://schemas.datacontract.org/2004/07/RHITMobile.Secure" name="detail" element="q6:AuthFault" />
+    <wsdl:part xmlns:q7="http://schemas.datacontract.org/2004/07/RHITMobile.Secure" name="detail" element="q7:AuthFault" />
   </wsdl:message>
   <wsdl:message name="IWebService_GetInstructorSchedule_InputMessage">
     <wsdl:part name="parameters" element="tns:GetInstructorSchedule" />
@@ -79,7 +88,7 @@
     <wsdl:part name="parameters" element="tns:GetInstructorScheduleResponse" />
   </wsdl:message>
   <wsdl:message name="IWebService_GetInstructorSchedule_AuthFaultFault_FaultMessage">
-    <wsdl:part xmlns:q7="http://schemas.datacontract.org/2004/07/RHITMobile.Secure" name="detail" element="q7:AuthFault" />
+    <wsdl:part xmlns:q8="http://schemas.datacontract.org/2004/07/RHITMobile.Secure" name="detail" element="q8:AuthFault" />
   </wsdl:message>
   <wsdl:message name="IWebService_GetCourseSchedule_InputMessage">
     <wsdl:part name="parameters" element="tns:GetCourseSchedule" />
@@ -88,7 +97,7 @@
     <wsdl:part name="parameters" element="tns:GetCourseScheduleResponse" />
   </wsdl:message>
   <wsdl:message name="IWebService_GetCourseSchedule_AuthFaultFault_FaultMessage">
-    <wsdl:part xmlns:q8="http://schemas.datacontract.org/2004/07/RHITMobile.Secure" name="detail" element="q8:AuthFault" />
+    <wsdl:part xmlns:q9="http://schemas.datacontract.org/2004/07/RHITMobile.Secure" name="detail" element="q9:AuthFault" />
   </wsdl:message>
   <wsdl:message name="IWebService_GetRoomSchedule_InputMessage">
     <wsdl:part name="parameters" element="tns:GetRoomSchedule" />
@@ -97,7 +106,7 @@
     <wsdl:part name="parameters" element="tns:GetRoomScheduleResponse" />
   </wsdl:message>
   <wsdl:message name="IWebService_GetRoomSchedule_AuthFaultFault_FaultMessage">
-    <wsdl:part xmlns:q9="http://schemas.datacontract.org/2004/07/RHITMobile.Secure" name="detail" element="q9:AuthFault" />
+    <wsdl:part xmlns:q10="http://schemas.datacontract.org/2004/07/RHITMobile.Secure" name="detail" element="q10:AuthFault" />
   </wsdl:message>
   <wsdl:message name="IWebService_RequestUpdate_InputMessage">
     <wsdl:part name="parameters" element="tns:RequestUpdate" />
@@ -118,6 +127,11 @@
     </wsdl:operation>
     <wsdl:operation name="Logout">
       <wsdl:input wsaw:Action="http://mobileprivate.rose-hulman.edu/IWebService/Logout" message="tns:IWebService_Logout_InputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetTerms">
+      <wsdl:input wsaw:Action="http://mobileprivate.rose-hulman.edu/IWebService/GetTerms" message="tns:IWebService_GetTerms_InputMessage" />
+      <wsdl:output wsaw:Action="http://mobileprivate.rose-hulman.edu/IWebService/GetTermsResponse" message="tns:IWebService_GetTerms_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://mobileprivate.rose-hulman.edu/IWebService/GetTermsAuthFaultFault" name="AuthFaultFault" message="tns:IWebService_GetTerms_AuthFaultFault_FaultMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetUser">
       <wsdl:input wsaw:Action="http://mobileprivate.rose-hulman.edu/IWebService/GetUser" message="tns:IWebService_GetUser_InputMessage" />

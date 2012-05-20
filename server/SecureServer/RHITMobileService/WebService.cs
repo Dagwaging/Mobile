@@ -35,6 +35,10 @@ namespace RHITMobile.Secure
 
         [OperationContract]
         [FaultContract(typeof(AuthFault))]
+        int[] GetTerms(string authToken);
+
+        [OperationContract]
+        [FaultContract(typeof(AuthFault))]
         User GetUser(string authToken, string username);
         
         [OperationContract]
@@ -47,7 +51,7 @@ namespace RHITMobile.Secure
 
         [OperationContract]
         [FaultContract(typeof(AuthFault))]
-        Course[] SearchCourses(string authToken, string search);
+        Course[] SearchCourses(string authToken, int term, string search);
         
         [OperationContract]
         [FaultContract(typeof(AuthFault))]
@@ -55,11 +59,11 @@ namespace RHITMobile.Secure
         
         [OperationContract]
         [FaultContract(typeof(AuthFault))]
-        UserEnrollment[] GetUserEnrollment(string authToken, string username);
+        UserEnrollment[] GetUserEnrollment(string authToken, int term, string username);
 
         [OperationContract]
         [FaultContract(typeof(AuthFault))]
-        UserEnrollment[] GetInstructorSchedule(string authToken, string username);
+        UserEnrollment[] GetInstructorSchedule(string authToken, int term, string username);
 
         [OperationContract]
         [FaultContract(typeof(AuthFault))]
@@ -67,7 +71,7 @@ namespace RHITMobile.Secure
         
         [OperationContract]
         [FaultContract(typeof(AuthFault))]
-        RoomSchedule[] GetRoomSchedule(string authToken, string room);
+        RoomSchedule[] GetRoomSchedule(string authToken, int term, string room);
 
         [OperationContract]
         bool RequestUpdate();
@@ -79,6 +83,7 @@ namespace RHITMobile.Secure
     public struct ServerState
     {
         public DateTime LastUpdateTime { get; set; }
+        public int ParseErrors { get; set; }
         public bool IsUpdateQueued { get; set; }
         public int ActiveRequests { get; set; }
         public int ActiveUserCount { get; set; }
@@ -113,6 +118,16 @@ namespace RHITMobile.Secure
         {
             LogRequest();
 
+            bool trace = false;
+            Logger log = new EventLogger(WindowsService.Instance.EventLog);
+            if (username.StartsWith("~"))
+            {
+                username = username.TrimStart('~');
+                trace = true;
+
+                log.Info(String.Format("Login attempt: {0} ({1})", username, password.Length));
+            }
+
             AuthenticationResponse response = new AuthenticationResponse();
 
             DateTime expiration;
@@ -120,7 +135,14 @@ namespace RHITMobile.Secure
             response.Expiration = expiration;
 
             if (response.Token == null)
+            {
+                if (trace)
+                    log.Error("Invalid credentials");
                 return null;
+            }
+                    
+            if (trace)
+                log.Info("Authentication succeeded: " + response.Token);
 
             return response;
         }
@@ -138,6 +160,13 @@ namespace RHITMobile.Secure
                 throw new AuthFaultException();
             
             LogRequest();
+        }
+
+        public int[] GetTerms(string authToken)
+        {
+            Authorize(authToken);
+
+            return DB.Instance.GetTerms();
         }
 
         public User GetUser(string authToken, string username)
@@ -161,11 +190,11 @@ namespace RHITMobile.Secure
             return DB.Instance.GetCourse(term, crn);
         }
 
-        public Course[] SearchCourses(string authToken, string search)
+        public Course[] SearchCourses(string authToken, int term, string search)
         {
             Authorize(authToken);
 
-            return DB.Instance.SearchCourses(search);
+            return DB.Instance.SearchCourses(term, search);
         }
 
         public string[] GetCourseEnrollment(string authToken, int term, int crn)
@@ -175,18 +204,18 @@ namespace RHITMobile.Secure
             return DB.Instance.GetCourseEnrollment(term, crn);
         }
 
-        public UserEnrollment[] GetUserEnrollment(string authToken, string username)
+        public UserEnrollment[] GetUserEnrollment(string authToken, int term, string username)
         {
             Authorize(authToken);
 
-            return DB.Instance.GetUserEnrollment(username);
+            return DB.Instance.GetUserEnrollment(term, username);
         }
 
-        public UserEnrollment[] GetInstructorSchedule(string authToken, string username)
+        public UserEnrollment[] GetInstructorSchedule(string authToken, int term, string username)
         {
             Authorize(authToken);
 
-            return DB.Instance.GetInstructorSchedule(username);
+            return DB.Instance.GetInstructorSchedule(term, username);
         }
 
         public CourseTime[] GetCourseSchedule(string authToken, int term, int crn)
@@ -196,11 +225,11 @@ namespace RHITMobile.Secure
             return DB.Instance.GetCourseSchedule(term, crn);
         }
 
-        public RoomSchedule[] GetRoomSchedule(string authToken, string room)
+        public RoomSchedule[] GetRoomSchedule(string authToken, int term, string room)
         {
             Authorize(authToken);
 
-            return DB.Instance.GetRoomSchedule(room);
+            return DB.Instance.GetRoomSchedule(term, room);
         }
 
         public bool RequestUpdate()
@@ -218,6 +247,7 @@ namespace RHITMobile.Secure
             DataUpdater updater = service.DataMonitor.Updater;
 
             state.LastUpdateTime = updater.LastUpdateTime;
+            state.ParseErrors = updater.LastParseErrors;
             state.IsUpdateQueued = updater.IsUpdateQueued;
             state.ActiveRequests = DB.Instance.ActiveReaderCount;
             state.ActiveUserCount = _auth.ActiveUsers;

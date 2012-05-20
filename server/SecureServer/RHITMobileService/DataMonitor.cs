@@ -180,6 +180,17 @@ namespace RHITMobile.Secure
                 }
             }
         }
+        
+        public int LastParseErrors
+        {
+            get
+            {
+                lock (_updaterThreadData)
+                {
+                    return _updaterThreadData.lastParseErrors;
+                }
+            }
+        }
 
         public bool IsUpdateQueued
         {
@@ -222,6 +233,7 @@ namespace RHITMobile.Secure
                     lock (_updaterThreadData)
                     {
                         _updaterThreadData.lastUpdate = DateTime.UtcNow;
+                        _updaterThreadData.lastParseErrors = importer.ParseErrors;
                     }
                 }
                 catch (ThreadAbortException)
@@ -253,6 +265,7 @@ namespace RHITMobile.Secure
         {
             public bool updateQueued;
             public DateTime lastUpdate;
+            public int lastParseErrors;
         }
     }
 }

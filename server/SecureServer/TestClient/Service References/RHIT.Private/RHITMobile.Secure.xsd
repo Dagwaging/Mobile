@@ -24,6 +24,7 @@
       <xs:element minOccurs="0" name="IsUpdateQueued" type="xs:boolean" />
       <xs:element minOccurs="0" name="LastRecordsAffected" type="xs:int" />
       <xs:element minOccurs="0" name="LastUpdateTime" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="ParseErrors" type="xs:int" />
       <xs:element minOccurs="0" name="RequestCount" type="xs:int" />
       <xs:element minOccurs="0" name="Uptime" type="ser:duration" />
     </xs:sequence>

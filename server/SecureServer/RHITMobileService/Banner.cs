@@ -4,7 +4,7 @@ namespace RHITMobile.Secure
 {
     public partial class Banner
     {
-        partial class GetRoomScheduleDataTable
+        partial class spGetRoomScheduleDataTable
         {
             public RoomSchedule[] Schedule
             {
@@ -16,11 +16,11 @@ namespace RHITMobile.Secure
                     {
                         RoomSchedule item = new RoomSchedule();
 
-                        item.Term = row.Term;
-                        item.CRN = row.CRN;
-                        item.Day = row.Day[0];
-                        item.StartPeriod = row.StartPeriod;
-                        item.EndPeriod = row.EndPeriod;
+                        item.Term = row.term;
+                        item.CRN = row.crn;
+                        item.Day = row.day[0];
+                        item.StartPeriod = row.startperiod;
+                        item.EndPeriod = row.endperiod;
 
                         schedule.Add(item);
                     }
@@ -29,7 +29,7 @@ namespace RHITMobile.Secure
             }
         }
     
-        partial class GetCourseScheduleDataTable
+        partial class spGetCourseScheduleDataTable
         {
             public CourseTime[] Schedule
             {
@@ -41,10 +41,10 @@ namespace RHITMobile.Secure
                     {
                         CourseTime item = new CourseTime();
 
-                        item.Day = row.Day[0];
-                        item.StartPeriod = row.StartPeriod;
-                        item.EndPeriod = row.EndPeriod;
-                        item.Room = row.Room;
+                        item.Day = row.day[0];
+                        item.StartPeriod = row.startperiod;
+                        item.EndPeriod = row.endperiod;
+                        item.Room = row.room;
 
                         schedule.Add(item);
                     }
@@ -53,7 +53,7 @@ namespace RHITMobile.Secure
             }
         }
     
-        partial class GetCourseEnrollmentDataTable
+        partial class spGetCourseEnrollmentDataTable
         {
             public string[] Enrollment
             {
@@ -62,14 +62,14 @@ namespace RHITMobile.Secure
                     List<string> enrollment = new List<string>();
 
                     foreach (var row in this)
-                        enrollment.Add(row.Username);
+                        enrollment.Add(row.username);
 
                     return enrollment.ToArray();
                 }
             }
         }
     
-        partial class GetUserEnrollmentDataTable
+        partial class spGetUserEnrollmentDataTable
         {
             public UserEnrollment[] Enrollment
             {
@@ -81,8 +81,8 @@ namespace RHITMobile.Secure
                     {
                         UserEnrollment item = new UserEnrollment();
 
-                        item.Term = row.Term;
-                        item.CRN = row.CRN;
+                        item.Term = row.term;
+                        item.CRN = row.crn;
 
                         enrollment.Add(item);
                     }
@@ -91,7 +91,7 @@ namespace RHITMobile.Secure
             }
         }
 
-        partial class GetInstructorScheduleDataTable
+        partial class spGetInstructorScheduleDataTable
         {
             public UserEnrollment[] Schedule
             {
@@ -103,8 +103,8 @@ namespace RHITMobile.Secure
                     {
                         UserEnrollment item = new UserEnrollment();
 
-                        item.Term = row.Term;
-                        item.CRN = row.CRN;
+                        item.Term = row.term;
+                        item.CRN = row.crn;
 
                         enrollment.Add(item);
                     }
@@ -113,7 +113,7 @@ namespace RHITMobile.Secure
             }
         }
     
-        partial class GetCourseDataTable
+        partial class spGetCourseDataTable
         {
             public Course Course
             {
@@ -126,42 +126,42 @@ namespace RHITMobile.Secure
 
                     Course course = new Course();
 
-                    course.Term = row.Term;
-                    course.CRN = row.CRN;
+                    course.Term = row.term;
+                    course.CRN = row.crn;
 
-                    course.Name = row.Course;
-                    course.Title = row.Title;
+                    course.Name = row.course;
+                    course.Title = row.title;
 
-                    if (!row.IsInstructorNull())
-                        course.Instructor = row.Instructor;
+                    if (!row.IsinstructorNull())
+                        course.Instructor = row.instructor;
 
-                    course.Credit = row.Credits;
+                    course.Credit = row.credits;
 
-                    if (!row.IsFinalDayNull())
-                        course.FinalDay = row.FinalDay[0];
+                    if (!row.IsfinaldayNull())
+                        course.FinalDay = row.finalday[0];
                     else
                         course.FinalDay = '\0';
 
-                    if (!row.IsFinalHourNull())
-                        course.FinalHour = row.FinalHour;
+                    if (!row.IsfinalhourNull())
+                        course.FinalHour = row.finalhour;
                     else
                         course.FinalHour = -1;
 
-                    if (!row.IsFinalRoomNull())
-                        course.FinalRoom = row.FinalRoom;
+                    if (!row.IsfinalroomNull())
+                        course.FinalRoom = row.finalroom;
 
-                    course.Enrolled = row.Enrolled;
-                    course.MaxEnrollment = row.MaxEnrolled;
+                    course.Enrolled = row.enrolled;
+                    course.MaxEnrollment = row.maxenrolled;
 
-                    if (!row.IsCommentsNull())
-                        course.Comments = row.Comments;
+                    if (!row.IscommentsNull())
+                        course.Comments = row.comments;
 
                     return course;
                 }
             }
         }
 
-        partial class SearchCoursesDataTable
+        partial class spSearchCoursesDataTable
         {
             public Course[] Courses
             {
@@ -173,35 +173,35 @@ namespace RHITMobile.Secure
                     {
                         Course course = new Course();
 
-                        course.Term = row.Term;
-                        course.CRN = row.CRN;
+                        course.Term = row.term;
+                        course.CRN = row.crn;
 
-                        course.Name = row.Course;
-                        course.Title = row.Title;
+                        course.Name = row.course;
+                        course.Title = row.title;
 
-                        if (!row.IsInstructorNull())
-                            course.Instructor = row.Instructor;
+                        if (!row.IsinstructorNull())
+                            course.Instructor = row.instructor;
 
-                        course.Credit = row.Credits;
+                        course.Credit = row.credits;
 
-                        if (!row.IsFinalDayNull())
-                            course.FinalDay = row.FinalDay[0];
+                        if (!row.IsfinaldayNull())
+                            course.FinalDay = row.finalday[0];
                         else
                             course.FinalDay = '\0';
 
-                        if (!row.IsFinalHourNull())
-                            course.FinalHour = row.FinalHour;
+                        if (!row.IsfinalhourNull())
+                            course.FinalHour = row.finalhour;
                         else
                             course.FinalHour = -1;
 
-                        if (!row.IsFinalRoomNull())
-                            course.FinalRoom = row.FinalRoom;
+                        if (!row.IsfinalroomNull())
+                            course.FinalRoom = row.finalroom;
 
-                        course.Enrolled = row.Enrolled;
-                        course.MaxEnrollment = row.MaxEnrolled;
+                        course.Enrolled = row.enrolled;
+                        course.MaxEnrollment = row.maxenrolled;
 
-                        if (!row.IsCommentsNull())
-                            course.Comments = row.Comments;
+                        if (!row.IscommentsNull())
+                            course.Comments = row.comments;
 
                         courses.Add(course);
                     }
@@ -211,7 +211,7 @@ namespace RHITMobile.Secure
             }
         }
     
-        partial class SearchUsersDataTable
+        partial class spSearchUsersDataTable
         {
             public User[] Users
             {
@@ -223,42 +223,42 @@ namespace RHITMobile.Secure
                     {
                         User user = new User();
 
-                        user.Username = row.Username;
+                        user.Username = row.username;
 
-                        if (!row.IsEmailNull())
-                            user.Alias = row.Email;
+                        if (!row.IsemailNull())
+                            user.Alias = row.email;
 
-                        if (!row.IsCMNull())
-                            user.Mailbox = row.CM;
+                        if (!row.IscmNull())
+                            user.Mailbox = row.cm;
                         else
                             user.Mailbox = -1;
 
-                        if (!row.IsMajorNull())
-                            user.Major = row.Major;
+                        if (!row.IsmajorsNull())
+                            user.Major = row.majors;
 
-                        if (!row.IsClassNull())
-                            user.Class = row.Class;
+                        if (!row.Is_classNull())
+                            user.Class = row._class;
 
-                        if (!row.IsYearNull())
-                            user.Year = row.Year;
+                        if (!row.IsyearNull())
+                            user.Year = row.year;
 
-                        if (!row.IsAdvisorNull())
-                            user.Advisor = row.Advisor;
+                        if (!row.IsadvisorNull())
+                            user.Advisor = row.advisor;
 
-                        user.LastName = row.LastName;
-                        user.FirstName = row.FirstName;
+                        user.LastName = row.lastname;
+                        user.FirstName = row.firstname;
 
-                        if (!row.IsMiddleNameNull())
-                            user.MiddleName = row.MiddleName;
+                        if (!row.IsmiddlenameNull())
+                            user.MiddleName = row.middlename;
 
-                        if (!row.IsDepartmentNull())
-                            user.Department = row.Department;
+                        if (!row.IsdepartmentNull())
+                            user.Department = row.department;
 
-                        if (!row.IsTelephoneNull())
-                            user.Phone = row.Telephone;
+                        if (!row.IstelephoneNull())
+                            user.Phone = row.telephone;
 
-                        if (!row.IsRoomNull())
-                            user.Room = row.Room;
+                        if (!row.IsofficeNull())
+                            user.Room = row.office;
                         users.Add(user);
                     }
 
@@ -267,7 +267,7 @@ namespace RHITMobile.Secure
             }
         }
     
-        partial class GetUserDataTable
+        partial class spGetUserDataTable
         {
             public User User
             {
@@ -276,48 +276,65 @@ namespace RHITMobile.Secure
                     if (Count < 1)
                         return null;
 
-                    Banner.GetUserRow row = this[0];
-                    User res = new User();
+                    var row = this[0];
+                    User user = new User();
 
-                    res.Username = row.Username;
+                    user.Username = row.username;
 
-                    if (!row.IsEmailNull())
-                        res.Alias = row.Email;
+                    if (!row.IsemailNull())
+                        user.Alias = row.email;
 
-                    if (!row.IsCMNull())
-                        res.Mailbox = row.CM;
+                    if (!row.IscmNull())
+                        user.Mailbox = row.cm;
                     else
-                        res.Mailbox = -1;
+                        user.Mailbox = -1;
 
-                    if (!row.IsMajorNull())
-                        res.Major = row.Major;
+                    if (!row.IsmajorsNull())
+                        user.Major = row.majors;
 
-                    if (!row.IsClassNull())
-                        res.Class = row.Class;
+                    if (!row.Is_classNull())
+                        user.Class = row._class;
 
-                    if (!row.IsYearNull())
-                        res.Year = row.Year;
+                    if (!row.IsyearNull())
+                        user.Year = row.year;
 
-                    if (!row.IsAdvisorNull())
-                        res.Advisor = row.Advisor;
+                    if (!row.IsadvisorNull())
+                        user.Advisor = row.advisor;
 
-                    res.LastName = row.LastName;
-                    res.FirstName = row.FirstName;
+                    user.LastName = row.lastname;
+                    user.FirstName = row.firstname;
 
-                    if (!row.IsMiddleNameNull())
-                        res.MiddleName = row.MiddleName;
+                    if (!row.IsmiddlenameNull())
+                        user.MiddleName = row.middlename;
 
-                    if (!row.IsDepartmentNull())
-                        res.Department = row.Department;
+                    if (!row.IsdepartmentNull())
+                        user.Department = row.department;
 
-                    if (!row.IsTelephoneNull())
-                        res.Phone = row.Telephone;
+                    if (!row.IstelephoneNull())
+                        user.Phone = row.telephone;
 
-                    if (!row.IsRoomNull())
-                        res.Room = row.Room;
+                    if (!row.IsofficeNull())
+                        user.Room = row.office;
 
-                    return res;
+                    return user;
 
+                }
+            }
+        }
+
+        partial class spGetTermsDataTable
+        {
+            public int[] Terms
+            {
+                get
+                {
+                    List<int> terms = new List<int>();
+
+                    foreach (var row in this)
+                    {
+                        terms.Add(row.term);
+                    }
+                    return terms.ToArray();
                 }
             }
         }
@@ -330,12 +347,27 @@ namespace RHITMobile.Secure.BannerTableAdapters
     {
         public int AddUser(bool s, User user)
         {
-            return spInsertUser(s, user.Username, user.Alias, user.Mailbox, user.Major, user.Class, user.Year, user.LastName, user.FirstName, user.MiddleName, user.Department, user.Phone, user.Room);
+            int? mailbox = user.Mailbox;
+            if (mailbox < 1)
+                mailbox = null;
+
+            return spInsertUser(s, user.Username, user.Alias, mailbox, user.Major, user.Class, user.Year, user.LastName, user.FirstName, user.MiddleName, user.Department, user.Phone, user.Room);
         }
         
         public int AddCourse(bool s, Course course)
         {
-            return spInsertCourse(s, course.Term, course.CRN, course.Name, course.Title, course.Instructor, course.Credit, course.FinalDay.ToString(), course.FinalHour, course.FinalRoom, course.Enrolled, course.MaxEnrollment, course.Comments);
+            string finalDay = course.FinalDay.ToString();
+            int? finalHour = course.FinalHour;
+            string finalRoom = course.FinalRoom;
+
+            if (course.FinalDay == char.MinValue || finalHour == 0)
+            {
+                finalDay = null;
+                finalHour = null;
+                finalRoom = null;
+            }
+
+            return spInsertCourse(s, course.Term, course.CRN, course.Name, course.Title, course.Instructor, course.Credit, finalDay, finalHour, finalRoom, course.Enrolled, course.MaxEnrollment, course.Comments);
         }
 
         public int AddCourseSchedule(bool s, Course course)

@@ -8,8 +8,8 @@ namespace RHITMobile.Secure.Data_Import
 {
     public class UserCsvParser : BannerCsvParser<User>
     {
-        public UserCsvParser(String path)
-            : base(path)
+        public UserCsvParser(Logger log, String path)
+            : base(log, path)
         { }
 
         protected override User convertRecord(String[] fields)
@@ -27,22 +27,22 @@ namespace RHITMobile.Secure.Data_Import
 
             res.ID = fields[i++];
             res.Username = fields[i++].ToLower();
-            res.Alias = fields[i++].ToLower();
+            res.Alias = optionalField(fields[i++].ToLower());
             {
                 String mailbox = fields[i++];
                 mailbox = mailbox.Replace("CM", "").Trim();
                 res.Mailbox = toInt(mailbox);
             }
-            res.Major = fields[i++];
-            res.Class = fields[i++];
-            res.Year = fields[i++];
-            res.Advisor = fields[i++].ToLower();
+            res.Major = optionalField(fields[i++]);
+            res.Class = optionalField(fields[i++]);
+            res.Year = optionalField(fields[i++]);
+            res.Advisor = optionalField(fields[i++].ToLower());
             res.LastName = fields[i++];
             res.FirstName = fields[i++];
-            res.MiddleName = fields[i++];
-            res.Department = fields[i++];
-            res.Phone = fields[i++];
-            res.Room = fields[i++];
+            res.MiddleName = optionalField(fields[i++]);
+            res.Department = optionalField(fields[i++]);
+            res.Phone = optionalField(fields[i++]);
+            res.Room = optionalField(fields[i++]);
 
             return res;
         }
