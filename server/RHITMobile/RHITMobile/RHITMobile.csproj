@@ -84,9 +84,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\Monitors.cs" />
     <Compile Include="Path Handling\BannerData.cs" />
     <Compile Include="Path Handling\CampusServices.cs" />
     <Compile Include="Path Handling\FileHost.cs" />
+    <Compile Include="Path Handling\MiscHandler.cs" />
     <Compile Include="Path Handling\SecurePathHandler.cs" />
     <Compile Include="Path Handling\Tours.cs" />
     <Compile Include="Response Handling\DatabaseScripter.cs" />
@@ -116,6 +118,7 @@
   <ItemGroup>
     <None Include="app.config">
       <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Service References\RhitPrivate\Arrays11.xsd">
       <SubType>Designer</SubType>

@@ -213,7 +213,7 @@ namespace RHITMobile {
                 } catch (CommunicationException ex) {
                     throw new BadRequestException(currentThread, ex.Message);
                 } catch (Exception ex) {
-                    throw new ServerHandledException(currentThread, ex);
+                    throw new ExceptionThrownException<Exception>(currentThread, ex);
                 }
             });
         }

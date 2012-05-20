@@ -388,12 +388,12 @@ namespace RHITMobile {
                 Forward = newForward;
                 TotalDist = shortestPaths[PrevNode.Id].TotalDist + newDist;
 
-                Changed(TotalDist);
+                if (Changed != null) Changed(TotalDist);
             }
 
             public void DistChanged(double totalDist) {
                 TotalDist = totalDist + MyDist;
-                Changed(TotalDist);
+                if (Changed != null) Changed(TotalDist);
             }
         }
 

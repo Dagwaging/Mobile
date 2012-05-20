@@ -37,7 +37,7 @@ namespace RHITMobile {
             Guid id = new Guid();
             try {
                 id = new Guid(token);
-            } catch (Exception e) {
+            } catch (Exception) {
                 throw new UnauthorizedException(currentThread, "Authentication token is invalid.");
             }
             if (!AdminHandler.Logins.ContainsKey(id))
@@ -222,16 +222,22 @@ namespace RHITMobile {
 
         protected override IEnumerable<ThreadInfo> HandleNoPath(ThreadManager TM, Dictionary<string, string> query, object state) {
             var currentThread = TM.CurrentThread;
-            double newLocations = Program.LocationsVersion;
-            double newServices = Program.ServicesVersion;
-            double newTags = Program.TagsVersion;
-            if (query.ContainsKey("locations"))
-                Double.TryParse(query["locations"], out newLocations);
-            if (query.ContainsKey("services"))
-                Double.TryParse(query["services"], out newServices);
-            if (query.ContainsKey("tags"))
-                Double.TryParse(query["tags"], out newTags);
-            Program.WriteVersions(newLocations, newServices, newTags);
+            double version;
+            if (query.ContainsKey("locations") && Double.TryParse(query["locations"], out version)) {
+                yield return TM.Await(currentThread, Program.UpdateVersion(TM, "Locations", version));
+                TM.GetResult(currentThread);
+                Program.LocationsVersion = version;
+            }
+            if (query.ContainsKey("services") && Double.TryParse(query["services"], out version)) {
+                yield return TM.Await(currentThread, Program.UpdateVersion(TM, "Services", version));
+                TM.GetResult(currentThread);
+                Program.ServicesVersion = version;
+            }
+            if (query.ContainsKey("tags") && Double.TryParse(query["tags"], out version)) {
+                yield return TM.Await(currentThread, Program.UpdateVersion(TM, "Tags", version));
+                TM.GetResult(currentThread);
+                Program.TagsVersion = version;
+            }
             yield return TM.Return(currentThread, new JsonResponse(new VersionResponse()));
         }
     }
@@ -265,6 +271,12 @@ namespace RHITMobile {
 
         protected override IEnumerable<ThreadInfo> HandleNoPath(ThreadManager TM, Dictionary<string, string> query, object state) {
             var currentThread = TM.CurrentThread;
+            yield return TM.Await(currentThread, GetPathData(TM));
+            yield return TM.Return(currentThread, new JsonResponse(TM.GetResult<JsonObject>(currentThread)));
+        }
+
+        public static IEnumerable<ThreadInfo> GetPathData(ThreadManager TM) {
+            var currentThread = TM.CurrentThread;
             var result = new PathDataResponse(Program.LocationsVersion);
             yield return TM.MakeDbCall(currentThread, Program.ConnectionString, "spGetPaths");
             foreach (DataRow row in TM.GetResult<DataTable>(currentThread).Rows) {
@@ -273,10 +285,6 @@ namespace RHITMobile {
             yield return TM.MakeDbCall(currentThread, Program.ConnectionString, "spGetNodes");
             foreach (DataRow row in TM.GetResult<DataTable>(currentThread).Rows) {
                 result.Nodes.Add(new Node(row));
-            }
-            yield return TM.MakeDbCall(currentThread, Program.ConnectionString, "spGetPartitions");
-            foreach (DataRow row in TM.GetResult<DataTable>(currentThread).Rows) {
-                result.Partitions.Add(new Partition(row));
             }
             yield return TM.MakeDbCall(currentThread, Program.ConnectionString, "spGetPartitions");
             foreach (DataRow row in TM.GetResult<DataTable>(currentThread).Rows) {
@@ -295,8 +303,7 @@ namespace RHITMobile {
                 }
                 result.Directions.Add(direction);
             }
-
-            yield return TM.Return(currentThread, new JsonResponse(result));
+            yield return TM.Return(currentThread, result);
         }
     }
 }

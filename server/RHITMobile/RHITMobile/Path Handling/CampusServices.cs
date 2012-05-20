@@ -38,7 +38,7 @@ namespace RHITMobile {
             yield return TM.MakeDbCall(currentThread, Program.ConnectionString, "spGetCampusServiceLinks");
             using (var table = TM.GetResult<DataTable>(currentThread)) {
                 foreach (DataRow row in table.Rows) {
-                    categories[(string)row["category"]].Links.Add(new HyperLink(row));
+                    categories[(string)row["category"]].Links.Add(new HyperLinkShort(row));
                 }
             }
 

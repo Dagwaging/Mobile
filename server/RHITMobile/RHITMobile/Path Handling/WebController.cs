@@ -18,6 +18,8 @@ namespace RHITMobile {
 
         public static bool[] RequestsBeingHandled = new bool[10];
         public static int RequestCounter = 0;
+        public static DateTime PrevRequest { get; set; }
+        public static DateTime LastRequest { get; set; }
 
         public static IEnumerable<ThreadInfo> HandleClients(ThreadManager TM) {
             var currentThread = TM.CurrentThread;
@@ -29,6 +31,7 @@ namespace RHITMobile {
                     try {
                         string message;
                         if (!SetupSsl(5601, out message)) {
+                            EventWriter.write("Could not setup SSL: " + message, System.Diagnostics.EventLogEntryType.Error);
                             Console.WriteLine("Could not setup SSL: {0}", message);
                             Console.WriteLine("Please fix and restart the program.");
                             while (true) {
@@ -39,6 +42,7 @@ namespace RHITMobile {
                         }
                         listener = new HttpListener();
                         foreach (var kvp in ListenPorts) {
+                            //Console.WriteLine(ExecuteNetshCommand(String.Format("add urlacl url=\"http{0}://+:{1}/\"", kvp.Value ? "s" : "", kvp.Key)));
                             listener.Prefixes.Add(String.Format("http{0}://+:{1}/", kvp.Value ? "s" : "", kvp.Key));
                         }
                         Console.WriteLine("[{0}]\nAttempt #{1} to start HttpListener...", DateTime.Now, tries);
@@ -47,6 +51,7 @@ namespace RHITMobile {
                         break;
                     } catch (Exception ex) {
                         Console.WriteLine("HttpListener failed to start with exception:\nMessage: {0}\nStack trace:\n{1}\n", ex.Message, ex.StackTrace);
+                        EventWriter.write(String.Format("HttpListener failed to start with exception:\nMessage: {0}\nStack trace:\n{1}\n", ex.Message, ex.StackTrace), System.Diagnostics.EventLogEntryType.Error);
                         tries++;
                     }
                     if (tries > 5) {
@@ -101,7 +106,7 @@ namespace RHITMobile {
                     return false;
                 }
 
-            } catch (Exception e) {
+            } catch (Exception) {
                 message = "Certificate retrieval threw an exception.";
                 return false;
             } finally {
@@ -129,6 +134,8 @@ namespace RHITMobile {
 
         private static IEnumerable<ThreadInfo> HandleRequest(ThreadManager TM, HttpListenerContext context) {
             var currentThread = TM.CurrentThread;
+            PrevRequest = LastRequest;
+            LastRequest = DateTime.Now;
 
             bool isSSL = ListenPorts[context.Request.Url.Port];
 
@@ -180,7 +187,7 @@ namespace RHITMobile {
 
             JsonResponse result = null;
 
-            var path = Uri.UnescapeDataString(context.Request.Url.LocalPath).Split('/').SkipWhile(String.IsNullOrEmpty).TakeWhile(s => !String.IsNullOrEmpty(s));
+            var path = /*Uri.UnescapeDataString(*/context.Request.Url.LocalPath/*)*/.Split('/').SkipWhile(String.IsNullOrEmpty).TakeWhile(s => !String.IsNullOrEmpty(s));
             Dictionary<string, string> query = new Dictionary<string, string>();
             if (!String.IsNullOrEmpty(context.Request.Url.Query)) {
                 var querySplit = Uri.UnescapeDataString(context.Request.Url.Query).Split('?', '&', ';').Skip(1);
@@ -204,7 +211,18 @@ namespace RHITMobile {
                     result = new JsonResponse(HttpStatusCode.BadRequest, e.Message);
                 } catch (UnauthorizedException e) {
                     result = new JsonResponse(HttpStatusCode.Unauthorized, e.Message);
-                } catch (Exception) {
+                } catch (Exception e) {
+                    var builder = new StringBuilder();
+                    builder.AppendLine("Exception was thrown:");
+                    var ce = e;
+                    int num = 0;
+                    while (ce != null && num < 5) {
+                        builder.AppendLine("Message: " + ce.Message);
+                        builder.AppendLine("Stack:\n" + ce.StackTrace);
+                        ce = ce.InnerException;
+                        num++;
+                    }
+                    EventWriter.write(builder.ToString(), System.Diagnostics.EventLogEntryType.Error);
                     result = new JsonResponse(HttpStatusCode.InternalServerError);
                 }
             }
@@ -275,7 +293,7 @@ namespace RHITMobile {
             var currentThread = TM.CurrentThread;
 
             while (true) {
-                yield return TM.Sleep(currentThread, 3000);
+                yield return TM.Sleep(currentThread, 5000);
                 for (int j = 0; j < 10; j++)
                     if (RequestsBeingHandled[j])
                         Console.Write("   ||   ");
@@ -295,6 +313,8 @@ namespace RHITMobile {
             Redirects.Add("banner", new BannerHandler());
             Redirects.Add("download", new FileHostDownloadHandler());
             Redirects.Add("clientaccesspolicy.xml", new ClientAccessPolicyHandler());
+            Redirects.Add("favicon.ico", new FaviconHandler());
+            Redirects.Add("status", new StatusHandler());
         }
 
         protected override IEnumerable<ThreadInfo> HandleNoPath(ThreadManager TM, Dictionary<string, string> query, object state) {

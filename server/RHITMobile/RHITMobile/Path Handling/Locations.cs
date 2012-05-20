@@ -38,6 +38,7 @@ namespace RHITMobile {
             Redirects.Add("data", new LocationsDataHandler());
             Redirects.Add("names", new LocationsNamesHandler());
             Redirects.Add("desc", new LocationsDescHandler());
+            Redirects.Add("withname", new LocationsWithNameHandler());
         }
 
         public static List<T> ApplySearchFilter<T>(Dictionary<string, string> query, Func<T, string> getName, Action<T, string> setName, List<T> items) {
@@ -292,7 +293,6 @@ namespace RHITMobile {
         }
     }
 
-    // Need to add links to response
     public class LocationsDescIdHandler : PathHandler {
         protected override IEnumerable<ThreadInfo> HandleNoPath(ThreadManager TM, Dictionary<string, string> query, object state) {
             var currentThread = TM.CurrentThread;
@@ -303,6 +303,85 @@ namespace RHITMobile {
                 yield return TM.Return(currentThread, new JsonResponse(new LocationDescResponse(row)));
             }
             throw new BadRequestException(currentThread, "Could not find location with ID {0}.", state);
+        }
+    }
+
+    public class LocationsWithNameHandler : PathHandler {
+        public LocationsWithNameHandler() {
+            UnknownRedirect = new LocationsWithNameNameHandler();
+        }
+
+        protected override IEnumerable<ThreadInfo> HandleUnknownPath(ThreadManager TM, string path, object state) {
+            var currentThread = TM.CurrentThread;
+            yield return TM.Return(currentThread, path);
+        }
+    }
+
+    public class LocationsWithNameNameHandler : PathHandler {
+        protected override IEnumerable<ThreadInfo> HandleNoPath(ThreadManager TM, Dictionary<string, string> query, object state) {
+            var currentThread = TM.CurrentThread;
+
+            string name = (string)state;
+            List<string> split = new List<string>();
+            split.Add(null);
+            int i = 0;
+            while (i < name.Length) {
+                if (Char.IsLetter(name, i)) {
+                    int j = i + 1;
+                    while (j < name.Length && Char.IsLetter(name, j)) j++;
+                    split.Add(name.Substring(i, j - i));
+                    i = j;
+                } else if (Char.IsDigit(name, i)) {
+                    int j = i + 1;
+                    while (j < name.Length && Char.IsDigit(name, j)) j++;
+                    split.Add(name.Substring(i, j - i));
+                    i = j;
+                } else {
+                    split.Add(name.Substring(i, 1));
+                    i++;
+                }
+            }
+            split.Add(null);
+
+            var count = new Dictionary<int, int>();
+            int maxCount = 0;
+            int maxId = -1;
+            bool multiple = true;
+            for (int l = split.Count; l > 1; l--) {
+                for (int li = 0; li <= split.Count - l; li++) {
+                    var splits = split.Skip(li).Take(l);
+                    string s = splits.Aggregate((s1, s2) => (s1 ?? "") + (s2 ?? ""));
+                    yield return TM.MakeDbCall(currentThread, Program.ConnectionString, "spGetLocationIdsWithSearch",
+                        new SqlParameter("search", s),
+                        new SqlParameter("isstart", splits.First() == null ? 1 : 0),
+                        new SqlParameter("isend", splits.Last() == null ? 1 : 0));
+                    foreach (DataRow row in TM.GetResult<DataTable>(currentThread).Rows) {
+                        int id = (int)row["id"];
+                        if (count.ContainsKey(id)) {
+                            count[id] += s.Length;
+                        } else {
+                            count[id] = s.Length;
+                        }
+                        if (count[id] > maxCount) {
+                            maxCount = count[id];
+                            maxId = id;
+                            multiple = false;
+                        } else if (count[id] == maxCount) {
+                            multiple = true;
+                        }
+                    }
+                }
+
+                if (!multiple) {
+                    yield return TM.Return(currentThread, new JsonResponse(new LocationIdResponse(maxId)));
+                }
+            }
+
+            if (maxId != -1) {
+                yield return TM.Return(currentThread, new JsonResponse(new LocationIdResponse(maxId)));
+            }
+
+            throw new BadRequestException(currentThread, "No location has name '{0}'", name);
         }
     }
 }

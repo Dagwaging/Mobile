@@ -61,7 +61,7 @@ namespace RHITMobile {
 
         protected override IEnumerable<ThreadInfo> HandleFloatPath(ThreadManager TM, double lon, object state) {
             var currentThread = TM.CurrentThread;
-            float lat = (float)state;
+            double lat = (double)state;
 
             yield return TM.MakeDbCall(currentThread, Program.ConnectionString, "spGetOutsideNodesNearLat",
                 new SqlParameter("@lat", lat));

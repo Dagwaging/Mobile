@@ -13,8 +13,6 @@ namespace RHITMobile {
             if (!isSSL)
                 throw new BadRequestException(currentThread, "SSL required for this request.");
 
-            //yield return TM.Await(currentThread, VerifyHeaders(TM, headers, state));
-
             yield return TM.Await(currentThread, base.HandlePath(TM, true, path, query, headers, context, state));
 
             yield return TM.Return(currentThread);

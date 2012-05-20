@@ -123,7 +123,10 @@ namespace RHITMobile {
                     new SqlParameter("node", _start.Id),
                     new SqlParameter("location", location.LocId));
                 using (var table = TM.GetResult<DataTable>(currentThread)) {
-                    if ((bool)table.Rows[0][0]) break;
+                    if (table.Rows.Count > 0) {
+                        if ((table.Rows[0][0] is int && (int)table.Rows[0][0] == 1)
+                            || (table.Rows[0][0] is bool && (bool)table.Rows[0][0])) break;
+                    }
                 }
 
                 int numPaths = pathsBetweenLocs.Count;

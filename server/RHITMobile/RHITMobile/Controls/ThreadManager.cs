@@ -80,8 +80,7 @@ namespace RHITMobile {
         /// <summary>
         /// Execution queues for each priority
         /// </summary>
-        private Dictionary<ThreadPriority, Queue<ThreadInfo>> _queues = new Dictionary<ThreadPriority, Queue<ThreadInfo>>()
-        {
+        private Dictionary<ThreadPriority, Queue<ThreadInfo>> _queues = new Dictionary<ThreadPriority, Queue<ThreadInfo>>() {
             { ThreadPriority.Low, new Queue<ThreadInfo>() },
             { ThreadPriority.Normal, new Queue<ThreadInfo>() },
         };
@@ -99,7 +98,7 @@ namespace RHITMobile {
         /// <summary>
         /// Results from each thread being executed
         /// </summary>
-        private ThreadInfo[] _results;
+        private ThreadInfo _result;
 
         /// <summary>
         /// Gets the result from the last async call
@@ -107,15 +106,13 @@ namespace RHITMobile {
         /// <param name="currentThread">Current thread</param>
         /// <returns>Result as an "object"</returns>
         public object GetResult(ThreadInfo currentThread) {
-            foreach (var continuation in _results) {
-                if (continuation.Thread == currentThread.Thread) {
-                    if (continuation.Result is ServerHandledException) {
-                        throw (continuation.Result as ServerHandledException).WithThread(currentThread);
-                    } else if (continuation.Result is Exception) {
-                        throw new ExceptionThrownException<Exception>(currentThread, continuation.Result as Exception);
-                    }
-                    return continuation.Result;
+            if (_result.Thread == currentThread.Thread) {
+                if (_result.Result is ServerHandledException) {
+                    throw (_result.Result as ServerHandledException).WithThread(currentThread);
+                } else if (_result.Result is Exception) {
+                    throw new ExceptionThrownException<Exception>(currentThread, _result.Result as Exception);
                 }
+                return _result.Result;
             }
             return null;
         }
@@ -126,10 +123,8 @@ namespace RHITMobile {
         /// <param name="currentThread">Current thread</param>
         /// <returns>Result as an "object"</returns>
         public object GetResultNoException(ThreadInfo currentThread) {
-            foreach (var continuation in _results) {
-                if (continuation.Thread == currentThread.Thread) {
-                    return continuation.Result;
-                }
+            if (_result.Thread == currentThread.Thread) {
+                return _result.Result;
             }
             return null;
         }
@@ -143,34 +138,6 @@ namespace RHITMobile {
         public T GetResult<T>(ThreadInfo currentThread) {
             return (T)GetResult(currentThread);
         }
-
-        /// <summary>
-        /// Gets the result from the last async call, returning it as one of two types
-        /// </summary>
-        /// <typeparam name="T1">Type to try first</typeparam>
-        /// <typeparam name="T2">Type to try second</typeparam>
-        /// <param name="currentThread">Current thread</param>
-        /// <param name="a1">Result as type T1</param>
-        /// <param name="a2">Result as type T2</param>
-        /// <returns>True if result is of type T1, otherwise false</returns>
-        /*public bool GetResult<T1, T2>(ThreadInfo currentThread, out T1 a1, out T2 a2) {
-            foreach (var continuation in _results) {
-                if (continuation.Thread == currentThread.Thread) {
-                    if (continuation.Result is Exception) {
-                        throw continuation.Result as Exception;
-                    } else if (continuation.Result is T1) {
-                        a1 = (T1)continuation.Result;
-                        a2 = default(T2);
-                        return true;
-                    } else {
-                        a1 = default(T1);
-                        a2 = (T2)continuation.Result;
-                        return false;
-                    }
-                }
-            }
-            throw new ArgumentException("Thread does not have a result.");
-        }*/
         #endregion
 
         #region Enqueue, Await, and Return
@@ -241,17 +208,8 @@ namespace RHITMobile {
         /// <summary>
         /// Starts the ThreadManager loop with the given number of processes
         /// </summary>
-        /// <param name="processes">Number of processes to execute in parallel</param>
-        public void Start(int processes) {
-            /*_results = new ThreadInfo[processes];
-            Task[] tasks = new Task[processes];
-            for (int i = 0; i < processes; i++)
-            {
-                tasks[i] = Task.Factory.StartNew(Run, i);
-            }
-            Task.WaitAll(tasks);*/
-            _results = new ThreadInfo[1];
-            Run(0);
+        public void Start() {
+            Run();
             Console.WriteLine("ThreadManager ran out of items to process.  Please restart the service.");
             Console.ReadLine();
         }
@@ -259,9 +217,7 @@ namespace RHITMobile {
         /// <summary>
         /// Continually takes from the execution queues and executes the next item
         /// </summary>
-        /// <param name="processObj">Id of process</param>
-        private void Run(object processObj) {
-            int processor = (int)processObj;
+        private void Run() {
             while (true) {
                 ThreadInfo continuation = null;
                 while (true) {
@@ -280,8 +236,8 @@ namespace RHITMobile {
                 }
 
                 // Continue the next item in the queue
-                _results[processor] = continuation;
-                ContinueThread(processor, continuation);
+                _result = continuation;
+                ContinueThread(continuation);
             }
         }
 
@@ -300,7 +256,7 @@ namespace RHITMobile {
         /// </summary>
         /// <param name="processor"></param>
         /// <param name="continueThread"></param>
-        private void ContinueThread(int processor, ThreadInfo continueThread) {
+        private void ContinueThread(ThreadInfo continueThread) {
             int threadId = continueThread.Thread;
             while (threadId >= 0) {
                 var thread = _threads[threadId];
@@ -309,21 +265,21 @@ namespace RHITMobile {
                     thread.Iterator.MoveNext();
                 } catch (ServerHandledException ex) {
                     Return(ex.CurrentThread);
-                    _results[processor] = new ThreadInfo(thread.Caller, continueThread.Priority, ex);
+                    _result = new ThreadInfo(thread.Caller, continueThread.Priority, ex);
                     threadId = thread.Caller;
                     continue;
                 } catch (Exception ex) {
                     // If an exception was thrown, return to the caller
-                    _results[processor] = new ThreadInfo(thread.Caller, continueThread.Priority, ex);
+                    _result = new ThreadInfo(thread.Caller, continueThread.Priority, ex);
                     threadId = thread.Caller;
                     continue;
                 }
                 // If no exception was thrown, store the result and continue down the call stack
                 var threadResult = thread.Iterator.Current;
-                _results[processor] = threadResult;
+                _result = threadResult;
                 threadId = threadResult.Thread;
             }
-            if (_results[processor].Result is Exception) {
+            if (_result.Result is Exception) {
                 // Log exception
             }
             DecreaseExecutions(continueThread.Priority);
@@ -384,7 +340,7 @@ namespace RHITMobile {
         public ThreadInfo WaitForConsole(ThreadInfo currentThread) {
             IncreaseExecutions(currentThread.Priority);
             Task.Factory.StartNew<object>(() => {
-                    return Console.ReadLine();
+                return Console.ReadLine();
             }).ContinueWith((task) => {
                 if (task.Exception == null)
                     Enqueue(currentThread.WithResult(task.Result));

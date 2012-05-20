@@ -89,6 +89,6 @@ namespace RHITMobile {
         public virtual IEnumerable<ThreadInfo> VerifyHeaders(ThreadManager TM, NameValueCollection headers, object state) {
             var currentThread = TM.CurrentThread;
             yield return TM.Return(currentThread, state);
-        } // TODO: Remove
+        }
     }
 }

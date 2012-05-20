@@ -5,6 +5,7 @@ using System.Text;
 using System.Data.SqlClient;
 using System.Data;
 using System.IO;
+using System.Diagnostics;
 
 namespace RHITMobile {
     /// <summary>
@@ -15,12 +16,40 @@ namespace RHITMobile {
         /// Main entry for the application
         /// </summary>
         public static void Main() {
+            InitService().Start();
+        }
+
+        public static ThreadManager InitService() {
             // Initialize the connection string
             InitConnection();
 
             try {
                 // Get the server version from the external text file
-                UpdateServerVersion();
+                using (var connection = new SqlConnection(Program.ConnectionString)) {
+                    connection.Open();
+                    using (var command = connection.CreateCommand()) {
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.CommandText = "spGetVersions";
+                        using (var reader = command.ExecuteReader()) {
+                            while (reader.Read()) {
+                                switch ((string)reader["name"]) {
+                                    case "Locations":
+                                        LocationsVersion = (double)reader["version"];
+                                        break;
+                                    case "Services":
+                                        ServicesVersion = (double)reader["version"];
+                                        break;
+                                    case "Tags":
+                                        TagsVersion = (double)reader["version"];
+                                        break;
+                                    default:
+                                        // TODO: Unknown version
+                                        break;
+                                }
+                            }
+                        }
+                    }
+                }
             } catch {
                 // If could not get the version, default it to 0.0
                 Console.WriteLine("Could not get version.");
@@ -41,13 +70,13 @@ namespace RHITMobile {
             TM.Enqueue(BannerHandler.ClearAuthenticationExpirations(TM), ThreadPriority.Low);
 
             // Start the listener for console commands
-            TM.Enqueue(HandleConsoleRequests(TM), ThreadPriority.Low);
+            //TM.Enqueue(HandleConsoleRequests(TM), ThreadPriority.Low);
+            TM.Enqueue(Monitors.SetPartitionAndLocationBoundaries(TM));
 
             // Start the listener for HTTP requests
             TM.Enqueue(WebController.HandleClients(TM));
 
-            // Start the ThreadManager
-            TM.Start(1);
+            return TM;
         }
 
         /// <summary>
@@ -63,10 +92,7 @@ namespace RHITMobile {
                 try {
                     switch (request) {
                         case "help":
-                            Console.WriteLine("update\nstatus\nexecutions\nqueues\nthreads\ndirections\ntours\nexit");
-                            break;
-                        case "update":
-                            UpdateServerVersion();
+                            Console.WriteLine("status\nexecutions\nqueues\nthreads\ndirections\ntours\nexit");
                             break;
                         case "status":
                             TM.WriteExecutionStatus();
@@ -104,39 +130,12 @@ namespace RHITMobile {
             }
         }
 
-        /// <summary>
-        /// Set the server version based on an external text file
-        /// </summary>
-        public static void UpdateServerVersion() {
-            using (var fileReader = new StreamReader("version.txt")) {
-                string line;
-                while ((line = fileReader.ReadLine()) != null) {
-                    switch (line.Substring(0, line.IndexOf(':'))) {
-                        case "Locations":
-                            LocationsVersion = Double.Parse(line.Substring(line.IndexOf(':') + 1));
-                            break;
-                        case "Services":
-                            ServicesVersion = Double.Parse(line.Substring(line.IndexOf(':') + 1));
-                            break;
-                        case "Tags":
-                            TagsVersion = Double.Parse(line.Substring(line.IndexOf(':') + 1));
-                            break;
-                    }
-                }
-            }
-            Console.WriteLine("Version update from file successful.");
-        }
-
-        public static void WriteVersions(double locations, double services, double tags) {
-            LocationsVersion = locations;
-            ServicesVersion = services;
-            TagsVersion = tags;
-            using (var fileWriter = new StreamWriter("version.txt", false)) {
-                fileWriter.WriteLine("Locations:\t" + locations);
-                fileWriter.WriteLine("Services:\t" + services);
-                fileWriter.WriteLine("Tags:\t\t" + tags);
-            }
-            Console.WriteLine("Version was updated.");
+        public static IEnumerable<ThreadInfo> UpdateVersion(ThreadManager TM, string name, double version) {
+            var currentThread = TM.CurrentThread;
+            TM.MakeDbCall(currentThread, Program.ConnectionString, "spUpdateVersion",
+                new SqlParameter("name", name),
+                new SqlParameter("version", version));
+            yield return TM.Return(currentThread);
         }
 
         public static string GetConnectionString(string username, string password) {
@@ -147,31 +146,9 @@ namespace RHITMobile {
         public static void InitConnection() {
             if (ConnectionString == null) {
                 ConnectionString = @"Data Source=localhost\RHITMobile;Initial Catalog=MapData;Integrated Security=SSPI;Persist Security Info=true";
-                try {
-                    Console.WriteLine("Attempting to login to SQL Server using Windows credentials...");
-                    using (var connection = new SqlConnection(ConnectionString)) {
-                        connection.Open();
-                    }
-                } catch {
-                    Console.WriteLine("Could not connect using Windows credentials.");
-                    Console.WriteLine();
-                    bool success = false;
-                    while (!success) {
-                        try {
-                            Console.Write("Enter the user ID: ");
-                            string userId = Console.ReadLine();
-                            Console.Write("Enter the password: ");
-                            string password = Console.ReadLine();
-                            ConnectionString = GetConnectionString(userId, password);
-                            using (var connection = new SqlConnection(ConnectionString)) {
-                                connection.Open();
-                            }
-                            success = true;
-                        } catch {
-                            Console.WriteLine("Incorrect SQL credentials.");
-                            Console.WriteLine();
-                        }
-                    }
+                Console.WriteLine("Attempting to login to SQL Server using Windows credentials...");
+                using (var connection = new SqlConnection(ConnectionString)) {
+                    connection.Open();
                 }
 
                 Console.WriteLine("Login successful.");
@@ -180,8 +157,8 @@ namespace RHITMobile {
         }
 
         public static double LocationsVersion;
-        public static double ServicesVersion;
         public static double TagsVersion;
+        public static double ServicesVersion;
         private const string CustomConnectionString = @"Data Source=tcp:mobilewin.csse.rose-hulman.edu,4848\RHITMobile;Initial Catalog=MapData;User Id={0};Password={1};Persist Security Info=true";
         public const double EarthRadius = 20925524.9; // feet
         public const double DegToRad = Math.PI / 180;
@@ -195,5 +172,18 @@ namespace RHITMobile {
         public const string FileHostPath = @"C:\FileHost";
 
         public static double UseStairsStairMultiplier = (Math.Sqrt(1 + MaxSlopeRatio * MaxSlopeRatio) * StairRatio - Math.Sqrt(1 + StairRatio * StairRatio) * MaxSlopeRatio) * StairHeight / (MaxSlopeRatio * StairRatio);
+    }
+
+    public static class EventWriter {
+        private static string source = "RHITMobileWindowsService"; //Must be the same as the name of the windows service
+        private static string log = "Application";
+        static EventWriter() {
+            if (!EventLog.SourceExists(source))
+                EventLog.CreateEventSource(source, log);
+        }
+
+        public static void write(string msg, EventLogEntryType type) {
+            EventLog.WriteEntry(source, msg, type);
+        }
     }
 }
