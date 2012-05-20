@@ -1,0 +1,21 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="RHITMobile.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="MapDataConnectionString" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Data Source=localhost\RHITMobile;Initial Catalog=MapData;Integrated Security=SSPI;Persist Security Info=true</Value>
+    </Setting>
+    <Setting Name="AdminConnectionString" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Data Source=tcp:mobilewin.csse.rose-hulman.edu,4848\RHITMobile;Initial Catalog=MapData;</Value>
+    </Setting>
+    <Setting Name="FileHostPath" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">C:\FileHost</Value>
+    </Setting>
+    <Setting Name="MaxDailyBannerCalls" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">100000</Value>
+    </Setting>
+    <Setting Name="MapDataScriptPath" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">C:/DBBackup/Dropbox</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

@@ -6,6 +6,7 @@ using RHITMobile.RhitPrivate;
 using System.Collections.Specialized;
 using System.Net;
 using System.ServiceModel;
+using RHITMobile.Properties;
 
 namespace RHITMobile {
     public class BannerHandler : SecurePathHandler {
@@ -33,7 +34,7 @@ namespace RHITMobile {
         public static void VerifyUser(ThreadInfo currentThread, string username) {
             CleanQueue();
             if (BlockedUsers.Contains(username)) {
-                if (RequestDictionary[username].Sum(r => r.SecureServerRequests) >= Program.MaxDailySecureServerCalls) {
+                if (RequestDictionary[username].Sum(r => r.SecureServerRequests) >= Settings.Default.MaxDailyBannerCalls) {
                     throw new BadRequestException(currentThread, "Number of secure server calls has exceeded the daily limit for user '{0}'.", username);
                 } else {
                     BlockedUsers.Remove(username);
@@ -60,7 +61,7 @@ namespace RHITMobile {
                 RequestDictionary[username] = new List<BannerRequestRecord>();
             RequestDictionary[username].Add(record);
 
-            if (RequestDictionary[username].Sum(r => r.SecureServerRequests) >= Program.MaxDailySecureServerCalls)
+            if (RequestDictionary[username].Sum(r => r.SecureServerRequests) >= Settings.Default.MaxDailyBannerCalls)
                 BlockedUsers.Add(username);
         }
 

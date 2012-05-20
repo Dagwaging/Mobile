@@ -5,10 +5,11 @@ using System.Text;
 using System.Collections.Specialized;
 using System.IO;
 using System.Net;
+using RHITMobile.Properties;
 
 namespace RHITMobile {
     public class FileHostHandler : PathHandler {
-        public static DirectoryInfo Root = new DirectoryInfo(Program.FileHostPath);
+        public static DirectoryInfo Root = new DirectoryInfo(Settings.Default.FileHostPath);
 
         public FileHostHandler() {
             Redirects.Add("upload", new FileHostUploadHandler());

@@ -17,7 +17,7 @@ namespace RHITMobile {
 
         protected override IEnumerable<ThreadInfo> HandleNoPath(ThreadManager TM, Dictionary<string, string> query, object state) {
             var now = DateTime.Now;
-            return ScriptDatabase(TM, Program.ConnectionString, "MapData", String.Format("C:/DBBackup/Dropbox/MapData_Backup_{0:yyyy_MM_dd_HH_mm_ss}.sql", now), now, ((SqlLoginData)state).Username);
+            return ScriptDatabase(TM, Program.ConnectionString, "MapData", String.Format("{1}/MapData_Backup_{0:yyyy_MM_dd_HH_mm_ss}.sql", now, RHITMobile.Properties.Settings.Default.MapDataScriptPath), now, ((SqlLoginData)state).Username);
         }
 
         public IEnumerable<ThreadInfo> ScriptDatabase(ThreadManager TM, string connectionString, string dbName, string destination, DateTime start, string user) {

@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using System.Data;
 using System.IO;
 using System.Diagnostics;
+using RHITMobile.Properties;
 
 namespace RHITMobile {
     /// <summary>
@@ -145,8 +146,8 @@ namespace RHITMobile {
         public static string ConnectionString = null;
         public static void InitConnection() {
             if (ConnectionString == null) {
-                ConnectionString = @"Data Source=localhost\RHITMobile;Initial Catalog=MapData;Integrated Security=SSPI;Persist Security Info=true";
-                Console.WriteLine("Attempting to login to SQL Server using Windows credentials...");
+                ConnectionString = Settings.Default.MapDataConnectionString;
+                Console.WriteLine("Attempting to login to SQL Serve...");
                 using (var connection = new SqlConnection(ConnectionString)) {
                     connection.Open();
                 }
@@ -159,7 +160,7 @@ namespace RHITMobile {
         public static double LocationsVersion;
         public static double TagsVersion;
         public static double ServicesVersion;
-        private const string CustomConnectionString = @"Data Source=tcp:mobilewin.csse.rose-hulman.edu,4848\RHITMobile;Initial Catalog=MapData;User Id={0};Password={1};Persist Security Info=true";
+        private static string CustomConnectionString = Settings.Default.AdminConnectionString + @"User Id={0};Password={1};Persist Security Info=true";
         public const double EarthRadius = 20925524.9; // feet
         public const double DegToRad = Math.PI / 180;
         public const double MaxSlopeAngle = 10 * DegToRad; // radians
@@ -168,8 +169,6 @@ namespace RHITMobile {
         public const double StairLength = 11 / 12;
         public const double StairRatio = StairHeight / StairLength;
         public static double StairAngle = Math.Asin(StairRatio); // radians
-        public const int MaxDailySecureServerCalls = 25000;
-        public const string FileHostPath = @"C:\FileHost";
 
         public static double UseStairsStairMultiplier = (Math.Sqrt(1 + MaxSlopeRatio * MaxSlopeRatio) * StairRatio - Math.Sqrt(1 + StairRatio * StairRatio) * MaxSlopeRatio) * StairHeight / (MaxSlopeRatio * StairRatio);
     }
