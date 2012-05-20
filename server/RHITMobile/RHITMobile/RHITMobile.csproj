@@ -123,7 +123,6 @@
   <ItemGroup>
     <None Include="app.config">
       <SubType>Designer</SubType>
-<<<<<<< HEAD
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Properties\Settings.settings">
@@ -131,10 +130,6 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <None Include="Service References\RhitPrivate\Arrays11.xsd">
-=======
-    </None>
-    <None Include="Service References\RhitPrivate\Arrays.xsd">
->>>>>>> 3282d4558acd1283b68a3c82e4109a43ce9a5832
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\RhitPrivate\mobileprivate.rose-hulman.edu11.wsdl" />
