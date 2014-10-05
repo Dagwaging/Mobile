@@ -1,6 +1,7 @@
 [submodule "android/src/android-mapviewballoons"]
 	path = android/src/android-mapviewballoons
-	url = http://github.com/RHIT/android-mapviewballoons.git
+	url = https://github.com/wellsie1116/android-mapviewballoons
+	branch = rhit
 [submodule "ios/src/TouchJSON"]
 	path = ios/src/TouchJSON
 	url = https://github.com/TouchCode/TouchJSON.git
